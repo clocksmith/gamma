@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/doppler/schemas/wgsl-repair-seed-selection-v1.schema.json",
+  "title": "WGSL repair V13 seed-selection policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
+    "policyId",
+    "status",
+    "eligibleLane",
+    "predecessor",
+    "runtime",
+    "populations",
+    "eligibleCandidates",
+    "promptContract",
+    "generation",
+    "ranking",
+    "selectionAuthority",
+    "claimBoundary"
+  ],
+  "properties": {
+    "$schema": { "const": "../../src/config/schema/wgsl-repair-seed-selection.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "source": { "const": "doppler" },
+    "policyId": { "const": "doppler-wgsl-repair-v13-external20-seed-selection" },
+    "status": { "const": "frozen_before_candidate_evaluation" },
+    "eligibleLane": { "const": "external20" },
+    "predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapterPortabilityReceiptPath", "adapterPortabilityReceiptSha256", "requiredDecision"],
+      "properties": {
+        "adapterPortabilityReceiptPath": { "$ref": "#/$defs/repoPath" },
+        "adapterPortabilityReceiptSha256": { "$ref": "#/$defs/sha256" },
+        "requiredDecision": { "const": "diagnostic_import_parity_passed" }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["modelId", "modelManifestSha256", "artifactStatusPath", "artifactStatusSha256", "conversionConfigPath", "conversionConfigSha256", "runtimeProfile"],
+      "properties": {
+        "modelId": { "const": "qwen-3-5-9b-f16-af32" },
+        "modelManifestSha256": { "$ref": "#/$defs/sha256" },
+        "artifactStatusPath": { "$ref": "#/$defs/repoPath" },
+        "artifactStatusSha256": { "$ref": "#/$defs/sha256" },
+        "conversionConfigPath": { "$ref": "#/$defs/repoPath" },
+        "conversionConfigSha256": { "$ref": "#/$defs/sha256" },
+        "runtimeProfile": { "const": "profiles/production" }
+      }
+    },
+    "populations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["calibration", "checkpointSelection"],
+      "properties": {
+        "calibration": { "$ref": "#/$defs/population" },
+        "checkpointSelection": { "$ref": "#/$defs/population" }
+      }
+    },
+    "eligibleCandidates": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/candidate" }
+    },
+    "promptContract": {
+      "const": {
+        "templateId": "wgsl-replacement-only-context-600-v1",
+        "contextCharactersPerSide": 600,
+        "useChatTemplate": false,
+        "responseContract": "replacement_only_wgsl_span_v1"
+      }
+    },
+    "generation": {
+      "const": {
+        "maxTokens": 64,
+        "temperature": 0,
+        "topP": 1,
+        "topK": 1,
+        "repetitionPenalty": 1,
+        "greedyThreshold": 0
+      }
+    },
+    "ranking": {
+      "const": {
+        "populationRole": "checkpoint_selection",
+        "lexicographicOrder": [
+          "semantic_task_pass_count_desc",
+          "compile_pass_count_desc",
+          "semantic_variant_pass_count_desc",
+          "exact_reference_completion_count_desc",
+          "seed_asc"
+        ],
+        "tieBreak": "lowest_numeric_seed",
+        "missingOrInvalidReceipt": "candidate_ineligible"
+      }
+    },
+    "selectionAuthority": { "type": "string", "minLength": 1 },
+    "claimBoundary": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "repoPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "selectionAuthority"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repoPath" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "selectionAuthority": { "type": "boolean" }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["seed", "adapterManifestPath", "adapterManifestSha256", "adapterWeightsPath", "adapterWeightsSha256"],
+      "properties": {
+        "seed": { "enum": [11, 29, 47] },
+        "adapterManifestPath": { "$ref": "#/$defs/repoPath" },
+        "adapterManifestSha256": { "$ref": "#/$defs/sha256" },
+        "adapterWeightsPath": { "$ref": "#/$defs/repoPath" },
+        "adapterWeightsSha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

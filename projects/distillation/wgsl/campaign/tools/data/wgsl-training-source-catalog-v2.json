@@ -1,0 +1,128 @@
+{
+  "$schema": "../../src/config/schema/wgsl-training-source-catalog.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "catalogId": "wgsl-ml-kernel-sources-v2",
+  "claimBoundary": "Pinned source and license inventory. Training is allowed only where allowTraining is true and the corpus verifier accepts the materialized WGSL.",
+  "sources": [
+    {
+      "id": "doppler",
+      "repository": "https://github.com/clocksmith/doppler",
+      "revision": "90ca8e7d88e945f29a8f0c658a8c4f36d9cc6b26",
+      "license": "Apache-2.0",
+      "parserKind": "wgsl_files",
+      "localPath": ".",
+      "includeRoots": [
+        "src/gpu/kernels"
+      ],
+      "allowTraining": true,
+      "role": "primary_in_domain",
+      "notes": "Handwritten and generated inference, training, diffusion, and energy kernels. Every accepted file must compile on the declared WebGPU verifier."
+    },
+    {
+      "id": "zero-tvm",
+      "repository": "https://github.com/abgnydn/zero-tvm",
+      "revision": "32406c88acc201694df83a4e22df64bf4391d380",
+      "license": "MIT",
+      "parserKind": "wgsl_files",
+      "includeRoots": [
+        "src"
+      ],
+      "allowTraining": true,
+      "role": "external_ood",
+      "notes": "Captured TVM shaders plus handwritten browser LLM, optimizer, and BPE kernels. One malformed source observed at the pinned revision is filtered by clean compilation."
+    },
+    {
+      "id": "llama-cpp",
+      "repository": "https://github.com/ggml-org/llama.cpp",
+      "revision": "e3546c7948e3af463d0b401e6421d5a4c2faf565",
+      "license": "MIT",
+      "parserKind": "templated_wgsl",
+      "includeRoots": [
+        "ggml/src/ggml-webgpu/wgsl-shaders"
+      ],
+      "allowTraining": false,
+      "role": "reference_only",
+      "notes": "The raw files require llama.cpp preprocessing and specialization. They are not training rows until a pinned materializer reproduces compile-clean shaders."
+    },
+    {
+      "id": "onnxruntime",
+      "repository": "https://github.com/microsoft/onnxruntime",
+      "revision": "361184e61957410f19153754f325806972546d5b",
+      "license": "MIT",
+      "parserKind": "typescript_generators",
+      "includeRoots": [
+        "js/web/lib/wasm/jsep/webgpu/ops"
+      ],
+      "allowTraining": false,
+      "role": "reference_only",
+      "notes": "WebGPU operator programs are generated from TypeScript. Add a versioned materializer before admitting generated shaders."
+    },
+    {
+      "id": "tensorflow-js",
+      "repository": "https://github.com/tensorflow/tfjs",
+      "revision": "7f5309fef0a47545e34049903dbdae0f97285f7e",
+      "license": "Apache-2.0",
+      "parserKind": "typescript_generators",
+      "includeRoots": [
+        "tfjs-backend-webgpu/src"
+      ],
+      "allowTraining": false,
+      "role": "reference_only",
+      "notes": "WebGPU programs are TypeScript generators rather than standalone WGSL files."
+    },
+    {
+      "id": "cubecl",
+      "repository": "https://github.com/tracel-ai/cubecl",
+      "revision": "9110136fe5bb3c6e7dc0295100fe7f88342ceb6e",
+      "license": "Apache-2.0",
+      "parserKind": "compiler_reference",
+      "includeRoots": [
+        "crates/cubecl-wgpu"
+      ],
+      "allowTraining": false,
+      "role": "reference_only",
+      "notes": "Rust compiler source is useful for design diversity but is not a standalone WGSL training corpus."
+    },
+    {
+      "id": "apache-tvm",
+      "repository": "https://github.com/apache/tvm",
+      "revision": "7356265096cba7196673b09f90b023e600171452",
+      "license": "Apache-2.0",
+      "parserKind": "compiler_reference",
+      "includeRoots": [
+        "src/target/source/codegen_webgpu.cc"
+      ],
+      "allowTraining": false,
+      "role": "reference_only",
+      "notes": "Compiler source requires a frozen lowering workload before it can yield comparable WGSL rows."
+    },
+    {
+      "id": "mlc-web-llm",
+      "repository": "https://github.com/mlc-ai/web-llm",
+      "revision": "21314560fe1e44f379c3415f1077362769ac5c94",
+      "license": "Apache-2.0",
+      "parserKind": "compiler_reference",
+      "includeRoots": [
+        "src",
+        "3rdparty"
+      ],
+      "allowTraining": false,
+      "role": "reference_only",
+      "notes": "WebLLM consumes TVM-generated model libraries and does not check in standalone materialized WGSL. Admit rows only after a pinned MLC/TVM build reproduces shader text, specialization inputs, and compile receipts."
+    },
+    {
+      "id": "webgpu-llm",
+      "repository": "https://github.com/toprakdeviren/webgpu-llm",
+      "revision": "e331fe1151540d688aa2fec9d18cec600356dd91",
+      "license": "MIT",
+      "parserKind": "wgsl_files",
+      "includeRoots": [
+        "src"
+      ],
+      "allowTraining": false,
+      "role": "quarantined",
+      "notes": "The pinned raw shader bundle caused verifier instability during catalog qualification and remains excluded pending per-file isolation receipts."
+    }
+  ]
+}

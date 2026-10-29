@@ -1,0 +1,211 @@
+{
+  "$schema": "../../src/config/schema/wgsl-writer-v3-training-policy.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-writer-v3-explicit-budget-training",
+  "experimentId": "doppler-wgsl-writer-v3",
+  "status": "frozen_before_training",
+  "artifactRoot": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/explicit-budget-v4",
+  "repairEvidence": {
+    "unfairTrainingPolicy": {
+      "path": "tools/policies/wgsl-writer-v3-explicit-semantic-training-policy.json",
+      "sha256": "875eb84f87ce0a53e4d0a0ad936be412a3ffaed4106821beeab55305be437bcb"
+    },
+    "failureClass": "hidden_output_token_budget",
+    "promptContractBefore": "wgsl-executable-package-semantic-spec-host-v2",
+    "promptContractAfter": "wgsl-executable-package-semantic-budget-spec-host-v3",
+    "outputTokenBudget": 1280,
+    "hardStopDisclosed": true,
+    "abortedBeforeReceipt": true,
+    "selectionGateChanged": false
+  },
+  "admission": {
+    "corpusPolicy": {
+      "path": "tools/policies/wgsl-writer-v3-explicit-output-budget-corpus-policy.json",
+      "sha256": "27cd9102c69e8e7ec10bbebadccb2c9f51fac80edef4c08b3d8ad9cf274ee106"
+    },
+    "corpusManifest": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v4-explicit-budget/corpus-manifest.json",
+      "sha256": "d28152b4b23d73364247496fdef130a8b2de5467a2033d307cfb736c11b4642b"
+    },
+    "referenceQualification": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v4-explicit-budget/reference-qualification.json",
+      "sha256": "3cb95e1ceeabc8c1b90b29dc437fdce2cbba8662738c4a47e1448707f9aa9635"
+    },
+    "trainingLanes": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v4-explicit-budget/manifest.json",
+      "sha256": "e2167503d368892ded492fa3ef7eff33a24e48c306a62b4f272bfa5a67952fe0"
+    }
+  },
+  "model": {
+    "modelId": "Qwen/Qwen3.5-9B",
+    "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "configSha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+    "tokenizerSha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+    "localProvisioning": "operator_provided_pinned_snapshot"
+  },
+  "initialization": {
+    "adapters": [
+      {
+        "id": "semantic_package_base_seed47_adapter",
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/explicit-semantic-repair-v3/training/semantic-package-base-seed47/checkpoint/adapter",
+        "configSha256": "6edc2583c3bfbc0da5ebd285833dbe252384023b14db903edcf2f4da24d8c600",
+        "weightsSha256": "c00f5a96c3effc6971219b0b9dd64a48e2914911740d64e93a0b0b1ee545b464",
+        "sourceTrainingStatus": {
+          "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/explicit-semantic-repair-v3/training/semantic-package-base-seed47/training-status.json",
+          "sha256": "75023cb6a284191a05c1d37d2e37122b261eda6a1d3e4a7121612ec96a9546b7"
+        }
+      },
+      {
+        "id": "semantic_repair_seed47_adapter",
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/explicit-semantic-repair-v3/training/semantic-repair-prior-init-seed47/checkpoint/adapter",
+        "configSha256": "f01c18aa548e7ad0f91b59a428cea09fbf73f212631e2c3364484d9f81213db3",
+        "weightsSha256": "d07e4eae455a56afd837abf0991ca4ff9b73e07ceb7c3b944fd021fc6bffb73f",
+        "sourceTrainingStatus": {
+          "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/explicit-semantic-repair-v3/training/semantic-repair-prior-init-seed47/training-status.json",
+          "sha256": "dbf3ef2e780cd21bee806807e0b03a78dd82d40901b2d14c30eefd293c1fe62e"
+        }
+      }
+    ],
+    "evidenceTransfers": false
+  },
+  "lanes": [
+    {
+      "id": "budget-package-base",
+      "dataset": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v4-explicit-budget/package-sft.jsonl",
+        "sha256": "c46560915b7612d73cb159990e005e1b3f329ee600464081d1764dd3e18423ff",
+        "rows": 192,
+        "supervisedCompletionTokens": 147200
+      },
+      "initialization": "base",
+      "screeningSeed": 47,
+      "capabilityAuthority": true
+    },
+    {
+      "id": "budget-package-semantic-init",
+      "dataset": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v4-explicit-budget/package-sft.jsonl",
+        "sha256": "c46560915b7612d73cb159990e005e1b3f329ee600464081d1764dd3e18423ff",
+        "rows": 192,
+        "supervisedCompletionTokens": 147200
+      },
+      "initialization": "semantic_package_base_seed47_adapter",
+      "screeningSeed": 47,
+      "capabilityAuthority": true
+    },
+    {
+      "id": "budget-repair-semantic-init",
+      "dataset": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v4-explicit-budget/repair-mixed-sft.jsonl",
+        "sha256": "1109c9999bc5ea422aea75f363d12700a2bcf8cb39358be8c534b7b867a40fd4",
+        "rows": 192,
+        "supervisedCompletionTokens": 147200
+      },
+      "initialization": "semantic_repair_seed47_adapter",
+      "screeningSeed": 47,
+      "capabilityAuthority": true
+    },
+    {
+      "id": "budget-count-matched-control",
+      "dataset": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v4-explicit-budget/count-matched-control.jsonl",
+        "sha256": "b7aae257479d72348c214bde59d4e39a873c0e58aab271197096d5f25fdb9c56",
+        "rows": 192,
+        "supervisedCompletionTokens": 147200
+      },
+      "initialization": "base",
+      "screeningSeed": 47,
+      "capabilityAuthority": false
+    }
+  ],
+  "trainer": {
+    "owner": "gamma",
+    "protocol": "gamma_wgsl_trainer_json_v1",
+    "action": "sft",
+    "dtype": "bfloat16",
+    "sequenceLength": 3072,
+    "adapter": {
+      "kind": "lora",
+      "rank": 32,
+      "alpha": 64,
+      "dropout": 0.05,
+      "targetModules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ]
+    },
+    "training": {
+      "steps": 192,
+      "gradientAccumulationSteps": 8,
+      "learningRate": 0.0001,
+      "weightDecay": 0.01,
+      "maxGradNorm": 1,
+      "rowOrder": "seed_hash_sorted_v1"
+    },
+    "screeningOrder": [
+      "budget-package-base",
+      "budget-package-semantic-init",
+      "budget-repair-semantic-init",
+      "budget-count-matched-control"
+    ],
+    "parallelRunsAllowed": false
+  },
+  "evaluation": {
+    "baselines": [
+      "unchanged_base",
+      "unchanged_semantic_package_seed47_adapter",
+      "unchanged_semantic_repair_seed47_adapter"
+    ],
+    "baselineCandidates": [
+      {
+        "id": "unchanged-semantic-package",
+        "initialization": "semantic_package_base_seed47_adapter"
+      },
+      {
+        "id": "unchanged-semantic-repair",
+        "initialization": "semantic_repair_seed47_adapter"
+      }
+    ],
+    "calibrationPopulation": "calibration",
+    "selectionPopulation": "checkpoint_selection",
+    "confirmationPopulation": "seed_confirmation",
+    "screeningSeed": 47,
+    "confirmationSeeds": [11, 29],
+    "generation": {
+      "mode": "greedy",
+      "maxNewTokens": 1280,
+      "samplesPerTask": 1
+    },
+    "primaryMetric": "semantic_executable_package_pass_at_1",
+    "minimumSelectionSemanticPassRate": 0.5,
+    "minimumConfirmationMeanSemanticPassRate": 0.75,
+    "minimumConfirmationPerSeedSemanticPassRate": 0.5,
+    "tieBreakers": [
+      "quality_pass_rate",
+      "response_contract_pass_rate",
+      "compile_at_1",
+      "resource_contract_pass_rate",
+      "lower_mean_response_characters",
+      "lane_id"
+    ],
+    "selectionReceiptPath": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/explicit-budget-v4/evaluation/selection/selected-lane.json",
+    "exactDopplerParityRequired": true,
+    "externalPromotionRequired": true
+  },
+  "authority": {
+    "training": true,
+    "checkpointSelection": true,
+    "seedConfirmation": true,
+    "dopplerParity": true,
+    "promotion": false,
+    "generalWgslWriterClaim": false,
+    "productization": false
+  },
+  "claimBoundary": "Every training and held-out prompt discloses the exact 1280-generated-token hard stop, and the evaluator must mechanically match it. Family-disjoint AMD/Vulkan execution and the unchanged 50% selection and 75% confirmation gates decide bounded capability; no earlier evidence transfers."
+}

@@ -1,0 +1,119 @@
+{
+  "$schema": "../../src/config/schema/wgsl-repair-semantic-evaluation.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-repair-v13-semantic-evaluation",
+  "status": "frozen_requirements_populations_unmaterialized",
+  "predecessor": {
+    "experimentId": "doppler-wgsl-repair-v12",
+    "resultPath": "docs/status/wgsl-repair-v12-2026-07-13.json",
+    "resultSha256": "84959c835e260d523a291649a52b7003dd0a7a26f263ac96993e2bd6be9ca11f",
+    "preservationVerificationPath": "docs/status/wgsl-repair-v12-adapter-preservation-verification-2026-07-13.json",
+    "preservationVerificationSha256": "2892b97dd87db3247c622ee0d031c9e649eee6a0c5cb560d0ac67f5c2639025c"
+  },
+  "capability": "replacement_only_semantically_correct_wgsl_repair",
+  "candidate": {
+    "eligibleLane": "external20",
+    "seedSelectionStatus": "not_selected",
+    "selectedSeed": null,
+    "adapterSha256": null,
+    "adapterPath": null,
+    "trainerToDopplerParityReceipt": null
+  },
+  "populations": {
+    "calibration": { "status": "unmaterialized", "manifestPath": null, "populationHash": null },
+    "checkpointSelection": { "status": "unmaterialized", "manifestPath": null, "populationHash": null },
+    "seedConfirmation": { "status": "unmaterialized", "manifestPath": null, "populationHash": null },
+    "promotion": { "status": "unmaterialized", "manifestPath": null, "populationHash": null },
+    "overlapPolicy": "No kernel-family, source-kernel, mutation lineage, natural-error document, oracle fixture, or historical regression may overlap roles."
+  },
+  "taskContract": {
+    "responseContract": "replacement_only_wgsl_span_v1",
+    "compilationPrerequisite": "chromium_webgpu_compile_must_pass_before_dispatch",
+    "actualDispatchRequired": true,
+    "cpuOracle": {
+      "required": true,
+      "implementationRevision": null,
+      "inputAndOutputHashBinding": true
+    },
+    "numericalAgreement": {
+      "formula": "abs(actual-reference) <= absTolerance + relTolerance * abs(reference)",
+      "nonFinitePolicy": "unexpected_nan_or_infinity_fails; expected_nonfinite_requires_exact_class_and_sign",
+      "tiers": {
+        "integerAndBoolean": { "mode": "exact", "absTolerance": 0, "relTolerance": 0 },
+        "float32": { "mode": "numeric", "absTolerance": 0.00001, "relTolerance": 0.0001 },
+        "float16": { "mode": "numeric", "absTolerance": 0.002, "relTolerance": 0.02 }
+      },
+      "wideningRule": "Per-task tolerances may be narrower; wider tolerances require a new policy revision frozen before candidate evaluation."
+    },
+    "shapeVariation": {
+      "minimumDistinctShapesPerTask": 3,
+      "requiredClasses": ["nominal", "non_workgroup_multiple", "boundary_or_tail"]
+    },
+    "workgroupVariation": {
+      "minimumSemanticallyValidVariantsPerTask": 2,
+      "referenceAndCandidateUseIdenticalVariants": true
+    },
+    "bufferBounds": {
+      "prefixCanaryElements": 16,
+      "suffixCanaryElements": 16,
+      "readOnlyBuffersMustRemainByteIdentical": true,
+      "outputPaddingMustRemainByteIdentical": true,
+      "unexpectedValidationErrorFails": true
+    },
+    "metamorphic": {
+      "minimumApplicableRelationsPerTask": 2,
+      "allowedRelations": [
+        "input_permutation_equivariance",
+        "zero_or_identity_relation",
+        "scale_relation",
+        "tiling_equivalence",
+        "shape_partition_equivalence",
+        "task_specific_adjudicated_invariant"
+      ],
+      "referenceQualificationRequired": true
+    },
+    "historicalRegressions": {
+      "required": true,
+      "manifestPath": null,
+      "manifestSha256": null
+    }
+  },
+  "metrics": {
+    "primary": "semantic_task_pass_at_1",
+    "secondary": ["compile_at_1", "semantic_pass_at_8", "edit_size", "policy_violation_rate"],
+    "semanticTaskPassDefinition": "compile pass and every dispatch, oracle, tolerance, bounds, workgroup, shape, metamorphic, and historical-regression check passes"
+  },
+  "blockingGuardrails": [
+    "response_contract_violation",
+    "compilation_failure",
+    "dispatch_failure",
+    "cpu_oracle_mismatch",
+    "nonfinite_mismatch",
+    "buffer_canary_corruption",
+    "read_only_buffer_mutation",
+    "output_padding_mutation",
+    "shape_variant_failure",
+    "workgroup_variant_failure",
+    "metamorphic_failure",
+    "historical_regression",
+    "trainer_to_doppler_parity_failure"
+  ],
+  "productization": {
+    "wgslDoctorAllowed": false,
+    "autonomousShaderAuthorAllowed": false
+  },
+  "blockers": [
+    "semantic_calibration_population_unmaterialized",
+    "semantic_checkpoint_selection_population_unmaterialized",
+    "semantic_seed_confirmation_population_unmaterialized",
+    "semantic_promotion_population_unmaterialized",
+    "semantic_task_manifest_absent",
+    "cpu_oracle_implementation_revision_absent",
+    "historical_regression_manifest_absent",
+    "external20_seed_checkpoint_not_selected",
+    "trainer_to_doppler_adapter_parity_absent",
+    "semantic_dispatch_evidence_absent"
+  ],
+  "claimBoundary": "This policy freezes the semantic WGSL repair contract after V12 without modifying V12. It does not claim a selected seed, adapter parity, dispatch correctness, semantic capability, WGSL Doctor readiness, general shader authorship, or promotion."
+}

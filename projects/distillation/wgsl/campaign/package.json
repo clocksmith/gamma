@@ -1,0 +1,33 @@
+{
+  "name": "gamma-wgsl-training-campaign",
+  "private": true,
+  "type": "module",
+  "description": "WGSL repair/writer training campaign moved from Doppler. Runs inside a generated Doppler-namespace view (node run.js); DOPPLER_ROOT selects the Doppler checkout.",
+  "scripts": {
+    "test": "node run.js --test",
+    "training:teachers:verify": "node run.js tools/verify-host-teacher-contracts.js",
+    "training:teachers:qualify": "node run.js tools/qualify-code-teachers.js",
+    "training:students:verify": "node run.js tools/verify-student-code-experiment.js",
+    "training:students:run": "node run.js tools/run-student-code-experiment.js",
+    "training:wgsl:corpus": "node run.js tools/build-wgsl-repair-corpus.js",
+    "training:wgsl:experiment": "node run.js tools/run-wgsl-repair-experiment.js",
+    "training:wgsl:rollouts": "node run.js tools/run-wgsl-repair-rollouts.js",
+    "training:wgsl:semantic": "node run.js tools/run-wgsl-repair-semantic-harness.js",
+    "training:wgsl:writer:semantic": "node run.js tools/run-wgsl-writer-semantic-harness.js",
+    "training:wgsl:writer:candidate": "node run.js tools/run-wgsl-writer-candidate.js",
+    "training:wgsl:writer:corpus": "node run.js tools/build-wgsl-writer-corpus.js",
+    "training:wgsl:writer:corpus:check": "node run.js tools/build-wgsl-writer-corpus.js --check",
+    "training:wgsl:writer:corpus:qualify": "node run.js tools/qualify-wgsl-writer-corpus.js",
+    "training:wgsl:writer:workloads:check": "node run.js tools/materialize-wgsl-writer-v2-seed-workloads.js --check",
+    "training:wgsl:writer:train": "node run.js tools/run-wgsl-writer-v2-training.js",
+    "training:wgsl:writer:evaluate": "node run.js tools/run-wgsl-writer-v2-evaluation.js",
+    "training:wgsl:writer:select": "node run.js tools/select-wgsl-writer-v2-seed.js",
+    "training:wgsl:writer:confirm": "node run.js tools/finalize-wgsl-writer-v2-confirmation.js",
+    "training:wgsl:writer:parity": "node run.js tools/run-wgsl-writer-v2-parity.js",
+    "training:wgsl:writer:result": "node run.js tools/finalize-wgsl-writer-v2-result.js",
+    "training:wgsl:author:contract": "node run.js --test tests/tooling/wgsl-author-package.test.js tests/tooling/wgsl-author-execution-plan.test.js tests/tooling/wgsl-author-browser-executor.test.js tests/tooling/wgsl-author-reference.test.js tests/training/wgsl-writer-v3-contract.test.js",
+    "training:wgsl:author:reference": "node run.js tools/run-wgsl-author-v3-reference.js",
+    "training:wgsl:seed-candidates": "node run.js tools/run-wgsl-repair-seed-candidates.js",
+    "training:wgsl:seed-select": "node run.js tools/select-wgsl-repair-v13-seed.js"
+  }
+}

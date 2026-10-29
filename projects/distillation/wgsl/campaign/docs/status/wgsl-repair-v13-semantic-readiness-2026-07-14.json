@@ -1,0 +1,297 @@
+{
+  "schema": "doppler.wgsl-repair-semantic-readiness/v2",
+  "experimentId": "doppler-wgsl-repair-v13",
+  "policyId": "doppler-wgsl-repair-v13-semantic-evaluation",
+  "policyStatus": "frozen_requirements_populations_unmaterialized",
+  "policyBinding": {
+    "path": "tools/policies/wgsl-repair-v13-semantic-policy.json",
+    "sha256": "c5814bde7453a3d69c1c8ad07f15c3665e5f2aa8b69b63f64538bb1ca747bf80"
+  },
+  "predecessorVerified": true,
+  "preservationDecision": "complete",
+  "adapterPortabilityBinding": {
+    "path": "docs/status/wgsl-repair-v12-adapter-portability-2026-07-13.json",
+    "sha256": "589888d414a34a25e386f1b43347dc9b25a68ed858de6e0dc2cc3b46d8ea32e3"
+  },
+  "adapterPortability": {
+    "receiptVerified": true,
+    "schema": "doppler.wgsl-repair-v12-adapter-portability-status/v1",
+    "experimentId": "doppler-wgsl-repair-v12",
+    "lane": "external20",
+    "decision": "diagnostic_import_parity_passed",
+    "basePass": true,
+    "adapterPassBySeed": {
+      "11": true,
+      "29": true,
+      "47": true
+    },
+    "pass": true
+  },
+  "candidate": {
+    "eligibleLane": "external20",
+    "seedSelectionStatus": "not_selected",
+    "selectedSeed": null,
+    "adapterPath": null,
+    "adapterSha256": null,
+    "selectionReceiptPath": null,
+    "selectionReceiptSha256": null
+  },
+  "populations": {
+    "calibration": {
+      "status": "frozen",
+      "manifestPath": "tools/data/wgsl-repair-v13-semantic-calibration.json",
+      "populationHash": "f479e256730c57ef5d000648d9a0464cb5eac9c0b942660735b96444d95085b2"
+    },
+    "checkpointSelection": {
+      "status": "frozen",
+      "manifestPath": "tools/data/wgsl-repair-v13-semantic-checkpoint-selection.json",
+      "populationHash": "4b35750e905ce8ff92114715f36d65807b9b020015e00d4567c80a5e9fa53c1b"
+    },
+    "seedConfirmation": {
+      "status": "unmaterialized",
+      "manifestPath": null,
+      "populationHash": null
+    },
+    "promotion": {
+      "status": "unmaterialized",
+      "manifestPath": null,
+      "populationHash": null
+    }
+  },
+  "implementation": {
+    "taskManifestPath": "tools/data/wgsl-repair-v13-semantic-task-qualification.json",
+    "taskManifestSha256": "15e9799a7742f56243455c004e8aea315355ff127cd375c750ee159e7137e248",
+    "cpuOracleRevision": "wgsl-semantic-cpu-oracles-v1",
+    "historicalRegressionManifestPath": "tools/data/wgsl-repair-v13-historical-regressions.json",
+    "historicalRegressionManifestSha256": "0cf12c4641fad4e99994d6d3b1162569d674bf82f6749b7297984027122e9c23"
+  },
+  "taskEvidence": [
+    {
+      "taskId": "v13-mechanics-affine-f32",
+      "pass": true,
+      "variants": [
+        {
+          "shapeId": "affine-nominal-64",
+          "shapeClass": "nominal",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 64,
+            "actualElements": 64,
+            "mismatchCount": 0,
+            "maxAbsError": 4.76837158203125e-7,
+            "maxRelError": 2.928401748607252e-7,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "affine-tail-67",
+          "shapeClass": "non_workgroup_multiple",
+          "workgroupId": "wg-64",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 67,
+            "actualElements": 67,
+            "mismatchCount": 0,
+            "maxAbsError": 4.76837158203125e-7,
+            "maxRelError": 2.928401748607252e-7,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "affine-boundary-1",
+          "shapeClass": "boundary_or_tail",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        }
+      ],
+      "distinctShapeCount": 3,
+      "distinctWorkgroupCount": 2,
+      "passedMetamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "blockers": [],
+      "resultHash": "3dd6329e22d822308a7b98b797e1b7524690f858c2fa18ebc9141fb468d879a1"
+    },
+    {
+      "taskId": "v13-mechanics-saxpy-f32",
+      "pass": true,
+      "variants": [
+        {
+          "shapeId": "saxpy-nominal-64",
+          "shapeClass": "nominal",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 64,
+            "actualElements": 64,
+            "mismatchCount": 0,
+            "maxAbsError": 9.5367431640625e-7,
+            "maxRelError": 0.000005388221348132981,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "saxpy-tail-67",
+          "shapeClass": "non_workgroup_multiple",
+          "workgroupId": "wg-64",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 67,
+            "actualElements": 67,
+            "mismatchCount": 0,
+            "maxAbsError": 9.5367431640625e-7,
+            "maxRelError": 0.000005388221348132981,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "saxpy-boundary-1",
+          "shapeClass": "boundary_or_tail",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        }
+      ],
+      "distinctShapeCount": 3,
+      "distinctWorkgroupCount": 2,
+      "passedMetamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "blockers": [],
+      "resultHash": "036d7600c54e5c3a0b5f47d9105d2181e199760d60c30002aa12b569c54b0410"
+    },
+    {
+      "taskId": "v13-mechanics-clamp-f32",
+      "pass": true,
+      "variants": [
+        {
+          "shapeId": "clamp-nominal-64",
+          "shapeClass": "nominal",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 64,
+            "actualElements": 64,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "clamp-tail-67",
+          "shapeClass": "non_workgroup_multiple",
+          "workgroupId": "wg-64",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 67,
+            "actualElements": 67,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "clamp-boundary-1",
+          "shapeClass": "boundary_or_tail",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        }
+      ],
+      "distinctShapeCount": 3,
+      "distinctWorkgroupCount": 2,
+      "passedMetamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "blockers": [],
+      "resultHash": "20b7ba7583781bbb2473c456dde83189ef2d41e307c56137d7804f9d13f57429"
+    }
+  ],
+  "phaseAdmission": {
+    "calibrationAllowed": true,
+    "checkpointSelectionAllowed": true,
+    "seedConfirmationAllowed": false,
+    "promotionEvaluationAllowed": false
+  },
+  "admission": {
+    "semanticEvaluationAllowed": true,
+    "semanticClaimAllowed": false,
+    "wgslDoctorAllowed": false,
+    "autonomousShaderAuthorAllowed": false
+  },
+  "decision": "semantic_evaluation_allowed",
+  "declaredHistoricalBlockers": [
+    "cpu_oracle_implementation_revision_absent",
+    "external20_seed_checkpoint_not_selected",
+    "historical_regression_manifest_absent",
+    "semantic_calibration_population_unmaterialized",
+    "semantic_checkpoint_selection_population_unmaterialized",
+    "semantic_dispatch_evidence_absent",
+    "semantic_promotion_population_unmaterialized",
+    "semantic_seed_confirmation_population_unmaterialized",
+    "semantic_task_manifest_absent",
+    "trainer_to_doppler_adapter_parity_absent"
+  ],
+  "blockers": [
+    "external20_seed_checkpoint_not_selected",
+    "semantic_promotion_population_unmaterialized",
+    "semantic_seed_confirmation_population_unmaterialized"
+  ],
+  "claimBoundary": "This evidence state recognizes the passing, frozen V12 external20 portability receipt and a passing reference-control qualification of the semantic harness. It does not select a seed or claim model semantic correctness. Every later fact must be represented by a repo-relative artifact path and verified SHA-256 before it can clear a V13 blocker.",
+  "receiptHash": "877fdb61880269d28ef9611692ae4edbd7016ee6c301d5970d5013fed5b0586c"
+}

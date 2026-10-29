@@ -1,0 +1,436 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/doppler/schemas/wgsl-writer-training-policy-v1.schema.json",
+  "title": "WGSL writer training and development-evaluation policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
+    "policyId",
+    "experimentId",
+    "status",
+    "capability",
+    "admission",
+    "dataset",
+    "model",
+    "workloads",
+    "trainer",
+    "generation",
+    "evaluation",
+    "metrics",
+    "authority",
+    "claimBoundary"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../src/config/schema/wgsl-writer-training-policy.schema.json"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "source": {
+      "const": "doppler"
+    },
+    "policyId": {
+      "const": "doppler-wgsl-writer-v2-training"
+    },
+    "experimentId": {
+      "const": "doppler-wgsl-writer-v2"
+    },
+    "status": {
+      "const": "frozen_before_training"
+    },
+    "capability": {
+      "const": "complete_1d_elementwise_f32_compute_shader_from_explicit_interface"
+    },
+    "admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "corpusPolicy",
+        "corpusManifest",
+        "referenceQualification",
+        "workloadRegistry"
+      ],
+      "properties": {
+        "corpusPolicy": {
+          "$ref": "#/$defs/binding"
+        },
+        "corpusManifest": {
+          "$ref": "#/$defs/binding"
+        },
+        "referenceQualification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "sha256",
+            "requiredDecision"
+          ],
+          "properties": {
+            "path": {
+              "$ref": "#/$defs/repoPath"
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "requiredDecision": {
+              "const": "reference_corpus_qualified"
+            }
+          }
+        },
+        "workloadRegistry": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "sha256",
+            "registryHash"
+          ],
+          "properties": {
+            "path": {
+              "$ref": "#/$defs/repoPath"
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "registryHash": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        }
+      }
+    },
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "rows",
+        "semanticFamilies",
+        "rowConsumption",
+        "rowOrder"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/repoPath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "rows": {
+          "const": 720
+        },
+        "semanticFamilies": {
+          "const": 15
+        },
+        "rowConsumption": {
+          "const": "each_row_exactly_once_per_seed"
+        },
+        "rowOrder": {
+          "const": "seed_hash_sorted_v1"
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modelId",
+        "revision",
+        "initialization",
+        "localProvisioning"
+      ],
+      "properties": {
+        "modelId": {
+          "const": "Qwen/Qwen3.5-9B"
+        },
+        "revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "initialization": {
+          "const": "base_model_each_seed"
+        },
+        "localProvisioning": {
+          "const": "operator_provided_pinned_snapshot"
+        }
+      }
+    },
+    "workloads": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "seed",
+          "path",
+          "sha256",
+          "runRoot"
+        ],
+        "properties": {
+          "seed": {
+            "enum": [
+              11,
+              29,
+              47
+            ]
+          },
+          "path": {
+            "$ref": "#/$defs/repoPath"
+          },
+          "sha256": {
+            "$ref": "#/$defs/sha256"
+          },
+          "runRoot": {
+            "$ref": "#/$defs/repoPath"
+          }
+        }
+      }
+    },
+    "trainer": {
+      "type": "object",
+      "required": [
+        "owner",
+        "protocol",
+        "runnerId",
+        "dtype",
+        "sequenceLength",
+        "adapter",
+        "training",
+        "executionOrder",
+        "parallelSeedsAllowed"
+      ],
+      "properties": {
+        "owner": {
+          "const": "gamma"
+        },
+        "protocol": {
+          "const": "gamma_wgsl_trainer_json_v1"
+        },
+        "runnerId": {
+          "const": "gamma-wgsl-causal-lm-lora"
+        },
+        "dtype": {
+          "const": "bfloat16"
+        },
+        "sequenceLength": {
+          "const": 2048
+        },
+        "executionOrder": {
+          "const": [
+            11,
+            29,
+            47
+          ]
+        },
+        "parallelSeedsAllowed": {
+          "const": false
+        },
+        "adapter": {
+          "type": "object"
+        },
+        "training": {
+          "type": "object"
+        }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "required": [
+        "maxTokens",
+        "temperature",
+        "topP",
+        "topK",
+        "repetitionPenalty",
+        "greedyThreshold",
+        "samplesPerTask",
+        "maxTokensDerivation"
+      ],
+      "properties": {
+        "maxTokens": {
+          "const": 384
+        },
+        "temperature": {
+          "const": 0
+        },
+        "topP": {
+          "const": 1
+        },
+        "topK": {
+          "const": 1
+        },
+        "repetitionPenalty": {
+          "const": 1
+        },
+        "greedyThreshold": {
+          "const": 0
+        },
+        "samplesPerTask": {
+          "const": 1
+        },
+        "maxTokensDerivation": {
+          "type": "object"
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "order",
+        "calibration",
+        "checkpointSelection",
+        "seedConfirmation",
+        "dopplerParity",
+        "promotion"
+      ],
+      "properties": {
+        "order": {
+          "const": [
+            "calibration",
+            "checkpoint_selection",
+            "seed_confirmation",
+            "doppler_parity",
+            "external_promotion"
+          ]
+        },
+        "calibration": {
+          "$ref": "#/$defs/population"
+        },
+        "checkpointSelection": {
+          "$ref": "#/$defs/population"
+        },
+        "seedConfirmation": {
+          "$ref": "#/$defs/population"
+        },
+        "dopplerParity": {
+          "type": "object"
+        },
+        "promotion": {
+          "type": "object",
+          "required": [
+            "status",
+            "sealedOpenings",
+            "materialized",
+            "promotionAllowed"
+          ],
+          "properties": {
+            "status": {
+              "const": "external_custody_required"
+            },
+            "sealedOpenings": {
+              "const": 1
+            },
+            "materialized": {
+              "const": false
+            },
+            "promotionAllowed": {
+              "const": false
+            }
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object"
+    },
+    "authority": {
+      "type": "object",
+      "required": [
+        "training",
+        "calibration",
+        "checkpointSelection",
+        "seedConfirmation",
+        "dopplerParity",
+        "promotion",
+        "generalWgslWriterClaim",
+        "productization"
+      ],
+      "properties": {
+        "training": {
+          "const": true
+        },
+        "calibration": {
+          "const": true
+        },
+        "checkpointSelection": {
+          "const": true
+        },
+        "seedConfirmation": {
+          "const": true
+        },
+        "dopplerParity": {
+          "const": true
+        },
+        "promotion": {
+          "const": false
+        },
+        "generalWgslWriterClaim": {
+          "const": false
+        },
+        "productization": {
+          "const": false
+        }
+      }
+    },
+    "claimBoundary": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "repoPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\.\.(?:/|$)).+$"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/repoPath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "population": {
+      "type": "object",
+      "required": [
+        "populationPath",
+        "rows",
+        "semanticFamilies"
+      ],
+      "properties": {
+        "populationPath": {
+          "$ref": "#/$defs/repoPath"
+        },
+        "rows": {
+          "const": 16
+        },
+        "semanticFamilies": {
+          "const": 2
+        }
+      }
+    }
+  }
+}

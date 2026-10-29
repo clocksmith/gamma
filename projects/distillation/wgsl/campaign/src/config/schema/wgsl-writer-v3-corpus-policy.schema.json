@@ -1,0 +1,321 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/doppler/schemas/wgsl-writer-v3-corpus-policy-v1.schema.json",
+  "title": "WGSL writer v3 executable package corpus policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
+    "policyId",
+    "experimentId",
+    "status",
+    "capability",
+    "predecessor",
+    "corpus",
+    "promptContract",
+    "runtime",
+    "referenceQualification",
+    "authority",
+    "claimBoundary"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../src/config/schema/wgsl-writer-v3-corpus-policy.schema.json"
+    },
+    "schemaVersion": { "const": 1 },
+    "source": { "const": "doppler" },
+    "policyId": {
+      "enum": [
+        "doppler-wgsl-writer-v3-corpus",
+        "doppler-wgsl-writer-v3-corpus-diversity-repair",
+        "doppler-wgsl-writer-v3-explicit-semantic-repair",
+        "doppler-wgsl-writer-v3-explicit-output-budget"
+      ]
+    },
+    "experimentId": { "const": "doppler-wgsl-writer-v3" },
+    "status": { "enum": ["frozen_before_materialization", "reference_qualified"] },
+    "capability": {
+      "const": "complete_executable_webgpu_shader_package_from_natural_language_and_host_contract"
+    },
+    "predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["referenceQualification", "capabilityClaimTransfers"],
+      "properties": {
+        "referenceQualification": { "$ref": "#/$defs/binding" },
+        "capabilityClaimTransfers": { "const": false }
+      }
+    },
+    "corpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capabilityCatalog",
+        "outputRoot",
+        "rowsPerFamily",
+        "splitKey",
+        "sourceLineage",
+        "sourceLicense"
+      ],
+      "properties": {
+        "capabilityCatalog": { "$ref": "#/$defs/binding" },
+        "outputRoot": { "$ref": "#/$defs/repoPath" },
+        "rowsPerFamily": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["training", "calibration", "checkpoint_selection", "seed_confirmation"],
+          "properties": {
+            "training": { "type": "integer", "minimum": 3 },
+            "calibration": { "type": "integer", "minimum": 3 },
+            "checkpoint_selection": { "type": "integer", "minimum": 3 },
+            "seed_confirmation": { "type": "integer", "minimum": 3 }
+          }
+        },
+        "splitKey": { "const": "semanticFamilyId" },
+        "sourceLineage": {
+          "enum": [
+            "human_authored_doppler_parametric_reference",
+            "human_authored_doppler_parametric_reference_with_verified_alpha_layout_variants",
+            "human_authored_doppler_explicit_semantic_contract_with_verified_alpha_layout_variants",
+            "human_authored_doppler_explicit_semantic_and_output_budget_contract"
+          ]
+        },
+        "sourceLicense": { "const": "Apache-2.0" },
+        "packageDiversity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": {
+            "mode": { "const": "identifier_binding_permutation_v1" }
+          }
+        }
+      }
+    },
+    "promptContract": {
+      "oneOf": [
+        {
+          "const": {
+            "templateId": "wgsl-executable-package-spec-host-v1",
+            "useChatTemplate": false,
+            "responseContract": "wgsl_author_package_v1",
+            "includesNaturalLanguageSpecification": true,
+            "includesExplicitHostContract": true
+          }
+        },
+        {
+          "const": {
+            "templateId": "wgsl-executable-package-semantic-spec-host-v2",
+            "useChatTemplate": false,
+            "responseContract": "wgsl_author_package_v1",
+            "includesNaturalLanguageSpecification": true,
+            "includesExplicitSemanticContract": true,
+            "includesExplicitHostContract": true
+          }
+        },
+        {
+          "const": {
+            "templateId": "wgsl-executable-package-semantic-budget-spec-host-v3",
+            "useChatTemplate": false,
+            "responseContract": "wgsl_author_package_v1",
+            "includesNaturalLanguageSpecification": true,
+            "includesExplicitSemanticContract": true,
+            "includesExplicitHostContract": true,
+            "includesExplicitOutputTokenBudget": true,
+            "outputTokenBudget": 1280,
+            "hardStopDisclosed": true
+          }
+        }
+      ]
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "headless",
+        "requiredBackend",
+        "requiredVendor",
+        "requiredFeatures",
+        "requiredLimits",
+        "powerPreference",
+        "executionTimeoutMs",
+        "browserArgs",
+        "allocationLimits"
+      ],
+      "properties": {
+        "headless": { "type": "boolean" },
+        "requiredBackend": { "type": "string", "minLength": 1 },
+        "requiredVendor": { "type": ["string", "null"] },
+        "requiredFeatures": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "requiredLimits": { "type": "object" },
+        "powerPreference": { "enum": ["low-power", "high-performance"] },
+        "executionTimeoutMs": { "type": "integer", "minimum": 1000 },
+        "browserArgs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "allocationLimits": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["maxBufferBytes", "maxTextureBytes", "maxTotalBytes"],
+          "properties": {
+            "maxBufferBytes": { "type": "integer", "minimum": 1 },
+            "maxTextureBytes": { "type": "integer", "minimum": 1 },
+            "maxTotalBytes": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+    "referenceQualification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "replayCount",
+        "compileEveryPackage",
+        "executeEveryHeldoutTask",
+        "executeOneRepresentativePerTrainingFamily",
+        "qualityGateBlocking",
+        "mustPassBeforeTraining"
+      ],
+      "properties": {
+        "replayCount": { "type": "integer", "minimum": 2 },
+        "compileEveryPackage": { "const": true },
+        "executeEveryHeldoutTask": { "const": true },
+        "executeOneRepresentativePerTrainingFamily": { "type": "boolean" },
+        "executeEveryTrainingTask": { "type": "boolean" },
+        "qualityGateBlocking": { "const": true },
+        "mustPassBeforeTraining": { "const": true }
+      }
+    },
+    "authority": {
+      "const": {
+        "corpusMaterialization": true,
+        "referenceQualification": true,
+        "trainingAfterReferenceQualification": true,
+        "checkpointSelection": true,
+        "seedConfirmation": true,
+        "promotion": false,
+        "generalWgslWriterClaim": false,
+        "productization": false
+      }
+    },
+    "claimBoundary": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "policyId": { "const": "doppler-wgsl-writer-v3-corpus-diversity-repair" }
+        }
+      },
+      "then": {
+        "properties": {
+          "corpus": {
+            "required": ["packageDiversity"],
+            "properties": {
+              "sourceLineage": {
+                "const": "human_authored_doppler_parametric_reference_with_verified_alpha_layout_variants"
+              }
+            }
+          },
+          "referenceQualification": {
+            "required": ["executeEveryTrainingTask"],
+            "properties": {
+              "executeOneRepresentativePerTrainingFamily": { "const": false },
+              "executeEveryTrainingTask": { "const": true }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "policyId": { "const": "doppler-wgsl-writer-v3-explicit-semantic-repair" }
+        }
+      },
+      "then": {
+        "properties": {
+          "corpus": {
+            "required": ["packageDiversity"],
+            "properties": {
+              "sourceLineage": {
+                "const": "human_authored_doppler_explicit_semantic_contract_with_verified_alpha_layout_variants"
+              }
+            }
+          },
+          "promptContract": {
+            "const": {
+              "templateId": "wgsl-executable-package-semantic-spec-host-v2",
+              "useChatTemplate": false,
+              "responseContract": "wgsl_author_package_v1",
+              "includesNaturalLanguageSpecification": true,
+              "includesExplicitSemanticContract": true,
+              "includesExplicitHostContract": true
+            }
+          },
+          "referenceQualification": {
+            "required": ["executeEveryTrainingTask"],
+            "properties": {
+              "executeOneRepresentativePerTrainingFamily": { "const": false },
+              "executeEveryTrainingTask": { "const": true }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "policyId": { "const": "doppler-wgsl-writer-v3-explicit-output-budget" }
+        }
+      },
+      "then": {
+        "properties": {
+          "corpus": {
+            "required": ["packageDiversity"],
+            "properties": {
+              "sourceLineage": {
+                "const": "human_authored_doppler_explicit_semantic_and_output_budget_contract"
+              }
+            }
+          },
+          "promptContract": {
+            "const": {
+              "templateId": "wgsl-executable-package-semantic-budget-spec-host-v3",
+              "useChatTemplate": false,
+              "responseContract": "wgsl_author_package_v1",
+              "includesNaturalLanguageSpecification": true,
+              "includesExplicitSemanticContract": true,
+              "includesExplicitHostContract": true,
+              "includesExplicitOutputTokenBudget": true,
+              "outputTokenBudget": 1280,
+              "hardStopDisclosed": true
+            }
+          },
+          "referenceQualification": {
+            "required": ["executeEveryTrainingTask"],
+            "properties": {
+              "executeOneRepresentativePerTrainingFamily": { "const": false },
+              "executeEveryTrainingTask": { "const": true }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "repoPath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repoPath" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

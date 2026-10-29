@@ -1,0 +1,140 @@
+{
+  "$schema": "../../src/config/schema/wgsl-writer-family-distillation-policy.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-writer-family-distillation-v1",
+  "status": "active_identity_bound_experiment",
+  "artifactRoot": "reports/training/wgsl-writer/family-distillation-v1",
+  "researchBasis": [
+    {
+      "method": "LLM-Neo",
+      "url": "https://arxiv.org/html/2411.06839v2",
+      "use": "Fresh student LoRA with teacher-distribution supervision."
+    },
+    {
+      "method": "Delta-KD",
+      "url": "https://arxiv.org/html/2509.14526v1",
+      "use": "Transfer the teacher base-to-adapter logit shift onto the student base distribution."
+    },
+    {
+      "method": "Generalized Knowledge Distillation",
+      "url": "https://arxiv.org/abs/2306.13649",
+      "use": "Keep a hard-sequence teacher arm distinct from offline logit supervision."
+    },
+    {
+      "method": "TIES-Merging",
+      "url": "https://arxiv.org/abs/2306.01708",
+      "use": "Motivates merging task deltas rather than averaging raw factor coordinates."
+    }
+  ],
+  "teacher": {
+    "modelId": "Qwen/Qwen3.5-9B",
+    "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "configSha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+    "tokenizerSha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42"
+  },
+  "students": [
+    {
+      "modelId": "Qwen/Qwen3.5-0.8B",
+      "revision": "2fc06364715b967f1860aea9cf38778875588b17",
+      "trainingSnapshotProvisioned": true,
+      "runtimeModelId": "qwen-3-5-0-8b-q4k-ehaf16",
+      "configSha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+      "tokenizerSha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+      "blocker": null
+    },
+    {
+      "modelId": "Qwen/Qwen3.5-2B",
+      "revision": null,
+      "trainingSnapshotProvisioned": false,
+      "runtimeModelId": "qwen-3-5-2b-q4k-ehaf16",
+      "blocker": "Full-precision SafeTensors training snapshot is not locally provisioned; only GGUF and RDRR runtime artifacts are present."
+    }
+  ],
+  "sourceAdapterSet": {
+    "transportRequest": {
+      "path": "reports/training/wgsl-writer/family-distillation-v1/transport/0-8b-v2/transport-request.json",
+      "sha256": "0eaee1fde6bb18e61f1098976b1589e9ed54f18475f10ad8902b6bec60e8c38d"
+    },
+    "includedAdapters": 11,
+    "excludedControls": true,
+    "weightingAuthority": "contract_generation_recency_without_holdout_scores"
+  },
+  "dataset": {
+    "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v4-explicit-budget/package-sft.jsonl",
+    "sha256": "c46560915b7612d73cb159990e005e1b3f329ee600464081d1764dd3e18423ff",
+    "rows": 192,
+    "completionTokens": 147200,
+    "outputTokenBudget": 1280
+  },
+  "arms": [
+    {
+      "id": "lwsc-v2-sft",
+      "method": "lineage-weighted-sketch-compress-v2",
+      "initialization": "transported_rank32",
+      "teacherSignal": "weights_and_adapters",
+      "adapterPath": "reports/training/wgsl-writer/family-distillation-v1/arms/lwsc-v2-sft-0-8b/checkpoint/adapter",
+      "dopplerExportPath": "reports/training/wgsl-writer/family-distillation-v1/arms/lwsc-v2-sft-0-8b/doppler-export"
+    },
+    {
+      "id": "llm-neo",
+      "method": "llm-neo-topk-v1",
+      "initialization": "fresh_rank32",
+      "teacherSignal": "topk_logits",
+      "adapterPath": "reports/training/wgsl-writer/family-distillation-v1/arms/llm-neo-0-8b/checkpoint/adapter",
+      "dopplerExportPath": "reports/training/wgsl-writer/family-distillation-v1/arms/llm-neo-0-8b/doppler-export"
+    },
+    {
+      "id": "delta-kd",
+      "method": "delta-kd-topk-v1",
+      "initialization": "fresh_rank32",
+      "teacherSignal": "delta_logits",
+      "adapterPath": "reports/training/wgsl-writer/family-distillation-v1/arms/delta-kd-0-8b/checkpoint/adapter",
+      "dopplerExportPath": "reports/training/wgsl-writer/family-distillation-v1/arms/delta-kd-0-8b/doppler-export"
+    },
+    {
+      "id": "sequence-kd",
+      "method": "oracle-filtered-sequence-kd-v1",
+      "initialization": "fresh_rank32",
+      "teacherSignal": "hard_sequences",
+      "adapterPath": "reports/training/wgsl-writer/family-distillation-v1/arms/sequence-kd-0-8b/checkpoint/adapter",
+      "dopplerExportPath": "reports/training/wgsl-writer/family-distillation-v1/arms/sequence-kd-0-8b/doppler-export"
+    }
+  ],
+  "fairness": {
+    "seed": 47,
+    "rank": 32,
+    "alpha": 64,
+    "dropout": 0.05,
+    "microsteps": 192,
+    "optimizerUpdates": 24,
+    "gradientAccumulationSteps": 8,
+    "learningRate": 0.0001,
+    "weightDecay": 0.01,
+    "maxLength": 3072,
+    "rowOrder": "seed_hash_sorted_v1",
+    "logitTopK": 64,
+    "tailPolicy": "renormalize_on_teacher_adapted_topk_support"
+  },
+  "evaluation": {
+    "surface": "chromium_webgpu",
+    "backend": "vulkan",
+    "gpu": "AMD Radeon 8060S Graphics",
+    "generation": {
+      "mode": "greedy",
+      "maxNewTokens": 1280
+    },
+    "primaryMetric": "semantic_executable_package_pass_at_1",
+    "requiresActualDispatchOrDraw": true,
+    "requiresDeterministicReplay": true,
+    "requiresGpuCleanup": true,
+    "exactDopplerAdapterParity": true
+  },
+  "authority": {
+    "training": true,
+    "comparison": true,
+    "generalWgslWriterClaim": false,
+    "productization": false
+  },
+  "claimBoundary": "This experiment compares cross-size initialization and distillation mechanics on an explicit 1280-token WGSL package contract. Only disjoint Chromium WebGPU execution can establish bounded student capability; no arm proves arbitrary shader authorship."
+}

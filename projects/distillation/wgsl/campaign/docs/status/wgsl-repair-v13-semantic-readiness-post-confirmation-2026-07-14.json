@@ -1,0 +1,633 @@
+{
+  "schema": "doppler.wgsl-repair-semantic-readiness/v2",
+  "experimentId": "doppler-wgsl-repair-v13",
+  "policyId": "doppler-wgsl-repair-v13-semantic-evaluation",
+  "policyStatus": "frozen_requirements_populations_unmaterialized",
+  "policyBinding": {
+    "path": "tools/policies/wgsl-repair-v13-semantic-policy.json",
+    "sha256": "c5814bde7453a3d69c1c8ad07f15c3665e5f2aa8b69b63f64538bb1ca747bf80"
+  },
+  "predecessorVerified": true,
+  "preservationDecision": "complete",
+  "adapterPortabilityBinding": {
+    "path": "docs/status/wgsl-repair-v12-adapter-portability-2026-07-13.json",
+    "sha256": "589888d414a34a25e386f1b43347dc9b25a68ed858de6e0dc2cc3b46d8ea32e3"
+  },
+  "adapterPortability": {
+    "receiptVerified": true,
+    "schema": "doppler.wgsl-repair-v12-adapter-portability-status/v1",
+    "experimentId": "doppler-wgsl-repair-v12",
+    "lane": "external20",
+    "decision": "diagnostic_import_parity_passed",
+    "basePass": true,
+    "adapterPassBySeed": {
+      "11": true,
+      "29": true,
+      "47": true
+    },
+    "pass": true
+  },
+  "candidate": {
+    "eligibleLane": "external20",
+    "seedSelectionStatus": "selected",
+    "selectedSeed": 29,
+    "adapterPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/external20/sft/exports/checkpoint-001200.adapters.safetensors",
+    "adapterSha256": "0d9ab8e1348a3fcdd6ef2973b624cc1a3d962de90a571976a5a222df27b69394",
+    "selectionReceiptPath": "docs/status/wgsl-repair-v13-seed-selection-2026-07-14.json",
+    "selectionReceiptSha256": "8f33d219a6a757e19e22beb2d809b9f9a2770aaf3d563da541c26d0b67b701ef"
+  },
+  "candidateSelection": {
+    "receiptVerified": true,
+    "decision": "selected_for_seed_confirmation",
+    "selectedSeed": 29,
+    "pass": true
+  },
+  "seedConfirmation": {
+    "receiptVerified": true,
+    "status": "passed",
+    "decision": "seed_confirmation_passed",
+    "selectedSeed": 29,
+    "pass": true
+  },
+  "populations": {
+    "calibration": {
+      "status": "frozen",
+      "manifestPath": "tools/data/wgsl-repair-v13-semantic-calibration.json",
+      "populationHash": "f479e256730c57ef5d000648d9a0464cb5eac9c0b942660735b96444d95085b2"
+    },
+    "checkpointSelection": {
+      "status": "frozen",
+      "manifestPath": "tools/data/wgsl-repair-v13-semantic-checkpoint-selection.json",
+      "populationHash": "4b35750e905ce8ff92114715f36d65807b9b020015e00d4567c80a5e9fa53c1b"
+    },
+    "seedConfirmation": {
+      "status": "frozen",
+      "manifestPath": "tools/data/wgsl-repair-v13-semantic-seed-confirmation.json",
+      "populationHash": "e86d55497329d5d6adfd579b726b980bf7d42386f1df74d740ff0903fdefb3e9"
+    },
+    "promotion": {
+      "status": "unmaterialized",
+      "manifestPath": null,
+      "populationHash": null
+    }
+  },
+  "implementation": {
+    "taskManifestPath": "tools/data/wgsl-repair-v13-semantic-task-qualification.json",
+    "taskManifestSha256": "15e9799a7742f56243455c004e8aea315355ff127cd375c750ee159e7137e248",
+    "cpuOracleRevision": "wgsl-semantic-cpu-oracles-v1",
+    "historicalRegressionManifestPath": "tools/data/wgsl-repair-v13-historical-regressions.json",
+    "historicalRegressionManifestSha256": "0cf12c4641fad4e99994d6d3b1162569d674bf82f6749b7297984027122e9c23"
+  },
+  "taskEvidence": [
+    {
+      "taskId": "v13-confirmation-max-pair-f32",
+      "pass": true,
+      "variants": [
+        {
+          "shapeId": "confirm-max-pair-nominal-64",
+          "shapeClass": "nominal",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 64,
+            "actualElements": 64,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-max-pair-tail-70",
+          "shapeClass": "non_workgroup_multiple",
+          "workgroupId": "wg-64",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 70,
+            "actualElements": 70,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-max-pair-boundary-2",
+          "shapeClass": "boundary_or_tail",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 2,
+            "actualElements": 2,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        }
+      ],
+      "distinctShapeCount": 3,
+      "distinctWorkgroupCount": 2,
+      "passedMetamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "blockers": [],
+      "resultHash": "56f0ee269e1efa6ac44150009ef96f63ae60208aec2e32d12b9a662918f5e4cc"
+    },
+    {
+      "taskId": "v13-confirmation-mean-pair-f32",
+      "pass": true,
+      "variants": [
+        {
+          "shapeId": "confirm-mean-pair-nominal-64",
+          "shapeClass": "nominal",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 64,
+            "actualElements": 64,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-mean-pair-tail-71",
+          "shapeClass": "non_workgroup_multiple",
+          "workgroupId": "wg-64",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 71,
+            "actualElements": 71,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-mean-pair-boundary-2",
+          "shapeClass": "boundary_or_tail",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 2,
+            "actualElements": 2,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        }
+      ],
+      "distinctShapeCount": 3,
+      "distinctWorkgroupCount": 2,
+      "passedMetamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "blockers": [],
+      "resultHash": "37dcde062cc1ceac1e8700bbcdbadb2d9cf633e841a28e6a648b31ae28cd090f"
+    },
+    {
+      "taskId": "v13-confirmation-square-scale-f32",
+      "pass": true,
+      "variants": [
+        {
+          "shapeId": "confirm-square-scale-nominal-64",
+          "shapeClass": "nominal",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 64,
+            "actualElements": 64,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-square-scale-tail-77",
+          "shapeClass": "non_workgroup_multiple",
+          "workgroupId": "wg-64",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 77,
+            "actualElements": 77,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-square-scale-boundary-7",
+          "shapeClass": "boundary_or_tail",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        }
+      ],
+      "distinctShapeCount": 3,
+      "distinctWorkgroupCount": 2,
+      "passedMetamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "blockers": [],
+      "resultHash": "0c315d84a6c7aa13d694c4703f8262ddb8b523c719137022292ba7aa198fb4e9"
+    },
+    {
+      "taskId": "v13-confirmation-negate-f32",
+      "pass": true,
+      "variants": [
+        {
+          "shapeId": "confirm-negate-nominal-64",
+          "shapeClass": "nominal",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 64,
+            "actualElements": 64,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-negate-tail-65",
+          "shapeClass": "non_workgroup_multiple",
+          "workgroupId": "wg-64",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-negate-boundary-3",
+          "shapeClass": "boundary_or_tail",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 3,
+            "actualElements": 3,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        }
+      ],
+      "distinctShapeCount": 3,
+      "distinctWorkgroupCount": 2,
+      "passedMetamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "blockers": [],
+      "resultHash": "09e6f04d1c8367c89b514b65681aeb814f546f2f46bf6141aee92bc9496f52d0"
+    },
+    {
+      "taskId": "v13-confirmation-distance-pair-f32",
+      "pass": true,
+      "variants": [
+        {
+          "shapeId": "confirm-distance-pair-nominal-64",
+          "shapeClass": "nominal",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 64,
+            "actualElements": 64,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-distance-pair-tail-68",
+          "shapeClass": "non_workgroup_multiple",
+          "workgroupId": "wg-64",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 68,
+            "actualElements": 68,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-distance-pair-boundary-7",
+          "shapeClass": "boundary_or_tail",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        }
+      ],
+      "distinctShapeCount": 3,
+      "distinctWorkgroupCount": 2,
+      "passedMetamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "blockers": [],
+      "resultHash": "4dad503bb089427cb92ecfd4e3a5cc3fc771c79ea1454377a5768a7571317f07"
+    },
+    {
+      "taskId": "v13-confirmation-difference-scale-f32",
+      "pass": true,
+      "variants": [
+        {
+          "shapeId": "confirm-difference-scale-nominal-64",
+          "shapeClass": "nominal",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 64,
+            "actualElements": 64,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-difference-scale-tail-69",
+          "shapeClass": "non_workgroup_multiple",
+          "workgroupId": "wg-64",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 69,
+            "actualElements": 69,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-difference-scale-boundary-2",
+          "shapeClass": "boundary_or_tail",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 2,
+            "actualElements": 2,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        }
+      ],
+      "distinctShapeCount": 3,
+      "distinctWorkgroupCount": 2,
+      "passedMetamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "blockers": [],
+      "resultHash": "9ae04e384a71813a6e6450f218b5880bbb3228f0aa9a517a841c9c615eff182e"
+    },
+    {
+      "taskId": "v13-confirmation-add-scalar-f32",
+      "pass": true,
+      "variants": [
+        {
+          "shapeId": "confirm-add-scalar-nominal-64",
+          "shapeClass": "nominal",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 64,
+            "actualElements": 64,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-add-scalar-tail-74",
+          "shapeClass": "non_workgroup_multiple",
+          "workgroupId": "wg-64",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 74,
+            "actualElements": 74,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-add-scalar-boundary-4",
+          "shapeClass": "boundary_or_tail",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 4,
+            "actualElements": 4,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        }
+      ],
+      "distinctShapeCount": 3,
+      "distinctWorkgroupCount": 2,
+      "passedMetamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "blockers": [],
+      "resultHash": "6928fbdacebf505e799667884b61568d6bf466d06f926d6150606e9690c8bdd7"
+    },
+    {
+      "taskId": "v13-confirmation-mask-below-f32",
+      "pass": true,
+      "variants": [
+        {
+          "shapeId": "confirm-mask-below-nominal-64",
+          "shapeClass": "nominal",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 64,
+            "actualElements": 64,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-mask-below-tail-71",
+          "shapeClass": "non_workgroup_multiple",
+          "workgroupId": "wg-64",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 71,
+            "actualElements": 71,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        },
+        {
+          "shapeId": "confirm-mask-below-boundary-5",
+          "shapeClass": "boundary_or_tail",
+          "workgroupId": "wg-32",
+          "dispatchPass": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 5,
+            "actualElements": 5,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "hashBindingPass": true,
+          "boundsPass": true
+        }
+      ],
+      "distinctShapeCount": 3,
+      "distinctWorkgroupCount": 2,
+      "passedMetamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "blockers": [],
+      "resultHash": "4d8ea7c969865f87520fa027005abc3d3844781bf2ac808e1aed6e0695d1c2d1"
+    }
+  ],
+  "phaseAdmission": {
+    "calibrationAllowed": true,
+    "checkpointSelectionAllowed": true,
+    "seedConfirmationAllowed": true,
+    "promotionEvaluationAllowed": false
+  },
+  "admission": {
+    "semanticEvaluationAllowed": true,
+    "semanticClaimAllowed": false,
+    "wgslDoctorAllowed": false,
+    "autonomousShaderAuthorAllowed": false
+  },
+  "decision": "semantic_evaluation_allowed",
+  "declaredHistoricalBlockers": [
+    "cpu_oracle_implementation_revision_absent",
+    "external20_seed_checkpoint_not_selected",
+    "historical_regression_manifest_absent",
+    "semantic_calibration_population_unmaterialized",
+    "semantic_checkpoint_selection_population_unmaterialized",
+    "semantic_dispatch_evidence_absent",
+    "semantic_promotion_population_unmaterialized",
+    "semantic_seed_confirmation_population_unmaterialized",
+    "semantic_task_manifest_absent",
+    "trainer_to_doppler_adapter_parity_absent"
+  ],
+  "blockers": [
+    "semantic_promotion_population_unmaterialized"
+  ],
+  "claimBoundary": "This evidence state recognizes passing V12 portability, seed 29 selected under the frozen checkpoint-selection policy, and seed 29 passing the one-use commit-derived semantic confirmation population. Promotion evaluation remains blocked until a separate one-use promotion population is externally frozen; WGSL Doctor and complete shader writing remain unauthorized.",
+  "receiptHash": "65ae24c078c9d304e17671cf9593bce07c30000f4b3592526024e92677584b35"
+}

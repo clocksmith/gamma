@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://doppler.dev/schemas/host-teacher-qualification-receipt.schema.json",
+  "title": "Doppler Host Teacher Qualification Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "source",
+    "receiptKind",
+    "sessionId",
+    "policyId",
+    "policyHash",
+    "receiptSchemaHash",
+    "harnessHash",
+    "harnessFiles",
+    "harnessRuntime",
+    "taskBankId",
+    "taskBankHash",
+    "baseRevision",
+    "mutatedBaselineRevision",
+    "provider",
+    "providerVersion",
+    "teacherModelId",
+    "task",
+    "promptHash",
+    "providerProcess",
+    "eventCount",
+    "eventParseErrors",
+    "auditedCommands",
+    "passed",
+    "checks",
+    "policyViolationCount",
+    "actualChangedPaths",
+    "unauthorizedPaths",
+    "forbiddenChangedPaths",
+    "forbiddenCommands",
+    "exactRecovery",
+    "validationCommands",
+    "finalOutput",
+    "finalOutputError",
+    "patchHash",
+    "patchBytes",
+    "workspacePath"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "source": { "const": "doppler" },
+    "receiptKind": { "const": "host_teacher_machine_qualification" },
+    "sessionId": { "type": "string", "minLength": 1 },
+    "policyId": { "type": "string", "minLength": 1 },
+    "policyHash": { "$ref": "#/$defs/hash" },
+    "receiptSchemaHash": { "$ref": "#/$defs/hash" },
+    "harnessHash": { "$ref": "#/$defs/hash" },
+    "harnessFiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "hash"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "hash": { "$ref": "#/$defs/hash" }
+        }
+      }
+    },
+    "harnessRuntime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodeVersion", "platform", "architecture"],
+      "properties": {
+        "nodeVersion": { "type": "string", "minLength": 1 },
+        "platform": { "type": "string", "minLength": 1 },
+        "architecture": { "type": "string", "minLength": 1 }
+      }
+    },
+    "taskBankId": { "type": "string", "minLength": 1 },
+    "taskBankHash": { "$ref": "#/$defs/hash" },
+    "baseRevision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "mutatedBaselineRevision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "provider": { "enum": ["claude", "codex"] },
+    "providerVersion": { "type": "string", "minLength": 1 },
+    "teacherModelId": { "type": "string", "minLength": 1 },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "lane", "split", "sourceFiles", "allowedChangedPaths"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "lane": { "enum": ["javascript", "wgsl"] },
+        "split": { "enum": ["qualification", "label", "student_holdout"] },
+        "sourceFiles": { "$ref": "#/$defs/strings" },
+        "allowedChangedPaths": { "$ref": "#/$defs/strings" }
+      }
+    },
+    "promptHash": { "$ref": "#/$defs/hash" },
+    "providerProcess": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command", "argsHash", "code", "signal", "stdoutHash", "stderrHash"],
+      "properties": {
+        "command": { "type": "string", "minLength": 1 },
+        "argsHash": { "$ref": "#/$defs/hash" },
+        "code": { "type": ["integer", "null"] },
+        "signal": { "type": ["string", "null"] },
+        "stdoutHash": { "$ref": "#/$defs/hash" },
+        "stderrHash": { "$ref": "#/$defs/hash" }
+      }
+    },
+    "eventCount": { "type": "integer", "minimum": 0 },
+    "eventParseErrors": { "type": "array", "items": { "type": "object" } },
+    "auditedCommands": { "$ref": "#/$defs/strings" },
+    "passed": { "type": "boolean" },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "providerExitedSuccessfully",
+        "eventStreamParsed",
+        "finalOutputValid",
+        "declaredChangedFilesMatch",
+        "patchPresent",
+        "changedPathsAllowed",
+        "forbiddenChangedPathsAbsent",
+        "forbiddenCommandsAbsent",
+        "exactSourceRecovery",
+        "validationCommandsPassed"
+      ],
+      "properties": {
+        "providerExitedSuccessfully": { "type": "boolean" },
+        "eventStreamParsed": { "type": "boolean" },
+        "finalOutputValid": { "type": "boolean" },
+        "declaredChangedFilesMatch": { "type": "boolean" },
+        "patchPresent": { "type": "boolean" },
+        "changedPathsAllowed": { "type": "boolean" },
+        "forbiddenChangedPathsAbsent": { "type": "boolean" },
+        "forbiddenCommandsAbsent": { "type": "boolean" },
+        "exactSourceRecovery": { "type": "boolean" },
+        "validationCommandsPassed": { "type": "boolean" }
+      }
+    },
+    "policyViolationCount": { "type": "integer", "minimum": 0 },
+    "actualChangedPaths": { "$ref": "#/$defs/strings" },
+    "unauthorizedPaths": { "$ref": "#/$defs/strings" },
+    "forbiddenChangedPaths": { "$ref": "#/$defs/strings" },
+    "forbiddenCommands": { "type": "array", "items": { "type": "object" } },
+    "exactRecovery": { "type": "array", "items": { "type": "object" } },
+    "validationCommands": { "type": "array", "items": { "type": "object" } },
+    "finalOutput": {
+      "oneOf": [
+        { "$ref": "./host-teacher-output.schema.json" },
+        { "type": "null" }
+      ]
+    },
+    "finalOutputError": { "type": ["string", "null"] },
+    "patchHash": { "$ref": "#/$defs/hash" },
+    "patchBytes": { "type": "integer", "minimum": 0 },
+    "workspacePath": { "type": ["string", "null"] }
+  },
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "strings": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

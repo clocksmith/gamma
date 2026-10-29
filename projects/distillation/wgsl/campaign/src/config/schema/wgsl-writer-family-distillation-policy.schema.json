@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/doppler/schemas/wgsl-writer-family-distillation-policy-v1.schema.json",
+  "title": "WGSL writer cross-size family distillation policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
+    "policyId",
+    "status",
+    "artifactRoot",
+    "researchBasis",
+    "teacher",
+    "students",
+    "sourceAdapterSet",
+    "dataset",
+    "arms",
+    "fairness",
+    "evaluation",
+    "authority",
+    "claimBoundary"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../src/config/schema/wgsl-writer-family-distillation-policy.schema.json"
+    },
+    "schemaVersion": { "const": 1 },
+    "source": { "const": "doppler" },
+    "policyId": { "const": "doppler-wgsl-writer-family-distillation-v1" },
+    "status": { "enum": ["active_identity_bound_experiment", "completed"] },
+    "artifactRoot": { "$ref": "#/$defs/repoPath" },
+    "researchBasis": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["method", "url", "use"],
+        "properties": {
+          "method": { "type": "string", "minLength": 1 },
+          "url": { "type": "string", "pattern": "^https://" },
+          "use": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "teacher": { "$ref": "#/$defs/model" },
+    "students": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": { "$ref": "#/$defs/student" }
+    },
+    "sourceAdapterSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transportRequest", "includedAdapters", "excludedControls", "weightingAuthority"],
+      "properties": {
+        "transportRequest": { "$ref": "#/$defs/binding" },
+        "includedAdapters": { "const": 11 },
+        "excludedControls": { "const": true },
+        "weightingAuthority": { "const": "contract_generation_recency_without_holdout_scores" }
+      }
+    },
+    "dataset": { "$ref": "#/$defs/dataset" },
+    "arms": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "method",
+          "initialization",
+          "teacherSignal",
+          "adapterPath",
+          "dopplerExportPath"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "method": {
+            "enum": [
+              "lineage-weighted-sketch-compress-v2",
+              "llm-neo-topk-v1",
+              "delta-kd-topk-v1",
+              "oracle-filtered-sequence-kd-v1"
+            ]
+          },
+          "initialization": { "enum": ["transported_rank32", "fresh_rank32"] },
+          "teacherSignal": { "enum": ["weights_and_adapters", "topk_logits", "delta_logits", "hard_sequences"] },
+          "adapterPath": { "$ref": "#/$defs/repoPath" },
+          "dopplerExportPath": { "$ref": "#/$defs/repoPath" }
+        }
+      }
+    },
+    "fairness": { "type": "object" },
+    "evaluation": { "type": "object" },
+    "authority": {
+      "const": {
+        "training": true,
+        "comparison": true,
+        "generalWgslWriterClaim": false,
+        "productization": false
+      }
+    },
+    "claimBoundary": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "repoPath": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repoPath" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["modelId", "revision", "configSha256", "tokenizerSha256"],
+      "properties": {
+        "modelId": { "type": "string", "minLength": 1 },
+        "revision": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "configSha256": { "$ref": "#/$defs/sha256" },
+        "tokenizerSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "student": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["modelId", "revision", "trainingSnapshotProvisioned", "runtimeModelId", "blocker"],
+      "properties": {
+        "modelId": { "type": "string", "minLength": 1 },
+        "revision": { "type": ["string", "null"] },
+        "trainingSnapshotProvisioned": { "type": "boolean" },
+        "runtimeModelId": { "type": "string", "minLength": 1 },
+        "configSha256": { "$ref": "#/$defs/sha256" },
+        "tokenizerSha256": { "$ref": "#/$defs/sha256" },
+        "blocker": { "type": ["string", "null"] }
+      }
+    },
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "rows", "completionTokens", "outputTokenBudget"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repoPath" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "rows": { "const": 192 },
+        "completionTokens": { "const": 147200 },
+        "outputTokenBudget": { "const": 1280 }
+      }
+    }
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "artifactType": "student_code_terminal_status",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "experimentId": "doppler-student-code-replay-v1",
+  "runId": "doppler-js-wgsl-2026-07-11-v8",
+  "generatedAt": "2026-07-11T22:56:05.650Z",
+  "status": "rejected",
+  "evidenceClass": "experimental_constructive_replay",
+  "releaseTarget": "0.4.9",
+  "baseModelId": "gemma-3-270m-it-f16-af32",
+  "repositoryRevision": "1c9c0850b5efe8c342baeec3eae26c471656e7f6",
+  "policyHash": "7117bcb0ea365872d80065459f2015ae654099cb05c4de0a480aea7531a0593b",
+  "taskBankHash": "cc45a609e78e9e282b39621fc52fa7e79c0808dd4dfc91a0d8c0b3876a832700",
+  "harnessHash": "41edacdff8a36657c157e19ca71b4d81b2734f46d8a2141b50f99c7bf477348b",
+  "claimBoundary": "The WGSL mechanics receipt passed, but frozen held-out replay measured no constructive improvement and 30 candidate policy violations. The mixed candidate failed its loss gate before replay. controlProven is false; challengers and all model, adapter, package, release, and demo promotion remain blocked. This is execution-verified SFT, not RLVR, GRPO, or logit KD.",
+  "wgslTraining": {
+    "status": "mechanics_proven",
+    "datasetHash": "5520bfec792121714f5e83e968c4a640a995599fa41d0739bfd9aa766d90702b",
+    "expectedSteps": 8,
+    "observedSteps": 8,
+    "nonzeroGradientSteps": 8,
+    "parameterizedSteps": 8,
+    "tensorCount": 72,
+    "changedTensorCount": 72,
+    "nonzeroFinalTensorCount": 72,
+    "l2Delta": 0.23221625547152977,
+    "baselineLoss": 1.7594943249029105,
+    "adapterLoss": 1.7594215848313548,
+    "absoluteLossImprovement": 0.00007274007155566586,
+    "learningReceiptPassed": true,
+    "weightsSha256": "15f2697050b3c52d5e1937a842ea2411dc2907a63875d9d3a6e47be9af4ba9d7"
+  },
+  "wgslReplay": {
+    "status": "rejected",
+    "taskCount": 2,
+    "requiredRepetitions": 3,
+    "baselineReplayCount": 6,
+    "candidateReplayCount": 6,
+    "baselinePassRate": 0,
+    "candidatePassRate": 0,
+    "absoluteImprovement": 0,
+    "strictImprovement": false,
+    "deterministicOutputs": true,
+    "candidatePolicyViolationCount": 30,
+    "failureCodes": [
+      "changed_paths_mismatch",
+      "invalid_edit_keys",
+      "invalid_edit_record",
+      "output_wrapper"
+    ],
+    "passed": false
+  },
+  "mixedTraining": {
+    "status": "rejected_before_replay",
+    "datasetHash": "f3ae8a0a2469144419613bc3367eb16166d3320facb7d3f6fc1819a5667726d1",
+    "sourceRowCount": 8,
+    "materializedRowCount": 16,
+    "laneCounts": {
+      "javascript": 4,
+      "wgsl": 4
+    },
+    "expectedSteps": 16,
+    "observedSteps": 16,
+    "nonzeroGradientSteps": 16,
+    "parameterizedSteps": 16,
+    "tensorCount": 72,
+    "changedTensorCount": 72,
+    "nonzeroFinalTensorCount": 72,
+    "l2Delta": 0.4372571839979604,
+    "baselineLoss": 1.7467704704098914,
+    "adapterLoss": 1.7469165558029276,
+    "absoluteLossImprovement": -0.00014608539303617718,
+    "learningReceiptPassed": false,
+    "weightsSha256": "92d00840cc9261184a61166ebefca5250e7684ca96b5c5645afe5583a7a119a2",
+    "replayed": false
+  },
+  "javascriptSpecialist": {
+    "status": "not_run_after_wgsl_rejection",
+    "reason": "A JavaScript-only result could not make the specialized candidate eligible after the WGSL lane failed."
+  },
+  "promotion": {
+    "controlProven": false,
+    "specializedEligible": false,
+    "mixedEligible": false,
+    "challengerStatus": "blocked_until_control_proven"
+  },
+  "sourceArtifacts": [
+    {
+      "path": "reports/training/student-code-replay/doppler-js-wgsl-2026-07-11-v8/report.json",
+      "sha256": "3655c5e674ca74c52ef0bc6f2deffa21c255068714d8e4241df4e1c973d5622f"
+    },
+    {
+      "path": "reports/training/student-code-replay/doppler-js-wgsl-2026-07-11-v8/replay/baseline/receipts.json",
+      "sha256": "6f3e5e057b1289c288a6fd81f330af3a0f2e807de08661d093a1cf03596485da"
+    },
+    {
+      "path": "reports/training/student-code-replay/doppler-js-wgsl-2026-07-11-v8/replay/wgsl/receipts.json",
+      "sha256": "6b054f7a0439307b409255c2b16a807f8583d1dc0da87e7561efbb7053d53da5"
+    },
+    {
+      "path": "reports/training/student-code-replay/doppler-js-wgsl-2026-07-11-v8/training/wgsl/student-training-result.json",
+      "sha256": "c83ebc03ab960855c6be3e502980bd38ef45bd2ac5f137900843c73056d68ea0"
+    },
+    {
+      "path": "reports/training/student-code-replay/doppler-js-wgsl-2026-07-11-v8/training/mixed/student-training-result.json",
+      "sha256": "c65d357b175c1eb708d8a1d432f45e56cb6e0d78ec5fe85bc06c5770e0ff980d"
+    },
+    {
+      "path": "reports/training/student-code-replay/doppler-js-wgsl-2026-07-11-v8/ouroboros-failure-signals.jsonl",
+      "sha256": "e4097a485489f257037c98c47b240faf16253d0e0d77f04f0b955120fa6739a6"
+    }
+  ]
+}

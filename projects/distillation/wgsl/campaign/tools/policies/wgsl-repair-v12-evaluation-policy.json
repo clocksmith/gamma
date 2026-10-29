@@ -1,0 +1,88 @@
+{
+  "artifactType": "wgsl_stratified_evaluation_policy",
+  "schemaVersion": 1,
+  "policyId": "doppler-wgsl-repair-v12-evaluation",
+  "model": {
+    "modelId": "Qwen/Qwen3.5-9B",
+    "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+  },
+  "referencePolicyHash": "18e0ddabf064e824c0e2dd6c6f7ba1516dbf492fd6f9cadcc6944d7af07760f2",
+  "verifierPolicyPath": "tools/policies/wgsl-repair-v11-policy.json",
+  "trainer": {
+    "protocol": "gamma_wgsl_trainer_json_v1",
+    "dtype": "bfloat16",
+    "gradientCheckpointing": true,
+    "maxLength": 2048
+  },
+  "sampling": {
+    "groupSize": 8,
+    "temperature": 0.8,
+    "topP": 0.95,
+    "baseSeed": 20260711,
+    "longSeedOffset": 1000000
+  },
+  "splits": {
+    "diagnostic": {
+      "short": {
+        "datasetPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/length-strata/diagnostic/short.jsonl",
+        "datasetSha256": "b5783ecd8ea9cdaca52328afd5daa46a759ee7157a40a4033ff71b0620cfa5b0",
+        "rows": 275,
+        "maxTokens": 64,
+        "maximumTrainingTargetTokensIncludingEos": 54,
+        "marginTokens": 10
+      },
+      "long": {
+        "datasetPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/length-strata/diagnostic/long.jsonl",
+        "datasetSha256": "884356c83ad4c29d2f709c6b37cc7360a4c1111cbff723222a029c129e307026",
+        "rows": 10,
+        "maxTokens": 640,
+        "maximumTrainingTargetTokensIncludingEos": 619,
+        "marginTokens": 21
+      }
+    },
+    "public-test": {
+      "short": {
+        "datasetPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/length-strata/public-test/short.jsonl",
+        "datasetSha256": "13afb837ac72056be82e2c71b205ad18339172e0b5b68afd82fe16d33eed6831",
+        "rows": 290,
+        "maxTokens": 64,
+        "maximumTrainingTargetTokensIncludingEos": 54,
+        "marginTokens": 10
+      },
+      "long": {
+        "datasetPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/length-strata/public-test/long.jsonl",
+        "datasetSha256": "56e4484ada36ac858858d3bd96d20ca2a06dd2b1facb5902719457cd283e49c6",
+        "rows": 9,
+        "maxTokens": 640,
+        "maximumTrainingTargetTokensIncludingEos": 619,
+        "marginTokens": 21
+      }
+    }
+  },
+  "selection": {
+    "lanes": [
+      "anchor",
+      "external20",
+      "random20"
+    ],
+    "seeds": [
+      11,
+      29,
+      47
+    ],
+    "replicationRule": "Train and evaluate every lane at every seed before opening the public split.",
+    "primaryMetric": "task_weighted_recombined_pass_at_1",
+    "primaryTreatment": "external20",
+    "controls": [
+      "anchor",
+      "random20"
+    ],
+    "successRule": "External20 must beat anchor on recombined diagnostic pass@1 at every seed, beat random20 on mean diagnostic pass@1 across seeds, and not reduce mean long-stratum pass@1 versus anchor.",
+    "tieBreakers": [
+      "recombined_pass_at_8",
+      "recombined_sample_pass_rate"
+    ],
+    "publicAccessRule": "Do not generate public-test rollouts until all nine diagnostic receipts are sealed and the treatment decision is recorded."
+  },
+  "claimBoundary": "This policy freezes multi-seed short/long compiler-repair evaluation and data-lane selection. Compilation is not semantic ML-kernel correctness or promotion evidence."
+}

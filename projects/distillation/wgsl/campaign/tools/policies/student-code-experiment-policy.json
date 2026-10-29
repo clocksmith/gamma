@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-student-code-replay-v1",
+  "releaseTarget": "0.4.9",
+  "claimBoundary": "Experimental constructive evidence only. This policy does not promote a model, adapter, package release, or demo tier.",
+  "taskBankPath": "tools/teacher-qualification/doppler-code-task-bank.json",
+  "harnessFiles": [
+    "src/config/kernels/backward-registry.json",
+    "src/config/kernels/kernel-ref-digests.js",
+    "src/config/kernels/registry.json",
+    "src/experimental/training/attention-backward.js",
+    "src/experimental/training/autograd.js",
+    "src/experimental/training/clip.js",
+    "src/experimental/training/datasets/text-pairs.js",
+    "src/experimental/training/distillation/student-fixture.js",
+    "src/experimental/training/lora.js",
+    "src/experimental/training/lora-pipeline.js",
+    "src/experimental/training/loss.js",
+    "src/experimental/training/optimizer.js",
+    "src/experimental/training/runner.js",
+    "src/experimental/training/trainer.js",
+    "src/gpu/kernels/backward/adam.js",
+    "src/gpu/kernels/backward/adam.wgsl",
+    "src/gpu/kernels/backward/attention_backward.js",
+    "src/gpu/kernels/backward/attention_backward.wgsl",
+    "src/gpu/kernels/backward/cross_entropy_backward.js",
+    "src/gpu/kernels/backward/cross_entropy_backward.wgsl",
+    "src/gpu/kernels/backward/matmul_backward.js",
+    "src/gpu/kernels/backward/matmul_backward.wgsl",
+    "src/gpu/kernels/backward/matmul_transpose_a.wgsl",
+    "src/gpu/kernels/backward/rmsnorm_backward.js",
+    "src/gpu/kernels/backward/rmsnorm_backward.wgsl",
+    "src/gpu/kernels/backward/utils.js",
+    "src/gpu/kernels/cast.js",
+    "src/gpu/kernels/cast_f16_to_f32.wgsl",
+    "src/inference/pipelines/text/embed.js",
+    "src/inference/pipelines/text/generator.js",
+    "src/memory/buffer-pool.js",
+    "tools/lib/student-code-experiment.js",
+    "tools/run-student-code-experiment.js",
+    "tools/verify-student-code-experiment.js"
+  ],
+  "baseModel": {
+    "id": "gemma-3-270m-it-f16-af32",
+    "modelRef": "gemma-3-270m-it-f16-af32",
+    "chatTemplate": "gemma"
+  },
+  "lanes": ["javascript", "wgsl"],
+  "holdoutSplit": "student_holdout",
+  "prompt": {
+    "contextLines": 1,
+    "maxSourceChars": 1200
+  },
+  "generation": {
+    "repetitions": 3,
+    "seed": 1337,
+    "maxTokens": 192,
+    "temperature": 0,
+    "topK": 1,
+    "topP": 1,
+    "repetitionPenalty": 1
+  },
+  "training": {
+    "datasetPasses": 2,
+    "maxLength": 320,
+    "learningRate": 0.0001,
+    "rank": 4,
+    "alpha": 8,
+    "dropout": 0,
+    "targetModules": ["q_proj", "v_proj"],
+    "gradientMaxNorm": 1
+  },
+  "adapters": [
+    {
+      "id": "javascript",
+      "lanes": ["javascript"]
+    },
+    {
+      "id": "wgsl",
+      "lanes": ["wgsl"]
+    },
+    {
+      "id": "mixed",
+      "lanes": ["javascript", "wgsl"],
+      "balanceLanes": true
+    }
+  ],
+  "promotion": {
+    "requiredRepetitions": 3,
+    "requireStrictPassRateImprovement": true,
+    "requireDeterministicOutputs": true,
+    "maxPolicyViolations": 0,
+    "requiredWinningLanes": ["javascript", "wgsl"]
+  },
+  "challengers": [
+    {
+      "id": "qwen-3-5-0-8b-q4k-ehaf16",
+      "family": "qwen3",
+      "status": "blocked_until_control_proven",
+      "trainer": "external_causal_lm_lora"
+    },
+    {
+      "id": "qwen-3-5-2b-q4k-ehaf16",
+      "family": "qwen3",
+      "status": "blocked_until_control_proven",
+      "trainer": "external_causal_lm_lora"
+    },
+    {
+      "id": "gemma-4-e2b-it-q4k-ehf16-af32-int4ple",
+      "family": "gemma4",
+      "status": "blocked_until_control_proven",
+      "trainer": "external_causal_lm_lora"
+    }
+  ]
+}

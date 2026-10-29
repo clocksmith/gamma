@@ -1,0 +1,65 @@
+{
+  "schema": "doppler.wgsl-repair-semantic-task-manifest/v1",
+  "schemaVersion": 1,
+  "experimentId": "doppler-wgsl-repair-v13",
+  "role": "mechanics_qualification_only",
+  "populationAuthority": "none",
+  "responseContract": "replacement_only_wgsl_span_v1",
+  "cpuOracleRevision": "wgsl-semantic-cpu-oracles-v1",
+  "inputGeneratorRevision": "wgsl-semantic-inputs-v1",
+  "tasks": [
+    {
+      "taskId": "v13-mechanics-affine-f32",
+      "kernelFamilyId": "v13-mechanics-affine",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/affine-broken.wgsl",
+      "sourceSha256": "ea2fdc961e28582986dc128937231bfe5a6db061db6da00a66d809d67a4b326d",
+      "brokenSpan": "output_values[params.output_offset + index] = value * params.scale + ;",
+      "referenceSpan": "output_values[params.output_offset + index] = value * params.scale + params.bias;",
+      "oracleId": "affine_f32",
+      "inputSeed": 1301,
+      "parameters": { "scale": -1.75, "bias": 0.625 },
+      "variants": [
+        { "shapeId": "affine-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "affine-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "affine-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    },
+    {
+      "taskId": "v13-mechanics-saxpy-f32",
+      "kernelFamilyId": "v13-mechanics-saxpy",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/saxpy-broken.wgsl",
+      "sourceSha256": "7b8a39129b9ade08d36af3e54fa36bce13d94a2e1ac17b431e45399db11391ea",
+      "brokenSpan": "output_values[params.output_offset + index] = left_values[index] + params.scale * ;",
+      "referenceSpan": "output_values[params.output_offset + index] = left_values[index] + params.scale * right_values[index];",
+      "oracleId": "saxpy_f32",
+      "inputSeed": 2903,
+      "parameters": { "scale": 0.375 },
+      "variants": [
+        { "shapeId": "saxpy-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "saxpy-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "saxpy-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    },
+    {
+      "taskId": "v13-mechanics-clamp-f32",
+      "kernelFamilyId": "v13-mechanics-clamp",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/clamp-broken.wgsl",
+      "sourceSha256": "aebd27e3bf8cf260b6295e48a600ea1880552bbe63d45a92a2063cfbcfc4966b",
+      "brokenSpan": "output_values[params.output_offset + index] = clamp(value, params.lower, );",
+      "referenceSpan": "output_values[params.output_offset + index] = clamp(value, params.lower, params.upper);",
+      "oracleId": "clamp_f32",
+      "inputSeed": 4709,
+      "parameters": { "lower": -2.25, "upper": 3.5 },
+      "variants": [
+        { "shapeId": "clamp-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "clamp-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "clamp-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    }
+  ],
+  "sourceOverlapPolicy": "These hand-authored fixtures qualify mechanics only. They have no calibration, checkpoint-selection, seed-confirmation, or promotion role and cannot select a V12 adapter seed.",
+  "claimBoundary": "A passing reference run proves Chromium dispatch, CPU-oracle, bounds, workgroup, shape, metamorphic, and receipt mechanics. It is not candidate capability evidence."
+}

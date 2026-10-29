@@ -1,0 +1,69 @@
+{
+  "schema": "doppler.wgsl-repair-semantic-task-manifest/v1",
+  "schemaVersion": 1,
+  "experimentId": "doppler-wgsl-repair-v13",
+  "populationId": "v13-semantic-calibration-v1",
+  "role": "calibration",
+  "populationAuthority": "prompt_and_harness_calibration_only",
+  "responseContract": "replacement_only_wgsl_span_v1",
+  "cpuOracleRevision": "wgsl-semantic-cpu-oracles-v1",
+  "inputGeneratorRevision": "wgsl-semantic-inputs-v1",
+  "tasks": [
+    {
+      "taskId": "v13-calibration-add-f32",
+      "kernelFamilyId": "v13-calibration-add",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/calibration-add-broken.wgsl",
+      "sourceSha256": "397d0da102c86eb5505b6f8d62510b975b98447e5edc910ea53b4d86bb15e930",
+      "mutationClass": "identifier_reference",
+      "brokenSpan": "output_values[params.output_offset + index] = left_values[index] + ;",
+      "referenceSpan": "output_values[params.output_offset + index] = left_values[index] + right_values[index];",
+      "oracleId": "add_f32",
+      "inputSeed": 7111,
+      "parameters": {},
+      "variants": [
+        { "shapeId": "cal-add-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "cal-add-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "cal-add-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    },
+    {
+      "taskId": "v13-calibration-scale-f32",
+      "kernelFamilyId": "v13-calibration-scale",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/calibration-scale-broken.wgsl",
+      "sourceSha256": "10750bd453df2734edf686246e5827ba9ac0c43274a7675874ad694311ebdb99",
+      "mutationClass": "identifier_reference",
+      "brokenSpan": "output_values[params.output_offset + index] = input_values[index] * ;",
+      "referenceSpan": "output_values[params.output_offset + index] = input_values[index] * params.scale;",
+      "oracleId": "scale_f32",
+      "inputSeed": 7127,
+      "parameters": { "scale": -0.875 },
+      "variants": [
+        { "shapeId": "cal-scale-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "cal-scale-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "cal-scale-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    },
+    {
+      "taskId": "v13-calibration-relu-f32",
+      "kernelFamilyId": "v13-calibration-relu",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/calibration-relu-broken.wgsl",
+      "sourceSha256": "c47539b585b968810cc9b6f8a4df8acbe3bf91faa7afae6d896053743852d9bc",
+      "mutationClass": "identifier_reference",
+      "brokenSpan": "output_values[params.output_offset + index] = max(input_values[index], );",
+      "referenceSpan": "output_values[params.output_offset + index] = max(input_values[index], 0.0);",
+      "oracleId": "relu_f32",
+      "inputSeed": 7151,
+      "parameters": {},
+      "variants": [
+        { "shapeId": "cal-relu-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "cal-relu-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "cal-relu-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    }
+  ],
+  "sourceOverlapPolicy": "No kernel family, source fixture, input seed, or task identifier overlaps checkpoint selection, seed confirmation, promotion, V12 training, V12 diagnostic, or V12 public evaluation.",
+  "claimBoundary": "Calibration may qualify prompt formatting and harness behavior. It cannot rank or select an external20 seed."
+}

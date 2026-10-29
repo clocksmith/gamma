@@ -1,0 +1,175 @@
+{
+  "$schema": "../../src/config/schema/wgsl-writer-v3-training-policy.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-writer-v3-diversity-repair-training",
+  "experimentId": "doppler-wgsl-writer-v3",
+  "status": "frozen_before_training",
+  "artifactRoot": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/diversity-repair-v2",
+  "repairEvidence": {
+    "failedEvaluation": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/evaluation/checkpoint-selection/evaluation.json",
+      "sha256": "35d902c20ebe99cab9f580d50aa5acbb1a2bd9f8751c5c62e16e6bf8d997648f"
+    },
+    "failureClass": "training_completion_diversity_collapse",
+    "uniqueTrainingCompletionsBefore": 8,
+    "uniqueTrainingCompletionsAfter": 192,
+    "selectionGateChanged": false
+  },
+  "admission": {
+    "corpusPolicy": {
+      "path": "tools/policies/wgsl-writer-v3-corpus-diversity-policy.json",
+      "sha256": "1d4b729e5310b8afaaa7fa06439ff30008a33bb5c7bb0aeded993fe76884ccae"
+    },
+    "corpusManifest": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v2-diverse/corpus-manifest.json",
+      "sha256": "9ee43e8d11b1b2ff6c2413fe1113e91e6ea80f0210a7cb7bfec67bc378603df4"
+    },
+    "referenceQualification": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/corpus-v2-diverse/reference-qualification.json",
+      "sha256": "428293d6205131468801c7373322a51bc1da0b6a18ade1f59421e58d874634e9"
+    },
+    "trainingLanes": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v2-diverse/manifest.json",
+      "sha256": "ee25033ab140dea132ee277ecf2cb8e0582afa553dd1405d5ced96bfbe1e9d25"
+    }
+  },
+  "model": {
+    "modelId": "Qwen/Qwen3.5-9B",
+    "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "configSha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+    "tokenizerSha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+    "localProvisioning": "operator_provided_pinned_snapshot"
+  },
+  "initialization": {
+    "v2AdapterPath": "reports/training/wgsl-writer/doppler-wgsl-writer-v2/seed47/sft/checkpoints/gamma/adapter",
+    "v2AdapterConfigSha256": "3e0f8cbe55289a65addb01bb4e150ec644d149b5a8ac46f70396fc4baa049b66",
+    "v2AdapterWeightsSha256": "64cb65bfd2f409278d666d874c4dc2179058cab8e75609f5fe1fdc8644794667",
+    "evidenceTransfers": false
+  },
+  "lanes": [
+    {
+      "id": "package-base",
+      "dataset": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v2-diverse/package-sft.jsonl",
+        "sha256": "178660df39ddb443d3c3de4020b163a78dcf2202c49d838a1cdaa9bef0dd1927",
+        "rows": 192,
+        "supervisedCompletionTokens": 147200
+      },
+      "initialization": "base",
+      "screeningSeed": 47,
+      "capabilityAuthority": true
+    },
+    {
+      "id": "package-v2-init",
+      "dataset": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v2-diverse/package-sft.jsonl",
+        "sha256": "178660df39ddb443d3c3de4020b163a78dcf2202c49d838a1cdaa9bef0dd1927",
+        "rows": 192,
+        "supervisedCompletionTokens": 147200
+      },
+      "initialization": "v2_seed47_adapter",
+      "screeningSeed": 47,
+      "capabilityAuthority": true
+    },
+    {
+      "id": "repair-v2-init",
+      "dataset": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v2-diverse/repair-mixed-sft.jsonl",
+        "sha256": "b7d96d46079e7df20698af56e2fe96c2c8e5b797497ab6cb019e1f7351dae894",
+        "rows": 192,
+        "supervisedCompletionTokens": 147200
+      },
+      "initialization": "v2_seed47_adapter",
+      "screeningSeed": 47,
+      "capabilityAuthority": true
+    },
+    {
+      "id": "count-matched-control",
+      "dataset": {
+        "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/training-lanes-v2-diverse/count-matched-control.jsonl",
+        "sha256": "4dd9c142b44376d4c16314f4cb576b8e79815c1a7e32fa62af5516bca1ba24f1",
+        "rows": 192,
+        "supervisedCompletionTokens": 147200
+      },
+      "initialization": "base",
+      "screeningSeed": 47,
+      "capabilityAuthority": false
+    }
+  ],
+  "trainer": {
+    "owner": "gamma",
+    "protocol": "gamma_wgsl_trainer_json_v1",
+    "action": "sft",
+    "dtype": "bfloat16",
+    "sequenceLength": 3072,
+    "adapter": {
+      "kind": "lora",
+      "rank": 32,
+      "alpha": 64,
+      "dropout": 0.05,
+      "targetModules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ]
+    },
+    "training": {
+      "steps": 192,
+      "gradientAccumulationSteps": 8,
+      "learningRate": 0.0001,
+      "weightDecay": 0.01,
+      "maxGradNorm": 1,
+      "rowOrder": "seed_hash_sorted_v1"
+    },
+    "screeningOrder": [
+      "package-base",
+      "package-v2-init",
+      "repair-v2-init",
+      "count-matched-control"
+    ],
+    "parallelRunsAllowed": false
+  },
+  "evaluation": {
+    "baselines": ["unchanged_base", "unchanged_v2_seed47_adapter"],
+    "calibrationPopulation": "calibration",
+    "selectionPopulation": "checkpoint_selection",
+    "confirmationPopulation": "seed_confirmation",
+    "screeningSeed": 47,
+    "confirmationSeeds": [11, 29],
+    "generation": {
+      "mode": "greedy",
+      "maxNewTokens": 1280,
+      "samplesPerTask": 1
+    },
+    "primaryMetric": "semantic_executable_package_pass_at_1",
+    "minimumSelectionSemanticPassRate": 0.5,
+    "minimumConfirmationMeanSemanticPassRate": 0.75,
+    "minimumConfirmationPerSeedSemanticPassRate": 0.5,
+    "tieBreakers": [
+      "quality_pass_rate",
+      "response_contract_pass_rate",
+      "compile_at_1",
+      "resource_contract_pass_rate",
+      "lower_mean_response_characters",
+      "lane_id"
+    ],
+    "selectionReceiptPath": "reports/training/wgsl-writer/doppler-wgsl-writer-v3/diversity-repair-v2/evaluation/selection/selected-lane.json",
+    "exactDopplerParityRequired": true,
+    "externalPromotionRequired": true
+  },
+  "authority": {
+    "training": true,
+    "checkpointSelection": true,
+    "seedConfirmation": true,
+    "dopplerParity": true,
+    "promotion": false,
+    "generalWgslWriterClaim": false,
+    "productization": false
+  },
+  "claimBoundary": "The diversity-repair screen keeps the original family-disjoint evaluation and semantic thresholds unchanged. Training completion alone proves no capability; selection still requires executable AMD/Vulkan packages on the frozen held-out population."
+}

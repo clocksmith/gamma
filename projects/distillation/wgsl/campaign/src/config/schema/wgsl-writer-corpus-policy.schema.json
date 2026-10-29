@@ -1,0 +1,306 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/doppler/schemas/wgsl-writer-corpus-policy-v1.schema.json",
+  "title": "WGSL writer corpus construction policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
+    "policyId",
+    "experimentId",
+    "status",
+    "capability",
+    "predecessor",
+    "corpus",
+    "promptContract",
+    "model",
+    "trainer",
+    "referenceQualification",
+    "populationRoles",
+    "authority",
+    "claimBoundary"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../src/config/schema/wgsl-writer-corpus-policy.schema.json"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "source": {
+      "const": "doppler"
+    },
+    "policyId": {
+      "const": "doppler-wgsl-writer-v2-corpus"
+    },
+    "experimentId": {
+      "const": "doppler-wgsl-writer-v2"
+    },
+    "status": {
+      "const": "frozen_before_materialization_and_training"
+    },
+    "capability": {
+      "const": "complete_1d_elementwise_f32_compute_shader_from_explicit_interface"
+    },
+    "predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mechanicsPolicy",
+        "referenceReceipt",
+        "zeroShotResult",
+        "repairEvidenceTransfers"
+      ],
+      "properties": {
+        "mechanicsPolicy": {
+          "$ref": "#/$defs/binding"
+        },
+        "referenceReceipt": {
+          "$ref": "#/$defs/binding"
+        },
+        "zeroShotResult": {
+          "$ref": "#/$defs/binding"
+        },
+        "repairEvidenceTransfers": {
+          "const": false
+        }
+      }
+    },
+    "corpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "blueprintCatalog",
+        "outputRoot",
+        "rowsPerFamily",
+        "splitKey",
+        "sourceLineage",
+        "sourceLicense",
+        "mechanicsOracleExclusions"
+      ],
+      "properties": {
+        "blueprintCatalog": {
+          "$ref": "#/$defs/binding"
+        },
+        "outputRoot": {
+          "$ref": "#/$defs/repoPath"
+        },
+        "rowsPerFamily": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "training",
+            "calibration",
+            "checkpoint_selection",
+            "seed_confirmation"
+          ],
+          "properties": {
+            "training": {
+              "const": 48
+            },
+            "calibration": {
+              "const": 8
+            },
+            "checkpoint_selection": {
+              "const": 8
+            },
+            "seed_confirmation": {
+              "const": 8
+            }
+          }
+        },
+        "splitKey": {
+          "const": "semanticFamilyId"
+        },
+        "sourceLineage": {
+          "const": "doppler_owned_parametric_blueprints"
+        },
+        "sourceLicense": {
+          "const": "Apache-2.0"
+        },
+        "mechanicsOracleExclusions": {
+          "const": [
+            "add_f32",
+            "affine_f32",
+            "clamp_f32"
+          ]
+        }
+      }
+    },
+    "promptContract": {
+      "const": {
+        "templateId": "wgsl-complete-shader-spec-interface-v1",
+        "useChatTemplate": false,
+        "responseContract": "complete_wgsl_compute_shader_only_v1",
+        "includesNaturalLanguageSpecification": true,
+        "includesExplicitInterfaceContract": true
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modelId",
+        "revision",
+        "initialization"
+      ],
+      "properties": {
+        "modelId": {
+          "const": "Qwen/Qwen3.5-9B"
+        },
+        "revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "initialization": {
+          "const": "base_model_each_seed"
+        }
+      }
+    },
+    "trainer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owner",
+        "protocol",
+        "dtype",
+        "sequenceLength",
+        "seeds",
+        "adapter",
+        "training"
+      ],
+      "properties": {
+        "owner": {
+          "const": "gamma"
+        },
+        "protocol": {
+          "const": "gamma_wgsl_trainer_json_v1"
+        },
+        "dtype": {
+          "const": "bfloat16"
+        },
+        "sequenceLength": {
+          "const": 2048
+        },
+        "seeds": {
+          "const": [
+            11,
+            29,
+            47
+          ]
+        },
+        "adapter": {
+          "const": {
+            "kind": "lora",
+            "rank": 32,
+            "alpha": 64,
+            "dropout": 0.05,
+            "targetModules": [
+              "q_proj",
+              "k_proj",
+              "v_proj",
+              "o_proj",
+              "gate_proj",
+              "up_proj",
+              "down_proj"
+            ]
+          }
+        },
+        "training": {
+          "const": {
+            "steps": 720,
+            "gradientAccumulationSteps": 8,
+            "learningRate": 0.0001,
+            "weightDecay": 0.01,
+            "maxGradNorm": 1,
+            "rowOrder": "seed_hash_sorted_v1"
+          }
+        }
+      }
+    },
+    "referenceQualification": {
+      "const": {
+        "compileEveryMaterializedShader": true,
+        "semanticDispatchEveryHeldoutTask": true,
+        "semanticDispatchOneRepresentativePerTrainingFamily": true,
+        "mustPassBeforeTraining": true
+      }
+    },
+    "populationRoles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "training",
+        "calibration",
+        "checkpointSelection",
+        "seedConfirmation",
+        "promotion"
+      ],
+      "properties": {
+        "training": {
+          "const": "gradient_updates_only"
+        },
+        "calibration": {
+          "const": "generation_and_response_contract_calibration_only"
+        },
+        "checkpointSelection": {
+          "const": "seed_and_checkpoint_selection_only"
+        },
+        "seedConfirmation": {
+          "const": "selected_recipe_replication_only"
+        },
+        "promotion": {
+          "const": "external_custody_one_use_unmaterialized"
+        }
+      }
+    },
+    "authority": {
+      "const": {
+        "corpusMaterialization": true,
+        "referenceQualification": true,
+        "trainingAfterReferenceQualification": true,
+        "checkpointSelection": true,
+        "seedConfirmation": true,
+        "promotion": false,
+        "generalWgslWriterClaim": false,
+        "productization": false
+      }
+    },
+    "claimBoundary": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "repoPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\.\.(?:/|$)).+$"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/repoPath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}

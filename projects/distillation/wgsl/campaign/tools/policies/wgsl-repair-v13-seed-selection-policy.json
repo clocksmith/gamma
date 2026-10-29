@@ -1,0 +1,85 @@
+{
+  "$schema": "../../src/config/schema/wgsl-repair-seed-selection.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-repair-v13-external20-seed-selection",
+  "status": "frozen_before_candidate_evaluation",
+  "eligibleLane": "external20",
+  "predecessor": {
+    "adapterPortabilityReceiptPath": "docs/status/wgsl-repair-v12-adapter-portability-2026-07-13.json",
+    "adapterPortabilityReceiptSha256": "589888d414a34a25e386f1b43347dc9b25a68ed858de6e0dc2cc3b46d8ea32e3",
+    "requiredDecision": "diagnostic_import_parity_passed"
+  },
+  "runtime": {
+    "modelId": "qwen-3-5-9b-f16-af32",
+    "modelManifestSha256": "2ff1f1eec0345bd379614b8b0bafd66957bbec1c22072132661a6e35300ad398",
+    "artifactStatusPath": "docs/status/qwen35-9b-rdrr-2026-07-11.json",
+    "artifactStatusSha256": "40cbfefb31a8cd2c92b65fe9a1d44b1c5ee50a93054fa2bd20782f0ce613edf8",
+    "conversionConfigPath": "src/config/conversion/qwen3/qwen-3-5-9b-f16-af32.json",
+    "conversionConfigSha256": "b2f3bb3f182b9b1829406f9febf0d38f309c2e79f35f5ee52704f6830642371a",
+    "runtimeProfile": "profiles/production"
+  },
+  "populations": {
+    "calibration": {
+      "path": "tools/data/wgsl-repair-v13-semantic-calibration.json",
+      "sha256": "f479e256730c57ef5d000648d9a0464cb5eac9c0b942660735b96444d95085b2",
+      "selectionAuthority": false
+    },
+    "checkpointSelection": {
+      "path": "tools/data/wgsl-repair-v13-semantic-checkpoint-selection.json",
+      "sha256": "4b35750e905ce8ff92114715f36d65807b9b020015e00d4567c80a5e9fa53c1b",
+      "selectionAuthority": true
+    }
+  },
+  "eligibleCandidates": [
+    {
+      "seed": 11,
+      "adapterManifestPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed11/external20/sft/exports/checkpoint-001200.adapter.manifest.json",
+      "adapterManifestSha256": "2bd26209ddcc77969759371a41ec6448dc561acb87e4f1a351df80a88de0c595",
+      "adapterWeightsPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed11/external20/sft/exports/checkpoint-001200.adapters.safetensors",
+      "adapterWeightsSha256": "8631f512fe8ce481ade2e29a476bb1ade4e2ab6fd8627c7e27c7c093b4824af6"
+    },
+    {
+      "seed": 29,
+      "adapterManifestPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/external20/sft/exports/checkpoint-001200.adapter.manifest.json",
+      "adapterManifestSha256": "e5dec965a953aa746e592ae38045f445e7d9b1407feb609f448238427af4b042",
+      "adapterWeightsPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/external20/sft/exports/checkpoint-001200.adapters.safetensors",
+      "adapterWeightsSha256": "0d9ab8e1348a3fcdd6ef2973b624cc1a3d962de90a571976a5a222df27b69394"
+    },
+    {
+      "seed": 47,
+      "adapterManifestPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed47/external20/sft/exports/checkpoint-001200.adapter.manifest.json",
+      "adapterManifestSha256": "ca04f8d0cbd3cafcce0a97fe8e2850208bbaed4a1ee1cefcfb39d191d7d5b13a",
+      "adapterWeightsPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed47/external20/sft/exports/checkpoint-001200.adapters.safetensors",
+      "adapterWeightsSha256": "3e3895f062ae99d67c22ef3220a44ffe8081ba2021473de357e70216c50fd7d8"
+    }
+  ],
+  "promptContract": {
+    "templateId": "wgsl-replacement-only-context-600-v1",
+    "contextCharactersPerSide": 600,
+    "useChatTemplate": false,
+    "responseContract": "replacement_only_wgsl_span_v1"
+  },
+  "generation": {
+    "maxTokens": 64,
+    "temperature": 0,
+    "topP": 1,
+    "topK": 1,
+    "repetitionPenalty": 1,
+    "greedyThreshold": 0
+  },
+  "ranking": {
+    "populationRole": "checkpoint_selection",
+    "lexicographicOrder": [
+      "semantic_task_pass_count_desc",
+      "compile_pass_count_desc",
+      "semantic_variant_pass_count_desc",
+      "exact_reference_completion_count_desc",
+      "seed_asc"
+    ],
+    "tieBreak": "lowest_numeric_seed",
+    "missingOrInvalidReceipt": "candidate_ineligible"
+  },
+  "selectionAuthority": "Select exactly one preserved external20 seed for later seed-confirmation evaluation. Selection is not confirmation or promotion.",
+  "claimBoundary": "This frozen policy can select one V12 external20 adapter seed using only the hash-bound checkpoint-selection population. It cannot establish semantic capability, promotion, WGSL Doctor readiness, or autonomous shader authorship."
+}

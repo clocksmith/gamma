@@ -1,0 +1,74 @@
+{
+  "schema": "doppler.wgsl-repair-adapter-parity-policy/v1",
+  "policyId": "doppler-wgsl-repair-v12-external20-adapter-parity",
+  "status": "frozen_pre_execution",
+  "experimentId": "doppler-wgsl-repair-v12",
+  "purpose": "diagnostic_trainer_to_doppler_import_mechanics",
+  "sourceModel": {
+    "modelId": "Qwen/Qwen3.5-9B",
+    "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "configSha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+    "tokenizerSha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+    "referenceDtype": "bfloat16"
+  },
+  "dopplerBaseArtifact": {
+    "modelId": "qwen-3-5-9b-f16-af32",
+    "manifestSha256": "2ff1f1eec0345bd379614b8b0bafd66957bbec1c22072132661a6e35300ad398",
+    "tokenizerSha256": "8fc3b6de02de5a8e21d3867aba335e2d9a3c2263201f55daaed1feab3541bea4",
+    "sourceReceipt": "docs/status/qwen35-9b-rdrr-2026-07-11.json"
+  },
+  "probe": {
+    "datasetPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/length-strata/diagnostic/short.jsonl",
+    "datasetSha256": "b5783ecd8ea9cdaca52328afd5daa46a759ee7157a40a4033ff71b0620cfa5b0",
+    "rowIndex": 0,
+    "rowId": "wgsl-6f0b2203bbfdd71e8111",
+    "promptSha256": "90027761d6b156eb37e1798046851c352fd6f06eeb1f26ef0aa08e69ca43ee9c",
+    "tokenization": "raw_prompt_add_special_tokens",
+    "useChatTemplate": false,
+    "generation": {
+      "mode": "greedy",
+      "maxNewTokens": 32
+    }
+  },
+  "adapters": [
+    {
+      "seed": 11,
+      "peftWeightsSha256": "0cf0f396cf377509ed8675a26e4e31ed8eb287f6028966cc9d4734bc8356ba41",
+      "dopplerManifestSha256": "2bd26209ddcc77969759371a41ec6448dc561acb87e4f1a351df80a88de0c595",
+      "dopplerWeightsSha256": "8631f512fe8ce481ade2e29a476bb1ade4e2ab6fd8627c7e27c7c093b4824af6"
+    },
+    {
+      "seed": 29,
+      "peftWeightsSha256": "2c533f89054cb8613f1daa8a15bcd662eed8404c726e4b06b40dd5da07aad5f9",
+      "dopplerManifestSha256": "e5dec965a953aa746e592ae38045f445e7d9b1407feb609f448238427af4b042",
+      "dopplerWeightsSha256": "0d9ab8e1348a3fcdd6ef2973b624cc1a3d962de90a571976a5a222df27b69394"
+    },
+    {
+      "seed": 47,
+      "peftWeightsSha256": "78745f9c6a2e1e062f3be4810abb01f62a4c68423d59f76b1dd81e23aac32eb8",
+      "dopplerManifestSha256": "ca04f8d0cbd3cafcce0a97fe8e2850208bbaed4a1ee1cefcfb39d191d7d5b13a",
+      "dopplerWeightsSha256": "3e3895f062ae99d67c22ef3220a44ffe8081ba2021473de357e70216c50fd7d8"
+    }
+  ],
+  "thresholds": {
+    "topK": 10,
+    "base": {
+      "promptTokenIdsExact": true,
+      "firstTokenIdExact": true,
+      "minimumLogitCosineSimilarity": 0.995,
+      "minimumTopKTokenOverlap": 8
+    },
+    "adapter": {
+      "promptTokenIdsExact": true,
+      "firstTokenIdExact": true,
+      "completionTokenIdsExact": true,
+      "completionTextExact": true,
+      "minimumLogitCosineSimilarity": 0.995,
+      "minimumTopKTokenOverlap": 8,
+      "minimumAdapterDeltaCosineSimilarity": 0.9,
+      "minimumNonzeroAdapterDeltaL2Norm": 0.000001
+    }
+  },
+  "selectionBoundary": "All three external20 seeds are diagnostic import candidates. Passing this policy does not select a seed or satisfy V13 checkpoint selection.",
+  "claimBoundary": "This policy can establish exact prompt-token parity, comparable first-token logits, deterministic token/output parity, and nonzero aligned adapter effects between Gamma Transformers/PEFT and Doppler F16. It cannot establish semantic WGSL correctness, seed selection, promotion, or deployment readiness."
+}

@@ -1,0 +1,115 @@
+{
+  "$schema": "../../src/config/schema/wgsl-writer-corpus-policy.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-writer-v2-corpus",
+  "experimentId": "doppler-wgsl-writer-v2",
+  "status": "frozen_before_materialization_and_training",
+  "capability": "complete_1d_elementwise_f32_compute_shader_from_explicit_interface",
+  "predecessor": {
+    "mechanicsPolicy": {
+      "path": "tools/policies/wgsl-writer-v1-policy.json",
+      "sha256": "1a55f4ae3bcc1331cbfb9203d9c3573fdc434dd4775d803b1be121dcf82ecebc"
+    },
+    "referenceReceipt": {
+      "path": "reports/training/wgsl-writer/doppler-wgsl-writer-v1/mechanics/reference.json",
+      "sha256": "a9ccfbefebce8827669dfb08a515699f8ae57e4902bf81d9edb88366099b99ab"
+    },
+    "zeroShotResult": {
+      "path": "docs/status/wgsl-writer-v1-diagnostic-result-2026-07-14.json",
+      "sha256": "16fbd260763e9f3704cacc4b547599504dd98d5007d5d41ce1446576b620b94b"
+    },
+    "repairEvidenceTransfers": false
+  },
+  "corpus": {
+    "blueprintCatalog": {
+      "path": "tools/data/wgsl-writer-v2-blueprints.json",
+      "sha256": "85ff008bbdfb86800296e08779186d0f23d938e8cf5c3418f9b5127d448dfc61"
+    },
+    "outputRoot": "reports/training/wgsl-writer/doppler-wgsl-writer-v2/corpus-v1",
+    "rowsPerFamily": {
+      "training": 48,
+      "calibration": 8,
+      "checkpoint_selection": 8,
+      "seed_confirmation": 8
+    },
+    "splitKey": "semanticFamilyId",
+    "sourceLineage": "doppler_owned_parametric_blueprints",
+    "sourceLicense": "Apache-2.0",
+    "mechanicsOracleExclusions": [
+      "add_f32",
+      "affine_f32",
+      "clamp_f32"
+    ]
+  },
+  "promptContract": {
+    "templateId": "wgsl-complete-shader-spec-interface-v1",
+    "useChatTemplate": false,
+    "responseContract": "complete_wgsl_compute_shader_only_v1",
+    "includesNaturalLanguageSpecification": true,
+    "includesExplicitInterfaceContract": true
+  },
+  "model": {
+    "modelId": "Qwen/Qwen3.5-9B",
+    "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "initialization": "base_model_each_seed"
+  },
+  "trainer": {
+    "owner": "gamma",
+    "protocol": "gamma_wgsl_trainer_json_v1",
+    "dtype": "bfloat16",
+    "sequenceLength": 2048,
+    "seeds": [
+      11,
+      29,
+      47
+    ],
+    "adapter": {
+      "kind": "lora",
+      "rank": 32,
+      "alpha": 64,
+      "dropout": 0.05,
+      "targetModules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ]
+    },
+    "training": {
+      "steps": 720,
+      "gradientAccumulationSteps": 8,
+      "learningRate": 0.0001,
+      "weightDecay": 0.01,
+      "maxGradNorm": 1,
+      "rowOrder": "seed_hash_sorted_v1"
+    }
+  },
+  "referenceQualification": {
+    "compileEveryMaterializedShader": true,
+    "semanticDispatchEveryHeldoutTask": true,
+    "semanticDispatchOneRepresentativePerTrainingFamily": true,
+    "mustPassBeforeTraining": true
+  },
+  "populationRoles": {
+    "training": "gradient_updates_only",
+    "calibration": "generation_and_response_contract_calibration_only",
+    "checkpointSelection": "seed_and_checkpoint_selection_only",
+    "seedConfirmation": "selected_recipe_replication_only",
+    "promotion": "external_custody_one_use_unmaterialized"
+  },
+  "authority": {
+    "corpusMaterialization": true,
+    "referenceQualification": true,
+    "trainingAfterReferenceQualification": true,
+    "checkpointSelection": true,
+    "seedConfirmation": true,
+    "promotion": false,
+    "generalWgslWriterClaim": false,
+    "productization": false
+  },
+  "claimBoundary": "V2 trains a complete-shader writer only for 1-D elementwise f32 compute tasks with explicit bindings, uniforms, dispatch, and bounds requirements. Semantic-family-disjoint development evidence cannot promote a general WGSL writer, and promotion remains blocked on an externally custodied one-use population."
+}

@@ -1,0 +1,2014 @@
+{
+  "schema": "doppler.wgsl-author-reference-qualification/v1",
+  "createdAtUtc": "2026-07-18T23:41:31.128Z",
+  "experimentId": "doppler-wgsl-writer-v3",
+  "evaluationRole": "mechanics_reference_qualification_only",
+  "policy": {
+    "path": "tools/policies/wgsl-writer-v3-campaign-policy.json",
+    "sha256": "7634ba1258ac8da93deac558cd3e10165f773939fc23e061940a49b0837bc0f5"
+  },
+  "manifest": {
+    "path": "tools/data/wgsl-author-v3-reference/manifest.json",
+    "sha256": "f9697f2f7ff6e2b7b686f50eb30987265fe06d1cba9f8da19a72d03798aeb0a0"
+  },
+  "runtime": {
+    "backend": "chromium_webgpu",
+    "identity": {
+      "schema": "doppler.chromium-webgpu-runtime-identity/v1",
+      "host": {
+        "platform": "linux",
+        "release": "7.0.0-22-generic",
+        "architecture": "x64"
+      },
+      "browser": {
+        "engine": "chromium",
+        "version": "145.0.7632.6",
+        "headless": true,
+        "args": [
+          "--enable-unsafe-webgpu",
+          "--enable-dawn-features=allow_unsafe_apis",
+          "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE",
+          "--use-angle=vulkan",
+          "--disable-vulkan-surface"
+        ]
+      },
+      "gpuBackend": {
+        "required": "vulkan",
+        "detected": "vulkan"
+      },
+      "chromiumGpu": {
+        "devices": [
+          {
+            "vendorId": 4098,
+            "deviceId": 5510,
+            "vendorString": "Google Inc. (AMD)",
+            "deviceString": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+            "driverVendor": "AMD",
+            "driverVersion": "26.0.3"
+          }
+        ],
+        "auxAttributes": {
+          "displayType": "ANGLE_VULKAN",
+          "glImplementationParts": "(gl=egl-angle,angle=vulkan)",
+          "glRenderer": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+          "glVendor": "Google Inc. (AMD)",
+          "glVersion": "OpenGL ES 3.0 (ANGLE 2.1.26821 git hash: 4c0ae3917d4f)",
+          "hardwareSupportsVulkan": true,
+          "skiaBackendType": "GaneshVulkan"
+        },
+        "featureStatus": {
+          "gpuCompositing": "enabled",
+          "vulkan": "enabled_on",
+          "webgpu": "enabled"
+        }
+      },
+      "webgpuAdapter": {
+        "vendor": "amd",
+        "architecture": "rdna-3",
+        "device": null,
+        "description": null,
+        "availableFeatures": [
+          "bgra8unorm-storage",
+          "chromium-experimental-multi-draw-indirect",
+          "chromium-experimental-subgroup-matrix",
+          "chromium-experimental-timestamp-query-inside-passes",
+          "clip-distances",
+          "core-features-and-limits",
+          "depth-clip-control",
+          "depth32float-stencil8",
+          "dual-source-blending",
+          "float32-blendable",
+          "float32-filterable",
+          "indirect-first-instance",
+          "primitive-index",
+          "rg11b10ufloat-renderable",
+          "shader-f16",
+          "subgroups",
+          "texture-component-swizzle",
+          "texture-compression-bc",
+          "texture-compression-bc-sliced-3d",
+          "texture-formats-tier1",
+          "texture-formats-tier2",
+          "timestamp-query"
+        ],
+        "requiredFeatures": [],
+        "limits": {
+          "maxTextureDimension1D": 16384,
+          "maxTextureDimension2D": 16384,
+          "maxTextureDimension3D": 2048,
+          "maxTextureArrayLayers": 2048,
+          "maxBindGroups": 4,
+          "maxBindGroupsPlusVertexBuffers": 24,
+          "maxBindingsPerBindGroup": 1000,
+          "maxDynamicUniformBuffersPerPipelineLayout": 10,
+          "maxDynamicStorageBuffersPerPipelineLayout": 8,
+          "maxSampledTexturesPerShaderStage": 16,
+          "maxSamplersPerShaderStage": 16,
+          "maxStorageBuffersPerShaderStage": 10,
+          "maxStorageTexturesPerShaderStage": 8,
+          "maxUniformBuffersPerShaderStage": 12,
+          "maxUniformBufferBindingSize": 65536,
+          "maxStorageBufferBindingSize": 2147483648,
+          "minUniformBufferOffsetAlignment": 256,
+          "minStorageBufferOffsetAlignment": 256,
+          "maxVertexBuffers": 8,
+          "maxBufferSize": 2147483648,
+          "maxVertexAttributes": 30,
+          "maxVertexBufferArrayStride": 2048,
+          "maxInterStageShaderVariables": 28,
+          "maxColorAttachments": 8,
+          "maxColorAttachmentBytesPerSample": 128,
+          "maxComputeWorkgroupStorageSize": 65536,
+          "maxComputeInvocationsPerWorkgroup": 1024,
+          "maxComputeWorkgroupSizeX": 1024,
+          "maxComputeWorkgroupSizeY": 1024,
+          "maxComputeWorkgroupSizeZ": 64,
+          "maxComputeWorkgroupsPerDimension": 65535,
+          "maxImmediateSize": 64,
+          "maxStorageBuffersInFragmentStage": 10,
+          "maxStorageTexturesInFragmentStage": 8,
+          "maxStorageBuffersInVertexStage": 10,
+          "maxStorageTexturesInVertexStage": 8
+        },
+        "requiredLimits": {}
+      }
+    },
+    "executionTimeoutMs": 30000,
+    "replayCount": 2,
+    "sessionCleanup": {
+      "attempted": true,
+      "browserClosed": true,
+      "errors": [],
+      "passed": true
+    }
+  },
+  "tasks": [
+    {
+      "taskId": "writer-v3-reference-compute-add-one",
+      "pipelineKind": "compute",
+      "objective": "Add one to each of four f32 values and expose the output buffer.",
+      "sourceBindings": [
+        {
+          "id": "compute-module",
+          "path": "tools/data/wgsl-author-v3-reference/compute-add-one.wgsl",
+          "sha256": "8ccab8be48faa9c8600526b373d05bd664866c240e9b49ea9f74a4a591286ff8"
+        }
+      ],
+      "packageSha256": "b8efa96e8fed2ae246df306458f11cdd070b3e0be3e7281b1b4db385aed0738c",
+      "planSha256": "27d81ed9f297d9233cd26a1a877e163364d7d1568f9bbf9708c0f561423a9ae5",
+      "runs": [
+        {
+          "run": 1,
+          "execution": {
+            "schema": "doppler.wgsl-author-browser-execution/v1",
+            "id": "writer-v3-reference-compute-add-one-run-1",
+            "planSha256": "27d81ed9f297d9233cd26a1a877e163364d7d1568f9bbf9708c0f561423a9ae5",
+            "runtimeIdentity": {
+              "schema": "doppler.chromium-webgpu-runtime-identity/v1",
+              "host": {
+                "platform": "linux",
+                "release": "7.0.0-22-generic",
+                "architecture": "x64"
+              },
+              "browser": {
+                "engine": "chromium",
+                "version": "145.0.7632.6",
+                "headless": true,
+                "args": [
+                  "--enable-unsafe-webgpu",
+                  "--enable-dawn-features=allow_unsafe_apis",
+                  "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE",
+                  "--use-angle=vulkan",
+                  "--disable-vulkan-surface"
+                ]
+              },
+              "gpuBackend": {
+                "required": "vulkan",
+                "detected": "vulkan"
+              },
+              "chromiumGpu": {
+                "devices": [
+                  {
+                    "vendorId": 4098,
+                    "deviceId": 5510,
+                    "vendorString": "Google Inc. (AMD)",
+                    "deviceString": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                    "driverVendor": "AMD",
+                    "driverVersion": "26.0.3"
+                  }
+                ],
+                "auxAttributes": {
+                  "displayType": "ANGLE_VULKAN",
+                  "glImplementationParts": "(gl=egl-angle,angle=vulkan)",
+                  "glRenderer": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                  "glVendor": "Google Inc. (AMD)",
+                  "glVersion": "OpenGL ES 3.0 (ANGLE 2.1.26821 git hash: 4c0ae3917d4f)",
+                  "hardwareSupportsVulkan": true,
+                  "skiaBackendType": "GaneshVulkan"
+                },
+                "featureStatus": {
+                  "gpuCompositing": "enabled",
+                  "vulkan": "enabled_on",
+                  "webgpu": "enabled"
+                }
+              },
+              "webgpuAdapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": null,
+                "description": null,
+                "availableFeatures": [
+                  "bgra8unorm-storage",
+                  "chromium-experimental-multi-draw-indirect",
+                  "chromium-experimental-subgroup-matrix",
+                  "chromium-experimental-timestamp-query-inside-passes",
+                  "clip-distances",
+                  "core-features-and-limits",
+                  "depth-clip-control",
+                  "depth32float-stencil8",
+                  "dual-source-blending",
+                  "float32-blendable",
+                  "float32-filterable",
+                  "indirect-first-instance",
+                  "primitive-index",
+                  "rg11b10ufloat-renderable",
+                  "shader-f16",
+                  "subgroups",
+                  "texture-component-swizzle",
+                  "texture-compression-bc",
+                  "texture-compression-bc-sliced-3d",
+                  "texture-formats-tier1",
+                  "texture-formats-tier2",
+                  "timestamp-query"
+                ],
+                "requiredFeatures": [],
+                "limits": {
+                  "maxTextureDimension1D": 16384,
+                  "maxTextureDimension2D": 16384,
+                  "maxTextureDimension3D": 2048,
+                  "maxTextureArrayLayers": 2048,
+                  "maxBindGroups": 4,
+                  "maxBindGroupsPlusVertexBuffers": 24,
+                  "maxBindingsPerBindGroup": 1000,
+                  "maxDynamicUniformBuffersPerPipelineLayout": 10,
+                  "maxDynamicStorageBuffersPerPipelineLayout": 8,
+                  "maxSampledTexturesPerShaderStage": 16,
+                  "maxSamplersPerShaderStage": 16,
+                  "maxStorageBuffersPerShaderStage": 10,
+                  "maxStorageTexturesPerShaderStage": 8,
+                  "maxUniformBuffersPerShaderStage": 12,
+                  "maxUniformBufferBindingSize": 65536,
+                  "maxStorageBufferBindingSize": 2147483648,
+                  "minUniformBufferOffsetAlignment": 256,
+                  "minStorageBufferOffsetAlignment": 256,
+                  "maxVertexBuffers": 8,
+                  "maxBufferSize": 2147483648,
+                  "maxVertexAttributes": 30,
+                  "maxVertexBufferArrayStride": 2048,
+                  "maxInterStageShaderVariables": 28,
+                  "maxColorAttachments": 8,
+                  "maxColorAttachmentBytesPerSample": 128,
+                  "maxComputeWorkgroupStorageSize": 65536,
+                  "maxComputeInvocationsPerWorkgroup": 1024,
+                  "maxComputeWorkgroupSizeX": 1024,
+                  "maxComputeWorkgroupSizeY": 1024,
+                  "maxComputeWorkgroupSizeZ": 64,
+                  "maxComputeWorkgroupsPerDimension": 65535,
+                  "maxImmediateSize": 64,
+                  "maxStorageBuffersInFragmentStage": 10,
+                  "maxStorageTexturesInFragmentStage": 8,
+                  "maxStorageBuffersInVertexStage": 10,
+                  "maxStorageTexturesInVertexStage": 8
+                },
+                "requiredLimits": {}
+              }
+            },
+            "compilation": [
+              {
+                "moduleId": "compute-module",
+                "passed": true,
+                "errorCount": 0,
+                "messages": []
+              }
+            ],
+            "executedPassIds": [
+              "compute-pass"
+            ],
+            "outputs": {
+              "result": {
+                "kind": "buffer",
+                "bytes": [
+                  0,
+                  0,
+                  0,
+                  64,
+                  0,
+                  0,
+                  128,
+                  191,
+                  0,
+                  0,
+                  144,
+                  64,
+                  0,
+                  0,
+                  128,
+                  63
+                ]
+              }
+            },
+            "runtimeErrors": [],
+            "validationErrorsAbsent": true,
+            "cleanup": {
+              "attempted": true,
+              "destroyableCount": 3,
+              "destroyedCount": 3,
+              "mappedBufferCount": 3,
+              "unmappedBufferCount": 3,
+              "errors": [],
+              "passed": true
+            },
+            "passed": true,
+            "receiptHash": "267f7f1f1fd16134b07cac51cccbf8e3591cc8bd97f93cc9e108dcb40f2ce17a"
+          },
+          "executionError": null,
+          "outputSha256": "186c4353edfb0b61ae2f3e47643157914dcaf226c85718f6bccf6f8dfa252d13",
+          "oracle": {
+            "pass": true,
+            "kind": "f32_sequence",
+            "resourceId": "result",
+            "lengthExact": true,
+            "expected": [
+              2,
+              -1,
+              4.5,
+              1
+            ],
+            "actual": [
+              2,
+              -1,
+              4.5,
+              1
+            ],
+            "comparisons": [
+              {
+                "index": 0,
+                "expected": 2,
+                "actual": 2,
+                "error": 0,
+                "tolerance": 0.000003,
+                "pass": true
+              },
+              {
+                "index": 1,
+                "expected": -1,
+                "actual": -1,
+                "error": 0,
+                "tolerance": 0.000002,
+                "pass": true
+              },
+              {
+                "index": 2,
+                "expected": 4.5,
+                "actual": 4.5,
+                "error": 0,
+                "tolerance": 0.0000055,
+                "pass": true
+              },
+              {
+                "index": 3,
+                "expected": 1,
+                "actual": 1,
+                "error": 0,
+                "tolerance": 0.000002,
+                "pass": true
+              }
+            ]
+          },
+          "pass": true
+        },
+        {
+          "run": 2,
+          "execution": {
+            "schema": "doppler.wgsl-author-browser-execution/v1",
+            "id": "writer-v3-reference-compute-add-one-run-2",
+            "planSha256": "27d81ed9f297d9233cd26a1a877e163364d7d1568f9bbf9708c0f561423a9ae5",
+            "runtimeIdentity": {
+              "schema": "doppler.chromium-webgpu-runtime-identity/v1",
+              "host": {
+                "platform": "linux",
+                "release": "7.0.0-22-generic",
+                "architecture": "x64"
+              },
+              "browser": {
+                "engine": "chromium",
+                "version": "145.0.7632.6",
+                "headless": true,
+                "args": [
+                  "--enable-unsafe-webgpu",
+                  "--enable-dawn-features=allow_unsafe_apis",
+                  "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE",
+                  "--use-angle=vulkan",
+                  "--disable-vulkan-surface"
+                ]
+              },
+              "gpuBackend": {
+                "required": "vulkan",
+                "detected": "vulkan"
+              },
+              "chromiumGpu": {
+                "devices": [
+                  {
+                    "vendorId": 4098,
+                    "deviceId": 5510,
+                    "vendorString": "Google Inc. (AMD)",
+                    "deviceString": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                    "driverVendor": "AMD",
+                    "driverVersion": "26.0.3"
+                  }
+                ],
+                "auxAttributes": {
+                  "displayType": "ANGLE_VULKAN",
+                  "glImplementationParts": "(gl=egl-angle,angle=vulkan)",
+                  "glRenderer": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                  "glVendor": "Google Inc. (AMD)",
+                  "glVersion": "OpenGL ES 3.0 (ANGLE 2.1.26821 git hash: 4c0ae3917d4f)",
+                  "hardwareSupportsVulkan": true,
+                  "skiaBackendType": "GaneshVulkan"
+                },
+                "featureStatus": {
+                  "gpuCompositing": "enabled",
+                  "vulkan": "enabled_on",
+                  "webgpu": "enabled"
+                }
+              },
+              "webgpuAdapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": null,
+                "description": null,
+                "availableFeatures": [
+                  "bgra8unorm-storage",
+                  "chromium-experimental-multi-draw-indirect",
+                  "chromium-experimental-subgroup-matrix",
+                  "chromium-experimental-timestamp-query-inside-passes",
+                  "clip-distances",
+                  "core-features-and-limits",
+                  "depth-clip-control",
+                  "depth32float-stencil8",
+                  "dual-source-blending",
+                  "float32-blendable",
+                  "float32-filterable",
+                  "indirect-first-instance",
+                  "primitive-index",
+                  "rg11b10ufloat-renderable",
+                  "shader-f16",
+                  "subgroups",
+                  "texture-component-swizzle",
+                  "texture-compression-bc",
+                  "texture-compression-bc-sliced-3d",
+                  "texture-formats-tier1",
+                  "texture-formats-tier2",
+                  "timestamp-query"
+                ],
+                "requiredFeatures": [],
+                "limits": {
+                  "maxTextureDimension1D": 16384,
+                  "maxTextureDimension2D": 16384,
+                  "maxTextureDimension3D": 2048,
+                  "maxTextureArrayLayers": 2048,
+                  "maxBindGroups": 4,
+                  "maxBindGroupsPlusVertexBuffers": 24,
+                  "maxBindingsPerBindGroup": 1000,
+                  "maxDynamicUniformBuffersPerPipelineLayout": 10,
+                  "maxDynamicStorageBuffersPerPipelineLayout": 8,
+                  "maxSampledTexturesPerShaderStage": 16,
+                  "maxSamplersPerShaderStage": 16,
+                  "maxStorageBuffersPerShaderStage": 10,
+                  "maxStorageTexturesPerShaderStage": 8,
+                  "maxUniformBuffersPerShaderStage": 12,
+                  "maxUniformBufferBindingSize": 65536,
+                  "maxStorageBufferBindingSize": 2147483648,
+                  "minUniformBufferOffsetAlignment": 256,
+                  "minStorageBufferOffsetAlignment": 256,
+                  "maxVertexBuffers": 8,
+                  "maxBufferSize": 2147483648,
+                  "maxVertexAttributes": 30,
+                  "maxVertexBufferArrayStride": 2048,
+                  "maxInterStageShaderVariables": 28,
+                  "maxColorAttachments": 8,
+                  "maxColorAttachmentBytesPerSample": 128,
+                  "maxComputeWorkgroupStorageSize": 65536,
+                  "maxComputeInvocationsPerWorkgroup": 1024,
+                  "maxComputeWorkgroupSizeX": 1024,
+                  "maxComputeWorkgroupSizeY": 1024,
+                  "maxComputeWorkgroupSizeZ": 64,
+                  "maxComputeWorkgroupsPerDimension": 65535,
+                  "maxImmediateSize": 64,
+                  "maxStorageBuffersInFragmentStage": 10,
+                  "maxStorageTexturesInFragmentStage": 8,
+                  "maxStorageBuffersInVertexStage": 10,
+                  "maxStorageTexturesInVertexStage": 8
+                },
+                "requiredLimits": {}
+              }
+            },
+            "compilation": [
+              {
+                "moduleId": "compute-module",
+                "passed": true,
+                "errorCount": 0,
+                "messages": []
+              }
+            ],
+            "executedPassIds": [
+              "compute-pass"
+            ],
+            "outputs": {
+              "result": {
+                "kind": "buffer",
+                "bytes": [
+                  0,
+                  0,
+                  0,
+                  64,
+                  0,
+                  0,
+                  128,
+                  191,
+                  0,
+                  0,
+                  144,
+                  64,
+                  0,
+                  0,
+                  128,
+                  63
+                ]
+              }
+            },
+            "runtimeErrors": [],
+            "validationErrorsAbsent": true,
+            "cleanup": {
+              "attempted": true,
+              "destroyableCount": 3,
+              "destroyedCount": 3,
+              "mappedBufferCount": 3,
+              "unmappedBufferCount": 3,
+              "errors": [],
+              "passed": true
+            },
+            "passed": true,
+            "receiptHash": "4562fe8924a4fda3f5f0ce3c621ca839d8c1a573b5e432787fbece8d25f4c60b"
+          },
+          "executionError": null,
+          "outputSha256": "186c4353edfb0b61ae2f3e47643157914dcaf226c85718f6bccf6f8dfa252d13",
+          "oracle": {
+            "pass": true,
+            "kind": "f32_sequence",
+            "resourceId": "result",
+            "lengthExact": true,
+            "expected": [
+              2,
+              -1,
+              4.5,
+              1
+            ],
+            "actual": [
+              2,
+              -1,
+              4.5,
+              1
+            ],
+            "comparisons": [
+              {
+                "index": 0,
+                "expected": 2,
+                "actual": 2,
+                "error": 0,
+                "tolerance": 0.000003,
+                "pass": true
+              },
+              {
+                "index": 1,
+                "expected": -1,
+                "actual": -1,
+                "error": 0,
+                "tolerance": 0.000002,
+                "pass": true
+              },
+              {
+                "index": 2,
+                "expected": 4.5,
+                "actual": 4.5,
+                "error": 0,
+                "tolerance": 0.0000055,
+                "pass": true
+              },
+              {
+                "index": 3,
+                "expected": 1,
+                "actual": 1,
+                "error": 0,
+                "tolerance": 0.000002,
+                "pass": true
+              }
+            ]
+          },
+          "pass": true
+        }
+      ],
+      "deterministicReplay": {
+        "requiredRuns": 2,
+        "completedRuns": 2,
+        "outputHashes": [
+          "186c4353edfb0b61ae2f3e47643157914dcaf226c85718f6bccf6f8dfa252d13",
+          "186c4353edfb0b61ae2f3e47643157914dcaf226c85718f6bccf6f8dfa252d13"
+        ],
+        "outputsMatch": true,
+        "executedPassesMatch": true,
+        "pass": true
+      },
+      "pass": true
+    },
+    {
+      "taskId": "writer-v3-reference-procedural-render",
+      "pipelineKind": "render",
+      "objective": "Render a full target in rgba8unorm with the exact constant color (0.25, 0.5, 0.75, 1).",
+      "sourceBindings": [
+        {
+          "id": "render-module",
+          "path": "tools/data/wgsl-author-v3-reference/procedural-solid.wgsl",
+          "sha256": "3eb42a2b0f780971b401ae58a34f8c8c732d881e350d56f7efbfc1fbbe587fd1"
+        }
+      ],
+      "packageSha256": "840d0aa3292a6467643dd1a8422325509556ff1b4153ab016b2f945c513a9aa7",
+      "planSha256": "c474d08185573952bed3787a39903d9a0cfb5318a68dbc3f6c1ffd1d0efbbc21",
+      "runs": [
+        {
+          "run": 1,
+          "execution": {
+            "schema": "doppler.wgsl-author-browser-execution/v1",
+            "id": "writer-v3-reference-procedural-render-run-1",
+            "planSha256": "c474d08185573952bed3787a39903d9a0cfb5318a68dbc3f6c1ffd1d0efbbc21",
+            "runtimeIdentity": {
+              "schema": "doppler.chromium-webgpu-runtime-identity/v1",
+              "host": {
+                "platform": "linux",
+                "release": "7.0.0-22-generic",
+                "architecture": "x64"
+              },
+              "browser": {
+                "engine": "chromium",
+                "version": "145.0.7632.6",
+                "headless": true,
+                "args": [
+                  "--enable-unsafe-webgpu",
+                  "--enable-dawn-features=allow_unsafe_apis",
+                  "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE",
+                  "--use-angle=vulkan",
+                  "--disable-vulkan-surface"
+                ]
+              },
+              "gpuBackend": {
+                "required": "vulkan",
+                "detected": "vulkan"
+              },
+              "chromiumGpu": {
+                "devices": [
+                  {
+                    "vendorId": 4098,
+                    "deviceId": 5510,
+                    "vendorString": "Google Inc. (AMD)",
+                    "deviceString": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                    "driverVendor": "AMD",
+                    "driverVersion": "26.0.3"
+                  }
+                ],
+                "auxAttributes": {
+                  "displayType": "ANGLE_VULKAN",
+                  "glImplementationParts": "(gl=egl-angle,angle=vulkan)",
+                  "glRenderer": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                  "glVendor": "Google Inc. (AMD)",
+                  "glVersion": "OpenGL ES 3.0 (ANGLE 2.1.26821 git hash: 4c0ae3917d4f)",
+                  "hardwareSupportsVulkan": true,
+                  "skiaBackendType": "GaneshVulkan"
+                },
+                "featureStatus": {
+                  "gpuCompositing": "enabled",
+                  "vulkan": "enabled_on",
+                  "webgpu": "enabled"
+                }
+              },
+              "webgpuAdapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": null,
+                "description": null,
+                "availableFeatures": [
+                  "bgra8unorm-storage",
+                  "chromium-experimental-multi-draw-indirect",
+                  "chromium-experimental-subgroup-matrix",
+                  "chromium-experimental-timestamp-query-inside-passes",
+                  "clip-distances",
+                  "core-features-and-limits",
+                  "depth-clip-control",
+                  "depth32float-stencil8",
+                  "dual-source-blending",
+                  "float32-blendable",
+                  "float32-filterable",
+                  "indirect-first-instance",
+                  "primitive-index",
+                  "rg11b10ufloat-renderable",
+                  "shader-f16",
+                  "subgroups",
+                  "texture-component-swizzle",
+                  "texture-compression-bc",
+                  "texture-compression-bc-sliced-3d",
+                  "texture-formats-tier1",
+                  "texture-formats-tier2",
+                  "timestamp-query"
+                ],
+                "requiredFeatures": [],
+                "limits": {
+                  "maxTextureDimension1D": 16384,
+                  "maxTextureDimension2D": 16384,
+                  "maxTextureDimension3D": 2048,
+                  "maxTextureArrayLayers": 2048,
+                  "maxBindGroups": 4,
+                  "maxBindGroupsPlusVertexBuffers": 24,
+                  "maxBindingsPerBindGroup": 1000,
+                  "maxDynamicUniformBuffersPerPipelineLayout": 10,
+                  "maxDynamicStorageBuffersPerPipelineLayout": 8,
+                  "maxSampledTexturesPerShaderStage": 16,
+                  "maxSamplersPerShaderStage": 16,
+                  "maxStorageBuffersPerShaderStage": 10,
+                  "maxStorageTexturesPerShaderStage": 8,
+                  "maxUniformBuffersPerShaderStage": 12,
+                  "maxUniformBufferBindingSize": 65536,
+                  "maxStorageBufferBindingSize": 2147483648,
+                  "minUniformBufferOffsetAlignment": 256,
+                  "minStorageBufferOffsetAlignment": 256,
+                  "maxVertexBuffers": 8,
+                  "maxBufferSize": 2147483648,
+                  "maxVertexAttributes": 30,
+                  "maxVertexBufferArrayStride": 2048,
+                  "maxInterStageShaderVariables": 28,
+                  "maxColorAttachments": 8,
+                  "maxColorAttachmentBytesPerSample": 128,
+                  "maxComputeWorkgroupStorageSize": 65536,
+                  "maxComputeInvocationsPerWorkgroup": 1024,
+                  "maxComputeWorkgroupSizeX": 1024,
+                  "maxComputeWorkgroupSizeY": 1024,
+                  "maxComputeWorkgroupSizeZ": 64,
+                  "maxComputeWorkgroupsPerDimension": 65535,
+                  "maxImmediateSize": 64,
+                  "maxStorageBuffersInFragmentStage": 10,
+                  "maxStorageTexturesInFragmentStage": 8,
+                  "maxStorageBuffersInVertexStage": 10,
+                  "maxStorageTexturesInVertexStage": 8
+                },
+                "requiredLimits": {}
+              }
+            },
+            "compilation": [
+              {
+                "moduleId": "render-module",
+                "passed": true,
+                "errorCount": 0,
+                "messages": []
+              }
+            ],
+            "executedPassIds": [
+              "render-pass"
+            ],
+            "outputs": {
+              "color": {
+                "kind": "texture",
+                "bytes": [
+                  64,
+                  128,
+                  191,
+                  255,
+                  64,
+                  128,
+                  191,
+                  255,
+                  64,
+                  128,
+                  191,
+                  255,
+                  64,
+                  128,
+                  191,
+                  255
+                ]
+              }
+            },
+            "runtimeErrors": [],
+            "validationErrorsAbsent": true,
+            "cleanup": {
+              "attempted": true,
+              "destroyableCount": 2,
+              "destroyedCount": 2,
+              "mappedBufferCount": 1,
+              "unmappedBufferCount": 1,
+              "errors": [],
+              "passed": true
+            },
+            "passed": true,
+            "receiptHash": "4de852bd555990bb280b10861fb03cde002be7647f2b69d020067e56a9cd8209"
+          },
+          "executionError": null,
+          "outputSha256": "44f73fde34e1fadead9689fd89315503c9262b6aa5f50b1cbaa0a3d02ba10cf8",
+          "oracle": {
+            "pass": true,
+            "kind": "rgba8_uniform",
+            "resourceId": "color",
+            "pixels": 4,
+            "expectedPixel": [
+              64,
+              128,
+              191,
+              255
+            ],
+            "channelTolerance": 1,
+            "mismatches": [],
+            "outputSha256": "9e5e872487d17cc66a439ebd6029ba136c4bca34dcbc6e9fe9bb88f2c7cc4b77"
+          },
+          "pass": true
+        },
+        {
+          "run": 2,
+          "execution": {
+            "schema": "doppler.wgsl-author-browser-execution/v1",
+            "id": "writer-v3-reference-procedural-render-run-2",
+            "planSha256": "c474d08185573952bed3787a39903d9a0cfb5318a68dbc3f6c1ffd1d0efbbc21",
+            "runtimeIdentity": {
+              "schema": "doppler.chromium-webgpu-runtime-identity/v1",
+              "host": {
+                "platform": "linux",
+                "release": "7.0.0-22-generic",
+                "architecture": "x64"
+              },
+              "browser": {
+                "engine": "chromium",
+                "version": "145.0.7632.6",
+                "headless": true,
+                "args": [
+                  "--enable-unsafe-webgpu",
+                  "--enable-dawn-features=allow_unsafe_apis",
+                  "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE",
+                  "--use-angle=vulkan",
+                  "--disable-vulkan-surface"
+                ]
+              },
+              "gpuBackend": {
+                "required": "vulkan",
+                "detected": "vulkan"
+              },
+              "chromiumGpu": {
+                "devices": [
+                  {
+                    "vendorId": 4098,
+                    "deviceId": 5510,
+                    "vendorString": "Google Inc. (AMD)",
+                    "deviceString": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                    "driverVendor": "AMD",
+                    "driverVersion": "26.0.3"
+                  }
+                ],
+                "auxAttributes": {
+                  "displayType": "ANGLE_VULKAN",
+                  "glImplementationParts": "(gl=egl-angle,angle=vulkan)",
+                  "glRenderer": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                  "glVendor": "Google Inc. (AMD)",
+                  "glVersion": "OpenGL ES 3.0 (ANGLE 2.1.26821 git hash: 4c0ae3917d4f)",
+                  "hardwareSupportsVulkan": true,
+                  "skiaBackendType": "GaneshVulkan"
+                },
+                "featureStatus": {
+                  "gpuCompositing": "enabled",
+                  "vulkan": "enabled_on",
+                  "webgpu": "enabled"
+                }
+              },
+              "webgpuAdapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": null,
+                "description": null,
+                "availableFeatures": [
+                  "bgra8unorm-storage",
+                  "chromium-experimental-multi-draw-indirect",
+                  "chromium-experimental-subgroup-matrix",
+                  "chromium-experimental-timestamp-query-inside-passes",
+                  "clip-distances",
+                  "core-features-and-limits",
+                  "depth-clip-control",
+                  "depth32float-stencil8",
+                  "dual-source-blending",
+                  "float32-blendable",
+                  "float32-filterable",
+                  "indirect-first-instance",
+                  "primitive-index",
+                  "rg11b10ufloat-renderable",
+                  "shader-f16",
+                  "subgroups",
+                  "texture-component-swizzle",
+                  "texture-compression-bc",
+                  "texture-compression-bc-sliced-3d",
+                  "texture-formats-tier1",
+                  "texture-formats-tier2",
+                  "timestamp-query"
+                ],
+                "requiredFeatures": [],
+                "limits": {
+                  "maxTextureDimension1D": 16384,
+                  "maxTextureDimension2D": 16384,
+                  "maxTextureDimension3D": 2048,
+                  "maxTextureArrayLayers": 2048,
+                  "maxBindGroups": 4,
+                  "maxBindGroupsPlusVertexBuffers": 24,
+                  "maxBindingsPerBindGroup": 1000,
+                  "maxDynamicUniformBuffersPerPipelineLayout": 10,
+                  "maxDynamicStorageBuffersPerPipelineLayout": 8,
+                  "maxSampledTexturesPerShaderStage": 16,
+                  "maxSamplersPerShaderStage": 16,
+                  "maxStorageBuffersPerShaderStage": 10,
+                  "maxStorageTexturesPerShaderStage": 8,
+                  "maxUniformBuffersPerShaderStage": 12,
+                  "maxUniformBufferBindingSize": 65536,
+                  "maxStorageBufferBindingSize": 2147483648,
+                  "minUniformBufferOffsetAlignment": 256,
+                  "minStorageBufferOffsetAlignment": 256,
+                  "maxVertexBuffers": 8,
+                  "maxBufferSize": 2147483648,
+                  "maxVertexAttributes": 30,
+                  "maxVertexBufferArrayStride": 2048,
+                  "maxInterStageShaderVariables": 28,
+                  "maxColorAttachments": 8,
+                  "maxColorAttachmentBytesPerSample": 128,
+                  "maxComputeWorkgroupStorageSize": 65536,
+                  "maxComputeInvocationsPerWorkgroup": 1024,
+                  "maxComputeWorkgroupSizeX": 1024,
+                  "maxComputeWorkgroupSizeY": 1024,
+                  "maxComputeWorkgroupSizeZ": 64,
+                  "maxComputeWorkgroupsPerDimension": 65535,
+                  "maxImmediateSize": 64,
+                  "maxStorageBuffersInFragmentStage": 10,
+                  "maxStorageTexturesInFragmentStage": 8,
+                  "maxStorageBuffersInVertexStage": 10,
+                  "maxStorageTexturesInVertexStage": 8
+                },
+                "requiredLimits": {}
+              }
+            },
+            "compilation": [
+              {
+                "moduleId": "render-module",
+                "passed": true,
+                "errorCount": 0,
+                "messages": []
+              }
+            ],
+            "executedPassIds": [
+              "render-pass"
+            ],
+            "outputs": {
+              "color": {
+                "kind": "texture",
+                "bytes": [
+                  64,
+                  128,
+                  191,
+                  255,
+                  64,
+                  128,
+                  191,
+                  255,
+                  64,
+                  128,
+                  191,
+                  255,
+                  64,
+                  128,
+                  191,
+                  255
+                ]
+              }
+            },
+            "runtimeErrors": [],
+            "validationErrorsAbsent": true,
+            "cleanup": {
+              "attempted": true,
+              "destroyableCount": 2,
+              "destroyedCount": 2,
+              "mappedBufferCount": 1,
+              "unmappedBufferCount": 1,
+              "errors": [],
+              "passed": true
+            },
+            "passed": true,
+            "receiptHash": "19363665c5a428cc2774ceda706d87bd6942a23e5f14e461cd63e8d03350477e"
+          },
+          "executionError": null,
+          "outputSha256": "44f73fde34e1fadead9689fd89315503c9262b6aa5f50b1cbaa0a3d02ba10cf8",
+          "oracle": {
+            "pass": true,
+            "kind": "rgba8_uniform",
+            "resourceId": "color",
+            "pixels": 4,
+            "expectedPixel": [
+              64,
+              128,
+              191,
+              255
+            ],
+            "channelTolerance": 1,
+            "mismatches": [],
+            "outputSha256": "9e5e872487d17cc66a439ebd6029ba136c4bca34dcbc6e9fe9bb88f2c7cc4b77"
+          },
+          "pass": true
+        }
+      ],
+      "deterministicReplay": {
+        "requiredRuns": 2,
+        "completedRuns": 2,
+        "outputHashes": [
+          "44f73fde34e1fadead9689fd89315503c9262b6aa5f50b1cbaa0a3d02ba10cf8",
+          "44f73fde34e1fadead9689fd89315503c9262b6aa5f50b1cbaa0a3d02ba10cf8"
+        ],
+        "outputsMatch": true,
+        "executedPassesMatch": true,
+        "pass": true
+      },
+      "pass": true
+    },
+    {
+      "taskId": "writer-v3-reference-indexed-render",
+      "pipelineKind": "render",
+      "objective": "Render a full rgba8unorm target as solid green using an indexed vertex buffer.",
+      "sourceBindings": [
+        {
+          "id": "render-module",
+          "path": "tools/data/wgsl-author-v3-reference/indexed-solid.wgsl",
+          "sha256": "cf793346c6bf1614152b148096415681752f9921b49695e54922e4e77a494a66"
+        }
+      ],
+      "packageSha256": "82d73145234ea08df4dd24b42c9a635d3fad0a226486157c08693598a0f3e826",
+      "planSha256": "b29149f052c7e842da63962d476e652cb0c18b0b77e69d1bd1e05ce57af0bb4d",
+      "runs": [
+        {
+          "run": 1,
+          "execution": {
+            "schema": "doppler.wgsl-author-browser-execution/v1",
+            "id": "writer-v3-reference-indexed-render-run-1",
+            "planSha256": "b29149f052c7e842da63962d476e652cb0c18b0b77e69d1bd1e05ce57af0bb4d",
+            "runtimeIdentity": {
+              "schema": "doppler.chromium-webgpu-runtime-identity/v1",
+              "host": {
+                "platform": "linux",
+                "release": "7.0.0-22-generic",
+                "architecture": "x64"
+              },
+              "browser": {
+                "engine": "chromium",
+                "version": "145.0.7632.6",
+                "headless": true,
+                "args": [
+                  "--enable-unsafe-webgpu",
+                  "--enable-dawn-features=allow_unsafe_apis",
+                  "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE",
+                  "--use-angle=vulkan",
+                  "--disable-vulkan-surface"
+                ]
+              },
+              "gpuBackend": {
+                "required": "vulkan",
+                "detected": "vulkan"
+              },
+              "chromiumGpu": {
+                "devices": [
+                  {
+                    "vendorId": 4098,
+                    "deviceId": 5510,
+                    "vendorString": "Google Inc. (AMD)",
+                    "deviceString": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                    "driverVendor": "AMD",
+                    "driverVersion": "26.0.3"
+                  }
+                ],
+                "auxAttributes": {
+                  "displayType": "ANGLE_VULKAN",
+                  "glImplementationParts": "(gl=egl-angle,angle=vulkan)",
+                  "glRenderer": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                  "glVendor": "Google Inc. (AMD)",
+                  "glVersion": "OpenGL ES 3.0 (ANGLE 2.1.26821 git hash: 4c0ae3917d4f)",
+                  "hardwareSupportsVulkan": true,
+                  "skiaBackendType": "GaneshVulkan"
+                },
+                "featureStatus": {
+                  "gpuCompositing": "enabled",
+                  "vulkan": "enabled_on",
+                  "webgpu": "enabled"
+                }
+              },
+              "webgpuAdapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": null,
+                "description": null,
+                "availableFeatures": [
+                  "bgra8unorm-storage",
+                  "chromium-experimental-multi-draw-indirect",
+                  "chromium-experimental-subgroup-matrix",
+                  "chromium-experimental-timestamp-query-inside-passes",
+                  "clip-distances",
+                  "core-features-and-limits",
+                  "depth-clip-control",
+                  "depth32float-stencil8",
+                  "dual-source-blending",
+                  "float32-blendable",
+                  "float32-filterable",
+                  "indirect-first-instance",
+                  "primitive-index",
+                  "rg11b10ufloat-renderable",
+                  "shader-f16",
+                  "subgroups",
+                  "texture-component-swizzle",
+                  "texture-compression-bc",
+                  "texture-compression-bc-sliced-3d",
+                  "texture-formats-tier1",
+                  "texture-formats-tier2",
+                  "timestamp-query"
+                ],
+                "requiredFeatures": [],
+                "limits": {
+                  "maxTextureDimension1D": 16384,
+                  "maxTextureDimension2D": 16384,
+                  "maxTextureDimension3D": 2048,
+                  "maxTextureArrayLayers": 2048,
+                  "maxBindGroups": 4,
+                  "maxBindGroupsPlusVertexBuffers": 24,
+                  "maxBindingsPerBindGroup": 1000,
+                  "maxDynamicUniformBuffersPerPipelineLayout": 10,
+                  "maxDynamicStorageBuffersPerPipelineLayout": 8,
+                  "maxSampledTexturesPerShaderStage": 16,
+                  "maxSamplersPerShaderStage": 16,
+                  "maxStorageBuffersPerShaderStage": 10,
+                  "maxStorageTexturesPerShaderStage": 8,
+                  "maxUniformBuffersPerShaderStage": 12,
+                  "maxUniformBufferBindingSize": 65536,
+                  "maxStorageBufferBindingSize": 2147483648,
+                  "minUniformBufferOffsetAlignment": 256,
+                  "minStorageBufferOffsetAlignment": 256,
+                  "maxVertexBuffers": 8,
+                  "maxBufferSize": 2147483648,
+                  "maxVertexAttributes": 30,
+                  "maxVertexBufferArrayStride": 2048,
+                  "maxInterStageShaderVariables": 28,
+                  "maxColorAttachments": 8,
+                  "maxColorAttachmentBytesPerSample": 128,
+                  "maxComputeWorkgroupStorageSize": 65536,
+                  "maxComputeInvocationsPerWorkgroup": 1024,
+                  "maxComputeWorkgroupSizeX": 1024,
+                  "maxComputeWorkgroupSizeY": 1024,
+                  "maxComputeWorkgroupSizeZ": 64,
+                  "maxComputeWorkgroupsPerDimension": 65535,
+                  "maxImmediateSize": 64,
+                  "maxStorageBuffersInFragmentStage": 10,
+                  "maxStorageTexturesInFragmentStage": 8,
+                  "maxStorageBuffersInVertexStage": 10,
+                  "maxStorageTexturesInVertexStage": 8
+                },
+                "requiredLimits": {}
+              }
+            },
+            "compilation": [
+              {
+                "moduleId": "render-module",
+                "passed": true,
+                "errorCount": 0,
+                "messages": []
+              }
+            ],
+            "executedPassIds": [
+              "render-pass"
+            ],
+            "outputs": {
+              "color": {
+                "kind": "texture",
+                "bytes": [
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255
+                ]
+              }
+            },
+            "runtimeErrors": [],
+            "validationErrorsAbsent": true,
+            "cleanup": {
+              "attempted": true,
+              "destroyableCount": 4,
+              "destroyedCount": 4,
+              "mappedBufferCount": 3,
+              "unmappedBufferCount": 3,
+              "errors": [],
+              "passed": true
+            },
+            "passed": true,
+            "receiptHash": "a2220e6ca57a8cac16c621515f9916602eec7562cbbbf95a47f448d44d228fd7"
+          },
+          "executionError": null,
+          "outputSha256": "4b06419528536a732dd5a90cea2a285208beaf5cd585c639b9626d60dfc04cda",
+          "oracle": {
+            "pass": true,
+            "kind": "rgba8_uniform",
+            "resourceId": "color",
+            "pixels": 16,
+            "expectedPixel": [
+              0,
+              255,
+              0,
+              255
+            ],
+            "channelTolerance": 0,
+            "mismatches": [],
+            "outputSha256": "2349700c261952d812af77ea8824dec5a5b0cddc2ca47f881c22f7819625d5f4"
+          },
+          "pass": true
+        },
+        {
+          "run": 2,
+          "execution": {
+            "schema": "doppler.wgsl-author-browser-execution/v1",
+            "id": "writer-v3-reference-indexed-render-run-2",
+            "planSha256": "b29149f052c7e842da63962d476e652cb0c18b0b77e69d1bd1e05ce57af0bb4d",
+            "runtimeIdentity": {
+              "schema": "doppler.chromium-webgpu-runtime-identity/v1",
+              "host": {
+                "platform": "linux",
+                "release": "7.0.0-22-generic",
+                "architecture": "x64"
+              },
+              "browser": {
+                "engine": "chromium",
+                "version": "145.0.7632.6",
+                "headless": true,
+                "args": [
+                  "--enable-unsafe-webgpu",
+                  "--enable-dawn-features=allow_unsafe_apis",
+                  "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE",
+                  "--use-angle=vulkan",
+                  "--disable-vulkan-surface"
+                ]
+              },
+              "gpuBackend": {
+                "required": "vulkan",
+                "detected": "vulkan"
+              },
+              "chromiumGpu": {
+                "devices": [
+                  {
+                    "vendorId": 4098,
+                    "deviceId": 5510,
+                    "vendorString": "Google Inc. (AMD)",
+                    "deviceString": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                    "driverVendor": "AMD",
+                    "driverVersion": "26.0.3"
+                  }
+                ],
+                "auxAttributes": {
+                  "displayType": "ANGLE_VULKAN",
+                  "glImplementationParts": "(gl=egl-angle,angle=vulkan)",
+                  "glRenderer": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                  "glVendor": "Google Inc. (AMD)",
+                  "glVersion": "OpenGL ES 3.0 (ANGLE 2.1.26821 git hash: 4c0ae3917d4f)",
+                  "hardwareSupportsVulkan": true,
+                  "skiaBackendType": "GaneshVulkan"
+                },
+                "featureStatus": {
+                  "gpuCompositing": "enabled",
+                  "vulkan": "enabled_on",
+                  "webgpu": "enabled"
+                }
+              },
+              "webgpuAdapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": null,
+                "description": null,
+                "availableFeatures": [
+                  "bgra8unorm-storage",
+                  "chromium-experimental-multi-draw-indirect",
+                  "chromium-experimental-subgroup-matrix",
+                  "chromium-experimental-timestamp-query-inside-passes",
+                  "clip-distances",
+                  "core-features-and-limits",
+                  "depth-clip-control",
+                  "depth32float-stencil8",
+                  "dual-source-blending",
+                  "float32-blendable",
+                  "float32-filterable",
+                  "indirect-first-instance",
+                  "primitive-index",
+                  "rg11b10ufloat-renderable",
+                  "shader-f16",
+                  "subgroups",
+                  "texture-component-swizzle",
+                  "texture-compression-bc",
+                  "texture-compression-bc-sliced-3d",
+                  "texture-formats-tier1",
+                  "texture-formats-tier2",
+                  "timestamp-query"
+                ],
+                "requiredFeatures": [],
+                "limits": {
+                  "maxTextureDimension1D": 16384,
+                  "maxTextureDimension2D": 16384,
+                  "maxTextureDimension3D": 2048,
+                  "maxTextureArrayLayers": 2048,
+                  "maxBindGroups": 4,
+                  "maxBindGroupsPlusVertexBuffers": 24,
+                  "maxBindingsPerBindGroup": 1000,
+                  "maxDynamicUniformBuffersPerPipelineLayout": 10,
+                  "maxDynamicStorageBuffersPerPipelineLayout": 8,
+                  "maxSampledTexturesPerShaderStage": 16,
+                  "maxSamplersPerShaderStage": 16,
+                  "maxStorageBuffersPerShaderStage": 10,
+                  "maxStorageTexturesPerShaderStage": 8,
+                  "maxUniformBuffersPerShaderStage": 12,
+                  "maxUniformBufferBindingSize": 65536,
+                  "maxStorageBufferBindingSize": 2147483648,
+                  "minUniformBufferOffsetAlignment": 256,
+                  "minStorageBufferOffsetAlignment": 256,
+                  "maxVertexBuffers": 8,
+                  "maxBufferSize": 2147483648,
+                  "maxVertexAttributes": 30,
+                  "maxVertexBufferArrayStride": 2048,
+                  "maxInterStageShaderVariables": 28,
+                  "maxColorAttachments": 8,
+                  "maxColorAttachmentBytesPerSample": 128,
+                  "maxComputeWorkgroupStorageSize": 65536,
+                  "maxComputeInvocationsPerWorkgroup": 1024,
+                  "maxComputeWorkgroupSizeX": 1024,
+                  "maxComputeWorkgroupSizeY": 1024,
+                  "maxComputeWorkgroupSizeZ": 64,
+                  "maxComputeWorkgroupsPerDimension": 65535,
+                  "maxImmediateSize": 64,
+                  "maxStorageBuffersInFragmentStage": 10,
+                  "maxStorageTexturesInFragmentStage": 8,
+                  "maxStorageBuffersInVertexStage": 10,
+                  "maxStorageTexturesInVertexStage": 8
+                },
+                "requiredLimits": {}
+              }
+            },
+            "compilation": [
+              {
+                "moduleId": "render-module",
+                "passed": true,
+                "errorCount": 0,
+                "messages": []
+              }
+            ],
+            "executedPassIds": [
+              "render-pass"
+            ],
+            "outputs": {
+              "color": {
+                "kind": "texture",
+                "bytes": [
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255,
+                  0,
+                  255
+                ]
+              }
+            },
+            "runtimeErrors": [],
+            "validationErrorsAbsent": true,
+            "cleanup": {
+              "attempted": true,
+              "destroyableCount": 4,
+              "destroyedCount": 4,
+              "mappedBufferCount": 3,
+              "unmappedBufferCount": 3,
+              "errors": [],
+              "passed": true
+            },
+            "passed": true,
+            "receiptHash": "7007f081279f98c87d6b62ec99d7a092d394426247cb314abfa38fc518821856"
+          },
+          "executionError": null,
+          "outputSha256": "4b06419528536a732dd5a90cea2a285208beaf5cd585c639b9626d60dfc04cda",
+          "oracle": {
+            "pass": true,
+            "kind": "rgba8_uniform",
+            "resourceId": "color",
+            "pixels": 16,
+            "expectedPixel": [
+              0,
+              255,
+              0,
+              255
+            ],
+            "channelTolerance": 0,
+            "mismatches": [],
+            "outputSha256": "2349700c261952d812af77ea8824dec5a5b0cddc2ca47f881c22f7819625d5f4"
+          },
+          "pass": true
+        }
+      ],
+      "deterministicReplay": {
+        "requiredRuns": 2,
+        "completedRuns": 2,
+        "outputHashes": [
+          "4b06419528536a732dd5a90cea2a285208beaf5cd585c639b9626d60dfc04cda",
+          "4b06419528536a732dd5a90cea2a285208beaf5cd585c639b9626d60dfc04cda"
+        ],
+        "outputsMatch": true,
+        "executedPassesMatch": true,
+        "pass": true
+      },
+      "pass": true
+    },
+    {
+      "taskId": "writer-v3-reference-compute-to-render",
+      "pipelineKind": "multi_pass",
+      "objective": "Write one RGBA color in a compute pass and consume it in a full-target render pass.",
+      "sourceBindings": [
+        {
+          "id": "prepare-module",
+          "path": "tools/data/wgsl-author-v3-reference/multipass-prepare.wgsl",
+          "sha256": "512b8c08c7e18263ca2fb925f62e7117948e4fa032e09ca8a9ec0b9dba6db7c3"
+        },
+        {
+          "id": "draw-module",
+          "path": "tools/data/wgsl-author-v3-reference/multipass-draw.wgsl",
+          "sha256": "9dbb6822307b13466fe7b92dec362151c26b570cda6a090250855234f9d217e9"
+        }
+      ],
+      "packageSha256": "9df40ac6d26acfd4ea2fe6c1cc5f1187f4807c1bb6bfd6f96f9282f1430e437a",
+      "planSha256": "f1b6ca29b28e1bc2ad63ea9dac64efe4ded1064c24207f041eaaa7e8dd4ff9c4",
+      "runs": [
+        {
+          "run": 1,
+          "execution": {
+            "schema": "doppler.wgsl-author-browser-execution/v1",
+            "id": "writer-v3-reference-compute-to-render-run-1",
+            "planSha256": "f1b6ca29b28e1bc2ad63ea9dac64efe4ded1064c24207f041eaaa7e8dd4ff9c4",
+            "runtimeIdentity": {
+              "schema": "doppler.chromium-webgpu-runtime-identity/v1",
+              "host": {
+                "platform": "linux",
+                "release": "7.0.0-22-generic",
+                "architecture": "x64"
+              },
+              "browser": {
+                "engine": "chromium",
+                "version": "145.0.7632.6",
+                "headless": true,
+                "args": [
+                  "--enable-unsafe-webgpu",
+                  "--enable-dawn-features=allow_unsafe_apis",
+                  "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE",
+                  "--use-angle=vulkan",
+                  "--disable-vulkan-surface"
+                ]
+              },
+              "gpuBackend": {
+                "required": "vulkan",
+                "detected": "vulkan"
+              },
+              "chromiumGpu": {
+                "devices": [
+                  {
+                    "vendorId": 4098,
+                    "deviceId": 5510,
+                    "vendorString": "Google Inc. (AMD)",
+                    "deviceString": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                    "driverVendor": "AMD",
+                    "driverVersion": "26.0.3"
+                  }
+                ],
+                "auxAttributes": {
+                  "displayType": "ANGLE_VULKAN",
+                  "glImplementationParts": "(gl=egl-angle,angle=vulkan)",
+                  "glRenderer": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                  "glVendor": "Google Inc. (AMD)",
+                  "glVersion": "OpenGL ES 3.0 (ANGLE 2.1.26821 git hash: 4c0ae3917d4f)",
+                  "hardwareSupportsVulkan": true,
+                  "skiaBackendType": "GaneshVulkan"
+                },
+                "featureStatus": {
+                  "gpuCompositing": "enabled",
+                  "vulkan": "enabled_on",
+                  "webgpu": "enabled"
+                }
+              },
+              "webgpuAdapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": null,
+                "description": null,
+                "availableFeatures": [
+                  "bgra8unorm-storage",
+                  "chromium-experimental-multi-draw-indirect",
+                  "chromium-experimental-subgroup-matrix",
+                  "chromium-experimental-timestamp-query-inside-passes",
+                  "clip-distances",
+                  "core-features-and-limits",
+                  "depth-clip-control",
+                  "depth32float-stencil8",
+                  "dual-source-blending",
+                  "float32-blendable",
+                  "float32-filterable",
+                  "indirect-first-instance",
+                  "primitive-index",
+                  "rg11b10ufloat-renderable",
+                  "shader-f16",
+                  "subgroups",
+                  "texture-component-swizzle",
+                  "texture-compression-bc",
+                  "texture-compression-bc-sliced-3d",
+                  "texture-formats-tier1",
+                  "texture-formats-tier2",
+                  "timestamp-query"
+                ],
+                "requiredFeatures": [],
+                "limits": {
+                  "maxTextureDimension1D": 16384,
+                  "maxTextureDimension2D": 16384,
+                  "maxTextureDimension3D": 2048,
+                  "maxTextureArrayLayers": 2048,
+                  "maxBindGroups": 4,
+                  "maxBindGroupsPlusVertexBuffers": 24,
+                  "maxBindingsPerBindGroup": 1000,
+                  "maxDynamicUniformBuffersPerPipelineLayout": 10,
+                  "maxDynamicStorageBuffersPerPipelineLayout": 8,
+                  "maxSampledTexturesPerShaderStage": 16,
+                  "maxSamplersPerShaderStage": 16,
+                  "maxStorageBuffersPerShaderStage": 10,
+                  "maxStorageTexturesPerShaderStage": 8,
+                  "maxUniformBuffersPerShaderStage": 12,
+                  "maxUniformBufferBindingSize": 65536,
+                  "maxStorageBufferBindingSize": 2147483648,
+                  "minUniformBufferOffsetAlignment": 256,
+                  "minStorageBufferOffsetAlignment": 256,
+                  "maxVertexBuffers": 8,
+                  "maxBufferSize": 2147483648,
+                  "maxVertexAttributes": 30,
+                  "maxVertexBufferArrayStride": 2048,
+                  "maxInterStageShaderVariables": 28,
+                  "maxColorAttachments": 8,
+                  "maxColorAttachmentBytesPerSample": 128,
+                  "maxComputeWorkgroupStorageSize": 65536,
+                  "maxComputeInvocationsPerWorkgroup": 1024,
+                  "maxComputeWorkgroupSizeX": 1024,
+                  "maxComputeWorkgroupSizeY": 1024,
+                  "maxComputeWorkgroupSizeZ": 64,
+                  "maxComputeWorkgroupsPerDimension": 65535,
+                  "maxImmediateSize": 64,
+                  "maxStorageBuffersInFragmentStage": 10,
+                  "maxStorageTexturesInFragmentStage": 8,
+                  "maxStorageBuffersInVertexStage": 10,
+                  "maxStorageTexturesInVertexStage": 8
+                },
+                "requiredLimits": {}
+              }
+            },
+            "compilation": [
+              {
+                "moduleId": "prepare-module",
+                "passed": true,
+                "errorCount": 0,
+                "messages": []
+              },
+              {
+                "moduleId": "draw-module",
+                "passed": true,
+                "errorCount": 0,
+                "messages": []
+              }
+            ],
+            "executedPassIds": [
+              "prepare-pass",
+              "draw-pass"
+            ],
+            "outputs": {
+              "color": {
+                "kind": "texture",
+                "bytes": [
+                  51,
+                  102,
+                  153,
+                  255,
+                  51,
+                  102,
+                  153,
+                  255,
+                  51,
+                  102,
+                  153,
+                  255,
+                  51,
+                  102,
+                  153,
+                  255
+                ]
+              }
+            },
+            "runtimeErrors": [],
+            "validationErrorsAbsent": true,
+            "cleanup": {
+              "attempted": true,
+              "destroyableCount": 3,
+              "destroyedCount": 3,
+              "mappedBufferCount": 2,
+              "unmappedBufferCount": 2,
+              "errors": [],
+              "passed": true
+            },
+            "passed": true,
+            "receiptHash": "4e8d840acd1e8be49e645ee6769e827865de1c7fb550fdb3f8405c08481678c3"
+          },
+          "executionError": null,
+          "outputSha256": "3ccb9f6a76b04009d4a911517f5d1f4ae8ff6ebecc9aaf2081f1c3aba6f41fba",
+          "oracle": {
+            "pass": true,
+            "kind": "rgba8_uniform",
+            "resourceId": "color",
+            "pixels": 4,
+            "expectedPixel": [
+              51,
+              102,
+              153,
+              255
+            ],
+            "channelTolerance": 1,
+            "mismatches": [],
+            "outputSha256": "0cef6218997faf995e6d4adaac2f671edafc4fc1fe3e10903288ca98e5f6f7e0"
+          },
+          "pass": true
+        },
+        {
+          "run": 2,
+          "execution": {
+            "schema": "doppler.wgsl-author-browser-execution/v1",
+            "id": "writer-v3-reference-compute-to-render-run-2",
+            "planSha256": "f1b6ca29b28e1bc2ad63ea9dac64efe4ded1064c24207f041eaaa7e8dd4ff9c4",
+            "runtimeIdentity": {
+              "schema": "doppler.chromium-webgpu-runtime-identity/v1",
+              "host": {
+                "platform": "linux",
+                "release": "7.0.0-22-generic",
+                "architecture": "x64"
+              },
+              "browser": {
+                "engine": "chromium",
+                "version": "145.0.7632.6",
+                "headless": true,
+                "args": [
+                  "--enable-unsafe-webgpu",
+                  "--enable-dawn-features=allow_unsafe_apis",
+                  "--enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE",
+                  "--use-angle=vulkan",
+                  "--disable-vulkan-surface"
+                ]
+              },
+              "gpuBackend": {
+                "required": "vulkan",
+                "detected": "vulkan"
+              },
+              "chromiumGpu": {
+                "devices": [
+                  {
+                    "vendorId": 4098,
+                    "deviceId": 5510,
+                    "vendorString": "Google Inc. (AMD)",
+                    "deviceString": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                    "driverVendor": "AMD",
+                    "driverVersion": "26.0.3"
+                  }
+                ],
+                "auxAttributes": {
+                  "displayType": "ANGLE_VULKAN",
+                  "glImplementationParts": "(gl=egl-angle,angle=vulkan)",
+                  "glRenderer": "ANGLE (AMD, Vulkan 1.4.335 (Radeon 8060S Graphics (RADV STRIX_HALO) (0x00001586)), radv-26.0.3)",
+                  "glVendor": "Google Inc. (AMD)",
+                  "glVersion": "OpenGL ES 3.0 (ANGLE 2.1.26821 git hash: 4c0ae3917d4f)",
+                  "hardwareSupportsVulkan": true,
+                  "skiaBackendType": "GaneshVulkan"
+                },
+                "featureStatus": {
+                  "gpuCompositing": "enabled",
+                  "vulkan": "enabled_on",
+                  "webgpu": "enabled"
+                }
+              },
+              "webgpuAdapter": {
+                "vendor": "amd",
+                "architecture": "rdna-3",
+                "device": null,
+                "description": null,
+                "availableFeatures": [
+                  "bgra8unorm-storage",
+                  "chromium-experimental-multi-draw-indirect",
+                  "chromium-experimental-subgroup-matrix",
+                  "chromium-experimental-timestamp-query-inside-passes",
+                  "clip-distances",
+                  "core-features-and-limits",
+                  "depth-clip-control",
+                  "depth32float-stencil8",
+                  "dual-source-blending",
+                  "float32-blendable",
+                  "float32-filterable",
+                  "indirect-first-instance",
+                  "primitive-index",
+                  "rg11b10ufloat-renderable",
+                  "shader-f16",
+                  "subgroups",
+                  "texture-component-swizzle",
+                  "texture-compression-bc",
+                  "texture-compression-bc-sliced-3d",
+                  "texture-formats-tier1",
+                  "texture-formats-tier2",
+                  "timestamp-query"
+                ],
+                "requiredFeatures": [],
+                "limits": {
+                  "maxTextureDimension1D": 16384,
+                  "maxTextureDimension2D": 16384,
+                  "maxTextureDimension3D": 2048,
+                  "maxTextureArrayLayers": 2048,
+                  "maxBindGroups": 4,
+                  "maxBindGroupsPlusVertexBuffers": 24,
+                  "maxBindingsPerBindGroup": 1000,
+                  "maxDynamicUniformBuffersPerPipelineLayout": 10,
+                  "maxDynamicStorageBuffersPerPipelineLayout": 8,
+                  "maxSampledTexturesPerShaderStage": 16,
+                  "maxSamplersPerShaderStage": 16,
+                  "maxStorageBuffersPerShaderStage": 10,
+                  "maxStorageTexturesPerShaderStage": 8,
+                  "maxUniformBuffersPerShaderStage": 12,
+                  "maxUniformBufferBindingSize": 65536,
+                  "maxStorageBufferBindingSize": 2147483648,
+                  "minUniformBufferOffsetAlignment": 256,
+                  "minStorageBufferOffsetAlignment": 256,
+                  "maxVertexBuffers": 8,
+                  "maxBufferSize": 2147483648,
+                  "maxVertexAttributes": 30,
+                  "maxVertexBufferArrayStride": 2048,
+                  "maxInterStageShaderVariables": 28,
+                  "maxColorAttachments": 8,
+                  "maxColorAttachmentBytesPerSample": 128,
+                  "maxComputeWorkgroupStorageSize": 65536,
+                  "maxComputeInvocationsPerWorkgroup": 1024,
+                  "maxComputeWorkgroupSizeX": 1024,
+                  "maxComputeWorkgroupSizeY": 1024,
+                  "maxComputeWorkgroupSizeZ": 64,
+                  "maxComputeWorkgroupsPerDimension": 65535,
+                  "maxImmediateSize": 64,
+                  "maxStorageBuffersInFragmentStage": 10,
+                  "maxStorageTexturesInFragmentStage": 8,
+                  "maxStorageBuffersInVertexStage": 10,
+                  "maxStorageTexturesInVertexStage": 8
+                },
+                "requiredLimits": {}
+              }
+            },
+            "compilation": [
+              {
+                "moduleId": "prepare-module",
+                "passed": true,
+                "errorCount": 0,
+                "messages": []
+              },
+              {
+                "moduleId": "draw-module",
+                "passed": true,
+                "errorCount": 0,
+                "messages": []
+              }
+            ],
+            "executedPassIds": [
+              "prepare-pass",
+              "draw-pass"
+            ],
+            "outputs": {
+              "color": {
+                "kind": "texture",
+                "bytes": [
+                  51,
+                  102,
+                  153,
+                  255,
+                  51,
+                  102,
+                  153,
+                  255,
+                  51,
+                  102,
+                  153,
+                  255,
+                  51,
+                  102,
+                  153,
+                  255
+                ]
+              }
+            },
+            "runtimeErrors": [],
+            "validationErrorsAbsent": true,
+            "cleanup": {
+              "attempted": true,
+              "destroyableCount": 3,
+              "destroyedCount": 3,
+              "mappedBufferCount": 2,
+              "unmappedBufferCount": 2,
+              "errors": [],
+              "passed": true
+            },
+            "passed": true,
+            "receiptHash": "0fe1a25b0d2aa44c4c922b803f1be91b9d55369ce03a74eb9c3573a06519b682"
+          },
+          "executionError": null,
+          "outputSha256": "3ccb9f6a76b04009d4a911517f5d1f4ae8ff6ebecc9aaf2081f1c3aba6f41fba",
+          "oracle": {
+            "pass": true,
+            "kind": "rgba8_uniform",
+            "resourceId": "color",
+            "pixels": 4,
+            "expectedPixel": [
+              51,
+              102,
+              153,
+              255
+            ],
+            "channelTolerance": 1,
+            "mismatches": [],
+            "outputSha256": "0cef6218997faf995e6d4adaac2f671edafc4fc1fe3e10903288ca98e5f6f7e0"
+          },
+          "pass": true
+        }
+      ],
+      "deterministicReplay": {
+        "requiredRuns": 2,
+        "completedRuns": 2,
+        "outputHashes": [
+          "3ccb9f6a76b04009d4a911517f5d1f4ae8ff6ebecc9aaf2081f1c3aba6f41fba",
+          "3ccb9f6a76b04009d4a911517f5d1f4ae8ff6ebecc9aaf2081f1c3aba6f41fba"
+        ],
+        "outputsMatch": true,
+        "executedPassesMatch": true,
+        "pass": true
+      },
+      "pass": true
+    }
+  ],
+  "summary": {
+    "tasks": 4,
+    "runs": 8,
+    "passedTasks": 4,
+    "failedTasks": 0,
+    "computeTasks": 1,
+    "renderTasks": 2,
+    "multiPassTasks": 1,
+    "deterministicReplayPassed": true,
+    "cleanupPassed": true
+  },
+  "decision": "reference_package_mechanics_qualified",
+  "mechanicsQualificationAuthority": true,
+  "corpusMaterializationAuthority": false,
+  "trainingAuthority": false,
+  "selectionAuthority": false,
+  "confirmationAuthority": false,
+  "promotionAuthority": false,
+  "generalWgslWriterClaim": false,
+  "productizationAllowed": false,
+  "claimBoundary": "A passing receipt qualifies visible compute, procedural-render, indexed-render, multi-pass, deterministic replay, tracked GPU-resource cleanup, readback, and oracle mechanics only on the bound Chromium WebGPU identity. It is not model capability, corpus, training, selection, confirmation, promotion, or product evidence.",
+  "receiptHash": "ccba5c0305b3419a05464d61132e9bc330a9056b760aae5e9a91889e13422603"
+}

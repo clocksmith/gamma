@@ -1,0 +1,210 @@
+{
+  "$schema": "../../src/config/schema/wgsl-writer-experiment.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "policyId": "doppler-wgsl-writer-v1",
+  "experimentId": "doppler-wgsl-writer-v1",
+  "status": "frozen_mechanics_before_reference_execution",
+  "capability": "complete_wgsl_compute_shader_from_specification_and_interface_contract",
+  "claimInheritance": {
+    "repairEvidenceTransfers": false,
+    "v13MayBeTestedOnlyAsInitialization": true,
+    "reason": "Replacement-only repair does not establish binding design, complete-program structure, algorithm selection, or full-shader generation."
+  },
+  "mechanics": {
+    "taskManifest": {
+      "path": "tools/data/wgsl-writer-v1-mechanics.json",
+      "sha256": "5df1979f7487431d6ad9480dd7ac14417e9297fbee5c5d26f6d11b2ff3882dbe"
+    },
+    "populationAuthority": "none",
+    "referenceExecution": {
+      "required": true,
+      "status": "not_run_at_policy_freeze",
+      "mustCommitBeforeCandidateInference": true
+    }
+  },
+  "implementation": {
+    "semanticHarness": {
+      "path": "tools/run-wgsl-writer-semantic-harness.js",
+      "sha256": "f091af26151aab89b815ec52df94e3ba094085a5c40b5c7042621b02bd264584"
+    },
+    "semanticLibrary": {
+      "path": "tools/lib/wgsl-writer-semantic-harness.js",
+      "sha256": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110"
+    },
+    "repairSemanticLibrary": {
+      "path": "tools/lib/wgsl-semantic-harness.js",
+      "sha256": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef"
+    },
+    "browserVerifier": {
+      "path": "tools/lib/wgsl-browser-verifier.js",
+      "sha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd"
+    },
+    "cpuOracleRevision": "wgsl-semantic-cpu-oracles-v1",
+    "inputGeneratorRevision": "wgsl-semantic-inputs-v1",
+    "historicalRegressions": {
+      "path": "tools/data/wgsl-repair-v13-historical-regressions.json",
+      "sha256": "0cf12c4641fad4e99994d6d3b1162569d674bf82f6749b7297984027122e9c23"
+    }
+  },
+  "candidateInitializations": [
+    {
+      "id": "qwen35-9b-f16-base",
+      "kind": "base_model_control",
+      "modelId": "qwen-3-5-9b-f16-af32",
+      "modelManifestSha256": "2ff1f1eec0345bd379614b8b0bafd66957bbec1c22072132661a6e35300ad398",
+      "adapterManifestPath": null,
+      "adapterManifestSha256": null,
+      "adapterWeightsPath": null,
+      "adapterWeightsSha256": null,
+      "predecessorReceiptPath": null,
+      "predecessorReceiptSha256": null
+    },
+    {
+      "id": "v13-seed29-repair-initialization",
+      "kind": "repair_adapter_initialization",
+      "modelId": "qwen-3-5-9b-f16-af32",
+      "modelManifestSha256": "2ff1f1eec0345bd379614b8b0bafd66957bbec1c22072132661a6e35300ad398",
+      "adapterManifestPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/external20/sft/exports/checkpoint-001200.adapter.manifest.json",
+      "adapterManifestSha256": "e5dec965a953aa746e592ae38045f445e7d9b1407feb609f448238427af4b042",
+      "adapterWeightsPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/external20/sft/exports/checkpoint-001200.adapters.safetensors",
+      "adapterWeightsSha256": "0d9ab8e1348a3fcdd6ef2973b624cc1a3d962de90a571976a5a222df27b69394",
+      "predecessorReceiptPath": "docs/status/wgsl-repair-v13-seed-confirmation-result-2026-07-14.json",
+      "predecessorReceiptSha256": "5195a50299e7054a49d5d176ce30f468e561f9870fe9890b404ee7b9ec352fc5"
+    }
+  ],
+  "runtime": {
+    "modelId": "qwen-3-5-9b-f16-af32",
+    "modelManifestSha256": "2ff1f1eec0345bd379614b8b0bafd66957bbec1c22072132661a6e35300ad398",
+    "artifactStatusPath": "docs/status/qwen35-9b-rdrr-2026-07-11.json",
+    "artifactStatusSha256": "40cbfefb31a8cd2c92b65fe9a1d44b1c5ee50a93054fa2bd20782f0ce613edf8",
+    "conversionConfigPath": "src/config/conversion/qwen3/qwen-3-5-9b-f16-af32.json",
+    "conversionConfigSha256": "b2f3bb3f182b9b1829406f9febf0d38f309c2e79f35f5ee52704f6830642371a",
+    "adapterPortabilityReceiptPath": "docs/status/wgsl-repair-v12-adapter-portability-2026-07-13.json",
+    "adapterPortabilityReceiptSha256": "589888d414a34a25e386f1b43347dc9b25a68ed858de6e0dc2cc3b46d8ea32e3",
+    "runtimeProfile": "profiles/production"
+  },
+  "promptContract": {
+    "templateId": "wgsl-complete-shader-spec-interface-v1",
+    "useChatTemplate": false,
+    "responseContract": "complete_wgsl_compute_shader_only_v1",
+    "includesNaturalLanguageSpecification": true,
+    "includesExplicitInterfaceContract": true
+  },
+  "generation": {
+    "maxTokens": 768,
+    "temperature": 0,
+    "topP": 1,
+    "topK": 1,
+    "repetitionPenalty": 1,
+    "greedyThreshold": 0
+  },
+  "populations": {
+    "calibration": { "status": "unmaterialized", "manifestPath": null, "populationHash": null },
+    "checkpointSelection": { "status": "unmaterialized", "manifestPath": null, "populationHash": null },
+    "seedConfirmation": { "status": "unmaterialized", "manifestPath": null, "populationHash": null },
+    "promotion": { "status": "unmaterialized", "manifestPath": null, "populationHash": null },
+    "overlapPolicy": "No specification, kernel family, interface contract, reference shader, oracle fixture, input seed, or generated candidate may overlap population roles. Visible mechanics tasks have no population role."
+  },
+  "taskContract": {
+    "responseEnvelope": {
+      "id": "complete_wgsl_compute_shader_only_v1",
+      "maxCharacters": 16000,
+      "forbidMarkdownFences": true,
+      "requireComputeStage": true
+    },
+    "compilationPrerequisite": "chromium_webgpu_compile_must_pass_before_dispatch",
+    "actualDispatchRequired": true,
+    "cpuOracle": {
+      "required": true,
+      "implementationRevision": "wgsl-semantic-cpu-oracles-v1",
+      "inputAndOutputHashBinding": true
+    },
+    "numericalAgreement": {
+      "formula": "abs(actual-reference) <= absTolerance + relTolerance * abs(reference)",
+      "nonFinitePolicy": "unexpected_nan_or_infinity_fails; expected_nonfinite_requires_exact_class_and_sign",
+      "tiers": {
+        "integerAndBoolean": { "mode": "exact", "absTolerance": 0, "relTolerance": 0 },
+        "float32": { "mode": "numeric", "absTolerance": 0.00001, "relTolerance": 0.0001 },
+        "float16": { "mode": "numeric", "absTolerance": 0.002, "relTolerance": 0.02 }
+      },
+      "wideningRule": "Per-task tolerances may be narrower; wider tolerances require a new policy revision frozen before candidate evaluation."
+    },
+    "shapeVariation": {
+      "minimumDistinctShapesPerTask": 3,
+      "requiredClasses": ["nominal", "non_workgroup_multiple", "boundary_or_tail"]
+    },
+    "workgroupVariation": {
+      "minimumSemanticallyValidVariantsPerTask": 2,
+      "referenceAndCandidateUseIdenticalVariants": true
+    },
+    "bufferBounds": {
+      "prefixCanaryElements": 16,
+      "suffixCanaryElements": 16,
+      "readOnlyBuffersMustRemainByteIdentical": true,
+      "outputPaddingMustRemainByteIdentical": true,
+      "unexpectedValidationErrorFails": true
+    },
+    "metamorphic": {
+      "minimumApplicableRelationsPerTask": 2,
+      "allowedRelations": [
+        "input_permutation_equivariance",
+        "zero_or_identity_relation",
+        "scale_relation",
+        "tiling_equivalence",
+        "shape_partition_equivalence",
+        "task_specific_adjudicated_invariant"
+      ],
+      "referenceQualificationRequired": true
+    },
+    "historicalRegressions": {
+      "required": true,
+      "manifestPath": "tools/data/wgsl-repair-v13-historical-regressions.json",
+      "manifestSha256": "0cf12c4641fad4e99994d6d3b1162569d674bf82f6749b7297984027122e9c23"
+    }
+  },
+  "metrics": {
+    "primary": "semantic_complete_shader_pass_at_1",
+    "secondary": [
+      "compile_at_1",
+      "semantic_pass_at_8",
+      "response_contract_pass_rate",
+      "shader_character_count",
+      "policy_violation_rate"
+    ],
+    "semanticTaskPassDefinition": "complete-shader response contract and compilation pass, then every dispatch, CPU-oracle, tolerance, bounds, workgroup, shape, metamorphic, and historical-regression check passes"
+  },
+  "blockingGuardrails": [
+    "response_contract_violation",
+    "compilation_failure",
+    "dispatch_failure",
+    "cpu_oracle_mismatch",
+    "nonfinite_mismatch",
+    "buffer_canary_corruption",
+    "read_only_buffer_mutation",
+    "output_padding_mutation",
+    "shape_variant_failure",
+    "workgroup_variant_failure",
+    "metamorphic_failure",
+    "historical_regression",
+    "trainer_to_doppler_parity_failure"
+  ],
+  "authority": {
+    "mechanicsQualification": true,
+    "candidateEvaluation": false,
+    "checkpointSelection": false,
+    "seedConfirmation": false,
+    "promotion": false,
+    "productization": false
+  },
+  "blockers": [
+    "writer_reference_mechanics_unqualified",
+    "writer_candidate_execution_policy_unfrozen",
+    "writer_calibration_population_unmaterialized",
+    "writer_checkpoint_selection_population_unmaterialized",
+    "writer_seed_confirmation_population_unmaterialized",
+    "writer_promotion_population_unmaterialized",
+    "writer_capability_evidence_absent"
+  ],
+  "claimBoundary": "This policy freezes a separate complete-shader WGSL writer mechanics contract before any reference or model execution. V13 repair evidence does not transfer. Passing visible mechanics can qualify only the harness; model capability, selection, confirmation, promotion, and productization require new disjoint populations and receipts."
+}

@@ -1,0 +1,123 @@
+{
+  "schema": "doppler.wgsl-repair-semantic-task-manifest/v1",
+  "schemaVersion": 1,
+  "experimentId": "doppler-wgsl-repair-v13",
+  "populationId": "v13-semantic-checkpoint-selection-v1",
+  "role": "checkpoint_selection",
+  "populationAuthority": "external20_seed_selection_only",
+  "responseContract": "replacement_only_wgsl_span_v1",
+  "cpuOracleRevision": "wgsl-semantic-cpu-oracles-v1",
+  "inputGeneratorRevision": "wgsl-semantic-inputs-v1",
+  "tasks": [
+    {
+      "taskId": "v13-selection-subtract-f32",
+      "kernelFamilyId": "v13-selection-subtract",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/selection-subtract-broken.wgsl",
+      "sourceSha256": "bc2424e2bb78f8032f637b360a9a934d97a200162093ca1be7d007837689afec",
+      "mutationClass": "identifier_reference",
+      "brokenSpan": "output_values[params.output_offset + index] = left_values[index] - ;",
+      "referenceSpan": "output_values[params.output_offset + index] = left_values[index] - right_values[index];",
+      "oracleId": "subtract_f32",
+      "inputSeed": 11003,
+      "parameters": {},
+      "variants": [
+        { "shapeId": "sel-sub-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "sel-sub-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "sel-sub-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    },
+    {
+      "taskId": "v13-selection-mix-f32",
+      "kernelFamilyId": "v13-selection-mix",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/selection-mix-broken.wgsl",
+      "sourceSha256": "733bd68d2c6aba6c6fc074a3c914d1c21544c512ba8ea590cbaccd3fc77ca14c",
+      "mutationClass": "identifier_reference",
+      "brokenSpan": "output_values[params.output_offset + index] = mix(left_values[index], right_values[index], );",
+      "referenceSpan": "output_values[params.output_offset + index] = mix(left_values[index], right_values[index], params.alpha);",
+      "oracleId": "mix_f32",
+      "inputSeed": 11027,
+      "parameters": { "alpha": 0.3125 },
+      "variants": [
+        { "shapeId": "sel-mix-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "sel-mix-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "sel-mix-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    },
+    {
+      "taskId": "v13-selection-square-bias-f32",
+      "kernelFamilyId": "v13-selection-square-bias",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/selection-square-bias-broken.wgsl",
+      "sourceSha256": "e5f0a03cdea457179522a753c6442e364f622b86d9f4a60c0e38be627823f815",
+      "mutationClass": "identifier_reference",
+      "brokenSpan": "output_values[params.output_offset + index] = value * value + ;",
+      "referenceSpan": "output_values[params.output_offset + index] = value * value + params.bias;",
+      "oracleId": "square_bias_f32",
+      "inputSeed": 11047,
+      "parameters": { "bias": -0.4375 },
+      "variants": [
+        { "shapeId": "sel-square-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "sel-square-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "sel-square-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    },
+    {
+      "taskId": "v13-selection-absolute-f32",
+      "kernelFamilyId": "v13-selection-absolute",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/selection-absolute-broken.wgsl",
+      "sourceSha256": "8088dcf9cdb411465a0ae74a94993e97b2efff6fcbf291645d930fb570f5b6da",
+      "mutationClass": "identifier_reference",
+      "brokenSpan": "output_values[params.output_offset + index] = abs();",
+      "referenceSpan": "output_values[params.output_offset + index] = abs(input_values[index]);",
+      "oracleId": "absolute_f32",
+      "inputSeed": 11071,
+      "parameters": {},
+      "variants": [
+        { "shapeId": "sel-abs-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "sel-abs-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "sel-abs-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    },
+    {
+      "taskId": "v13-selection-min-pair-f32",
+      "kernelFamilyId": "v13-selection-min-pair",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/selection-min-pair-broken.wgsl",
+      "sourceSha256": "0316667d65f9b4cc32e65db64336180194b092939b48077752cbf6d9e673e784",
+      "mutationClass": "identifier_reference",
+      "brokenSpan": "output_values[params.output_offset + index] = min(left_values[index], );",
+      "referenceSpan": "output_values[params.output_offset + index] = min(left_values[index], right_values[index]);",
+      "oracleId": "min_pair_f32",
+      "inputSeed": 11087,
+      "parameters": {},
+      "variants": [
+        { "shapeId": "sel-min-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "sel-min-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "sel-min-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    },
+    {
+      "taskId": "v13-selection-threshold-negate-f32",
+      "kernelFamilyId": "v13-selection-threshold-negate",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/selection-threshold-negate-broken.wgsl",
+      "sourceSha256": "2bc1322250a761ffcc8bb728c14b325eeaf4585f1ca8e849776812237060faca",
+      "mutationClass": "identifier_reference",
+      "brokenSpan": "output_values[params.output_offset + index] = select(value, -value, value < );",
+      "referenceSpan": "output_values[params.output_offset + index] = select(value, -value, value < params.threshold);",
+      "oracleId": "threshold_negate_f32",
+      "inputSeed": 11113,
+      "parameters": { "threshold": 0.75 },
+      "variants": [
+        { "shapeId": "sel-threshold-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "sel-threshold-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "sel-threshold-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    }
+  ],
+  "sourceOverlapPolicy": "No kernel family, source fixture, input seed, or task identifier overlaps calibration, seed confirmation, promotion, mechanics qualification, V12 training, V12 diagnostic, or V12 public evaluation.",
+  "claimBoundary": "This population may rank the three preserved external20 V12 seeds under the separately frozen selection policy. It has no seed-confirmation, promotion, semantic-claim, or productization authority."
+}

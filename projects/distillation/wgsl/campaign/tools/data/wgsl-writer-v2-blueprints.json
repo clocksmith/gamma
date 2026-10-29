@@ -1,0 +1,268 @@
+{
+  "$schema": "../../src/config/schema/wgsl-writer-blueprint-catalog.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "catalogId": "doppler-wgsl-writer-elementwise-f32-v1",
+  "license": "Apache-2.0",
+  "taskScope": "complete_1d_elementwise_f32_compute_shader_from_explicit_interface",
+  "excludedOracleIds": [
+    "add_f32",
+    "affine_f32",
+    "clamp_f32"
+  ],
+  "blueprints": [
+    {
+      "id": "scale",
+      "role": "training",
+      "oracleId": "scale_f32",
+      "arity": "unary",
+      "operationDescription": "multiply the input value by the f32 scale stored in the first scalar uniform field",
+      "expression": "$input * $first",
+      "firstField": "scale",
+      "firstParameterKey": "scale",
+      "parameters": {
+        "scale": -1.75
+      }
+    },
+    {
+      "id": "relu",
+      "role": "training",
+      "oracleId": "relu_f32",
+      "arity": "unary",
+      "operationDescription": "replace negative input values with zero and preserve non-negative values",
+      "expression": "max($input, 0.0)",
+      "firstField": "first_reserved",
+      "firstParameterKey": null,
+      "parameters": {}
+    },
+    {
+      "id": "subtract",
+      "role": "training",
+      "oracleId": "subtract_f32",
+      "arity": "binary",
+      "operationDescription": "subtract the right input value from the left input value",
+      "expression": "$left - $right",
+      "firstField": "first_reserved",
+      "firstParameterKey": null,
+      "parameters": {}
+    },
+    {
+      "id": "mix",
+      "role": "training",
+      "oracleId": "mix_f32",
+      "arity": "binary",
+      "operationDescription": "linearly interpolate from the left value to the right value using the f32 alpha stored in the first scalar uniform field",
+      "expression": "mix($left, $right, $first)",
+      "firstField": "alpha",
+      "firstParameterKey": "alpha",
+      "parameters": {
+        "alpha": 0.375
+      }
+    },
+    {
+      "id": "square_bias",
+      "role": "training",
+      "oracleId": "square_bias_f32",
+      "arity": "unary",
+      "operationDescription": "square the input value and add the f32 bias stored in the first scalar uniform field",
+      "expression": "$input * $input + $first",
+      "firstField": "bias",
+      "firstParameterKey": "bias",
+      "parameters": {
+        "bias": 0.625
+      }
+    },
+    {
+      "id": "absolute",
+      "role": "training",
+      "oracleId": "absolute_f32",
+      "arity": "unary",
+      "operationDescription": "compute the absolute value of the input",
+      "expression": "abs($input)",
+      "firstField": "first_reserved",
+      "firstParameterKey": null,
+      "parameters": {}
+    },
+    {
+      "id": "minimum_pair",
+      "role": "training",
+      "oracleId": "min_pair_f32",
+      "arity": "binary",
+      "operationDescription": "select the smaller of the corresponding left and right input values",
+      "expression": "min($left, $right)",
+      "firstField": "first_reserved",
+      "firstParameterKey": null,
+      "parameters": {}
+    },
+    {
+      "id": "threshold_negate",
+      "role": "training",
+      "oracleId": "threshold_negate_f32",
+      "arity": "unary",
+      "operationDescription": "negate the input when it is below the f32 threshold stored in the first scalar uniform field and otherwise preserve it",
+      "expression": "select($input, -$input, $input < $first)",
+      "firstField": "threshold",
+      "firstParameterKey": "threshold",
+      "parameters": {
+        "threshold": -0.5
+      }
+    },
+    {
+      "id": "multiply_pair",
+      "role": "training",
+      "oracleId": "multiply_pair_f32",
+      "arity": "binary",
+      "operationDescription": "multiply the corresponding left and right input values",
+      "expression": "$left * $right",
+      "firstField": "first_reserved",
+      "firstParameterKey": null,
+      "parameters": {}
+    },
+    {
+      "id": "maximum_pair",
+      "role": "training",
+      "oracleId": "max_pair_f32",
+      "arity": "binary",
+      "operationDescription": "select the larger of the corresponding left and right input values",
+      "expression": "max($left, $right)",
+      "firstField": "first_reserved",
+      "firstParameterKey": null,
+      "parameters": {}
+    },
+    {
+      "id": "mean_pair",
+      "role": "training",
+      "oracleId": "mean_pair_f32",
+      "arity": "binary",
+      "operationDescription": "compute the arithmetic mean of the corresponding left and right input values",
+      "expression": "($left + $right) * 0.5",
+      "firstField": "first_reserved",
+      "firstParameterKey": null,
+      "parameters": {}
+    },
+    {
+      "id": "negate",
+      "role": "training",
+      "oracleId": "negate_f32",
+      "arity": "unary",
+      "operationDescription": "negate the input value",
+      "expression": "-$input",
+      "firstField": "first_reserved",
+      "firstParameterKey": null,
+      "parameters": {}
+    },
+    {
+      "id": "floor",
+      "role": "training",
+      "oracleId": "floor_f32",
+      "arity": "unary",
+      "operationDescription": "round the input value toward negative infinity with the WGSL floor function",
+      "expression": "floor($input)",
+      "firstField": "first_reserved",
+      "firstParameterKey": null,
+      "parameters": {}
+    },
+    {
+      "id": "add_scalar",
+      "role": "training",
+      "oracleId": "add_scalar_f32",
+      "arity": "unary",
+      "operationDescription": "add the f32 scalar stored in the first scalar uniform field to the input value",
+      "expression": "$input + $first",
+      "firstField": "scalar",
+      "firstParameterKey": "scalar",
+      "parameters": {
+        "scalar": 1.25
+      }
+    },
+    {
+      "id": "leaky_relu",
+      "role": "training",
+      "oracleId": "leaky_relu_f32",
+      "arity": "unary",
+      "operationDescription": "preserve non-negative inputs and multiply negative inputs by the f32 slope stored in the first scalar uniform field",
+      "expression": "select($first * $input, $input, $input >= 0.0)",
+      "firstField": "slope",
+      "firstParameterKey": "slope",
+      "parameters": {
+        "slope": 0.125
+      }
+    },
+    {
+      "id": "distance_pair",
+      "role": "calibration",
+      "oracleId": "distance_pair_f32",
+      "arity": "binary",
+      "operationDescription": "compute the absolute difference between the corresponding left and right input values",
+      "expression": "abs($left - $right)",
+      "firstField": "first_reserved",
+      "firstParameterKey": null,
+      "parameters": {}
+    },
+    {
+      "id": "cap",
+      "role": "calibration",
+      "oracleId": "cap_f32",
+      "arity": "unary",
+      "operationDescription": "limit the input to at most the f32 cap stored in the first scalar uniform field",
+      "expression": "min($input, $first)",
+      "firstField": "cap",
+      "firstParameterKey": "cap",
+      "parameters": {
+        "cap": 2.75
+      }
+    },
+    {
+      "id": "mask_below",
+      "role": "checkpoint_selection",
+      "oracleId": "mask_below_f32",
+      "arity": "unary",
+      "operationDescription": "write zero when the input is below the f32 threshold stored in the first scalar uniform field and otherwise preserve the input",
+      "expression": "select(0.0, $input, $input >= $first)",
+      "firstField": "threshold",
+      "firstParameterKey": "threshold",
+      "parameters": {
+        "threshold": 0.75
+      }
+    },
+    {
+      "id": "difference_scale",
+      "role": "checkpoint_selection",
+      "oracleId": "difference_scale_f32",
+      "arity": "binary",
+      "operationDescription": "subtract the right input from the left input and multiply the difference by the f32 scale stored in the first scalar uniform field",
+      "expression": "($left - $right) * $first",
+      "firstField": "scale",
+      "firstParameterKey": "scale",
+      "parameters": {
+        "scale": -0.625
+      }
+    },
+    {
+      "id": "square_scale",
+      "role": "seed_confirmation",
+      "oracleId": "square_scale_f32",
+      "arity": "unary",
+      "operationDescription": "square the input and multiply the result by the f32 scale stored in the first scalar uniform field",
+      "expression": "($input * $input) * $first",
+      "firstField": "scale",
+      "firstParameterKey": "scale",
+      "parameters": {
+        "scale": 0.375
+      }
+    },
+    {
+      "id": "saxpy",
+      "role": "seed_confirmation",
+      "oracleId": "saxpy_f32",
+      "arity": "binary",
+      "operationDescription": "add the left input value to the right input value multiplied by the f32 scale stored in the first scalar uniform field",
+      "expression": "$left + $first * $right",
+      "firstField": "scale",
+      "firstParameterKey": "scale",
+      "parameters": {
+        "scale": 1.5
+      }
+    }
+  ]
+}

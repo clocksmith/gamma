@@ -1,0 +1,198 @@
+{
+  "artifactType": "wgsl_repair_v10_result",
+  "schemaVersion": 1,
+  "experimentId": "doppler-wgsl-repair-v10",
+  "recordedAt": "2026-07-12",
+  "status": "capability_proven",
+  "capabilityDomain": "family_disjoint_public_wgsl_compiler_repair",
+  "predecessor": {
+    "experimentId": "doppler-wgsl-repair-v9",
+    "receiptPath": "docs/status/wgsl-repair-v9-2026-07-11.json",
+    "statusAtFreeze": "harness_ready"
+  },
+  "model": {
+    "modelId": "Qwen/Qwen3.5-9B",
+    "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "modelConfigSha256": "d0883072e01861ed0b2d47be3c16c36a8e81c224c7ffaa310c6558fb3f932b05",
+    "tokenizerSha256": "5f9e4d4901a92b997e463c1f46055088b6cca5ca61a6522d1b9f64c4bb81cb42",
+    "basePolicyHash": "18e0ddabf064e824c0e2dd6c6f7ba1516dbf492fd6f9cadcc6944d7af07760f2",
+    "sftPolicyHash": "fcba6cbbfee3b52de597be8df7400ae601f6fdbc15989946da543cb299eebc87",
+    "trainingRuntime": "Gamma Transformers BF16 on ROCm",
+    "rdrrInferenceArtifact": {
+      "modelId": "qwen-3-5-9b-f16-af32",
+      "manifestSha256": "2ff1f1eec0345bd379614b8b0bafd66957bbec1c22072132661a6e35300ad398",
+      "receiptPath": "docs/status/qwen35-9b-rdrr-2026-07-11.json",
+      "receiptSha256": "40cbfefb31a8cd2c92b65fe9a1d44b1c5ee50a93054fa2bd20782f0ce613edf8",
+      "usedForTraining": false
+    }
+  },
+  "training": {
+    "methodId": "execution_verified_sft",
+    "seed": 11,
+    "datasetPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v9/corpus-v1/train-anchor.jsonl",
+    "datasetFileSha256": "fad2f7821ef8424cf8531df7556694d10167e572681b5948c4f76354276dad3d",
+    "availableRows": 1200,
+    "optimizerVisibleRows": 800,
+    "optimizerVisibleFamilies": 129,
+    "optimizerVisibleKernels": 190,
+    "optimizerVisibleMutationOperators": 9,
+    "microsteps": 800,
+    "gradientAccumulationSteps": 8,
+    "optimizerUpdates": 100,
+    "optimizerUpdateRowsWithNonzeroGradientNorm": 100,
+    "learningRate": 0.0001,
+    "finalLoss": 9.179047992802225e-7,
+    "meanLoss": 0.022453638633036378,
+    "adapter": {
+      "kind": "lora",
+      "rank": 32,
+      "alpha": 64,
+      "dropout": 0.05,
+      "targetModules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ],
+      "weightsBytes": 232821904,
+      "weightsSha256": "54c390d8285051389062e1e8a24460ea3c61670326ac54b40b1828dfa2840096",
+      "exportChecksum": "07dbdad5a223ca80977cde45bc533e8423bbbaa5c0c7598a6af97fd8108fa7a5"
+    }
+  },
+  "evaluation": {
+    "taskContract": "replacement_only_wgsl_span_v1",
+    "taskSet": "public-test",
+    "taskSetPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v9/corpus-v1/public-test.jsonl",
+    "taskSetSha256": "0d8b1886b263da1080e0867662451938b3eaebdc318a428dcbbb4450115ebf53",
+    "tasks": 299,
+    "samplesPerTask": 8,
+    "samplesPerPolicy": 2392,
+    "sampling": {
+      "seed": 20260711,
+      "temperature": 0.8,
+      "topP": 0.95,
+      "maxTokens": 64,
+      "maxTokensDerivedOnlyFromVisibleTrainingTargets": true,
+      "publicReferencesOverCeiling": 8
+    },
+    "verifier": {
+      "api": "GPUShaderModule.getCompilationInfo",
+      "adapterVendor": "amd",
+      "adapterArchitecture": "rdna-3",
+      "verifierBundleHash": "81e4aea92507d8277754b66480cf1b695e4a91c5dc5723d0c9d73dff7e8959f8",
+      "runtimeHash": "90b5aa881a018c12ceba56d5c7b15018e9f5b9f8fa6f07911419ac2bde4e7bbd",
+      "perShaderIsolation": true
+    },
+    "base": {
+      "passingSamples": 211,
+      "samplePassRate": 0.08821070234113712,
+      "passingTasksAt1": 25,
+      "passAt1": 0.08361204013377926,
+      "passingTasksAt8": 122,
+      "passAt8": 0.4080267558528428,
+      "exactReferenceSamples": 0,
+      "blockedSamples": 216
+    },
+    "sft": {
+      "passingSamples": 2125,
+      "samplePassRate": 0.8883779264214047,
+      "passingTasksAt1": 264,
+      "passAt1": 0.882943143812709,
+      "passingTasksAt8": 270,
+      "passAt8": 0.903010033444816,
+      "exactReferenceSamples": 2124,
+      "blockedSamples": 216
+    },
+    "effects": {
+      "samplePassRate": 0.8001672240802675,
+      "passAt1": 0.7993311036789297,
+      "passAt8": 0.4949832775919732
+    },
+    "paired": {
+      "passAt1": {
+        "bothPass": 23,
+        "bothFail": 33,
+        "baseOnly": 2,
+        "sftOnly": 241,
+        "exactMcNemarP": 4.194901838280833e-69
+      },
+      "passAt8": {
+        "bothPass": 113,
+        "bothFail": 20,
+        "baseOnly": 9,
+        "sftOnly": 157,
+        "exactMcNemarP": 4.794187446718929e-36
+      }
+    },
+    "sourceSubgroups": {
+      "doppler": {
+        "tasks": 186,
+        "basePassAt1": 0.07526881720430108,
+        "sftPassAt1": 0.9838709677419355,
+        "effect": 0.9086021505376344
+      },
+      "zero-tvm": {
+        "tasks": 113,
+        "basePassAt1": 0.09734513274336283,
+        "sftPassAt1": 0.7168141592920354,
+        "effect": 0.6194690265486725,
+        "presentInAnchorTrainingLane": false
+      }
+    }
+  },
+  "sourceArtifacts": [
+    {
+      "path": "tools/policies/wgsl-repair-v10-policy.json",
+      "sha256": "44139fdf26f8d1971fbf6c23a1ee26f9064bffe192f0076dedd7083310410ec3"
+    },
+    {
+      "path": "src/experimental/training/workload-packs/lora-doppler-wgsl-qwen35-9b-v9.json",
+      "sha256": "23351a6c3a99be5c108819ef0417172eebae3357daa772893ecdcc523d2699e2"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v9/experiment-seed11/sft/logs/gamma-response.json",
+      "sha256": "a0ffd805c5a82fa469cccd529e51231101317888b5b20b13347163c5c8cbb9e2"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v10/experiment-baseline/gamma/base-rollout/raw-rollouts.jsonl",
+      "sha256": "d0b3569ff54fafbf55c2bf1190325263c8caa35ad30e05d9471bcbd6df5af813"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v10/experiment-seed11/gamma/rollout/raw-rollouts.jsonl",
+      "sha256": "062017d8926157a40fddbabbf66bf6f2048680ef9ad78f6b921d356fd67c8281"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v10/experiment-baseline/verified-base-rollouts-v2/verification-manifest.json",
+      "sha256": "a8f2d6641e15fc1487670f288ef098732942971a6a2492d996a710af771e9539"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v10/experiment-seed11/verified-rollouts-v2/verification-manifest.json",
+      "sha256": "06cad20166af7d6263de2d31c9000dc37f2a0fa0fd10a7daf4ff1f6819260779"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v10/comparison-base-vs-sft-v2.json",
+      "sha256": "ab2ee0f3072016bec4fc9e6371053a1b9e7d2f9896cecefe77a0a47d39662201"
+    }
+  ],
+  "evidenceBoundary": {
+    "primaryWeightsProvisioned": true,
+    "primarySftRunCompleted": true,
+    "familyDisjointCompilerRepairImproved": true,
+    "externalSourceSubgroupImproved": true,
+    "minimumSeedsCompleted": false,
+    "dataLaneControlsCompleted": false,
+    "sealedSemanticSuiteCompleted": false,
+    "semanticKernelCorrectnessProven": false,
+    "promoted": false
+  },
+  "claimBoundary": "V10 proves a large paired improvement for one Qwen 3.5 9B LoRA seed on 299 family-disjoint public compiler-repair tasks under one frozen 64-token sampler and one Radeon WebGPU compiler runtime. It does not prove semantic ML-kernel correctness, multi-seed stability, the causal value of external curation, RLVR improvement, or promotion.",
+  "nextGates": [
+    "Derive DPO and GRPO training signal only from the disjoint diagnostic split and compare each resulting policy once on the public split.",
+    "Run seeds 29 and 47 and the external20 and random20 data controls under the same training recipe.",
+    "Add a training-derived long-repair stratum without removing over-ceiling tasks from the denominator.",
+    "Require dispatch, CPU-oracle, numerical, metamorphic, and historical-regression checks on the sealed semantic suite before promotion."
+  ]
+}

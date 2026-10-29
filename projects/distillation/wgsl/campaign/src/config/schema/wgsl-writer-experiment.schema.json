@@ -1,0 +1,382 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/doppler/schemas/wgsl-writer-experiment-v1.schema.json",
+  "title": "WGSL complete-shader writer experiment policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
+    "policyId",
+    "experimentId",
+    "status",
+    "capability",
+    "claimInheritance",
+    "mechanics",
+    "implementation",
+    "candidateInitializations",
+    "runtime",
+    "promptContract",
+    "generation",
+    "populations",
+    "taskContract",
+    "metrics",
+    "blockingGuardrails",
+    "authority",
+    "blockers",
+    "claimBoundary"
+  ],
+  "properties": {
+    "$schema": { "const": "../../src/config/schema/wgsl-writer-experiment.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "source": { "const": "doppler" },
+    "policyId": { "const": "doppler-wgsl-writer-v1" },
+    "experimentId": { "const": "doppler-wgsl-writer-v1" },
+    "status": { "const": "frozen_mechanics_before_reference_execution" },
+    "capability": { "const": "complete_wgsl_compute_shader_from_specification_and_interface_contract" },
+    "claimInheritance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repairEvidenceTransfers", "v13MayBeTestedOnlyAsInitialization", "reason"],
+      "properties": {
+        "repairEvidenceTransfers": { "const": false },
+        "v13MayBeTestedOnlyAsInitialization": { "const": true },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
+    "mechanics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["taskManifest", "populationAuthority", "referenceExecution"],
+      "properties": {
+        "taskManifest": { "$ref": "#/$defs/binding" },
+        "populationAuthority": { "const": "none" },
+        "referenceExecution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required", "status", "mustCommitBeforeCandidateInference"],
+          "properties": {
+            "required": { "const": true },
+            "status": { "const": "not_run_at_policy_freeze" },
+            "mustCommitBeforeCandidateInference": { "const": true }
+          }
+        }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "semanticHarness",
+        "semanticLibrary",
+        "repairSemanticLibrary",
+        "browserVerifier",
+        "cpuOracleRevision",
+        "inputGeneratorRevision",
+        "historicalRegressions"
+      ],
+      "properties": {
+        "semanticHarness": { "$ref": "#/$defs/binding" },
+        "semanticLibrary": { "$ref": "#/$defs/binding" },
+        "repairSemanticLibrary": { "$ref": "#/$defs/binding" },
+        "browserVerifier": { "$ref": "#/$defs/binding" },
+        "cpuOracleRevision": { "const": "wgsl-semantic-cpu-oracles-v1" },
+        "inputGeneratorRevision": { "const": "wgsl-semantic-inputs-v1" },
+        "historicalRegressions": { "$ref": "#/$defs/binding" }
+      }
+    },
+    "candidateInitializations": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "allOf": [
+            { "$ref": "#/$defs/candidate" },
+            {
+              "properties": {
+                "id": { "const": "qwen35-9b-f16-base" },
+                "kind": { "const": "base_model_control" },
+                "adapterManifestPath": { "const": null },
+                "adapterManifestSha256": { "const": null },
+                "adapterWeightsPath": { "const": null },
+                "adapterWeightsSha256": { "const": null },
+                "predecessorReceiptPath": { "const": null },
+                "predecessorReceiptSha256": { "const": null }
+              }
+            }
+          ]
+        },
+        {
+          "allOf": [
+            { "$ref": "#/$defs/candidate" },
+            {
+              "properties": {
+                "id": { "const": "v13-seed29-repair-initialization" },
+                "kind": { "const": "repair_adapter_initialization" },
+                "adapterManifestPath": { "$ref": "#/$defs/repoPath" },
+                "adapterManifestSha256": { "$ref": "#/$defs/sha256" },
+                "adapterWeightsPath": { "$ref": "#/$defs/repoPath" },
+                "adapterWeightsSha256": { "$ref": "#/$defs/sha256" },
+                "predecessorReceiptPath": { "$ref": "#/$defs/repoPath" },
+                "predecessorReceiptSha256": { "$ref": "#/$defs/sha256" }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modelId",
+        "modelManifestSha256",
+        "artifactStatusPath",
+        "artifactStatusSha256",
+        "conversionConfigPath",
+        "conversionConfigSha256",
+        "adapterPortabilityReceiptPath",
+        "adapterPortabilityReceiptSha256",
+        "runtimeProfile"
+      ],
+      "properties": {
+        "modelId": { "const": "qwen-3-5-9b-f16-af32" },
+        "modelManifestSha256": { "$ref": "#/$defs/sha256" },
+        "artifactStatusPath": { "$ref": "#/$defs/repoPath" },
+        "artifactStatusSha256": { "$ref": "#/$defs/sha256" },
+        "conversionConfigPath": { "$ref": "#/$defs/repoPath" },
+        "conversionConfigSha256": { "$ref": "#/$defs/sha256" },
+        "adapterPortabilityReceiptPath": { "$ref": "#/$defs/repoPath" },
+        "adapterPortabilityReceiptSha256": { "$ref": "#/$defs/sha256" },
+        "runtimeProfile": { "const": "profiles/production" }
+      }
+    },
+    "promptContract": {
+      "const": {
+        "templateId": "wgsl-complete-shader-spec-interface-v1",
+        "useChatTemplate": false,
+        "responseContract": "complete_wgsl_compute_shader_only_v1",
+        "includesNaturalLanguageSpecification": true,
+        "includesExplicitInterfaceContract": true
+      }
+    },
+    "generation": {
+      "const": {
+        "maxTokens": 768,
+        "temperature": 0,
+        "topP": 1,
+        "topK": 1,
+        "repetitionPenalty": 1,
+        "greedyThreshold": 0
+      }
+    },
+    "populations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["calibration", "checkpointSelection", "seedConfirmation", "promotion", "overlapPolicy"],
+      "properties": {
+        "calibration": { "$ref": "#/$defs/unmaterializedPopulation" },
+        "checkpointSelection": { "$ref": "#/$defs/unmaterializedPopulation" },
+        "seedConfirmation": { "$ref": "#/$defs/unmaterializedPopulation" },
+        "promotion": { "$ref": "#/$defs/unmaterializedPopulation" },
+        "overlapPolicy": { "type": "string", "minLength": 1 }
+      }
+    },
+    "taskContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "responseEnvelope",
+        "compilationPrerequisite",
+        "actualDispatchRequired",
+        "cpuOracle",
+        "numericalAgreement",
+        "shapeVariation",
+        "workgroupVariation",
+        "bufferBounds",
+        "metamorphic",
+        "historicalRegressions"
+      ],
+      "properties": {
+        "responseEnvelope": {
+          "const": {
+            "id": "complete_wgsl_compute_shader_only_v1",
+            "maxCharacters": 16000,
+            "forbidMarkdownFences": true,
+            "requireComputeStage": true
+          }
+        },
+        "compilationPrerequisite": { "const": "chromium_webgpu_compile_must_pass_before_dispatch" },
+        "actualDispatchRequired": { "const": true },
+        "cpuOracle": {
+          "const": {
+            "required": true,
+            "implementationRevision": "wgsl-semantic-cpu-oracles-v1",
+            "inputAndOutputHashBinding": true
+          }
+        },
+        "numericalAgreement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["formula", "nonFinitePolicy", "tiers", "wideningRule"],
+          "properties": {
+            "formula": { "const": "abs(actual-reference) <= absTolerance + relTolerance * abs(reference)" },
+            "nonFinitePolicy": { "const": "unexpected_nan_or_infinity_fails; expected_nonfinite_requires_exact_class_and_sign" },
+            "tiers": {
+              "const": {
+                "integerAndBoolean": { "mode": "exact", "absTolerance": 0, "relTolerance": 0 },
+                "float32": { "mode": "numeric", "absTolerance": 0.00001, "relTolerance": 0.0001 },
+                "float16": { "mode": "numeric", "absTolerance": 0.002, "relTolerance": 0.02 }
+              }
+            },
+            "wideningRule": { "type": "string", "minLength": 1 }
+          }
+        },
+        "shapeVariation": {
+          "const": {
+            "minimumDistinctShapesPerTask": 3,
+            "requiredClasses": ["nominal", "non_workgroup_multiple", "boundary_or_tail"]
+          }
+        },
+        "workgroupVariation": {
+          "const": {
+            "minimumSemanticallyValidVariantsPerTask": 2,
+            "referenceAndCandidateUseIdenticalVariants": true
+          }
+        },
+        "bufferBounds": {
+          "const": {
+            "prefixCanaryElements": 16,
+            "suffixCanaryElements": 16,
+            "readOnlyBuffersMustRemainByteIdentical": true,
+            "outputPaddingMustRemainByteIdentical": true,
+            "unexpectedValidationErrorFails": true
+          }
+        },
+        "metamorphic": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["minimumApplicableRelationsPerTask", "allowedRelations", "referenceQualificationRequired"],
+          "properties": {
+            "minimumApplicableRelationsPerTask": { "const": 2 },
+            "allowedRelations": {
+              "const": [
+                "input_permutation_equivariance",
+                "zero_or_identity_relation",
+                "scale_relation",
+                "tiling_equivalence",
+                "shape_partition_equivalence",
+                "task_specific_adjudicated_invariant"
+              ]
+            },
+            "referenceQualificationRequired": { "const": true }
+          }
+        },
+        "historicalRegressions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required", "manifestPath", "manifestSha256"],
+          "properties": {
+            "required": { "const": true },
+            "manifestPath": { "$ref": "#/$defs/repoPath" },
+            "manifestSha256": { "$ref": "#/$defs/sha256" }
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary", "secondary", "semanticTaskPassDefinition"],
+      "properties": {
+        "primary": { "const": "semantic_complete_shader_pass_at_1" },
+        "secondary": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "semanticTaskPassDefinition": { "type": "string", "minLength": 1 }
+      }
+    },
+    "blockingGuardrails": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "authority": {
+      "const": {
+        "mechanicsQualification": true,
+        "candidateEvaluation": false,
+        "checkpointSelection": false,
+        "seedConfirmation": false,
+        "promotion": false,
+        "productization": false
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "claimBoundary": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "repoPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "nullableRepoPath": {
+      "oneOf": [{ "$ref": "#/$defs/repoPath" }, { "type": "null" }]
+    },
+    "nullableSha256": {
+      "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }]
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repoPath" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "modelId",
+        "modelManifestSha256",
+        "adapterManifestPath",
+        "adapterManifestSha256",
+        "adapterWeightsPath",
+        "adapterWeightsSha256",
+        "predecessorReceiptPath",
+        "predecessorReceiptSha256"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["base_model_control", "repair_adapter_initialization"] },
+        "modelId": { "const": "qwen-3-5-9b-f16-af32" },
+        "modelManifestSha256": { "$ref": "#/$defs/sha256" },
+        "adapterManifestPath": { "$ref": "#/$defs/nullableRepoPath" },
+        "adapterManifestSha256": { "$ref": "#/$defs/nullableSha256" },
+        "adapterWeightsPath": { "$ref": "#/$defs/nullableRepoPath" },
+        "adapterWeightsSha256": { "$ref": "#/$defs/nullableSha256" },
+        "predecessorReceiptPath": { "$ref": "#/$defs/nullableRepoPath" },
+        "predecessorReceiptSha256": { "$ref": "#/$defs/nullableSha256" }
+      }
+    },
+    "unmaterializedPopulation": {
+      "const": { "status": "unmaterialized", "manifestPath": null, "populationHash": null }
+    }
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "schema": "doppler.wgsl-writer-task-manifest/v1",
+  "schemaVersion": 1,
+  "experimentId": "doppler-wgsl-writer-v1",
+  "role": "mechanics_qualification_only",
+  "populationAuthority": "none",
+  "responseContract": "complete_wgsl_compute_shader_only_v1",
+  "cpuOracleRevision": "wgsl-semantic-cpu-oracles-v1",
+  "inputGeneratorRevision": "wgsl-semantic-inputs-v1",
+  "tasks": [
+    {
+      "taskId": "writer-v1-mechanics-vector-add-f32",
+      "kernelFamilyId": "writer-v1-mechanics-vector-add",
+      "specification": "For every logical index, add the corresponding left and right f32 values and store the result at output_offset + index. Invocations at or beyond length must return without reading or writing storage.",
+      "interfaceContract": {
+        "entryPoint": "main",
+        "stage": "compute",
+        "requiredOverrides": [
+          { "name": "WORKGROUP_SIZE", "type": "u32", "default": 64 }
+        ],
+        "bindings": [
+          { "group": 0, "binding": 0, "name": "left_values", "kind": "read_only_storage", "wgslType": "array<f32>" },
+          { "group": 0, "binding": 1, "name": "right_values", "kind": "read_only_storage", "wgslType": "array<f32>" },
+          { "group": 0, "binding": 2, "name": "output_values", "kind": "read_write_storage", "wgslType": "array<f32>" },
+          { "group": 0, "binding": 3, "name": "params", "kind": "uniform", "wgslType": "Params" }
+        ],
+        "uniformLayout": [
+          { "name": "length", "type": "u32", "byteOffset": 0 },
+          { "name": "output_offset", "type": "u32", "byteOffset": 4 },
+          { "name": "first", "type": "f32", "byteOffset": 8 },
+          { "name": "second", "type": "f32", "byteOffset": 12 }
+        ],
+        "dispatch": "ceil(length / WORKGROUP_SIZE) workgroups in x; y=1; z=1",
+        "requiredBuiltin": "global_invocation_id",
+        "boundsRule": "Return when global_invocation_id.x >= params.length.",
+        "outputRule": "Write only output_values[params.output_offset + index]."
+      },
+      "referenceShaderPath": "tests/fixtures/wgsl-writer-v1/reference/vector-add-f32.wgsl",
+      "referenceShaderSha256": "582b852db5198373a5dd4e28f6f5998bdc5611554035de1de2dc221e0f69a990",
+      "oracleId": "add_f32",
+      "inputSeed": 14011,
+      "parameters": {},
+      "variants": [
+        { "shapeId": "vector-add-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "vector-add-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "vector-add-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    },
+    {
+      "taskId": "writer-v1-mechanics-affine-f32",
+      "kernelFamilyId": "writer-v1-mechanics-affine",
+      "specification": "For every logical index, compute input * scale + bias in f32 and store it at output_offset + index. Invocations at or beyond length must return without reading or writing storage.",
+      "interfaceContract": {
+        "entryPoint": "main",
+        "stage": "compute",
+        "requiredOverrides": [
+          { "name": "WORKGROUP_SIZE", "type": "u32", "default": 64 }
+        ],
+        "bindings": [
+          { "group": 0, "binding": 0, "name": "input_values", "kind": "read_only_storage", "wgslType": "array<f32>" },
+          { "group": 0, "binding": 1, "name": "output_values", "kind": "read_write_storage", "wgslType": "array<f32>" },
+          { "group": 0, "binding": 2, "name": "params", "kind": "uniform", "wgslType": "Params" }
+        ],
+        "uniformLayout": [
+          { "name": "length", "type": "u32", "byteOffset": 0 },
+          { "name": "output_offset", "type": "u32", "byteOffset": 4 },
+          { "name": "scale", "type": "f32", "byteOffset": 8 },
+          { "name": "bias", "type": "f32", "byteOffset": 12 }
+        ],
+        "dispatch": "ceil(length / WORKGROUP_SIZE) workgroups in x; y=1; z=1",
+        "requiredBuiltin": "global_invocation_id",
+        "boundsRule": "Return when global_invocation_id.x >= params.length.",
+        "outputRule": "Write only output_values[params.output_offset + index]."
+      },
+      "referenceShaderPath": "tests/fixtures/wgsl-writer-v1/reference/affine-f32.wgsl",
+      "referenceShaderSha256": "0b3413a4deb3d9d762de1378c1e80a5776ae357b7925a3ba55df33f4419ab02a",
+      "oracleId": "affine_f32",
+      "inputSeed": 14029,
+      "parameters": { "scale": -1.75, "bias": 0.625 },
+      "variants": [
+        { "shapeId": "affine-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "affine-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "affine-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    },
+    {
+      "taskId": "writer-v1-mechanics-clamp-f32",
+      "kernelFamilyId": "writer-v1-mechanics-clamp",
+      "specification": "For every logical index, clamp the input f32 value to the inclusive lower and upper limits and store it at output_offset + index. Invocations at or beyond length must return without reading or writing storage.",
+      "interfaceContract": {
+        "entryPoint": "main",
+        "stage": "compute",
+        "requiredOverrides": [
+          { "name": "WORKGROUP_SIZE", "type": "u32", "default": 64 }
+        ],
+        "bindings": [
+          { "group": 0, "binding": 0, "name": "input_values", "kind": "read_only_storage", "wgslType": "array<f32>" },
+          { "group": 0, "binding": 1, "name": "output_values", "kind": "read_write_storage", "wgslType": "array<f32>" },
+          { "group": 0, "binding": 2, "name": "params", "kind": "uniform", "wgslType": "Params" }
+        ],
+        "uniformLayout": [
+          { "name": "length", "type": "u32", "byteOffset": 0 },
+          { "name": "output_offset", "type": "u32", "byteOffset": 4 },
+          { "name": "lower", "type": "f32", "byteOffset": 8 },
+          { "name": "upper", "type": "f32", "byteOffset": 12 }
+        ],
+        "dispatch": "ceil(length / WORKGROUP_SIZE) workgroups in x; y=1; z=1",
+        "requiredBuiltin": "global_invocation_id",
+        "boundsRule": "Return when global_invocation_id.x >= params.length.",
+        "outputRule": "Write only output_values[params.output_offset + index]."
+      },
+      "referenceShaderPath": "tests/fixtures/wgsl-writer-v1/reference/clamp-f32.wgsl",
+      "referenceShaderSha256": "879d24b05ff8facc74b6e31e35c902dadc83e232edb2c59ef9958b71935f22d4",
+      "oracleId": "clamp_f32",
+      "inputSeed": 14047,
+      "parameters": { "lower": -2.25, "upper": 3.5 },
+      "variants": [
+        { "shapeId": "clamp-nominal-64", "shapeClass": "nominal", "length": 64, "workgroupId": "wg-32", "workgroupSize": 32 },
+        { "shapeId": "clamp-tail-67", "shapeClass": "non_workgroup_multiple", "length": 67, "workgroupId": "wg-64", "workgroupSize": 64 },
+        { "shapeId": "clamp-boundary-1", "shapeClass": "boundary_or_tail", "length": 1, "workgroupId": "wg-32", "workgroupSize": 32 }
+      ],
+      "metamorphicRelations": ["input_permutation_equivariance", "tiling_equivalence"]
+    }
+  ],
+  "overlapPolicy": "These visible hand-authored tasks qualify full-shader prompt, response, compilation, dispatch, oracle, bounds, workgroup, shape, metamorphic, and receipt mechanics only. They cannot calibrate, select, confirm, or promote a writer candidate.",
+  "claimBoundary": "A passing reference run establishes writer-harness mechanics only. It is not model capability evidence and does not authorize a WGSL writer product."
+}

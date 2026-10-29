@@ -1,0 +1,753 @@
+{
+  "artifactType": "wgsl_repair_v12_result",
+  "schemaVersion": 1,
+  "experimentId": "doppler-wgsl-repair-v12",
+  "recordedAt": "2026-07-13",
+  "status": "seed_confirmed_compiler_curation",
+  "hypothesis": "Replacing 20% of a full, seed-ordered Doppler SFT lane with pinned Zero-TVM repairs improves external and long-span WGSL compiler repair beyond both a Doppler-only anchor and a random in-domain replacement control.",
+  "method": {
+    "methodIds": [
+      "data_centric_sft"
+    ],
+    "teacherModel": null,
+    "studentModel": {
+      "modelId": "Qwen/Qwen3.5-9B",
+      "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+      "baseModelId": "qwen-3-5-9b-hf-bf16"
+    },
+    "intervention": "Replace 240 of 1,200 Doppler rows with pinned Zero-TVM repairs.",
+    "anchor": "Train on 1,200 Doppler rows.",
+    "randomControl": "Replace 240 rows with a disjoint seeded Doppler sample.",
+    "task": "Family-disjoint replacement-only WGSL compiler repair."
+  },
+  "sameR": {
+    "detailedStage": "seed_confirmed",
+    "registerStatus": "mechanics_proven",
+    "rationale": "The frozen diagnostic selection rule reproduces on the complete three-seed public compiler matrix, but semantic guardrails are absent."
+  },
+  "frozenContract": {
+    "policyId": "doppler-wgsl-repair-v12-evaluation",
+    "successRule": "External20 must beat anchor on recombined diagnostic pass@1 at every seed, beat random20 on mean diagnostic pass@1 across seeds, and not reduce mean long-stratum pass@1 versus anchor.",
+    "primaryMetric": "task_weighted_recombined_pass_at_1",
+    "seeds": [
+      11,
+      29,
+      47
+    ],
+    "lanes": [
+      "anchor",
+      "external20",
+      "random20"
+    ],
+    "publicTasks": 299,
+    "samplesPerPolicy": 2392,
+    "referencePolicyHash": "18e0ddabf064e824c0e2dd6c6f7ba1516dbf492fd6f9cadcc6944d7af07760f2"
+  },
+  "diagnosticSelection": {
+    "status": "candidate_selected",
+    "selectedLane": "external20",
+    "checks": {
+      "treatmentBeatsAnchorEverySeed": true,
+      "treatmentBeatsRandomMean": true,
+      "longNonRegression": true
+    },
+    "aggregate": {
+      "anchorMeanPassAt1": 0.9789473684210526,
+      "external20MeanPassAt1": 0.9929824561403509,
+      "random20MeanPassAt1": 0.9847953216374269,
+      "anchorMeanLongPassAt1": 0.49999999999999994,
+      "external20MeanLongPassAt1": 0.9
+    }
+  },
+  "training": {
+    "runtime": {
+      "deviceName": "Radeon 8060S Graphics",
+      "dtype": "bfloat16",
+      "hipVersion": "7.2.53211",
+      "torchVersion": "2.12.1+rocm7.2",
+      "transformersVersion": "5.13.1"
+    },
+    "completedRuns": 9,
+    "expectedRuns": 9,
+    "adapterWeightsByteVerified": true,
+    "allRowsConsumedOnce": true,
+    "runs": [
+      {
+        "seed": 11,
+        "lane": "anchor",
+        "workloadId": "lora-doppler-wgsl-qwen35-9b-v12-anchor",
+        "workloadSha256": "3b5e8690b51c62abe6b97244a9397936c0cd7e747ee62f2e6599a2eb48a0a32b",
+        "configHash": "4961518f308b2c035ce1b5f9cc05d14c7ad2b15090fc46f97ad13ab9e37b3b7f",
+        "datasetHash": "741d61426a1782acbd955292ec0888f63b9022a8feaf02d5593c97e30a57d672",
+        "rowOrderSha256": "d03f28eafc80a94958a7d0e24d07f7f6214c0dfebe3212f2572abe73d39c744c",
+        "policyHash": "1e1d55af58ed241acdcb124e1bdd91f26dfd478291d0eed3b6b0511b1a053a0a",
+        "adapterWeightsSha256": "58cac45263b28803fe8c69eb8073c07e6f871acbcf203d7f255938c2e337363c",
+        "datasetRows": 1200,
+        "distinctRowsVisited": 1200,
+        "microsteps": 1200,
+        "optimizerUpdates": 150,
+        "finalLoss": 0.000011205327609786764,
+        "meanLoss": 0.02108107590003739
+      },
+      {
+        "seed": 11,
+        "lane": "external20",
+        "workloadId": "lora-doppler-wgsl-qwen35-9b-v12-external20",
+        "workloadSha256": "3577f9add4c49ff9ee07f28d8e21affd137dcb04b0714bc4c2ec50e4562e4cf4",
+        "configHash": "cd22a753333b2f62f94cff8532cbdb56127321e27f094e529f13583fd1f9589b",
+        "datasetHash": "b702eefe075ddbe06e43572dd05843ce41f7dd541b9bc05816bdc29d1700d043",
+        "rowOrderSha256": "033c182d1c1e28adf71977934803c0d539487dfa466db49d7cd1e0a09794593e",
+        "policyHash": "355ed9f1c5a7f648b384801c4c33a65939e1287eacb4ea6ee70632e00fe1324e",
+        "adapterWeightsSha256": "8631f512fe8ce481ade2e29a476bb1ade4e2ab6fd8627c7e27c7c093b4824af6",
+        "datasetRows": 1200,
+        "distinctRowsVisited": 1200,
+        "microsteps": 1200,
+        "optimizerUpdates": 150,
+        "finalLoss": 0.000002245096766273491,
+        "meanLoss": 0.02152624117278046
+      },
+      {
+        "seed": 11,
+        "lane": "random20",
+        "workloadId": "lora-doppler-wgsl-qwen35-9b-v12-random20",
+        "workloadSha256": "24442cf96932c42b8e629dee4ab035adc0a9083c45d8f00a8843c213bd3adc04",
+        "configHash": "f5158eb0110b5f160156c982b75cba3eed12dd84e34736a778cba99385b847a3",
+        "datasetHash": "de3abd4bd4c79bb9dc9738dfd508aa41d30c47f5a93fcc63f6f27c5cabaa4c83",
+        "rowOrderSha256": "29fbb49b0a9350f101100b84c24bcf893d9a2d53741885a5fabeafd53b7f908e",
+        "policyHash": "47b76dcea6cf1f911103d6911c4e3bd522a700db9b7f04842f91e6a2e7324422",
+        "adapterWeightsSha256": "871801ba627a7f81fdaf30103b1121dfcfcb399a2cb1829b6475496ddd2791bf",
+        "datasetRows": 1200,
+        "distinctRowsVisited": 1200,
+        "microsteps": 1200,
+        "optimizerUpdates": 150,
+        "finalLoss": 0.000003337850330353831,
+        "meanLoss": 0.022786013591677555
+      },
+      {
+        "seed": 29,
+        "lane": "anchor",
+        "workloadId": "lora-doppler-wgsl-qwen35-9b-v12-anchor-seed29",
+        "workloadSha256": "4d146b5ca31e9687a41e28e82db4177b3fa013ae2f2d125b2b13baa007501062",
+        "configHash": "858cb5ce943e1f2ab02da1342cbcbaee695d23332a7b94ef5cf2d2badf1b9998",
+        "datasetHash": "741d61426a1782acbd955292ec0888f63b9022a8feaf02d5593c97e30a57d672",
+        "rowOrderSha256": "932b8fb4f89e6480185e7ae1ad5ba4b6a70a9367fd0e5cbe4e8a203cef100cff",
+        "policyHash": "963edc073b6c78545c5d97f85756953f38296d71145b248e3d135f8d8360a246",
+        "adapterWeightsSha256": "a0b2ff94a299d4f5f19de13e5456c22f13e39db7a9cd3143eadcaf658b14d55f",
+        "datasetRows": 1200,
+        "distinctRowsVisited": 1200,
+        "microsteps": 1200,
+        "optimizerUpdates": 150,
+        "finalLoss": 0.000004723583515442442,
+        "meanLoss": 0.019097133134462815
+      },
+      {
+        "seed": 29,
+        "lane": "external20",
+        "workloadId": "lora-doppler-wgsl-qwen35-9b-v12-external20-seed29",
+        "workloadSha256": "b36a54d647b736fc404cc8a74f8c139943f5939456081d94eafa80629f7402c5",
+        "configHash": "0105a5c70c1d4db29b814de66d579b43a990174b7e9637c9b9e5a5fb95feae12",
+        "datasetHash": "b702eefe075ddbe06e43572dd05843ce41f7dd541b9bc05816bdc29d1700d043",
+        "rowOrderSha256": "2a26e46726c14525f762a056b5cb64dccef9fdeb3e45242a8e8ea9a6878ad32e",
+        "policyHash": "dfcddcab14eb7a3580f5d04df90e02ce40f2cf27ce43a5cc2411f58ec6a9ac7a",
+        "adapterWeightsSha256": "0d9ab8e1348a3fcdd6ef2973b624cc1a3d962de90a571976a5a222df27b69394",
+        "datasetRows": 1200,
+        "distinctRowsVisited": 1200,
+        "microsteps": 1200,
+        "optimizerUpdates": 150,
+        "finalLoss": 0.00003098544402746484,
+        "meanLoss": 0.019620010201600698
+      },
+      {
+        "seed": 29,
+        "lane": "random20",
+        "workloadId": "lora-doppler-wgsl-qwen35-9b-v12-random20-seed29",
+        "workloadSha256": "7f0c73fde5204fcb6f51d29f123b43c94d0f431a27a6e14907f543adb03cc5dd",
+        "configHash": "0c60bfaf66fedbc8339ff953530a2ce92895fa67af26dbf4f31a5102abdf20b3",
+        "datasetHash": "de3abd4bd4c79bb9dc9738dfd508aa41d30c47f5a93fcc63f6f27c5cabaa4c83",
+        "rowOrderSha256": "d1534b4d3b92a8e3e6839cb43094a4edfde7db88472032c4ce1a35bf6a1e92eb",
+        "policyHash": "218da0bffbb7c3319dea78c3748c0317ec042054dee515b12ea66304f9fade7d",
+        "adapterWeightsSha256": "146e6256c12577f19d2db032eec161836a0817a967bb175384570e5ff58cb544",
+        "datasetRows": 1200,
+        "distinctRowsVisited": 1200,
+        "microsteps": 1200,
+        "optimizerUpdates": 150,
+        "finalLoss": 0.0000023841691927373176,
+        "meanLoss": 0.018829218259360014
+      },
+      {
+        "seed": 47,
+        "lane": "anchor",
+        "workloadId": "lora-doppler-wgsl-qwen35-9b-v12-anchor-seed47",
+        "workloadSha256": "5b87103c9881ff4d199ddb03d40de93b41f21b0e64edaba0f2ae052bc56ed3ed",
+        "configHash": "017dbb3fc2b0c7af7fca5ee82c934e9c663514b0dc80e2841140d79c18599a01",
+        "datasetHash": "741d61426a1782acbd955292ec0888f63b9022a8feaf02d5593c97e30a57d672",
+        "rowOrderSha256": "fdd57db389b38187428b62a973f092cffe8c2d0903a58dff4707a9c1036d0199",
+        "policyHash": "5839460fd2a358321fd9a18742c71c9a393adce00d94e8fc8679d7bc684a523a",
+        "adapterWeightsSha256": "08283c5cc7d1d7c0d6b7852c2d1e1500f7508c7842bd28385698402c38d93dd7",
+        "datasetRows": 1200,
+        "distinctRowsVisited": 1200,
+        "microsteps": 1200,
+        "optimizerUpdates": 150,
+        "finalLoss": 0.000002485498725945945,
+        "meanLoss": 0.021861665081943357
+      },
+      {
+        "seed": 47,
+        "lane": "external20",
+        "workloadId": "lora-doppler-wgsl-qwen35-9b-v12-external20-seed47",
+        "workloadSha256": "39ed499f14cde8f8f38a2e13b92738eade3fe81fcfe008fb3a436580eba001a3",
+        "configHash": "4948618767176227b032678e04bc13c47e506fc2a32ecd369e53cc48f402b3af",
+        "datasetHash": "b702eefe075ddbe06e43572dd05843ce41f7dd541b9bc05816bdc29d1700d043",
+        "rowOrderSha256": "8ed87f170e5388bf65fe3a077c636c429d031a2e8629793f01f690acd23079c9",
+        "policyHash": "11fc6a94b169f49e09ce0aaf6a27b0f1672432daf8b506088e32e2e941c36f31",
+        "adapterWeightsSha256": "3e3895f062ae99d67c22ef3220a44ffe8081ba2021473de357e70216c50fd7d8",
+        "datasetRows": 1200,
+        "distinctRowsVisited": 1200,
+        "microsteps": 1200,
+        "optimizerUpdates": 150,
+        "finalLoss": 0.0000045239407882036176,
+        "meanLoss": 0.021902363754896813
+      },
+      {
+        "seed": 47,
+        "lane": "random20",
+        "workloadId": "lora-doppler-wgsl-qwen35-9b-v12-random20-seed47",
+        "workloadSha256": "0954e93eb3b57c05a960dfeb9035c4211ac91d9d332e35ce874d5c697dc4b82d",
+        "configHash": "b3bfb0986102e707e31b2467556e653a9fa9a5b5d1d29d21226dd00def8256b9",
+        "datasetHash": "de3abd4bd4c79bb9dc9738dfd508aa41d30c47f5a93fcc63f6f27c5cabaa4c83",
+        "rowOrderSha256": "f7e2db1ec17dd492fc98d159a968319c9ef47405180ec974018cd404a4f28dfb",
+        "policyHash": "6778e54cc10f36fa1a32991d4a602de92fbc6f65620d718115d42cd89d4b56d7",
+        "adapterWeightsSha256": "beb8e9cd2562641609bb2965206e3e11b88b0b59430230fab73af69fb3adfb7b",
+        "datasetRows": 1200,
+        "distinctRowsVisited": 1200,
+        "microsteps": 1200,
+        "optimizerUpdates": 150,
+        "finalLoss": 0.00004354240809334442,
+        "meanLoss": 0.0246755928395586
+      }
+    ]
+  },
+  "publicEvaluation": {
+    "completedPolicies": 9,
+    "expectedPolicies": 9,
+    "perSeed": {
+      "11": {
+        "anchor": {
+          "policyHash": "1e1d55af58ed241acdcb124e1bdd91f26dfd478291d0eed3b6b0511b1a053a0a",
+          "passAt1": 0.9933110367892977,
+          "passAt8": 0.9966555183946488,
+          "samplePassRate": 0.9908026755852842,
+          "passingTasksAt1": 297,
+          "tasks": 299,
+          "blockedSamples": 0,
+          "shortPassAt1": 1,
+          "longPassAt1": 0.7777777777777778
+        },
+        "external20": {
+          "policyHash": "355ed9f1c5a7f648b384801c4c33a65939e1287eacb4ea6ee70632e00fe1324e",
+          "passAt1": 0.9966555183946488,
+          "passAt8": 1,
+          "samplePassRate": 0.9970735785953178,
+          "passingTasksAt1": 298,
+          "tasks": 299,
+          "blockedSamples": 0,
+          "shortPassAt1": 0.996551724137931,
+          "longPassAt1": 1
+        },
+        "random20": {
+          "policyHash": "47b76dcea6cf1f911103d6911c4e3bd522a700db9b7f04842f91e6a2e7324422",
+          "passAt1": 0.9832775919732442,
+          "passAt8": 1,
+          "samplePassRate": 0.9832775919732442,
+          "passingTasksAt1": 294,
+          "tasks": 299,
+          "blockedSamples": 0,
+          "shortPassAt1": 0.993103448275862,
+          "longPassAt1": 0.6666666666666666
+        }
+      },
+      "29": {
+        "anchor": {
+          "policyHash": "963edc073b6c78545c5d97f85756953f38296d71145b248e3d135f8d8360a246",
+          "passAt1": 0.9832775919732442,
+          "passAt8": 0.9933110367892977,
+          "samplePassRate": 0.9866220735785953,
+          "passingTasksAt1": 294,
+          "tasks": 299,
+          "blockedSamples": 0,
+          "shortPassAt1": 0.9896551724137931,
+          "longPassAt1": 0.7777777777777778
+        },
+        "external20": {
+          "policyHash": "dfcddcab14eb7a3580f5d04df90e02ce40f2cf27ce43a5cc2411f58ec6a9ac7a",
+          "passAt1": 0.9933110367892977,
+          "passAt8": 0.9966555183946488,
+          "samplePassRate": 0.9941471571906354,
+          "passingTasksAt1": 297,
+          "tasks": 299,
+          "blockedSamples": 0,
+          "shortPassAt1": 1,
+          "longPassAt1": 0.7777777777777778
+        },
+        "random20": {
+          "policyHash": "218da0bffbb7c3319dea78c3748c0317ec042054dee515b12ea66304f9fade7d",
+          "passAt1": 0.9966555183946488,
+          "passAt8": 0.9966555183946488,
+          "samplePassRate": 0.9962374581939799,
+          "passingTasksAt1": 298,
+          "tasks": 299,
+          "blockedSamples": 0,
+          "shortPassAt1": 1,
+          "longPassAt1": 0.8888888888888888
+        }
+      },
+      "47": {
+        "anchor": {
+          "policyHash": "5839460fd2a358321fd9a18742c71c9a393adce00d94e8fc8679d7bc684a523a",
+          "passAt1": 0.9765886287625418,
+          "passAt8": 0.9899665551839465,
+          "samplePassRate": 0.9820234113712375,
+          "passingTasksAt1": 292,
+          "tasks": 299,
+          "blockedSamples": 0,
+          "shortPassAt1": 1,
+          "longPassAt1": 0.2222222222222222
+        },
+        "external20": {
+          "policyHash": "11fc6a94b169f49e09ce0aaf6a27b0f1672432daf8b506088e32e2e941c36f31",
+          "passAt1": 0.9933110367892977,
+          "passAt8": 0.9966555183946488,
+          "samplePassRate": 0.9933110367892977,
+          "passingTasksAt1": 297,
+          "tasks": 299,
+          "blockedSamples": 0,
+          "shortPassAt1": 0.993103448275862,
+          "longPassAt1": 1
+        },
+        "random20": {
+          "policyHash": "6778e54cc10f36fa1a32991d4a602de92fbc6f65620d718115d42cd89d4b56d7",
+          "passAt1": 0.9866220735785953,
+          "passAt8": 0.9966555183946488,
+          "samplePassRate": 0.9862040133779264,
+          "passingTasksAt1": 295,
+          "tasks": 299,
+          "blockedSamples": 0,
+          "shortPassAt1": 0.993103448275862,
+          "longPassAt1": 0.7777777777777778
+        }
+      }
+    },
+    "meanByLane": {
+      "anchor": {
+        "passAt1": {
+          "mean": 0.9843924191750278,
+          "minimum": 0.9765886287625418,
+          "maximum": 0.9933110367892977
+        },
+        "passAt8": {
+          "mean": 0.9933110367892977,
+          "minimum": 0.9899665551839465,
+          "maximum": 0.9966555183946488
+        },
+        "samplePassRate": {
+          "mean": 0.9864827201783722,
+          "minimum": 0.9820234113712375,
+          "maximum": 0.9908026755852842
+        },
+        "shortPassAt1": {
+          "mean": 0.996551724137931,
+          "minimum": 0.9896551724137931,
+          "maximum": 1
+        },
+        "longPassAt1": {
+          "mean": 0.5925925925925926,
+          "minimum": 0.2222222222222222,
+          "maximum": 0.7777777777777778
+        }
+      },
+      "external20": {
+        "passAt1": {
+          "mean": 0.9944258639910813,
+          "minimum": 0.9933110367892977,
+          "maximum": 0.9966555183946488
+        },
+        "passAt8": {
+          "mean": 0.9977703455964325,
+          "minimum": 0.9966555183946488,
+          "maximum": 1
+        },
+        "samplePassRate": {
+          "mean": 0.9948439241917503,
+          "minimum": 0.9933110367892977,
+          "maximum": 0.9970735785953178
+        },
+        "shortPassAt1": {
+          "mean": 0.9965517241379311,
+          "minimum": 0.993103448275862,
+          "maximum": 1
+        },
+        "longPassAt1": {
+          "mean": 0.9259259259259259,
+          "minimum": 0.7777777777777778,
+          "maximum": 1
+        }
+      },
+      "random20": {
+        "passAt1": {
+          "mean": 0.9888517279821628,
+          "minimum": 0.9832775919732442,
+          "maximum": 0.9966555183946488
+        },
+        "passAt8": {
+          "mean": 0.9977703455964325,
+          "minimum": 0.9966555183946488,
+          "maximum": 1
+        },
+        "samplePassRate": {
+          "mean": 0.9885730211817169,
+          "minimum": 0.9832775919732442,
+          "maximum": 0.9962374581939799
+        },
+        "shortPassAt1": {
+          "mean": 0.9954022988505747,
+          "minimum": 0.993103448275862,
+          "maximum": 1
+        },
+        "longPassAt1": {
+          "mean": 0.7777777777777777,
+          "minimum": 0.6666666666666666,
+          "maximum": 0.8888888888888888
+        }
+      }
+    },
+    "effects": {
+      "external20VsAnchorMeanPassAt1": 0.010033444816053505,
+      "external20VsRandom20MeanPassAt1": 0.00557413600891854,
+      "external20VsAnchorMeanLongPassAt1": 0.33333333333333337
+    },
+    "frozenRuleReplay": {
+      "status": "passed",
+      "checks": {
+        "treatmentBeatsAnchorEverySeed": true,
+        "treatmentBeatsRandomMean": true,
+        "longNonRegression": true
+      },
+      "note": "This replays the already-frozen diagnostic selection rule descriptively on public outcomes; it is not a new promotion threshold."
+    },
+    "pairedComparisons": [
+      {
+        "id": "seed11-external20-vs-anchor",
+        "seed": 11,
+        "referenceLane": "anchor",
+        "candidateLane": "external20",
+        "referencePassAt1": 0.9933110367892977,
+        "candidatePassAt1": 0.9966555183946488,
+        "effectPassAt1": 0.0033444816053511683,
+        "effectPassAt8": 0.0033444816053511683,
+        "referenceOnly": 1,
+        "candidateOnly": 2,
+        "exactMcNemarP": 1,
+        "holmAdjustedP": 1
+      },
+      {
+        "id": "seed11-external20-vs-random20",
+        "seed": 11,
+        "referenceLane": "random20",
+        "candidateLane": "external20",
+        "referencePassAt1": 0.9832775919732442,
+        "candidatePassAt1": 0.9966555183946488,
+        "effectPassAt1": 0.013377926421404673,
+        "effectPassAt8": 0,
+        "referenceOnly": 1,
+        "candidateOnly": 5,
+        "exactMcNemarP": 0.21875000000000014,
+        "holmAdjustedP": 1
+      },
+      {
+        "id": "seed29-external20-vs-anchor",
+        "seed": 29,
+        "referenceLane": "anchor",
+        "candidateLane": "external20",
+        "referencePassAt1": 0.9832775919732442,
+        "candidatePassAt1": 0.9933110367892977,
+        "effectPassAt1": 0.010033444816053505,
+        "effectPassAt8": 0.0033444816053511683,
+        "referenceOnly": 2,
+        "candidateOnly": 5,
+        "exactMcNemarP": 0.45312500000000017,
+        "holmAdjustedP": 1
+      },
+      {
+        "id": "seed29-external20-vs-random20",
+        "seed": 29,
+        "referenceLane": "random20",
+        "candidateLane": "external20",
+        "referencePassAt1": 0.9966555183946488,
+        "candidatePassAt1": 0.9933110367892977,
+        "effectPassAt1": -0.0033444816053511683,
+        "effectPassAt8": 0,
+        "referenceOnly": 2,
+        "candidateOnly": 1,
+        "exactMcNemarP": 1,
+        "holmAdjustedP": 1
+      },
+      {
+        "id": "seed47-external20-vs-anchor",
+        "seed": 47,
+        "referenceLane": "anchor",
+        "candidateLane": "external20",
+        "referencePassAt1": 0.9765886287625418,
+        "candidatePassAt1": 0.9933110367892977,
+        "effectPassAt1": 0.01672240802675584,
+        "effectPassAt8": 0.006688963210702337,
+        "referenceOnly": 2,
+        "candidateOnly": 7,
+        "exactMcNemarP": 0.17968749999999997,
+        "holmAdjustedP": 1
+      },
+      {
+        "id": "seed47-external20-vs-random20",
+        "seed": 47,
+        "referenceLane": "random20",
+        "candidateLane": "external20",
+        "referencePassAt1": 0.9866220735785953,
+        "candidatePassAt1": 0.9933110367892977,
+        "effectPassAt1": 0.006688963210702337,
+        "effectPassAt8": 0,
+        "referenceOnly": 2,
+        "candidateOnly": 4,
+        "exactMcNemarP": 0.6875000000000004,
+        "holmAdjustedP": 1
+      }
+    ],
+    "multiplicity": {
+      "family": "Six per-seed external20-versus-control pass@1 McNemar tests.",
+      "adjustment": "Holm",
+      "alpha": 0.05,
+      "significantTestIds": []
+    },
+    "pooledDiscordanceDescriptive": {
+      "anchor": {
+        "referenceOnly": 5,
+        "candidateOnly": 14,
+        "inferentialUseAllowed": false,
+        "reason": "The same public tasks repeat across seeds, so seed-task pairs are not independent."
+      },
+      "random20": {
+        "referenceOnly": 5,
+        "candidateOnly": 10,
+        "inferentialUseAllowed": false,
+        "reason": "The same public tasks repeat across seeds, so seed-task pairs are not independent."
+      }
+    }
+  },
+  "evidenceBoundary": {
+    "fullLaneTrainingCompleted": true,
+    "adapterWeightsByteVerified": true,
+    "diagnosticMatrixCompleted": true,
+    "publicCompilerMatrixCompleted": true,
+    "publicRuleReplayPassed": true,
+    "perSeedControlTestSignificantAfterHolm": false,
+    "semanticKernelSuiteCompleted": false,
+    "adapterInferenceParityCompleted": false,
+    "runtimePerformanceMeasured": false,
+    "promoted": false
+  },
+  "artifacts": {
+    "policy": {
+      "path": "tools/policies/wgsl-repair-v12-evaluation-policy.json",
+      "sha256": "d62addfdd3e376efe4dcfbe24eb8cb222ac2ec70d87e43a512dd5eb4ab735a5c"
+    },
+    "design": {
+      "path": "docs/status/wgsl-repair-v12-design-2026-07-12.json",
+      "sha256": "b791be3096c125cdd184ad42514618e8cb7fe62ddb0b076268510531cb6c2348"
+    },
+    "diagnosticDecision": {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/lane-decision.json",
+      "sha256": "8c911ef5ffb5141fbbf7a99c786ad3fac0f4a5a04a68fab3031cee870ba5f871"
+    },
+    "trainingExports": [
+      {
+        "seed": 11,
+        "lane": "anchor",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed11/anchor/sft/exports/checkpoint-001200.export.json",
+        "sha256": "3c5f073653bd44a4eb18c34a0240231997589fb491e7ad7972181f5faf768ed8"
+      },
+      {
+        "seed": 11,
+        "lane": "external20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed11/external20/sft/exports/checkpoint-001200.export.json",
+        "sha256": "75bc2f71841645e3afb8fd556ef62eeb28eb1b76c661b74207a501465b163873"
+      },
+      {
+        "seed": 11,
+        "lane": "random20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed11/random20/sft/exports/checkpoint-001200.export.json",
+        "sha256": "fa85211fe5abc007ee42943b35f5f12e449ff1e12730733202e1adb93a50cf20"
+      },
+      {
+        "seed": 29,
+        "lane": "anchor",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/anchor/sft/exports/checkpoint-001200.export.json",
+        "sha256": "eaa6f7e152b186e21227416f1a4d3b0ee6408c7d9f559b4f5ede42f442834546"
+      },
+      {
+        "seed": 29,
+        "lane": "external20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/external20/sft/exports/checkpoint-001200.export.json",
+        "sha256": "7196c851cd1543259ad2ad5d8736c45793b087e903fd6273663b3ca6fc11f876"
+      },
+      {
+        "seed": 29,
+        "lane": "random20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/random20/sft/exports/checkpoint-001200.export.json",
+        "sha256": "db80f156ab7a0dce3b93bcedd54144d623d36d8dbee2d063fa9c59e3f6b1f30a"
+      },
+      {
+        "seed": 47,
+        "lane": "anchor",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed47/anchor/sft/exports/checkpoint-001200.export.json",
+        "sha256": "8d047ebf02d8c8cf4ddcf27e7a13a564553fd5262c9cc151918c0347d1b98019"
+      },
+      {
+        "seed": 47,
+        "lane": "external20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed47/external20/sft/exports/checkpoint-001200.export.json",
+        "sha256": "407c7d6972a50bc1cc77ef96fa1ae757004e57f777c752fe29d6fb5c207d6c7c"
+      },
+      {
+        "seed": 47,
+        "lane": "random20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed47/random20/sft/exports/checkpoint-001200.export.json",
+        "sha256": "b518d24164a25d51946272487c735349470a03b476907552a02bf289c0023dae"
+      }
+    ],
+    "adapterWeights": [
+      {
+        "seed": 11,
+        "lane": "anchor",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed11/anchor/sft/exports/checkpoint-001200.adapters.safetensors",
+        "sha256": "58cac45263b28803fe8c69eb8073c07e6f871acbcf203d7f255938c2e337363c",
+        "bytes": 232808939
+      },
+      {
+        "seed": 11,
+        "lane": "external20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed11/external20/sft/exports/checkpoint-001200.adapters.safetensors",
+        "sha256": "8631f512fe8ce481ade2e29a476bb1ade4e2ab6fd8627c7e27c7c093b4824af6",
+        "bytes": 232808939
+      },
+      {
+        "seed": 11,
+        "lane": "random20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed11/random20/sft/exports/checkpoint-001200.adapters.safetensors",
+        "sha256": "871801ba627a7f81fdaf30103b1121dfcfcb399a2cb1829b6475496ddd2791bf",
+        "bytes": 232808939
+      },
+      {
+        "seed": 29,
+        "lane": "anchor",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/anchor/sft/exports/checkpoint-001200.adapters.safetensors",
+        "sha256": "a0b2ff94a299d4f5f19de13e5456c22f13e39db7a9cd3143eadcaf658b14d55f",
+        "bytes": 232808939
+      },
+      {
+        "seed": 29,
+        "lane": "external20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/external20/sft/exports/checkpoint-001200.adapters.safetensors",
+        "sha256": "0d9ab8e1348a3fcdd6ef2973b624cc1a3d962de90a571976a5a222df27b69394",
+        "bytes": 232808939
+      },
+      {
+        "seed": 29,
+        "lane": "random20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/random20/sft/exports/checkpoint-001200.adapters.safetensors",
+        "sha256": "146e6256c12577f19d2db032eec161836a0817a967bb175384570e5ff58cb544",
+        "bytes": 232808939
+      },
+      {
+        "seed": 47,
+        "lane": "anchor",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed47/anchor/sft/exports/checkpoint-001200.adapters.safetensors",
+        "sha256": "08283c5cc7d1d7c0d6b7852c2d1e1500f7508c7842bd28385698402c38d93dd7",
+        "bytes": 232808939
+      },
+      {
+        "seed": 47,
+        "lane": "external20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed47/external20/sft/exports/checkpoint-001200.adapters.safetensors",
+        "sha256": "3e3895f062ae99d67c22ef3220a44ffe8081ba2021473de357e70216c50fd7d8",
+        "bytes": 232808939
+      },
+      {
+        "seed": 47,
+        "lane": "random20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed47/random20/sft/exports/checkpoint-001200.adapters.safetensors",
+        "sha256": "beb8e9cd2562641609bb2965206e3e11b88b0b59430230fab73af69fb3adfb7b",
+        "bytes": 232808939
+      }
+    ],
+    "publicEvaluationReceipts": [
+      {
+        "seed": 11,
+        "lane": "anchor",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed11/anchor/evaluation/public-test/stratified-evaluation.json",
+        "sha256": "0312ab3b6cad5cd3db1582777865ce7496190355a5571d34a328a94a3130816a"
+      },
+      {
+        "seed": 11,
+        "lane": "external20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed11/external20/evaluation/public-test/stratified-evaluation.json",
+        "sha256": "c17df248a1f3a45ebe63400bd6fd5da64abdcf69d7d79df2834f7b2479ebe9bc"
+      },
+      {
+        "seed": 11,
+        "lane": "random20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed11/random20/evaluation/public-test/stratified-evaluation.json",
+        "sha256": "bf20ca52710d37b3bf6ba8442324515335ba15a6e37676ff10e7ef9f91e815b8"
+      },
+      {
+        "seed": 29,
+        "lane": "anchor",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/anchor/evaluation/public-test/stratified-evaluation.json",
+        "sha256": "7489098b9215772d5949b719b94c488f6975d82a585bed89970451fb25140cf3"
+      },
+      {
+        "seed": 29,
+        "lane": "external20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/external20/evaluation/public-test/stratified-evaluation.json",
+        "sha256": "6e0257d53ce0e7f5e6636931bdbef2d3fc252a4dc99a29cfb2f5503b258d46ba"
+      },
+      {
+        "seed": 29,
+        "lane": "random20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/random20/evaluation/public-test/stratified-evaluation.json",
+        "sha256": "f97c6d37358d013677dc6321e5d90a845f416ed7603a21a12dd112183b22c502"
+      },
+      {
+        "seed": 47,
+        "lane": "anchor",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed47/anchor/evaluation/public-test/stratified-evaluation.json",
+        "sha256": "22924cbad11f22c07f09b1df3a94fee973d5b6803355c0b56400dca2744b094a"
+      },
+      {
+        "seed": 47,
+        "lane": "external20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed47/external20/evaluation/public-test/stratified-evaluation.json",
+        "sha256": "8b4ac363ee89f6f14fce4d55138c09eed6bfff5a73697536c09a650799f3bf2a"
+      },
+      {
+        "seed": 47,
+        "lane": "random20",
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed47/random20/evaluation/public-test/stratified-evaluation.json",
+        "sha256": "db9fafeddc2589d109d4356e865c04c0231ec2ffa86b6f52433aca76a2ac62cf"
+      }
+    ]
+  },
+  "claimBoundary": "V12 provides seed-confirmed controlled-data evidence on the frozen public WGSL compiler-repair diagnostic: external20 has the highest mean pass@1, beats anchor at all three seeds, beats the random-control mean, and improves mean long-stratum pass@1. No per-seed control comparison is significant after Holm correction, the long stratum has nine tasks, and no sealed dispatch, CPU-oracle, numerical, metamorphic, bounds, or historical-regression suite ran. This is data-centric SFT compiler evidence, not teacher distillation, semantic-kernel correctness, adapter promotion, or runtime-performance evidence.",
+  "nextGates": [
+    "Provision and run the sealed semantic WGSL suite with dispatch, CPU-oracle, numerical, metamorphic, bounds, and historical-regression checks under a separately frozen contract.",
+    "Prove PEFT-to-Doppler adapter activation and matched inference parity from a coherent base-model lane before any local serving claim.",
+    "Treat dense checkpoint selection, GRPO from the selected SFT lane, and Doppler-native training parity as separate SAME-R experiments rather than modifying V12 after outcome opening."
+  ]
+}

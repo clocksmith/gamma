@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/doppler/schemas/wgsl-repair-semantic-evaluation-v1.schema.json",
+  "title": "WGSL repair semantic evaluation policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
+    "policyId",
+    "status",
+    "predecessor",
+    "capability",
+    "candidate",
+    "populations",
+    "taskContract",
+    "metrics",
+    "blockingGuardrails",
+    "productization",
+    "blockers",
+    "claimBoundary"
+  ],
+  "properties": {
+    "$schema": { "const": "../../src/config/schema/wgsl-repair-semantic-evaluation.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "source": { "const": "doppler" },
+    "policyId": { "const": "doppler-wgsl-repair-v13-semantic-evaluation" },
+    "status": {
+      "enum": [
+        "frozen_requirements_populations_unmaterialized",
+        "evaluation_ready",
+        "candidate_selected",
+        "terminal"
+      ]
+    },
+    "predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "experimentId",
+        "resultPath",
+        "resultSha256",
+        "preservationVerificationPath",
+        "preservationVerificationSha256"
+      ],
+      "properties": {
+        "experimentId": { "const": "doppler-wgsl-repair-v12" },
+        "resultPath": { "$ref": "#/$defs/repoPath" },
+        "resultSha256": { "$ref": "#/$defs/sha256" },
+        "preservationVerificationPath": { "$ref": "#/$defs/repoPath" },
+        "preservationVerificationSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "capability": { "const": "replacement_only_semantically_correct_wgsl_repair" },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eligibleLane",
+        "seedSelectionStatus",
+        "selectedSeed",
+        "adapterSha256",
+        "adapterPath",
+        "trainerToDopplerParityReceipt"
+      ],
+      "properties": {
+        "eligibleLane": { "const": "external20" },
+        "seedSelectionStatus": { "enum": ["not_selected", "selected"] },
+        "selectedSeed": { "type": ["integer", "null"] },
+        "adapterSha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "adapterPath": { "oneOf": [{ "$ref": "#/$defs/repoPath" }, { "type": "null" }] },
+        "trainerToDopplerParityReceipt": { "oneOf": [{ "$ref": "#/$defs/repoPath" }, { "type": "null" }] }
+      }
+    },
+    "populations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["calibration", "checkpointSelection", "seedConfirmation", "promotion", "overlapPolicy"],
+      "properties": {
+        "calibration": { "$ref": "#/$defs/population" },
+        "checkpointSelection": { "$ref": "#/$defs/population" },
+        "seedConfirmation": { "$ref": "#/$defs/population" },
+        "promotion": { "$ref": "#/$defs/population" },
+        "overlapPolicy": {
+          "const": "No kernel-family, source-kernel, mutation lineage, natural-error document, oracle fixture, or historical regression may overlap roles."
+        }
+      }
+    },
+    "taskContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "responseContract",
+        "compilationPrerequisite",
+        "actualDispatchRequired",
+        "cpuOracle",
+        "numericalAgreement",
+        "shapeVariation",
+        "workgroupVariation",
+        "bufferBounds",
+        "metamorphic",
+        "historicalRegressions"
+      ],
+      "properties": {
+        "responseContract": { "const": "replacement_only_wgsl_span_v1" },
+        "compilationPrerequisite": { "const": "chromium_webgpu_compile_must_pass_before_dispatch" },
+        "actualDispatchRequired": { "const": true },
+        "cpuOracle": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required", "implementationRevision", "inputAndOutputHashBinding"],
+          "properties": {
+            "required": { "const": true },
+            "implementationRevision": { "type": ["string", "null"] },
+            "inputAndOutputHashBinding": { "const": true }
+          }
+        },
+        "numericalAgreement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["formula", "nonFinitePolicy", "tiers", "wideningRule"],
+          "properties": {
+            "formula": { "const": "abs(actual-reference) <= absTolerance + relTolerance * abs(reference)" },
+            "nonFinitePolicy": { "const": "unexpected_nan_or_infinity_fails; expected_nonfinite_requires_exact_class_and_sign" },
+            "tiers": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["integerAndBoolean", "float32", "float16"],
+              "properties": {
+                "integerAndBoolean": {
+                  "const": { "mode": "exact", "absTolerance": 0, "relTolerance": 0 }
+                },
+                "float32": {
+                  "const": { "mode": "numeric", "absTolerance": 0.00001, "relTolerance": 0.0001 }
+                },
+                "float16": {
+                  "const": { "mode": "numeric", "absTolerance": 0.002, "relTolerance": 0.02 }
+                }
+              }
+            },
+            "wideningRule": { "const": "Per-task tolerances may be narrower; wider tolerances require a new policy revision frozen before candidate evaluation." }
+          }
+        },
+        "shapeVariation": {
+          "const": {
+            "minimumDistinctShapesPerTask": 3,
+            "requiredClasses": ["nominal", "non_workgroup_multiple", "boundary_or_tail"]
+          }
+        },
+        "workgroupVariation": {
+          "const": {
+            "minimumSemanticallyValidVariantsPerTask": 2,
+            "referenceAndCandidateUseIdenticalVariants": true
+          }
+        },
+        "bufferBounds": {
+          "const": {
+            "prefixCanaryElements": 16,
+            "suffixCanaryElements": 16,
+            "readOnlyBuffersMustRemainByteIdentical": true,
+            "outputPaddingMustRemainByteIdentical": true,
+            "unexpectedValidationErrorFails": true
+          }
+        },
+        "metamorphic": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["minimumApplicableRelationsPerTask", "allowedRelations", "referenceQualificationRequired"],
+          "properties": {
+            "minimumApplicableRelationsPerTask": { "const": 2 },
+            "allowedRelations": {
+              "const": [
+                "input_permutation_equivariance",
+                "zero_or_identity_relation",
+                "scale_relation",
+                "tiling_equivalence",
+                "shape_partition_equivalence",
+                "task_specific_adjudicated_invariant"
+              ]
+            },
+            "referenceQualificationRequired": { "const": true }
+          }
+        },
+        "historicalRegressions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required", "manifestPath", "manifestSha256"],
+          "properties": {
+            "required": { "const": true },
+            "manifestPath": { "oneOf": [{ "$ref": "#/$defs/repoPath" }, { "type": "null" }] },
+            "manifestSha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] }
+          }
+        }
+      }
+    },
+    "metrics": {
+      "const": {
+        "primary": "semantic_task_pass_at_1",
+        "secondary": ["compile_at_1", "semantic_pass_at_8", "edit_size", "policy_violation_rate"],
+        "semanticTaskPassDefinition": "compile pass and every dispatch, oracle, tolerance, bounds, workgroup, shape, metamorphic, and historical-regression check passes"
+      }
+    },
+    "blockingGuardrails": {
+      "const": [
+        "response_contract_violation",
+        "compilation_failure",
+        "dispatch_failure",
+        "cpu_oracle_mismatch",
+        "nonfinite_mismatch",
+        "buffer_canary_corruption",
+        "read_only_buffer_mutation",
+        "output_padding_mutation",
+        "shape_variant_failure",
+        "workgroup_variant_failure",
+        "metamorphic_failure",
+        "historical_regression",
+        "trainer_to_doppler_parity_failure"
+      ]
+    },
+    "productization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["wgslDoctorAllowed", "autonomousShaderAuthorAllowed"],
+      "properties": {
+        "wgslDoctorAllowed": { "type": "boolean" },
+        "autonomousShaderAuthorAllowed": { "const": false }
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "claimBoundary": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "frozen_requirements_populations_unmaterialized" } },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "candidate": {
+            "properties": {
+              "seedSelectionStatus": { "const": "not_selected" },
+              "selectedSeed": { "const": null },
+              "adapterSha256": { "const": null },
+              "adapterPath": { "const": null },
+              "trainerToDopplerParityReceipt": { "const": null }
+            }
+          },
+          "productization": {
+            "properties": { "wgslDoctorAllowed": { "const": false } }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "repoPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "manifestPath", "populationHash"],
+      "properties": {
+        "status": { "enum": ["unmaterialized", "frozen"] },
+        "manifestPath": { "oneOf": [{ "$ref": "#/$defs/repoPath" }, { "type": "null" }] },
+        "populationHash": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] }
+      }
+    }
+  }
+}

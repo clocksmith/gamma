@@ -1,0 +1,416 @@
+{
+  "schema": "doppler.wgsl-repair-semantic-task-manifest/v1",
+  "schemaVersion": 1,
+  "experimentId": "doppler-wgsl-repair-v13",
+  "populationId": "v13-semantic-seed-confirmation-v1",
+  "role": "seed_confirmation",
+  "populationAuthority": "selected_external20_seed_confirmation_only",
+  "responseContract": "replacement_only_wgsl_span_v1",
+  "cpuOracleRevision": "wgsl-semantic-cpu-oracles-v1",
+  "inputGeneratorRevision": "wgsl-semantic-inputs-v1",
+  "materialization": {
+    "freezeCommit": "327589ac633f15dc9ace2d13a48ab1512edef2c8",
+    "algorithm": "commit_sha256_stratified_blueprint_subset_v2",
+    "generatorPath": "tools/materialize-wgsl-repair-v13-confirmation.js",
+    "generatorSha256": "c0c66e7a0531126b3323f704697d8ea3447e661472a7891688dadde308d1551d",
+    "catalogPath": "tools/data/wgsl-repair-v13-confirmation-blueprints.json",
+    "catalogSha256": "856d67bdbff25a7971f2c0648bf5427dfc7868b6ad52155dce48a37a32c2281a",
+    "oracleImplementationPath": "tools/lib/wgsl-semantic-harness.js",
+    "oracleImplementationSha256": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+    "selectedBlueprintIds": [
+      "max-pair-f32",
+      "mean-pair-f32",
+      "square-scale-f32",
+      "negate-f32",
+      "distance-pair-f32",
+      "difference-scale-f32",
+      "add-scalar-f32",
+      "mask-below-f32"
+    ],
+    "strata": [
+      {
+        "id": "binary_parameterized",
+        "arity": "binary",
+        "parameterized": true,
+        "count": 1
+      },
+      {
+        "id": "binary_nonparameterized",
+        "arity": "binary",
+        "parameterized": false,
+        "count": 3
+      },
+      {
+        "id": "unary_parameterized",
+        "arity": "unary",
+        "parameterized": true,
+        "count": 3
+      },
+      {
+        "id": "unary_nonparameterized",
+        "arity": "unary",
+        "parameterized": false,
+        "count": 1
+      }
+    ],
+    "eligibleBlueprintCount": 12,
+    "selectedTaskCount": 8,
+    "candidateInferenceBeforeFreeze": false
+  },
+  "tasks": [
+    {
+      "taskId": "v13-confirmation-max-pair-f32",
+      "kernelFamilyId": "v13-confirmation-max-pair",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/confirmation/max-pair-f32-broken.wgsl",
+      "sourceSha256": "e4ead5be0b6ab95ebdced01c0ff2b6f4b492d6da10e64759b15e1d82adbc754c",
+      "mutationClass": "builtin_argument_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = max(left_values[index], );",
+      "referenceSpan": "output_values[params.output_offset + index] = max(left_values[index], right_values[index]);",
+      "oracleId": "max_pair_f32",
+      "inputSeed": 30579,
+      "parameters": {},
+      "variants": [
+        {
+          "shapeId": "confirm-max-pair-nominal-64",
+          "shapeClass": "nominal",
+          "length": 64,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        },
+        {
+          "shapeId": "confirm-max-pair-tail-70",
+          "shapeClass": "non_workgroup_multiple",
+          "length": 70,
+          "workgroupId": "wg-64",
+          "workgroupSize": 64
+        },
+        {
+          "shapeId": "confirm-max-pair-boundary-2",
+          "shapeClass": "boundary_or_tail",
+          "length": 2,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        }
+      ],
+      "metamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "materializationDigest": "1e555315467553361de7454e35b6b3302c2a9a5136672d37cb89f83d97c29e62",
+      "selectionRank": 1,
+      "selectionStratum": "binary_nonparameterized",
+      "selectionDigest": "17b8d12b5e7829d8eaa1eb11a03bad908119e8ac0fee7cebbf4f26697c5c6e08"
+    },
+    {
+      "taskId": "v13-confirmation-mean-pair-f32",
+      "kernelFamilyId": "v13-confirmation-mean-pair",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/confirmation/mean-pair-f32-broken.wgsl",
+      "sourceSha256": "5774beb4d89ec09f838f91344c097074c2d7f764a6bdd0e50e12dbf2c8cc0680",
+      "mutationClass": "literal_operand_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = (left_values[index] + right_values[index]) * ;",
+      "referenceSpan": "output_values[params.output_offset + index] = (left_values[index] + right_values[index]) * 0.5;",
+      "oracleId": "mean_pair_f32",
+      "inputSeed": 31779,
+      "parameters": {},
+      "variants": [
+        {
+          "shapeId": "confirm-mean-pair-nominal-64",
+          "shapeClass": "nominal",
+          "length": 64,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        },
+        {
+          "shapeId": "confirm-mean-pair-tail-71",
+          "shapeClass": "non_workgroup_multiple",
+          "length": 71,
+          "workgroupId": "wg-64",
+          "workgroupSize": 64
+        },
+        {
+          "shapeId": "confirm-mean-pair-boundary-2",
+          "shapeClass": "boundary_or_tail",
+          "length": 2,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        }
+      ],
+      "metamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "materializationDigest": "ec755a0601b22d599eeef4b28812be4cbd64f7fc5398f703d954e6a601ee4690",
+      "selectionRank": 2,
+      "selectionStratum": "binary_nonparameterized",
+      "selectionDigest": "1abfc35b21b1846b4cfee2ffbc0d380c62a4560f65ddd10e19df396de793186c"
+    },
+    {
+      "taskId": "v13-confirmation-square-scale-f32",
+      "kernelFamilyId": "v13-confirmation-square-scale",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/confirmation/square-scale-f32-broken.wgsl",
+      "sourceSha256": "af6b3f96912c5fd7f74b4eb81a49004aae6205009da4c00d7296f630039de72a",
+      "mutationClass": "scalar_parameter_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = value * value * ;",
+      "referenceSpan": "output_values[params.output_offset + index] = value * value * params.scale;",
+      "oracleId": "square_scale_f32",
+      "inputSeed": 32483,
+      "parameters": {
+        "scale": 1.25
+      },
+      "variants": [
+        {
+          "shapeId": "confirm-square-scale-nominal-64",
+          "shapeClass": "nominal",
+          "length": 64,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        },
+        {
+          "shapeId": "confirm-square-scale-tail-77",
+          "shapeClass": "non_workgroup_multiple",
+          "length": 77,
+          "workgroupId": "wg-64",
+          "workgroupSize": 64
+        },
+        {
+          "shapeId": "confirm-square-scale-boundary-7",
+          "shapeClass": "boundary_or_tail",
+          "length": 7,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        }
+      ],
+      "metamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "materializationDigest": "2bd6250061c832d9fd4ec80d9bbed845c6106b92f68aafdc18002530cd348c91",
+      "selectionRank": 3,
+      "selectionStratum": "unary_parameterized",
+      "selectionDigest": "316c6d34a587c480b659d2b0b3924de95c97b5268b372e764ab0cd4ff7be2e70"
+    },
+    {
+      "taskId": "v13-confirmation-negate-f32",
+      "kernelFamilyId": "v13-confirmation-negate",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/confirmation/negate-f32-broken.wgsl",
+      "sourceSha256": "e536e25b2267ae805fea484ddd31665883e889477403e15bfe19a872d7306ec2",
+      "mutationClass": "unary_operand_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = -();",
+      "referenceSpan": "output_values[params.output_offset + index] = -value;",
+      "oracleId": "negate_f32",
+      "inputSeed": 33258,
+      "parameters": {},
+      "variants": [
+        {
+          "shapeId": "confirm-negate-nominal-64",
+          "shapeClass": "nominal",
+          "length": 64,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        },
+        {
+          "shapeId": "confirm-negate-tail-65",
+          "shapeClass": "non_workgroup_multiple",
+          "length": 65,
+          "workgroupId": "wg-64",
+          "workgroupSize": 64
+        },
+        {
+          "shapeId": "confirm-negate-boundary-3",
+          "shapeClass": "boundary_or_tail",
+          "length": 3,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        }
+      ],
+      "metamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "materializationDigest": "b7e5dfe9ba70f0a6e554e1dfe70573cc317efbf55adc55800ef87d92d9f40a5e",
+      "selectionRank": 4,
+      "selectionStratum": "unary_nonparameterized",
+      "selectionDigest": "41e58ba649e9ca43c89ce1e3e3bac86ad2b44f0f03dc42f825488a9a93914828"
+    },
+    {
+      "taskId": "v13-confirmation-distance-pair-f32",
+      "kernelFamilyId": "v13-confirmation-distance-pair",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/confirmation/distance-pair-f32-broken.wgsl",
+      "sourceSha256": "a7556b9594164c66731351534c9eab7bbaf9252cd5942b1891134f56b25f7ddf",
+      "mutationClass": "nested_operand_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = abs(left_values[index] - );",
+      "referenceSpan": "output_values[params.output_offset + index] = abs(left_values[index] - right_values[index]);",
+      "oracleId": "distance_pair_f32",
+      "inputSeed": 34371,
+      "parameters": {},
+      "variants": [
+        {
+          "shapeId": "confirm-distance-pair-nominal-64",
+          "shapeClass": "nominal",
+          "length": 64,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        },
+        {
+          "shapeId": "confirm-distance-pair-tail-68",
+          "shapeClass": "non_workgroup_multiple",
+          "length": 68,
+          "workgroupId": "wg-64",
+          "workgroupSize": 64
+        },
+        {
+          "shapeId": "confirm-distance-pair-boundary-7",
+          "shapeClass": "boundary_or_tail",
+          "length": 7,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        }
+      ],
+      "metamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "materializationDigest": "bc5221243feaee58941492931aa54d4f5cd2bf96dc122d4326796761a7a447b7",
+      "selectionRank": 5,
+      "selectionStratum": "binary_nonparameterized",
+      "selectionDigest": "868bb6a81e3c6e31dc6ea5d88dd0c96850f515d5c061ec92deebb30dc46d9fbb"
+    },
+    {
+      "taskId": "v13-confirmation-difference-scale-f32",
+      "kernelFamilyId": "v13-confirmation-difference-scale",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/confirmation/difference-scale-f32-broken.wgsl",
+      "sourceSha256": "7d8153d87789171436d2c89c59c92e935e02344813381699603310578416f452",
+      "mutationClass": "scalar_parameter_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = (left_values[index] - right_values[index]) * ;",
+      "referenceSpan": "output_values[params.output_offset + index] = (left_values[index] - right_values[index]) * params.scale;",
+      "oracleId": "difference_scale_f32",
+      "inputSeed": 35830,
+      "parameters": {
+        "scale": 1.25
+      },
+      "variants": [
+        {
+          "shapeId": "confirm-difference-scale-nominal-64",
+          "shapeClass": "nominal",
+          "length": 64,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        },
+        {
+          "shapeId": "confirm-difference-scale-tail-69",
+          "shapeClass": "non_workgroup_multiple",
+          "length": 69,
+          "workgroupId": "wg-64",
+          "workgroupSize": 64
+        },
+        {
+          "shapeId": "confirm-difference-scale-boundary-2",
+          "shapeClass": "boundary_or_tail",
+          "length": 2,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        }
+      ],
+      "metamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "materializationDigest": "8e15b05f94e210dfe62099553250590ddf2440503cba42855e3c86b37415c8c3",
+      "selectionRank": 6,
+      "selectionStratum": "binary_parameterized",
+      "selectionDigest": "b9386e7bde06bf77638875d1ff2ed6b3bb084f1d464a9691ed2052310a564fca"
+    },
+    {
+      "taskId": "v13-confirmation-add-scalar-f32",
+      "kernelFamilyId": "v13-confirmation-add-scalar",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/confirmation/add-scalar-f32-broken.wgsl",
+      "sourceSha256": "c606c240b6835e2d22fbc4742041fb165797e89fc7fc423604b654ba07bb1416",
+      "mutationClass": "scalar_parameter_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = value + ;",
+      "referenceSpan": "output_values[params.output_offset + index] = value + params.scalar;",
+      "oracleId": "add_scalar_f32",
+      "inputSeed": 36218,
+      "parameters": {
+        "scalar": 0.625
+      },
+      "variants": [
+        {
+          "shapeId": "confirm-add-scalar-nominal-64",
+          "shapeClass": "nominal",
+          "length": 64,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        },
+        {
+          "shapeId": "confirm-add-scalar-tail-74",
+          "shapeClass": "non_workgroup_multiple",
+          "length": 74,
+          "workgroupId": "wg-64",
+          "workgroupSize": 64
+        },
+        {
+          "shapeId": "confirm-add-scalar-boundary-4",
+          "shapeClass": "boundary_or_tail",
+          "length": 4,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        }
+      ],
+      "metamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "materializationDigest": "7120173cacb0e6316a57e5ddd9198ffa50b6496f10f35a3df76cebb1acf29a64",
+      "selectionRank": 7,
+      "selectionStratum": "unary_parameterized",
+      "selectionDigest": "bc53f9c21c818b4be9d112bc357fe61f45c03e69f701af1511a899f6eb6b7ce9"
+    },
+    {
+      "taskId": "v13-confirmation-mask-below-f32",
+      "kernelFamilyId": "v13-confirmation-mask-below",
+      "sourcePath": "tests/fixtures/wgsl-repair-v13/confirmation/mask-below-f32-broken.wgsl",
+      "sourceSha256": "b30c9576e341337c56abe90159dc5d7913ea9925d1ae69938ab39d256679259e",
+      "mutationClass": "scalar_condition_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = select(0.0, value, value >= );",
+      "referenceSpan": "output_values[params.output_offset + index] = select(0.0, value, value >= params.threshold);",
+      "oracleId": "mask_below_f32",
+      "inputSeed": 37895,
+      "parameters": {
+        "threshold": 1.25
+      },
+      "variants": [
+        {
+          "shapeId": "confirm-mask-below-nominal-64",
+          "shapeClass": "nominal",
+          "length": 64,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        },
+        {
+          "shapeId": "confirm-mask-below-tail-71",
+          "shapeClass": "non_workgroup_multiple",
+          "length": 71,
+          "workgroupId": "wg-64",
+          "workgroupSize": 64
+        },
+        {
+          "shapeId": "confirm-mask-below-boundary-5",
+          "shapeClass": "boundary_or_tail",
+          "length": 5,
+          "workgroupId": "wg-32",
+          "workgroupSize": 32
+        }
+      ],
+      "metamorphicRelations": [
+        "input_permutation_equivariance",
+        "tiling_equivalence"
+      ],
+      "materializationDigest": "a6aa938f1d3ad740fc015f5a483eb1beac0dd451740d0dcb7443e06a05b328e3",
+      "selectionRank": 8,
+      "selectionStratum": "unary_parameterized",
+      "selectionDigest": "d1a8d29b8489dbca83ff1282e9d451fad6a61a5de34b7be54de2620108fa00ff"
+    }
+  ],
+  "sourceOverlapPolicy": "No task identifier, kernel family, oracle identifier, source fixture, or input seed overlaps mechanics qualification, calibration, checkpoint selection, V12 training, V12 diagnostic, or V12 public evaluation.",
+  "claimBoundary": "This commit-derived population may confirm or reject selected external20 seed 29 on disjoint semantic repairs. It cannot promote an adapter, authorize WGSL Doctor, or establish complete shader authorship."
+}

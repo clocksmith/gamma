@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/doppler/schemas/wgsl-writer-diagnostic-v1.schema.json",
+  "title": "WGSL writer v1 zero-shot diagnostic policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
+    "policyId",
+    "experimentId",
+    "status",
+    "predecessor",
+    "population",
+    "candidateRunner",
+    "semanticHarness",
+    "candidateIds",
+    "executionOrder",
+    "decisionRule",
+    "authority",
+    "claimBoundary"
+  ],
+  "properties": {
+    "$schema": { "const": "../../src/config/schema/wgsl-writer-diagnostic.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "source": { "const": "doppler" },
+    "policyId": { "const": "doppler-wgsl-writer-v1-zero-shot-diagnostic" },
+    "experimentId": { "const": "doppler-wgsl-writer-v1" },
+    "status": { "const": "frozen_before_candidate_inference" },
+    "predecessor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["basePolicy", "referenceReceipt"],
+      "properties": {
+        "basePolicy": { "$ref": "#/$defs/binding" },
+        "referenceReceipt": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256", "requiredDecision"],
+          "properties": {
+            "path": { "$ref": "#/$defs/repoPath" },
+            "sha256": { "$ref": "#/$defs/sha256" },
+            "requiredDecision": { "const": "reference_mechanics_passed" }
+          }
+        }
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "role", "populationAuthority"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repoPath" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "role": { "const": "mechanics_qualification_only" },
+        "populationAuthority": { "const": "none" }
+      }
+    },
+    "candidateRunner": { "$ref": "#/$defs/binding" },
+    "semanticHarness": { "$ref": "#/$defs/binding" },
+    "candidateIds": { "$ref": "#/$defs/candidateIds" },
+    "executionOrder": { "$ref": "#/$defs/candidateIds" },
+    "decisionRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "submissionsPerCandidate",
+        "identicalPrompts",
+        "identicalGeneration",
+        "retryAllowed",
+        "selectionAllowed",
+        "confirmationAllowed",
+        "promotionAllowed",
+        "diagnosticQuestion"
+      ],
+      "properties": {
+        "submissionsPerCandidate": { "const": 1 },
+        "identicalPrompts": { "const": true },
+        "identicalGeneration": { "const": true },
+        "retryAllowed": { "const": false },
+        "selectionAllowed": { "const": false },
+        "confirmationAllowed": { "const": false },
+        "promotionAllowed": { "const": false },
+        "diagnosticQuestion": { "type": "string", "minLength": 1 }
+      }
+    },
+    "authority": {
+      "const": {
+        "visibleZeroShotDiagnostic": true,
+        "calibration": false,
+        "checkpointSelection": false,
+        "seedConfirmation": false,
+        "promotion": false,
+        "productization": false
+      }
+    },
+    "claimBoundary": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "repoPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repoPath" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "candidateIds": {
+      "const": [
+        "qwen35-9b-f16-base",
+        "v13-seed29-repair-initialization"
+      ]
+    }
+  }
+}

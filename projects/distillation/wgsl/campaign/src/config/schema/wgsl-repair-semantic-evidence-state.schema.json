@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clocksmith.dev/doppler/schemas/wgsl-repair-semantic-evidence-state-v1.schema.json",
+  "title": "WGSL repair semantic evidence state v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "source",
+    "experimentId",
+    "policy",
+    "adapterPortability",
+    "candidate",
+    "populations",
+    "implementation",
+    "claimBoundary"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../src/config/schema/wgsl-repair-semantic-evidence-state.schema.json"
+    },
+    "schemaVersion": { "const": 1 },
+    "source": { "const": "doppler" },
+    "experimentId": { "const": "doppler-wgsl-repair-v13" },
+    "policy": { "$ref": "#/$defs/artifactBinding" },
+    "adapterPortability": { "$ref": "#/$defs/artifactBinding" },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eligibleLane",
+        "seedSelectionStatus",
+        "selectedSeed",
+        "adapterPath",
+        "adapterSha256",
+        "selectionReceiptPath",
+        "selectionReceiptSha256"
+      ],
+      "properties": {
+        "eligibleLane": { "const": "external20" },
+        "seedSelectionStatus": { "enum": ["not_selected", "selected"] },
+        "selectedSeed": { "type": ["integer", "null"] },
+        "adapterPath": { "oneOf": [{ "$ref": "#/$defs/repoPath" }, { "type": "null" }] },
+        "adapterSha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "selectionReceiptPath": { "oneOf": [{ "$ref": "#/$defs/repoPath" }, { "type": "null" }] },
+        "selectionReceiptSha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] }
+      }
+    },
+    "seedConfirmation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "receiptPath", "receiptSha256", "populationHash"],
+      "properties": {
+        "status": { "enum": ["passed", "failed"] },
+        "receiptPath": { "$ref": "#/$defs/repoPath" },
+        "receiptSha256": { "$ref": "#/$defs/sha256" },
+        "populationHash": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "populations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["calibration", "checkpointSelection", "seedConfirmation", "promotion"],
+      "properties": {
+        "calibration": { "$ref": "#/$defs/population" },
+        "checkpointSelection": { "$ref": "#/$defs/population" },
+        "seedConfirmation": { "$ref": "#/$defs/population" },
+        "promotion": { "$ref": "#/$defs/population" }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "taskManifestPath",
+        "taskManifestSha256",
+        "cpuOracleRevision",
+        "historicalRegressionManifestPath",
+        "historicalRegressionManifestSha256"
+      ],
+      "properties": {
+        "taskManifestPath": { "oneOf": [{ "$ref": "#/$defs/repoPath" }, { "type": "null" }] },
+        "taskManifestSha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "cpuOracleRevision": { "type": ["string", "null"], "minLength": 1 },
+        "historicalRegressionManifestPath": { "oneOf": [{ "$ref": "#/$defs/repoPath" }, { "type": "null" }] },
+        "historicalRegressionManifestSha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] }
+      }
+    },
+    "claimBoundary": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "candidate": {
+            "properties": { "seedSelectionStatus": { "const": "not_selected" } },
+            "required": ["seedSelectionStatus"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "candidate": {
+            "properties": {
+              "selectedSeed": { "const": null },
+              "adapterPath": { "const": null },
+              "adapterSha256": { "const": null },
+              "selectionReceiptPath": { "const": null },
+              "selectionReceiptSha256": { "const": null }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "repoPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "artifactBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/repoPath" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "population": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "manifestPath", "populationHash"],
+      "properties": {
+        "status": { "enum": ["unmaterialized", "frozen"] },
+        "manifestPath": { "oneOf": [{ "$ref": "#/$defs/repoPath" }, { "type": "null" }] },
+        "populationHash": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] }
+      }
+    }
+  }
+}

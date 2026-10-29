@@ -1,0 +1,169 @@
+{
+  "artifactType": "wgsl_repair_v9_status",
+  "schemaVersion": 1,
+  "experimentId": "doppler-wgsl-repair-v9",
+  "recordedAt": "2026-07-11",
+  "status": "harness_ready",
+  "predecessor": {
+    "experimentId": "doppler-wgsl-student-replay-v8",
+    "status": "rejected",
+    "receiptPath": "docs/status/wgsl-student-replay-v8-2026-07-11.json"
+  },
+  "hypothesis": "A diverse, compiler-reproducing replacement-only WGSL corpus improves Qwen 3.5 9B on unseen kernel families, and a GRPO RLVR lane adds constructive repair pass@1 over an otherwise fixed execution-verified SFT checkpoint.",
+  "corpus": {
+    "taskContract": "replacement_only_wgsl_span_v1",
+    "catalogSha256": "ff99b6f2597f65be601cd48b668a1fae3d943de180eb3b4f7b95f50af4af161e",
+    "corpusHash": "d1f60685312b50564de275375ba179644f159302883778e0d1493aa45045c8e3",
+    "manifestHash": "37bbab14fa075473d75c0b33d65a4bf290b5ceea2918eb553ba211f5cbaf808b",
+    "manifestFileSha256": "55cc9cf6462fe44056d17b7a2b9b0ad3f94711bd07429689276d300cd2b43f4c",
+    "discoveredSourceFiles": 348,
+    "cleanCompilePasses": 347,
+    "mutationCandidates": 2973,
+    "acceptedRows": 2714,
+    "rejectedRows": 259,
+    "distinctKernels": 345,
+    "sourceRows": {
+      "doppler": 1823,
+      "zero-tvm": 891
+    },
+    "splits": {
+      "train": { "rows": 2130, "families": 192 },
+      "diagnostic": { "rows": 285, "families": 25 },
+      "public-test": { "rows": 299, "families": 28 }
+    },
+    "familyOverlap": [],
+    "trainingLanes": {
+      "anchor": {
+        "rows": 1200,
+        "datasetHash": "2e2235c9fa7db5037c19d0c0f029bb49e9cc929bc2df5bc23ec395506b4941a8",
+        "sourceRows": { "doppler": 1200 }
+      },
+      "external20": {
+        "rows": 1200,
+        "datasetHash": "02ff49fede38256a4d891a13315cb2d2d102e626faf52671be88bd101fb84baf",
+        "sourceRows": { "doppler": 960, "zero-tvm": 240 }
+      },
+      "random20": {
+        "rows": 1200,
+        "datasetHash": "f00ff4254475513172ccc14c958a978154d812c2b646e448baa884a978f832d4",
+        "sourceRows": { "doppler": 1200 }
+      }
+    },
+    "verifier": {
+      "api": "GPUShaderModule.getCompilationInfo",
+      "adapterVendor": "amd",
+      "adapterArchitecture": "rdna-3",
+      "requiredFeatures": ["shader-f16", "subgroups"]
+    }
+  },
+  "models": {
+    "primaryStudent": {
+      "modelId": "Qwen/Qwen3.5-9B",
+      "status": "blocked",
+      "reason": "model_not_provisioned",
+      "preflightReceiptSha256": "6a994f332531f202e05e37baeea15b8da7a31fc23098ca279e3610e2c84c55fb"
+    },
+    "efficiencyControl": {
+      "modelId": "Qwen/Qwen3.5-2B",
+      "gatesPrimary": false
+    },
+    "teacherCeiling": {
+      "modelId": "Qwen/Qwen3.6-27B",
+      "status": "preflight_passed",
+      "localSnapshotPresent": true,
+      "preflightReceiptSha256": "e41312f6b40492bf7a38e700e0cf1659224f575846d549228310577d8991ec9b"
+    }
+  },
+  "runtime": {
+    "device": "Radeon 8060S Graphics",
+    "devicePoolBytes": 65945612288,
+    "torch": "2.12.1+rocm7.2",
+    "hip": "7.2.53211",
+    "transformers": "5.13.1",
+    "dtype": "bfloat16",
+    "bf16MatmulPassed": true
+  },
+  "mechanicsFixture": {
+    "claimBoundary": "A one-step Gemma 3 270M fixture validates optimizer plumbing only. It is excluded from V9 capability comparisons and cannot gate Qwen 3.5 9B.",
+    "modelId": "google/gemma-3-270m-it",
+    "sft": {
+      "steps": 1,
+      "loss": 7.795848369598389,
+      "inputRowsVisible": 1200,
+      "policyHash": "b3430ea0984a080318c07546f4cd9a324a7cf373bb5696b7f3cbe73441b1caef",
+      "receiptSha256": "ba11eb2ad32bb77dee15bb65d0c6aa571459cdff89b9371c47fb07fcbba18116"
+    },
+    "rollout": {
+      "groups": 1,
+      "samples": 2,
+      "rolloutTokens": 96,
+      "compilePassingSamples": 0,
+      "receiptSha256": "a269528f26c5cbed623fc7fb6dc44e01461375d359c4d3ec9772d678c66d0f21",
+      "verificationManifestSha256": "705af857767e195a9815f3d16fa7898ab3d948e94cbfb8ff442d2b41d953127a"
+    },
+    "dpo": {
+      "steps": 1,
+      "loss": 0.6911851167678833,
+      "outputPolicyHash": "b38791f79fb785222c6637b9bebede0ad353bc5376174be962632be5a165cf05",
+      "receiptSha256": "b5d2ef4677d69e2e291353361a6c027217b1abaca9090d0e55e9d62eb61db4c7"
+    },
+    "grpo": {
+      "steps": 1,
+      "loss": 0.000003924668362742523,
+      "zeroVarianceAdvantages": true,
+      "outputPolicyHash": "8cc76a0114973cad00c2faab6649a094a869dd94b8a16dc8c3a579b7d0f887be",
+      "receiptSha256": "a1b511710dcbaa068207ac249d144ff65df43851ccd4411e4418f53230eed1ac"
+    }
+  },
+  "implementedSurfaces": [
+    "execution_verified_sft",
+    "rejection_sampling",
+    "dpo",
+    "grouped_on_policy_rollout_collection",
+    "policy_and_reference_token_logprob_receipts",
+    "grpo_rlvr_update",
+    "verifier_guided_artifact_validation",
+    "fail_closed_promotion_decision"
+  ],
+  "evidenceBoundary": {
+    "corpusPrepared": true,
+    "rocmTrainerPreflightPassed": true,
+    "optimizerMechanicsFixturePassed": true,
+    "primaryWeightsProvisioned": false,
+    "primarySftRunCompleted": false,
+    "primaryDpoRunCompleted": false,
+    "primaryGrpoRunCompleted": false,
+    "capabilityProven": false,
+    "promoted": false
+  },
+  "sourceArtifacts": [
+    {
+      "path": "tools/policies/wgsl-repair-v9-policy.json",
+      "sha256": "6f6ef5b3e81240db7299df08bce5ca271ac7783b0a35ce3c1f0ec803041d2983"
+    },
+    {
+      "path": "tools/data/wgsl-training-source-catalog-v1.json",
+      "sha256": "ff99b6f2597f65be601cd48b668a1fae3d943de180eb3b4f7b95f50af4af161e"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v9/corpus-v1/corpus-manifest.json",
+      "sha256": "55cc9cf6462fe44056d17b7a2b9b0ad3f94711bd07429689276d300cd2b43f4c"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v9/experiment-v1/experiment-status.json",
+      "sha256": "6a994f332531f202e05e37baeea15b8da7a31fc23098ca279e3610e2c84c55fb"
+    },
+    {
+      "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v9/qwen36-27b-preflight/teacher-response.json",
+      "sha256": "e41312f6b40492bf7a38e700e0cf1659224f575846d549228310577d8991ec9b"
+    }
+  ],
+  "claimBoundary": "V9 has a verified corpus, controlled data lanes, executable SFT/DPO/rollout/GRPO code, and a proven ROCm/Qwen3.5-compatible runtime. No Qwen 3.5 9B optimizer run or held-out capability result exists because the primary weights are not provisioned. This is harness-ready evidence, not mechanics-proven or capability-proven evidence.",
+  "nextGates": [
+    "Provision a local Qwen/Qwen3.5-9B Transformers snapshot without changing the frozen model identity.",
+    "Freeze the V9 policy and sealed semantic WGSL repair suite before the first primary optimizer run.",
+    "Run anchor, external20, and random20 SFT lanes under seeds 11, 29, and 47.",
+    "From the selected SFT checkpoint, compare best-of-eight rejection sampling, DPO, and GRPO RLVR under the same rollout tasks and token budget.",
+    "Open the sealed suite once and require strict paired pass@1 improvement, zero policy violations, and zero historical regressions."
+  ]
+}

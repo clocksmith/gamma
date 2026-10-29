@@ -1,0 +1,24 @@
+{
+  "schema": "doppler.wgsl-repair-semantic-historical-regressions/v1",
+  "schemaVersion": 1,
+  "experimentId": "doppler-wgsl-repair-v13",
+  "cases": [
+    {
+      "id": "logical-elements-not-padded-storage",
+      "originStatusPath": "docs/status/wgsl-student-replay-v8-2026-07-11.md",
+      "originStatusSha256": "1af130028bd1b19cac6766e4be336979cd84b5219538762b06b74fab97084066",
+      "regressionTestPath": "tests/gpu/adam-logical-shape-contract.test.js",
+      "regressionTestSha256": "bdfb7665319cef6e3c74c29bec43535a06e36f447f4bab8cb101a8c6f2ec985d",
+      "semanticAssertion": "Dispatch uses logical element counts: every logical output is written while non-workgroup tail padding and both canary regions remain unchanged."
+    },
+    {
+      "id": "readonly-input-byte-identity",
+      "originStatusPath": "docs/status/wgsl-student-replay-v8-2026-07-11.md",
+      "originStatusSha256": "1af130028bd1b19cac6766e4be336979cd84b5219538762b06b74fab97084066",
+      "regressionTestPath": "tests/gpu/adam-logical-shape-contract.test.js",
+      "regressionTestSha256": "bdfb7665319cef6e3c74c29bec43535a06e36f447f4bab8cb101a8c6f2ec985d",
+      "semanticAssertion": "Every storage input declared read-only remains byte-identical after dispatch."
+    }
+  ],
+  "claimBoundary": "These cases carry prior logical-shape invariants into V13 semantic mechanics. Passing them does not select a model or establish semantic repair capability."
+}

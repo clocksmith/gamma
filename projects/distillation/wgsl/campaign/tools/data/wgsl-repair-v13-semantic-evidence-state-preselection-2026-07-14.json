@@ -1,0 +1,45 @@
+{
+  "$schema": "../../src/config/schema/wgsl-repair-semantic-evidence-state.schema.json",
+  "schemaVersion": 1,
+  "source": "doppler",
+  "experimentId": "doppler-wgsl-repair-v13",
+  "policy": {
+    "path": "tools/policies/wgsl-repair-v13-semantic-policy.json",
+    "sha256": "c5814bde7453a3d69c1c8ad07f15c3665e5f2aa8b69b63f64538bb1ca747bf80"
+  },
+  "adapterPortability": {
+    "path": "docs/status/wgsl-repair-v12-adapter-portability-2026-07-13.json",
+    "sha256": "589888d414a34a25e386f1b43347dc9b25a68ed858de6e0dc2cc3b46d8ea32e3"
+  },
+  "candidate": {
+    "eligibleLane": "external20",
+    "seedSelectionStatus": "not_selected",
+    "selectedSeed": null,
+    "adapterPath": null,
+    "adapterSha256": null,
+    "selectionReceiptPath": null,
+    "selectionReceiptSha256": null
+  },
+  "populations": {
+    "calibration": {
+      "status": "frozen",
+      "manifestPath": "tools/data/wgsl-repair-v13-semantic-calibration.json",
+      "populationHash": "f479e256730c57ef5d000648d9a0464cb5eac9c0b942660735b96444d95085b2"
+    },
+    "checkpointSelection": {
+      "status": "frozen",
+      "manifestPath": "tools/data/wgsl-repair-v13-semantic-checkpoint-selection.json",
+      "populationHash": "4b35750e905ce8ff92114715f36d65807b9b020015e00d4567c80a5e9fa53c1b"
+    },
+    "seedConfirmation": { "status": "unmaterialized", "manifestPath": null, "populationHash": null },
+    "promotion": { "status": "unmaterialized", "manifestPath": null, "populationHash": null }
+  },
+  "implementation": {
+    "taskManifestPath": "tools/data/wgsl-repair-v13-semantic-task-qualification.json",
+    "taskManifestSha256": "15e9799a7742f56243455c004e8aea315355ff127cd375c750ee159e7137e248",
+    "cpuOracleRevision": "wgsl-semantic-cpu-oracles-v1",
+    "historicalRegressionManifestPath": "tools/data/wgsl-repair-v13-historical-regressions.json",
+    "historicalRegressionManifestSha256": "0cf12c4641fad4e99994d6d3b1162569d674bf82f6749b7297984027122e9c23"
+  },
+  "claimBoundary": "This evidence state recognizes the passing, frozen V12 external20 portability receipt and a passing reference-control qualification of the semantic harness. It does not select a seed or claim model semantic correctness. Every later fact must be represented by a repo-relative artifact path and verified SHA-256 before it can clear a V13 blocker."
+}

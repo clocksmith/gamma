@@ -1,0 +1,104 @@
+{
+  "schema": "doppler.wgsl-repair-v13-seed-selection/v1",
+  "experimentId": "doppler-wgsl-repair-v13",
+  "policy": {
+    "path": "tools/policies/wgsl-repair-v13-seed-selection-policy.json",
+    "sha256": "70644c10b6bf390f0acd091b7afd83f22ef2f41e257a02d32a21c1b2eace470f"
+  },
+  "population": {
+    "path": "tools/data/wgsl-repair-v13-semantic-checkpoint-selection.json",
+    "sha256": "4b35750e905ce8ff92114715f36d65807b9b020015e00d4567c80a5e9fa53c1b",
+    "selectionAuthority": true
+  },
+  "ranking": {
+    "populationRole": "checkpoint_selection",
+    "lexicographicOrder": [
+      "semantic_task_pass_count_desc",
+      "compile_pass_count_desc",
+      "semantic_variant_pass_count_desc",
+      "exact_reference_completion_count_desc",
+      "seed_asc"
+    ],
+    "tieBreak": "lowest_numeric_seed",
+    "missingOrInvalidReceipt": "candidate_ineligible"
+  },
+  "rankedCandidates": [
+    {
+      "rank": 1,
+      "seed": 29,
+      "adapterManifestSha256": "e5dec965a953aa746e592ae38045f445e7d9b1407feb609f448238427af4b042",
+      "adapterWeightsSha256": "0d9ab8e1348a3fcdd6ef2973b624cc1a3d962de90a571976a5a222df27b69394",
+      "semanticReceiptPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v13/checkpoint-selection/seed29.semantic.json",
+      "semanticReceiptSha256": "a95f5d2b196dd632f241983ed441a85cafdfbe24f0f34506698fb01958367c68",
+      "semanticReceiptHash": "f29e6c2c439153bdf0aeb0af38a8efa5b2c52616e60ce3cd78b71fb8d70b152a",
+      "candidateCompletions": {
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v13/checkpoint-selection/seed29.completions.json",
+        "sha256": "82cb31075c40ef5775da0e4fdfbdfbd8cf15ef946c6a70b0ee4d1ef2d3ca42a6",
+        "receiptHash": "25b580d88321c258bb6cadabe1fa7407ca25d9f0423684226c7e1543a87db17e"
+      },
+      "semanticDecision": "candidate_tasks_failed",
+      "score": {
+        "semanticTaskPassCount": 4,
+        "compilePassCount": 6,
+        "semanticVariantPassCount": 13,
+        "exactReferenceCompletionCount": 4
+      }
+    },
+    {
+      "rank": 2,
+      "seed": 11,
+      "adapterManifestSha256": "2bd26209ddcc77969759371a41ec6448dc561acb87e4f1a351df80a88de0c595",
+      "adapterWeightsSha256": "8631f512fe8ce481ade2e29a476bb1ade4e2ab6fd8627c7e27c7c093b4824af6",
+      "semanticReceiptPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v13/checkpoint-selection/seed11.semantic.json",
+      "semanticReceiptSha256": "78206ad9ec0aad77821d73242d3a3249e15ad024a5e48ec5080c4d57f0788d88",
+      "semanticReceiptHash": "c287f3dc5adee09a9e8a52b8b55794261fb0c167764f084ee14bad4bfb05290c",
+      "candidateCompletions": {
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v13/checkpoint-selection/seed11.completions.json",
+        "sha256": "5ff4df5e30e50094766c26abbf661a6677bf719551e7e8027ea512c52d7bf584",
+        "receiptHash": "a9392445dfa78ba54d9ec315d54fee79a5c7cee5581800481a104570f2cf10a9"
+      },
+      "semanticDecision": "candidate_tasks_failed",
+      "score": {
+        "semanticTaskPassCount": 1,
+        "compilePassCount": 4,
+        "semanticVariantPassCount": 4,
+        "exactReferenceCompletionCount": 1
+      }
+    },
+    {
+      "rank": 3,
+      "seed": 47,
+      "adapterManifestSha256": "ca04f8d0cbd3cafcce0a97fe8e2850208bbaed4a1ee1cefcfb39d191d7d5b13a",
+      "adapterWeightsSha256": "3e3895f062ae99d67c22ef3220a44ffe8081ba2021473de357e70216c50fd7d8",
+      "semanticReceiptPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v13/checkpoint-selection/seed47.semantic.json",
+      "semanticReceiptSha256": "a844469e171fbf2fa5f71db44fa6ffdb6bcc87bc781a0297dab089bee579e3b3",
+      "semanticReceiptHash": "6f4f2320c4038cbedda7565a8845dd304b74ce5a37d196fcef52e07a96666e4f",
+      "candidateCompletions": {
+        "path": "reports/training/wgsl-repair/doppler-wgsl-repair-v13/checkpoint-selection/seed47.completions.json",
+        "sha256": "4965e4cbb4a2039b413656236a7c63984b99ac3b8017bb9b11a70c0f444102bc",
+        "receiptHash": "80e1b29fc56e1b3bf5168738f355a9b8569dae8766a16a53d236b0451550057a"
+      },
+      "semanticDecision": "candidate_tasks_failed",
+      "score": {
+        "semanticTaskPassCount": 1,
+        "compilePassCount": 4,
+        "semanticVariantPassCount": 4,
+        "exactReferenceCompletionCount": 1
+      }
+    }
+  ],
+  "selected": {
+    "lane": "external20",
+    "seed": 29,
+    "adapterPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/external20/sft/exports/checkpoint-001200.adapters.safetensors",
+    "adapterSha256": "0d9ab8e1348a3fcdd6ef2973b624cc1a3d962de90a571976a5a222df27b69394",
+    "adapterManifestPath": "reports/training/wgsl-repair/doppler-wgsl-repair-v12/seed29/external20/sft/exports/checkpoint-001200.adapter.manifest.json",
+    "adapterManifestSha256": "e5dec965a953aa746e592ae38045f445e7d9b1407feb609f448238427af4b042"
+  },
+  "decision": "selected_for_seed_confirmation",
+  "selectionAuthority": true,
+  "seedConfirmationSatisfied": false,
+  "promotionAuthority": false,
+  "claimBoundary": "This frozen policy can select one V12 external20 adapter seed using only the hash-bound checkpoint-selection population. It cannot establish semantic capability, promotion, WGSL Doctor readiness, or autonomous shader authorship.",
+  "receiptHash": "c4b2ea6169ac44d9c75f0a37c32cf4f509ddfed7fa90325eed787d9cd9081526"
+}

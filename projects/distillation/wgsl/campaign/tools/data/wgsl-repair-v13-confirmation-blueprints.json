@@ -1,0 +1,147 @@
+{
+  "schema": "doppler.wgsl-repair-v13-confirmation-blueprints/v1",
+  "schemaVersion": 1,
+  "experimentId": "doppler-wgsl-repair-v13",
+  "role": "seed_confirmation_source_pool",
+  "blueprints": [
+    {
+      "id": "multiply-pair-f32",
+      "arity": "binary",
+      "oracleId": "multiply_pair_f32",
+      "mutationClass": "binary_operand_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = left_values[index] * ;",
+      "referenceSpan": "output_values[params.output_offset + index] = left_values[index] * right_values[index];",
+      "parameter": null
+    },
+    {
+      "id": "max-pair-f32",
+      "arity": "binary",
+      "oracleId": "max_pair_f32",
+      "mutationClass": "builtin_argument_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = max(left_values[index], );",
+      "referenceSpan": "output_values[params.output_offset + index] = max(left_values[index], right_values[index]);",
+      "parameter": null
+    },
+    {
+      "id": "mean-pair-f32",
+      "arity": "binary",
+      "oracleId": "mean_pair_f32",
+      "mutationClass": "literal_operand_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = (left_values[index] + right_values[index]) * ;",
+      "referenceSpan": "output_values[params.output_offset + index] = (left_values[index] + right_values[index]) * 0.5;",
+      "parameter": null
+    },
+    {
+      "id": "distance-pair-f32",
+      "arity": "binary",
+      "oracleId": "distance_pair_f32",
+      "mutationClass": "nested_operand_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = abs(left_values[index] - );",
+      "referenceSpan": "output_values[params.output_offset + index] = abs(left_values[index] - right_values[index]);",
+      "parameter": null
+    },
+    {
+      "id": "negate-f32",
+      "arity": "unary",
+      "oracleId": "negate_f32",
+      "mutationClass": "unary_operand_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = -();",
+      "referenceSpan": "output_values[params.output_offset + index] = -value;",
+      "parameter": null
+    },
+    {
+      "id": "floor-f32",
+      "arity": "unary",
+      "oracleId": "floor_f32",
+      "mutationClass": "builtin_argument_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = floor();",
+      "referenceSpan": "output_values[params.output_offset + index] = floor(value);",
+      "parameter": null
+    },
+    {
+      "id": "add-scalar-f32",
+      "arity": "unary",
+      "oracleId": "add_scalar_f32",
+      "mutationClass": "scalar_parameter_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = value + ;",
+      "referenceSpan": "output_values[params.output_offset + index] = value + params.scalar;",
+      "parameter": {
+        "name": "scalar",
+        "values": [-1.25, -0.75, 0.625, 1.375]
+      }
+    },
+    {
+      "id": "leaky-relu-f32",
+      "arity": "unary",
+      "oracleId": "leaky_relu_f32",
+      "mutationClass": "literal_condition_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = select(params.slope * value, value, value >= );",
+      "referenceSpan": "output_values[params.output_offset + index] = select(params.slope * value, value, value >= 0.0);",
+      "parameter": {
+        "name": "slope",
+        "values": [0.125, 0.25, 0.375, 0.5]
+      }
+    },
+    {
+      "id": "cap-f32",
+      "arity": "unary",
+      "oracleId": "cap_f32",
+      "mutationClass": "scalar_parameter_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = min(value, );",
+      "referenceSpan": "output_values[params.output_offset + index] = min(value, params.cap);",
+      "parameter": {
+        "name": "cap",
+        "values": [-1.5, -0.25, 0.75, 2.0]
+      }
+    },
+    {
+      "id": "mask-below-f32",
+      "arity": "unary",
+      "oracleId": "mask_below_f32",
+      "mutationClass": "scalar_condition_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = select(0.0, value, value >= );",
+      "referenceSpan": "output_values[params.output_offset + index] = select(0.0, value, value >= params.threshold);",
+      "parameter": {
+        "name": "threshold",
+        "values": [-1.25, -0.5, 0.5, 1.25]
+      }
+    },
+    {
+      "id": "difference-scale-f32",
+      "arity": "binary",
+      "oracleId": "difference_scale_f32",
+      "mutationClass": "scalar_parameter_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = (left_values[index] - right_values[index]) * ;",
+      "referenceSpan": "output_values[params.output_offset + index] = (left_values[index] - right_values[index]) * params.scale;",
+      "parameter": {
+        "name": "scale",
+        "values": [-1.5, -0.625, 0.75, 1.25]
+      }
+    },
+    {
+      "id": "square-scale-f32",
+      "arity": "unary",
+      "oracleId": "square_scale_f32",
+      "mutationClass": "scalar_parameter_completion",
+      "brokenSpan": "output_values[params.output_offset + index] = value * value * ;",
+      "referenceSpan": "output_values[params.output_offset + index] = value * value * params.scale;",
+      "parameter": {
+        "name": "scale",
+        "values": [-1.5, -0.625, 0.75, 1.25]
+      }
+    }
+  ],
+  "exclusions": {
+    "priorRoles": [
+      "mechanics_qualification_only",
+      "calibration",
+      "checkpoint_selection"
+    ],
+    "requireDistinctTaskIds": true,
+    "requireDistinctKernelFamilies": true,
+    "requireDistinctOracleIds": true,
+    "requireDistinctSourcePaths": true,
+    "requireDistinctInputSeeds": true
+  },
+  "claimBoundary": "This is a pre-evaluation source pool. No blueprint has seed-confirmation authority until the commit-derived materializer selects and freezes a population before candidate inference."
+}

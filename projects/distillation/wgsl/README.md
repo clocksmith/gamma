@@ -1,10 +1,14 @@
 # WGSL Verifier-Guided Training
 
-This project is Gamma's optimization plane for the Doppler WGSL repair
-program. Doppler owns task construction, source and license lineage, WebGPU
-compilation and regression verification, reward vectors, rollout-group
-receipts, and promotion decisions. Gamma owns model loading, completion-masked
-SFT, DPO, sampled rollout log-probabilities, and GRPO-style policy updates.
+This project is Gamma's optimization plane for the WGSL repair and writer
+program. Since 2026-10-29 the campaign itself (task construction, source and
+license lineage, frozen policies, harness orchestration, evaluation, selection,
+and promotion decisions) lives in [campaign/](campaign/README.md), moved
+byte-for-byte from Doppler. Doppler still supplies WebGPU compilation and
+execution, the verifier-guided artifact builders (reward vectors, rollout-group
+receipts), workload capsules, and the trainer bridge that calls this lane.
+Gamma owns model loading, completion-masked SFT, DPO, sampled rollout
+log-probabilities, and GRPO-style policy updates.
 
 The protocol is JSON and fail-closed:
 
@@ -93,5 +97,5 @@ semantic-kernel correctness or promotion.
 
 The first prepared Doppler corpus is compiler-reproducing replacement repair.
 It establishes a training substrate, not a semantic-kernel capability claim.
-Promotion remains dependent on Doppler's sealed semantic repair suite and the
-frozen multi-seed policy.
+Promotion remains dependent on the campaign's sealed semantic repair suite and
+the frozen multi-seed policy.
