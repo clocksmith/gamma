@@ -1,0 +1,137 @@
+{
+  "approachId": "approach:leetcode:808:official:v1",
+  "complexityClaims": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/808/complexity/javascript",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/808/complexity_target",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/808-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2ccb8fc932375fa9648b1818f44b1cd295fcdd862d9d82e9032f7be713d70e58"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "bound": "O(min(u, 200)^2)",
+        "resource": "time",
+        "where": "u = ceil(n/25)"
+      },
+      {
+        "bound": "O(min(u, 200)^2)",
+        "resource": "space",
+        "where": "Float64Array rows of the DP table"
+      }
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:808:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/contract--contract_leetcode_808_official_authored-v1.json",
+    "sha256": "1319aae01ae58b684b7e1a203a7fb86a9edac887ca5cf322c5ecee1d366c622e",
+    "version": 1
+  },
+  "documentSchema": null,
+  "executionKind": "code",
+  "externalLocator": {
+    "reason": "The source file is in this repository; no external locator.",
+    "status": "not-applicable"
+  },
+  "file": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "bytes": 527,
+      "mediaType": "text/javascript",
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+      "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+    }
+  },
+  "id": "artifact:leetcode:808:official:javascript:v1",
+  "kind": "artifact",
+  "language": "javascript",
+  "nativeMetadata": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/808-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2ccb8fc932375fa9648b1818f44b1cd295fcdd862d9d82e9032f7be713d70e58"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "comparison": {
+        "absolute_tolerance": 1e-05,
+        "policy": "finite float absolute tolerance"
+      },
+      "effects": "arguments unchanged",
+      "entrypoint": "solve",
+      "language": "javascript",
+      "official_interface": {
+        "name": "soupServings",
+        "params": [
+          {
+            "name": "n",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "double"
+        }
+      },
+      "parameters": [
+        "n"
+      ],
+      "problem_id": 808,
+      "qualification": {
+        "reason": "Not qualified: author-local runs only (the author ran its own candidates against its own references); no independent isolated execution",
+        "status": "unknown"
+      },
+      "schema": "gamma.authored-scalar-semantics.v1",
+      "source_reasoning": {
+        "candidate_design": "units=ceil(n/25); units>=200 returns 1.0 (table error there <=3.3e-6); else float bottom-up DP",
+        "complexity_target": "O(min(units,200)**2) time/space",
+        "reference": "45-digit Decimal bottom-up table over 25 mL units up to 1000 units; Hoeffding certificate (tail<1e-6) returns 1.0 beyond; exact Fraction millilitre recursion cross-check for n<=1500"
+      },
+      "source_sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+    }
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/808.js",
+      "repository": "gamma",
+      "revision": null,
+      "selector": null,
+      "sha256": "2537eb7b9ead71cf569d08b6c4f69bda1f4c3e22ab766a3a5b50cd590e15e009"
+    }
+  ],
+  "problemId": "leetcode:808",
+  "schema": "study.record.v1",
+  "title": "Soup Servings · javascript candidate (qualification unknown)",
+  "type": "implementation",
+  "version": 1
+}

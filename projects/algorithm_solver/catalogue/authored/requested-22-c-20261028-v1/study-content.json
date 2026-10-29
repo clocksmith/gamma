@@ -1,0 +1,1863 @@
+{
+  "schema": "gamma.authored-study-content.v1",
+  "cohort": "requested-22-c-20261028-v1",
+  "scope": "Authored teaching content (paraphrased or inferred statements, requirements, constraints, assumptions, clarifying questions, own examples, interface declarations, approaches and complexity claims) behind this cohort's study.record.v1 records. Example outputs were produced by running both cohort candidates. Not qualification evidence.",
+  "variants": {
+    "770": {
+      "statement": "You get an arithmetic expression over integers and lowercase variable names, using +, -, * and parentheses, with single spaces between tokens. Some variables are given fixed integer values by two parallel lists. Substitute those values, expand and simplify the expression into a polynomial in the remaining variables, and return its terms as strings. Each term is written as its coefficient followed by '*' and its variables in sorted order (a variable repeats for each power). Terms are ordered by degree from highest to lowest, ties broken by comparing the variable sequences, terms with coefficient zero are dropped, and the constant term, if nonzero, comes last.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Tokenise numbers, variable names, operators and parentheses; multiplication binds tighter than addition and subtraction, which associate left to right."
+        },
+        {
+          "id": "R2",
+          "text": "Replace every variable listed in evalvars by its paired value from evalints; leave other variables symbolic."
+        },
+        {
+          "id": "R3",
+          "text": "Expand all products and collect like terms; a term is identified by its multiset of variables."
+        },
+        {
+          "id": "R4",
+          "text": "Drop terms whose coefficient becomes zero; return an empty list if the whole polynomial is zero."
+        },
+        {
+          "id": "R5",
+          "text": "Format each term as the coefficient (always printed, including 1 and negative values) followed by '*name' for each variable in sorted order."
+        },
+        {
+          "id": "R6",
+          "text": "Order terms by degree descending, then by the variable sequence in lexicographic order; the constant term goes last."
+        },
+        {
+          "id": "R7",
+          "text": "Leave the input string and lists unchanged; return a fresh list."
+        }
+      ],
+      "constraints": [
+        "The expression is 1 to 250 characters of lowercase letters, digits, '+', '-', '*', '(', ')' and spaces, with operators and operand chunks separated by single spaces.",
+        "Parentheses are balanced and the expression is well formed (no leading or trailing operator).",
+        "evalvars has 0 to 100 names of 1 to 20 lowercase letters; evalints has the same length with values from -100 to 100.",
+        "Every coefficient produced while evaluating stays within a signed 32-bit integer."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 bfd6d2f18f0f2f3737ee8577bc6751864d8f91913dceb1f7395af904324fb72e and statement content sha256 5eaa3fcda2e29bf0761f2e542f511496379e82eb763e37b7ad371da8c979ed66; the official text is not stored on this machine."
+        },
+        {
+          "assumption": "Terms of equal degree are ordered by plain lexicographic comparison of their sorted variable sequences, the coefficient is always printed, and the constant term is last.",
+          "basis": "README 770 output note: terms ordered by degree descending, then variable sequence; coefficient always printed; zero terms omitted; constant last."
+        },
+        {
+          "assumption": "If a name appears twice in evalvars, the last binding wins.",
+          "basis": "README 770 note: duplicate evalvars names are not excluded by the constraints; both languages let the last binding win and generated cases contain none."
+        },
+        {
+          "assumption": "The cohort replaced one maximum-size case whose 2**21-term answer could not fit the sandbox; this is an output-size bound inferred from sandbox limits, not a statement constraint.",
+          "basis": "README post-freeze amendment for 770 cases.py."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "How are two terms of the same degree ordered?",
+          "answer": "By comparing their sorted variable lists as sequences of strings.",
+          "basis": "README 770 output note."
+        },
+        {
+          "question": "Is a coefficient of 1 written out?",
+          "answer": "Yes, every term starts with its coefficient, so x becomes '1*x'.",
+          "basis": "README 770 output note; candidate formatting."
+        },
+        {
+          "question": "What if the same variable name is assigned twice?",
+          "answer": "The constraints do not forbid it; the candidates use the last value.",
+          "basis": "README 770 note."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            "(x + 1) * (x - y) + 4",
+            [
+              "y"
+            ],
+            [
+              2
+            ]
+          ],
+          "output": [
+            "1*x*x",
+            "-1*x",
+            "2"
+          ],
+          "explanation": "With y = 2 the expression is (x + 1)(x - 2) + 4 = x^2 - x + 2."
+        },
+        {
+          "args": [
+            "a * b - b * a + c * (c - 2)",
+            [
+              "c"
+            ],
+            [
+              3
+            ]
+          ],
+          "output": [
+            "3"
+          ],
+          "explanation": "a*b and b*a are the same term and cancel; c*(c - 2) with c = 3 is 3, leaving only a constant."
+        },
+        {
+          "args": [
+            "e - 7 + k * 0",
+            [],
+            []
+          ],
+          "output": [
+            "1*e",
+            "-7"
+          ],
+          "explanation": "k*0 vanishes; the degree-1 term precedes the constant and its coefficient 1 is printed."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(expression: str, evalvars: list[str], evalints: list[int]) -> list[str]; class Solution: def basicCalculatorIV(self, expression, evalvars, evalints) -> list[str]"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(expression, evalvars, evalints) -> string[]; module.exports = solve; module.exports.basicCalculatorIV(expression, evalvars, evalints) -> string[]"
+        }
+      },
+      "approach": {
+        "title": "Recursive-descent parser over polynomial maps",
+        "explanation": "Represent a polynomial as a map from a sorted tuple of variable names (the monomial) to an integer coefficient; the empty tuple is the constant. Parse with the classic grammar expr := term (('+'|'-') term)*, term := factor ('*' factor)*, factor := number | name | '(' expr ')'. A factor becomes a one-term polynomial (a known variable becomes a constant), addition merges maps with a sign, and multiplication combines every pair of terms by concatenating and re-sorting their variable tuples. Zero coefficients are removed after each operation. Finally sort terms by (-degree, variables) and format them.",
+        "chooseWhen": [
+          "You must simplify symbolic expressions rather than evaluate them to a number.",
+          "Operator precedence is the usual two levels, so a small recursive-descent parser is the clearest fit.",
+          "Expression length is small enough that expanding products term by term is affordable."
+        ],
+        "tradeoffs": [
+          "A shunting-yard or postfix evaluator (the cohort reference method) works too, but recursive descent maps directly onto the precedence levels.",
+          "Expanding products can blow up the number of terms exponentially in the number of distinct factors; the method is only as cheap as the output.",
+          "In JavaScript, intermediate products can exceed 2**53 before cancellation, so the candidate uses BigInt coefficients; Python ints are unbounded."
+        ],
+        "invariants": [
+          "Every polynomial map contains no zero coefficients.",
+          "Monomial keys are always sorted, so equal monomials written in different orders collide on the same key.",
+          "After parsing a factor, term or expression, the token position points to the first token not consumed."
+        ],
+        "hints": [
+          "What data structure can represent an expression that still contains unknown variables?",
+          "Treat a polynomial as a map from a monomial to its coefficient, and make the monomial key canonical.",
+          "Write one parsing function per precedence level: expression, term, factor.",
+          "Multiply two polynomials by pairing every term of one with every term of the other, merging sorted variable lists; drop zero coefficients and sort by (-degree, variables) at the end."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Choose a representation for partial results",
+            "question": "What value should parsing a sub-expression like (x - y) return when x and y are unknown?",
+            "explanation": "A sub-expression evaluates to a polynomial, not a number. Keying terms by their sorted multiset of variables makes like terms combine automatically, and the constant is the empty key.",
+            "rationale": "Once every sub-result is a polynomial, +, - and * become closed operations on maps and the parser stays an ordinary evaluator.",
+            "instructions": [
+              "Write (x + 1) * (x - 2) as a map before and after multiplying.",
+              "Decide what key the term y*x should have so it matches x*y."
+            ],
+            "observations": [
+              "Substituted variables are just constants at the leaf level.",
+              "Cancellation (a*b - b*a) only happens if keys are canonical."
+            ],
+            "hints": [
+              "Sort the variable names inside each monomial.",
+              "Use an empty tuple or list for the constant term."
+            ],
+            "requirementIds": [
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Tokenise, parse and expand",
+            "question": "How do you implement precedence and expansion without an explicit tree?",
+            "explanation": "The tokenizer splits on spaces and single-character symbols, grouping alphanumeric runs. expr calls term and folds + and - by merging maps with sign +1 or -1; term calls factor and folds * by pairwise multiplication; factor consumes a number, a name (constant if bound, else a one-variable monomial) or a parenthesised expr. Both candidates filter zero coefficients after every combine and multiply, then sort by (-len(key), key) and format coefficient plus '*name' parts.",
+            "rationale": "Each grammar level handles exactly one precedence, so the evaluation order is correct by construction and the work done is proportional to the polynomial sizes involved.",
+            "instructions": [
+              "Build the token list, keeping a shared position index.",
+              "Implement factor, term and expr as mutually recursive functions over that index.",
+              "Implement combine(left, right, sign) and multiply(left, right) on maps, removing zeros.",
+              "Sort the final terms by degree descending, then variables, and format each one with its coefficient."
+            ],
+            "observations": [
+              "A literal 0 or a variable bound to 0 becomes the empty polynomial immediately.",
+              "JavaScript keys need a string encoding of the sorted variable list and BigInt coefficients."
+            ],
+            "hints": [
+              "After '(' recurse into expr, then skip the matching ')'.",
+              "Sorting by the tuple (-degree, variables) puts the constant (degree 0) last automatically."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4",
+              "R5",
+              "R6",
+              "R7"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Test cancellation, ordering and formatting",
+            "question": "Which inputs reveal mistakes in like-term collection or output order?",
+            "explanation": "Check expressions that cancel completely, terms that differ only in variable order, equal-degree ties, negative coefficients, nested parentheses and substitutions to zero. Compare with hand expansion on small cases.",
+            "rationale": "Most bugs are non-canonical keys, a leftover zero term or the wrong tie order rather than parsing errors.",
+            "instructions": [
+              "Run the examples, then 'a - a' (expect an empty list) and 'b * a + a * b' (expect ['2*a*b']).",
+              "Check that 'x * x + y * y + x * y' orders the three degree-2 terms by variable sequence.",
+              "Check that a coefficient of 1 is still printed."
+            ],
+            "observations": [
+              "An empty result is a valid answer, not an error."
+            ],
+            "hints": [
+              "Expand small inputs by hand and compare term by term.",
+              "Try a substitution that makes a whole bracket zero."
+            ],
+            "requirementIds": [
+              "R3",
+              "R4",
+              "R5",
+              "R6"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(L + sum over multiplications of |P|*|Q|*d log d)",
+            "where": "L is expression length, |P| and |Q| the term counts of the multiplied polynomials, d the monomial degree"
+          },
+          {
+            "resource": "space",
+            "bound": "O(T*d)",
+            "where": "T output (and intermediate) terms of degree at most d"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(L + sum over multiplications of |P|*|Q|*d log d)",
+            "where": "same as Python; BigInt arithmetic on coefficients"
+          },
+          {
+            "resource": "space",
+            "bound": "O(T*d)",
+            "where": "T terms of degree at most d"
+          }
+        ]
+      }
+    },
+    "782": {
+      "statement": "You are given an n by n grid of 0s and 1s. In one move you may swap any two rows or any two columns. Return the fewest moves that turn the grid into a chessboard pattern, where no two orthogonally adjacent cells are equal, or -1 if that is impossible.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Only whole-row swaps and whole-column swaps are allowed; each swap counts as one move."
+        },
+        {
+          "id": "R2",
+          "text": "Return -1 when no sequence of swaps yields a chessboard."
+        },
+        {
+          "id": "R3",
+          "text": "Otherwise return the minimum number of swaps; either of the two chessboard colourings is acceptable."
+        },
+        {
+          "id": "R4",
+          "text": "Do not modify the input grid."
+        }
+      ],
+      "constraints": [
+        "n is between 2 and 30.",
+        "Every cell is 0 or 1."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 96761b490c6db9e21bd6617f148afb472f19f19b0fb844e566e8f0ef1ab8bc76 and statement content sha256 92e2adaca5a6bb4b959c4ce0c4fe1ac1acc281568434b21a13e363d245817e55; the official text is not stored on this machine."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Must the top-left cell end up as a specific value?",
+          "answer": "No, either chessboard colouring counts.",
+          "basis": "Candidate takes the cheaper parity when n is even."
+        },
+        {
+          "question": "Do row swaps and column swaps interact?",
+          "answer": "No. Row swaps permute rows and column swaps permute columns independently, so the two costs add.",
+          "basis": "Design: per-axis misplaced count."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            [
+              [
+                0,
+                1,
+                1,
+                0
+              ],
+              [
+                0,
+                1,
+                1,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                1
+              ],
+              [
+                1,
+                0,
+                0,
+                1
+              ]
+            ]
+          ],
+          "output": 2,
+          "explanation": "Swap rows 1 and 2, then columns 0 and 1 (or equivalent), one swap per axis."
+        },
+        {
+          "args": [
+            [
+              [
+                1,
+                0
+              ],
+              [
+                0,
+                1
+              ]
+            ]
+          ],
+          "output": 0,
+          "explanation": "Already a chessboard."
+        },
+        {
+          "args": [
+            [
+              [
+                1,
+                1
+              ],
+              [
+                0,
+                0
+              ]
+            ]
+          ],
+          "output": -1,
+          "explanation": "The first row has two equal cells; no permutation of columns can separate them, because every row keeps its multiset of values."
+        },
+        {
+          "args": [
+            [
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                1,
+                0,
+                1
+              ],
+              [
+                1,
+                0,
+                1
+              ]
+            ]
+          ],
+          "output": 1,
+          "explanation": "Swapping rows 0 and 1 gives 101/010/101."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(board: list[list[int]]) -> int; class Solution: def movesToChessboard(self, board) -> int"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(board) -> number; module.exports = solve; module.exports.movesToChessboard(board) -> number"
+        }
+      },
+      "approach": {
+        "title": "Feasibility by rectangle parity, then per-axis misplacement count",
+        "explanation": "Swaps never change which rows are equal or complementary, so a solvable grid has exactly two row types that are bitwise complements, and the same for columns. That is equivalent to every rectangle corner XOR board[0][0]^board[i][0]^board[0][j]^board[i][j] being 0. The first row must also have a balanced count of ones (n/2 for even n, floor or ceil of n/2 for odd n), and so must the first column. Once feasible, rows and columns are solved independently: count positions where the first row disagrees with the pattern 1010..., and each swap fixes two misplaced positions. For even n take the cheaper of the two target patterns; for odd n only the pattern with an even misplaced count is reachable.",
+        "chooseWhen": [
+          "Moves are permutations of rows or columns, so structure invariant under permutation decides feasibility.",
+          "You need an O(n^2) answer and enumeration of permutations is hopeless."
+        ],
+        "tradeoffs": [
+          "Brute force over row and column permutations (the cohort reference) is exact but factorial; the counting argument is linear in the grid size.",
+          "The argument needs care with odd n, where only one target parity is reachable."
+        ],
+        "invariants": [
+          "Row and column swaps preserve the XOR of any rectangle's four corners.",
+          "A swap moves two positions into place, so the cost along one axis is half the misplaced count.",
+          "Row cost and column cost are independent and add."
+        ],
+        "hints": [
+          "What properties of the grid can never change no matter how you swap rows and columns?",
+          "In a chessboard, every row is either a pattern or its complement.",
+          "Check that every rectangle's corners XOR to 0 and that row and column one-counts are balanced.",
+          "Count mismatches of the first row and first column against 0101...; halve, choosing the parity that is even (odd n) or smaller (even n)."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Find what swaps cannot change",
+            "question": "Which properties of the grid are preserved by row and column swaps, and which of them must hold in a chessboard?",
+            "explanation": "Swapping rows keeps each row's contents and swapping columns permutes all rows alike, so the relation 'row i equals row k or its complement' is preserved. A chessboard has only two complementary row types, balanced in count. The same holds for columns.",
+            "rationale": "Turning the feasibility question into invariants avoids searching over permutations.",
+            "instructions": [
+              "Show that board[0][0]^board[i][0]^board[0][j]^board[i][j] is unchanged by any swap.",
+              "Work out the required number of ones in the first row for n = 4 and n = 5."
+            ],
+            "observations": [
+              "If any rectangle XOR is 1, the answer is -1.",
+              "Rows and columns can be solved separately once feasible."
+            ],
+            "hints": [
+              "Consider the first row and first column as representatives.",
+              "Balance must hold for both the first row and the first column."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Check feasibility and count swaps",
+            "question": "How do you turn the misplaced counts into a swap count for each axis?",
+            "explanation": "Both candidates first test every cell's rectangle XOR, then the one-counts of row 0 and column 0. rowMisplaced counts j where board[0][j] == j % 2 (disagreement with the pattern starting with 1... or equivalently the other pattern); likewise for columns. For odd n, if the count is odd it must target the other pattern, so use n - count. For even n take min(count, n - count). The answer is (rowMisplaced + colMisplaced) / 2.",
+            "rationale": "Each swap fixes exactly two misplaced positions on its axis, and choosing the cheaper reachable pattern gives the minimum.",
+            "instructions": [
+              "Loop over all (i, j) and return -1 on any nonzero rectangle XOR.",
+              "Check n//2 <= ones <= (n+1)//2 for the first row and the first column.",
+              "Count misplaced positions on each axis and adjust by parity of n.",
+              "Return the sum of both counts divided by 2."
+            ],
+            "observations": [
+              "The grid is only read; no copy is made.",
+              "The parity rule for odd n follows because the majority value must occupy the even indices."
+            ],
+            "hints": [
+              "For odd n, an odd misplaced count means you compared against the unreachable pattern.",
+              "Integer division by 2 is exact after the parity adjustment."
+            ],
+            "requirementIds": [
+              "R2",
+              "R3",
+              "R4"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Exercise both parities and impossible grids",
+            "question": "What small grids distinguish a correct parity rule from a wrong one?",
+            "explanation": "Test already-solved boards, boards needing only row swaps, only column swaps, both, and grids failing either the rectangle test or the balance test, for both even and odd n. Cross-check small n by brute force over permutations.",
+            "rationale": "The odd-n parity choice and the balance check are where most solutions go wrong.",
+            "instructions": [
+              "Run the examples.",
+              "For n = 3, try a grid with rows 110/001/110 (balanced rectangles but unbalanced counts) and expect -1.",
+              "Brute-force all row and column permutations for n <= 4 and compare."
+            ],
+            "observations": [
+              "A grid can pass the rectangle test and still fail the count test."
+            ],
+            "hints": [
+              "Generate a chessboard and apply random swaps; the answer must not exceed the number applied."
+            ],
+            "requirementIds": [
+              "R2",
+              "R3"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(n^2)",
+            "where": "n is the grid side (rectangle check over all cells)"
+          },
+          {
+            "resource": "space",
+            "bound": "O(1)",
+            "where": "a few counters"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(n^2)",
+            "where": "n is the grid side"
+          },
+          {
+            "resource": "space",
+            "bound": "O(1)",
+            "where": "a few counters"
+          }
+        ]
+      }
+    },
+    "799": {
+      "statement": "Glasses are stacked in a triangle: row r (counting from 0) has r + 1 glasses, and each glass holds one unit. A given amount of liquid is poured into the top glass. When a glass is full, any excess splits equally into the two glasses directly below it; liquid that overflows the bottom of the tower is lost. Return how full a specified glass (row and index within the row) is, as a number between 0 and 1.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Pour the whole amount into the single glass of row 0."
+        },
+        {
+          "id": "R2",
+          "text": "Each glass keeps at most one unit and sends half of any excess to each of its two lower neighbours."
+        },
+        {
+          "id": "R3",
+          "text": "Return the amount in the queried glass, capped at 1."
+        },
+        {
+          "id": "R4",
+          "text": "The result is compared with an absolute tolerance of 1e-5."
+        }
+      ],
+      "constraints": [
+        "The poured amount is an integer from 0 to 10^9.",
+        "The query row is from 0 to 99, and the glass index is from 0 to the query row."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 e160ecb20b183bf5464cb3b4c4c14f68add512f817104abaf7296f99d144233c and statement content sha256 88b301804cefe2a388fc532d80a8d236d5af79d4c65d4d79be12c8bbafc1a629; the official text is not stored on this machine."
+        },
+        {
+          "assumption": "Answers are accepted within an absolute tolerance of 1e-5.",
+          "basis": "README float note: the 799 statement states no tolerance; 1e-5 is inferred from its five-decimal outputs."
+        },
+        {
+          "assumption": "Glasses far from the centre in deep rows may receive tiny but nonzero amounts (about 1e9/2^99), not exactly 0 or 1.",
+          "basis": "README post-freeze amendment: a hand expectation of 1.0 at row 99 edges was wrong and was replaced by the exact reference."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "What tolerance is used for the answer?",
+          "answer": "Absolute 1e-5 in this cohort; the statement itself does not say.",
+          "basis": "README float note."
+        },
+        {
+          "question": "Does liquid ever flow sideways?",
+          "answer": "No, only to the two glasses directly below.",
+          "basis": "Flow model."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            4,
+            2,
+            1
+          ],
+          "output": 0.5,
+          "explanation": "Row 0 keeps 1 and passes 1.5 to each row-1 glass; each keeps 1 and passes 0.25 to each side, so the middle glass of row 2 gets 0.5."
+        },
+        {
+          "args": [
+            4,
+            2,
+            0
+          ],
+          "output": 0.25,
+          "explanation": "The edge glass of row 2 receives only one 0.25 share."
+        },
+        {
+          "args": [
+            1,
+            1,
+            1
+          ],
+          "output": 0.0,
+          "explanation": "One unit exactly fills the top glass; nothing overflows."
+        },
+        {
+          "args": [
+            10,
+            3,
+            0
+          ],
+          "output": 0.375,
+          "explanation": "Row 1 glasses hold 4.5 each, row 2 is 1.75, 3.5, 1.75, and the left edge of row 3 gets half of 0.75."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(poured: int, query_row: int, query_glass: int) -> float; class Solution: def champagneTower(self, poured, query_row, query_glass) -> float"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(poured, query_row, query_glass) -> number; module.exports = solve; module.exports.champagneTower(poured, query_row, query_glass) -> number"
+        }
+      },
+      "approach": {
+        "title": "Row-by-row overflow simulation down to the queried row",
+        "explanation": "Track the total liquid that flows into each glass of the current row, without capping. For the next row, every glass with more than one unit sends (amount - 1) / 2 to each glass below. Repeat until the queried row, then cap the queried glass at 1. Only the previous row is needed at each step.",
+        "chooseWhen": [
+          "Flow is acyclic and moves strictly downward, so a single pass in row order computes every inflow.",
+          "Only one row is queried, so later rows are never needed."
+        ],
+        "tradeoffs": [
+          "Exact rational arithmetic (the cohort reference) avoids rounding but is slower; doubles are accurate well within 1e-5 here.",
+          "Storing the full triangle is simpler to debug but uses O(r^2) memory; a rolling row uses O(r)."
+        ],
+        "invariants": [
+          "row[c] is the total liquid that has flowed into glass c of the current row, before capping.",
+          "Liquid passed downward from a glass is max(0, row[c] - 1), split equally."
+        ],
+        "hints": [
+          "Can you compute a glass's inflow from the row directly above?",
+          "Keep uncapped inflow amounts per glass and cap only when you answer.",
+          "Each glass with inflow a > 1 gives (a - 1) / 2 to each child; simulate row by row up to the query row."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Model inflow rather than time",
+            "question": "Does the order in which glasses fill matter for the final amounts?",
+            "explanation": "No. Only the total that reaches each glass matters, and a glass's inflow depends only on the two glasses above it. So the final state can be computed row by row without simulating time.",
+            "rationale": "Removing time from the model reduces the problem to a simple recurrence.",
+            "instructions": [
+              "Write the inflow of glass (r, c) in terms of glasses (r-1, c-1) and (r-1, c).",
+              "Do the 10-unit example by hand to row 3."
+            ],
+            "observations": [
+              "Edge glasses have only one parent.",
+              "Capping happens only for the answer; overflow uses the uncapped inflow minus one."
+            ],
+            "hints": [
+              "Each parent contributes max(0, inflow - 1) / 2."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Simulate with a rolling row",
+            "question": "How do you implement the recurrence with O(r) memory?",
+            "explanation": "Start with row = [poured]. For r from 0 to query_row - 1, make a zero array of length r + 2 and, for each glass with amount above 1, add half the excess to positions c and c + 1. Return min(1, row[query_glass]). Both candidates use double-precision floats.",
+            "rationale": "Pushing overflow forward from each parent is equivalent to pulling from two parents and handles edges without special cases.",
+            "instructions": [
+              "Initialise the current row with the poured amount.",
+              "Build the next row from the overflow of the current one, query_row times.",
+              "Cap the queried glass at 1 and return it."
+            ],
+            "observations": [
+              "With poured up to 1e9 and 100 rows, magnitudes and rounding are far within the 1e-5 tolerance."
+            ],
+            "hints": [
+              "Skip glasses with amount <= 1; they pass nothing down."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Check small towers and deep edges",
+            "question": "How can you be confident the floating result is accurate enough?",
+            "explanation": "Compare small cases with hand calculation and with an exact Fraction version of the same recurrence, including large pours at row 99 where edge glasses get tiny amounts.",
+            "rationale": "The tolerance assumption is inferred, so measuring the actual error against exact arithmetic is the right check.",
+            "instructions": [
+              "Run the examples.",
+              "Rewrite the loop with fractions.Fraction and compare for poured = 10^9, row 99, several glasses."
+            ],
+            "observations": [
+              "Edge glasses at row 99 are nonzero but far below 1 even for 10^9 units."
+            ],
+            "hints": [
+              "Zero poured must return 0 for every glass."
+            ],
+            "requirementIds": [
+              "R3",
+              "R4"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(R^2)",
+            "where": "R is the query row"
+          },
+          {
+            "resource": "space",
+            "bound": "O(R)",
+            "where": "one rolling row"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(R^2)",
+            "where": "R is the query row"
+          },
+          {
+            "resource": "space",
+            "bound": "O(R)",
+            "where": "one rolling row"
+          }
+        ]
+      }
+    },
+    "803": {
+      "statement": "A grid holds bricks (1) and empty cells (0). A brick is stable if it is in the top row or is connected, through up, down, left and right neighbours, to a brick in the top row. You receive a sequence of hits; each hit erases the brick at a cell if one is there, after which every brick that is no longer stable falls and disappears. For each hit, return how many bricks fell because of it, not counting the hit brick itself.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Process hits in order; each hit removes the brick at that cell if present."
+        },
+        {
+          "id": "R2",
+          "text": "After a hit, every brick no longer connected to the top row falls and is removed from the grid."
+        },
+        {
+          "id": "R3",
+          "text": "Report, per hit, the number of bricks that fell, excluding the erased brick; a hit on an empty cell reports 0."
+        },
+        {
+          "id": "R4",
+          "text": "Bricks that are already unstable in the initial grid are never counted, and a hit on such a brick drops nothing."
+        },
+        {
+          "id": "R5",
+          "text": "Leave the grid and the hit list unchanged; return a fresh list."
+        }
+      ],
+      "constraints": [
+        "The grid has 1 to 200 rows and 1 to 200 columns, all rows the same width, cells 0 or 1.",
+        "There are 1 to 40000 hits, each a valid cell, and no cell is hit twice."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 616de092f80ad5ccbac72700c820577de3b5eee804881fe5f3f476f0b5da35b9 and statement content sha256 173db5c63a42033ba31f16d50a899fe6dbeaa6c8f33b34358a43cfa8a5c84b94; the official text is not stored on this machine."
+        },
+        {
+          "assumption": "Bricks that are unstable before any hit are never counted as falling, and hitting one drops nothing.",
+          "basis": "README post-freeze amendment for 803: the statement does not settle this; the adopted reading matches the reverse union-find model."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Can the initial grid contain bricks that are not attached to the top?",
+          "answer": "The statement does not settle it; this cohort treats them as never counted.",
+          "basis": "README 803 amendment."
+        },
+        {
+          "question": "Is the hit brick itself counted?",
+          "answer": "No, only the bricks that fall as a consequence.",
+          "basis": "Candidate subtracts one for the restored brick."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            [
+              [
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                0,
+                1
+              ]
+            ]
+          ],
+          "output": [
+            3
+          ],
+          "explanation": "Removing the top-middle brick detaches the column below it and the brick to its lower right, three bricks in all; the top corners stay."
+        },
+        {
+          "args": [
+            [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                1,
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                0
+              ]
+            ]
+          ],
+          "output": [
+            1,
+            0
+          ],
+          "explanation": "The first hit cuts off the rightmost bottom brick. The second removes a brick whose only remaining neighbour is the top-row brick above it, so nothing else falls."
+        },
+        {
+          "args": [
+            [
+              [
+                1,
+                1
+              ],
+              [
+                0,
+                1
+              ]
+            ],
+            [
+              [
+                1,
+                1
+              ],
+              [
+                0,
+                1
+              ]
+            ]
+          ],
+          "output": [
+            0,
+            0
+          ],
+          "explanation": "Neither hit disconnects any other brick from the top row."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(grid: list[list[int]], hits: list[list[int]]) -> list[int]; class Solution: def hitBricks(self, grid, hits) -> list[int]"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(grid, hits) -> number[]; module.exports = solve; module.exports.hitBricks(grid, hits) -> number[]"
+        }
+      },
+      "approach": {
+        "title": "Reverse time with union-find and a virtual roof",
+        "explanation": "Removing bricks splits components, which union-find cannot do, but adding bricks only merges them. So apply every hit first, build components of the remaining bricks with a virtual roof node joined to every top-row brick, and then restore the hits in reverse order. When a brick that existed originally is restored, the bricks that newly become connected to the roof are exactly those that fell when it was hit. The answer for that hit is the growth of the roof component's size minus one (the restored brick itself), floored at 0.",
+        "chooseWhen": [
+          "A sequence of deletions asks about connectivity after each one, and all deletions are known in advance (offline).",
+          "Grids are large and per-hit flood fills would be quadratic in the worst case."
+        ],
+        "tradeoffs": [
+          "A per-hit BFS from the top row (the cohort reference) is simple and obviously correct but costs O(m*n) per hit.",
+          "The reverse method requires knowing all hits up front and careful handling of hits on empty cells.",
+          "Union-find with path compression and union by size gives near-constant amortised operations."
+        ],
+        "invariants": [
+          "At reverse step k, the structure reflects the grid after hits 0..k-1 only.",
+          "size[find(roof)] - 1 is the number of bricks currently connected to the top row.",
+          "Restoring a brick only adds bricks to the roof component; it never removes any."
+        ],
+        "hints": [
+          "Is it easier to delete bricks or to add them back?",
+          "Process the hits backwards so every step is a merge.",
+          "Add a virtual roof node connected to every top-row brick and track component sizes.",
+          "When restoring an originally present brick, the answer is (roof size after - roof size before - 1), floored at 0; skip hits on originally empty cells."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Turn deletions into insertions",
+            "question": "How can you avoid recomputing connectivity from scratch after every hit?",
+            "explanation": "Connectivity under deletions is hard, but under insertions union-find handles it. Since all hits are given, apply them all, then replay them backwards as insertions. The bricks that join the roof component when a brick is re-inserted are the ones that fell at that hit.",
+            "rationale": "Reversing time converts a splitting problem into a merging problem with a known efficient structure.",
+            "instructions": [
+              "On the first example, remove the hit brick, then add it back and see which bricks reconnect to the top.",
+              "Decide how to represent 'connected to the top row' as one union-find set."
+            ],
+            "observations": [
+              "A virtual roof node makes 'stable' equal to 'in the roof set'.",
+              "Bricks never attached to the top initially never join the roof set, so they are never counted."
+            ],
+            "hints": [
+              "Measure the size of the roof set before and after each re-insertion."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R4"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Build the final state and replay hits in reverse",
+            "question": "How do you implement the replay and the per-hit counts?",
+            "explanation": "Copy the grid, clear every hit cell, and union each remaining brick with its present neighbours and, for row 0, with the roof (index m*n). Then for k from the last hit down to the first: if the original cell was empty, the answer is 0; otherwise record the roof size, set the cell, union it with the roof if in row 0 and with present neighbours, and store max(0, new size - old size - 1).",
+            "rationale": "Each brick and hit costs a constant number of union-find operations, so the whole run is near linear.",
+            "instructions": [
+              "Make a working copy of the grid so the input stays unchanged.",
+              "Implement find with path compression and union by size.",
+              "Union all remaining bricks after clearing hits.",
+              "Replay hits in reverse, computing roof-size growth."
+            ],
+            "observations": [
+              "The max(0, ...) handles a restored brick that is itself not connected to the roof.",
+              "JavaScript uses typed arrays for parent and size."
+            ],
+            "hints": [
+              "Use the original grid, not the working copy, to tell whether a hit cell had a brick."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4",
+              "R5"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Compare against a literal simulation",
+            "question": "Which cases test the edge handling of the reverse method?",
+            "explanation": "Compare on random small grids with a forward simulation that removes the hit brick and flood-fills from the top row after each hit. Include hits on empty cells, hits in the top row, and initial floating bricks.",
+            "rationale": "The forward simulation states the definition directly, so agreement on many small grids is strong evidence.",
+            "instructions": [
+              "Run the examples.",
+              "Write the BFS simulation and compare on random grids up to 6 by 6 with random hit orders.",
+              "Include an initial grid with a brick not connected to row 0 and hit it."
+            ],
+            "observations": [
+              "The interpretation for initially floating bricks must match in both versions."
+            ],
+            "hints": [
+              "A one-row grid never drops anything."
+            ],
+            "requirementIds": [
+              "R3",
+              "R4"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O((m*n + h) * alpha(m*n))",
+            "where": "m by n grid, h hits, alpha the inverse Ackermann function"
+          },
+          {
+            "resource": "space",
+            "bound": "O(m*n)",
+            "where": "working grid copy and union-find arrays"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O((m*n + h) * alpha(m*n))",
+            "where": "m by n grid, h hits"
+          },
+          {
+            "resource": "space",
+            "bound": "O(m*n)",
+            "where": "typed arrays for cells, parent and size"
+          }
+        ]
+      }
+    },
+    "805": {
+      "statement": "Given an array of integers, decide whether it can be divided into two non-empty groups (every element in exactly one group) whose averages are equal.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Both groups must be non-empty and together use every element exactly once."
+        },
+        {
+          "id": "R2",
+          "text": "Return true exactly when some such division gives equal averages; otherwise false."
+        },
+        {
+          "id": "R3",
+          "text": "Do not modify the input array."
+        }
+      ],
+      "constraints": [
+        "The array has 1 to 30 elements.",
+        "Each value is between 0 and 10^4."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 a785fbba7df4140d3b9c09a8ea57e6f076a5db910f8ea784ab5691f5ae14ab2f and statement content sha256 b52135bcbf52bb099aa51b07154b2e8c208a9d68833faa0663d417a07261cf27; the official text is not stored on this machine."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "What about an array of one element?",
+          "answer": "It cannot be split into two non-empty groups, so the answer is false.",
+          "basis": "Candidate returns false when n < 2."
+        },
+        {
+          "question": "Must the groups be contiguous?",
+          "answer": "No, any subset and its complement.",
+          "basis": "Subset-sum design."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            [
+              2,
+              4,
+              6,
+              8
+            ]
+          ],
+          "output": true,
+          "explanation": "{2, 8} and {4, 6} both average 5."
+        },
+        {
+          "args": [
+            [
+              1,
+              2
+            ]
+          ],
+          "output": false,
+          "explanation": "The only split is {1} and {2}, with different averages."
+        },
+        {
+          "args": [
+            [
+              5,
+              3,
+              11,
+              19,
+              2
+            ]
+          ],
+          "output": true,
+          "explanation": "The overall average is 8; {5, 11} averages 8 and so does {3, 19, 2}."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(nums: list[int]) -> bool; class Solution: def splitArraySameAverage(self, nums) -> bool"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(nums) -> boolean; module.exports = solve; module.exports.splitArraySameAverage(nums) -> boolean"
+        }
+      },
+      "approach": {
+        "title": "Shift to zero mean, then meet in the middle on subset sums",
+        "explanation": "If both groups have equal averages, each equals the overall average. Replace each value x by n*x - total; now the overall average is 0 and the question becomes whether some non-empty proper subset sums to 0 (its complement then also sums to 0). Split the array into two halves and list all subset sums of each. A zero-sum subset is either a non-empty subset of one half (excluding the full array) or a combination of a non-empty subset of the right half with a subset of the left half whose sum is the negation. To keep the subset proper, the left part used with the full right half cannot also be the full left half.",
+        "chooseWhen": [
+          "n is around 30, so 2^n subsets are too many but 2^(n/2) per half is fine.",
+          "The condition can be rewritten as a subset-sum-equals-target question."
+        ],
+        "tradeoffs": [
+          "A dynamic program over (size, sum) bitsets (used by the cohort reference for larger n) is polynomial in total value; meet in the middle depends only on n.",
+          "Meet in the middle stores 2^(n/2) sums per half, about 32768 for n = 30.",
+          "Excluding the empty set and the full array needs care at the join step."
+        ],
+        "invariants": [
+          "After scaling, a subset has the overall average exactly when its scaled sum is 0.",
+          "The full array always has scaled sum 0, so it must be excluded explicitly.",
+          "Each half's sum list includes the empty subset at index 0 and the full half at the last index."
+        ],
+        "hints": [
+          "What must each group's average equal if the two averages match?",
+          "Subtract the mean from every value (scale by n to stay in integers); now look for a subset summing to zero.",
+          "Thirty elements is too many for brute force but fifteen is not: split the array in two.",
+          "Check zero sums inside one half, then match each non-empty right-half sum s against -s among left-half sums that are neither empty nor the full left half."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Reduce to a zero-sum subset",
+            "question": "How can the equal-average condition be expressed without division?",
+            "explanation": "Equal averages force both to equal total/n. A subset A of size k has that average iff sum(A)*n = k*total, iff the sum of (n*x - total) over A is 0. So shift values and look for a non-empty proper subset with sum 0.",
+            "rationale": "The shifted form removes the subset size from the condition, turning it into plain subset sum.",
+            "instructions": [
+              "Scale [2, 4, 6, 8] and find a zero-sum subset.",
+              "Explain why the complement of a zero-sum subset is also zero-sum."
+            ],
+            "observations": [
+              "The empty set and the full array always sum to 0 and must be excluded."
+            ],
+            "hints": [
+              "Multiply by n so all shifted values are integers."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Enumerate half sums and join",
+            "question": "How do you combine the two halves without creating the empty or full subset?",
+            "explanation": "Both candidates build subset-sum lists by doubling: start with [0] and, for each value, append every existing sum plus that value. Then return true if 0 appears in either list beyond index 0. Otherwise put the left sums except the first (empty) and last (full left half) into a set, and for every non-empty right sum s check whether -s is in it.",
+            "rationale": "Excluding the full left half when pairing ensures the combined subset is never the full array; combinations with an empty side are already covered by the per-half check.",
+            "instructions": [
+              "Return false immediately if n < 2.",
+              "Compute scaled values, split at n // 2 and enumerate subset sums of each half.",
+              "Check for zero inside each half, then join through a hash set."
+            ],
+            "observations": [
+              "The doubling enumeration keeps the empty subset first and the full half last.",
+              "Scaled values stay well below 2^53, so JavaScript numbers are exact."
+            ],
+            "hints": [
+              "If the full right half pairs with a proper left subset, the union is still proper."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Check against brute force",
+            "question": "Which inputs test the exclusion of trivial subsets?",
+            "explanation": "Compare with brute force over all subsets for n up to 12, using exact fractions for averages. Include arrays of equal values, single-element arrays and arrays where only the full array has the mean.",
+            "rationale": "Off-by-one exclusion of the empty or full subset produces false positives that brute force will catch.",
+            "instructions": [
+              "Run the examples, then [7] (false) and [3, 3] (true).",
+              "Brute-force random arrays of length up to 12 and compare."
+            ],
+            "observations": [
+              "All-equal arrays of length 2 or more are always true."
+            ],
+            "hints": [
+              "Generate arrays with no valid split, like [1, 2], to test the false path."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(2^(n/2))",
+            "where": "n is the array length"
+          },
+          {
+            "resource": "space",
+            "bound": "O(2^(n/2))",
+            "where": "subset-sum lists and the hash set"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(2^(n/2))",
+            "where": "n is the array length"
+          },
+          {
+            "resource": "space",
+            "bound": "O(2^(n/2))",
+            "where": "subset-sum arrays and the Set"
+          }
+        ]
+      }
+    },
+    "808": {
+      "statement": "Two soups, A and B, each start with n millilitres. Repeatedly, one of four servings is chosen uniformly at random: 100 mL of A and 0 of B, 75 and 25, 50 and 50, or 25 and 75. If a serving asks for more than what remains, serve what is left. Stop as soon as either soup is empty. Return the probability that A runs out first plus half the probability that both run out at the same time.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Each step picks one of the four servings with probability 1/4."
+        },
+        {
+          "id": "R2",
+          "text": "Servings are truncated at the remaining amount; the process stops when either soup reaches zero."
+        },
+        {
+          "id": "R3",
+          "text": "Return P(A empties first) + 0.5 * P(both empty together)."
+        },
+        {
+          "id": "R4",
+          "text": "The answer is accepted within an absolute error of 1e-5."
+        }
+      ],
+      "constraints": [
+        "n is an integer from 0 to 10^9."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 3cf144c5490498c679c4da05a7bd8b11c286cfcda6a17f8c8e2f628b5e7b2dd2 and statement content sha256 166bb66745a4756502f751dd8a461419a61b9b690a02cefce4feb33d624edfa2; the official text is not stored on this machine."
+        },
+        {
+          "assumption": "For n with ceil(n/25) >= 200 the answer 1.0 is within tolerance.",
+          "basis": "README float note: a 45-digit Decimal table puts the error there at <= 3.3e-6 and decreasing through 1000 units, and a Hoeffding tail bound is below 1e-6 beyond."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "What tolerance applies?",
+          "answer": "Absolute 1e-5, stated by the official problem.",
+          "basis": "README float note."
+        },
+        {
+          "question": "What if n is 0?",
+          "answer": "Both soups are empty at once, so the answer is 0.5.",
+          "basis": "Base case of the recurrence."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            10
+          ],
+          "output": 0.625,
+          "explanation": "Ten millilitres is one 25 mL unit of each soup. Every serving empties A; only the 100/0 serving leaves B, so A empties first with probability 1/4 and both together with 3/4: 0.25 + 0.5 * 0.75 = 0.625."
+        },
+        {
+          "args": [
+            100
+          ],
+          "output": 0.71875,
+          "explanation": "Four 25 mL units each; the recurrence over units gives 0.71875."
+        },
+        {
+          "args": [
+            0
+          ],
+          "output": 0.5,
+          "explanation": "Both soups are already empty."
+        },
+        {
+          "args": [
+            1000000
+          ],
+          "output": 1.0,
+          "explanation": "For large n soup A almost surely runs out first; the answer is within 1e-5 of 1."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(n: int) -> float; class Solution: def soupServings(self, n) -> float"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(n) -> number; module.exports = solve; module.exports.soupServings(n) -> number"
+        }
+      },
+      "approach": {
+        "title": "DP over 25 mL units with a large-n cutoff",
+        "explanation": "All servings are multiples of 25 mL, so measure in units of 25, rounding n up. Let f(a, b) be the answer with a and b units left: f = 0.5 if both are <= 0, 1 if only a is <= 0, 0 if only b is <= 0, otherwise the average of f(a-4, b), f(a-3, b-1), f(a-2, b-2), f(a-1, b-3). Fill a table bottom up. Because A is served 2.5 units per step on average versus 1.5 for B, the answer approaches 1 quickly; once there are 200 or more units it is within 1e-5 of 1, so return 1.0 directly.",
+        "chooseWhen": [
+          "n is huge but the answer converges, so a cutoff keeps the table small.",
+          "Amounts move in fixed steps, allowing a coarser unit."
+        ],
+        "tradeoffs": [
+          "Memoised recursion is shorter but deep for large tables; a bottom-up table avoids recursion limits.",
+          "The cutoff must be justified numerically; the cohort reference checks it with a high-precision Decimal table and a tail bound.",
+          "Floats suffice within the 1e-5 tolerance; exact fractions are only needed for verification."
+        ],
+        "invariants": [
+          "table[a][b] holds f(a, b) for all a, b >= 1 computed so far, and the base cases are handled by a value() helper.",
+          "Each entry depends only on entries with strictly smaller a."
+        ],
+        "hints": [
+          "Can you measure soup in a larger unit than 1 mL?",
+          "Define the answer as a function of the remaining amounts of A and B and write its recurrence.",
+          "A is consumed faster on average, so for large n the answer tends to 1.",
+          "Use units = ceil(n/25), return 1.0 when units >= 200, else fill a units x units table bottom up."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Set up the probability recurrence",
+            "question": "What state determines the answer, and what are the stopping cases?",
+            "explanation": "The state is the remaining amount of each soup. Stopping cases are A empty (1), B empty (0) and both empty (0.5). Otherwise average the four successor states. In 25 mL units the servings are (4,0), (3,1), (2,2), (1,3).",
+            "rationale": "With a clear recurrence the only remaining problem is the size of n.",
+            "instructions": [
+              "Compute f for n = 10 by hand (1 unit each).",
+              "Compare the expected amount served of A and of B per step."
+            ],
+            "observations": [
+              "A loses 2.5 units per step on average and B 1.5, so A usually empties first for large n."
+            ],
+            "hints": [
+              "Round n up to a whole number of 25 mL units; partial units behave like full ones."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Fill the table with a cutoff",
+            "question": "How do you implement the recurrence safely for n up to 10^9?",
+            "explanation": "Compute units = (n + 24) // 25. If units >= 200 return 1.0. Otherwise allocate a (units+1) square table and, for a and b from 1 upward, set table[a][b] to a quarter of the sum of value(a-4, b), value(a-3, b-1), value(a-2, b-2), value(a-1, b-3), where value() applies the base cases for non-positive arguments. Return value(units, units).",
+            "rationale": "Bottom-up order guarantees dependencies are ready, and the cutoff bounds the table at 200 by 200.",
+            "instructions": [
+              "Implement value(a, b) with the three base cases before table lookup.",
+              "Loop a then b from 1 to units.",
+              "Return the cutoff value for large inputs before allocating."
+            ],
+            "observations": [
+              "n = 0 gives units = 0 and value(0, 0) = 0.5."
+            ],
+            "hints": [
+              "Check the both-empty case before the single-empty cases."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Verify the cutoff and small values",
+            "question": "How do you know returning 1.0 is accurate enough?",
+            "explanation": "Compute the table exactly or in high precision for units up to a few hundred and observe 1 - f(units, units) falling below 1e-5 before 200 units. Check small n by hand, including n that is not a multiple of 25.",
+            "rationale": "The cutoff is a numerical claim and should be measured, as the cohort reference does.",
+            "instructions": [
+              "Run the examples.",
+              "Evaluate the DP with fractions for units 190 to 210 and confirm the gap to 1 is below 1e-5.",
+              "Check n = 1 equals n = 25."
+            ],
+            "observations": [
+              "The gap to 1 decreases monotonically in this range."
+            ],
+            "hints": [
+              "Compare float and exact results for small units to measure rounding."
+            ],
+            "requirementIds": [
+              "R3",
+              "R4"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(min(u, 200)^2)",
+            "where": "u = ceil(n/25)"
+          },
+          {
+            "resource": "space",
+            "bound": "O(min(u, 200)^2)",
+            "where": "the DP table"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(min(u, 200)^2)",
+            "where": "u = ceil(n/25)"
+          },
+          {
+            "resource": "space",
+            "bound": "O(min(u, 200)^2)",
+            "where": "Float64Array rows of the DP table"
+          }
+        ]
+      }
+    },
+    "817": {
+      "statement": "You are given the head of a singly linked list whose node values are distinct, and an array that is a subset of those values. Two chosen values are connected if their nodes are adjacent in the list. Return the number of connected components among the chosen values, that is, the number of maximal runs of consecutive list nodes whose values are all in the array.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "Walk the list in order and treat a node as chosen if its value is in the array."
+        },
+        {
+          "id": "R2",
+          "text": "Count maximal runs of consecutive chosen nodes."
+        },
+        {
+          "id": "R3",
+          "text": "Do not change any node's value or next pointer, allocate no nodes and leave the array unchanged."
+        },
+        {
+          "id": "R4",
+          "text": "Use the native linked-list node type (val, next) supplied with the solution."
+        }
+      ],
+      "constraints": [
+        "The list has 1 to 10^4 nodes with distinct values from 0 to n - 1, where n is the list length.",
+        "The array has 1 to n distinct values, all present in the list."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 552c646cbc73d75fc7346abdc246a1431d10232b98dc95eac8ca46c936682670 and statement content sha256 b8b4bcd92770964026380cebaf769e74ac74aa207704a5835f58a63c6cc0b896; the official text is not stored on this machine."
+        },
+        {
+          "assumption": "The indexed {'values': [...]} packet used by the cohort transport is a reference model; the real interface receives the head node.",
+          "basis": "README 817 note: native-bindings.json fixes the route; the indexed packet is a reference/transport model, not the native API."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Can the array contain values not in the list?",
+          "answer": "No, it is a subset of the list values.",
+          "basis": "oracles.py validate_domain for 817."
+        },
+        {
+          "question": "Is an isolated chosen node a component?",
+          "answer": "Yes, a run of length one counts.",
+          "basis": "Run definition."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            [
+              0,
+              1,
+              2,
+              3
+            ],
+            [
+              0,
+              1,
+              3
+            ]
+          ],
+          "output": 2,
+          "explanation": "Chosen runs are 0-1 and 3.",
+          "listNodeArgs": [
+            0
+          ]
+        },
+        {
+          "args": [
+            [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            [
+              0,
+              3,
+              1,
+              4
+            ]
+          ],
+          "output": 2,
+          "explanation": "Runs 0-1 and 3-4; the order of the array does not matter.",
+          "listNodeArgs": [
+            0
+          ]
+        },
+        {
+          "args": [
+            [
+              3,
+              0,
+              2,
+              1
+            ],
+            [
+              2
+            ]
+          ],
+          "output": 1,
+          "explanation": "A single chosen node forms one component.",
+          "listNodeArgs": [
+            0
+          ]
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "class ListNode: def __init__(self, val=0, next=None); def solve(head: ListNode | None, nums: list[int]) -> int; class Solution: def numComponents(self, head, nums) -> int"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function ListNode(val, next); function solve(head, nums) -> number; class Solution { numComponents(head, nums) -> number }; module.exports = solve; module.exports.numComponents, .Solution, .ListNode"
+        }
+      },
+      "approach": {
+        "title": "Count run ends in one pass with a hash set",
+        "explanation": "Put the chosen values in a set. Walk the list once; a node ends a component when it is chosen and its successor is missing or not chosen. Counting those ends counts the runs exactly once each.",
+        "chooseWhen": [
+          "You need to count maximal runs satisfying a predicate in a sequence.",
+          "Membership tests must be fast because the array can be as long as the list."
+        ],
+        "tradeoffs": [
+          "Counting run starts (chosen node whose predecessor was not chosen) works equally well but needs to remember the previous node.",
+          "A set costs O(len(nums)) memory; a boolean array indexed by value also works because values are 0..n-1."
+        ],
+        "invariants": [
+          "count equals the number of chosen runs that have ended at or before the current node.",
+          "The list is only read; no pointer is changed."
+        ],
+        "hints": [
+          "How many times does each component end?",
+          "Make membership checks constant time.",
+          "Count a node when it is in the set and its next node is null or not in the set."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "See components as runs",
+            "question": "In a linked list, what does a connected component of chosen values look like?",
+            "explanation": "Adjacency in a list is only between consecutive nodes, so a component is a maximal block of consecutive chosen nodes. Each block has exactly one last node.",
+            "rationale": "Counting one distinguished node per block avoids any graph traversal.",
+            "instructions": [
+              "Mark chosen nodes in the first example and circle each run.",
+              "Identify a unique node per run."
+            ],
+            "observations": [
+              "The run's last node is followed by null or an unchosen node."
+            ],
+            "hints": [
+              "Look at the boundary between a chosen node and the next one."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Walk the native list once",
+            "question": "How do you implement the count against the native node type without changing the list?",
+            "explanation": "Build a set from nums. Starting at head, for each node, increment the count when node.val is in the set and (node.next is null or node.next.val is not in the set). Advance with node = node.next. The JavaScript candidate also exports the ListNode constructor with the official defaults.",
+            "rationale": "A single read-only pass satisfies the no-mutation requirement and runs in linear time.",
+            "instructions": [
+              "Create the membership set.",
+              "Loop while the node is not null, applying the run-end test.",
+              "Return the count."
+            ],
+            "observations": [
+              "JavaScript also tolerates an undefined next pointer as end of list."
+            ],
+            "hints": [
+              "Access node.next.val only after checking node.next is not null."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3",
+              "R4"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Check boundaries and immutability",
+            "question": "Which lists test the start and end of runs?",
+            "explanation": "Test runs at the head, at the tail, the whole list chosen, and alternating choices; confirm afterwards that values and next pointers are unchanged.",
+            "rationale": "Runs touching the list ends are where null handling matters.",
+            "instructions": [
+              "Run the examples.",
+              "Try a list where all nodes are chosen (answer 1) and alternate choices (answer ceil(n/2)).",
+              "Record node identities and values before and after the call and compare."
+            ],
+            "observations": [
+              "A one-node list with that value chosen returns 1."
+            ],
+            "hints": [
+              "Compare against counting groups in the list of membership flags."
+            ],
+            "requirementIds": [
+              "R2",
+              "R3"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(n + k)",
+            "where": "n list nodes, k = len(nums)"
+          },
+          {
+            "resource": "space",
+            "bound": "O(k)",
+            "where": "membership set"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(n + k)",
+            "where": "n list nodes, k = len(nums)"
+          },
+          {
+            "resource": "space",
+            "bound": "O(k)",
+            "where": "membership Set"
+          }
+        ]
+      }
+    },
+    "818": {
+      "statement": "A car starts at position 0 with speed +1 on an infinite number line. Instruction A moves the car by its speed and then doubles the speed. Instruction R reverses direction: the speed becomes -1 if it was positive, or +1 if it was negative, and the position stays the same. Return the length of the shortest instruction sequence that brings the car to a given positive target position.",
+      "requirements": [
+        {
+          "id": "R1",
+          "text": "A: position += speed, then speed *= 2."
+        },
+        {
+          "id": "R2",
+          "text": "R: speed becomes -1 if positive, else +1; position unchanged."
+        },
+        {
+          "id": "R3",
+          "text": "Return the minimum number of instructions needed to stand at the target (speed at arrival is irrelevant)."
+        }
+      ],
+      "constraints": [
+        "The target is an integer from 1 to 10^4."
+      ],
+      "assumptions": [
+        {
+          "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+          "basis": "contracts.json records the official response sha256 75738f077ce073d99609af5e7350a31fd0f864952db9629d8b6d7b4dec4fa2b9 and statement content sha256 effaf1962c3a950baf8bf0b71934534fdca322e24680bdc42797b77b332b4f55; the official text is not stored on this machine."
+        }
+      ],
+      "clarifyingQuestions": [
+        {
+          "question": "Must the car stop or have a particular speed at the target?",
+          "answer": "No, it only has to be at the target position after some instruction.",
+          "basis": "Recurrence ends when the position equals the target."
+        },
+        {
+          "question": "May the car go to negative positions?",
+          "answer": "Yes, the line is unbounded both ways.",
+          "basis": "Model of the problem."
+        }
+      ],
+      "examples": [
+        {
+          "args": [
+            7
+          ],
+          "output": 3,
+          "explanation": "AAA moves 1 + 2 + 4 = 7."
+        },
+        {
+          "args": [
+            1
+          ],
+          "output": 1,
+          "explanation": "A single A reaches 1."
+        },
+        {
+          "args": [
+            4
+          ],
+          "output": 5,
+          "explanation": "AARRA: two accelerations reach 3, two reversals reset the speed to +1 in place, and one more A reaches 4."
+        },
+        {
+          "args": [
+            5
+          ],
+          "output": 7,
+          "explanation": "For example AARARAA: reach 3, reverse and step back to 2, reverse, then forward 1 + 2 to 5."
+        }
+      ],
+      "interfaces": {
+        "python": {
+          "kind": "function",
+          "declaration": "def solve(target: int) -> int; class Solution: def racecar(self, target) -> int"
+        },
+        "javascript": {
+          "kind": "function",
+          "declaration": "function solve(target) -> number; module.exports = solve; module.exports.racecar(target) -> number"
+        }
+      },
+      "approach": {
+        "title": "DP over targets: overshoot and come back, or stop short and adjust",
+        "explanation": "Let k be the bit length of t, so 2^(k-1) <= t < 2^k. k accelerations travel 2^k - 1. If t = 2^k - 1, the answer is k. Otherwise there are two shapes of an optimal first run. Overshoot: k A's, then R, then solve the remaining distance 2^k - 1 - t, costing k + 1 + dp[2^k - 1 - t]. Stop short: k - 1 A's reach 2^(k-1) - 1, then R, then j A's backwards (0 <= j < k - 1) covering 2^j - 1, then R, then solve the remaining distance t - (2^(k-1) - 1) + (2^j - 1), costing (k - 1) + 1 + j + 1 + dp[...]. Take the minimum. Distances are symmetric under direction, so dp on positive distances suffices.",
+        "chooseWhen": [
+          "The state space can be reduced to distances because the remaining problem after a reversal looks like the original from speed 1.",
+          "Targets are up to 10^4, so an O(t log t) table is cheap."
+        ],
+        "tradeoffs": [
+          "A BFS over (position, speed) (the cohort reference) is simpler to trust but needs a chosen bound on positions and speeds and explores many states.",
+          "The DP relies on a structural argument about optimal paths: never go further than 2^k - 1 forward on the first run, and never go back more than 2^(k-1) - 1."
+        ],
+        "invariants": [
+          "dp[d] is the minimum instruction count to travel distance d starting at speed +1.",
+          "Every candidate for dp[t] refers only to dp of strictly smaller distances."
+        ],
+        "hints": [
+          "Where can the car be after n consecutive A's starting at speed 1?",
+          "After a reversal (or two) the speed is back to magnitude 1, so the rest is a smaller instance of the same problem.",
+          "Let k be the bit length of t: either go past with k A's and return, or stop at k - 1 A's, back up j steps, and continue forward.",
+          "dp[t] = k if t = 2^k - 1, else min(k + 1 + dp[2^k - 1 - t], min over j < k - 1 of k + 1 + j + dp[t - 2^(k-1) + 2^j])."
+        ],
+        "stages": [
+          {
+            "type": "reasoning",
+            "title": "Find the reusable subproblem",
+            "question": "After an R, what does the remaining task look like?",
+            "explanation": "R resets the speed to magnitude 1, so whatever distance is left is a fresh instance of the problem in some direction. Runs of A's cover 1, 3, 7, ..., 2^n - 1. So a path is a sequence of such runs separated by reversals, and you only need to decide the first one or two runs.",
+            "rationale": "Reducing the state to a distance makes a one-dimensional DP possible.",
+            "instructions": [
+              "List the positions after 1 to 4 A's.",
+              "For target 4, compare going to 7 and back with going to 3 and adjusting."
+            ],
+            "observations": [
+              "Going beyond 2^k - 1 on the first run is never useful.",
+              "A double R (RR) is a zero-length backwards run that resets speed in place."
+            ],
+            "hints": [
+              "Use the bit length of the target to bound the first run."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "coding",
+            "title": "Fill dp from 1 to target",
+            "question": "How do you implement the two cases in a bottom-up loop?",
+            "explanation": "For t from 1 to target, compute k as the bit length. If t is 2^k - 1, set dp[t] = k. Otherwise start with the overshoot cost k + 1 + dp[2^k - 1 - t], then for j from 0 to k - 2 try k + 1 + j + dp[t - (2^(k-1) - 1) + (2^j - 1)]. Both candidates use this exact loop; JavaScript computes the bit length with 32 - Math.clz32(t).",
+            "rationale": "All referenced distances are smaller than t, so a forward loop fills dependencies in time.",
+            "instructions": [
+              "Allocate dp of size target + 1.",
+              "Compute k and handle the exact case.",
+              "Evaluate the overshoot and the stop-short options and keep the minimum."
+            ],
+            "observations": [
+              "The stop-short cost (k - 1) + 1 + j + 1 simplifies to k + 1 + j."
+            ],
+            "hints": [
+              "Check that 2^k - 1 - t < t so the overshoot case looks back, not forward."
+            ],
+            "requirementIds": [
+              "R1",
+              "R2",
+              "R3"
+            ]
+          },
+          {
+            "type": "validation",
+            "title": "Compare with BFS on small targets",
+            "question": "How do you confirm the structural shortcuts lose no optimal path?",
+            "explanation": "Run a BFS over (position, speed) states with generous bounds for targets up to a few hundred and compare every answer with the DP.",
+            "rationale": "The DP's correctness rests on a proof sketch; exhaustive search on small targets is the practical check.",
+            "instructions": [
+              "Run the examples.",
+              "Write a BFS with positions in [-2*target, 2*target] and compare for targets 1..300."
+            ],
+            "observations": [
+              "Targets of the form 2^k - 1 are the cheapest for their size."
+            ],
+            "hints": [
+              "Include targets just above and below powers of two."
+            ],
+            "requirementIds": [
+              "R3"
+            ]
+          }
+        ]
+      },
+      "complexity": {
+        "python": [
+          {
+            "resource": "time",
+            "bound": "O(T log T)",
+            "where": "T is the target"
+          },
+          {
+            "resource": "space",
+            "bound": "O(T)",
+            "where": "dp table"
+          }
+        ],
+        "javascript": [
+          {
+            "resource": "time",
+            "bound": "O(T log T)",
+            "where": "T is the target"
+          },
+          {
+            "resource": "space",
+            "bound": "O(T)",
+            "where": "Int32Array dp table"
+          }
+        ]
+      }
+    }
+  }
+}

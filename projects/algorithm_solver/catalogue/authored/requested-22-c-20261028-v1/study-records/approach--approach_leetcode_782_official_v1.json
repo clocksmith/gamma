@@ -1,0 +1,1098 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/782/approach/chooseWhen",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/782",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Moves are permutations of rows or columns, so structure invariant under permutation decides feasibility.",
+      "You need an O(n^2) answer and enumeration of permutations is hopeless."
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:782:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/contract--contract_leetcode_782_official_authored-v1.json",
+    "sha256": "b1cdeb40065d0629aca9a9b3b6cb90477f169cd441e9b7c73fc14433b9d78737",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/782/approach/explanation",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/782",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+      }
+    ],
+    "status": "present",
+    "value": "Swaps never change which rows are equal or complementary, so a solvable grid has exactly two row types that are bitwise complements, and the same for columns. That is equivalent to every rectangle corner XOR board[0][0]^board[i][0]^board[0][j]^board[i][j] being 0. The first row must also have a balanced count of ones (n/2 for even n, floor or ceil of n/2 for odd n), and so must the first column. Once feasible, rows and columns are solved independently: count positions where the first row disagrees with the pattern 1010..., and each swap fixes two misplaced positions. For even n take the cheaper of the two target patterns; for odd n only the pattern with an even misplaced count is reachable."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/782/approach/hints",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/782",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "What properties of the grid can never change no matter how you swap rows and columns?",
+      "In a chessboard, every row is either a pattern or its complement.",
+      "Check that every rectangle's corners XOR to 0 and that row and column one-counts are balanced.",
+      "Count mismatches of the first row and first column against 0101...; halve, choosing the parity that is even (odd n) or smaller (even n)."
+    ]
+  },
+  "id": "approach:leetcode:782:official:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/782/approach/invariants",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/782",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Row and column swaps preserve the XOR of any rectangle's four corners.",
+      "A swap moves two positions into place, so the cost along one axis is half the misplaced count.",
+      "Row cost and column cost are independent and add."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:leetcode:782:official:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_782_official_approach-native_v1.json",
+    "sha256": "4092949748ea40d1d154c2aabd7c18ad0320a632ad196cb1025320324620a11a",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/782",
+      "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+    }
+  ],
+  "problemId": "leetcode:782",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/0/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": "Swapping rows keeps each row's contents and swapping columns permutes all rows alike, so the relation 'row i equals row k or its complement' is preserved. A chessboard has only two complementary row types, balanced in count. The same holds for columns."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/0/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Consider the first row and first column as representatives.",
+          "Balance must hold for both the first row and the first column."
+        ]
+      },
+      "id": "approach:leetcode:782:official:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/0/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Show that board[0][0]^board[i][0]^board[0][j]^board[i][j] is unchanged by any swap.",
+          "Work out the required number of ones in the first row for n = 4 and n = 5."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:782:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_782_official_approach-native_v1.json",
+        "sha256": "4092949748ea40d1d154c2aabd7c18ad0320a632ad196cb1025320324620a11a",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/0/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "If any rectangle XOR is 1, the answer is -1.",
+          "Rows and columns can be solved separately once feasible."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/0/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": "Which properties of the grid are preserved by row and column swaps, and which of them must hold in a chessboard?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/0/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": "Turning the feasibility question into invariants avoids searching over permutations."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/0/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/0/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": "Find what swaps cannot change"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:leetcode:782:official:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_782_official_python_v1.json",
+          "sha256": "2534ab47fb80ec4a620980b71de3f2818a689c2cf11ed125f14a691b02472c04",
+          "version": 1
+        },
+        {
+          "id": "artifact:leetcode:782:official:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_782_official_javascript_v1.json",
+          "sha256": "6c6294e19f01bc484cfb655ee4d278df5d9175a0118691c19cfa64c5995d73b9",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/1/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": "Both candidates first test every cell's rectangle XOR, then the one-counts of row 0 and column 0. rowMisplaced counts j where board[0][j] == j % 2 (disagreement with the pattern starting with 1... or equivalently the other pattern); likewise for columns. For odd n, if the count is odd it must target the other pattern, so use n - count. For even n take min(count, n - count). The answer is (rowMisplaced + colMisplaced) / 2."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/1/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "For odd n, an odd misplaced count means you compared against the unreachable pattern.",
+          "Integer division by 2 is exact after the parity adjustment."
+        ]
+      },
+      "id": "approach:leetcode:782:official:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/1/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Loop over all (i, j) and return -1 on any nonzero rectangle XOR.",
+          "Check n//2 <= ones <= (n+1)//2 for the first row and the first column.",
+          "Count misplaced positions on each axis and adjust by parity of n.",
+          "Return the sum of both counts divided by 2."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:782:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_782_official_approach-native_v1.json",
+        "sha256": "4092949748ea40d1d154c2aabd7c18ad0320a632ad196cb1025320324620a11a",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/1/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The grid is only read; no copy is made.",
+          "The parity rule for odd n follows because the majority value must occupy the even indices."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/1/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": "How do you turn the misplaced counts into a swap count for each axis?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/1/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": "Each swap fixes exactly two misplaced positions on its axis, and choosing the cheaper reachable pattern gives the minimum."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/1/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/1/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": "Check feasibility and count swaps"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/2/explanation",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": "Test already-solved boards, boards needing only row swaps, only column swaps, both, and grids failing either the rectangle test or the balance test, for both even and odd n. Cross-check small n by brute force over permutations."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/2/hints",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Generate a chessboard and apply random swaps; the answer must not exceed the number applied."
+        ]
+      },
+      "id": "approach:leetcode:782:official:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/2/instructions",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "For n = 3, try a grid with rows 110/001/110 (balanced rectangles but unbalanced counts) and expect -1.",
+          "Brute-force all row and column permutations for n <= 4 and compare."
+        ]
+      },
+      "native": {
+        "id": "artifact:leetcode:782:official:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/artifact--artifact_leetcode_782_official_approach-native_v1.json",
+        "sha256": "4092949748ea40d1d154c2aabd7c18ad0320a632ad196cb1025320324620a11a",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/2/observations",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A grid can pass the rectangle test and still fail the count test."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/2/question",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": "What small grids distinguish a correct parity rule from a wrong one?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/2/rationale",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": "The odd-n parity choice and the balance check are where most solutions go wrong."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/2/requirementIds",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/782/approach/stages/2/title",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/782",
+            "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+          }
+        ],
+        "status": "present",
+        "value": "Exercise both parities and impossible grids"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/782/approach/title",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/782",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+      }
+    ],
+    "status": "present",
+    "value": "Feasibility by rectangle parity, then per-axis misplacement count"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/782/approach/tradeoffs",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/782",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/782.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9153120ca2d82ecebeb985ae56f3c169f16c34c941effd377d0e5d0d2acc399c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/782.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "034639933a67d3569addcb7cf19f0d0194951e1860bdd2c9145477f01ca77a17"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Brute force over row and column permutations (the cohort reference) is exact but factorial; the counting argument is linear in the grid size.",
+      "The argument needs care with odd n, where only one target parity is reachable."
+    ]
+  },
+  "version": 1
+}

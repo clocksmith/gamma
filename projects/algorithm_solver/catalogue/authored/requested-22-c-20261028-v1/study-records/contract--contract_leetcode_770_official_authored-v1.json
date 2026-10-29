@@ -1,0 +1,447 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/770/assumptions",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/0",
+        "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "06dd6eb159cf8ec1a32b35eedf2f819feaa06013fb02b6792dfe7c1dcdba981f"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The statement is a paraphrase of the official LeetCode statement in the author's own words, not the official text; requirements, constraints and examples are likewise authored, not copied.",
+        "basis": "contracts.json records the official response sha256 bfd6d2f18f0f2f3737ee8577bc6751864d8f91913dceb1f7395af904324fb72e and statement content sha256 5eaa3fcda2e29bf0761f2e542f511496379e82eb763e37b7ad371da8c979ed66; the official text is not stored on this machine."
+      },
+      {
+        "assumption": "Terms of equal degree are ordered by plain lexicographic comparison of their sorted variable sequences, the coefficient is always printed, and the constant term is last.",
+        "basis": "README 770 output note: terms ordered by degree descending, then variable sequence; coefficient always printed; zero terms omitted; constant last."
+      },
+      {
+        "assumption": "If a name appears twice in evalvars, the last binding wins.",
+        "basis": "README 770 note: duplicate evalvars names are not excluded by the constraints; both languages let the last binding win and generated cases contain none."
+      },
+      {
+        "assumption": "The cohort replaced one maximum-size case whose 2**21-term answer could not fit the sandbox; this is an output-size bound inferred from sandbox limits, not a statement constraint.",
+        "basis": "README post-freeze amendment for 770 cases.py."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/770/clarifyingQuestions",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "06dd6eb159cf8ec1a32b35eedf2f819feaa06013fb02b6792dfe7c1dcdba981f"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "By comparing their sorted variable lists as sequences of strings.",
+        "basis": "README 770 output note.",
+        "question": "How are two terms of the same degree ordered?"
+      },
+      {
+        "answer": "Yes, every term starts with its coefficient, so x becomes '1*x'.",
+        "basis": "README 770 output note; candidate formatting.",
+        "question": "Is a coefficient of 1 written out?"
+      },
+      {
+        "answer": "The constraints do not forbid it; the candidates use the last value.",
+        "basis": "README 770 note.",
+        "question": "What if the same variable name is assigned twice?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/770-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c40690a350e2387285b9cbdd266f3057e1fcc858f133c3bb264fd1c7d5943204"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/770-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4c8bf571d769e51034e6d823e61339fbd846ec7c083ab47b2502e77d4b05a0ce"
+      }
+    ],
+    "status": "present",
+    "value": "exact ordered string list"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/770/constraints",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "d3d1407337edd5064907aeddadb90372ec51b6b67d2ba96395695b8898f31c28"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "The expression is 1 to 250 characters of lowercase letters, digits, '+', '-', '*', '(', ')' and spaces, with operators and operand chunks separated by single spaces.",
+      "Parentheses are balanced and the expression is well formed (no leading or trailing operator).",
+      "evalvars has 0 to 100 names of 1 to 20 lowercase letters; evalints has the same length with values from -100 to 100.",
+      "Every coefficient produced while evaluating stays within a signed 32-bit integer."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/770-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c40690a350e2387285b9cbdd266f3057e1fcc858f133c3bb264fd1c7d5943204"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/770-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4c8bf571d769e51034e6d823e61339fbd846ec7c083ab47b2502e77d4b05a0ce"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh list of fresh strings"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/770/examples",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "evalints": [
+            2
+          ],
+          "evalvars": [
+            "y"
+          ],
+          "expression": "(x + 1) * (x - y) + 4"
+        },
+        "explanation": "With y = 2 the expression is (x + 1)(x - 2) + 4 = x^2 - x + 2.",
+        "output": [
+          "1*x*x",
+          "-1*x",
+          "2"
+        ]
+      },
+      {
+        "arguments": {
+          "evalints": [
+            3
+          ],
+          "evalvars": [
+            "c"
+          ],
+          "expression": "a * b - b * a + c * (c - 2)"
+        },
+        "explanation": "a*b and b*a are the same term and cancel; c*(c - 2) with c = 3 is 3, leaving only a constant.",
+        "output": [
+          "3"
+        ]
+      },
+      {
+        "arguments": {
+          "evalints": [],
+          "evalvars": [],
+          "expression": "e - 7 + k * 0"
+        },
+        "explanation": "k*0 vanishes; the degree-1 term precedes the constant and its coefficient 1 is printed.",
+        "output": [
+          "1*e",
+          "-7"
+        ]
+      }
+    ]
+  },
+  "id": "contract:leetcode:770:official:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/interfaces/python/declaration",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/770.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "2fa3f8b57820322170c3081b2e8b768ea1b10a7bb60df06c063f36fb8482f3df"
+          }
+        ],
+        "status": "present",
+        "value": "def solve(expression: str, evalvars: list[str], evalints: list[int]) -> list[str]; class Solution: def basicCalculatorIV(self, expression, evalvars, evalints) -> list[str]"
+      },
+      "kind": "function",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/0/official_interface",
+            "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "basicCalculatorIV",
+          "params": [
+            {
+              "name": "expression",
+              "type": "string"
+            },
+            {
+              "name": "evalvars",
+              "type": "string[]"
+            },
+            {
+              "name": "evalints",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "list<string>"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/770/interfaces/javascript/declaration",
+            "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/javascript/770.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "9df972f344d8b979217a574b5e1082a274a46c2e5a822928713d453627f6a6a3"
+          }
+        ],
+        "status": "present",
+        "value": "function solve(expression, evalvars, evalints) -> string[]; module.exports = solve; module.exports.basicCalculatorIV(expression, evalvars, evalints) -> string[]"
+      },
+      "kind": "function",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/0/official_interface",
+            "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "basicCalculatorIV",
+          "params": [
+            {
+              "name": "expression",
+              "type": "string"
+            },
+            {
+              "name": "evalvars",
+              "type": "string[]"
+            },
+            {
+              "name": "evalints",
+              "type": "integer[]"
+            }
+          ],
+          "return": {
+            "type": "list<string>"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/0",
+      "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+    }
+  ],
+  "problemId": "leetcode:770",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/770/requirements",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/0",
+        "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/770-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c40690a350e2387285b9cbdd266f3057e1fcc858f133c3bb264fd1c7d5943204"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/770-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4c8bf571d769e51034e6d823e61339fbd846ec7c083ab47b2502e77d4b05a0ce"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "Tokenise numbers, variable names, operators and parentheses; multiplication binds tighter than addition and subtraction, which associate left to right."
+      },
+      {
+        "id": "R2",
+        "text": "Replace every variable listed in evalvars by its paired value from evalints; leave other variables symbolic."
+      },
+      {
+        "id": "R3",
+        "text": "Expand all products and collect like terms; a term is identified by its multiset of variables."
+      },
+      {
+        "id": "R4",
+        "text": "Drop terms whose coefficient becomes zero; return an empty list if the whole polynomial is zero."
+      },
+      {
+        "id": "R5",
+        "text": "Format each term as the coefficient (always printed, including 1 and negative values) followed by '*name' for each variable in sorted order."
+      },
+      {
+        "id": "R6",
+        "text": "Order terms by degree descending, then by the variable sequence in lexicographic order; the constant term goes last."
+      },
+      {
+        "id": "R7",
+        "text": "Leave the input string and lists unchanged; return a fresh list."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/770/statement",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/0",
+        "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+      }
+    ],
+    "status": "present",
+    "value": "You get an arithmetic expression over integers and lowercase variable names, using +, -, * and parentheses, with single spaces between tokens. Some variables are given fixed integer values by two parallel lists. Substitute those values, expand and simplify the expression into a polynomial in the remaining variables, and return its terms as strings. Each term is written as its coefficient followed by '*' and its variables in sorted order (a variable repeats for each power). Terms are ordered by degree from highest to lowest, ties broken by comparing the variable sequences, terms with coefficient zero are dropped, and the constant term, if nonzero, comes last."
+  },
+  "variantId": "official",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/0",
+        "sha256": "b2c71368134898962214f56d87ee64b0de7cf793f7c1d0682e812d90a430554a"
+      }
+    ],
+    "status": "present",
+    "value": "Basic Calculator IV"
+  },
+  "version": 1
+}

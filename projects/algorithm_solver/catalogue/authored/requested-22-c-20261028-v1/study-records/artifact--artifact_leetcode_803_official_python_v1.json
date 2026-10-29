@@ -1,0 +1,139 @@
+{
+  "approachId": "approach:leetcode:803:official:v1",
+  "complexityClaims": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/803/complexity/python",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/803/complexity_target",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/803-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "29ce7b94c57a4fb66df39b1e806d12f46358713d70be6121487e2d4175588a44"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "bound": "O((m*n + h) * alpha(m*n))",
+        "resource": "time",
+        "where": "m by n grid, h hits, alpha the inverse Ackermann function"
+      },
+      {
+        "bound": "O(m*n)",
+        "resource": "space",
+        "where": "working grid copy and union-find arrays"
+      }
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:803:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/contract--contract_leetcode_803_official_authored-v1.json",
+    "sha256": "37a45b6172b58a16adff9605d825c3bb1c1febbd334e84429a0d80674bbf97d3",
+    "version": 1
+  },
+  "documentSchema": null,
+  "executionKind": "code",
+  "externalLocator": {
+    "reason": "The source file is in this repository; no external locator.",
+    "status": "not-applicable"
+  },
+  "file": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "bytes": 1473,
+      "mediaType": "text/x-python",
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+      "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+    }
+  },
+  "id": "artifact:leetcode:803:official:python:v1",
+  "kind": "artifact",
+  "language": "python",
+  "nativeMetadata": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/803-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "29ce7b94c57a4fb66df39b1e806d12f46358713d70be6121487e2d4175588a44"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "comparison": "exact typed JSON result",
+      "effects": "grid rows and hit pairs unchanged; fresh result list",
+      "entrypoint": "solve",
+      "language": "python",
+      "official_interface": {
+        "name": "hitBricks",
+        "params": [
+          {
+            "name": "grid",
+            "type": "integer[][]"
+          },
+          {
+            "name": "hits",
+            "type": "integer[][]"
+          }
+        ],
+        "return": {
+          "type": "integer[]"
+        }
+      },
+      "parameters": [
+        "grid",
+        "hits"
+      ],
+      "problem_id": 803,
+      "qualification": {
+        "reason": "Not qualified: author-local runs only (the author ran its own candidates against its own references); no independent isolated execution",
+        "status": "unknown"
+      },
+      "schema": "gamma.authored-scalar-semantics.v1",
+      "source_reasoning": {
+        "candidate_design": "reverse-time union-find with virtual roof node and component sizes; restored brick reports roof-size growth minus one",
+        "complexity_target": "O((m*n+hits) alpha) time/O(m*n) space",
+        "reference": "literal per-hit erase then BFS from top row; drop every unreached brick"
+      },
+      "source_sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+    }
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/803.py",
+      "repository": "gamma",
+      "revision": null,
+      "selector": null,
+      "sha256": "b67d9f7fd28a7ec03cb21c7a3e3f86cc4b98a7fdfc6fb90d0131d5c449e3fce6"
+    }
+  ],
+  "problemId": "leetcode:803",
+  "schema": "study.record.v1",
+  "title": "Bricks Falling When Hit · python candidate (qualification unknown)",
+  "type": "implementation",
+  "version": 1
+}

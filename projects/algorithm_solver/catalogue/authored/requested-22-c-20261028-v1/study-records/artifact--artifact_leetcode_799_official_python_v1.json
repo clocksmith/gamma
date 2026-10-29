@@ -1,0 +1,147 @@
+{
+  "approachId": "approach:leetcode:799:official:v1",
+  "complexityClaims": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/799/complexity/python",
+        "sha256": "142e823b994085943a4432475b5e5c59bf799b5798924007c0100b191770ddd6"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/799/complexity_target",
+        "sha256": "1cb8b1ee328b3e2377fafb2cf498a189f5e6bb41e64eeca4a8ea506f94352d2f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/799-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a2c4d6d45b561ea6ffd07c3cc3a493341d23fbbc70f6500fc7bcd065fbcb19d1"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "bound": "O(R^2)",
+        "resource": "time",
+        "where": "R is the query row"
+      },
+      {
+        "bound": "O(R)",
+        "resource": "space",
+        "where": "one rolling row"
+      }
+    ]
+  },
+  "contract": {
+    "id": "contract:leetcode:799:official:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/study-records/contract--contract_leetcode_799_official_authored-v1.json",
+    "sha256": "754822061096e21ddbefdf37a3121e3c5280c104bf69f446d1dcbff2fd9e8536",
+    "version": 1
+  },
+  "documentSchema": null,
+  "executionKind": "code",
+  "externalLocator": {
+    "reason": "The source file is in this repository; no external locator.",
+    "status": "not-applicable"
+  },
+  "file": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "bytes": 590,
+      "mediaType": "text/x-python",
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+      "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+    }
+  },
+  "id": "artifact:leetcode:799:official:python:v1",
+  "kind": "artifact",
+  "language": "python",
+  "nativeMetadata": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/semantics/799-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "a2c4d6d45b561ea6ffd07c3cc3a493341d23fbbc70f6500fc7bcd065fbcb19d1"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "comparison": {
+        "absolute_tolerance": 1e-05,
+        "policy": "finite float absolute tolerance"
+      },
+      "effects": "arguments unchanged",
+      "entrypoint": "solve",
+      "language": "python",
+      "official_interface": {
+        "name": "champagneTower",
+        "params": [
+          {
+            "name": "poured",
+            "type": "integer"
+          },
+          {
+            "name": "query_row",
+            "type": "integer"
+          },
+          {
+            "name": "query_glass",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "double"
+        }
+      },
+      "parameters": [
+        "poured",
+        "query_row",
+        "query_glass"
+      ],
+      "problem_id": 799,
+      "qualification": {
+        "reason": "Not qualified: author-local runs only (the author ran its own candidates against its own references); no independent isolated execution",
+        "status": "unknown"
+      },
+      "schema": "gamma.authored-scalar-semantics.v1",
+      "source_reasoning": {
+        "candidate_design": "float row-by-row overflow simulation down to the queried row only",
+        "complexity_target": "O(query_row**2) time/O(query_row) space",
+        "reference": "exact Fraction top-down inflow per glass, capped at one"
+      },
+      "source_sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+    }
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/requested-22-c-20261028-v1/python/799.py",
+      "repository": "gamma",
+      "revision": null,
+      "selector": null,
+      "sha256": "da201db225f0ee34d47d562285caddbf76139bad6785b14f91b0b65dc0772bae"
+    }
+  ],
+  "problemId": "leetcode:799",
+  "schema": "study.record.v1",
+  "title": "Champagne Tower · python candidate (qualification unknown)",
+  "type": "implementation",
+  "version": 1
+}
