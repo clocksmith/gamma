@@ -1,0 +1,1106 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/695aed975242f618a4d2fa2f/approach/chooseWhen",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Output is staged in fixed-size blocks and must be emitted as soon as a block fills.",
+      "You want memory bounded by the capacity regardless of how large a single write is.",
+      "You need the exact block boundaries, not just the final stream."
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:695aed835242f618a4d2fa2e:695aed975242f618a4d2fa2f:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/contract--contract_hack2hire_695aed835242f618a4d2fa2e_695aed975242f618a4d2fa2f_authored-v1.json",
+    "sha256": "91ff1a83f32daed6f05de0d717abc01f933e03dc4f67e3cf89f63384da8fab33",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/695aed975242f618a4d2fa2f/approach/explanation",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+      }
+    ],
+    "status": "present",
+    "value": "Keep a preallocated array of length capacity and an integer size that says how much of it is used. A write is processed in slices: take as many bytes as fit (the smaller of the free space and the remaining input), copy them in, advance, and if the buffer is now full, drain it to the sink and reset size to zero. Draining appends the buffered bytes to this call's output list (and, when a sink object was given, calls its write for each byte). flush drains only when size is positive. Each input byte is copied once into the buffer and once out, so a write costs time proportional to its length."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/695aed975242f618a4d2fa2f/approach/hints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "What has to happen at the exact moment the buffer becomes full?",
+      "A single write can be longer than the whole buffer, so it may fill it several times.",
+      "Process the write in chunks: copy min(free space, remaining bytes), then check for a full buffer.",
+      "Keep a size counter over a fixed array; draining copies buffer[0:size] to the output and resets size to 0, and flush drains only if size > 0."
+    ]
+  },
+  "id": "approach:hack2hire:695aed835242f618a4d2fa2e:695aed975242f618a4d2fa2f:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/695aed975242f618a4d2fa2f/approach/invariants",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "0 <= size < capacity between calls: a full buffer never survives a call.",
+      "buffer[0:size] holds, in order, exactly the written bytes that have not yet reached the sink.",
+      "The concatenation of all returned lists followed by buffer[0:size] equals the concatenation of all written data."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:hack2hire:695aed835242f618a4d2fa2e:695aed975242f618a4d2fa2f:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_695aed835242f618a4d2fa2e_695aed975242f618a4d2fa2f_approach-native_v1.json",
+    "sha256": "0d3a3f2dcca1c96aae3e5c4331fadaa5b23fb32dbe517de1ec04de92d1be276c",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+      "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+    }
+  ],
+  "problemId": "hack2hire:695aed835242f618a4d2fa2e",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/0/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": "Think of the written bytes as one stream. During a write, the buffer empties each time the number of buffered bytes reaches the capacity, so the bytes emitted are whole capacity-sized blocks. flush emits the leftover tail. Working out the first example by hand shows that one write can emit two blocks."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/0/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Track how many bytes are buffered, not just what they are.",
+          "Ask when the buffer is full, not when it overflows."
+        ]
+      },
+      "id": "approach:hack2hire:695aed835242f618a4d2fa2e:695aed975242f618a4d2fa2f:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/0/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Trace capacity 3 with writes [1,2] and [3,4,5,6,7] and record the buffer contents after each byte.",
+          "Write down what each call returned."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:695aed835242f618a4d2fa2e:695aed975242f618a4d2fa2f:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_695aed835242f618a4d2fa2e_695aed975242f618a4d2fa2f_approach-native_v1.json",
+        "sha256": "0d3a3f2dcca1c96aae3e5c4331fadaa5b23fb32dbe517de1ec04de92d1be276c",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/0/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Every write's output length is a multiple of the capacity.",
+          "Only flush can return fewer than capacity bytes."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/0/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": "Given a capacity and a sequence of writes, which bytes leave the buffer during each call?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/0/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": "Knowing that writes emit only whole blocks and flush emits the remainder fixes the expected output before any code is written."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/0/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R5"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/0/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": "Model the buffer and its emptying rule"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:hack2hire:695aed835242f618a4d2fa2e:695aed975242f618a4d2fa2f:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_695aed835242f618a4d2fa2e_695aed975242f618a4d2fa2f_python_v1.json",
+          "sha256": "4fcfaac98a2df9fce1bb3c7b3deb5a559a428d250508e6bfd3a40f1ca756dde4",
+          "version": 1
+        },
+        {
+          "id": "artifact:hack2hire:695aed835242f618a4d2fa2e:695aed975242f618a4d2fa2f:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_695aed835242f618a4d2fa2e_695aed975242f618a4d2fa2f_javascript_v1.json",
+          "sha256": "4419253b9a3ce0b2d64e9c8e30447f2ee719940bf6000be30b49b6e2ea32a91a",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/1/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": "Allocate buffer = [0]*capacity and size = 0. In write, loop while input remains: take = min(capacity - size, remaining), copy that slice into buffer[size:size+take], advance size and the input index, and drain if size == capacity. _drain appends buffer[0:size] to the call's output list, forwards each byte to an optional sink, and resets size. flush creates an output list and drains only when size > 0. The trace adapter builds one instance from the constructor row and records each method's result."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/1/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compute take before copying so you never write past the end of the buffer.",
+          "Check for a full buffer after each copy, inside the loop."
+        ]
+      },
+      "id": "approach:hack2hire:695aed835242f618a4d2fa2e:695aed975242f618a4d2fa2f:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/1/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Create the instance state: capacity, fixed buffer, size, optional sink.",
+          "Implement _drain(out) that moves buffer[0:size] to out and resets size.",
+          "Implement write with the take/copy/drain loop and return out.",
+          "Implement flush, then the solve trace adapter returning null for the constructor."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:695aed835242f618a4d2fa2e:695aed975242f618a4d2fa2f:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_695aed835242f618a4d2fa2e_695aed975242f618a4d2fa2f_approach-native_v1.json",
+        "sha256": "0d3a3f2dcca1c96aae3e5c4331fadaa5b23fb32dbe517de1ec04de92d1be276c",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/1/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The returned list is newly created for every call.",
+          "An empty write returns an empty list without touching state."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/1/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": "How do you copy a write into the buffer without handling one byte per loop iteration and without exceeding capacity?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/1/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": "Slice copies bound the iterations per write, and the shared drain helper keeps write and flush consistent."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/1/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R6"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/1/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": "Implement write and flush over a fixed array"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/2/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": "Use capacity 1, writes that fill the buffer exactly, writes longer than several capacities, empty writes, and repeated flushes. Concatenate all outputs plus the final buffered tail and compare to the concatenated input."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/2/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compare total emitted bytes with total written bytes after a final flush."
+        ]
+      },
+      "id": "approach:hack2hire:695aed835242f618a4d2fa2e:695aed975242f618a4d2fa2f:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/2/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Try capacity 2 with a single write of 7 bytes, then flush.",
+          "Check that the stream concatenation property holds for a random trace."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:695aed835242f618a4d2fa2e:695aed975242f618a4d2fa2f:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_695aed835242f618a4d2fa2e_695aed975242f618a4d2fa2f_approach-native_v1.json",
+        "sha256": "0d3a3f2dcca1c96aae3e5c4331fadaa5b23fb32dbe517de1ec04de92d1be276c",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/2/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A lazy implementation would return [] for a write that fills the buffer exactly; this contract expects the block."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/2/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": "Which traces show off-by-one mistakes in the emptying rule?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/2/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": "Boundary capacities and exact fills are where eager and lazy emptying differ, and where size resets are forgotten."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/2/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3",
+          "R4",
+          "R5"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/approach/stages/2/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": "Check block boundaries and empty cases"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/695aed975242f618a4d2fa2f/approach/title",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+      }
+    ],
+    "status": "present",
+    "value": "Fixed array buffer with a fill index, copying the largest fitting slice each step"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/695aed975242f618a4d2fa2f/approach/tradeoffs",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:695aed975242f618a4d2fa2f",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Copying slices keeps the loop count per write at about len(data)/capacity + 1 instead of one iteration per byte.",
+      "A growable list that is cleared on drain is simpler but reallocates; the fixed array keeps memory at capacity.",
+      "Returning drained bytes as lists is a test model; a real implementation would hand whole blocks to the file instead of building output lists."
+    ]
+  },
+  "version": 1
+}

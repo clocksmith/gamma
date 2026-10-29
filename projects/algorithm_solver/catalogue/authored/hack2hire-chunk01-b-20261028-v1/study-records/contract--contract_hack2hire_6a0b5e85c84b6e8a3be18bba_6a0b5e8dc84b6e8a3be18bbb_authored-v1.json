@@ -1,0 +1,477 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6a0b5e8dc84b6e8a3be18bbb/assumptions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/6",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The whole specification is an inference, not the official Hack2Hire statement (inference, not the owner/official specification; inferred by claude-opus-5-5 subagent on 2026-10-28).",
+        "basis": "Only a group-level partial preview was available (fields used: contentPreview, algorithmTags, title; preview response sha256 688c8888a3a99ea738f17b4a65fb1b87c0f89f6dbeb0ea014b6f7e246ed6f287, content sha256 a1c9986b96815043a05b556e0c9c08d5bec5e1d0fb3e171ce91daf2ca92863f9). No variant-specific statement, example or constraint list exists locally."
+      },
+      {
+        "assumption": "Open inference points recorded by the cohort: High: the preview names only the first two relationships; the other two names/semantics and the output (all admins vs boolean for one user) are inferred.",
+        "basis": "contracts.json inference_uncertainty for this variant."
+      },
+      {
+        "assumption": "The relationships subgroupMember and groupCameraOwner and their meaning are inferred.",
+        "basis": "contracts.json inference_uncertainty: only the first two relationships are named in the preview."
+      },
+      {
+        "assumption": "The output is the list of all administrators, not a yes/no answer for one user.",
+        "basis": "contracts.json inference_uncertainty."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6a0b5e8dc84b6e8a3be18bbb/clarifyingQuestions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "Yes; members of a subgroup inherit the parent's permissions.",
+        "basis": "contracts.json inferred_spec.",
+        "question": "Does membership in a child group make you a member of its parent?"
+      },
+      {
+        "answer": "Return an empty list.",
+        "basis": "contracts.json inferred_domain.",
+        "question": "What if the camera does not exist?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6a0b5e8dc84b6e8a3be18bbb-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "77b50f2377deeccc1fe96aa3b21168aad5b566af2a113f9a580462dcff789901"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6a0b5e8dc84b6e8a3be18bbb-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "81487cc21716f7305517b694a33dda10694b59e60311253eb9a70b032b7aea14"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6a0b5e8dc84b6e8a3be18bbb/constraints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/6/inferred_domain",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2234246083fef67b55d3fa4e8032b87441773bc5593292e5e6e241d220b0df0d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "At most 10^5 triples.",
+      "Ids match [A-Za-z0-9_] with length 1 to 20.",
+      "Users, groups and cameras are disjoint sets of ids.",
+      "The queried camera id may not appear in any triple."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6a0b5e8dc84b6e8a3be18bbb-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "77b50f2377deeccc1fe96aa3b21168aad5b566af2a113f9a580462dcff789901"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6a0b5e8dc84b6e8a3be18bbb-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "81487cc21716f7305517b694a33dda10694b59e60311253eb9a70b032b7aea14"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh returned containers"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6a0b5e8dc84b6e8a3be18bbb/examples",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6a0b5e8dc84b6e8a3be18bbb.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "79b8f8b8038882c8106af9697e4e7eee38d550360d9c77603b34f8442410c70f"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6a0b5e8dc84b6e8a3be18bbb.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "f5921da26c4cd376a916cc6c3b533e9cc80d9f64563d96c1b0d717627f9b059c"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "cameraId": "cam1",
+          "permissions": [
+            [
+              "ann",
+              "cameraOwner",
+              "cam1"
+            ],
+            [
+              "bob",
+              "groupMember",
+              "ops"
+            ],
+            [
+              "ops",
+              "groupCameraOwner",
+              "cam1"
+            ],
+            [
+              "cid",
+              "groupMember",
+              "night"
+            ],
+            [
+              "night",
+              "subgroupMember",
+              "ops"
+            ],
+            [
+              "dee",
+              "groupMember",
+              "other"
+            ]
+          ]
+        },
+        "explanation": "ann owns cam1, bob is in ops which owns it, and cid is in night, a subgroup of ops. dee's group has no access.",
+        "output": [
+          "ann",
+          "bob",
+          "cid"
+        ]
+      },
+      {
+        "arguments": {
+          "cameraId": "c",
+          "permissions": [
+            [
+              "u",
+              "groupMember",
+              "g1"
+            ],
+            [
+              "g1",
+              "subgroupMember",
+              "g2"
+            ],
+            [
+              "g2",
+              "subgroupMember",
+              "g1"
+            ],
+            [
+              "g2",
+              "groupCameraOwner",
+              "c"
+            ]
+          ]
+        },
+        "explanation": "g1 and g2 form a cycle; u still reaches c once.",
+        "output": [
+          "u"
+        ]
+      },
+      {
+        "arguments": {
+          "cameraId": "cam9",
+          "permissions": [
+            [
+              "ann",
+              "cameraOwner",
+              "cam1"
+            ]
+          ]
+        },
+        "explanation": "Nobody has permissions on an unknown camera.",
+        "output": []
+      }
+    ]
+  },
+  "id": "contract:hack2hire:6a0b5e85c84b6e8a3be18bba:6a0b5e8dc84b6e8a3be18bbb:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6a0b5e8dc84b6e8a3be18bbb/interfaces/python/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6a0b5e8dc84b6e8a3be18bbb.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "79b8f8b8038882c8106af9697e4e7eee38d550360d9c77603b34f8442410c70f"
+          }
+        ],
+        "status": "present",
+        "value": "def solve(permissions: list[list[str]], cameraId: str) -> list[str]; class Solution: def findCameraAdmins(self, permissions, cameraId) -> list[str]"
+      },
+      "kind": "function",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/6/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "findCameraAdmins",
+          "params": [
+            {
+              "name": "permissions",
+              "type": "string[][] ([entity, relationship, object])"
+            },
+            {
+              "name": "cameraId",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "string[]"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6a0b5e8dc84b6e8a3be18bbb/interfaces/javascript/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6a0b5e8dc84b6e8a3be18bbb.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "f5921da26c4cd376a916cc6c3b533e9cc80d9f64563d96c1b0d717627f9b059c"
+          }
+        ],
+        "status": "present",
+        "value": "function solve(permissions, cameraId) -> string[]; module.exports = solve; module.exports.findCameraAdmins(permissions, cameraId) -> string[]"
+      },
+      "kind": "function",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/6/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "findCameraAdmins",
+          "params": [
+            {
+              "name": "permissions",
+              "type": "string[][] ([entity, relationship, object])"
+            },
+            {
+              "name": "cameraId",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "string[]"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/6",
+      "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+    }
+  ],
+  "problemId": "hack2hire:6a0b5e85c84b6e8a3be18bba",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6a0b5e8dc84b6e8a3be18bbb/requirements",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/6",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6a0b5e8dc84b6e8a3be18bbb-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "77b50f2377deeccc1fe96aa3b21168aad5b566af2a113f9a580462dcff789901"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6a0b5e8dc84b6e8a3be18bbb-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "81487cc21716f7305517b694a33dda10694b59e60311253eb9a70b032b7aea14"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "A user who owns the camera directly is an administrator."
+      },
+      {
+        "id": "R2",
+        "text": "A user who is a member of a group that owns the camera, directly or through any chain of subgroup memberships, is an administrator."
+      },
+      {
+        "id": "R3",
+        "text": "Cycles among groups must not cause infinite loops or duplicates."
+      },
+      {
+        "id": "R4",
+        "text": "Return administrators sorted by code-unit order, each once; return an empty list if the camera is unknown."
+      },
+      {
+        "id": "R5",
+        "text": "The input triples are not modified."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6a0b5e8dc84b6e8a3be18bbb/statement",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/6",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Permissions are given as triples [entity, relationship, object] using four relationships: a user owns a camera (cameraOwner), a user belongs to a group (groupMember), a group is a member of a parent group so that its members also count as members of the parent (subgroupMember), and a group owns a camera (groupCameraOwner). A user administers a camera if they own it directly or belong, through any chain of group memberships, to a group that owns it. Given a camera id, return all its administrators sorted. Group membership may contain cycles."
+  },
+  "variantId": "6a0b5e8dc84b6e8a3be18bbb",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/6",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Find Camera Admin User (variant 1)"
+  },
+  "version": 1
+}

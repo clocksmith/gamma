@@ -1,0 +1,463 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/68e1734e0fdcf62632c38cdc/assumptions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/23",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The whole specification is an inference, not the official Hack2Hire statement (inference, not the owner/official specification; inferred by claude-opus-5-5 subagent on 2026-10-28).",
+        "basis": "Only a group-level partial preview was available (fields used: contentPreview, algorithmTags, title; preview response sha256 0da473ee643f41ea24bb3cbfd2d36e72e6048126f25a4086c729a2df5f010ecb, content sha256 b535eb2cc8298244db8d633cc8ea2a87ec474d4f09d6d9b9108c252493f19822). No variant-specific statement, example or constraint list exists locally."
+      },
+      {
+        "assumption": "Open inference points recorded by the cohort: High: pairing rule and output order are inferred from the HASH_TABLE/SORTING tags.",
+        "basis": "contracts.json inference_uncertainty for this variant."
+      },
+      {
+        "assumption": "The rank-matching rule and sorting by left id are guesses.",
+        "basis": "contracts.json inference_uncertainty: pairing rule and output order are inferred from the HASH_TABLE/SORTING tags."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/68e1734e0fdcf62632c38cdc/clarifyingQuestions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "Yes, as integers, including negatives.",
+        "basis": "JavaScript candidate uses a numeric comparator; Python sorts ints.",
+        "question": "Are ids sorted numerically?"
+      },
+      {
+        "answer": "Yes; ids are distinct, so left ids never tie.",
+        "basis": "inferred_domain: distinct ids.",
+        "question": "Is the sort key unique?"
+      },
+      {
+        "answer": "They are left out of the output.",
+        "basis": "inferred_spec.",
+        "question": "What happens to unmatched socks?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/68e1734e0fdcf62632c38cdc-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ba2a176b86c3611cdf1d63c022d5a6a94fac066c3022ab98df21963dc88b006b"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/68e1734e0fdcf62632c38cdc-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "dc23930e735ee28e71767cedc5f12e9d476886204c5ee8b4f54ee9b4e907ae27"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/68e1734e0fdcf62632c38cdc/constraints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/23/inferred_domain",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2234246083fef67b55d3fa4e8032b87441773bc5593292e5e6e241d220b0df0d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "0..10^5 socks.",
+      "Ids are distinct integers in [-10^9, 10^9].",
+      "Colors are 1..10 lowercase letters.",
+      "Feet are exactly 'left' or 'right'."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/68e1734e0fdcf62632c38cdc-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ba2a176b86c3611cdf1d63c022d5a6a94fac066c3022ab98df21963dc88b006b"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/68e1734e0fdcf62632c38cdc-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "dc23930e735ee28e71767cedc5f12e9d476886204c5ee8b4f54ee9b4e907ae27"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh returned containers"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/68e1734e0fdcf62632c38cdc/examples",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/68e1734e0fdcf62632c38cdc.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4da027a0e106d1e42dae8d076ef630915124760567c85992079a3edfe708752c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/68e1734e0fdcf62632c38cdc.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "3e8d75f8c1d4bd8ea8bd5e0ebb60aab8a8179dc17ac82106c6cbcc5a041d8428"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "colors": [
+            "red",
+            "red",
+            "red",
+            "red",
+            "blue",
+            "blue"
+          ],
+          "feet": [
+            "left",
+            "left",
+            "right",
+            "right",
+            "left",
+            "right"
+          ],
+          "ids": [
+            7,
+            3,
+            9,
+            4,
+            8,
+            1
+          ]
+        },
+        "explanation": "Red lefts [3, 7] meet red rights [4, 9] by rank; blue pairs 8 with 1. Pairs are listed by left id.",
+        "output": [
+          [
+            3,
+            4
+          ],
+          [
+            7,
+            9
+          ],
+          [
+            8,
+            1
+          ]
+        ]
+      },
+      {
+        "arguments": {
+          "colors": [
+            "a",
+            "a",
+            "a"
+          ],
+          "feet": [
+            "right",
+            "left",
+            "left"
+          ],
+          "ids": [
+            -5,
+            2,
+            10
+          ]
+        },
+        "explanation": "Only one right sock, so the smallest left (2) gets it and 10 stays unpaired.",
+        "output": [
+          [
+            2,
+            -5
+          ]
+        ]
+      }
+    ]
+  },
+  "id": "contract:hack2hire:68dee3e64b499ddb216af5eb:68e1734e0fdcf62632c38cdc:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/68e1734e0fdcf62632c38cdc/interfaces/python/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/68e1734e0fdcf62632c38cdc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4da027a0e106d1e42dae8d076ef630915124760567c85992079a3edfe708752c"
+          }
+        ],
+        "status": "present",
+        "value": "def solve(ids: list[int], colors: list[str], feet: list[str]) -> list[list[int]]; class Solution: def findSockPairs(self, ids, colors, feet) -> list[list[int]]"
+      },
+      "kind": "function",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/23/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "findSockPairs",
+          "params": [
+            {
+              "name": "ids",
+              "type": "integer[]"
+            },
+            {
+              "name": "colors",
+              "type": "string[]"
+            },
+            {
+              "name": "feet",
+              "type": "string[] (\"left\"|\"right\")"
+            }
+          ],
+          "return": {
+            "type": "integer[][]"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/68e1734e0fdcf62632c38cdc/interfaces/javascript/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/68e1734e0fdcf62632c38cdc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "3e8d75f8c1d4bd8ea8bd5e0ebb60aab8a8179dc17ac82106c6cbcc5a041d8428"
+          }
+        ],
+        "status": "present",
+        "value": "function solve(ids, colors, feet) -> number[][]; module.exports = solve; module.exports.findSockPairs(ids, colors, feet) -> number[][]"
+      },
+      "kind": "function",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/23/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "findSockPairs",
+          "params": [
+            {
+              "name": "ids",
+              "type": "integer[]"
+            },
+            {
+              "name": "colors",
+              "type": "string[]"
+            },
+            {
+              "name": "feet",
+              "type": "string[] (\"left\"|\"right\")"
+            }
+          ],
+          "return": {
+            "type": "integer[][]"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/23",
+      "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+    }
+  ],
+  "problemId": "hack2hire:68dee3e64b499ddb216af5eb",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/68e1734e0fdcf62632c38cdc/requirements",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/23",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/68e1734e0fdcf62632c38cdc-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "ba2a176b86c3611cdf1d63c022d5a6a94fac066c3022ab98df21963dc88b006b"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/68e1734e0fdcf62632c38cdc-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "dc23930e735ee28e71767cedc5f12e9d476886204c5ee8b4f54ee9b4e907ae27"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "Pair only socks of the same color, one left and one right."
+      },
+      {
+        "id": "R2",
+        "text": "Within a color, sort left ids and right ids and pair them by rank; extra socks on the longer side stay unpaired."
+      },
+      {
+        "id": "R3",
+        "text": "Return the pairs as [leftId, rightId] sorted by left id (numerically)."
+      },
+      {
+        "id": "R4",
+        "text": "Inputs are unchanged; fresh lists are returned."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/68e1734e0fdcf62632c38cdc/statement",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/23",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Using the same socks (distinct id, color, foot), form pairs within each color by matching the smallest left id with the smallest right id, the second smallest with the second smallest, and so on, until one side runs out. Return all pairs as [leftId, rightId], sorted by left id."
+  },
+  "variantId": "68e1734e0fdcf62632c38cdc",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/23",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Find Valid Sock Pairs (variant 2)"
+  },
+  "version": 1
+}

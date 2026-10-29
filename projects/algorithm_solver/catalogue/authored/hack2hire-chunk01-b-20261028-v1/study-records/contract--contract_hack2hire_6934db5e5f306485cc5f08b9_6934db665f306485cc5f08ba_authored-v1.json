@@ -1,0 +1,483 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6934db665f306485cc5f08ba/assumptions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/12",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The whole specification is an inference, not the official Hack2Hire statement (inference, not the owner/official specification; inferred by claude-opus-5-5 subagent on 2026-10-28).",
+        "basis": "Only a group-level partial preview was available (fields used: contentPreview, algorithmTags, title; preview response sha256 15207bf5441708b334fb6e4c22f6985a06fbc804d6383eea3e10a636abad2516, content sha256 55813a31667238b91319ba6e64ce388f89b9e5bf8d0e6d12fac6b5dacbd43eb3). No variant-specific statement, example or constraint list exists locally."
+      },
+      {
+        "assumption": "Open inference points recorded by the cohort: Input representation of the stream API, output ordering, whether empty files count, and root path spelling.",
+        "basis": "contracts.json inference_uncertainty for this variant."
+      },
+      {
+        "assumption": "Paths are compared and sorted by plain code-unit string order.",
+        "basis": "Both candidates sort with default string comparison; the cohort spec says 'sorted' without a collation."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6934db665f306485cc5f08ba/clarifyingQuestions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "Yes, in this inferred spec; two or more empty files form a group.",
+        "basis": "contracts.json inferred_spec for this variant.",
+        "question": "Do empty files count as duplicates of each other?"
+      },
+      {
+        "answer": "Yes; only content matters, names and directories do not.",
+        "basis": "Inferred spec compares byte content only.",
+        "question": "Should groups of identical content but different names be reported?"
+      },
+      {
+        "answer": "Up to 200 levels; an iterative traversal avoids recursion limits.",
+        "basis": "inferred_domain and the README depth note for the encryption variants.",
+        "question": "How deep can the tree be?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6934db665f306485cc5f08ba-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "dec5c222e075e08d04168bc6731ab5fe84d0334322f2d99536fa59e50828860c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6934db665f306485cc5f08ba-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e43bb0189596790b579eed9ce4e373d138c5463ce1464ba23563131542b04386"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6934db665f306485cc5f08ba/constraints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/12/inferred_domain",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2234246083fef67b55d3fa4e8032b87441773bc5593292e5e6e241d220b0df0d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "At most 10^4 nodes (directories plus files).",
+      "Directory depth at most 200.",
+      "Total file content at most 2*10^5 bytes.",
+      "Each byte value is in 0..255.",
+      "Names are 1..30 characters from letters, digits, '.', '_' and '-'; sibling names are unique."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6934db665f306485cc5f08ba-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "dec5c222e075e08d04168bc6731ab5fe84d0334322f2d99536fa59e50828860c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6934db665f306485cc5f08ba-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e43bb0189596790b579eed9ce4e373d138c5463ce1464ba23563131542b04386"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh returned containers"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6934db665f306485cc5f08ba/examples",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6934db665f306485cc5f08ba.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "028cd07c2d3db9e2f1db3da5d78ec3bc19abd516fb522dd02bfbbaf8f1ae49c4"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6934db665f306485cc5f08ba.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "477c034e6a41f6977a78ccdf25a89f83f659dad0a2f7499ebad08d5fb5a0e25c"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "root": {
+            "directories": [
+              {
+                "directories": [],
+                "files": [
+                  {
+                    "content": [
+                      1,
+                      2
+                    ],
+                    "name": "x.txt"
+                  }
+                ],
+                "name": "a"
+              }
+            ],
+            "files": [
+              {
+                "content": [
+                  1,
+                  2
+                ],
+                "name": "y.txt"
+              },
+              {
+                "content": [
+                  2,
+                  1
+                ],
+                "name": "w"
+              },
+              {
+                "content": [],
+                "name": "e1"
+              }
+            ],
+            "name": "root"
+          }
+        },
+        "explanation": "x.txt and y.txt both hold [1, 2]. w holds [2, 1] (same size, different order) and e1 is the only empty file, so neither forms a group.",
+        "output": [
+          [
+            "/a/x.txt",
+            "/y.txt"
+          ]
+        ]
+      },
+      {
+        "arguments": {
+          "root": {
+            "directories": [
+              {
+                "directories": [
+                  {
+                    "directories": [],
+                    "files": [
+                      {
+                        "content": [],
+                        "name": "k"
+                      }
+                    ],
+                    "name": "e"
+                  }
+                ],
+                "files": [
+                  {
+                    "content": [
+                      7
+                    ],
+                    "name": "m"
+                  }
+                ],
+                "name": "d"
+              }
+            ],
+            "files": [
+              {
+                "content": [],
+                "name": "j"
+              },
+              {
+                "content": [
+                  8
+                ],
+                "name": "n"
+              }
+            ],
+            "name": "root"
+          }
+        },
+        "explanation": "The two empty files are duplicates; m and n are one byte each but differ.",
+        "output": [
+          [
+            "/d/e/k",
+            "/j"
+          ]
+        ]
+      }
+    ]
+  },
+  "id": "contract:hack2hire:6934db5e5f306485cc5f08b9:6934db665f306485cc5f08ba:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6934db665f306485cc5f08ba/interfaces/python/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6934db665f306485cc5f08ba.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "028cd07c2d3db9e2f1db3da5d78ec3bc19abd516fb522dd02bfbbaf8f1ae49c4"
+          }
+        ],
+        "status": "present",
+        "value": "def solve(root: dict) -> list[list[str]]; class Solution: def findDuplicateFiles(self, root) -> list[list[str]]"
+      },
+      "kind": "function",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/12/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "findDuplicateFiles",
+          "params": [
+            {
+              "name": "root",
+              "type": "DirectoryNode {name, directories, files:[{name, content:int[]}]}"
+            }
+          ],
+          "return": {
+            "type": "string[][]"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6934db665f306485cc5f08ba/interfaces/javascript/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6934db665f306485cc5f08ba.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "477c034e6a41f6977a78ccdf25a89f83f659dad0a2f7499ebad08d5fb5a0e25c"
+          }
+        ],
+        "status": "present",
+        "value": "function solve(root) -> string[][]; module.exports = solve; module.exports.findDuplicateFiles(root) -> string[][]"
+      },
+      "kind": "function",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/12/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "findDuplicateFiles",
+          "params": [
+            {
+              "name": "root",
+              "type": "DirectoryNode {name, directories, files:[{name, content:int[]}]}"
+            }
+          ],
+          "return": {
+            "type": "string[][]"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/12",
+      "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+    }
+  ],
+  "problemId": "hack2hire:6934db5e5f306485cc5f08b9",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6934db665f306485cc5f08ba/requirements",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/12",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6934db665f306485cc5f08ba-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "dec5c222e075e08d04168bc6731ab5fe84d0334322f2d99536fa59e50828860c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6934db665f306485cc5f08ba-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e43bb0189596790b579eed9ce4e373d138c5463ce1464ba23563131542b04386"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "Build each file path as '/' + the directory names below the root + the file name, joined by '/'; the root's own name is not part of any path."
+      },
+      {
+        "id": "R2",
+        "text": "Two files are duplicates exactly when their byte lists are equal element by element, including two empty files."
+      },
+      {
+        "id": "R3",
+        "text": "Report only groups with at least two files; every file appears in at most one group."
+      },
+      {
+        "id": "R4",
+        "text": "Sort paths within a group, and sort groups by their first path (plain string order)."
+      },
+      {
+        "id": "R5",
+        "text": "Do not modify the input tree; return fresh lists."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6934db665f306485cc5f08ba/statement",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/12",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "A file system is given as a nested directory object. Each directory has a name, a list of child directories and a list of files; each file has a name and its content as a list of byte values. The root directory's own name is ignored, so a file's path is '/' followed by the names of the directories below the root and then the file name, joined by '/'. Find every set of two or more files whose contents are exactly the same byte sequence (empty files count as identical to each other). Return these groups as lists of paths; sort the paths inside each group and sort the groups by their first path."
+  },
+  "variantId": "6934db665f306485cc5f08ba",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/12",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Find Duplicate Files (variant 1)"
+  },
+  "version": 1
+}

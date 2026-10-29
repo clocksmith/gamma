@@ -1,0 +1,1102 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/chooseWhen",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Data arrives incrementally and you must release safe output early.",
+      "Patterns are short, so the hold-back is bounded by the longest pattern.",
+      "You can afford a native search over a small pending buffer per chunk."
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:69dfe74795e80ae213e5c78f:69dfee0f95e80ae213e5c7bc:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/contract--contract_hack2hire_69dfe74795e80ae213e5c78f_69dfee0f95e80ae213e5c7bc_authored-v1.json",
+    "sha256": "c27e7c001d1ea13efa83062ae5a197ab60215872961b42a7643a919d1f486e93",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/explanation",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+      }
+    ],
+    "status": "present",
+    "value": "Keep a pending buffer consisting of the held-back suffix plus the new chunk. Precompute the set of proper prefixes of all stop words. After appending a chunk, find the hold position: the smallest start among the last (longest - 1) positions whose suffix is a proper prefix of some stop word. Search pending for the earliest complete stop word. If one starts at or before the hold position, it is certain: release text before it and stop. Otherwise release pending up to the hold position and keep the rest. At the end, flush what remains, cut at any stop word."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/hints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "What part of the text so far could still turn into a stop word?",
+      "Only a suffix shorter than the longest stop word can be the start of one.",
+      "Hold back the earliest-starting suffix that is a proper prefix of a stop word; search pending for full stop words.",
+      "If a full stop word starts at or before the hold position, release before it and stop; otherwise release up to the hold position and keep the rest; flush at the end."
+    ]
+  },
+  "id": "approach:hack2hire:69dfe74795e80ae213e5c78f:69dfee0f95e80ae213e5c7bc:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/invariants",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Released text so far is a prefix of the variant-1 answer.",
+      "pending is shorter than the longest stop word after each release (it is only the held suffix).",
+      "No released position is at or after the start of a stop word occurrence."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:hack2hire:69dfe74795e80ae213e5c78f:69dfee0f95e80ae213e5c7bc:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_69dfe74795e80ae213e5c78f_69dfee0f95e80ae213e5c7bc_approach-native_v1.json",
+    "sha256": "6191cdbb1f0c22b9c70c16ea9d816f42dcfb45a7ed984792a2e5e965f12f1076",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+      "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+    }
+  ],
+  "problemId": "hack2hire:69dfe74795e80ae213e5c78f",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/0/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": "Only characters in a suffix that matches the start of some stop word. Everything before the earliest such suffix is safe unless a complete stop word already appears earlier."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/0/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Think about a stop word split across two chunks.",
+          "How long can the held suffix be?"
+        ]
+      },
+      "id": "approach:hack2hire:69dfe74795e80ae213e5c78f:69dfee0f95e80ae213e5c7bc:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/0/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Trace the first example chunk by chunk.",
+          "Mark the held suffix after each chunk."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:69dfe74795e80ae213e5c78f:69dfee0f95e80ae213e5c7bc:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_69dfe74795e80ae213e5c78f_69dfee0f95e80ae213e5c7bc_approach-native_v1.json",
+        "sha256": "6191cdbb1f0c22b9c70c16ea9d816f42dcfb45a7ed984792a2e5e965f12f1076",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/0/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "A complete stop word inside pending that starts no later than the hold point settles the answer immediately."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/0/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": "After a chunk, which characters could still be part of a stop word that has not fully arrived?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/0/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": "Identifying the uncertain region precisely lets you release as much as possible without ever releasing unsafe text."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/0/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/0/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": "Decide what is safe to release"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:hack2hire:69dfe74795e80ae213e5c78f:69dfee0f95e80ae213e5c7bc:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_69dfe74795e80ae213e5c78f_69dfee0f95e80ae213e5c7bc_python_v1.json",
+          "sha256": "22c141fdba3b469a6c722a3ef1ae416e6cb05160a48d5a939194da89ca95aad1",
+          "version": 1
+        },
+        {
+          "id": "artifact:hack2hire:69dfe74795e80ae213e5c78f:69dfee0f95e80ae213e5c7bc:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_69dfe74795e80ae213e5c78f_69dfee0f95e80ae213e5c7bc_javascript_v1.json",
+          "sha256": "75a748b405e6c07ec3e30e893bb5158fc79c706031b5c3f5c84955d5968ec580",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/1/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": "Build the prefix set and the longest length. For each chunk: if stopped append ''. Otherwise pending += chunk; scan starts from max(0, len - longest + 1) upward and take the first whose suffix is in the prefix set as hold (default len). Find the earliest stop word in pending. If found at position <= hold, append pending[:position], clear and stop; else append pending[:hold] and keep pending[hold:]. After the loop append '' if stopped, else pending cut at any stop word."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/1/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compare the stop position with the hold position using <=.",
+          "Do not forget the final flush entry."
+        ]
+      },
+      "id": "approach:hack2hire:69dfe74795e80ae213e5c78f:69dfee0f95e80ae213e5c7bc:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/1/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Precompute proper prefixes of each word.",
+          "Compute hold by scanning candidate starts.",
+          "Search for the earliest complete stop word in pending.",
+          "Emit and update pending; emit the final flush."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:69dfe74795e80ae213e5c78f:69dfee0f95e80ae213e5c7bc:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_69dfe74795e80ae213e5c78f_69dfee0f95e80ae213e5c7bc_approach-native_v1.json",
+        "sha256": "6191cdbb1f0c22b9c70c16ea9d816f42dcfb45a7ed984792a2e5e965f12f1076",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/1/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The output always has len(chunks) + 1 entries.",
+          "Empty chunks still produce an output, possibly empty."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/1/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": "How do you compute the hold position and handle the stop?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/1/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": "Scanning starts from the left so the first hit is the earliest-starting (longest) candidate suffix."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/1/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R6"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/1/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": "Implement buffer, hold and stop"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/2/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": "For random texts, split them into random chunks and check that the concatenated outputs equal the variant-1 answer, that the output length is chunks + 1, and that no output after a stop is non-empty. Include stop words split across chunk boundaries and empty chunks."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/2/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Use the variant-1 solution as the oracle for the joined text."
+        ]
+      },
+      "id": "approach:hack2hire:69dfe74795e80ae213e5c78f:69dfee0f95e80ae213e5c7bc:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/2/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Split a text at every possible boundary and compare joined outputs to variant 1.",
+          "Include overlapping stop words such as 'ab' and 'abc'."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:69dfe74795e80ae213e5c78f:69dfee0f95e80ae213e5c7bc:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_69dfe74795e80ae213e5c78f_69dfee0f95e80ae213e5c7bc_approach-native_v1.json",
+        "sha256": "6191cdbb1f0c22b9c70c16ea9d816f42dcfb45a7ed984792a2e5e965f12f1076",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/2/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Stop words that share prefixes test the prefix set."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/2/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": "How can you test that every chunking gives a consistent result?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/2/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": "The concatenation property is an independent oracle that does not depend on the hold-back details."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/2/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R5"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/stages/2/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+          }
+        ],
+        "status": "present",
+        "value": "Check concatenation and splits"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/title",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+      }
+    ],
+    "status": "present",
+    "value": "Pending buffer with a proper-prefix hold-back"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69dfee0f95e80ae213e5c7bc/approach/tradeoffs",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:69dfee0f95e80ae213e5c7bc",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69dfee0f95e80ae213e5c7bc.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "49e927ecaefc0b908b24c41bb68384b6180f765c337f8d6c0b6bcd7f3d92ad26"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69dfee0f95e80ae213e5c7bc.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "5b0a4820a73fe7147128eeb20155e8d4ff9cb94aa8463e1851b857544d7aca6c"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Re-searching pending per chunk costs O((chunk + 50) * W); a streaming Aho-Corasick automaton would be linear but much more complex.",
+      "Holding back the smallest-start candidate suffix is conservative: it may delay text that turns out to be safe, but never releases unsafe text.",
+      "The prefix set uses memory proportional to the total stop-word length squared in the worst case (all proper prefixes)."
+    ]
+  },
+  "version": 1
+}

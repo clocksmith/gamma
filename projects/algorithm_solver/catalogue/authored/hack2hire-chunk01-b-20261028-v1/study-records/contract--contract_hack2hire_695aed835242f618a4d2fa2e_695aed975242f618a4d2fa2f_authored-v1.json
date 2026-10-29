@@ -1,0 +1,569 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/695aed975242f618a4d2fa2f/assumptions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/0",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The whole specification is an inference, not the official Hack2Hire statement (inference, not the owner/official specification; inferred by claude-opus-5-5 subagent on 2026-10-28).",
+        "basis": "Only a group-level partial preview was available (fields used: contentPreview, algorithmTags, title; preview response sha256 f72bc031abffb8d774b07d3fdb05c6098180a76176b3b6a786bcb1cc52fd1156, content sha256 5d79111ca6d13e3049dbe0912e88bacee9854f92c6c2d80946e9f897169789c6). No variant-specific statement, example or constraint list exists locally."
+      },
+      {
+        "assumption": "Open inference points recorded by the cohort: Whether a full buffer flushes eagerly (assumed) or only when the next byte would overflow; byte range; whether close() exists; real API returns void and side-effects the File.",
+        "basis": "contracts.json inference_uncertainty for this variant."
+      },
+      {
+        "assumption": "A buffer that becomes exactly full is emptied at once rather than when the next byte would overflow it.",
+        "basis": "contracts.json inference_uncertainty lists eager versus lazy emptying as open; the candidates and reference implement eager emptying."
+      },
+      {
+        "assumption": "No close() method exists; only write and flush are modelled.",
+        "basis": "contracts.json inferred_interface and inference_uncertainty."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/695aed975242f618a4d2fa2f/clarifyingQuestions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "Assumed yes: emptying is eager, so the bytes appear in that write's return value.",
+        "basis": "contracts.json inference_uncertainty; candidate design.",
+        "question": "When the buffer reaches capacity exactly at the end of a write, is it emptied right away?"
+      },
+      {
+        "answer": "No; it returns an empty list.",
+        "basis": "Candidate flush checks size before draining.",
+        "question": "Does flush on an empty buffer touch the sink?"
+      },
+      {
+        "answer": "The real API probably returns nothing and only writes to a file; returning the drained bytes is a test model of that side effect.",
+        "basis": "contracts.json inferred_spec and inference_uncertainty.",
+        "question": "What does the real API return?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/695aed975242f618a4d2fa2f-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "eb338a24ab77bd9b9444a32c14ac00703e066048aa4f16c5e1929bd5b9cb6bc3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/695aed975242f618a4d2fa2f-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1b6bb3a891245195a416ca52f825c06f794275cf942ec3a00d91cfda96073825"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/695aed975242f618a4d2fa2f/constraints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/0/inferred_domain",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2234246083fef67b55d3fa4e8032b87441773bc5593292e5e6e241d220b0df0d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "capacity is between 1 and 10^4.",
+      "At most 10^4 method calls follow the constructor.",
+      "Each write carries 0 to 10^4 bytes, each in the range -128 to 127.",
+      "The total number of written bytes is at most 2*10^5."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/695aed975242f618a4d2fa2f-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "eb338a24ab77bd9b9444a32c14ac00703e066048aa4f16c5e1929bd5b9cb6bc3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/695aed975242f618a4d2fa2f-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1b6bb3a891245195a416ca52f825c06f794275cf942ec3a00d91cfda96073825"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "native_state": "changes only through write/flush",
+      "returned_mutable_containers": "fresh trace list and fresh per-call byte lists",
+      "trace_inputs": "unchanged including nested argument lists"
+    }
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/695aed975242f618a4d2fa2f/examples",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "argument_lists": [
+            [
+              3
+            ],
+            [
+              [
+                1,
+                2
+              ]
+            ],
+            [
+              [
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            ],
+            []
+          ],
+          "operation_names": [
+            "BufferedFile",
+            "write",
+            "write",
+            "flush"
+          ]
+        },
+        "explanation": "Capacity 3. The first write leaves 2 bytes buffered. The second write fills the buffer twice (1,2,3 then 4,5,6) and leaves 7, which flush empties.",
+        "output": [
+          null,
+          [],
+          [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          [
+            7
+          ]
+        ]
+      },
+      {
+        "arguments": {
+          "argument_lists": [
+            [
+              1
+            ],
+            [],
+            [
+              [
+                -5,
+                0
+              ]
+            ],
+            [
+              []
+            ]
+          ],
+          "operation_names": [
+            "BufferedFile",
+            "flush",
+            "write",
+            "write"
+          ]
+        },
+        "explanation": "With capacity 1 every byte empties the buffer at once; flushing an empty buffer and writing an empty list hand nothing to the sink.",
+        "output": [
+          null,
+          [],
+          [
+            -5,
+            0
+          ],
+          []
+        ]
+      },
+      {
+        "arguments": {
+          "argument_lists": [
+            [
+              4
+            ],
+            [
+              [
+                9,
+                9,
+                9,
+                9
+              ]
+            ],
+            [],
+            []
+          ],
+          "operation_names": [
+            "BufferedFile",
+            "write",
+            "flush",
+            "flush"
+          ]
+        },
+        "explanation": "A write that fills the buffer exactly empties it immediately, so the following flushes have nothing to emit.",
+        "output": [
+          null,
+          [
+            9,
+            9,
+            9,
+            9
+          ],
+          [],
+          []
+        ]
+      }
+    ]
+  },
+  "id": "contract:hack2hire:695aed835242f618a4d2fa2e:695aed975242f618a4d2fa2f:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/interfaces/python/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/695aed975242f618a4d2fa2f.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "c9f61ec0b8d6ea6f7c4df811240ee060f4652aa24b4d8c8855a7b8394b5a2cce"
+          }
+        ],
+        "status": "present",
+        "value": "class BufferedFile: __init__(self, capacity: int, file=None); write(self, data: list[int]) -> list[int]; flush(self) -> list[int]. Trace adapter: solve(operation_names: list[str], argument_lists: list[list]) -> list"
+      },
+      "kind": "class",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/0/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "classname": "BufferedFile",
+          "constructor": {
+            "params": [
+              {
+                "name": "capacity",
+                "type": "integer"
+              }
+            ]
+          },
+          "methods": [
+            {
+              "name": "write",
+              "params": [
+                {
+                  "name": "data",
+                  "type": "integer[] (bytes -128..127)"
+                }
+              ],
+              "return": {
+                "type": "integer[]"
+              }
+            },
+            {
+              "name": "flush",
+              "params": [],
+              "return": {
+                "type": "integer[]"
+              }
+            }
+          ],
+          "transcript_interface": {
+            "argument_order": [
+              "operation_names",
+              "argument_lists"
+            ],
+            "name": "solve",
+            "note": "class trace adapter: solve(operation_names, argument_lists) returns null for the constructor then each method result"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/695aed975242f618a4d2fa2f/interfaces/javascript/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/695aed975242f618a4d2fa2f.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "e373d18e7bdfd105ef28391ca8e30982b6016357ddc1b6a8ca521a9fccae87e4"
+          }
+        ],
+        "status": "present",
+        "value": "class BufferedFile { constructor(capacity, file = null); write(data) -> number[]; flush() -> number[] }; module.exports = solve(operationNames, argumentLists) -> Array; module.exports.BufferedFile"
+      },
+      "kind": "class",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/0/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "classname": "BufferedFile",
+          "constructor": {
+            "params": [
+              {
+                "name": "capacity",
+                "type": "integer"
+              }
+            ]
+          },
+          "methods": [
+            {
+              "name": "write",
+              "params": [
+                {
+                  "name": "data",
+                  "type": "integer[] (bytes -128..127)"
+                }
+              ],
+              "return": {
+                "type": "integer[]"
+              }
+            },
+            {
+              "name": "flush",
+              "params": [],
+              "return": {
+                "type": "integer[]"
+              }
+            }
+          ],
+          "transcript_interface": {
+            "argument_order": [
+              "operation_names",
+              "argument_lists"
+            ],
+            "name": "solve",
+            "note": "class trace adapter: solve(operation_names, argument_lists) returns null for the constructor then each method result"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/0",
+      "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+    }
+  ],
+  "problemId": "hack2hire:695aed835242f618a4d2fa2e",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/695aed975242f618a4d2fa2f/requirements",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/0",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/695aed975242f618a4d2fa2f-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "eb338a24ab77bd9b9444a32c14ac00703e066048aa4f16c5e1929bd5b9cb6bc3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/695aed975242f618a4d2fa2f-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1b6bb3a891245195a416ca52f825c06f794275cf942ec3a00d91cfda96073825"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "The constructor takes a capacity of at least 1 and starts with an empty buffer."
+      },
+      {
+        "id": "R2",
+        "text": "write(data) appends bytes in their original order and empties the buffer into the sink every time it becomes exactly full, possibly more than once per call."
+      },
+      {
+        "id": "R3",
+        "text": "flush() empties all currently buffered bytes; with an empty buffer it hands nothing to the sink."
+      },
+      {
+        "id": "R4",
+        "text": "Every method returns a fresh list of the bytes handed to the sink during that call, in sink order; the constructor contributes null to a trace."
+      },
+      {
+        "id": "R5",
+        "text": "Bytes reach the sink in exactly the order they were written across all calls."
+      },
+      {
+        "id": "R6",
+        "text": "The input data lists are not modified."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/695aed975242f618a4d2fa2f/statement",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/0",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Design a writer class that holds an in-memory buffer of a fixed byte capacity in front of an output sink. write(data) appends the bytes in order; whenever the buffer becomes completely full it is immediately emptied into the sink, so a single long write can empty the buffer several times. flush() empties whatever is currently buffered, even if the buffer is not full. Because the real sink is not observable in a test, each method returns a new list of exactly the bytes passed to the sink during that call, or an empty list when nothing was passed. The class may also be given a sink object whose write(byte) method receives each byte as it is emptied."
+  },
+  "variantId": "695aed975242f618a4d2fa2f",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/0",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Design a Buffered File Writer (variant 1)"
+  },
+  "version": 1
+}

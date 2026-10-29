@@ -1,0 +1,151 @@
+{
+  "approachId": "approach:hack2hire:688102f5f96758aa78e1d679:688102fcf96758aa78e1d67a:v1",
+  "complexityClaims": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/688102fcf96758aa78e1d67a/complexity/javascript",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:688102fcf96758aa78e1d67a/complexity_target",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/688102fcf96758aa78e1d67a-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "8ba6114163d0155ff9b120773fdd430cf53e033b3db58fdac6793c92c40b031a"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "bound": "O(n log^2 n)",
+        "resource": "time",
+        "where": "n orders; O(log n) simulations each costing O(n log n)"
+      },
+      {
+        "bound": "O(n)",
+        "resource": "space",
+        "where": "sorted order indices and the heap of free times"
+      }
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:688102f5f96758aa78e1d679:688102fcf96758aa78e1d67a:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/contract--contract_hack2hire_688102f5f96758aa78e1d679_688102fcf96758aa78e1d67a_authored-v1.json",
+    "sha256": "b99cfc99d39afe4238fd8cae80589f8c763de6d51d86a7a92b1d97653faf6ac9",
+    "version": 1
+  },
+  "documentSchema": null,
+  "executionKind": "code",
+  "externalLocator": {
+    "reason": "The source file is in this repository; no external locator.",
+    "status": "not-applicable"
+  },
+  "file": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/688102fcf96758aa78e1d67a.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "8ce518845da043ceabd98c229d463871f05025b27f0439f53dacaddff180ca1f"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "bytes": 1952,
+      "mediaType": "text/javascript",
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/688102fcf96758aa78e1d67a.js",
+      "sha256": "8ce518845da043ceabd98c229d463871f05025b27f0439f53dacaddff180ca1f"
+    }
+  },
+  "id": "artifact:hack2hire:688102f5f96758aa78e1d679:688102fcf96758aa78e1d67a:javascript:v1",
+  "kind": "artifact",
+  "language": "javascript",
+  "nativeMetadata": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/688102fcf96758aa78e1d67a-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "8ba6114163d0155ff9b120773fdd430cf53e033b3db58fdac6793c92c40b031a"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh returned containers",
+      "entrypoint": "solve",
+      "inference": {
+        "basis_fields": [
+          "contentPreview",
+          "algorithmTags",
+          "title"
+        ],
+        "class": "inference, not the owner/official specification",
+        "inferred_at": "2026-10-28",
+        "inferred_by": "claude-opus-5-5 subagent"
+      },
+      "inferred_interface": {
+        "name": "minShoppers",
+        "params": [
+          {
+            "name": "orders",
+            "type": "integer[][] ([duration, arrivalTime])"
+          },
+          {
+            "name": "maxAverageWait",
+            "type": "integer"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      },
+      "language": "javascript",
+      "named_wrapper": "module.exports.minShoppers",
+      "parameters": [
+        "orders",
+        "maxAverageWait"
+      ],
+      "problem_uid": "hack2hire:688102fcf96758aa78e1d67a",
+      "qualification": {
+        "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+        "status": "unknown"
+      },
+      "schema": "gamma.authored-scalar-semantics.v1",
+      "source_reasoning": {
+        "candidate_design": "binary search on shopper count (wait is monotone) with min-heap simulation and integer comparison total <= target*n",
+        "complexity_target": "O(n log^2 n) time/O(n) space",
+        "reference": "increasing shopper counts with linear-scan simulation and exact Fraction comparison (<=60 orders)"
+      },
+      "source_sha256": "8ce518845da043ceabd98c229d463871f05025b27f0439f53dacaddff180ca1f",
+      "spec_basis": "inferred"
+    }
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/688102fcf96758aa78e1d67a.js",
+      "repository": "gamma",
+      "revision": null,
+      "selector": null,
+      "sha256": "8ce518845da043ceabd98c229d463871f05025b27f0439f53dacaddff180ca1f"
+    }
+  ],
+  "problemId": "hack2hire:688102f5f96758aa78e1d679",
+  "schema": "study.record.v1",
+  "title": "Find Minimal Shoppers (variant 1) · javascript candidate (qualification unknown)",
+  "type": "implementation",
+  "version": 1
+}

@@ -1,0 +1,1098 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69361ab01553144e303f6805/approach/chooseWhen",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "You need an order statistic over data that cannot be gathered in one place.",
+      "Workers can answer rank queries cheaply.",
+      "The value range is bounded so the number of probe rounds is small."
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/contract--contract_hack2hire_6935ba711553144e303f6769_69361ab01553144e303f6805_authored-v1.json",
+    "sha256": "e1a30fa1003a97f8ee84bcf3796c8733dbcd04edfa5b2cf4950f59ad04f1c9c0",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69361ab01553144e303f6805/approach/explanation",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+      }
+    ],
+    "status": "present",
+    "value": "Each worker sorts its slice once. To find the k-th smallest value overall (0-based), the coordinator binary-searches over the value range [-10^9, 10^9]: for a probe x it asks every worker how many of its values are at most x (a bisect in the sorted slice) and sums the answers. The smallest x with total at least k+1 is the k-th value. The median uses k = (N-1)//2 and k = N//2 and averages them, returning an integer when the sum is even. Only counts cross the network, never the data itself."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69361ab01553144e303f6805/approach/hints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Could you find the median without collecting all values in one place?",
+      "How many values are at most x? Each worker can answer that alone.",
+      "Binary search on the value x until that count first reaches k+1.",
+      "Sort each slice, bisect_right per worker, search [-10^9, 10^9] for the two middle ranks, average and return an int when the sum is even."
+    ]
+  },
+  "id": "approach:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69361ab01553144e303f6805/approach/invariants",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "During the search, the k-th smallest value always lies in [low, high].",
+      "count(x) = number of values <= x is nondecreasing in x.",
+      "The returned low is a value that actually occurs in the data."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_6935ba711553144e303f6769_69361ab01553144e303f6805_approach-native_v1.json",
+    "sha256": "19721afde687658dd774a69fde51e5e2fca4a5949b6d6563a288ac6c443f8fee",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+      "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+    }
+  ],
+  "problemId": "hack2hire:6935ba711553144e303f6769",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/0/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": "The k-th smallest value is the smallest x such that at least k+1 values are at most x. That count is a sum of independent per-worker counts and grows monotonically with x, so binary search over x finds it."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/0/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Think about how many values are below a candidate."
+        ]
+      },
+      "id": "approach:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/0/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "For the second example, tabulate count(x) for x from 0 to 5.",
+          "Find the smallest x with count >= 2 and >= 3."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_6935ba711553144e303f6769_69361ab01553144e303f6805_approach-native_v1.json",
+        "sha256": "19721afde687658dd774a69fde51e5e2fca4a5949b6d6563a288ac6c443f8fee",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/0/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "The answer is always a value present in the data."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/0/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": "What question can workers answer that locates the k-th smallest value?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/0/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": "Monotonic counting functions are what make binary search on the answer possible."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/0/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/0/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": "Express the median as a rank query"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_6935ba711553144e303f6769_69361ab01553144e303f6805_python_v1.json",
+          "sha256": "3bbaf7b8cb3b9ea9268e8016c1bca8d72866c88f45f28343394c1589be230781",
+          "version": 1
+        },
+        {
+          "id": "artifact:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_6935ba711553144e303f6769_69361ab01553144e303f6805_javascript_v1.json",
+          "sha256": "286187af998898908bbfc4f7680aac9163cc6ce17b4b442f22a8e063cf140f4d",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/1/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": "Sort each slice. kth(k) runs low=-10^9, high=10^9 and while low < high takes middle = floor((low+high)/2), sums upper bounds of middle over workers and sets high = middle if the sum >= k+1 else low = middle+1. Compute a = kth((N-1)//2) and b = kth(N//2); return (a+b)//2 if a+b is even else (a+b)/2."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/1/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Use floor, not truncation, for negative midpoints."
+        ]
+      },
+      "id": "approach:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/1/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Sort slices.",
+          "Write an upper-bound (bisect_right) helper.",
+          "Write kth with the binary search.",
+          "Combine a and b."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_6935ba711553144e303f6769_69361ab01553144e303f6805_approach-native_v1.json",
+        "sha256": "19721afde687658dd774a69fde51e5e2fca4a5949b6d6563a288ac6c443f8fee",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/1/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "For odd N, a and b are the same value."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/1/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": "How do you implement the search and return the right numeric type?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/1/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": "Floor division handles negative midpoints correctly in Python; JavaScript uses Math.floor."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/1/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/1/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": "Implement kth and the median formula"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/2/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": "Test odd and even totals, all-negative data, extreme values -10^9 and 10^9, many duplicates, and half-integer results. Compare with sorting the flattened data."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/2/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compare with a sorted-list median on random inputs."
+        ]
+      },
+      "id": "approach:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/2/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Try [[-1000000000], [1000000000]] which gives 0.",
+          "Try [[-3], [-2]] which gives -2.5."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:6935ba711553144e303f6769:69361ab01553144e303f6805:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_6935ba711553144e303f6769_69361ab01553144e303f6805_approach-native_v1.json",
+        "sha256": "19721afde687658dd774a69fde51e5e2fca4a5949b6d6563a288ac6c443f8fee",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/2/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "An even total with an odd sum of middle values yields a .5 result."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/2/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": "Which inputs check the search bounds and the averaging?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/2/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": "Extremes test the search bounds; duplicates test the >= k+1 condition."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/2/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/69361ab01553144e303f6805/approach/stages/2/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+          }
+        ],
+        "status": "present",
+        "value": "Test parity, negatives and duplicates"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69361ab01553144e303f6805/approach/title",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+      }
+    ],
+    "status": "present",
+    "value": "Value-range binary search with per-worker rank counts"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/69361ab01553144e303f6805/approach/tradeoffs",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:69361ab01553144e303f6805",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/69361ab01553144e303f6805.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "94d1659cba58c8a8be7ac711659972d22b0ff3dcc1d1ab46a37a5b38947221d5"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/69361ab01553144e303f6805.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "39af1535bc412e85a3ae0edd6a9503e42c0b810001032b06cb2064fbbe4c3283"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Sorting all data centrally (the reference) is simplest but moves every value.",
+      "Value-range search needs about 31 rounds of k rank queries, but each message is a single count.",
+      "Two separate searches for the two middle values double the rounds; it keeps the code simple."
+    ]
+  },
+  "version": 1
+}

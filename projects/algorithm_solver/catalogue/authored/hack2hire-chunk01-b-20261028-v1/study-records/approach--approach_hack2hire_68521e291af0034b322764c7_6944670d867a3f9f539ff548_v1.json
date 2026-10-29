@@ -1,0 +1,1101 @@
+{
+  "chooseWhen": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6944670d867a3f9f539ff548/approach/chooseWhen",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Weights differ per step but are non-negative.",
+      "The objective is a lexicographic pair rather than a single number.",
+      "The graph is a grid with up to 10^4 cells."
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:68521e291af0034b322764c7:6944670d867a3f9f539ff548:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/contract--contract_hack2hire_68521e291af0034b322764c7_6944670d867a3f9f539ff548_authored-v1.json",
+    "sha256": "7d4c935f50af48431b50653f00bbaa85a5f6759f4d64e7fb1555531b959a1864",
+    "version": 1
+  },
+  "explanation": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6944670d867a3f9f539ff548/approach/explanation",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+      }
+    ],
+    "status": "present",
+    "value": "Now step weights differ by cell, so BFS no longer works. Treat each cell as a node whose outgoing moves all carry the weight of the cell being left: (0, 0) for S, (times[d-1], costs[d-1]) for digit d. Pairs are added component-wise and compared lexicographically, which is a valid ordering for Dijkstra because all weights are non-negative and adding a pair preserves order. Pop the smallest (time, cost) from a heap, skip stale entries, return when D is popped, and relax non-blocked neighbours."
+  },
+  "hints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6944670d867a3f9f539ff548/approach/hints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Do all steps cost the same now?",
+      "Varying non-negative weights call for Dijkstra.",
+      "Make the distance a (time, cost) pair and compare tuples.",
+      "Weight each move by the cell you leave (S is free), skip X and S as targets, and return the pair when D is popped."
+    ]
+  },
+  "id": "approach:hack2hire:68521e291af0034b322764c7:6944670d867a3f9f539ff548:v1",
+  "invariants": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6944670d867a3f9f539ff548/approach/invariants",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "When a cell is popped with its current best pair, that pair is optimal.",
+      "best[cell] only ever decreases lexicographically.",
+      "Charges depend only on the cell being left."
+    ]
+  },
+  "kind": "approach",
+  "native": {
+    "id": "artifact:hack2hire:68521e291af0034b322764c7:6944670d867a3f9f539ff548:approach-native:v1",
+    "kind": "artifact",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_68521e291af0034b322764c7_6944670d867a3f9f539ff548_approach-native_v1.json",
+    "sha256": "8ce4d41dd433106e37070d60ff47af517be39e9862de701736e34efbf3b7c0f8",
+    "version": 1
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+      "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+    }
+  ],
+  "problemId": "hack2hire:68521e291af0034b322764c7",
+  "representation": "coding",
+  "schema": "study.record.v1",
+  "sequenceStatus": "draft",
+  "stages": [
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/0/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": "Yes: the pair order is total, adding a non-negative pair never makes a path smaller, and so the greedy pop order remains correct."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/0/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "What breaks BFS here?",
+          "What properties does Dijkstra need from weights?"
+        ]
+      },
+      "id": "approach:hack2hire:68521e291af0034b322764c7:6944670d867a3f9f539ff548:v1:stage:1-reasoning",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/0/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Compute the best pair for the first example by hand.",
+          "Argue that adding (t, c) with t, c >= 0 preserves lexicographic order."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:68521e291af0034b322764c7:6944670d867a3f9f539ff548:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_68521e291af0034b322764c7_6944670d867a3f9f539ff548_approach-native_v1.json",
+        "sha256": "8ce4d41dd433106e37070d60ff47af517be39e9862de701736e34efbf3b7c0f8",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/0/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Equal times are common, so cost must be tracked alongside time."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/0/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": "Can Dijkstra minimise a pair lexicographically?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/0/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": "Checking these properties is what licenses using Dijkstra on non-scalar weights."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/0/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R2",
+          "R3"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/0/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": "Choose a shortest-path algorithm for pairs"
+      },
+      "type": "reasoning"
+    },
+    {
+      "artifacts": [
+        {
+          "id": "artifact:hack2hire:68521e291af0034b322764c7:6944670d867a3f9f539ff548:python:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_68521e291af0034b322764c7_6944670d867a3f9f539ff548_python_v1.json",
+          "sha256": "476f18e9b53d957bbbd5df68f6b486b8fc9a45038dba44bd142d4dc44406c301",
+          "version": 1
+        },
+        {
+          "id": "artifact:hack2hire:68521e291af0034b322764c7:6944670d867a3f9f539ff548:javascript:v1",
+          "kind": "artifact",
+          "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_68521e291af0034b322764c7_6944670d867a3f9f539ff548_javascript_v1.json",
+          "sha256": "7ff31b9213a5649e6259ec6fcb56fb19e22e8c41e82419c0470b40e85abe277a",
+          "version": 1
+        }
+      ],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/1/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": "Store best[cell] = (time, cost). Push (time, cost, r, c). On pop, skip if it differs from best; return it if the cell is D; otherwise compute the departure charge of the cell and relax each in-bounds neighbour that is not X or S."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/1/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Do not charge when entering D; D is never left.",
+          "Exclude S as a neighbour."
+        ]
+      },
+      "id": "approach:hack2hire:68521e291af0034b322764c7:6944670d867a3f9f539ff548:v1:stage:2-coding",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/1/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Locate S and start with best[S] = (0, 0).",
+          "Pop, skip stale, return on D.",
+          "Compute the charge from the current cell's character.",
+          "Relax neighbours when the candidate pair is smaller."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:68521e291af0034b322764c7:6944670d867a3f9f539ff548:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_68521e291af0034b322764c7_6944670d867a3f9f539ff548_approach-native_v1.json",
+        "sha256": "8ce4d41dd433106e37070d60ff47af517be39e9862de701736e34efbf3b7c0f8",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/1/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Python compares tuples natively; JavaScript uses a comparator on [time, cost].",
+          "Returning [-1, -1] after the heap empties covers unreachable D."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/1/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": "How do you represent distances and handle stale heap entries?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/1/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": "Lazy deletion with a stale check is simpler than a decrease-key heap."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/1/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/1/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": "Implement lexicographic Dijkstra"
+      },
+      "type": "coding"
+    },
+    {
+      "artifacts": [],
+      "checks": [],
+      "explanation": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/2/explanation",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": "Use routes with equal time and different cost, a blocked D, a route that must switch modes, and compare against Bellman-Ford on small grids."
+      },
+      "hints": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/2/hints",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Test cost 0 modes."
+        ]
+      },
+      "id": "approach:hack2hire:68521e291af0034b322764c7:6944670d867a3f9f539ff548:v1:stage:3-validation",
+      "instructions": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/2/instructions",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Run the examples.",
+          "Build two equal-time routes with different costs and expect the cheaper one.",
+          "Compare with a Bellman-Ford reference on random small grids."
+        ]
+      },
+      "native": {
+        "id": "artifact:hack2hire:68521e291af0034b322764c7:6944670d867a3f9f539ff548:approach-native:v1",
+        "kind": "artifact",
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/artifact--artifact_hack2hire_68521e291af0034b322764c7_6944670d867a3f9f539ff548_approach-native_v1.json",
+        "sha256": "8ce4d41dd433106e37070d60ff47af517be39e9862de701736e34efbf3b7c0f8",
+        "version": 1
+      },
+      "observations": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/2/observations",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "Zero-cost modes make ties frequent."
+        ]
+      },
+      "question": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/2/question",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": "Which grids test cost tie-breaks and blocked destinations?"
+      },
+      "rationale": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/2/rationale",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": "Cost ties are where a time-only implementation goes wrong."
+      },
+      "requirementIds": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/2/requirementIds",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          }
+        ],
+        "status": "present",
+        "value": [
+          "R3",
+          "R4"
+        ]
+      },
+      "title": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6944670d867a3f9f539ff548/approach/stages/2/title",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+            "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+          }
+        ],
+        "status": "present",
+        "value": "Check pair ordering and reachability"
+      },
+      "type": "validation"
+    }
+  ],
+  "title": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6944670d867a3f9f539ff548/approach/title",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+      }
+    ],
+    "status": "present",
+    "value": "Dijkstra on lexicographic (time, cost) with departure weights"
+  },
+  "tradeoffs": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6944670d867a3f9f539ff548/approach/tradeoffs",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:6944670d867a3f9f539ff548",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6944670d867a3f9f539ff548.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4f17c9bb5f4cfde91008a6f96dd0b7cc87f77e9f66cb24ecf0fdef38e4598375"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6944670d867a3f9f539ff548.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "67118844feb5b5848c559358eb0fd8a4ee7e695af2e281c802b34b61840bd334"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "Dijkstra costs O(area log area), versus O(area) for BFS, but handles varying weights.",
+      "Encoding the pair as time * BIG + cost would work only with a safe bound; comparing tuples directly avoids overflow concerns.",
+      "Bellman-Ford handles the same pairs but is much slower."
+    ]
+  },
+  "version": 1
+}

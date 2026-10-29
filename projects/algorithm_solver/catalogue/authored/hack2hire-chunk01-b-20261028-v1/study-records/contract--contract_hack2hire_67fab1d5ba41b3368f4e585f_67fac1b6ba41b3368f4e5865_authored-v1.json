@@ -1,0 +1,474 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/67fac1b6ba41b3368f4e5865/assumptions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/11",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The whole specification is an inference, not the official Hack2Hire statement (inference, not the owner/official specification; inferred by claude-opus-5-5 subagent on 2026-10-28).",
+        "basis": "Only a group-level partial preview was available (fields used: contentPreview, algorithmTags, title; preview response sha256 cb41a1b678572e1c293330c74e1854882513d6e540d464e46edc8305441ccf5d, content sha256 0cf183c92daa23bb2c4a2cc1262775573cca5ba4372cc757507ca72e2600e398). No variant-specific statement, example or constraint list exists locally."
+      },
+      {
+        "assumption": "Open inference points recorded by the cohort: High: the second variant is not described; multi-destination BFS is inferred from the BREADTH_FIRST_SEARCH tag.",
+        "basis": "contracts.json inference_uncertainty for this variant."
+      },
+      {
+        "assumption": "The second variant asks for all reachable sink nodes.",
+        "basis": "contracts.json inference_uncertainty: inferred from the breadth-first search tag."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/67fac1b6ba41b3368f4e5865/clarifyingQuestions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "Yes; then the answer is [start].",
+        "basis": "contracts.json inferred_spec.",
+        "question": "Is start included if it has no outgoing edge?"
+      },
+      {
+        "answer": "No; a self loop is an outgoing edge.",
+        "basis": "Candidates treat any node present as an edge source as non-terminal.",
+        "question": "Does a node with only a self loop count as a destination?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/67fac1b6ba41b3368f4e5865-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "d81e9a16875742a5b7e38042044acff36ac8f0932c4b5c112323d41d087dcf15"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/67fac1b6ba41b3368f4e5865-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2596f65ed4b2839de353dce9eb7e5bdd67f66db1004a1fc9702ebc0f03df5c21"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/67fac1b6ba41b3368f4e5865/constraints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/11/inferred_domain",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2234246083fef67b55d3fa4e8032b87441773bc5593292e5e6e241d220b0df0d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "At most 10^5 edges.",
+      "Node labels and start are integers from 0 to 10^9."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/67fac1b6ba41b3368f4e5865-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "d81e9a16875742a5b7e38042044acff36ac8f0932c4b5c112323d41d087dcf15"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/67fac1b6ba41b3368f4e5865-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2596f65ed4b2839de353dce9eb7e5bdd67f66db1004a1fc9702ebc0f03df5c21"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh returned containers"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/67fac1b6ba41b3368f4e5865/examples",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67fac1b6ba41b3368f4e5865.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "30c7ebb6eefa6d034a5b4d1e0c9a67d6585d71672009abecba87775af0370442"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67fac1b6ba41b3368f4e5865.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "1fb5d4a85b09a2d986510355cc19634ffe674ed9b67ae15b579d77d7e21814e9"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "edges": [
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              3,
+              8
+            ]
+          ],
+          "start": 1
+        },
+        "explanation": "From 1 the reachable sinks are 4 and 8.",
+        "output": [
+          4,
+          8
+        ]
+      },
+      {
+        "arguments": {
+          "edges": [
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              2,
+              6
+            ]
+          ],
+          "start": 1
+        },
+        "explanation": "The cycle and self loop are explored once; 6 is the only sink.",
+        "output": [
+          6
+        ]
+      },
+      {
+        "arguments": {
+          "edges": [
+            [
+              10,
+              20
+            ]
+          ],
+          "start": 5
+        },
+        "explanation": "5 has no outgoing edges, so it is its own destination.",
+        "output": [
+          5
+        ]
+      },
+      {
+        "arguments": {
+          "edges": [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          "start": 0
+        },
+        "explanation": "Every reachable node has an outgoing edge, so there is no destination.",
+        "output": []
+      }
+    ]
+  },
+  "id": "contract:hack2hire:67fab1d5ba41b3368f4e585f:67fac1b6ba41b3368f4e5865:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67fac1b6ba41b3368f4e5865/interfaces/python/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/67fac1b6ba41b3368f4e5865.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "30c7ebb6eefa6d034a5b4d1e0c9a67d6585d71672009abecba87775af0370442"
+          }
+        ],
+        "status": "present",
+        "value": "def solve(edges: list[list[int]], start: int) -> list[int]; class Solution: def findDestinationNodes(self, edges, start) -> list[int]"
+      },
+      "kind": "function",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/11/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "findDestinationNodes",
+          "params": [
+            {
+              "name": "edges",
+              "type": "integer[][] ([u, v])"
+            },
+            {
+              "name": "start",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/67fac1b6ba41b3368f4e5865/interfaces/javascript/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/67fac1b6ba41b3368f4e5865.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "1fb5d4a85b09a2d986510355cc19634ffe674ed9b67ae15b579d77d7e21814e9"
+          }
+        ],
+        "status": "present",
+        "value": "function solve(edges, start) -> number[]; module.exports = solve; module.exports.findDestinationNodes(edges, start) -> number[]"
+      },
+      "kind": "function",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/11/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "findDestinationNodes",
+          "params": [
+            {
+              "name": "edges",
+              "type": "integer[][] ([u, v])"
+            },
+            {
+              "name": "start",
+              "type": "integer"
+            }
+          ],
+          "return": {
+            "type": "integer[]"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/11",
+      "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+    }
+  ],
+  "problemId": "hack2hire:67fab1d5ba41b3368f4e585f",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/67fac1b6ba41b3368f4e5865/requirements",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/11",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/67fac1b6ba41b3368f4e5865-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "d81e9a16875742a5b7e38042044acff36ac8f0932c4b5c112323d41d087dcf15"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/67fac1b6ba41b3368f4e5865-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2596f65ed4b2839de353dce9eb7e5bdd67f66db1004a1fc9702ebc0f03df5c21"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "Consider every node reachable from start by following edges, including start."
+      },
+      {
+        "id": "R2",
+        "text": "Return those reachable nodes that have no outgoing edge, each once."
+      },
+      {
+        "id": "R3",
+        "text": "Sort the result in ascending numeric order."
+      },
+      {
+        "id": "R4",
+        "text": "Cycles, duplicate edges and self loops must not cause repeated visits or duplicates."
+      },
+      {
+        "id": "R5",
+        "text": "The edge list is not modified."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/67fac1b6ba41b3368f4e5865/statement",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/11",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Now nodes may have any number of outgoing edges, and duplicate edges and self loops are allowed. Return, in ascending order, every node reachable from start (including start itself) that has no outgoing edge."
+  },
+  "variantId": "67fac1b6ba41b3368f4e5865",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/11",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Find Destination Node (variant 2)"
+  },
+  "version": 1
+}

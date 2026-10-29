@@ -1,0 +1,423 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6935ba921553144e303f676a/assumptions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/8",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The whole specification is an inference, not the official Hack2Hire statement (inference, not the owner/official specification; inferred by claude-opus-5-5 subagent on 2026-10-28).",
+        "basis": "Only a group-level partial preview was available (fields used: contentPreview, algorithmTags, title; preview response sha256 8ecde079e4bd7974ed43b2f29d82eda47286c938955c8f6d98bd96bc75cda23f, content sha256 01f1de0b878d39716274ccc1f86fa959f40c43b3c789d872138c7d009b3e9dc9). No variant-specific statement, example or constraint list exists locally."
+      },
+      {
+        "assumption": "Open inference points recorded by the cohort: Medium: network/protocol aspects are not testable and are modelled; interface shape (list of slices) is inferred.",
+        "basis": "contracts.json inference_uncertainty for this variant."
+      },
+      {
+        "assumption": "Network and protocol aspects are modelled as a deterministic in-process simulation; only the final value is tested.",
+        "basis": "contracts.json inference_uncertainty."
+      },
+      {
+        "assumption": "The input is a list of per-worker slices.",
+        "basis": "contracts.json inference_uncertainty names the interface shape as inferred."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6935ba921553144e303f676a/clarifyingQuestions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "By choosing the smallest value.",
+        "basis": "contracts.json inferred_spec.",
+        "question": "How are ties broken?"
+      },
+      {
+        "answer": "No; the test checks only the returned value, and the candidate models the shuffle in memory.",
+        "basis": "contracts.json inferred_spec.",
+        "question": "Must the solution actually be distributed?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6935ba921553144e303f676a-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "783036e4f43cfdbc93b54707830d7efe0465875902525ad663ec14b5456a4779"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6935ba921553144e303f676a-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "bae839d77225c50839fa3be6cb50186553d45388d3d2749d6f3de4631134fb92"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6935ba921553144e303f676a/constraints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/8/inferred_domain",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2234246083fef67b55d3fa4e8032b87441773bc5593292e5e6e241d220b0df0d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "1 to 100 slices, one per worker; slice lengths differ by at most 1.",
+      "1 to 2*10^5 values in total, each in [-10^9, 10^9]."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6935ba921553144e303f676a-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "783036e4f43cfdbc93b54707830d7efe0465875902525ad663ec14b5456a4779"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6935ba921553144e303f676a-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "bae839d77225c50839fa3be6cb50186553d45388d3d2749d6f3de4631134fb92"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh returned containers"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6935ba921553144e303f676a/examples",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6935ba921553144e303f676a.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "74e74532ef00e120d61b2a8e6b0ae1a022293b44fb996302afe8b568e65338b0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6935ba921553144e303f676a.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "3c2bfd5cd996d3eceb6720da2a736363bcdbf367c9b2d0a2754ea469032c03c0"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "slices": [
+            [
+              3,
+              1,
+              3
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              1,
+              5
+            ]
+          ]
+        },
+        "explanation": "1 appears three times across workers; 3 appears twice.",
+        "output": 1
+      },
+      {
+        "arguments": {
+          "slices": [
+            [
+              7,
+              -2
+            ],
+            [
+              -2,
+              7
+            ]
+          ]
+        },
+        "explanation": "-2 and 7 both appear twice; the smaller value wins.",
+        "output": -2
+      },
+      {
+        "arguments": {
+          "slices": [
+            [
+              4
+            ]
+          ]
+        },
+        "explanation": "A single worker with a single value.",
+        "output": 4
+      }
+    ]
+  },
+  "id": "contract:hack2hire:6935ba711553144e303f6769:6935ba921553144e303f676a:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6935ba921553144e303f676a/interfaces/python/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6935ba921553144e303f676a.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "74e74532ef00e120d61b2a8e6b0ae1a022293b44fb996302afe8b568e65338b0"
+          }
+        ],
+        "status": "present",
+        "value": "def solve(slices: list[list[int]]) -> int; class Solution: def findClusterMode(self, slices) -> int"
+      },
+      "kind": "function",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/8/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "findClusterMode",
+          "params": [
+            {
+              "name": "slices",
+              "type": "integer[][] (one per worker)"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6935ba921553144e303f676a/interfaces/javascript/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6935ba921553144e303f676a.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "3c2bfd5cd996d3eceb6720da2a736363bcdbf367c9b2d0a2754ea469032c03c0"
+          }
+        ],
+        "status": "present",
+        "value": "function solve(slices) -> number; module.exports = solve; module.exports.findClusterMode(slices) -> number"
+      },
+      "kind": "function",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/8/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "findClusterMode",
+          "params": [
+            {
+              "name": "slices",
+              "type": "integer[][] (one per worker)"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/8",
+      "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+    }
+  ],
+  "problemId": "hack2hire:6935ba711553144e303f6769",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6935ba921553144e303f676a/requirements",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/8",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6935ba921553144e303f676a-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "783036e4f43cfdbc93b54707830d7efe0465875902525ad663ec14b5456a4779"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6935ba921553144e303f676a-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "bae839d77225c50839fa3be6cb50186553d45388d3d2749d6f3de4631134fb92"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "Return the value with the largest total count across all slices."
+      },
+      {
+        "id": "R2",
+        "text": "On equal counts return the smallest value."
+      },
+      {
+        "id": "R3",
+        "text": "The result must not depend on how values are distributed among workers."
+      },
+      {
+        "id": "R4",
+        "text": "The input slices are not modified."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6935ba921553144e303f676a/statement",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/8",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Data is split across worker machines, given here as one list of integers per worker. Return the value that occurs most often across all workers, choosing the smallest such value on a tie. The candidate simulates a distributed computation: each worker counts locally, the partial counts are sent to reducer workers chosen by value, each reducer reports its best value and the coordinator picks the overall best."
+  },
+  "variantId": "6935ba921553144e303f676a",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/8",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Find Cluster Mode and Median (variant 1)"
+  },
+  "version": 1
+}

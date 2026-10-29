@@ -1,0 +1,156 @@
+{
+  "approachId": "approach:hack2hire:68dee3e64b499ddb216af5eb:68dee4164b499ddb216af5ec:v1",
+  "complexityClaims": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/68dee4164b499ddb216af5ec/complexity/javascript",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/design.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/hack2hire:68dee4164b499ddb216af5ec/complexity_target",
+        "sha256": "c068a36ba3c9e65ea08f22c38a5ce2db240e1c3d1ca54a2d27beef3b26abd8d0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/68dee4164b499ddb216af5ec-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "f88e22f73e60a1f0c29a759568a542363d740442ecf0598b7e116160b6131827"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "bound": "O(n)",
+        "resource": "time",
+        "where": "n socks (expected, hash maps)"
+      },
+      {
+        "bound": "O(K)",
+        "resource": "space",
+        "where": "K distinct colors"
+      }
+    ]
+  },
+  "contract": {
+    "id": "contract:hack2hire:68dee3e64b499ddb216af5eb:68dee4164b499ddb216af5ec:authored-v1",
+    "kind": "contract",
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-records/contract--contract_hack2hire_68dee3e64b499ddb216af5eb_68dee4164b499ddb216af5ec_authored-v1.json",
+    "sha256": "920a59956e7574ef60b51b084501f4d475357397285957886840abd5d5389079",
+    "version": 1
+  },
+  "documentSchema": null,
+  "executionKind": "code",
+  "externalLocator": {
+    "reason": "The source file is in this repository; no external locator.",
+    "status": "not-applicable"
+  },
+  "file": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/68dee4164b499ddb216af5ec.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "3cbf1f1c5971f90e1fff3fcf23347c6cf296f72a6249e370c84908a7cad54be0"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "bytes": 684,
+      "mediaType": "text/javascript",
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/68dee4164b499ddb216af5ec.js",
+      "sha256": "3cbf1f1c5971f90e1fff3fcf23347c6cf296f72a6249e370c84908a7cad54be0"
+    }
+  },
+  "id": "artifact:hack2hire:68dee3e64b499ddb216af5eb:68dee4164b499ddb216af5ec:javascript:v1",
+  "kind": "artifact",
+  "language": "javascript",
+  "nativeMetadata": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/68dee4164b499ddb216af5ec-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "f88e22f73e60a1f0c29a759568a542363d740442ecf0598b7e116160b6131827"
+      }
+    ],
+    "status": "present",
+    "value": {
+      "comparison": "exact typed JSON result",
+      "effects": "arguments unchanged; fresh returned containers",
+      "entrypoint": "solve",
+      "inference": {
+        "basis_fields": [
+          "contentPreview",
+          "algorithmTags",
+          "title"
+        ],
+        "class": "inference, not the owner/official specification",
+        "inferred_at": "2026-10-28",
+        "inferred_by": "claude-opus-5-5 subagent"
+      },
+      "inferred_interface": {
+        "name": "countSockPairs",
+        "params": [
+          {
+            "name": "ids",
+            "type": "integer[]"
+          },
+          {
+            "name": "colors",
+            "type": "string[]"
+          },
+          {
+            "name": "feet",
+            "type": "string[] (\"left\"|\"right\")"
+          }
+        ],
+        "return": {
+          "type": "integer"
+        }
+      },
+      "language": "javascript",
+      "named_wrapper": "module.exports.countSockPairs",
+      "parameters": [
+        "ids",
+        "colors",
+        "feet"
+      ],
+      "problem_uid": "hack2hire:68dee4164b499ddb216af5ec",
+      "qualification": {
+        "reason": "Spec inferred from a partial preview (not an official specification); author-local runs of own candidates against own generated cases only; no isolated independent qualification",
+        "status": "unknown"
+      },
+      "schema": "gamma.authored-scalar-semantics.v1",
+      "source_reasoning": {
+        "candidate_design": "hash counts per color, sum of min(left, right)",
+        "complexity_target": "O(n) time/O(colors) space",
+        "reference": "repeated smallest-left / smallest-right selection (<=200 socks)"
+      },
+      "source_sha256": "3cbf1f1c5971f90e1fff3fcf23347c6cf296f72a6249e370c84908a7cad54be0",
+      "spec_basis": "inferred"
+    }
+  },
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/68dee4164b499ddb216af5ec.js",
+      "repository": "gamma",
+      "revision": null,
+      "selector": null,
+      "sha256": "3cbf1f1c5971f90e1fff3fcf23347c6cf296f72a6249e370c84908a7cad54be0"
+    }
+  ],
+  "problemId": "hack2hire:68dee3e64b499ddb216af5eb",
+  "schema": "study.record.v1",
+  "title": "Find Valid Sock Pairs (variant 1) · javascript candidate (qualification unknown)",
+  "type": "implementation",
+  "version": 1
+}

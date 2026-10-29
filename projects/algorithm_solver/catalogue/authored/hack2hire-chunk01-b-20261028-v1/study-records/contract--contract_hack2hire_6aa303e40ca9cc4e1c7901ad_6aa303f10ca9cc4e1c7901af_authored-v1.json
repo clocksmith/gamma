@@ -1,0 +1,467 @@
+{
+  "assumptions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6aa303f10ca9cc4e1c7901af/assumptions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "assumption": "The whole specification is an inference, not the official Hack2Hire statement (inference, not the owner/official specification; inferred by claude-opus-5-5 subagent on 2026-10-28).",
+        "basis": "Only a group-level partial preview was available (fields used: contentPreview, algorithmTags, title; preview response sha256 a9ee5a1c47a7df78a58c699d41442c70375e85bac19dd14f0ede624f886eb099, content sha256 8ca8ea2c6fb5460dc7e720be09b0f8f4a84b4ceef09e402abb17c5b8b392410d). No variant-specific statement, example or constraint list exists locally."
+      },
+      {
+        "assumption": "Open inference points recorded by the cohort: Highest. The preview stops after the node types; the objective (count vs list of paths), whether isEncrypted is current or desired state, and the treatment of empty directories are all inferred.",
+        "basis": "contracts.json inference_uncertainty for this variant."
+      },
+      {
+        "assumption": "The isEncrypted flag is read as the required final state, not the current state.",
+        "basis": "contracts.json inferred_spec and inference_uncertainty."
+      },
+      {
+        "assumption": "Operating on a directory with no files anywhere below it is pointless and never counted; such directories cost 0.",
+        "basis": "Candidate design: a directory costs 1 only when its subtree has at least one file and all are flagged."
+      }
+    ]
+  },
+  "clarifyingQuestions": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6aa303f10ca9cc4e1c7901af/clarifyingQuestions",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/README.md",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "0687cfd11202493d804f061bf06e3f9b359ae42a173e316964ae02a536afe2bb"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "answer": "Assumed a count.",
+        "basis": "contracts.json inference_uncertainty.",
+        "question": "Is the answer a count or a list of paths to operate on?"
+      },
+      {
+        "answer": "No; this variant has no decrypt operation, so such files may never be touched.",
+        "basis": "contracts.json inferred_spec; variant 2 adds decryption.",
+        "question": "Can an operation encrypt a file that must stay unencrypted, if a later step fixes it?"
+      }
+    ]
+  },
+  "comparison": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6aa303f10ca9cc4e1c7901af-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4d60c8198893f3dac00a0d4463a50f618785a4ac383c1734676017831ab57f9c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6aa303f10ca9cc4e1c7901af-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "8acae1444cc252bb8d9297c78335ab2a2f4c0262c64012dd4500b0fd97fbfcd5"
+      }
+    ],
+    "status": "present",
+    "value": "exact typed JSON result"
+  },
+  "constraints": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6aa303f10ca9cc4e1c7901af/constraints",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1/inferred_domain",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/oracles.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "2234246083fef67b55d3fa4e8032b87441773bc5593292e5e6e241d220b0df0d"
+      }
+    ],
+    "status": "present",
+    "value": [
+      "At most 10^5 nodes in total, counting directories and files.",
+      "Directory depth is at most 200.",
+      "Names match [A-Za-z0-9._-] with length 1 to 30 and are unique among siblings."
+    ]
+  },
+  "contentScope": "authored",
+  "effects": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6aa303f10ca9cc4e1c7901af-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4d60c8198893f3dac00a0d4463a50f618785a4ac383c1734676017831ab57f9c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6aa303f10ca9cc4e1c7901af-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "8acae1444cc252bb8d9297c78335ab2a2f4c0262c64012dd4500b0fd97fbfcd5"
+      }
+    ],
+    "status": "present",
+    "value": "arguments unchanged; fresh returned containers"
+  },
+  "examples": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6aa303f10ca9cc4e1c7901af/examples",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "arguments": {
+          "root": {
+            "directories": [
+              {
+                "directories": [],
+                "files": [
+                  {
+                    "isEncrypted": true,
+                    "name": "x"
+                  },
+                  {
+                    "isEncrypted": true,
+                    "name": "y"
+                  }
+                ],
+                "name": "docs"
+              },
+              {
+                "directories": [],
+                "files": [],
+                "name": "empty"
+              }
+            ],
+            "files": [
+              {
+                "isEncrypted": true,
+                "name": "a"
+              },
+              {
+                "isEncrypted": false,
+                "name": "b"
+              }
+            ],
+            "name": "root"
+          }
+        },
+        "explanation": "The root cannot be encrypted as a whole because b must stay plain. docs is fully flagged, so one operation covers it, and a needs its own operation.",
+        "output": 2
+      },
+      {
+        "arguments": {
+          "root": {
+            "directories": [
+              {
+                "directories": [],
+                "files": [
+                  {
+                    "isEncrypted": true,
+                    "name": "b"
+                  },
+                  {
+                    "isEncrypted": true,
+                    "name": "c"
+                  }
+                ],
+                "name": "d"
+              }
+            ],
+            "files": [
+              {
+                "isEncrypted": true,
+                "name": "a"
+              }
+            ],
+            "name": "root"
+          }
+        },
+        "explanation": "Every file in the tree is flagged, so one operation on the root suffices.",
+        "output": 1
+      },
+      {
+        "arguments": {
+          "root": {
+            "directories": [],
+            "files": [
+              {
+                "isEncrypted": false,
+                "name": "a"
+              }
+            ],
+            "name": "root"
+          }
+        },
+        "explanation": "Nothing needs encrypting.",
+        "output": 0
+      }
+    ]
+  },
+  "id": "contract:hack2hire:6aa303e40ca9cc4e1c7901ad:6aa303f10ca9cc4e1c7901af:authored-v1",
+  "interfaces": [
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/interfaces/python/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/python/6aa303f10ca9cc4e1c7901af.py",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "299a9ea733b585ea5bdde6bd050dfbe207d1c334e8ecf829801035330e55cbf3"
+          }
+        ],
+        "status": "present",
+        "value": "def solve(root: dict) -> int; class Solution: def minEncryptOperations(self, root: dict) -> int"
+      },
+      "kind": "function",
+      "language": "python",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "minEncryptOperations",
+          "params": [
+            {
+              "name": "root",
+              "type": "DirectoryNode {name, directories, files:[{name,isEncrypted}]}"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    {
+      "declaration": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/variants/6aa303f10ca9cc4e1c7901af/interfaces/javascript/declaration",
+            "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+          },
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/javascript/6aa303f10ca9cc4e1c7901af.js",
+            "repository": "gamma",
+            "revision": null,
+            "selector": null,
+            "sha256": "b3e924bd024bd583f0a26d412c01cdc487b01885374efc71f2312b493a85ed1c"
+          }
+        ],
+        "status": "present",
+        "value": "function solve(root) -> number; module.exports = solve; module.exports.minEncryptOperations(root) -> number"
+      },
+      "kind": "function",
+      "language": "javascript",
+      "nativeMetadata": {
+        "provenance": [
+          {
+            "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+            "repository": "gamma",
+            "revision": null,
+            "selector": "/problems/1/inferred_interface",
+            "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+          }
+        ],
+        "status": "present",
+        "value": {
+          "name": "minEncryptOperations",
+          "params": [
+            {
+              "name": "root",
+              "type": "DirectoryNode {name, directories, files:[{name,isEncrypted}]}"
+            }
+          ],
+          "return": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  ],
+  "kind": "contract",
+  "native": [],
+  "origin": [
+    {
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+      "repository": "gamma",
+      "revision": null,
+      "selector": "/problems/1",
+      "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+    }
+  ],
+  "problemId": "hack2hire:6aa303e40ca9cc4e1c7901ad",
+  "requirements": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6aa303f10ca9cc4e1c7901af/requirements",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6aa303f10ca9cc4e1c7901af-python.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "4d60c8198893f3dac00a0d4463a50f618785a4ac383c1734676017831ab57f9c"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/semantics/6aa303f10ca9cc4e1c7901af-javascript.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": null,
+        "sha256": "8acae1444cc252bb8d9297c78335ab2a2f4c0262c64012dd4500b0fd97fbfcd5"
+      }
+    ],
+    "status": "present",
+    "value": [
+      {
+        "id": "R1",
+        "text": "An operation on a file encrypts that file; an operation on a directory encrypts every file in its whole subtree."
+      },
+      {
+        "id": "R2",
+        "text": "No operation may encrypt a file whose flag is false."
+      },
+      {
+        "id": "R3",
+        "text": "After the operations, every flagged file is encrypted."
+      },
+      {
+        "id": "R4",
+        "text": "Return the minimum operation count as an integer; a tree with no flagged files needs 0."
+      },
+      {
+        "id": "R5",
+        "text": "The input tree is not modified."
+      }
+    ]
+  },
+  "schema": "study.record.v1",
+  "sources": [],
+  "statement": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/study-content.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/variants/6aa303f10ca9cc4e1c7901af/statement",
+        "sha256": "3177b2d87eb6f3d85926a44b91300ea91fc72c80f04df0964d57331e98553812"
+      },
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "A directory tree is given as nested objects. Each directory has a name, a list of subdirectories and a list of files; each file has a name and a flag that marks whether it must end up encrypted. Everything starts unencrypted. One operation encrypts either a single file or every file anywhere inside one directory. Encrypting a file whose flag is false is forbidden. Return the smallest number of operations after which exactly the flagged files are encrypted."
+  },
+  "variantId": "6aa303f10ca9cc4e1c7901af",
+  "variantLabel": {
+    "provenance": [
+      {
+        "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk01-b-20261028-v1/contracts.json",
+        "repository": "gamma",
+        "revision": null,
+        "selector": "/problems/1",
+        "sha256": "aea37b1bc35e461fffef6ad6f901541c51a509ea3c80613a70f641c6dc2f7ec0"
+      }
+    ],
+    "status": "present",
+    "value": "Directory Encryption Optimization (variant 1)"
+  },
+  "version": 1
+}
