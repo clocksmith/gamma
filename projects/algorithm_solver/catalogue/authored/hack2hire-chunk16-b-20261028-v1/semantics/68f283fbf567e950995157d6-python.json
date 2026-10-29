@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:68f283fbf567e950995157d6",
+ "language": "python",
+ "entrypoint": "solve",
+ "parameters": [
+  "sentence"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "toPigLatin",
+  "params": [
+   {
+    "name": "sentence",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "regular-expression substitution over word matches",
+  "candidate_design": "split on single spaces, transform each word with slicing, join",
+  "complexity_target": "O(length) time/O(length) space"
+ },
+ "source_sha256": "d93bb428b6c4d931191173b4779ca50af75f10e036f45798869b00e0feeb9267",
+ "wrapper": "Solution.toPigLatin"
+}

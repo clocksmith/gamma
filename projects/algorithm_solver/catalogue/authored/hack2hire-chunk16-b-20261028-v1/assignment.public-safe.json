@@ -1,0 +1,843 @@
+{
+ "schema": "gamma.authored-assignment-public-safe.v1",
+ "authorization": "Coordinator worklist h2h-chunk16-b (16 Hack2Hire groups, 16 variants); public group previews only; no full-content or solution endpoints",
+ "status": "new development variants over INFERRED specifications; independent isolated qualification pending; official specification unavailable",
+ "problems": [
+  {
+   "uid": "hack2hire:6a31cf175117d1b543567dcc",
+   "title": "Merge Values into Blocks",
+   "variant_ordinal": 1,
+   "group_post_id": "6a31cf0a5117d1b543567dc9",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minOperations",
+     "params": [
+      {
+       "name": "arr",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every cut position compare the value sets left and right of the cut; count the cuts with disjoint sets",
+    "candidate_design": "one pass with the last occurrence index of every value; a piece ends where the furthest last occurrence seen so far equals the current index",
+    "complexity_target": "O(n) expected time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "db5efd6a9f8fefe34b391215e67b3f70db24a6ccb1f88c7181b448cccbfdedf7",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6796992ab10bc587828f27ae",
+   "title": "Minimize Capital Gains Tax",
+   "variant_ordinal": 1,
+   "group_post_id": "679698ffb10bc587828f27ad",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minimizeTax",
+     "params": [
+      {
+       "name": "transactions",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep a plain list of lots and fully re-sort it by price before each sell",
+    "candidate_design": "max-heap of [price, remaining amount] lots; a sell pops or reduces the top lots",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "15c6807d930030596a5b76d37afb384e6a9ae9fcd362625362993718cec2ad40",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69cac664ff3ebde766ced9a5",
+   "title": "Minimum Absolute Difference Pairs",
+   "variant_ordinal": 1,
+   "group_post_id": "69cac65eff3ebde766ced9a4",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minimumAbsDifference",
+     "params": [
+      {
+       "name": "latencies",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer[][]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "compare every pair of values",
+    "candidate_design": "sort a copy, take the minimum adjacent gap, then collect adjacent pairs with that gap",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "bb110b44249e7f29c285fbd75ffde838a7fc3b584f079133eaf23d014a155905",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67803efe6fee41e51af73ddc",
+   "title": "Minimum Coins to Form All Amounts",
+   "variant_ordinal": 1,
+   "group_post_id": "67803a256fee41e51af73ddb",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minCoins",
+     "params": [
+      {
+       "name": "coins",
+       "type": "integer[]"
+      },
+      {
+       "name": "max",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "breadth-first search over (reachable prefix, largest coin used) states adding coins in non-decreasing order, each at most reachable + 1",
+    "candidate_design": "greedy on sorted distinct denominations: repeatedly add the largest coin not above reachable + 1, jumping many identical picks at once with integer division",
+    "complexity_target": "O(k log k) time/O(k) space, k = number of denominations"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "2b68de4c31a53b0e02b54e26296b5245fa89a1a8bffc1cd0a9912afc1f497a45",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a74eeddd713d873ca7a8195",
+   "title": "Minimum Device Procurement Cost",
+   "variant_ordinal": 1,
+   "group_post_id": "6a73c274d713d873ca7a77e9",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minimumCost",
+     "params": [
+      {
+       "name": "x",
+       "type": "integer"
+      },
+      {
+       "name": "y",
+       "type": "integer"
+      },
+      {
+       "name": "edgeCost",
+       "type": "integer"
+      },
+      {
+       "name": "inputCost",
+       "type": "integer"
+      },
+      {
+       "name": "bundleCost",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "try every bundle count from 0 to max(x, y)",
+    "candidate_design": "the cost is convex piecewise linear in the bundle count, so evaluate it at 0, min(x, y) and max(x, y)",
+    "complexity_target": "O(1) time/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "c4fe8eef2e9b1e8a872c0f23a5ceab881cc414e4462e63bdaaa30e1256ccde65",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6a31cd3f5117d1b543567dbe",
+   "title": "Minimum Redistribution Cost",
+   "variant_ordinal": 1,
+   "group_post_id": "6a31cd365117d1b543567dbd",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minRedistributionCost",
+     "params": [
+      {
+       "name": "products",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for each direction try every link as the one carrying no flow, derive the other link flows around the circle, keep non-negative assignments and take the cheapest",
+    "candidate_design": "prefix sums of products[i] - average; clockwise cost = sum(prefix) - n * min(prefix), counterclockwise cost = n * max(prefix) - sum(prefix); return the smaller",
+    "complexity_target": "O(n) time/O(1) extra space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "af758e7a9cb2dbcb760add095ec72f969b2285e6057b59ba504d2ae60ea74b9b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69f1384f96981f58ae1f7687",
+   "title": "Minimum Root Edges Reversal",
+   "variant_ordinal": 1,
+   "group_post_id": "69f1384b96981f58ae1f7686",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "minEdgeReversals",
+     "params": [
+      {
+       "name": "n",
+       "type": "integer"
+      },
+      {
+       "name": "fromNodes",
+       "type": "integer[]"
+      },
+      {
+       "name": "toNodes",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "breadth-first search from every candidate root counting edges traversed against their direction",
+    "candidate_design": "one iterative traversal from node 1 for its cost, then re-rooting: moving the root across an edge changes the cost by +1 or -1 depending on the edge direction",
+    "complexity_target": "O(n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "7d2550cd0306b279081d918ed526187f45aef13286a7e7d82aa18a344c9ff2a7",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67888093402dc47b67a14948",
+   "title": "Number of Idle Drives",
+   "variant_ordinal": 1,
+   "group_post_id": "67887ddb402dc47b67a14947",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countIdleDrives",
+     "params": [
+      {
+       "name": "x",
+       "type": "integer[]"
+      },
+      {
+       "name": "y",
+       "type": "integer[]"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "for every robot scan all robots for the four directions",
+    "candidate_design": "hash maps from x to the min and max y on that column and from y to the min and max x on that row; a robot is idle when it is strictly inside both ranges",
+    "complexity_target": "O(n) expected time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "074a7483d29aa141a4fdfa6ed72d0f5798a92f9fa7e8eca34722146e228faa04",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:69cda519ff3ebde766cee834",
+   "title": "Object Field Offset Manager",
+   "variant_ordinal": 1,
+   "group_post_id": "69cda510ff3ebde766cee833",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "ObjectLayout",
+     "constructor": {
+      "params": [
+       {
+        "name": "names",
+        "type": "string[]"
+       },
+       {
+        "name": "sizes",
+        "type": "integer[]"
+       }
+      ]
+     },
+     "methods": [
+      {
+       "name": "getOffset",
+       "params": [
+        {
+         "name": "name",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "fieldAt",
+       "params": [
+        {
+         "name": "offset",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "string"
+       }
+      },
+      {
+       "name": "totalSize",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "addField",
+       "params": [
+        {
+         "name": "name",
+         "type": "string"
+        },
+        {
+         "name": "size",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      },
+      {
+       "name": "removeField",
+       "params": [
+        {
+         "name": "name",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "boolean"
+       }
+      }
+     ]
+    },
+    "native_class": "ObjectLayout"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "flat list of [name, size] rows with linear prefix scans",
+    "candidate_design": "Fenwick tree over append slots holding sizes (0 once removed) plus a name-to-slot map; getOffset is a prefix sum, fieldAt a Fenwick descent",
+    "complexity_target": "O(log m) per operation/O(m) space, m = fields ever added"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "0f24e3449ccc0ac34cddb50b02abe243a45d08f10e1bf8dc538ee938099e35fb",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68d89bb279db2fbcd7d7db16",
+   "title": "Palindrome Stream Tracker",
+   "variant_ordinal": 1,
+   "group_post_id": "68d89ae079db2fbcd7d7db14",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "PalindromeStream",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "track",
+       "params": [
+        {
+         "name": "c",
+         "type": "string"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "isPalindrome",
+       "params": [],
+       "return": {
+        "type": "boolean"
+       }
+      }
+     ]
+    },
+    "native_class": "PalindromeStream"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "keep the string and compare it with its reverse on every query",
+    "candidate_design": "palindromic tree (eertree) maintained per appended character; the stream is a palindrome exactly when its longest palindromic suffix is the whole stream (exact, no hashing)",
+    "complexity_target": "O(1) amortised per track and O(1) per query/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "3660d12c58de45b3b993c31ca7b850c82dcae8a998c577189eaee9546f585d07",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:6907b46fe1919109b6df119a",
+   "title": "Pandigital Sum",
+   "variant_ordinal": 1,
+   "group_post_id": "68fe4a717e1bd8f9501bf147",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "countPandigitalSums",
+     "params": [
+      {
+       "name": "pattern",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "integer"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "enumerate all permutations of the free digits into the \"?\" positions and test the equation",
+    "candidate_design": "backtracking column by column from the units digit with the carry, so the sum digit is forced at each column",
+    "complexity_target": "O(9!) worst case, far fewer with column pruning/O(1) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "da9ab48da49b9adc94c1d5c808b89ed8dd1e11b480ad22b347180812d786ec43",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68f283fbf567e950995157d6",
+   "title": "Pig Latin Sentence Converter",
+   "variant_ordinal": 1,
+   "group_post_id": "68f2815df567e950995157d3",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "toPigLatin",
+     "params": [
+      {
+       "name": "sentence",
+       "type": "string"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "regular-expression substitution over word matches",
+    "candidate_design": "split on single spaces, transform each word with slicing, join",
+    "complexity_target": "O(length) time/O(length) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a8a80fd3cc5b0fb846a332f0e2b5ffa06e80ff6feb4f7bfa1104b1c97848f6a9",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:67cd196d3363b83a81fc99a7",
+   "title": "Portfolio Value Optimization",
+   "variant_ordinal": 1,
+   "group_post_id": "67cd0fba3363b83a81fc99a2",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "maximizePortfolioValue",
+     "params": [
+      {
+       "name": "securities",
+       "type": "(string|integer)[][]"
+      },
+      {
+       "name": "funds",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "exact rational arithmetic: sort by the fraction S / P, accumulate fractions, then round",
+    "candidate_design": "order indices by S / P with integer cross-multiplication, buy whole lots while affordable, buy the remaining fraction of the next one, and round the exact value I + r S / P with integer (BigInt in JavaScript) arithmetic",
+    "complexity_target": "O(n log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "68d6769a113686061a6636ff53f2c6acdf1499f72c5d8c162b47651b52b1be24",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68e8736a80f69c7a01706891",
+   "title": "Print Folder Path Given Node ID",
+   "variant_ordinal": 1,
+   "group_post_id": "68e8733480f69c7a0170688f",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "getFolderPath",
+     "params": [
+      {
+       "name": "idList",
+       "type": "integer[]"
+      },
+      {
+       "name": "children",
+       "type": "integer[][]"
+      },
+      {
+       "name": "nameList",
+       "type": "string[]"
+      },
+      {
+       "name": "targetId",
+       "type": "integer"
+      }
+     ],
+     "return": {
+      "type": "string"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "recursive search from every top-level folder carrying the path so far",
+    "candidate_design": "parent map from child id to parent id, then walk up from targetId and reverse",
+    "complexity_target": "O(n + total children) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a231198107a04fb8c707207e987a8d0d0cf8dffd7af3b9c963fba3ae3b3621b4",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68f68778a269f53ea0eff91d",
+   "title": "Product Price Query System",
+   "variant_ordinal": 1,
+   "group_post_id": "68f68771a269f53ea0eff91c",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "name": "getPrices",
+     "params": [
+      {
+       "name": "log",
+       "type": "string[]"
+      },
+      {
+       "name": "queries",
+       "type": "string[][]"
+      }
+     ],
+     "return": {
+      "type": "integer[]"
+     }
+    },
+    "native_class": null
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "scan the whole log for every query",
+    "candidate_design": "parse once from the right, group by item, sort each item's dates, answer each query by binary search",
+    "complexity_target": "O((n + q) log n) time/O(n) space"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "b675f3c600aaf3c2420ad10e4027b3c585d6622bc1a3861983a004148bfb6e2b",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  },
+  {
+   "uid": "hack2hire:68aceb961bf7d2097f647f62",
+   "title": "Product Price Tracker",
+   "variant_ordinal": 1,
+   "group_post_id": "68aceb681bf7d2097f647f60",
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "external_interface": {
+    "canonical": "solve",
+    "inferred": {
+     "classname": "ProductPrice",
+     "constructor": {
+      "params": []
+     },
+     "methods": [
+      {
+       "name": "update",
+       "params": [
+        {
+         "name": "timestamp",
+         "type": "integer"
+        },
+        {
+         "name": "price",
+         "type": "integer"
+        }
+       ],
+       "return": {
+        "type": "void"
+       }
+      },
+      {
+       "name": "current",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "maximum",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      },
+      {
+       "name": "minimum",
+       "params": [],
+       "return": {
+        "type": "integer"
+       }
+      }
+     ]
+    },
+    "native_class": "ProductPrice"
+   },
+   "mutation_alias_contract": {
+    "arguments": "unchanged",
+    "return": "fresh containers"
+   },
+   "numeric_complexity_contract": {
+    "reference": "dictionary of timestamp to price scanned on every query",
+    "candidate_design": "dictionary plus a max-heap and a min-heap of (price, timestamp) with lazy deletion of stale entries and a running latest timestamp",
+    "complexity_target": "O(log u) amortised per call/O(u) space, u = updates"
+   },
+   "qualification_status": "unknown",
+   "statement_constraints_snapshot": {
+    "domain_owner": "oracles.py validate_domain; INFERRED bounds, not official",
+    "preview_response_sha256": "a71ecdbdf561be8aefc33c19fadf71b205d644caa9d847598fa886964622820c",
+    "full_text_location": "none held; official full statement not accessed"
+   }
+  }
+ ]
+}

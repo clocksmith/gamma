@@ -1,0 +1,1078 @@
+{
+ "schema": "gamma.authored-inferred-contracts.v1",
+ "source_bank": "projects/question_bank/hack2hire/bank.json",
+ "note": "Every spec is inferred from a partial public preview, title and tags; paraphrased, never the official statement.",
+ "problems": [
+  {
+   "uid": "hack2hire:6a31cf175117d1b543567dcc",
+   "variant_id": "6a31cf175117d1b543567dcc",
+   "variant_ordinal": 1,
+   "title": "Merge Values into Blocks",
+   "source": {
+    "post_id": "6a31cf0a5117d1b543567dc9",
+    "group_title": "Merge Values into Blocks",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a31cf0a5117d1b543567dc9",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a31cf0a5117d1b543567dc9/practice?questionId=6a31cf175117d1b543567dcc",
+    "preview_response_sha256": "db5efd6a9f8fefe34b391215e67b3f70db24a6ccb1f88c7181b448cccbfdedf7",
+    "preview_content_sha256": "081204c83bdda3c1cf70ea7f976befdc74e158e29e9c6e8f9139a3da92fb26f0",
+    "preview_characters": 445,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a31cf0a5117d1b543567dc9.json",
+    "algorithm_tags": [
+     "UNION_FIND"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: an integer array; one operation picks two different values present in the array and relabels every occurrence of the first as the second; report the fewest operations after which every value occupies one contiguous run, 0 when that already holds",
+    "algorithmTags: UNION_FIND"
+   ],
+   "inferred_spec": "arr is a non-empty list of integers. One operation chooses two different values x and y that both occur in the current array and replaces every x with y. Return the minimum number of operations after which, for every value, all its occurrences are consecutive. Return 0 when this already holds.",
+   "inference_uncertainty": "medium: the operation and goal are in the preview; the input bounds are inferred, and the answer is derived as (number of distinct values) minus (number of pieces the array can be cut into so that no value occurs in two pieces)",
+   "inferred_interface": {
+    "name": "minOperations",
+    "params": [
+     {
+      "name": "arr",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MVB"
+  },
+  {
+   "uid": "hack2hire:6796992ab10bc587828f27ae",
+   "variant_id": "6796992ab10bc587828f27ae",
+   "variant_ordinal": 1,
+   "title": "Minimize Capital Gains Tax",
+   "source": {
+    "post_id": "679698ffb10bc587828f27ad",
+    "group_title": "Minimize Capital Gains Tax",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/679698ffb10bc587828f27ad",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/679698ffb10bc587828f27ad/practice?questionId=6796992ab10bc587828f27ae",
+    "preview_response_sha256": "15c6807d930030596a5b76d37afb384e6a9ae9fcd362625362993718cec2ad40",
+    "preview_content_sha256": "fcbbdc24fb211a4698c5fcee6b4570e56eb9269c8e80c2e135363e646cb5f82e",
+    "preview_characters": 315,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/679698ffb10bc587828f27ad.json",
+    "algorithm_tags": [
+     "HEAP",
+     "GREEDY"
+    ],
+    "companies": [
+     "COINBASE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "title",
+    "contentPreview: stock transactions in timestamp order, each [timestamp, \"buy\" or \"sell\", amount, price] as strings; every sell pays 10% tax on its profit and nothing when there is no profit (how the sold shares are matched to purchases and the output are cut off)",
+    "algorithmTags: HEAP, GREEDY"
+   ],
+   "inferred_spec": "transactions is a list of [timestamp, type, amount, price] string rows ordered by non-decreasing timestamp; type is \"buy\" or \"sell\"; amount and price are decimal integers. Shares are held in lots, one per buy, at the buy price. A sell of amount shares consumes held shares from the lots with the highest buy price first (the heap-greedy rule). The profit of a sell is the sum over consumed shares of (sell price - lot price); its tax is 10% of the profit when the profit is positive and 0 otherwise. Return the total tax as a decimal string with exactly one digit after the point (exact, since each tax is a whole number of tenths).",
+   "inference_uncertainty": "high: the row format and the 10% rule per sell are in the preview; that sells take the highest-priced shares first (the greedy the HEAP and GREEDY tags suggest, rather than a global optimum over all matchings), that sells never exceed the shares held, and the exact string output format are inferred",
+   "inferred_interface": {
+    "name": "minimizeTax",
+    "params": [
+     {
+      "name": "transactions",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MCG"
+  },
+  {
+   "uid": "hack2hire:69cac664ff3ebde766ced9a5",
+   "variant_id": "69cac664ff3ebde766ced9a5",
+   "variant_ordinal": 1,
+   "title": "Minimum Absolute Difference Pairs",
+   "source": {
+    "post_id": "69cac65eff3ebde766ced9a4",
+    "group_title": "Minimum Absolute Difference Pairs",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69cac65eff3ebde766ced9a4",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69cac65eff3ebde766ced9a4/practice?questionId=69cac664ff3ebde766ced9a5",
+    "preview_response_sha256": "bb110b44249e7f29c285fbd75ffde838a7fc3b584f079133eaf23d014a155905",
+    "preview_content_sha256": "ab6e82b66d01ade32c9c3722a1d63cc1e5cbb020deff6acc64a503574c4c3824",
+    "preview_characters": 568,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69cac65eff3ebde766ced9a4.json",
+    "algorithm_tags": [
+     "ARRAY"
+    ],
+    "companies": [
+     "TESLA"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 1200; an integer array latencies; find every pair of values whose absolute difference equals the smallest absolute difference over all pairs (output format cut off)",
+    "algorithmTags: ARRAY"
+   ],
+   "inferred_spec": "latencies is a list of at least two distinct integers. Let d be the smallest absolute difference between two of its values. Return every pair [a, b] of values with a < b and b - a = d, ordered by a ascending.",
+   "inference_uncertainty": "medium: the task is in the preview; distinct values and the [smaller, larger] ascending output follow LeetCode 1200, which the preview names as the base; whether repeated values may occur is not visible",
+   "inferred_interface": {
+    "name": "minimumAbsDifference",
+    "params": [
+     {
+      "name": "latencies",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer[][]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MAD"
+  },
+  {
+   "uid": "hack2hire:67803efe6fee41e51af73ddc",
+   "variant_id": "67803efe6fee41e51af73ddc",
+   "variant_ordinal": 1,
+   "title": "Minimum Coins to Form All Amounts",
+   "source": {
+    "post_id": "67803a256fee41e51af73ddb",
+    "group_title": "Minimum Coins to Form All Amounts",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67803a256fee41e51af73ddb",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67803a256fee41e51af73ddb/practice?questionId=67803efe6fee41e51af73ddc",
+    "preview_response_sha256": "2b68de4c31a53b0e02b54e26296b5245fa89a1a8bffc1cd0a9912afc1f497a45",
+    "preview_content_sha256": "d5aba61ff5f79c724baf6fb3c8d8c29e060a499547e674d00b083d300710fe34",
+    "preview_characters": 343,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67803a256fee41e51af73ddb.json",
+    "algorithm_tags": [
+     "GREEDY",
+     "BINARY_SEARCH"
+    ],
+    "companies": [
+     "GOOGLE",
+     "META",
+     "MICROSOFT"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: coin denominations and an integer max; pick coins so that every amount from 1 to max can be paid; report the fewest coins, or -1 when the denominations cannot form the amounts",
+    "algorithmTags: GREEDY, BINARY_SEARCH"
+   ],
+   "inferred_spec": "coins lists available denominations (each usable any number of times); max is a positive integer. Choose a multiset of coins with these denominations such that every amount 1, 2, ..., max is the sum of some sub-multiset. Return the minimum size of such a multiset, or -1 when none exists (exactly when no coin has value 1).",
+   "inference_uncertainty": "medium: the goal is in the preview; unlimited copies of each denomination and \"-1 iff there is no 1 coin\" are inferred from the usual version of this task",
+   "inferred_interface": {
+    "name": "minCoins",
+    "params": [
+     {
+      "name": "coins",
+      "type": "integer[]"
+     },
+     {
+      "name": "max",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MCF"
+  },
+  {
+   "uid": "hack2hire:6a74eeddd713d873ca7a8195",
+   "variant_id": "6a74eeddd713d873ca7a8195",
+   "variant_ordinal": 1,
+   "title": "Minimum Device Procurement Cost",
+   "source": {
+    "post_id": "6a73c274d713d873ca7a77e9",
+    "group_title": "Minimum Device Procurement Cost",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a73c274d713d873ca7a77e9",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a73c274d713d873ca7a77e9/practice?questionId=6a74eeddd713d873ca7a8195",
+    "preview_response_sha256": "c4fe8eef2e9b1e8a872c0f23a5ceab881cc414e4462e63bdaaa30e1256ccde65",
+    "preview_content_sha256": "56e41d4bf030fddc4a9dc2ebad041cb74f358de6d3cd58b4b50134c562264a1b",
+    "preview_characters": 436,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a73c274d713d873ca7a77e9.json",
+    "algorithm_tags": [
+     "MATH",
+     "GREEDY"
+    ],
+    "companies": [
+     "IBM"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: need at least x edge devices and at least y input peripherals; individual devices cost edgeCost and inputCost; a bundle with one of each costs bundleCost; any non-negative counts may be bought and extras are allowed (the question sentence is cut off)",
+    "algorithmTags: MATH, GREEDY"
+   ],
+   "inferred_spec": "Return the minimum total cost of buying non-negative numbers of single edge devices (edgeCost each), single input peripherals (inputCost each) and bundles (bundleCost each, one of each kind) so that at least x edge devices and at least y input peripherals are obtained.",
+   "inference_uncertainty": "low: the purchase options are in the preview; the parameter order and the inferred bounds are guesses",
+   "inferred_interface": {
+    "name": "minimumCost",
+    "params": [
+     {
+      "name": "x",
+      "type": "integer"
+     },
+     {
+      "name": "y",
+      "type": "integer"
+     },
+     {
+      "name": "edgeCost",
+      "type": "integer"
+     },
+     {
+      "name": "inputCost",
+      "type": "integer"
+     },
+     {
+      "name": "bundleCost",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MDP"
+  },
+  {
+   "uid": "hack2hire:6a31cd3f5117d1b543567dbe",
+   "variant_id": "6a31cd3f5117d1b543567dbe",
+   "variant_ordinal": 1,
+   "title": "Minimum Redistribution Cost",
+   "source": {
+    "post_id": "6a31cd365117d1b543567dbd",
+    "group_title": "Minimum Redistribution Cost",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a31cd365117d1b543567dbd",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/6a31cd365117d1b543567dbd/practice?questionId=6a31cd3f5117d1b543567dbe",
+    "preview_response_sha256": "af758e7a9cb2dbcb760add095ec72f969b2285e6057b59ba504d2ae60ea74b9b",
+    "preview_content_sha256": "6c54c5f0b68a608d48b9fce8f591517fad83035f1fb87ae06fffbc2e50000e2f",
+    "preview_characters": 650,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/6a31cd365117d1b543567dbd.json",
+    "algorithm_tags": [
+     "PREFIX_SUM"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: n warehouses on a circle, warehouse i linked clockwise to (i + 1) % n, products[i] units each, the total divisible by n; equalise all warehouses with every movement in one common direction (all clockwise or all counterclockwise); each unit crossing one link costs 1",
+    "algorithmTags: PREFIX_SUM"
+   ],
+   "inferred_spec": "products is a non-empty list of non-negative integers whose sum is divisible by n = len(products). Units move only along circle links, all in the same direction (either every move clockwise or every move counterclockwise); each unit crossing one link costs 1. Return the minimum total cost to make every warehouse hold sum / n units.",
+   "inference_uncertainty": "medium: the model is in the preview; the answer is the cheaper of the two directions, each computed as the minimum non-negative circulation; bounds are inferred",
+   "inferred_interface": {
+    "name": "minRedistributionCost",
+    "params": [
+     {
+      "name": "products",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MRC"
+  },
+  {
+   "uid": "hack2hire:69f1384f96981f58ae1f7687",
+   "variant_id": "69f1384f96981f58ae1f7687",
+   "variant_ordinal": 1,
+   "title": "Minimum Root Edges Reversal",
+   "source": {
+    "post_id": "69f1384b96981f58ae1f7686",
+    "group_title": "Minimum Root Edges Reversal",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f1384b96981f58ae1f7686",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69f1384b96981f58ae1f7686/practice?questionId=69f1384f96981f58ae1f7687",
+    "preview_response_sha256": "7d2550cd0306b279081d918ed526187f45aef13286a7e7d82aa18a344c9ff2a7",
+    "preview_content_sha256": "062e72d05d5a8c989603a884ea55d7fe897f3cf1d591c9c267cfcfb9f98d03a4",
+    "preview_characters": 539,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69f1384b96981f58ae1f7686.json",
+    "algorithm_tags": [
+     "DEPTH_FIRST_SEARCH"
+    ],
+    "companies": [
+     "UBER"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a directed tree on nodes 1..n with n - 1 edges from[i] -> to[i]; pick any root and reverse edges so every edge points away from it; report the fewest reversals over all roots; constraints n <= 1e5 and at most one edge between two nodes",
+    "algorithmTags: DEPTH_FIRST_SEARCH"
+   ],
+   "inferred_spec": "n is the node count and fromNodes[i] -> toNodes[i] (i < n - 1) are the edges of a tree when directions are ignored. For a root r, the cost is the number of edges that point toward r. Return the minimum cost over all roots.",
+   "inference_uncertainty": "low: the task and n <= 1e5 are in the preview; the parameter names (from and to cannot be Python parameters) and the two-array layout are inferred",
+   "inferred_interface": {
+    "name": "minEdgeReversals",
+    "params": [
+     {
+      "name": "n",
+      "type": "integer"
+     },
+     {
+      "name": "fromNodes",
+      "type": "integer[]"
+     },
+     {
+      "name": "toNodes",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "MRE"
+  },
+  {
+   "uid": "hack2hire:67888093402dc47b67a14948",
+   "variant_id": "67888093402dc47b67a14948",
+   "variant_ordinal": 1,
+   "title": "Number of Idle Drives",
+   "source": {
+    "post_id": "67887ddb402dc47b67a14947",
+    "group_title": "Number of Idle Drives",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67887ddb402dc47b67a14947",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67887ddb402dc47b67a14947/practice?questionId=67888093402dc47b67a14948",
+    "preview_response_sha256": "074a7483d29aa141a4fdfa6ed72d0f5798a92f9fa7e8eca34722146e228faa04",
+    "preview_content_sha256": "8af1a9203ab3968e05b5cf8921517cf7612f1127e92965b6f1d244e83849fc8e",
+    "preview_characters": 337,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67887ddb402dc47b67a14947.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "AMAZON"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: robots at distinct integer points; a robot is idle when another robot lies directly above, below, left and right of it (the input layout and output are cut off)",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "x and y give the robot positions (x[i], y[i]); positions are distinct. A robot is idle when some robot has the same x and a larger y, some has the same x and a smaller y, some has the same y and a larger x, and some has the same y and a smaller x. Return the number of idle robots.",
+   "inference_uncertainty": "medium: \"directly above/below/left/right\" is read as anywhere on the same column or row, not only at distance 1; the two-array input is inferred",
+   "inferred_interface": {
+    "name": "countIdleDrives",
+    "params": [
+     {
+      "name": "x",
+      "type": "integer[]"
+     },
+     {
+      "name": "y",
+      "type": "integer[]"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "NID"
+  },
+  {
+   "uid": "hack2hire:69cda519ff3ebde766cee834",
+   "variant_id": "69cda519ff3ebde766cee834",
+   "variant_ordinal": 1,
+   "title": "Object Field Offset Manager",
+   "source": {
+    "post_id": "69cda510ff3ebde766cee833",
+    "group_title": "Object Field Offset Manager",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69cda510ff3ebde766cee833",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/69cda510ff3ebde766cee833/practice?questionId=69cda519ff3ebde766cee834",
+    "preview_response_sha256": "0f24e3449ccc0ac34cddb50b02abe243a45d08f10e1bf8dc538ee938099e35fb",
+    "preview_content_sha256": "24f55ef1ff9ad904c7f27dbce8071f7955f020df431dc5f1d4e82b1a11511e0f",
+    "preview_characters": 374,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/69cda510ff3ebde766cee833.json",
+    "algorithm_tags": [
+     "DESIGN"
+    ],
+    "companies": [
+     "JANE_STREET"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: a class modelling the byte layout of an object with an ordered list of named fields, each a contiguous byte range, packed from offset 0 with no gaps; an example with three fields of sizes 3, 6 and 2 (the layout and the class methods are cut off)",
+    "algorithmTags: DESIGN"
+   ],
+   "inferred_spec": "ObjectLayout(names, sizes) packs the fields in order from byte 0 with no gaps (field i has sizes[i] > 0 bytes). getOffset(name) returns the first byte of the field, or -1 when there is no such field. fieldAt(offset) returns the name of the field covering that byte, or \"\" when the offset is at or beyond the total size. totalSize() returns the sum of sizes. addField(name, size) appends a new field at the end and returns true, or returns false (and changes nothing) when the name exists. removeField(name) deletes the field and closes the gap, shifting later fields down, and returns true, or returns false when absent. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "high: only the packed-layout model and an example are visible; every method, its name, the \"\" and -1 conventions and the append/remove operations are inferred",
+   "inferred_interface": {
+    "classname": "ObjectLayout",
+    "constructor": {
+     "params": [
+      {
+       "name": "names",
+       "type": "string[]"
+      },
+      {
+       "name": "sizes",
+       "type": "integer[]"
+      }
+     ]
+    },
+    "methods": [
+     {
+      "name": "getOffset",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "fieldAt",
+      "params": [
+       {
+        "name": "offset",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "totalSize",
+      "params": [],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "addField",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       },
+       {
+        "name": "size",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     },
+     {
+      "name": "removeField",
+      "params": [
+       {
+        "name": "name",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "OFM",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:68d89bb279db2fbcd7d7db16",
+   "variant_id": "68d89bb279db2fbcd7d7db16",
+   "variant_ordinal": 1,
+   "title": "Palindrome Stream Tracker",
+   "source": {
+    "post_id": "68d89ae079db2fbcd7d7db14",
+    "group_title": "Palindrome Stream Tracker",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68d89ae079db2fbcd7d7db14",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68d89ae079db2fbcd7d7db14/practice?questionId=68d89bb279db2fbcd7d7db16",
+    "preview_response_sha256": "3660d12c58de45b3b993c31ca7b850c82dcae8a998c577189eaee9546f585d07",
+    "preview_content_sha256": "25d65532c0849d63e1c6b46dd838d8d7670c2950313216e4264968f0c970a754",
+    "preview_characters": 417,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68d89ae079db2fbcd7d7db14.json",
+    "algorithm_tags": [
+     "DESIGN",
+     "MATH"
+    ],
+    "companies": [
+     "BLOOMBERG"
+    ],
+    "source_difficulty": 3,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: class PalindromeStream; track(c) appends a character; isPalindrome() reports whether everything received so far is a palindrome",
+    "algorithmTags: DESIGN, MATH"
+   ],
+   "inferred_spec": "PalindromeStream() starts with an empty stream. track(c) appends the one-character string c. isPalindrome() returns true when the characters received so far, in order, read the same backwards (the empty stream counts as a palindrome), comparing characters exactly. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "low: the class and both methods are in the preview; the alphabet, case sensitivity, the empty-stream answer and the bounds are inferred",
+   "inferred_interface": {
+    "classname": "PalindromeStream",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "track",
+      "params": [
+       {
+        "name": "c",
+        "type": "string"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "isPalindrome",
+      "params": [],
+      "return": {
+       "type": "boolean"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PST",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  },
+  {
+   "uid": "hack2hire:6907b46fe1919109b6df119a",
+   "variant_id": "6907b46fe1919109b6df119a",
+   "variant_ordinal": 1,
+   "title": "Pandigital Sum",
+   "source": {
+    "post_id": "68fe4a717e1bd8f9501bf147",
+    "group_title": "Pandigital Sum",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fe4a717e1bd8f9501bf147",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68fe4a717e1bd8f9501bf147/practice?questionId=6907b46fe1919109b6df119a",
+    "preview_response_sha256": "da9ab48da49b9adc94c1d5c808b89ed8dd1e11b480ad22b347180812d786ec43",
+    "preview_content_sha256": "25df6b69aeda4288c43e1b0b97cd51c02747567d0d7b59abbc03658f64eda5e6",
+    "preview_characters": 389,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68fe4a717e1bd8f9501bf147.json",
+    "algorithm_tags": [
+     "BACKTRACKING",
+     "MATH"
+    ],
+    "companies": [
+     "CITADEL"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: assign the digits 1..9 once each to the letters A..I, forming three-digit numbers ABC, DEF and GHI, and count the assignments that satisfy an equation (the equation itself is cut off)",
+    "algorithmTags: BACKTRACKING, MATH"
+   ],
+   "inferred_spec": "pattern is a 9-character string over \"1\"..\"9\" and \"?\" whose positions stand for the letters A..I; a digit fixes that letter (fixed digits are distinct) and \"?\" leaves it free. Count the assignments of the digits 1..9, each used exactly once, consistent with pattern, such that ABC + DEF = GHI. pattern \"?????????\" is the unconstrained count.",
+   "inference_uncertainty": "high: the digit assignment and the three numbers are in the preview, but the equation is cut off; ABC + DEF = GHI is inferred from the title, and the pattern parameter is an author extension so the function has an input (the official version likely takes none and its answer would be the all-\"?\" count)",
+   "inferred_interface": {
+    "name": "countPandigitalSums",
+    "params": [
+     {
+      "name": "pattern",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "integer"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PDS"
+  },
+  {
+   "uid": "hack2hire:68f283fbf567e950995157d6",
+   "variant_id": "68f283fbf567e950995157d6",
+   "variant_ordinal": 1,
+   "title": "Pig Latin Sentence Converter",
+   "source": {
+    "post_id": "68f2815df567e950995157d3",
+    "group_title": "Pig Latin Sentence Converter",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f2815df567e950995157d3",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f2815df567e950995157d3/practice?questionId=68f283fbf567e950995157d6",
+    "preview_response_sha256": "a8a80fd3cc5b0fb846a332f0e2b5ffa06e80ff6feb4f7bfa1104b1c97848f6a9",
+    "preview_content_sha256": "b378ad690207e9cd8b4e530d0b6313e2030074f89b9c40b8794e3430392dc76b",
+    "preview_characters": 746,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68f2815df567e950995157d3.json",
+    "algorithm_tags": [
+     "STRING",
+     "SIMULATION"
+    ],
+    "companies": [
+     "SQUARE"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 824; a sentence of words separated by single spaces; a word starting with a vowel (a, e, i, o, u, any case) gets \"way\" appended; a word starting with a consonant has its first letter moved to the end, then \"ay\" appended (any further rules are cut off)",
+    "algorithmTags: STRING, SIMULATION"
+   ],
+   "inferred_spec": "sentence consists of words of ASCII letters separated by single spaces, with no leading or trailing space (it may be empty). Transform each word: if its first letter is a vowel (a, e, i, o, u in either case) append \"way\"; otherwise move the first letter to the end and append \"ay\". Letter case is kept as is. Return the words joined by single spaces.",
+   "inference_uncertainty": "medium: both rules are in the preview; that there are no further rules, that words are letters only and that case is preserved are inferred",
+   "inferred_interface": {
+    "name": "toPigLatin",
+    "params": [
+     {
+      "name": "sentence",
+      "type": "string"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PIG"
+  },
+  {
+   "uid": "hack2hire:67cd196d3363b83a81fc99a7",
+   "variant_id": "67cd196d3363b83a81fc99a7",
+   "variant_ordinal": 1,
+   "title": "Portfolio Value Optimization",
+   "source": {
+    "post_id": "67cd0fba3363b83a81fc99a2",
+    "group_title": "Portfolio Value Optimization",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67cd0fba3363b83a81fc99a2",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/67cd0fba3363b83a81fc99a2/practice?questionId=67cd196d3363b83a81fc99a7",
+    "preview_response_sha256": "68d6769a113686061a6636ff53f2c6acdf1499f72c5d8c162b47651b52b1be24",
+    "preview_content_sha256": "b6e758f7ece1d90d1a4d8fbef0a63bf393fd240d04560544e14391dbc9c23a73",
+    "preview_characters": 419,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/67cd0fba3363b83a81fc99a2.json",
+    "algorithm_tags": [
+     "ARRAY",
+     "GREEDY"
+    ],
+    "companies": [
+     "ROBINHOOD"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: securities with a symbol, current price P, predicted price S and a maximum share count A; limited funds; maximise the predicted future value of the portfolio (whether shares are fractional and the output format are cut off)",
+    "algorithmTags: ARRAY, GREEDY"
+   ],
+   "inferred_spec": "securities is a list of [symbol, P, S, A] rows with integer P >= 1, S >= 0 and A >= 0; funds is a non-negative integer. Buy a (possibly fractional) number of shares q_i with 0 <= q_i <= A_i and total cost sum(q_i * P_i) <= funds, maximising sum(q_i * S_i), the predicted value of the bought shares (unspent funds do not count). Return that maximum rounded half up to two decimals, as a string with exactly two digits after the point.",
+   "inference_uncertainty": "high: the inputs and the goal are in the preview; fractional shares (a fractional knapsack, consistent with the GREEDY tag and difficulty 1), counting only the bought shares and the exact two-decimal string output are inferred",
+   "inferred_interface": {
+    "name": "maximizePortfolioValue",
+    "params": [
+     {
+      "name": "securities",
+      "type": "(string|integer)[][]"
+     },
+     {
+      "name": "funds",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PVO"
+  },
+  {
+   "uid": "hack2hire:68e8736a80f69c7a01706891",
+   "variant_id": "68e8736a80f69c7a01706891",
+   "variant_ordinal": 1,
+   "title": "Print Folder Path Given Node ID",
+   "source": {
+    "post_id": "68e8733480f69c7a0170688f",
+    "group_title": "Print Folder Path Given Node ID",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68e8733480f69c7a0170688f",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68e8733480f69c7a0170688f/practice?questionId=68e8736a80f69c7a01706891",
+    "preview_response_sha256": "a231198107a04fb8c707207e987a8d0d0cf8dffd7af3b9c963fba3ae3b3621b4",
+    "preview_content_sha256": "a35a1a30319de4ba0044485f34ed660c3c1268b548c821608c27decbd28dc1ac",
+    "preview_characters": 688,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68e8733480f69c7a0170688f.json",
+    "algorithm_tags": [
+     "UNION_FIND"
+    ],
+    "companies": [
+     "UBER"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: folders as idList (distinct ids), children[i] (ids of direct children of idList[i]) and nameList[i]; the folders form a forest; folders that are nobody's child are top level; find the path from a top-level folder to targetId (output format cut off)",
+    "algorithmTags: UNION_FIND"
+   ],
+   "inferred_spec": "idList holds distinct folder ids, children[i] the ids of the direct children of folder idList[i], nameList[i] its name; the structure is a forest. Return the names on the path from the top-level ancestor of targetId down to targetId, joined by \"/\". Return \"\" when targetId is not in idList.",
+   "inference_uncertainty": "medium: the inputs and task are in the preview; joining names with \"/\" (no leading slash) and \"\" for an unknown id are inferred",
+   "inferred_interface": {
+    "name": "getFolderPath",
+    "params": [
+     {
+      "name": "idList",
+      "type": "integer[]"
+     },
+     {
+      "name": "children",
+      "type": "integer[][]"
+     },
+     {
+      "name": "nameList",
+      "type": "string[]"
+     },
+     {
+      "name": "targetId",
+      "type": "integer"
+     }
+    ],
+    "return": {
+     "type": "string"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PFP"
+  },
+  {
+   "uid": "hack2hire:68f68778a269f53ea0eff91d",
+   "variant_id": "68f68778a269f53ea0eff91d",
+   "variant_ordinal": 1,
+   "title": "Product Price Query System",
+   "source": {
+    "post_id": "68f68771a269f53ea0eff91c",
+    "group_title": "Product Price Query System",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f68771a269f53ea0eff91c",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68f68771a269f53ea0eff91c/practice?questionId=68f68778a269f53ea0eff91d",
+    "preview_response_sha256": "b675f3c600aaf3c2420ad10e4027b3c585d6622bc1a3861983a004148bfb6e2b",
+    "preview_content_sha256": "3fd1da0f0befe3c2bf6472f8d056fe713b755b4725ef5d6bcbd60fb5d9b6fd86",
+    "preview_characters": 566,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68f68771a269f53ea0eff91c.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "SQUARE"
+    ],
+    "source_difficulty": 1,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: stated as a variation of LeetCode 981; a price log of strings \"<item_name>, <date>, <price>\" where the item name may contain spaces, the date is a unique ISO yyyy-mm-dd string and the price is an integer number of cents (the queries are cut off)",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "log is a list of \"<item_name>, <date>, <price>\" strings in any order; (item, date) pairs are unique. queries is a list of [item_name, date] pairs. For each query return the price of the log entry for that item with the latest date not after the query date, or -1 when there is none. Return the answers in query order.",
+   "inference_uncertainty": "high: the log format is in the preview; the query shape, \"latest entry at or before the date\" (the LeetCode 981 rule) and -1 for no entry are inferred, as is uniqueness per item rather than across the whole log",
+   "inferred_interface": {
+    "name": "getPrices",
+    "params": [
+     {
+      "name": "log",
+      "type": "string[]"
+     },
+     {
+      "name": "queries",
+      "type": "string[][]"
+     }
+    ],
+    "return": {
+     "type": "integer[]"
+    }
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON result",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PPQ"
+  },
+  {
+   "uid": "hack2hire:68aceb961bf7d2097f647f62",
+   "variant_id": "68aceb961bf7d2097f647f62",
+   "variant_ordinal": 1,
+   "title": "Product Price Tracker",
+   "source": {
+    "post_id": "68aceb681bf7d2097f647f60",
+    "group_title": "Product Price Tracker",
+    "group_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68aceb681bf7d2097f647f60",
+    "variant_url": "https://www.hack2hire.com/question-bank/questions/coding-questions/68aceb681bf7d2097f647f60/practice?questionId=68aceb961bf7d2097f647f62",
+    "preview_response_sha256": "a71ecdbdf561be8aefc33c19fadf71b205d644caa9d847598fa886964622820c",
+    "preview_content_sha256": "c540f15caea1345e17508ff63f9871692848ef3f27ca08eb4a94d604abd08949",
+    "preview_characters": 528,
+    "preview_scope": "group-level; not a complete variant specification",
+    "local_cache": "data/question_bank/hack2hire/details/68aceb681bf7d2097f647f60.json",
+    "algorithm_tags": [
+     "HASH_TABLE"
+    ],
+    "companies": [
+     "ORACLE"
+    ],
+    "source_difficulty": 2,
+    "variant_count": 1
+   },
+   "spec_basis": "inferred",
+   "inferred_by": {
+    "who": "claude-opus-5-5 subagent",
+    "date": "2026-10-29"
+   },
+   "inference_basis_fields": [
+    "contentPreview: class ProductPrice() constructs an empty tracker; update(timestamp, price) records a price at an arbitrary timestamp, replacing any earlier price at that timestamp; the tracker reports the latest, minimum and maximum price recorded so far (the query methods are cut off)",
+    "algorithmTags: HASH_TABLE"
+   ],
+   "inferred_spec": "ProductPrice() starts empty. update(timestamp, price) sets the price at timestamp, replacing a previous record there. current() returns the price at the largest recorded timestamp. maximum() and minimum() return the largest and smallest price over the current records (a replaced price no longer counts). Each query returns -1 when nothing is recorded. Every method call is answered in call order on one instance; void methods return nothing.",
+   "inference_uncertainty": "medium: the class, update and the three reported quantities are in the preview; the method names current/maximum/minimum (as in LeetCode 2034) and -1 when empty are inferred",
+   "inferred_interface": {
+    "classname": "ProductPrice",
+    "constructor": {
+     "params": []
+    },
+    "methods": [
+     {
+      "name": "update",
+      "params": [
+       {
+        "name": "timestamp",
+        "type": "integer"
+       },
+       {
+        "name": "price",
+        "type": "integer"
+       }
+      ],
+      "return": {
+       "type": "void"
+      }
+     },
+     {
+      "name": "current",
+      "params": [],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "maximum",
+      "params": [],
+      "return": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "minimum",
+      "params": [],
+      "return": {
+       "type": "integer"
+      }
+     }
+    ]
+   },
+   "official_interface": null,
+   "official_statement_available": false,
+   "comparison": "exact typed JSON trace result; no bool/int coercion",
+   "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+   "variant_split_inference": "single variant",
+   "oracle_constant": "PPT",
+   "transcript_interface": {
+    "name": "solve",
+    "argument_order": [
+     "operation_names",
+     "argument_lists"
+    ],
+    "constructor_output": null,
+    "void_method_output": null,
+    "result_order": "constructor followed by every method call",
+    "scope": "Explicit class trace adapter, separate from direct native observer checks."
+   }
+  }
+ ]
+}

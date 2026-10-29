@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a31cd3f5117d1b543567dbe",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "products"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minRedistributionCost",
+  "params": [
+   {
+    "name": "products",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for each direction try every link as the one carrying no flow, derive the other link flows around the circle, keep non-negative assignments and take the cheapest",
+  "candidate_design": "prefix sums of products[i] - average; clockwise cost = sum(prefix) - n * min(prefix), counterclockwise cost = n * max(prefix) - sum(prefix); return the smaller",
+  "complexity_target": "O(n) time/O(1) extra space"
+ },
+ "source_sha256": "cfbd14848404f83267c377d2c4b221c72f8f3eab889bbbc6b87ab742b1bb2e93",
+ "wrapper": "named export minRedistributionCost"
+}

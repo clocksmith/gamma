@@ -1,0 +1,485 @@
+{
+ "kind": "contract",
+ "id": "contract:hack2hire:68aceb681bf7d2097f647f60:68aceb961bf7d2097f647f62:authored-v1",
+ "version": 1,
+ "schema": "study.record.v1",
+ "origin": [
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+   "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+   "selector": "/problems/15"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "data/question_bank/hack2hire/details/68aceb681bf7d2097f647f60.json",
+   "sha256": "b0baf89aaeafd258a5e0c824b7181adae5825f63dcccf0868f56522eefac62db",
+   "selector": "/payload/data/contentPreview"
+  },
+  {
+   "repository": "gamma",
+   "revision": null,
+   "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+   "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+   "selector": "/variants/hack2hire:68aceb961bf7d2097f647f62"
+  }
+ ],
+ "problemId": "hack2hire:68aceb681bf7d2097f647f60",
+ "variantId": "68aceb961bf7d2097f647f62",
+ "variantLabel": {
+  "status": "present",
+  "value": "Single variant: latest, max and min price with corrections",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:68aceb961bf7d2097f647f62/variantLabel"
+   }
+  ]
+ },
+ "statement": {
+  "status": "present",
+  "value": "ProductPrice() starts empty. update(timestamp, price) sets the price at timestamp, replacing a previous record there. current() returns the price at the largest recorded timestamp. maximum() and minimum() return the largest and smallest price over the current records (a replaced price no longer counts). Each query returns -1 when nothing is recorded. Every method call is answered in call order on one instance; void methods return nothing.",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "contentScope": "authored",
+ "requirements": {
+  "status": "present",
+  "value": [
+   "ProductPrice() starts empty.",
+   "update(timestamp, price) sets the price at timestamp, replacing a previous record there.",
+   "current() returns the price at the largest recorded timestamp.",
+   "maximum() and minimum() return the largest and smallest price over the current records (a replaced price no longer counts).",
+   "Each query returns -1 when nothing is recorded.",
+   "Every method call is answered in call order on one instance; void methods return nothing."
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/15/inferred_spec"
+   }
+  ]
+ },
+ "constraints": {
+  "status": "present",
+  "value": [
+   "at most 1e5 calls",
+   "1 <= timestamp <= 1e9",
+   "1 <= price <= 1e9"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:68aceb961bf7d2097f647f62/constraints"
+   }
+  ]
+ },
+ "assumptions": {
+  "status": "present",
+  "value": [
+   {
+    "statement": "The whole specification is inferred by claude-opus-5-5 subagent, 2026-10-29; it is not the official statement.",
+    "basis": "preview fields used: contentPreview: class ProductPrice() constructs an empty tracker; update(timestamp, price) records a price at an arbitrary timestamp, replacing any earlier price at that timestamp; the tracker reports the latest, minimum and maximum price recorded so far (the query methods are cut off); algorithmTags: HASH_TABLE; preview response sha256 a71ecdbdf561be8aefc33c19fadf71b205d644caa9d847598fa886964622820c"
+   },
+   {
+    "statement": "Uncertainty: medium: the class, update and the three reported quantities are in the preview; the method names current/maximum/minimum (as in LeetCode 2034) and -1 when empty are inferred",
+    "basis": "the public group preview is partial (528 characters, group-level)"
+   },
+   {
+    "statement": "Variant split: single variant",
+    "basis": "variant ids and order from codingQuestions; no per-variant text is public"
+   },
+   {
+    "statement": "Domain bounds in constraints are chosen by the author for testing, not official limits.",
+    "basis": "no constraint text visible in the preview"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/15/inference_basis_fields"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/15/inference_uncertainty"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/15/variant_split_inference"
+   }
+  ]
+ },
+ "clarifyingQuestions": {
+  "status": "present",
+  "value": [
+   "What do the queries return before any update?",
+   "Does a replaced price still count for the maximum or minimum?",
+   "Is \"latest\" the newest timestamp or the newest call?"
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:68aceb961bf7d2097f647f62/clarifyingQuestions"
+   }
+  ]
+ },
+ "examples": {
+  "status": "present",
+  "value": [
+   {
+    "input": [
+     [
+      "ProductPrice",
+      "update"
+     ],
+     [
+      [],
+      [
+       1,
+       12
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   },
+   {
+    "input": [
+     [
+      "ProductPrice",
+      "current",
+      "current",
+      "minimum",
+      "minimum",
+      "current",
+      "update",
+      "update",
+      "maximum",
+      "maximum",
+      "current",
+      "update",
+      "minimum",
+      "minimum",
+      "update",
+      "maximum",
+      "current",
+      "update"
+     ],
+     [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [
+       6,
+       9
+      ],
+      [
+       5,
+       7
+      ],
+      [],
+      [],
+      [],
+      [
+       8,
+       9
+      ],
+      [],
+      [],
+      [
+       6,
+       16
+      ],
+      [],
+      [],
+      [
+       5,
+       15
+      ]
+     ]
+    ],
+    "output": [
+     null,
+     -1,
+     -1,
+     -1,
+     -1,
+     -1,
+     null,
+     null,
+     9,
+     9,
+     9,
+     null,
+     7,
+     7,
+     null,
+     16,
+     9,
+     null
+    ],
+    "source": "oracles.reference over a cases.py row"
+   }
+  ],
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/study-content.json",
+    "sha256": "d0dca438f80d22f86f85a249f58c85d3c3ee14dc92713c62b756430315972acb",
+    "selector": "/variants/hack2hire:68aceb961bf7d2097f647f62/examples"
+   },
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/oracles.py",
+    "sha256": "92fece1257387b75c988990ebb8ad1201e0d63b7f49cb53360d12cb5ea69b321",
+    "selector": null
+   }
+  ]
+ },
+ "interfaces": [
+  {
+   "language": "python",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ProductPrice:\n    def __init__(self)\n    def update(self, timestamp, price) -> void\n    def current(self) -> integer\n    def maximum(self) -> integer\n    def minimum(self) -> integer",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/68aceb961bf7d2097f647f62-python.json",
+     "inferredInterface": {
+      "classname": "ProductPrice",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "update",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "price",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "current",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "maximum",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "minimum",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/68aceb961bf7d2097f647f62-python.json",
+      "sha256": "44df3780ac8810c6120c42ca2fccf4bfd1b25e644f97be3542143e7ac34c020b",
+      "selector": null
+     }
+    ]
+   }
+  },
+  {
+   "language": "javascript",
+   "kind": "class",
+   "declaration": {
+    "status": "present",
+    "value": "class ProductPrice {\n  constructor()\n  update(timestamp, price) /* -> void */\n  current() /* -> integer */\n  maximum() /* -> integer */\n  minimum() /* -> integer */\n}",
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+      "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+      "selector": "/problems/15/inferred_interface"
+     }
+    ]
+   },
+   "nativeMetadata": {
+    "status": "present",
+    "value": {
+     "entrypoint": "solve",
+     "semantics": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/68aceb961bf7d2097f647f62-javascript.json",
+     "inferredInterface": {
+      "classname": "ProductPrice",
+      "constructor": {
+       "params": []
+      },
+      "methods": [
+       {
+        "name": "update",
+        "params": [
+         {
+          "name": "timestamp",
+          "type": "integer"
+         },
+         {
+          "name": "price",
+          "type": "integer"
+         }
+        ],
+        "return": {
+         "type": "void"
+        }
+       },
+       {
+        "name": "current",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "maximum",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       },
+       {
+        "name": "minimum",
+        "params": [],
+        "return": {
+         "type": "integer"
+        }
+       }
+      ]
+     },
+     "traceAdapter": {
+      "name": "solve",
+      "argument_order": [
+       "operation_names",
+       "argument_lists"
+      ],
+      "constructor_output": null,
+      "void_method_output": null,
+      "result_order": "constructor followed by every method call",
+      "scope": "Explicit class trace adapter, separate from direct native observer checks."
+     }
+    },
+    "provenance": [
+     {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/semantics/68aceb961bf7d2097f647f62-javascript.json",
+      "sha256": "3be39b286c98a9528d3073353dd340578800f49949beb60dcf46793afed68f07",
+      "selector": null
+     }
+    ]
+   }
+  }
+ ],
+ "effects": {
+  "status": "present",
+  "value": "arguments (including nested containers) unchanged; fresh returned containers",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/15/effects"
+   }
+  ]
+ },
+ "comparison": {
+  "status": "present",
+  "value": "exact typed JSON trace result; no bool/int coercion",
+  "provenance": [
+   {
+    "repository": "gamma",
+    "revision": null,
+    "path": "projects/algorithm_solver/catalogue/authored/hack2hire-chunk16-b-20261028-v1/contracts.json",
+    "sha256": "ef595baa726fe122f77d21702cda14f53d9cc1bd35fe6353ecc37f97e383e98a",
+    "selector": "/problems/15/comparison"
+   }
+  ]
+ },
+ "sources": [],
+ "native": []
+}

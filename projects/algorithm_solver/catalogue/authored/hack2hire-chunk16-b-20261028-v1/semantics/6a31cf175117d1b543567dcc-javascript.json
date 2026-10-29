@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6a31cf175117d1b543567dcc",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "arr"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "minOperations",
+  "params": [
+   {
+    "name": "arr",
+    "type": "integer[]"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "for every cut position compare the value sets left and right of the cut; count the cuts with disjoint sets",
+  "candidate_design": "one pass with the last occurrence index of every value; a piece ends where the furthest last occurrence seen so far equals the current index",
+  "complexity_target": "O(n) expected time/O(n) space"
+ },
+ "source_sha256": "62d40f5bee3254d50504258fba1dbfcfcf3f35fce7d4308ebe2830c0f3d4ba9d",
+ "wrapper": "named export minOperations"
+}

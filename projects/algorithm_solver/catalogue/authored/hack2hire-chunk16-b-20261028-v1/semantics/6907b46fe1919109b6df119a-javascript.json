@@ -1,0 +1,40 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:6907b46fe1919109b6df119a",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "pattern"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "countPandigitalSums",
+  "params": [
+   {
+    "name": "pattern",
+    "type": "string"
+   }
+  ],
+  "return": {
+   "type": "integer"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "enumerate all permutations of the free digits into the \"?\" positions and test the equation",
+  "candidate_design": "backtracking column by column from the units digit with the carry, so the sum digit is forced at each column",
+  "complexity_target": "O(9!) worst case, far fewer with column pruning/O(1) space"
+ },
+ "source_sha256": "b84c291bd273d5fcf598b62dca82a2d0891584451582f0f151aa0f91d6ee5d44",
+ "wrapper": "named export countPandigitalSums"
+}

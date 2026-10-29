@@ -1,0 +1,45 @@
+{
+ "schema": "gamma.authored-scalar-semantics.v1",
+ "problem_uid": "hack2hire:67cd196d3363b83a81fc99a7",
+ "language": "javascript",
+ "entrypoint": "solve",
+ "parameters": [
+  "securities",
+  "funds"
+ ],
+ "spec_basis": "inferred",
+ "inferred_by": {
+  "who": "claude-opus-5-5 subagent",
+  "date": "2026-10-29"
+ },
+ "inferred_interface": {
+  "name": "maximizePortfolioValue",
+  "params": [
+   {
+    "name": "securities",
+    "type": "(string|integer)[][]"
+   },
+   {
+    "name": "funds",
+    "type": "integer"
+   }
+  ],
+  "return": {
+   "type": "string"
+  }
+ },
+ "official_interface": null,
+ "comparison": "exact typed JSON result",
+ "effects": "arguments (including nested containers) unchanged; fresh returned containers",
+ "qualification": {
+  "status": "unknown",
+  "reason": "Not qualified. Specification inferred from a partial public preview, not the official statement; author-local runs of own candidates against own generated cases only; no isolated independent qualification"
+ },
+ "source_reasoning": {
+  "reference": "exact rational arithmetic: sort by the fraction S / P, accumulate fractions, then round",
+  "candidate_design": "order indices by S / P with integer cross-multiplication, buy whole lots while affordable, buy the remaining fraction of the next one, and round the exact value I + r S / P with integer (BigInt in JavaScript) arithmetic",
+  "complexity_target": "O(n log n) time/O(n) space"
+ },
+ "source_sha256": "900bd8f6992ce3a4fce7812dde5292258c032d75cf03b4a0e9548e1109c61302",
+ "wrapper": "named export maximizePortfolioValue"
+}
