@@ -10,5 +10,55 @@
   },
   "candidate_sources_exist": false,
   "candidate_executions": 0,
-  "source_free_tests_passed": 3
+  "source_free_tests_passed": 3,
+  "amendments": [
+    {
+      "file": "oracles.py",
+      "after_candidates_existed": true,
+      "old_sha256": "13baac223678de27a1c296696f6d41fe3f8097691c3ce6a0907ae146e1bdee02",
+      "new_sha256": "9addc57c0d4055af2d7e44272558fdb57feb94ccd8d9a7460823fe5aae5158ee",
+      "change": "ref_903 I step: ndp starts as [0] and appends prefix sums, so new[j] = sum(dp[0..j-1]); 903 expected values change for most inputs (for example DID 3 -> 5, IDID 3 -> 16)",
+      "reason": "Reference undercounted: the I transition kept the row length and summed dp[0..j] instead of adding the new lowest rank and summing dp[0..j-1] (for example DID gave 3, true count 5). Found 2026-10-29 when author-written study examples disagreed with both candidates; confirmed by enumerating permutations in crosscheck_bruteforce.py (89 of 150 seeded rows mismatched before, 0 after)."
+    },
+    {
+      "file": "python/903.py",
+      "after_candidates_existed": true,
+      "old_sha256": "a9033a209f44242e5abb8bbaf595b81ae98b70a0be80599289118c6be239b147",
+      "new_sha256": "5bbc28281e0018010289c97160b996d991ded1bab13b0e0a118074dbdf65e580",
+      "change": "same correction in the Python candidate (post-run change)",
+      "reason": "candidate repeated the reference defect"
+    },
+    {
+      "file": "javascript/903.js",
+      "after_candidates_existed": true,
+      "old_sha256": "5373fbfefc56cef4a8d78991375fa5df0424d666286da397531f2af8d7cf3e1f",
+      "new_sha256": "88ab1b4435789fad6216fee5fff723f8937b5dc9349349a8fda722a79ddf5cb9",
+      "change": "same correction in the JavaScript candidate: ndp[0] = 0 and ndp[i + 1] = prefix sum, without the trailing pop (post-run change)",
+      "reason": "candidate repeated the reference defect"
+    },
+    {
+      "file": "semantics/903-python.json",
+      "after_candidates_existed": true,
+      "old_sha256": "bb13cf05d4324f76f766fc68af92e7dcb8afc9d7c939b8cc23c6502cf7f3797d",
+      "new_sha256": "1bd5c33b25bb872c4dc83f86baf797cdfd46a57333b027ad481311a941ac652b",
+      "change": "source_sha256 updated to the corrected python/903.py",
+      "reason": "keep the semantics binding to the current source"
+    },
+    {
+      "file": "semantics/903-javascript.json",
+      "after_candidates_existed": true,
+      "old_sha256": "c626196098155b4dbd00bc641037ee6631d7a861098b471105627abab81f6488",
+      "new_sha256": "c84537c11e5487704c9dee777f232140df35aeaa6b54b3dee14f1fa9197140ad",
+      "change": "source_sha256 updated to the corrected javascript/903.js",
+      "reason": "keep the semantics binding to the current source"
+    }
+  ],
+  "amendment_notes": "authoring-catalog.json is unchanged and still pins the pre-amendment manifest and 903 source/semantics hashes. cases.py, contracts.json, design.json and test_oracles.py are unchanged. No other reference or expected-value rule changed.",
+  "current_sha256": {
+    "oracles.py": "9addc57c0d4055af2d7e44272558fdb57feb94ccd8d9a7460823fe5aae5158ee",
+    "test_oracles.py": "426f525925a0baec43cd3f33aee5bb2016ef0bea5d750cdcb19f7a8f2dc93668",
+    "cases.py": "6e4197ecad3d1b19f4c5ff27676f894cf686e2d8ca437e4b6f2d6eefdd1222bb",
+    "contracts.json": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+    "design.json": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe"
+  }
 }

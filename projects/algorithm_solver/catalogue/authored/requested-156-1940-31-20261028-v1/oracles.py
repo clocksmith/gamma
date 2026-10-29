@@ -428,7 +428,7 @@ def ref_903(s: str) -> int:
     for ch in s:
         if ch == "I":
             cur = 0
-            ndp = []
+            ndp = [0]
             for x in dp:
                 cur = (cur + x) % MOD
                 ndp.append(cur)
