@@ -8,11 +8,11 @@ function solve(s) {
     if (s[idx] === "I") {
       let cur = 0;
       const ndp = new Array(dp.length + 1);
+      ndp[0] = 0;
       for (let i = 0; i < dp.length; i++) {
         cur = (cur + dp[i]) % MOD;
-        ndp[i] = cur;
+        ndp[i + 1] = cur;
       }
-      ndp.pop();
       dp = ndp;
     } else {
       let cur = 0;
