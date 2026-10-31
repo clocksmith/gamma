@@ -1,0 +1,497 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:leetcode:361:requested-243-370-35-20261028-v1:361:v1",
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+      "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+      "selector": "/361"
+    }
+  ],
+  "problemId": "leetcode:361",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:leetcode:361:requested-243-370-35-20261028-v1:361:authored-v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/contract--contract_leetcode_361_requested-243-370-35-20261028-v1_361_authored-v1--v2.json",
+    "sha256": "b83687dfad5bd041b8f0adf8f3c35169d1e51b411b865fee9bff13b3f9d4f1c9"
+  },
+  "title": {
+    "status": "present",
+    "value": "Cache row-segment and column-segment enemy counts between walls.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/design.json",
+        "sha256": "09edd466fb1151dbd090203dc900164b726d6c3e0d91a5525f91b21d0d0e593f",
+        "selector": "/problems/31/numeric_complexity_contract/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "Cache row-segment and column-segment enemy counts between walls. Every wall-separated row or column segment shares one reusable enemy count. Walls reset visibility; enemies beyond a wall must never contribute to a candidate cell.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/361/explanation"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Compute a segment count only when entering it after a wall or grid boundary.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/361/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "Walls reset visibility; enemies beyond a wall must never contribute to a candidate cell.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/361/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "Every wall-separated row or column segment shares one reusable enemy count."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/361/invariant"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "Compute a segment count only when entering it after a wall or grid boundary.",
+      "Every wall-separated row or column segment shares one reusable enemy count.",
+      "Cache row-segment and column-segment enemy counts between walls.",
+      "Walls reset visibility; enemies beyond a wall must never contribute to a candidate cell."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/361/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Establish the invariant",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/0/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Compute a segment count only when entering it after a wall or grid boundary.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/0/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Place one bomb in an empty cell to maximize enemies hit along rows and columns until walls stop the blast. Every wall-separated row or column segment shares one reusable enemy count.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/0/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Identify the information that must survive each step before choosing code.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/0/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/0/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Compute a segment count only when entering it after a wall or grid boundary."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/0/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:361:requested-243-370-35-20261028-v1:361:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_361_requested-243-370-35-20261028-v1_361_approach-native_v1--v2.json",
+        "sha256": "baa71b8d3087842b658330263c01ff2bea0bb27ebfece16f6b7eecfd20e43c03"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Implement the state transition",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/1/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which state changes make the next step preserve this invariant?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/1/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Cache row-segment and column-segment enemy counts between walls. Every wall-separated row or column segment shares one reusable enemy count.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/1/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Walls reset visibility; enemies beyond a wall must never contribute to a candidate cell.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/1/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Cache row-segment and column-segment enemy counts between walls.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/1/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Every wall-separated row or column segment shares one reusable enemy count.",
+          "Cache row-segment and column-segment enemy counts between walls."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/1/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:361:requested-243-370-35-20261028-v1:361:python:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_361_requested-243-370-35-20261028-v1_361_python_v1--v2.json",
+          "sha256": "811cf1015ae2d1864ced63ce5bd9ebda6e85af3fae583f94474c0ba2595432e4"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:361:requested-243-370-35-20261028-v1:361:javascript:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_361_requested-243-370-35-20261028-v1_361_javascript_v1--v2.json",
+          "sha256": "7c45edf035b755bea5b8adb28ec32216b5c22ecec7dde91d1d35abf7d35b7a74"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:361:requested-243-370-35-20261028-v1:361:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_361_requested-243-370-35-20261028-v1_361_approach-native_v1--v2.json",
+        "sha256": "baa71b8d3087842b658330263c01ff2bea0bb27ebfece16f6b7eecfd20e43c03"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Challenge the boundary",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/2/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "What boundary or counterexample would expose this mistake?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/2/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Walls reset visibility; enemies beyond a wall must never contribute to a candidate cell. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/2/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/2/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/2/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Walls reset visibility; enemies beyond a wall must never contribute to a candidate cell."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/stages/2/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/361/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:361:requested-243-370-35-20261028-v1:361:development-suite:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_361_requested-243-370-35-20261028-v1_361_development-suite_v1--v2.json",
+          "sha256": "dc846d57fc3b74099cbfc0e30c79970f3d7b6580838e3c08c5953c6baaac3ecb"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:361:requested-243-370-35-20261028-v1:361:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_361_requested-243-370-35-20261028-v1_361_approach-native_v1--v2.json",
+        "sha256": "baa71b8d3087842b658330263c01ff2bea0bb27ebfece16f6b7eecfd20e43c03"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:leetcode:361:requested-243-370-35-20261028-v1:361:approach-native:v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_361_requested-243-370-35-20261028-v1_361_approach-native_v1--v2.json",
+    "sha256": "baa71b8d3087842b658330263c01ff2bea0bb27ebfece16f6b7eecfd20e43c03"
+  },
+  "version": 2
+}

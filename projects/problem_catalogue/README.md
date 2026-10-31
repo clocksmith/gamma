@@ -99,6 +99,15 @@ Origins/provenance in migrated wrappers point to the authored record snapshot; i
 unchanged source-native copy retains the author's original provenance. This proves
 faithful import, not the truth or qualification of the author's claims.
 
+Multiple immutable source revisions can coexist. The highest declared source
+version is current for that identity; old approaches are not added as duplicate
+current choices. Exact older dependencies remain pinned and are validated
+transitively. Conversion rows record the original source version/hash and its
+normalized target reference; normalized registry version numbers are local to
+the migration destination. Discovery resolves full references, including versions,
+rather than looking up only an ID. Historical normalized records remain immutable
+and tampering stops the next conversion.
+
 ## Outputs and review
 
 `inventory.json` pins the input snapshot. `extract.json` and

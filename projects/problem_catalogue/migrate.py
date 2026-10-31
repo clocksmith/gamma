@@ -42,6 +42,7 @@ def source_metadata_files(root):
    if name=='manifest.json' and p.parent.name.startswith('source-completion'):continue
    yield p,'gamma-source-metadata'
  for p in sorted(authored.glob('*/semantics/*.json')):yield p,'gamma-source-metadata'
+ for p in sorted(authored.glob('*/study-history/authoring/*.json')):yield p,'gamma-source-metadata'
  for p in sorted(authored.glob('*/study-records/*.json')):yield p,'gamma-study-record'
 
 def record_refs(value):
@@ -129,12 +130,13 @@ class Run:
 
 class Writer:
  def __init__(self,run):
-  self.run=run;self.previous={};self.records={};self.refs={}
+  self.run=run;self.previous={};self.records={};self.refs={};self.authored_versions={}
   if (run.dest/'convert.json').exists():
-   for ref in read(run.dest/'convert.json')['records']:
+   previous=read(run.dest/'convert.json');active_paths={r['path'] for r in previous['records']}
+   for ref in previous['records']+previous.get('historicalRecords',[]):
     raw=within(run.dest,run.dest/ref['path']).read_bytes()
     if sha(raw)!=ref['sha256']:raise ValueError('Existing version was modified: '+ref['path'])
-    self.previous[(ref['kind'],ref['id'])]=(ref,decode(raw))
+    if ref['path'] in active_paths:self.previous[(ref['kind'],ref['id'])]=(ref,decode(raw))
  def put(self,kind,id,origin,**data):
   key=(kind,id)
   if key in self.refs:raise ValueError('Duplicate record identity during conversion: '+str(key))
@@ -151,6 +153,27 @@ class Writer:
    if not p.exists():p.write_bytes(raw)
    ref={'kind':kind,'id':id,'version':version,'path':relative,'sha256':sha(raw)}
   self.records[key]=value;self.refs[key]=ref;return ref
+ def put_authored_version(self,kind,id,origin,active,**data):
+  """Retain multiple exact source revisions; expose only the selected current one."""
+  key=(kind,id);base={'schema':'study.record.v1','kind':kind,'id':id,'origin':[origin],**data}
+  if key not in self.authored_versions:
+   versions=[]
+   for path in (self.run.dest/'records'/kind/slug(id)).glob('v*.json'):
+    raw=path.read_bytes();value=decode(raw)
+    if (value['kind'],value['id'])!=key:raise ValueError('Historical record identity mismatch')
+    versions.append(({'kind':kind,'id':id,'version':value['version'],'path':str(path.relative_to(self.run.dest)),'sha256':sha(raw)},value))
+   self.authored_versions[key]=versions
+  versions=self.authored_versions[key];match=next(((r,v) for r,v in versions if semantic({k:x for k,x in v.items() if k!='version'},True)==semantic(base,True)),None)
+  if match:reference,value=match
+  else:
+   version=max((r['version'] for r,v in versions),default=0)+1;value={**base,'version':version};raw=encoded(value);relative=f'records/{kind}/{slug(id)}/v{version}.json';path=self.run.dest/relative
+   path.parent.mkdir(parents=True,exist_ok=True)
+   if path.exists():raise ValueError('Historical version would be overwritten')
+   path.write_bytes(raw);reference={'kind':kind,'id':id,'version':version,'path':relative,'sha256':sha(raw)};versions.append((reference,value))
+  if active:
+   if key in self.refs and self.refs[key]!=reference:raise ValueError('Conflicting active authored identity')
+   self.refs[key]=reference;self.records[key]=value
+  return reference
  def artifact(self,id,pointer,type='source-native',title='',value=None,file=None,problem=None,approach=None,contract=None,language=None,document_schema=None,execution='reference-only',external=None,metadata=None):
   if value is not None:file=self.run.blob(encoded(value))
   data=dict(type=type,title=title or id,problemId=problem,approachId=approach,contract=contract,file=present(file,pointer) if file else missing('Payload intentionally not opened or copied'),externalLocator=present(external,pointer) if external is not None else na('Content is copied into the migration destination'),language=language,documentSchema=document_schema,executionKind=execution,complexityClaims=missing('No source-bound complexity claim normalized'),nativeMetadata=present(metadata,pointer) if metadata is not None else missing('No additional metadata'))
@@ -260,7 +283,9 @@ def extract(run,args):
 def resolve(run,args):
  state=run.phase('extract');index={x['id']:x for x in run.phase('inventory')['items']};tasks=[];claims=[];manifest_paths={}
  study_tasks={index[t['inputId']]['path']:t for t in state['tasks'] if t['adapter']=='study-record'};blocked={};dependencies={};identities=defaultdict(list)
- for path,t in study_tasks.items():identities[(t['data']['kind'],t['data']['id'])].append(path)
+ latest={}
+ for path,t in study_tasks.items():
+  d=t['data'];identities[(d['kind'],d['id'],d['version'])].append(path);key=(d['kind'],d['id']);latest[key]=max(latest.get(key,0),d['version'])
  for paths in identities.values():
   if len({index[study_tasks[path]['inputId']]['sha256'] for path in paths})>1:
    for path in paths:blocked[path]='Conflicting authored files declare the same record identity; review required'
@@ -293,7 +318,8 @@ def resolve(run,args):
  for path in study_tasks:ready(path)
  for path,t in study_tasks.items():
   d=t['data'];pid=t['declaredProblemId']
-  if path not in blocked and d['kind']=='artifact' and d['type']=='implementation' and d['file']['status']=='present':
+  t['activeVersion']=d['version']==latest[d['kind'],d['id']]
+  if path not in blocked and t['activeVersion'] and d['kind']=='artifact' and d['type']=='implementation' and d['file']['status']=='present':
    source_path=d['file']['value']['path'];study_source_paths[source_path]=pid;manifest_paths[source_path]=(pid,d.get('language'))
  for t in state['tasks']:
   if t['adapter']=='gamma-paired':
@@ -443,7 +469,7 @@ def convert(run,args):
  authored={inputs[t['inputId']]['path']:t for t in state['tasks'] if t['adapter']=='study-record' and not t.get('blockedReason')};imported={};imported_ids={}
  def import_record(path):
   if path in imported:return imported[path]
-  task=authored[path];original=task['data'];item=inputs[task['inputId']];ptr=pointer(task);key=(original['kind'],original['id'])
+  task=authored[path];original=task['data'];item=inputs[task['inputId']];ptr=pointer(task);key=(original['kind'],original['id'],original['version'])
   if key in imported_ids:imported[path]=imported_ids[key];return imported[path]
   def rebase(value,selector=''):
    if isinstance(value,dict):
@@ -461,21 +487,23 @@ def convert(run,args):
    if original['file']['status']=='present':
     data['file']=missing('Source payload deliberately remains outside the migration; pinned author locator retained')
     data['externalLocator']=present({'repository':'gamma',**original['file']['value'],'binding':'Author-declared bytes and hash; not opened or executed by migration'},ptr)
-  reference=w.put(original['kind'],original['id'],ptr,**data);imported[path]=reference;imported_ids[key]=reference
+  reference=w.put_authored_version(original['kind'],original['id'],ptr,task.get('activeVersion',True),**data);imported[path]=reference;imported_ids[key]=reference
   p=problem(task,type='coding')
-  p[{'contract':'contracts','approach':'approaches','artifact':'artifacts'}[original['kind']]].append(reference)
+  if original['kind']!='approach' or task.get('activeVersion',True):p[{'contract':'contracts','approach':'approaches','artifact':'artifacts'}[original['kind']]].append(reference)
   return reference
- for task in state['tasks']:
+ for task in sorted(state['tasks'],key=lambda t:(t['data'].get('version',0),t['inputId'])):
   if task['adapter']!='study-record':continue
   if task.get('blockedReason'):
    converted_rows.append({'inputId':task['inputId'],'selector':task['selector'],'status':'blocked','reason':task['blockedReason']});continue
-  import_record(inputs[task['inputId']]['path']);converted_rows.append({'inputId':task['inputId'],'selector':task['selector'],'status':'converted','problemId':task['problemId']})
+  item=inputs[task['inputId']];target=import_record(item['path']);source=task['data']
+  converted_rows.append({'inputId':task['inputId'],'selector':task['selector'],'status':'converted','problemId':task['problemId'],'sourceRecord':{'repository':'gamma','kind':source['kind'],'id':source['id'],'version':source['version'],'path':item['path'],'sha256':item['sha256']},'targetRecord':target,'activeVersion':task.get('activeVersion',True)})
  for pid,p in sorted(problems.items()):
   origin=p.pop('origin')
   for key in ('contracts','approaches','artifacts','evidence','sources','companyReports','relationships'):
-   unique={x['id']:x for x in p[key]};p[key]=[unique[k] for k in sorted(unique)]
+   unique={(x['id'],x['version'],x['sha256']):x for x in p[key]};p[key]=[unique[k] for k in sorted(unique)]
   w.put('problem',pid,origin,**p)
- result={'schema':'study.conversion.v1','records':sorted(w.refs.values(),key=lambda r:(r['kind'],r['id'])),'rows':converted_rows,'counts':dict(Counter(r['kind'] for r in w.refs.values())),'historicalQualificationPromotions':0,'consumerChanges':0}
+ active_paths={r['path'] for r in w.refs.values()};historical={r['path']:r for r in imported.values() if r['path'] not in active_paths}
+ result={'schema':'study.conversion.v1','records':sorted(w.refs.values(),key=lambda r:(r['kind'],r['id'])),'historicalRecords':sorted(historical.values(),key=lambda r:(r['kind'],r['id'],r['version'])),'rows':converted_rows,'counts':dict(Counter(r['kind'] for r in w.refs.values())),'historicalQualificationPromotions':0,'consumerChanges':0}
  run.checkpoint('convert',result);return result
 
 
@@ -492,7 +520,7 @@ def load_records(run):
 
 def validate(run,args):
  from jsonschema import Draft202012Validator
- Draft202012Validator.check_schema(SCHEMA);validator=Draft202012Validator(SCHEMA);records=load_records(run);errors=[];reference_count=0;graph_count=0;reference_cache={};pointer_cache={}
+ Draft202012Validator.check_schema(SCHEMA);validator=Draft202012Validator(SCHEMA);records=load_records(run);errors=[];reference_count=0;graph_count=0;reference_cache={};pointer_cache={};validated_refs=set();visiting_refs=set();shape_validators={}
  source_items={(x['repository'],x['path'],x['sha256']):x for x in run.phase('inventory')['items'] if x['sha256']}
  def resolve_ref(r):
   nonlocal reference_count
@@ -503,9 +531,33 @@ def validate(run,args):
   value=decode(raw)
   if (value['kind'],value['id'],value['version'])!=(r['kind'],r['id'],r['version']):raise ValueError('Reference identity/version mismatch: '+r['path'])
   reference_cache[cache_key]=value;return value
+ def shape(value):
+  kind=value['kind']
+  if kind not in shape_validators:shape_validators[kind]=Draft202012Validator({**SCHEMA,'oneOf':[{'$ref':'#/$defs/'+kind.title().replace('-','')}]})
+  shape_validators[kind].validate(value)
+ def check_reference(r):
+  value=resolve_ref(r);key=(r['path'],r['sha256'])
+  if key in validated_refs:return value
+  if key in visiting_refs:raise ValueError('Cyclic immutable record references')
+  visiting_refs.add(key)
+  try:
+   shape(value);walk(value)
+   if value['kind']=='company-report':
+    if resolve_ref(value['company'])['kind']!='company' or resolve_ref(value['contract'])['kind']!='contract' or resolve_ref(value['source'])['kind']!='source':raise ValueError('Company report has incompatible reference types')
+   if value['kind']=='approach':
+    if resolve_ref(value['contract'])['kind']!='contract':raise ValueError('Approach contract reference has the wrong kind')
+    stages=value['stages']
+    if len({s['id'] for s in stages})!=len(stages):raise ValueError('Duplicate stage identity')
+    if value['sequenceStatus']=='study-ready' and len(stages)<8:raise ValueError('Study-ready approach requires at least eight stages')
+    for stage in stages:
+     for reference in stage['checks']:
+      record=resolve_ref(reference)
+      if record['kind']!='artifact' or record['type']!='check':raise ValueError('Stage check does not resolve to a check artifact')
+  finally:visiting_refs.remove(key)
+  validated_refs.add(key);return value
  def walk(value):
   if isinstance(value,dict):
-   if set(value)=={'kind','id','version','path','sha256'}:resolve_ref(value)
+   if set(value)=={'kind','id','version','path','sha256'}:check_reference(value)
    if set(value)=={'path','sha256','bytes','mediaType'}:
     raw=within(run.dest,run.dest/value['path']).read_bytes()
     if sha(raw)!=value['sha256'] or len(raw)!=value['bytes']:raise ValueError('Blob integrity mismatch: '+value['path'])
@@ -534,21 +586,13 @@ def validate(run,args):
  graphdefs={'simulatte.architecture.v1':'ArchitectureModel','simulatte.systemDiagram.v4':'SimulationDiagramV4','simulatte.systemDiagram.v5':'SimulationDiagramV5','simulatte.composableStudy.v2':'ComposableStudyDocument','simulatte.composableStudy.graph.v2':'Study_graph'}
  for key,(r,value) in records.items():
   try:
-   record_schema={**SCHEMA,'oneOf':[{'$ref':'#/$defs/'+value['kind'].title().replace('-','')}]};Draft202012Validator(record_schema).validate(value);walk(value)
-   if value['kind']=='company-report':
-    if resolve_ref(value['company'])['kind']!='company' or resolve_ref(value['contract'])['kind']!='contract' or resolve_ref(value['source'])['kind']!='source':raise ValueError('Company report has incompatible reference types')
-   if value['kind']=='approach':
-    if resolve_ref(value['contract'])['kind']!='contract':raise ValueError('Approach contract reference has the wrong kind')
-    stages=value['stages']
-    if len({s['id'] for s in stages})!=len(stages):raise ValueError('Duplicate stage identity')
-    if value['sequenceStatus']=='study-ready' and len(stages)<8:raise ValueError('Study-ready approach requires at least eight stages')
-    for stage in stages:
-     for c in stage['checks']:
-      record=resolve_ref(c)
-      if record['kind']!='artifact' or record['type']!='check':raise ValueError('Stage check does not resolve to a check artifact')
+   check_reference(r)
    if value['kind']=='artifact' and value['file']['status']=='present' and value.get('documentSchema') in graphdefs:
     blob=value['file']['value'];native=decode((run.dest/blob['path']).read_bytes());gvalidator=Draft202012Validator({**SCHEMA,'oneOf':[{'$ref':'#/$defs/'+graphdefs[value['documentSchema']]}]});gvalidator.validate(native);graph_count+=1
   except Exception as e:errors.append({'record':r['id'],'path':r['path'],'error':str(e)[:900]})
+ for r in run.phase('convert').get('historicalRecords',[]):
+  try:check_reference(r)
+  except Exception as error:errors.append({'record':r['id'],'path':r['path'],'error':str(error)[:900]})
  # Check semantic graph replay using the pinned Simulatte implementation, not a
  # new interpretation of insert/expand/merge or an invented JSON Patch adapter.
  inv=run.phase('inventory');native_root=run.dest/'native-lucyd'/'public'
@@ -561,25 +605,34 @@ def validate(run,args):
    details=read(output) if output.exists() else {'stderr':process.stderr[-1500:]};errors.append({'scope':'Lucyd native validation/replay','error':details})
   lucyd=read(output) if output.exists() else None
  else:lucyd=None
- result={'schema':'study.validation.v1','records':len(records),'referencesChecked':reference_count,'centralGraphSchemasChecked':graph_count,'lucyd':lucyd,'errors':errors,'passed':not errors,'candidateExecutions':0,'qualificationPromotions':0};run.checkpoint('validate',result)
+ result={'schema':'study.validation.v1','records':len(records),'historicalRecordsChecked':len(run.phase('convert').get('historicalRecords',[])),'referencesChecked':reference_count,'centralGraphSchemasChecked':graph_count,'lucyd':lucyd,'errors':errors,'passed':not errors,'candidateExecutions':0,'qualificationPromotions':0};run.checkpoint('validate',result)
  if errors:raise ValueError(f'Validation failed for {len(errors)} records/boundaries; inspect validate.json')
  return result
 
 
 def build_catalogue(run,args):
  if not run.phase('validate')['passed']:raise ValueError('Validate before building discovery')
- records=load_records(run);entries=[];companies=defaultdict(list);missing_counts=Counter()
+ records=load_records(run);entries=[];companies=defaultdict(list);missing_counts=Counter();pinned={(r['path'],r['sha256']):v for r,v in records.values()}
+ def referenced(r):
+  key=(r['path'],r['sha256'])
+  if key not in pinned:
+   raw=within(run.dest,run.dest/r['path']).read_bytes()
+   if sha(raw)!=r['sha256']:raise ValueError('Discovery reference hash mismatch')
+   value=decode(raw)
+   if (value['kind'],value['id'],value['version'])!=(r['kind'],r['id'],r['version']):raise ValueError('Discovery reference identity mismatch')
+   pinned[key]=value
+  return pinned[key]
  for (kind,id),(reference,p) in records.items():
   if kind!='problem':continue
   counts=Counter();gaps=[];stages=[]
   for r in p['artifacts']:
-   a=records[r['kind'],r['id']][1]
+   a=referenced(r)
    if a['type']=='implementation':counts[a['language'] or 'unknown']+=1
   for r in p['approaches']:
-   a=records[r['kind'],r['id']][1];stages.append({'approach':r,'representation':a['representation'],'stages':len(a['stages'])})
+   a=referenced(r);stages.append({'approach':r,'representation':a['representation'],'stages':len(a['stages'])})
    for field_name in ('explanation','chooseWhen','tradeoffs','hints'):
     if a[field_name]['status']!='present':gaps.append(a['id']+':'+field_name+':'+a[field_name]['status'])
-  contracts=[records[r['kind'],r['id']][1] for r in p['contracts']]
+  contracts=[referenced(r) for r in p['contracts']]
   if not any(c['statement']['status']=='present' and c['contentScope'] in ('full-statement','authored') for c in contracts):gaps.append('complete-statement')
   if p['type']=='coding':
    for language in ('javascript','python'):
@@ -589,7 +642,7 @@ def build_catalogue(run,args):
   for gap in gaps:missing_counts[gap.split(':')[-1]]+=1
   company_names=[]
   for r in p['companyReports']:
-   report=records[r['kind'],r['id']][1];company=records['company',report['company']['id']][1];company_names.append(company['name']);companies[company['id']].append({'problem':reference,'report':r})
+   report=referenced(r);company=referenced(report['company']);company_names.append(company['name']);companies[company['id']].append({'problem':reference,'report':r})
   entries.append({'problem':reference,'title':p['title'],'type':p['type'],'topics':p['topics'],'companies':sorted(set(company_names)),'contracts':p['contracts'],'implementationCounts':dict(counts),'approaches':stages,'missing':gaps,'historicalEvidenceCount':len(p['evidence']),'admissionStatus':'not-established-by-migration'})
  result={'schema':'study.discovery.v1','entries':sorted(entries,key=lambda x:x['problem']['id']),'counts':{'problems':len(entries),'types':dict(Counter(e['type'] for e in entries)),'namespaces':dict(Counter(e['problem']['id'].split(':',1)[0] for e in entries))}}
  write(run.dest/'generated/discovery.json',result);write(run.dest/'generated/company-index.json',{'schema':'study.company-index.v1','companies':dict(sorted(companies.items()))});write(run.dest/'generated/completeness.json',{'schema':'study.completeness.v1','counts':dict(missing_counts),'entries':[{'problem':e['problem'],'missing':e['missing']} for e in entries]});write(run.dest/'generated/relationship-candidates.json',{'schema':'study.relationship-candidates.v1','candidates':run.phase('resolve-identities')['proposedRelationships'],'automaticMerges':0});run.checkpoint('build-catalogue',result['counts']);return result['counts']

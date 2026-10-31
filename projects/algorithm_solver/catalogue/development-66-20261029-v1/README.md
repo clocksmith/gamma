@@ -43,6 +43,13 @@ The generator refuses to overwrite different existing authored extension records
 Changes require an explicit revision rather than silently rebinding published hashes.
 No evidence or admission records are created; qualification stays unknown.
 
+Use `build-study.py --revise` for a reviewed source correction. It appends record
+versions, retains previous files, and pins older source/provenance bytes through
+Git or local content-addressed history. If another author owns a different teaching
+file, this extension writes its own immutable teaching snapshot instead of replacing
+that file. Its manifest covers only this extension's record namespace. Legacy IDs
+containing `v1` remain stable identifiers; the explicit `version` field is authoritative.
+
 ## Run and inspect
 
 From Gamma:

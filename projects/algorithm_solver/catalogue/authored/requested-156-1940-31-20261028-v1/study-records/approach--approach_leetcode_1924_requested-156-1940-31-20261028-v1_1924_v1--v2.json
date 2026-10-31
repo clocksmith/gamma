@@ -1,0 +1,497 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:leetcode:1924:requested-156-1940-31-20261028-v1:1924:v1",
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+      "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+      "selector": "/1924"
+    }
+  ],
+  "problemId": "leetcode:1924",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:leetcode:1924:requested-156-1940-31-20261028-v1:1924:authored-v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/contract--contract_leetcode_1924_requested-156-1940-31-20261028-v1_1924_authored-v1--v2.json",
+    "sha256": "295faafc9287d977f3d0db53fc7665711c2d2c85f42983e288930f55e7cdd99a"
+  },
+  "title": {
+    "status": "present",
+    "value": "Incremental minimum enclosing circle (Welzl iterative).",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/design.json",
+        "sha256": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe",
+        "selector": "/problems/28/numeric_complexity_contract/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "Incremental minimum enclosing circle (Welzl iterative). When a point lies outside the maintained circle, it must constrain a replacement boundary. Deterministic input order has cubic worst-case work; no expected-linear claim follows without a distribution or shuffle.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1924/explanation"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Start with one point and rebuild using one, two or three boundary points as needed.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1924/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "Deterministic input order has cubic worst-case work; no expected-linear claim follows without a distribution or shuffle.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1924/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "When a point lies outside the maintained circle, it must constrain a replacement boundary."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1924/invariant"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "Start with one point and rebuild using one, two or three boundary points as needed.",
+      "When a point lies outside the maintained circle, it must constrain a replacement boundary.",
+      "Incremental minimum enclosing circle (Welzl iterative).",
+      "Deterministic input order has cubic worst-case work; no expected-linear claim follows without a distribution or shuffle."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1924/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Establish the invariant",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/0/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Start with one point and rebuild using one, two or three boundary points as needed.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/0/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Find a smallest circle enclosing all supplied points. When a point lies outside the maintained circle, it must constrain a replacement boundary.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/0/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Identify the information that must survive each step before choosing code.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/0/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/0/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Start with one point and rebuild using one, two or three boundary points as needed."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/0/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:1924:requested-156-1940-31-20261028-v1:1924:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1924_requested-156-1940-31-20261028-v1_1924_approach-native_v1--v2.json",
+        "sha256": "e4c32cdf4a82bdbce218ca556d25e95362cca5e820397fb33dd461ed09cdf6dc"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Implement the state transition",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/1/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which state changes make the next step preserve this invariant?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/1/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Incremental minimum enclosing circle (Welzl iterative). When a point lies outside the maintained circle, it must constrain a replacement boundary.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/1/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Deterministic input order has cubic worst-case work; no expected-linear claim follows without a distribution or shuffle.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/1/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Incremental minimum enclosing circle (Welzl iterative).",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/1/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "When a point lies outside the maintained circle, it must constrain a replacement boundary.",
+          "Incremental minimum enclosing circle (Welzl iterative)."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/1/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:1924:requested-156-1940-31-20261028-v1:1924:python:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1924_requested-156-1940-31-20261028-v1_1924_python_v1--v2.json",
+          "sha256": "4ca035d083507c2a57b5e70715dbab17c4cfd39474231f991c83da5c9baba002"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:1924:requested-156-1940-31-20261028-v1:1924:javascript:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1924_requested-156-1940-31-20261028-v1_1924_javascript_v1--v2.json",
+          "sha256": "a0a4fc8b95d90a06ca02a26fa2f76caca56b1e9484e3c8775f2d25771f02eafc"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:1924:requested-156-1940-31-20261028-v1:1924:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1924_requested-156-1940-31-20261028-v1_1924_approach-native_v1--v2.json",
+        "sha256": "e4c32cdf4a82bdbce218ca556d25e95362cca5e820397fb33dd461ed09cdf6dc"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Challenge the boundary",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/2/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "What boundary or counterexample would expose this mistake?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/2/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Deterministic input order has cubic worst-case work; no expected-linear claim follows without a distribution or shuffle. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/2/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/2/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/2/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Deterministic input order has cubic worst-case work; no expected-linear claim follows without a distribution or shuffle."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/stages/2/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1924/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:1924:requested-156-1940-31-20261028-v1:1924:development-suite:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1924_requested-156-1940-31-20261028-v1_1924_development-suite_v1--v2.json",
+          "sha256": "391ccd2870401a0babfb89cda9b78c5b5f11bb01e17efe8e48560b0f63fa519e"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:1924:requested-156-1940-31-20261028-v1:1924:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1924_requested-156-1940-31-20261028-v1_1924_approach-native_v1--v2.json",
+        "sha256": "e4c32cdf4a82bdbce218ca556d25e95362cca5e820397fb33dd461ed09cdf6dc"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:leetcode:1924:requested-156-1940-31-20261028-v1:1924:approach-native:v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1924_requested-156-1940-31-20261028-v1_1924_approach-native_v1--v2.json",
+    "sha256": "e4c32cdf4a82bdbce218ca556d25e95362cca5e820397fb33dd461ed09cdf6dc"
+  },
+  "version": 2
+}

@@ -91,6 +91,17 @@ class MigrationTests(unittest.TestCase):
  def test_unfinished_authored_dependencies_are_blocked_without_discarding_native_records(self):
   root,source,cr,ir,ar=self.authored_record_fixture();p=root/ar['path'];value=M.read(p);value['contract']['sha256']='f'*64;p.write_bytes(M.encoded(value));records=self.through_convert();self.assertNotIn(('approach',ar['id']),records)
   blocked=[r for r in self.run.phase('convert')['rows'] if r['status']=='blocked'];self.assertTrue(any('mismatch' in r['reason'] for r in blocked));self.assertIn(('artifact','input:gamma:'+ar['path']),records)
+ def test_authored_revisions_keep_exact_old_dependency_versions(self):
+  root,source,cr,ir,ar=self.authored_record_fixture();first=self.through_convert();original=first['contract',cr['id']][0];old_bytes=(self.run.dest/original['path']).read_bytes()
+  value=M.read(root/cr['path']);value.update(version=2,statement=M.missing('Revised incomplete framing'),contentScope='unknown');revised=(root/cr['path']).with_name('contract--revision2.json');revised.write_bytes(M.encoded(value))
+  records=self.through_convert();M.validate(self.run,self.args);M.build_catalogue(self.run,self.args)
+  active=records['contract',cr['id']][0];approach=records['approach',ar['id']][1];self.assertNotEqual(active,approach['contract']);self.assertEqual(approach['contract'],original);self.assertEqual((self.run.dest/original['path']).read_bytes(),old_bytes)
+  self.assertEqual(M.read(self.run.dest/active['path'])['statement']['status'],'missing');self.assertEqual(M.read(self.run.dest/approach['contract']['path'])['statement']['status'],'present')
+  entry=next(e for e in M.read(self.run.dest/'generated/discovery.json')['entries'] if e['problem']['id']=='leetcode:42');self.assertNotIn('complete-statement',entry['missing'],'discovery must resolve the pinned old contract, not replace it with the latest ID')
+  self.assertTrue(self.run.phase('convert')['historicalRecords']);again=self.through_convert();self.assertEqual(records['contract',cr['id']][0],again['contract',cr['id']][0])
+ def test_historical_version_tampering_is_not_repaired_or_hidden(self):
+  root,source,cr,ir,ar=self.authored_record_fixture();self.through_convert();value=M.read(root/cr['path']);value.update(version=2,statement=M.missing('Revision'));(root/cr['path']).with_name('contract--revision2.json').write_bytes(M.encoded(value));self.through_convert();historical=self.run.phase('convert')['historicalRecords'][0];path=self.run.dest/historical['path'];path.write_bytes(path.read_bytes()+b' ')
+  with self.assertRaisesRegex(ValueError,'Existing version was modified'):self.through_convert()
  def test_present_empty_is_different_from_absent_or_unknown(self):
   pointer={'repository':'fixture','revision':None,'path':'x.json','sha256':'a'*64,'selector':''};f=M.field({'items':[]},'items',pointer);self.assertEqual(f['status'],'present');self.assertEqual(f['value'],[]);self.assertEqual(M.field({},'items',pointer)['status'],'missing');validator=Draft202012Validator({**SCHEMA,'oneOf':[{'$ref':'#/$defs/ListField'}]});validator.validate(f)
   with self.assertRaises(Exception):validator.validate({'status':'unknown'})

@@ -1,0 +1,497 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:leetcode:256:requested-243-370-35-20261028-v1:256:v1",
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+      "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+      "selector": "/256"
+    }
+  ],
+  "problemId": "leetcode:256",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:leetcode:256:requested-243-370-35-20261028-v1:256:authored-v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/contract--contract_leetcode_256_requested-243-370-35-20261028-v1_256_authored-v1--v2.json",
+    "sha256": "b73b2f124b066e5d037f6102adc25c54e56fa517472a8d5acc2ee158cc17a3a8"
+  },
+  "title": {
+    "status": "present",
+    "value": "Rolling 3-state DP over consecutive houses.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/design.json",
+        "sha256": "09edd466fb1151dbd090203dc900164b726d6c3e0d91a5525f91b21d0d0e593f",
+        "selector": "/problems/9/numeric_complexity_contract/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "Rolling 3-state DP over consecutive houses. Each color state is the cheapest valid prefix ending in that color. Update a new row of states so one house’s newly computed costs never contaminate its other colors.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/256/explanation"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "The next state needs only the other two previous color costs.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/256/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "Update a new row of states so one house’s newly computed costs never contaminate its other colors.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/256/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "Each color state is the cheapest valid prefix ending in that color."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/256/invariant"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "The next state needs only the other two previous color costs.",
+      "Each color state is the cheapest valid prefix ending in that color.",
+      "Rolling 3-state DP over consecutive houses.",
+      "Update a new row of states so one house’s newly computed costs never contaminate its other colors."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/256/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Establish the invariant",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/0/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "The next state needs only the other two previous color costs.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/0/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Minimize painting cost for a row of houses using three colors, with adjacent houses different. Each color state is the cheapest valid prefix ending in that color.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/0/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Identify the information that must survive each step before choosing code.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/0/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/0/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "The next state needs only the other two previous color costs."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/0/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:256:requested-243-370-35-20261028-v1:256:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_256_requested-243-370-35-20261028-v1_256_approach-native_v1--v2.json",
+        "sha256": "d0b9eeb477126c30e9bf2b9671b07bd290107d1c90781b8b4ca8414f2541da3f"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Implement the state transition",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/1/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which state changes make the next step preserve this invariant?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/1/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Rolling 3-state DP over consecutive houses. Each color state is the cheapest valid prefix ending in that color.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/1/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Update a new row of states so one house’s newly computed costs never contaminate its other colors.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/1/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Rolling 3-state DP over consecutive houses.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/1/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Each color state is the cheapest valid prefix ending in that color.",
+          "Rolling 3-state DP over consecutive houses."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/1/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:256:requested-243-370-35-20261028-v1:256:python:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_256_requested-243-370-35-20261028-v1_256_python_v1--v2.json",
+          "sha256": "61e7a10f56907d4fb83a03e134f4359012d288201d38473f82c5ddaaf617db25"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:256:requested-243-370-35-20261028-v1:256:javascript:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_256_requested-243-370-35-20261028-v1_256_javascript_v1--v2.json",
+          "sha256": "58e7ec01e8fbdae423ad7e276a7f5e32cd73b1a479141167775ec5eccd9082c9"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:256:requested-243-370-35-20261028-v1:256:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_256_requested-243-370-35-20261028-v1_256_approach-native_v1--v2.json",
+        "sha256": "d0b9eeb477126c30e9bf2b9671b07bd290107d1c90781b8b4ca8414f2541da3f"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Challenge the boundary",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/2/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "What boundary or counterexample would expose this mistake?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/2/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Update a new row of states so one house’s newly computed costs never contaminate its other colors. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/2/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/2/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/2/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Update a new row of states so one house’s newly computed costs never contaminate its other colors."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/stages/2/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/256/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:256:requested-243-370-35-20261028-v1:256:development-suite:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_256_requested-243-370-35-20261028-v1_256_development-suite_v1--v2.json",
+          "sha256": "510d5e0e40fb860fa885c8769f040e16b2746e73d39b98aa1b935da64a1ecaa7"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:256:requested-243-370-35-20261028-v1:256:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_256_requested-243-370-35-20261028-v1_256_approach-native_v1--v2.json",
+        "sha256": "d0b9eeb477126c30e9bf2b9671b07bd290107d1c90781b8b4ca8414f2541da3f"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:leetcode:256:requested-243-370-35-20261028-v1:256:approach-native:v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_256_requested-243-370-35-20261028-v1_256_approach-native_v1--v2.json",
+    "sha256": "d0b9eeb477126c30e9bf2b9671b07bd290107d1c90781b8b4ca8414f2541da3f"
+  },
+  "version": 2
+}

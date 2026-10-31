@@ -1,0 +1,497 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:leetcode:1215:requested-156-1940-31-20261028-v1:1215:v1",
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+      "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+      "selector": "/1215"
+    }
+  ],
+  "problemId": "leetcode:1215",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:leetcode:1215:requested-156-1940-31-20261028-v1:1215:authored-v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/contract--contract_leetcode_1215_requested-156-1940-31-20261028-v1_1215_authored-v1--v2.json",
+    "sha256": "6025f226c028469527db0772f8d40eb151ee8a7cfec9148c037553cb23a81b57"
+  },
+  "title": {
+    "status": "present",
+    "value": "BFS from 1..9 extending last digit by +-1.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/design.json",
+        "sha256": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe",
+        "selector": "/problems/18/numeric_complexity_contract/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "BFS from 1..9 extending last digit by +-1. Appending lastDigit-1 or lastDigit+1 preserves the stepping-number property. Zero is a valid standalone number, but leading zeros must not create duplicate representations.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1215/explanation"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Generate valid prefixes directly instead of examining every integer in the range.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1215/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "Zero is a valid standalone number, but leading zeros must not create duplicate representations.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1215/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "Appending lastDigit-1 or lastDigit+1 preserves the stepping-number property."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1215/invariant"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "Generate valid prefixes directly instead of examining every integer in the range.",
+      "Appending lastDigit-1 or lastDigit+1 preserves the stepping-number property.",
+      "BFS from 1..9 extending last digit by +-1.",
+      "Zero is a valid standalone number, but leading zeros must not create duplicate representations."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1215/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Establish the invariant",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/0/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Generate valid prefixes directly instead of examining every integer in the range.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/0/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Enumerate numbers in an inclusive range whose adjacent decimal digits differ by exactly one. Appending lastDigit-1 or lastDigit+1 preserves the stepping-number property.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/0/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Identify the information that must survive each step before choosing code.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/0/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/0/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Generate valid prefixes directly instead of examining every integer in the range."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/0/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:1215:requested-156-1940-31-20261028-v1:1215:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1215_requested-156-1940-31-20261028-v1_1215_approach-native_v1--v2.json",
+        "sha256": "4909d30c54722c3259fe5418dff2a3c6f4ab70810e56d929087fbeef0be2da70"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Implement the state transition",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/1/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which state changes make the next step preserve this invariant?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/1/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "BFS from 1..9 extending last digit by +-1. Appending lastDigit-1 or lastDigit+1 preserves the stepping-number property.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/1/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Zero is a valid standalone number, but leading zeros must not create duplicate representations.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/1/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "BFS from 1..9 extending last digit by +-1.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/1/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Appending lastDigit-1 or lastDigit+1 preserves the stepping-number property.",
+          "BFS from 1..9 extending last digit by +-1."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/1/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:1215:requested-156-1940-31-20261028-v1:1215:python:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1215_requested-156-1940-31-20261028-v1_1215_python_v1--v2.json",
+          "sha256": "cebf1fa849e972d0ec918720b8eb9f13d8c1a719e4547242d12f04d15d3e4950"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:1215:requested-156-1940-31-20261028-v1:1215:javascript:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1215_requested-156-1940-31-20261028-v1_1215_javascript_v1--v2.json",
+          "sha256": "c5627bfa942e7a6f24be09b23a851046e34a3710eeebb76d0f3301916a9b6477"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:1215:requested-156-1940-31-20261028-v1:1215:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1215_requested-156-1940-31-20261028-v1_1215_approach-native_v1--v2.json",
+        "sha256": "4909d30c54722c3259fe5418dff2a3c6f4ab70810e56d929087fbeef0be2da70"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Challenge the boundary",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/2/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "What boundary or counterexample would expose this mistake?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/2/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Zero is a valid standalone number, but leading zeros must not create duplicate representations. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/2/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/2/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/2/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Zero is a valid standalone number, but leading zeros must not create duplicate representations."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/stages/2/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-content.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1215/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:1215:requested-156-1940-31-20261028-v1:1215:development-suite:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1215_requested-156-1940-31-20261028-v1_1215_development-suite_v1--v2.json",
+          "sha256": "87cff0e4f104928819bce01f201dd2cd17df37e412b78fe8c92f8f0a46959fea"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:1215:requested-156-1940-31-20261028-v1:1215:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1215_requested-156-1940-31-20261028-v1_1215_approach-native_v1--v2.json",
+        "sha256": "4909d30c54722c3259fe5418dff2a3c6f4ab70810e56d929087fbeef0be2da70"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:leetcode:1215:requested-156-1940-31-20261028-v1:1215:approach-native:v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1215_requested-156-1940-31-20261028-v1_1215_approach-native_v1--v2.json",
+    "sha256": "4909d30c54722c3259fe5418dff2a3c6f4ab70810e56d929087fbeef0be2da70"
+  },
+  "version": 2
+}

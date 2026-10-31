@@ -1,12 +1,15 @@
 """Add study-record extensions without rewriting another session's run receipts."""
 from pathlib import Path
+import argparse
 import hashlib
 import importlib.util
 import json
 from lessons import LESSONS
 from run import COHORTS, ROOT
+import importlib.util as _importlib
 
 HERE=Path(__file__).resolve().parent
+REVISE=False
 
 
 def raw(value):return (json.dumps(value,indent=2,ensure_ascii=False,allow_nan=False)+'\n').encode()
@@ -19,8 +22,17 @@ def na(reason):return {'status':'not-applicable','reason':reason}
 def file_ref(path,media):return {'path':str(path.relative_to(ROOT)),'sha256':sha(path),'bytes':path.stat().st_size,'mediaType':media}
 def keep(path,value):
     data=raw(value)
-    if path.exists() and path.read_bytes()!=data:raise RuntimeError('Existing authored extension differs; preserve it and review an explicit revision: '+str(path))
+    if path.exists() and path.read_bytes()!=data:
+        if not REVISE:raise RuntimeError('Existing authored extension differs; preserve it and review an explicit revision: '+str(path))
+        archive(path.parent,path.read_bytes())
     path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(data)
+
+
+def archive(base,data):
+    path=base/'study-history/blobs'/(hashlib.sha256(data).hexdigest()+'.bin');path.parent.mkdir(parents=True,exist_ok=True)
+    if path.exists() and path.read_bytes()!=data:raise RuntimeError('Historical blob conflict')
+    if not path.exists():path.write_bytes(data)
+    return path
 
 
 def build(base):
@@ -38,10 +50,24 @@ def build(base):
         ]}
         generated=cases.build_cases(pid,include_maximum=False)
         examples[str(pid)]=[{'arguments':case['args'],'expected':case['expected'],'source':'cohort-authored development example; not asserted to be an official example'} for case in generated[:2]]
-    content_path=base/'study-content.json';example_path=base/'study-examples.json';keep(content_path,content);keep(example_path,examples)
+    def teaching_file(name,value):
+        path=base/name;data=raw(value)
+        if path.exists() and path.read_bytes()!=data:
+            path=base/'study-history/authoring'/(Path(name).stem+'-'+hashlib.sha256(data).hexdigest()+'.json')
+        keep(path,value);return path
+    content_path=teaching_file('study-content.json',content);example_path=teaching_file('study-examples.json',examples)
     def record(kind,id,origin,selector=None,**fields):
-        value={'schema':'study.record.v1','kind':kind,'id':id,'version':1,'origin':[pointer(origin,selector)],**fields};path=out/(kind+'--'+id.replace(':','_')+'.json');keep(path,value);written.append(path)
-        return {'kind':kind,'id':id,'version':1,'path':str(path.relative_to(ROOT)),'sha256':sha(path)}
+        value={'schema':'study.record.v1','kind':kind,'id':id,'origin':[pointer(origin,selector)],**fields};existing=[]
+        for candidate in out.glob(kind+'--'+id.replace(':','_')+'*.json'):
+            previous=json.loads(candidate.read_text())
+            if (previous['kind'],previous['id'])!=(kind,id):continue
+            existing.append((previous['version'],candidate))
+            if {k:v for k,v in previous.items() if k!='version'}==value:
+                written.append(candidate);return {'kind':kind,'id':id,'version':previous['version'],'path':str(candidate.relative_to(ROOT)),'sha256':sha(candidate)}
+        if existing and not REVISE:raise RuntimeError('Authored record needs an explicit revision: '+id)
+        version=max((v for v,p in existing),default=0)+1;value['version']=version
+        path=out/(kind+'--'+id.replace(':','_')+('' if version==1 else '--v'+str(version))+'.json');keep(path,value);written.append(path)
+        return {'kind':kind,'id':id,'version':version,'path':str(path.relative_to(ROOT)),'sha256':sha(path)}
     def artifact(id,title,pid,aid,contract,path,media,type,language,metadata,selector=None):
         return record('artifact',id,path,selector,type=type,title=title,problemId=pid,approachId=aid,contract=contract,file=present(file_ref(path,media),path),externalLocator=na('Cohort-owned file'),language=language,documentSchema=None,executionKind='code' if type=='implementation' else 'reference-only',complexityClaims=unknown('The inherited complexity target requires separate review; native and JSON-wrapper allocation costs differ.') if type=='implementation' else na('Not an implementation'),nativeMetadata=present(metadata,path,selector))
     for index,row in enumerate(contracts):
@@ -69,10 +95,32 @@ def build(base):
     test_text='from pathlib import Path\nimport importlib.util\nROOT=Path(__file__).resolve().parents[5]\np=ROOT/"projects/algorithm_solver/catalogue/development-66-20261029-v1/validate-study.py"\ns=importlib.util.spec_from_file_location("validate_authored_study",p);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\nif __name__=="__main__":m.validate(Path(__file__).resolve().parent)\n'
     if test.exists() and test.read_text()!=test_text:raise RuntimeError('Existing study validation entrypoint differs')
     test.write_text(test_text);written.append(test)
-    manifest=base/'study-manifest.json';keep(manifest,{'schema':'gamma.authored-study-extension.v1','cohort':base.name,'problems':len(contracts),'approaches':len(contracts),'stages':len(contracts)*3,'records':len(list(out.glob('*.json'))),'qualification':'unknown','files':[{'path':str(p.relative_to(base)),'sha256':sha(p),'bytes':p.stat().st_size} for p in sorted(written)]});written.append(manifest)
+    # Preserve source/provenance bytes of every published revision before checking
+    # new ones. Reading these owner-authored files is distinct from migration's
+    # policy of retaining unopened source locators.
+    helper_spec=_importlib.spec_from_file_location('study_bound_bytes',HERE/'validate-study.py');helper=_importlib.module_from_spec(helper_spec);helper_spec.loader.exec_module(helper)
+    all_records=[p for p in out.glob('*.json') if ':'+base.name+':' in json.loads(p.read_text())['id']]
+    def preserve(value):
+        if isinstance(value,dict):
+            if set(value)=={'repository','revision','path','sha256','selector'}:
+                actual=ROOT/value['path']
+                if sha(actual)!=value['sha256']:archive(base,helper.bound_bytes(base,value['path'],value['sha256']))
+            for child in value.values():preserve(child)
+        elif isinstance(value,list):
+            for child in value:preserve(child)
+    for path in all_records:preserve(json.loads(path.read_text()))
+    written=list(set(written+all_records+list((base/'study-history/authoring').glob('*.json'))))
+    manifest=base/'study-manifest.json'
+    def manifest_data():
+        files=sorted(set(written+list((base/'study-history/blobs').glob('*.bin'))))
+        return {'schema':'gamma.authored-study-extension.v1','cohort':base.name,'problems':len(contracts),'approaches':len(contracts),'stages':len(contracts)*3,'records':len(all_records),'qualification':'unknown','files':[{'path':str(p.relative_to(base)),'sha256':sha(p),'bytes':p.stat().st_size} for p in files]}
+    data=manifest_data()
+    if REVISE and manifest.exists() and manifest.read_bytes()!=raw(data):archive(base,manifest.read_bytes());data=manifest_data()
+    keep(manifest,data);written=list(set(written+list((base/'study-history/blobs').glob('*.bin'))));written.append(manifest)
     sums=base/'STUDY-SHA256SUMS';sums.write_text(''.join(sha(p)+'  '+str(p.relative_to(base))+'\n' for p in sorted(written)))
     print(base.name,len(contracts),'problems',len(list(out.glob('*.json'))),'records')
 
 
 if __name__=='__main__':
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--revise',action='store_true');REVISE=parser.parse_args().revise
     for cohort in COHORTS:build(ROOT/'projects/algorithm_solver/catalogue/authored'/cohort)

@@ -1,0 +1,497 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:leetcode:333:requested-243-370-35-20261028-v1:333:v1",
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+      "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+      "selector": "/333"
+    }
+  ],
+  "problemId": "leetcode:333",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:leetcode:333:requested-243-370-35-20261028-v1:333:authored-v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/contract--contract_leetcode_333_requested-243-370-35-20261028-v1_333_authored-v1--v2.json",
+    "sha256": "1c1d17c67646d512a87b46073e3ff4f4d28d0522898ca92b2e4b0e3fcca17e46"
+  },
+  "title": {
+    "status": "present",
+    "value": "Bottom-up DFS returning (is_bst, min_val, max_val, best_size).",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/design.json",
+        "sha256": "09edd466fb1151dbd090203dc900164b726d6c3e0d91a5525f91b21d0d0e593f",
+        "selector": "/problems/25/numeric_complexity_contract/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "Bottom-up DFS returning (is_bst, min_val, max_val, best_size). A parent needs validity, minimum, maximum and size from each child to validate the combined subtree. A valid descendant subtree still counts when its ancestor violates BST ordering.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/333/explanation"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Return a compact postorder summary instead of checking every subtree independently.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/333/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "A valid descendant subtree still counts when its ancestor violates BST ordering.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/333/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "A parent needs validity, minimum, maximum and size from each child to validate the combined subtree."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/333/invariant"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "Return a compact postorder summary instead of checking every subtree independently.",
+      "A parent needs validity, minimum, maximum and size from each child to validate the combined subtree.",
+      "Bottom-up DFS returning (is_bst, min_val, max_val, best_size).",
+      "A valid descendant subtree still counts when its ancestor violates BST ordering."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/333/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Establish the invariant",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/0/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Return a compact postorder summary instead of checking every subtree independently.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/0/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Find the largest subtree that is itself a binary search tree. A parent needs validity, minimum, maximum and size from each child to validate the combined subtree.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/0/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Identify the information that must survive each step before choosing code.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/0/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/0/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Return a compact postorder summary instead of checking every subtree independently."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/0/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:333:requested-243-370-35-20261028-v1:333:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_333_requested-243-370-35-20261028-v1_333_approach-native_v1--v2.json",
+        "sha256": "15ace7a074a5e08842bf78cac880a34223e929d7dfd70104f52f3bbd281e15e2"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Implement the state transition",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/1/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which state changes make the next step preserve this invariant?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/1/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Bottom-up DFS returning (is_bst, min_val, max_val, best_size). A parent needs validity, minimum, maximum and size from each child to validate the combined subtree.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/1/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "A valid descendant subtree still counts when its ancestor violates BST ordering.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/1/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Bottom-up DFS returning (is_bst, min_val, max_val, best_size).",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/1/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "A parent needs validity, minimum, maximum and size from each child to validate the combined subtree.",
+          "Bottom-up DFS returning (is_bst, min_val, max_val, best_size)."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/1/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:333:requested-243-370-35-20261028-v1:333:python:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_333_requested-243-370-35-20261028-v1_333_python_v1--v2.json",
+          "sha256": "c3742d2c0512df3f00a17f45b23ea5c9bb895a48d242d07721f15e630b82081a"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:333:requested-243-370-35-20261028-v1:333:javascript:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_333_requested-243-370-35-20261028-v1_333_javascript_v1--v2.json",
+          "sha256": "f266f20f4ead09db1fa75b3ec844f9811c6953078b0cc80deb9dc9e1790c12cf"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:333:requested-243-370-35-20261028-v1:333:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_333_requested-243-370-35-20261028-v1_333_approach-native_v1--v2.json",
+        "sha256": "15ace7a074a5e08842bf78cac880a34223e929d7dfd70104f52f3bbd281e15e2"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Challenge the boundary",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/2/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "What boundary or counterexample would expose this mistake?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/2/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "A valid descendant subtree still counts when its ancestor violates BST ordering. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/2/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/2/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/2/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "A valid descendant subtree still counts when its ancestor violates BST ordering."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/stages/2/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/333/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:333:requested-243-370-35-20261028-v1:333:development-suite:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_333_requested-243-370-35-20261028-v1_333_development-suite_v1--v2.json",
+          "sha256": "70799d2abe0873f073676ec2baf6197511b4fef265e54f4654c1753b360aa257"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:333:requested-243-370-35-20261028-v1:333:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_333_requested-243-370-35-20261028-v1_333_approach-native_v1--v2.json",
+        "sha256": "15ace7a074a5e08842bf78cac880a34223e929d7dfd70104f52f3bbd281e15e2"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:leetcode:333:requested-243-370-35-20261028-v1:333:approach-native:v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_333_requested-243-370-35-20261028-v1_333_approach-native_v1--v2.json",
+    "sha256": "15ace7a074a5e08842bf78cac880a34223e929d7dfd70104f52f3bbd281e15e2"
+  },
+  "version": 2
+}
