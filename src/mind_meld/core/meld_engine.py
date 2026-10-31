@@ -94,8 +94,25 @@ class EngineTokenizerAdapter:
         return self._engine.model_name
 
     def get_vocab(self) -> Dict[str, int]:
-        """Delegate to engine's get_vocab method."""
-        return self._engine.get_vocab()
+        """Delegate to engine's get_vocab method or tokenizer's get_vocab method."""
+        vocab = self._engine.get_vocab()
+        if isinstance(vocab, dict):
+            return vocab
+        tokenizer = getattr(self._engine, "tokenizer", None)
+        if tokenizer is not None and callable(getattr(tokenizer, "get_vocab", None)):
+            tok_vocab = tokenizer.get_vocab()
+            if isinstance(tok_vocab, dict):
+                return tok_vocab
+        return vocab
+
+    def __getattr__(self, name: str) -> Any:
+        """Forward special-token and metadata attributes from the underlying tokenizer."""
+        tokenizer = getattr(self._engine, "tokenizer", None)
+        if tokenizer is not None:
+            tok_dict = getattr(tokenizer, "__dict__", {})
+            if name in tok_dict or hasattr(type(tokenizer), name):
+                return getattr(tokenizer, name)
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
 
     def encode(self, text: str, add_special_tokens: bool = True) -> List[int]:
         """Delegate to engine's encode method."""
@@ -943,12 +960,14 @@ class MeldEngine:
         if type(source_tokenizer) is not type(target_tokenizer):
             return False
         try:
-            source_vocab = len(source_engine.get_vocab())
-            target_vocab = len(target_engine.get_vocab())
+            source_vocab = source_engine.get_vocab()
+            target_vocab = target_engine.get_vocab()
+            if isinstance(source_vocab, dict) and isinstance(target_vocab, dict):
+                return source_vocab == target_vocab
+            return len(source_vocab) == len(target_vocab)
         except (AttributeError, KeyError, RuntimeError, TypeError, ValueError) as exc:
             _FALLBACKS.record("kv_tokenizer_vocab_probe_failed", exc)
             return False
-        return source_vocab == target_vocab
 
     def _kv_cache_translation_safe(
         self,
@@ -1452,7 +1471,7 @@ class MeldEngine:
             )
             probs = sampling_utils.softmax(logits_proc)
 
-            if engine is not base_engine and len(engine.get_vocab()) != base_vocab_size:
+            if engine is not base_engine:
                 probs = self._translate_probabilities(
                     probs, EngineTokenizerAdapter(engine), EngineTokenizerAdapter(base_engine)
                 )
@@ -1484,7 +1503,7 @@ class MeldEngine:
         if self._diagnostics_enabled:
             self._diag["vocab_translate_probs"] += 1
             try:
-                if len(source_tokenizer.get_vocab()) != len(target_tokenizer.get_vocab()):
+                if source_tokenizer.get_vocab() != target_tokenizer.get_vocab():
                     self._diag["vocab_mismatch"] += 1
             except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
                 _FALLBACKS.record("vocab_probe_probs_failed", exc)
@@ -1499,7 +1518,7 @@ class MeldEngine:
         if self._diagnostics_enabled:
             self._diag["vocab_translate_logits"] += 1
             try:
-                if len(source_tokenizer.get_vocab()) != len(target_tokenizer.get_vocab()):
+                if source_tokenizer.get_vocab() != target_tokenizer.get_vocab():
                     self._diag["vocab_mismatch"] += 1
             except (AttributeError, RuntimeError, TypeError, ValueError) as exc:
                 _FALLBACKS.record("vocab_probe_logits_failed", exc)
@@ -1879,7 +1898,7 @@ class MeldEngine:
             logits_clean = sampling_utils.sanitize_logits(logits)
 
             # Align logits to the base vocabulary to keep dimensions consistent
-            if model is not base_engine and len(model.get_vocab()) != base_vocab_size:
+            if model is not base_engine:
                 logits_clean = self._translate_logits(
                     logits_clean, EngineTokenizerAdapter(model), EngineTokenizerAdapter(base_engine)
                 )
@@ -1894,7 +1913,7 @@ class MeldEngine:
                 return_intermediates=True
             )
             probs = sampling_utils.softmax(logits_proc)
-            if model is not base_engine and len(model.get_vocab()) != base_vocab_size:
+            if model is not base_engine:
                 probs = self._translate_probabilities(
                     probs, EngineTokenizerAdapter(model), EngineTokenizerAdapter(base_engine)
                 )

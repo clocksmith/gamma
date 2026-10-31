@@ -423,6 +423,51 @@ class MindMeldEngineTests(unittest.TestCase):
         idx, engine = meld._resolve_target_model(TARGET_SELECTION_NEXT)
         self.assertEqual(idx, 0)
 
+    def test_weighted_average_translates_equal_sized_permuted_vocabularies(self) -> None:
+        """Weighted averaging must translate equal-sized permuted vocabularies instead of raw-index averaging."""
+        args = SimpleNamespace(
+            temperature=1.0,
+            top_k=0,
+            top_p=1.0,
+            steps=1,
+            verbose=False,
+            show_attention=False,
+            swap_strategy='fixed',
+            fixed_interval=1,
+            use_blending=False,
+            use_weighted_average=True,
+            use_abe=False,
+            use_stats_tracker=False,
+            stats_file=None,
+            initial_prompt="Test",
+            headless=True,
+            sampling_strategy="greedy",
+        )
+        engine_a = self._make_stub_engine("a")
+        engine_b = self._make_stub_engine("b")
+
+        vocab_a = {"x": 0, "y": 1}
+        vocab_b = {"y": 0, "x": 1}
+        engine_a.get_vocab.return_value = vocab_a
+        engine_a.tokenizer.get_vocab = lambda: vocab_a
+        engine_a.encode.side_effect = lambda text, add_special_tokens=True: ([vocab_a[text]], None) if text in vocab_a else (np.array([[0]]), None)
+        engine_a.decode.side_effect = lambda ids, skip_special_tokens=False: "x" if int(np.array(ids).flatten()[0]) == 0 else "y"
+        # Engine A strongly prefers token "y" (index 1 in A)
+        engine_a.predict_next.side_effect = lambda *a, **kw: {"logits_raw": np.array([[-5.0, 5.0]])}
+
+        engine_b.get_vocab.return_value = vocab_b
+        engine_b.tokenizer.get_vocab = lambda: vocab_b
+        engine_b.encode.side_effect = lambda text, add_special_tokens=True: ([vocab_b[text]], None) if text in vocab_b else (np.array([[0]]), None)
+        engine_b.decode.side_effect = lambda ids, skip_special_tokens=False: "y" if int(np.array(ids).flatten()[0]) == 0 else "x"
+        # Engine B also strongly prefers token "y" (index 0 in B)
+        engine_b.predict_next.side_effect = lambda *a, **kw: {"logits_raw": np.array([[5.0, -5.0]])}
+
+        meld = MeldEngine([engine_a, engine_b], args)
+        avg_logits, base_engine = meld._get_weighted_average_predictions("Test", None)
+        # Base engine is engine_a ("a" < "b" with same vocab size 2), where "y" is index 1
+        self.assertIs(base_engine, engine_a)
+        self.assertGreater(avg_logits[1], avg_logits[0])
+
 
 if __name__ == '__main__':  # pragma: no cover
     unittest.main()

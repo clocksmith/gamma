@@ -29,7 +29,7 @@ Measure capability transfer from teacher to student models under frozen task, da
 ## Acceptance
 
 - Training and evaluation artifacts retain enough provenance to rebuild reports.
-- Evidence: [training tests](../../tests/test_translate_distill_training.py), [evaluation tests](../../tests/test_translate_distill_eval.py), and [WGSL protocol tests](../../tests/test_wgsl_training_protocol.py).
+- Evidence: [training tests](../../tests/test_translate_distill_training.py), [evaluation tests](../../tests/test_translate_distill_eval.py), [WGSL protocol tests](../../tests/test_wgsl_training_protocol.py), and [DaD importer tests](../../tests/test_dad_importer.py).
 
 ## Non-goals
 
