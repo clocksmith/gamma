@@ -24,10 +24,18 @@ function solve(rooms) {
   return grid;
 }
 
+// Official LeetCode ABI (in_place_arg 0): rewrites rooms in place row by row
+// and returns nothing. The intermediate grid from solve is charged as
+// O(m * n) auxiliary space; the write-back as O(m * n) time.
 function wallsAndGates(rooms) {
-  return solve(rooms);
+  const out = solve(rooms);
+  for (let r = 0; r < out.length; r++) {
+    const row = rooms[r];
+    for (let c = 0; c < out[r].length; c++) row[c] = out[r][c];
+  }
 }
 
 module.exports = solve;
 module.exports.solve = solve;
 module.exports.wallsAndGates = wallsAndGates;
+if (typeof Solution !== "undefined") solve.Solution = Solution;

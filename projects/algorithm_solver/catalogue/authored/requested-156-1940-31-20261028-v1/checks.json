@@ -734,7 +734,7 @@
   "javascript_candidate_syntax_checks": 31,
   "note": "Author-local development checks only. No isolated runner, no independent qualification, no admission. Qualification status remains unknown everywhere.",
   "observations": [
-    "286: the public interface modifies the grid in place and returns nothing; this cohort contract returns a new grid and requires unchanged inputs, so in-place behaviour is not tested. 280: since 2026-11-02 the official entry (wiggleSort / Solution.wiggleSort) rewrites nums in place (official_interface.in_place_arg 0) and is judged on nums after the call; solve still returns a new list with nums unchanged.",
+    "280 and 286: the official entries (wiggleSort / Solution.wiggleSort since 2026-11-02, wallsAndGates / Solution.wallsAndGates since a later 2026-11-02 revision) rewrite their first argument in place (official_interface.in_place_arg 0) and are judged on that argument after the call; solve still returns a new value with its arguments unchanged.",
     "1924: for a single distinct point the reference and the Python candidate return integer centre coordinates (for example [3, 3, 0.0]) although the contract return type is double[]. JSON values are equal and JavaScript cannot distinguish them; recorded, not changed.",
     "Exact comparison fixes one answer where the public problem accepts several: 280 (any wiggle order), 742 (any nearest leaf), and rounding to 6, 10 and 5 decimals for 774, 1230 and 1924 where the public problem accepts a tolerance.",
     "1740: the candidates use a lowest-common-ancestor search while the reference uses BFS on an undirected graph, so that pair is independent; most other pairs are not (see reference_candidate_independence).",
@@ -753,6 +753,12 @@
       "at": "2026-11-02",
       "change": "Native-ABI split. 156: solve deep-copies a native TreeNode input (iterative, seen map rejects a node reached twice) so it neither mutates nor aliases caller nodes; upsideDownBinaryTree / Solution.upsideDownBinaryTree rotates in place (native_effects.mutates_inputs true). 280: wiggleSort / Solution.wiggleSort rewrites nums in place and returns nothing; contracts.json and semantics declare official_interface.in_place_arg 0, and run_candidates.py judges that entry on args_after[0] == expected with other arguments unchanged while solve still requires unchanged arguments and the expected result. Copy costs are charged in semantics charged_costs. 903: manifest source_inventory and authoring-catalog.json now carry the corrected hashes with explicit supersedes entries.",
       "evidence_after": "run_candidates.py: all 117 rows pass in both languages through both entries (280 official judged in place); test_oracles.py passes; development-66 check_native_abi.py passes (TreeNode non-mutation/alias-freedom, cycle rejection, in-place ABI and lineage).",
+      "qualification": "unknown"
+    },
+    {
+      "at": "2026-11-02",
+      "change": "286: wallsAndGates / Solution.wallsAndGates rewrites rooms in place row by row and returns nothing; contracts.json and semantics declare official_interface.in_place_arg 0 and the copy costs in charged_costs. solve is unchanged.",
+      "evidence_after": "run_candidates.py: all 117 rows pass in both languages through both entries (280 and 286 official judged in place); development-66 check_native_abi.py passes.",
       "qualification": "unknown"
     }
   ],

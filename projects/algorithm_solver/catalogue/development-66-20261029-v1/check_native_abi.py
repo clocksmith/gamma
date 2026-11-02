@@ -296,18 +296,27 @@ def check_effects(report, base, contracts, cases):
                 report.expect(False, where, 'non-BMP case without a declared string_unit')
 
 
-def retrievable(base, relative, digest):
+def historical_bytes(base, relative, digest):
+    """Bytes with this hash from disk, a history blob or Git history of the path; None if unrecoverable."""
+    current = base / relative
+    if current.exists() and sha(current.read_bytes()) == digest:
+        return current.read_bytes()
     blob = base / 'study-history/blobs' / f'{digest}.bin'
     if blob.exists():
-        return sha(blob.read_bytes()) == digest
+        data = blob.read_bytes()
+        return data if sha(data) == digest else None
     rel = str((base / relative).relative_to(ROOT))
     revisions = subprocess.run(['git', 'log', '--format=%H', '--', rel], cwd=ROOT, capture_output=True,
                                text=True).stdout.split()
     for revision in revisions:
         shown = subprocess.run(['git', 'show', f'{revision}:{rel}'], cwd=ROOT, capture_output=True)
         if shown.returncode == 0 and sha(shown.stdout) == digest:
-            return True
-    return False
+            return shown.stdout
+    return None
+
+
+def retrievable(base, relative, digest):
+    return historical_bytes(base, relative, digest) is not None
 
 
 def check_lineage(report, base):
@@ -360,8 +369,17 @@ def check_lineage(report, base):
         if prior:
             record = {k: v for k, v in variant.items() if k not in ('variant_id', 'supersedes')}
             report.expect(variant['variant_id'] == sha(compact(record)), where, f'revised variant id rule {tag}')
-            report.expect(any(p['manifest_sha256'] == sha(manifest_raw) for p in variant['provenance']), where,
-                          f'revised variant provenance pins the current manifest {tag}')
+            # A later revision rewrites manifest.json; the pinned manifest must still be recoverable
+            # and must list this variant's current hashes (refreshing provenance would change the ID).
+            bound = False
+            for p in variant['provenance']:
+                pinned = historical_bytes(base, 'manifest.json', p['manifest_sha256'])
+                if pinned is not None:
+                    bound = bound or any(r['id'] == variant['problem_id'] and r['language'] == variant['language'] and
+                                         r['sha256'] == variant['source_sha256'] and
+                                         r['semantics_sha256'] == variant['semantics_sha256']
+                                         for r in json.loads(pinned)['source_inventory'])
+            report.expect(bound, where, f'revised variant provenance pins a recoverable manifest listing its hashes {tag}')
     freeze = json.loads((base / 'pre-source-reference-freeze.json').read_text())
     chains = {}
     for amendment in freeze.get('amendments', []):

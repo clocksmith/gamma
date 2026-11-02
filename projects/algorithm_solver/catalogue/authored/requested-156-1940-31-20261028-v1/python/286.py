@@ -22,9 +22,16 @@ def solve(rooms):
     return grid
 
 
-wallsAndGates = solve
+def wallsAndGates(rooms):
+    """Official LeetCode ABI (in_place_arg 0): rewrites rooms in place row by row, returns None.
+
+    The intermediate grid from solve is charged as O(m * n) auxiliary space; the
+    write-back as O(m * n) time.
+    """
+    for r, row in enumerate(solve(rooms)):
+        rooms[r][:] = row
 
 
 class Solution:
     def wallsAndGates(self, rooms):
-        return solve(rooms)
+        wallsAndGates(rooms)

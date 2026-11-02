@@ -1,11 +1,26 @@
 {
   "candidate_design": "Multi-source BFS from all gate cells.",
+  "charged_costs": {
+    "native": {
+      "result_writeback": "rooms[r][:] = row for each row of solve(rooms): O(m * n) time, O(m * n) auxiliary space for the intermediate solve result"
+    },
+    "solve": {
+      "input_copy": "O(m * n) time, O(m * n) space"
+    }
+  },
   "comparison": "exact typed JSON result",
   "complexity_target": "O(m * n) time, O(m * n) space",
-  "effects": "arguments unchanged",
+  "effects": "solve: arguments unchanged, returns a new grid; Solution.wallsAndGates / wallsAndGates: rewrites rooms (argument 0) in place and returns nothing",
   "entrypoint": "solve",
   "language": "python",
+  "native_effects": {
+    "entry": "Solution.wallsAndGates / wallsAndGates",
+    "in_place_arg": 0,
+    "mutates_inputs": true,
+    "returns": "nothing (None/undefined); the judged output is rooms after the call"
+  },
   "official_interface": {
+    "in_place_arg": 0,
     "name": "wallsAndGates",
     "params": [
       {
@@ -29,10 +44,14 @@
     "status": "unknown"
   },
   "schema": "gamma.authored-scalar-semantics.v1",
+  "solve_effects": {
+    "inputMutation": "forbidden",
+    "outputAliasing": "forbidden"
+  },
   "source_reasoning": {
     "candidate_design": "Multi-source BFS from all gate cells.",
     "complexity_target": "O(m * n) time, O(m * n) space",
     "reference": "Multi-source BFS"
   },
-  "source_sha256": "017411671e331f65b1ae5a9cf2fd806dfe7332882fdddef1780364064bdfef9a"
+  "source_sha256": "bdf151cc0a31b44ae3f44fecdbf5d2ac1eff6b226317c410d6ca9013bff00cdf"
 }

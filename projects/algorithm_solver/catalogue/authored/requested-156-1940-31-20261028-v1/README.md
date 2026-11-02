@@ -25,8 +25,7 @@ exposed the disagreement, and enumerating permutations confirmed it. `oracles.py
 small inputs across all 31 references, and every candidate passes again.
 
 The Python `solve` bodies of 24 problems repeat the reference statement for statement, so agreement there is
-self-agreement; the brute-force cross-check is the independent evidence. Known gaps: 286 returns a new grid instead
-of modifying the input in place as the public interface does; 1924 returns integer centre coordinates for
+self-agreement; the brute-force cross-check is the independent evidence. Known gaps: 1924 returns integer centre coordinates for
 a single point; several multi-answer or tolerance problems are compared exactly; the generated maximum rows are far
 below the public limits.
 
@@ -43,6 +42,8 @@ are charged in each semantics file's `charged_costs` and `complexity_target`.
   semantics declare `official_interface.in_place_arg: 0`; `run_candidates.py` judges that entry on
   `args_after[0] == expected` with other arguments unchanged, while `solve` must still leave its arguments unchanged
   and return the expected value.
+- 286: `wallsAndGates` / `Solution.wallsAndGates` applies the same split, rewriting `rooms` in place row by row
+  (`in_place_arg: 0`); `solve` still returns a new grid.
 - 903: `manifest.json` `source_inventory` and `authoring-catalog.json` had kept the pre-fix hashes. They now carry the
   corrected hashes, with the pre-fix hashes, prior catalog variant IDs, freeze amendments and history blobs under
   explicit `supersedes` entries.

@@ -132,6 +132,51 @@
       "new_sha256": "09846e96840085bf9b3b8d5465bde4c8c682fd23414f2b9d1c392d565f62002f",
       "change": "official_interface.in_place_arg 0, solve_effects, native_effects, charged_costs; source_sha256 rebound",
       "reason": "keep the semantics binding to the current source and its declared effects"
+    },
+    {
+      "file": "contracts.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "16c1fe52a322ccf80c994d595904a1127cc6f671bd1843ea17506f8f042a3dab",
+      "new_sha256": "2c04f3a41fa3c24784f333ca2ac41e6f1c5b56c21bdc54527c969d12d3ef795b",
+      "change": "286 official_interface gains in_place_arg 0",
+      "reason": "declare the official in-place ABI so the runner judges rooms after the call"
+    },
+    {
+      "file": "python/286.py",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "017411671e331f65b1ae5a9cf2fd806dfe7332882fdddef1780364064bdfef9a",
+      "new_sha256": "bdf151cc0a31b44ae3f44fecdbf5d2ac1eff6b226317c410d6ca9013bff00cdf",
+      "change": "Native-ABI split: wallsAndGates / Solution.wallsAndGates now rewrites rooms in place row by row and returns nothing (in_place_arg 0); solve still returns a new grid and leaves rooms unchanged.",
+      "reason": "the official entry previously returned a new grid without modifying rooms"
+    },
+    {
+      "file": "javascript/286.js",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "13870ee9747452ba015c2472495ce57bdf8186d4aa6c9503d3432dade9940ea6",
+      "new_sha256": "d3bb6cb2688607c8e0310d20fcd8776d9f78a20eb022f590efbea4a8ec2a763d",
+      "change": "Native-ABI split: wallsAndGates / Solution.wallsAndGates now rewrites rooms in place row by row and returns nothing (in_place_arg 0); solve still returns a new grid and leaves rooms unchanged.",
+      "reason": "the official entry previously returned a new grid without modifying rooms"
+    },
+    {
+      "file": "semantics/286-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "8d4833a57543d00e638f6960e6576cbb62e540a3aae42821a41868321e744232",
+      "new_sha256": "953966a8074d869667ef0a5080819a3195aaebf464bbb71eb4f95a89d0232278",
+      "change": "official_interface.in_place_arg 0, solve_effects, native_effects, charged_costs; source_sha256 rebound",
+      "reason": "keep the semantics binding to the current source and its declared effects"
+    },
+    {
+      "file": "semantics/286-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "35eb891c8804c4af0383268d8e5a2cc6f0ccb15e137c1ee023e5a094fcc8c4b8",
+      "new_sha256": "9ca0d001bdcc19b1ca778898fd0163b3cf388817240f26e7e1e9b35a6bd30a7e",
+      "change": "official_interface.in_place_arg 0, solve_effects, native_effects, charged_costs; source_sha256 rebound",
+      "reason": "keep the semantics binding to the current source and its declared effects"
     }
   ],
   "amendment_notes": "authoring-catalog.json is unchanged and still pins the pre-amendment manifest and 903 source/semantics hashes. cases.py, contracts.json, design.json and test_oracles.py are unchanged. No other reference or expected-value rule changed.",
@@ -139,8 +184,8 @@
     "oracles.py": "9addc57c0d4055af2d7e44272558fdb57feb94ccd8d9a7460823fe5aae5158ee",
     "test_oracles.py": "426f525925a0baec43cd3f33aee5bb2016ef0bea5d750cdcb19f7a8f2dc93668",
     "cases.py": "6e4197ecad3d1b19f4c5ff27676f894cf686e2d8ca437e4b6f2d6eefdd1222bb",
-    "contracts.json": "16c1fe52a322ccf80c994d595904a1127cc6f671bd1843ea17506f8f042a3dab",
+    "contracts.json": "2c04f3a41fa3c24784f333ca2ac41e6f1c5b56c21bdc54527c969d12d3ef795b",
     "design.json": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe"
   },
-  "amendment_notes_2026_11_02": "Supersedes the authoring-catalog.json sentence of amendment_notes: manifest.json source_inventory and authoring-catalog.json now carry the corrected 903 hashes, with the pre-fix hashes and catalog variant IDs under supersedes. contracts.json changed for 280 (official_interface.in_place_arg 0); 156 and 280 sources and semantics changed for the native-ABI split (amendments dated 2026-11-02). oracles.py, cases.py, design.json and test_oracles.py are unchanged by these amendments."
+  "amendment_notes_2026_11_02": "Supersedes the authoring-catalog.json sentence of amendment_notes: manifest.json source_inventory and authoring-catalog.json now carry the corrected 903 hashes, with the pre-fix hashes and catalog variant IDs under supersedes. contracts.json changed for 280 (official_interface.in_place_arg 0); 156 and 280 sources and semantics changed for the native-ABI split (amendments dated 2026-11-02). oracles.py, cases.py, design.json and test_oracles.py are unchanged by these amendments. A second 2026-11-02 revision changed contracts.json for 286 (official_interface.in_place_arg 0) and the 286 sources and semantics for the same in-place split."
 }

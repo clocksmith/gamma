@@ -4,7 +4,7 @@ For each development cohort this reconciles hash-bound metadata with the bytes o
 disk, without rewriting history:
 
 1. pre-source-reference-freeze.json: appends an amendment (old -> new hash, change,
-   reason) for every reviewed file in REASONS whose bytes differ from the manifest
+   reason) for every reviewed file in REVISIONS whose bytes differ from the manifest
    pin, and refreshes `current_sha256` where that map exists.
 2. study-history/blobs/<old>.bin: archives the superseded source/semantics bytes
    (recovered from Git when no blob exists yet).
@@ -56,6 +56,31 @@ REASONS = {
         'semantics/340-javascript.json': ('string_unit unicode_codepoint, solve_effects, native_effects, charged_costs and complexity; source_sha256 rebound', 'keep the semantics binding to the current source and its declared effects'),
     },
 }
+NATIVE_286 = ('Native-ABI split: wallsAndGates / Solution.wallsAndGates now rewrites rooms in place row by row and returns '
+              'nothing (in_place_arg 0); solve still returns a new grid and leaves rooms unchanged.')
+# Ordered revisions. For a changed file the latest revision naming it supplies the amendment text and date.
+REVISIONS = [
+    ('2026-11-02', REASONS),
+    ('2026-11-02', {
+        'requested-156-1940-31-20261028-v1': {
+            'contracts.json': ('286 official_interface gains in_place_arg 0', 'declare the official in-place ABI so the runner judges rooms after the call'),
+            'python/286.py': (NATIVE_286, 'the official entry previously returned a new grid without modifying rooms'),
+            'javascript/286.js': (NATIVE_286, 'the official entry previously returned a new grid without modifying rooms'),
+            'semantics/286-python.json': ('official_interface.in_place_arg 0, solve_effects, native_effects, charged_costs; source_sha256 rebound', 'keep the semantics binding to the current source and its declared effects'),
+            'semantics/286-javascript.json': ('official_interface.in_place_arg 0, solve_effects, native_effects, charged_costs; source_sha256 rebound', 'keep the semantics binding to the current source and its declared effects'),
+        },
+    }),
+]
+
+
+def latest_reasons(cohort):
+    merged = {}
+    for at, table in REVISIONS:
+        for path, text in table.get(cohort, {}).items():
+            merged[path] = (at,) + text
+    return merged
+
+
 INVENTORY_REASON = {
     903: 'Reference and candidate I-step correction already recorded in pre-source-reference-freeze.json amendments (2026-10-29); source_inventory and authoring-catalog.json had kept the pre-fix hashes.',
 }
@@ -100,10 +125,10 @@ def revise(cohort):
     manifest, freeze = json.loads(manifest_path.read_text()), json.loads(freeze_path.read_text())
     pinned = {f['path']: f['sha256'] for f in manifest['files']}
     amendments = freeze.setdefault('amendments', [])
-    for path, (change, reason) in REASONS[cohort].items():
+    for path, (at, change, reason) in latest_reasons(cohort).items():
         old, new = pinned[path], sha((base / path).read_bytes())
         if old != new and not any(a['file'] == path and a['old_sha256'] == old and a['new_sha256'] == new for a in amendments):
-            amendments.append({'file': path, 'after_candidates_existed': True, 'at': AT, 'old_sha256': old,
+            amendments.append({'file': path, 'after_candidates_existed': True, 'at': at, 'old_sha256': old,
                                'new_sha256': new, 'change': change, 'reason': reason})
     if 'current_sha256' in freeze:
         freeze['current_sha256'] = {p: sha((base / p).read_bytes()) for p in freeze['current_sha256']}

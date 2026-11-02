@@ -52,6 +52,7 @@ admits, promotes or qualifies a source.
 | 1 | `run-case.cjs` | `fn = typeof candidate?.solve === 'function' ? candidate.solve : candidate`. `875.js` (`{ solve, Solution, minEatingSpeed }`) now loads without editing its qualified bytes; the previous loader failed with `candidate is not a function`. Modified development modules end with `if (typeof Solution !== "undefined") solve.Solution = Solution;` so pure-only modules never throw on load. |
 | 2 | 156 | `solve` deep-copies a native `TreeNode` graph (iterative, seen map rejects a node reached twice) before rotating, so it neither mutates nor aliases caller nodes (the previous `solve` returned all 5 caller nodes on a 5-node tree). `upsideDownBinaryTree` / `Solution.upsideDownBinaryTree` rotates in place under `native_effects.mutates_inputs: true`. Copy charged: O(n) time, O(n) space. |
 | 3 | 280 | `wiggleSort` writes the result into `nums` in place (`nums[:] = solve(nums)` in Python, element-wise copy in JavaScript) and returns nothing. `official_interface.in_place_arg: 0` is declared in `contracts.json` and both semantics. `run_candidates.py` requires `args_after == args_before` and `result == expected` for `solve`, and `args_after[0] == expected` with other arguments unchanged for the official entry, on every case including mutating ones. |
+| 3b | 286 | Same split as 280: `wallsAndGates` writes `solve(rooms)` back row by row (`rooms[r][:] = row` in Python, element copy in JavaScript) and returns nothing; `in_place_arg: 0` in `contracts.json` and both semantics; write-back charged O(m * n) time and space. |
 | 4 | 340 | Semantics pin `string_unit: unicode_codepoint`; JavaScript iterates `Array.from(s)`. Canary rows use oracle-computed expected values. The proposed `("\u{1F600}a", 1)` row expects **1**, not 2, and does not tell code points from UTF-16 units. The added rows `("\u{1F600}\u{1F600}a", 1)` and `("a\u{1F600}b\u{1F600}", 2)` expect 2 and 3, where UTF-16 units give 1 and 2. |
 | 5 | 903 | `manifest.json` `source_inventory` and `authoring-catalog.json` now carry the corrected hashes (`5bbc2828…` Python, `88ab1b44…` JavaScript). The pre-fix hashes, prior catalog variant IDs, freeze amendments and history blobs are recorded under explicit `supersedes` entries. Historical blobs stay in `study-history/blobs/`. |
 
@@ -64,9 +65,7 @@ verbatim. Revised IDs follow the rule stated in each catalog's
 
 ## Remaining boundaries
 
-- 286 (Walls and Gates) still returns a new grid; its official in-place ABI is not
-  implemented or tested.
-- The native-ABI split covers 156, 280 and 340 only; the other 63 cohort problems
+- The native-ABI split covers 156, 280, 286 and 340 only; the other 62 cohort problems
   keep their existing wrapper semantics. Export shape is checked for all 66.
 - Official-domain maxima, independent qualification and serving admission remain
   open.
