@@ -37,6 +37,18 @@ python3 projects/question_bank/descriptions.py show --id 6aa861578c97c56cdbdc93d
 solution. Coding variants retain separate identities. A group preview is linked to
 its variants without being promoted into a complete variant-specific contract.
 
+For a unified, single-line-per-problem index linking all 4,096 official LeetCode
+problems and all 1,048 Hack2Hire entries/variants to their canonical `.py`,
+`.js`, `semantics`, and `study-records` paths, use
+[`../algorithm_solver/catalogue/PROBLEM_INDEX.tsv`](../algorithm_solver/catalogue/PROBLEM_INDEX.tsv)
+and [`../algorithm_solver/catalogue/find_problem.py`](../algorithm_solver/catalogue/find_problem.py):
+
+```bash
+rg -i "databricks" projects/algorithm_solver/catalogue/PROBLEM_INDEX.tsv
+python3 projects/algorithm_solver/catalogue/find_problem.py --source hack2hire --company Databricks
+python3 projects/algorithm_solver/catalogue/find_problem.py 6aa861578c97c56cebdc969a
+```
+
 ## Collect and rebuild
 
 ```bash

@@ -4,6 +4,21 @@ Current milestone gates, evidence and status: [milestone registry view](catalogu
 [STATUS.md](STATUS.md) preserves dated historical scorecards; goals are tags, not completion units.
 For source-bound known answers and explicit editor insertion, see
 [qualified lookup usage](qualified-lookup.md) and its linked release decision.
+For one-step metadata lookup and grepping across all 4,096 official LeetCode
+problems and 1,048 Hack2Hire entries/variants without opening candidate source
+payloads or protected test cases, use
+[`catalogue/PROBLEM_INDEX.tsv`](catalogue/PROBLEM_INDEX.tsv),
+[`catalogue/PROBLEM_INDEX.jsonl`](catalogue/PROBLEM_INDEX.jsonl), and
+[`catalogue/find_problem.py`](catalogue/find_problem.py):
+
+```bash
+rg -i "walls and gates|wallsAndGates|^leetcode:286\t" projects/algorithm_solver/catalogue/PROBLEM_INDEX.tsv
+python3 projects/algorithm_solver/catalogue/find_problem.py 286
+python3 projects/algorithm_solver/catalogue/find_problem.py "koko eating bananas"
+python3 projects/algorithm_solver/catalogue/find_problem.py --stats
+python3 projects/algorithm_solver/catalogue/find_problem.py --check
+```
+
 The [experiment history](HISTORY.md) preserves prior checkpoints. The original
 comparison below remains a baseline, not the definition of the current goals.
 
