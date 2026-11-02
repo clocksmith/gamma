@@ -105,7 +105,11 @@ BASE_ARGS = {
         ([4, 2, 7, 2, 3, 5, None, 2, None, None, None, None, None, 1],),
         ([],),
     ],
-    340: [("eceba", 2), ("aa", 1), ("abcdef", 0), ("abaccc", 2)],
+    # Non-BMP canaries pin string_unit = unicode_codepoint (expected values come from
+    # ref_340). The last two discriminate code points from UTF-16 code units:
+    # code points give 2 and 3, UTF-16 units would give 1 and 2.
+    340: [("eceba", 2), ("aa", 1), ("abcdef", 0), ("abaccc", 2),
+          ("\U0001F600a", 1), ("\U0001F600\U0001F600a", 1), ("a\U0001F600b\U0001F600", 2)],
     351: [(1, 1), (1, 2), (2, 3)],
     356: [([[1, 1], [-1, 1]],), ([[1, 1], [-1, -1]],), ([[0, 0]],)],
     358: [("aabbcc", 3), ("aaabc", 3), ("aaadbbcc", 2), ("a", 0)],

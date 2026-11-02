@@ -827,7 +827,14 @@
     "Exact comparison fixes one answer where the public problem accepts several or any order: 247, 249, 254, 267, 269, 272, 320, 358 and 366. Passing shows agreement with the reference ordering, not acceptance of other valid outputs.",
     "MAX_ARGS rows are far below the public input limits (for example 247 uses n = 6 of 14, 254 uses 720 of 10^7, 340 uses 256 of 5 * 10^4 characters), so the CPU samples do not establish behaviour at the limits."
   ],
-  "post_run_changes": [],
+  "post_run_changes": [
+    {
+      "at": "2026-11-02",
+      "change": "340: semantics pin string_unit unicode_codepoint; javascript/340.js iterates Array.from(s) code points (charged O(n) array) instead of UTF-16 code units; cases.py adds three non-BMP canary rows whose expected values come from the unchanged ref_340. ('\\U0001F600a', 1) expects 1; ('\\U0001F600\\U0001F600a', 1) expects 2 and ('a\\U0001F600b\\U0001F600', 2) expects 3, where UTF-16 code units would give 1 and 2; the previous JavaScript candidate failed both.",
+      "evidence_after": "run_candidates.py: all 154 rows (151 + 3 canaries) pass in both languages through both entries; test_oracles.py passes; development-66 check_native_abi.py passes.",
+      "qualification": "unknown"
+    }
+  ],
   "python_candidate_ast_parses": 35,
   "qualification_status": "unknown",
   "reference_candidate_independence": {

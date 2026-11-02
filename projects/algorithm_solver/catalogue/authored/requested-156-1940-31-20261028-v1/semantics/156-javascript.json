@@ -1,10 +1,25 @@
 {
   "candidate_design": "Iterative pointer rotation down the left spine.",
+  "charged_costs": {
+    "native": {
+      "level_order_conversion": "O(n) time, O(n) space when the input is a level-order list"
+    },
+    "solve": {
+      "input_deep_copy": "O(n) time, O(n) space; iterative with a seen map that rejects a node reached twice (cycle or shared child)",
+      "level_order_conversion": "O(n) time, O(n) space when the input is a level-order list"
+    }
+  },
   "comparison": "exact typed JSON result",
-  "complexity_target": "O(n) time, O(1) auxiliary space",
-  "effects": "arguments unchanged",
+  "complexity_target": "solve: O(n) time, O(n) auxiliary space (charged deep copy of a native TreeNode input); native: O(n) time, O(1) auxiliary space",
+  "effects": "solve: arguments unchanged and the result shares no node with the input; upsideDownBinaryTree: rotates the caller TreeNode graph in place",
   "entrypoint": "solve",
   "language": "javascript",
+  "native_effects": {
+    "entry": "upsideDownBinaryTree",
+    "list_input": "converted to fresh nodes; the caller list is not mutated",
+    "mutates_inputs": true,
+    "returns": "new root of the rotated caller graph"
+  },
   "official_interface": {
     "name": "upsideDownBinaryTree",
     "params": [
@@ -29,10 +44,14 @@
     "status": "unknown"
   },
   "schema": "gamma.authored-scalar-semantics.v1",
+  "solve_effects": {
+    "inputMutation": "forbidden",
+    "outputAliasing": "forbidden"
+  },
   "source_reasoning": {
     "candidate_design": "Iterative pointer rotation down the left spine.",
-    "complexity_target": "O(n) time, O(1) auxiliary space",
+    "complexity_target": "solve: O(n) time, O(n) auxiliary space (charged deep copy of a native TreeNode input); native: O(n) time, O(1) auxiliary space",
     "reference": "Iterative left-spine rotation"
   },
-  "source_sha256": "fe053d1cac65899c7756def8757c6dd1c6abf3d22906b89e0850b9bf021abc7f"
+  "source_sha256": "e26d2558f8a561f2bdf5655d4dc2c4f8db837fca9542aafdb685d58b880f1ad6"
 }

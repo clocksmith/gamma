@@ -9,9 +9,15 @@ def solve(nums):
     return arr
 
 
-wiggleSort = solve
+def wiggleSort(nums):
+    """Official LeetCode ABI (in_place_arg 0): rewrites nums in place, returns None.
+
+    The slice assignment of the pure result is charged as O(n) time and O(n)
+    auxiliary space (the intermediate list from solve).
+    """
+    nums[:] = solve(nums)
 
 
 class Solution:
     def wiggleSort(self, nums):
-        return solve(nums)
+        wiggleSort(nums)

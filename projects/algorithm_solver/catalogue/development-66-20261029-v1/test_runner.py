@@ -47,5 +47,17 @@ class HarnessControls(unittest.TestCase):
             process=subprocess.run([sys.executable,str(HERE/'run.py'),'--output',str(Path(td)/'new'),'--only','999999'],capture_output=True,text=True,timeout=3)
             self.assertNotEqual(process.returncode,0);self.assertIn('Unknown requested development IDs',process.stderr);self.assertFalse((Path(td)/'new/results.json').exists())
 
+    def test_object_footer_and_guarded_footer_modules_load(self):
+        # 875.js-shaped object footer: { solve, Solution, <nativeMethod> } must call solve, not the object.
+        footer="'use strict';function solve(a,b){return a+b;}class Solution{add(a,b){return -1;}}if(typeof module!=='undefined')module.exports={solve,Solution,add:solve};"
+        self.assertEqual(self.invoke('javascript',footer,[2,3])['result'],5)
+        # Pure-only module with the guarded footer must not throw ReferenceError on load.
+        guarded="'use strict';function solve(a){return a*2;}module.exports=solve;module.exports.solve=solve;if(typeof Solution!=='undefined')solve.Solution=Solution;"
+        response=self.invoke('javascript',guarded,[4]);self.assertIsNone(response['exception']);self.assertEqual(response['result'],8)
+
+    def test_native_abi_checker_passes_on_current_cohorts(self):
+        process=subprocess.run([sys.executable,str(HERE/'check_native_abi.py')],capture_output=True,text=True,timeout=120)
+        report=json.loads(process.stdout);self.assertEqual(process.returncode,0,report['failures'][:5]);self.assertTrue(report['passed']);self.assertEqual(report['qualification'],'unknown')
+
 
 if __name__=='__main__':unittest.main()

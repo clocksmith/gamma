@@ -51,6 +51,87 @@
       "new_sha256": "c84537c11e5487704c9dee777f232140df35aeaa6b54b3dee14f1fa9197140ad",
       "change": "source_sha256 updated to the corrected javascript/903.js",
       "reason": "keep the semantics binding to the current source"
+    },
+    {
+      "file": "contracts.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+      "new_sha256": "16c1fe52a322ccf80c994d595904a1127cc6f671bd1843ea17506f8f042a3dab",
+      "change": "280 official_interface gains in_place_arg 0",
+      "reason": "declare the official in-place ABI so the runner judges nums after the call"
+    },
+    {
+      "file": "python/156.py",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "2ec17343a60a5af23675e6638d41237f34db37f20ac1a30d8689f26812b6cd22",
+      "new_sha256": "6549d45ab3d408287a50d32d45006fb0c3de1452c83debeb44e8afe0ee0265d6",
+      "change": "Native-ABI split: solve deep-copies a native TreeNode input (iterative, seen map rejects a node reached twice) so it neither mutates nor aliases caller nodes; upsideDownBinaryTree / Solution.upsideDownBinaryTree rotates the caller graph in place.",
+      "reason": "solve previously rotated a native TreeNode input in place and returned caller nodes"
+    },
+    {
+      "file": "javascript/156.js",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "fe053d1cac65899c7756def8757c6dd1c6abf3d22906b89e0850b9bf021abc7f",
+      "new_sha256": "e26d2558f8a561f2bdf5655d4dc2c4f8db837fca9542aafdb685d58b880f1ad6",
+      "change": "Native-ABI split: solve deep-copies a native TreeNode input (iterative, seen map rejects a node reached twice) so it neither mutates nor aliases caller nodes; upsideDownBinaryTree / Solution.upsideDownBinaryTree rotates the caller graph in place.",
+      "reason": "solve previously rotated a native TreeNode input in place and returned caller nodes"
+    },
+    {
+      "file": "python/280.py",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "4a57056fa6feb7c8cc550549f0eaa5fed1ab19d756eb11a598fef4ec4eb45ee3",
+      "new_sha256": "1499b102160a360e86b6e32992d9ac95955f5e840c3dcd1bf7c473c3e99a5315",
+      "change": "Native-ABI split: wiggleSort / Solution.wiggleSort now rewrites nums in place and returns nothing (in_place_arg 0); solve still returns a new list and leaves nums unchanged.",
+      "reason": "the official entry previously returned a new list without modifying nums"
+    },
+    {
+      "file": "javascript/280.js",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "8550b5a7c580c91a90e9b3995cdc267f3166bdc55a6766840bb0069929eeba45",
+      "new_sha256": "c814fa1f1578b71898ccd9d54139449a800bcce9cb503b950ff9a66e4a0309ac",
+      "change": "Native-ABI split: wiggleSort / Solution.wiggleSort now rewrites nums in place and returns nothing (in_place_arg 0); solve still returns a new list and leaves nums unchanged.",
+      "reason": "the official entry previously returned a new list without modifying nums"
+    },
+    {
+      "file": "semantics/156-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "13720f6346f4631432c28e2f85c799f3c928b46b4effa7079407f43ea669c9fe",
+      "new_sha256": "f9bc61ce495df497e0b3526ece09c1c03c516272b360ca6a84a53b5cf444118f",
+      "change": "solve_effects, native_effects (mutates_inputs true), charged_costs and complexity; source_sha256 rebound",
+      "reason": "keep the semantics binding to the current source and its declared effects"
+    },
+    {
+      "file": "semantics/156-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "072c64b4ea7979745ddaa6cde1cb9529f29b7b33c1b8b03bd7a10bcaefe6a514",
+      "new_sha256": "1f55013c8484623bf60195a193a53a6f996aa654591e8f72b2191978dde3353d",
+      "change": "solve_effects, native_effects (mutates_inputs true), charged_costs and complexity; source_sha256 rebound",
+      "reason": "keep the semantics binding to the current source and its declared effects"
+    },
+    {
+      "file": "semantics/280-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "284e02d955c93619fd046b5c5668f306d9619370f988e6f5c2ce72fc41ffa736",
+      "new_sha256": "091b139f90f9f360187a5ebea2ec9de0cc6dacc70cb6db17fb6cacad669c6d5f",
+      "change": "official_interface.in_place_arg 0, solve_effects, native_effects, charged_costs; source_sha256 rebound",
+      "reason": "keep the semantics binding to the current source and its declared effects"
+    },
+    {
+      "file": "semantics/280-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "c1fc85d25322bb13f24b2ea541bf62940ebf8f121cf72876788b2148577c5dc8",
+      "new_sha256": "09846e96840085bf9b3b8d5465bde4c8c682fd23414f2b9d1c392d565f62002f",
+      "change": "official_interface.in_place_arg 0, solve_effects, native_effects, charged_costs; source_sha256 rebound",
+      "reason": "keep the semantics binding to the current source and its declared effects"
     }
   ],
   "amendment_notes": "authoring-catalog.json is unchanged and still pins the pre-amendment manifest and 903 source/semantics hashes. cases.py, contracts.json, design.json and test_oracles.py are unchanged. No other reference or expected-value rule changed.",
@@ -58,7 +139,8 @@
     "oracles.py": "9addc57c0d4055af2d7e44272558fdb57feb94ccd8d9a7460823fe5aae5158ee",
     "test_oracles.py": "426f525925a0baec43cd3f33aee5bb2016ef0bea5d750cdcb19f7a8f2dc93668",
     "cases.py": "6e4197ecad3d1b19f4c5ff27676f894cf686e2d8ca437e4b6f2d6eefdd1222bb",
-    "contracts.json": "24d1628322508de11e6cb22b4230ac23cb78a8fbcbd3a8983fed63b3cb87bca6",
+    "contracts.json": "16c1fe52a322ccf80c994d595904a1127cc6f671bd1843ea17506f8f042a3dab",
     "design.json": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe"
-  }
+  },
+  "amendment_notes_2026_11_02": "Supersedes the authoring-catalog.json sentence of amendment_notes: manifest.json source_inventory and authoring-catalog.json now carry the corrected 903 hashes, with the pre-fix hashes and catalog variant IDs under supersedes. contracts.json changed for 280 (official_interface.in_place_arg 0); 156 and 280 sources and semantics changed for the native-ABI split (amendments dated 2026-11-02). oracles.py, cases.py, design.json and test_oracles.py are unchanged by these amendments."
 }

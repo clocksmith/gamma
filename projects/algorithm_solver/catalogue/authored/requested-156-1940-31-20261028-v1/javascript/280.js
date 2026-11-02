@@ -12,10 +12,15 @@ function solve(nums) {
   return arr;
 }
 
+// Official LeetCode ABI (in_place_arg 0): rewrites nums in place and returns
+// nothing. The element-wise copy of the pure result is charged as O(n) time
+// and O(n) auxiliary space (the intermediate array from solve).
 function wiggleSort(nums) {
-  return solve(nums);
+  const out = solve(nums);
+  for (let i = 0; i < out.length; i++) nums[i] = out[i];
 }
 
 module.exports = solve;
 module.exports.solve = solve;
 module.exports.wiggleSort = wiggleSort;
+if (typeof Solution !== "undefined") solve.Solution = Solution;

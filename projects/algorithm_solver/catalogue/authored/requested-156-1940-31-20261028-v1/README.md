@@ -25,10 +25,32 @@ exposed the disagreement, and enumerating permutations confirmed it. `oracles.py
 small inputs across all 31 references, and every candidate passes again.
 
 The Python `solve` bodies of 24 problems repeat the reference statement for statement, so agreement there is
-self-agreement; the brute-force cross-check is the independent evidence. Known gaps: 280 and 286 return new
-values instead of modifying the input in place as the public interfaces do; 1924 returns integer centre coordinates for
+self-agreement; the brute-force cross-check is the independent evidence. Known gaps: 286 returns a new grid instead
+of modifying the input in place as the public interface does; 1924 returns integer centre coordinates for
 a single point; several multi-answer or tolerance problems are compared exactly; the generated maximum rows are far
 below the public limits.
+
+## Native-ABI split and lineage reconciliation (appended 2026-11-02)
+
+`solve(...)` is the pure value-domain entrypoint (`solve_effects`: input mutation and output aliasing forbidden);
+the official entry implements the LeetCode ABI. Copies made to keep `solve` pure, or to adapt it to the native ABI,
+are charged in each semantics file's `charged_costs` and `complexity_target`.
+
+- 156: `solve` deep-copies a native `TreeNode` input (iterative, with a seen map that rejects a node reached twice)
+  before the rotation, so the result shares no node with the caller's tree. `upsideDownBinaryTree` /
+  `Solution.upsideDownBinaryTree` rotates the caller's tree in place (`native_effects.mutates_inputs: true`).
+- 280: `wiggleSort` / `Solution.wiggleSort` rewrites `nums` in place and returns nothing. `contracts.json` and the
+  semantics declare `official_interface.in_place_arg: 0`; `run_candidates.py` judges that entry on
+  `args_after[0] == expected` with other arguments unchanged, while `solve` must still leave its arguments unchanged
+  and return the expected value.
+- 903: `manifest.json` `source_inventory` and `authoring-catalog.json` had kept the pre-fix hashes. They now carry the
+  corrected hashes, with the pre-fix hashes, prior catalog variant IDs, freeze amendments and history blobs under
+  explicit `supersedes` entries.
+
+Every changed file has a dated amendment in `pre-source-reference-freeze.json`; superseded bytes are retained in
+`study-history/blobs/`. `../../development-66-20261029-v1/revise-cohort-lineage.py` performed the rebinding and
+`../../development-66-20261029-v1/check_native_abi.py` is the regression gate (a gate over declared contracts, not a
+purity proof or qualification). Qualification stays unknown.
 
 
 ```sh

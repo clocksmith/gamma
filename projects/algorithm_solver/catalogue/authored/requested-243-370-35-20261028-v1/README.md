@@ -24,6 +24,16 @@ expected value changed. Known gaps: 302 scans in O(m*n) although the public prob
 multi-answer problems are compared exactly against the reference's order; the generated maximum rows are far below
 the public limits.
 
+## 340 string unit (appended 2026-11-02)
+
+340's semantics pin `string_unit: unicode_codepoint`. `javascript/340.js` now iterates `Array.from(s)` (an O(n)
+code-point array, charged in its semantics) instead of UTF-16 code units, matching Python `str` iteration and
+`ref_340`. `cases.py` adds three non-BMP rows whose expected values come from the unchanged reference, raising the
+generated rows to 154 per language: `("\U0001F600a", 1)` expects 1; `("\U0001F600\U0001F600a", 1)` expects 2 and
+`("a\U0001F600b\U0001F600", 2)` expects 3, where UTF-16 code units would give 1 and 2 (the previous JavaScript
+candidate failed both). The amendments are dated in `pre-source-reference-freeze.json`; superseded bytes are in
+`study-history/blobs/`. Qualification stays unknown.
+
 
 ```sh
 python3 run_candidates.py > /dev/null

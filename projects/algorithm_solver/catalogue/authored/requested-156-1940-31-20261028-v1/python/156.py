@@ -1,6 +1,7 @@
 """Original frontend 156 variant; qualification unknown."""
 
 from collections import deque
+import copy
 
 
 class TreeNode:
@@ -45,9 +46,44 @@ def _to_level(root):
     return out
 
 
-def solve(root):
-    is_list = isinstance(root, list)
-    cur = _to_tree(root)
+def _clone_tree(root):
+    """Deep-copy a caller's node graph; reject a node reached twice (cycle or shared child).
+
+    Iterative, so degenerate spines have no recursion limit. copy.copy keeps the
+    caller's node class; children are then replaced by their copies.
+    """
+    if root is None:
+        return None
+    seen = {}
+
+    def copy_of(node):
+        if node is None:
+            return None
+        if id(node) in seen:
+            raise ValueError("upsideDownBinaryTree: input is not a tree (node reached twice)")
+        dup = copy.copy(node)
+        dup.left = None
+        dup.right = None
+        seen[id(node)] = (node, dup)  # keep node alive so its id cannot be reused
+        return dup
+
+    head = copy_of(root)
+    stack = [root]
+    while stack:
+        node = stack.pop()
+        dup = seen[id(node)][1]
+        dup.left = copy_of(node.left)
+        dup.right = copy_of(node.right)
+        if node.left is not None:
+            stack.append(node.left)
+        if node.right is not None:
+            stack.append(node.right)
+    return head
+
+
+def _rotate(root):
+    """In-place left-spine pointer rotation on nodes the caller of _rotate owns."""
+    cur = root
     prev = None
     prev_right = None
     while cur is not None:
@@ -57,12 +93,31 @@ def solve(root):
         cur.right = prev
         prev = cur
         cur = nxt
-    return _to_level(prev) if is_list else prev
+    return prev
 
 
-upsideDownBinaryTree = solve
+def solve(root):
+    """Pure value-domain entrypoint: never mutates the input and shares no node with it.
+
+    A native node input is deep-copied first; that copy is charged as O(n) time and
+    O(n) auxiliary space.
+    """
+    if isinstance(root, list):
+        return _to_level(_rotate(_to_tree(root)))
+    return _rotate(_clone_tree(root))
+
+
+def upsideDownBinaryTree(root):
+    """Official LeetCode ABI: rotates the caller's tree in place and returns the new root.
+
+    native_effects.mutates_inputs = true. A level-order list is converted to fresh
+    nodes first, so list callers see no mutation.
+    """
+    if isinstance(root, list):
+        return _to_level(_rotate(_to_tree(root)))
+    return _rotate(root)
 
 
 class Solution:
     def upsideDownBinaryTree(self, root):
-        return solve(root)
+        return upsideDownBinaryTree(root)

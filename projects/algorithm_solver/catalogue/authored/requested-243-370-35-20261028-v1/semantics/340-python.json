@@ -1,10 +1,19 @@
 {
   "candidate_design": "Two-pointer sliding window maintaining character frequency map.",
+  "charged_costs": {
+    "solve": {
+      "code_point_iteration": "Python str iteration is per code point; no copy"
+    }
+  },
   "comparison": "exact typed JSON result",
   "complexity_target": "O(n) time, O(k) space",
   "effects": "arguments unchanged",
   "entrypoint": "solve",
   "language": "python",
+  "native_effects": {
+    "entry": "Solution.lengthOfLongestSubstringKDistinct / lengthOfLongestSubstringKDistinct",
+    "mutates_inputs": false
+  },
   "official_interface": {
     "name": "lengthOfLongestSubstringKDistinct",
     "params": [
@@ -37,10 +46,15 @@
     "status": "unknown"
   },
   "schema": "gamma.authored-scalar-semantics.v1",
+  "solve_effects": {
+    "inputMutation": "forbidden",
+    "outputAliasing": "forbidden"
+  },
   "source_reasoning": {
     "candidate_design": "Two-pointer sliding window maintaining character frequency map.",
     "complexity_target": "O(n) time, O(k) space",
     "reference": "Sliding window with frequency map"
   },
-  "source_sha256": "d3a147aeee57cf88b3b2056fa82473f0fc1350019fa80dd2376c68a02fa12568"
+  "source_sha256": "d3a147aeee57cf88b3b2056fa82473f0fc1350019fa80dd2376c68a02fa12568",
+  "string_unit": "unicode_codepoint"
 }

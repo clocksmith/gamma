@@ -71,3 +71,24 @@ broken-copy qualification campaign for the solutions.
 Remaining boundaries: native object/void/class interface verification, broader
 independent cases and qualification, official-domain and resource confirmation,
 and catalogue serving admission. A passing serialized wrapper is not proof of those.
+
+## Native-ABI split (2026-11-02)
+
+[NATIVE-ABI-CONTRACT-v1.md](NATIVE-ABI-CONTRACT-v1.md) records the design rules
+and the applied guards. `run-case.cjs` now calls `candidate.solve` when it exists,
+so object-footer modules such as the qualified `875.js` load unchanged. 156 and 280
+separate a pure `solve` from an in-place native entry, and 340 pins code-point
+strings with non-BMP canaries. The 903 inventory/catalog hashes are reconciled with
+explicit `supersedes` lineage.
+
+`runs/native-abi-20261102/results.json` records 8 programs and 40 passing calls for
+156, 280, 340 and 903 on the revised sources. The study extensions were revised
+with `build-study.py --revise`; earlier records and receipts are retained.
+`runs/guarded/` keeps its original source hashes as history.
+
+```sh
+python3 projects/algorithm_solver/catalogue/development-66-20261029-v1/check_native_abi.py
+```
+
+The checker is a regression gate over declared contracts. It is not a purity
+proof or qualification.

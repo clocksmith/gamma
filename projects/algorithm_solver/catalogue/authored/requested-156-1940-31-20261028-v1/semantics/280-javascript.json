@@ -1,11 +1,26 @@
 {
   "candidate_design": "Single pass swapping adjacent elements when parity order is violated.",
+  "charged_costs": {
+    "native": {
+      "result_writeback": "element-wise copy of solve(nums) into nums: O(n) time, O(n) auxiliary space for the intermediate solve result"
+    },
+    "solve": {
+      "input_copy": "O(n) time, O(n) space"
+    }
+  },
   "comparison": "exact typed JSON result",
   "complexity_target": "O(n) time, O(n) space",
-  "effects": "arguments unchanged",
+  "effects": "solve: arguments unchanged, returns a new list; wiggleSort: rewrites nums (argument 0) in place and returns nothing",
   "entrypoint": "solve",
   "language": "javascript",
+  "native_effects": {
+    "entry": "wiggleSort",
+    "in_place_arg": 0,
+    "mutates_inputs": true,
+    "returns": "nothing (None/undefined); the judged output is nums after the call"
+  },
   "official_interface": {
+    "in_place_arg": 0,
     "name": "wiggleSort",
     "params": [
       {
@@ -29,10 +44,14 @@
     "status": "unknown"
   },
   "schema": "gamma.authored-scalar-semantics.v1",
+  "solve_effects": {
+    "inputMutation": "forbidden",
+    "outputAliasing": "forbidden"
+  },
   "source_reasoning": {
     "candidate_design": "Single pass swapping adjacent elements when parity order is violated.",
     "complexity_target": "O(n) time, O(n) space",
     "reference": "Single pass adjacent swap"
   },
-  "source_sha256": "8550b5a7c580c91a90e9b3995cdc267f3166bdc55a6766840bb0069929eeba45"
+  "source_sha256": "c814fa1f1578b71898ccd9d54139449a800bcce9cb503b950ff9a66e4a0309ac"
 }

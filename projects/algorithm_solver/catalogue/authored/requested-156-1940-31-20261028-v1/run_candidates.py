@@ -5,7 +5,9 @@ For each problem id, builds cases with cases.build_cases(pid, include_maximum=Tr
     problem the native class driven directly through the operation trace
   * node --jitless: javascript/<pid>.js callable export `solve(...args)`, plus the official named export
     (native class driven through the trace for a class problem)
-Each call gets a fresh deep copy of the arguments; the copy must be unchanged afterwards. Results are compared
+Each call gets a fresh deep copy of the arguments; the copy must be unchanged afterwards, except for an official
+entry whose contract declares `official_interface.in_place_arg` k (native in-place ABI): there args_after[k] must
+equal the expected value, every other argument must be unchanged, and the return value is not judged. Results are compared
 with the expected value from the cohort reference under JSON typing (Python: bool, int, float, str, None, list
 and dict kinds must match; JavaScript: JSON numbers compare by value). Per-call CPU time is measured with
 time.process_time (Python) and process.cpuUsage user+system (JavaScript). Writes JSON to stdout.
@@ -101,12 +103,11 @@ function native(Cls) {
 }
 function call(fn, args) {
   const copy = JSON.parse(JSON.stringify(args));
-  const before = JSON.stringify(copy);
   const t0 = process.cpuUsage();
   let value, error = null;
   try { value = fn(...copy); } catch (e) { error = String(e && e.stack || e); }
   const d = process.cpuUsage(t0);
-  return {value: mark(value), error, unchanged: JSON.stringify(copy) === before, cpu: (d.user + d.system) / 1e6};
+  return {value: mark(value), error, after: mark(copy), cpu: (d.user + d.system) / 1e6};
 }
 const out = [];
 for (const args of job.cases) {
@@ -126,7 +127,26 @@ def native(cls, ops, arg_lists):
     return [None] + [getattr(receiver, op)(*a) for op, a in zip(ops[1:], arg_lists[1:])]
 
 
-def run_python(pid, rows, official):
+def judge(label, value, error, args_before, args_after, expected, in_place_arg, json_numbers=False):
+    """One entry verdict. `ok` is the full pass condition; `unchanged` is reported as observed.
+
+    solve (and any official entry without in_place_arg): no exception, args_after == args_before and
+    result == expected. An official entry declaring in_place_arg k (native in-place ABI): no exception,
+    args_after[k] == expected and every other argument unchanged; its return value is not judged.
+    """
+    unchanged = exact(args_after, args_before, json_numbers)
+    if label == 'official' and in_place_arg is not None:
+        others = [i for i in range(len(args_before)) if i != in_place_arg]
+        ok = (error is None and len(args_after) == len(args_before)
+              and exact(args_after[in_place_arg], expected, json_numbers)
+              and all(exact(args_after[i], args_before[i], json_numbers) for i in others))
+        return {'ok': ok, 'effects': 'in_place_arg', 'in_place_arg': in_place_arg, 'unchanged': unchanged,
+                'mutated_arg': args_after[in_place_arg] if len(args_after) > in_place_arg else None}
+    ok = error is None and unchanged and exact(value, expected, json_numbers)
+    return {'ok': ok, 'effects': 'arguments_unchanged', 'unchanged': unchanged}
+
+
+def run_python(pid, rows, official, in_place_arg=None):
     module = load(f'cohort_candidate_{HERE.name.replace("-", "_")}_{pid}', HERE / 'python' / f'{pid}.py')
     results = []
     for row in rows:
@@ -147,7 +167,7 @@ def run_python(pid, rows, official):
             except Exception as exc:  # recorded as failure
                 value, error = None, repr(exc)
             cpu = time.process_time() - t0
-            entry[label] = {'ok': error is None and exact(value, row['expected']), 'unchanged': args == row['args'],
+            entry[label] = {**judge(label, value, error, row['args'], args, row['expected'], in_place_arg),
                             'cpu': cpu, 'error': error, 'value': value}
         results.append(entry)
     return results
@@ -160,7 +180,7 @@ def ops_first(rows):
     return None
 
 
-def run_javascript(pid, rows, official):
+def run_javascript(pid, rows, official, in_place_arg=None):
     job = {'path': str(HERE / 'javascript' / f'{pid}.js'), 'cases': [r['args'] for r in rows], 'official': official,
            'native': official is not None and official == (ops_first(rows) or '')}
     proc = subprocess.run(['node', '--jitless', '-e', JS_RUNNER], input=json.dumps(job), capture_output=True, text=True)
@@ -177,8 +197,9 @@ def run_javascript(pid, rows, official):
             if g.get('missing'):
                 entry[label] = {'missing': True}
                 continue
-            entry[label] = {'ok': g['error'] is None and exact(g['value'], row['expected'], json_numbers=True),
-                            'unchanged': g['unchanged'], 'cpu': g['cpu'], 'error': g['error'], 'value': g['value']}
+            entry[label] = {**judge(label, g['value'], g['error'], row['args'], g['after'], row['expected'],
+                                    in_place_arg, json_numbers=True),
+                            'cpu': g['cpu'], 'error': g['error'], 'value': g['value']}
         results.append(entry)
     return results
 
@@ -189,17 +210,18 @@ def main():
     for pid in CASES.PROBLEM_IDS:
         rows = CASES.build_cases(pid, include_maximum=True)
         official = CONTRACTS[pid]['official_interface'].get('name')
+        in_place_arg = CONTRACTS[pid]['official_interface'].get('in_place_arg')
         problem = {'cases': len(rows)}
         for language, runner, src in (('python', run_python, HERE / 'python' / f'{pid}.py'),
                                       ('javascript', run_javascript, HERE / 'javascript' / f'{pid}.js')):
-            res = runner(pid, rows, official)
-            solve_pass = sum(1 for r in res if r['solve']['ok'] and r['solve']['unchanged'])
+            res = runner(pid, rows, official, in_place_arg)
+            solve_pass = sum(1 for r in res if r['solve']['ok'])
             off = [r['official'] for r in res if 'official' in r]
             failures = []
             for i, (row, r) in enumerate(zip(rows, res)):
                 for label in ('solve', 'official'):
                     x = r.get(label)
-                    if x and not x.get('missing') and not (x['ok'] and x['unchanged']):
+                    if x and not x.get('missing') and not x['ok']:
                         failures.append({'case_index': i, 'entry': label, 'args': str(row['args'])[:160],
                                          'expected': str(row['expected'])[:160], 'got': str(x['value'])[:160],
                                          'unchanged': x['unchanged'], 'error': x['error']})
@@ -208,7 +230,8 @@ def main():
                 'source_sha256': sha(src),
                 'solve_passed': solve_pass,
                 'official_entry': (None if not off else 'missing' if any(o.get('missing') for o in off)
-                                   else sum(1 for o in off if o['ok'] and o['unchanged'])),
+                                   else sum(1 for o in off if o['ok'])),
+                'official_effects': 'in_place_arg %d' % in_place_arg if in_place_arg is not None else 'arguments_unchanged',
                 'heaviest_call_cpu_seconds': round(max(cpus), 4) if cpus else None,
                 'over_1s': sum(1 for c in cpus if c > SLOW_SECONDS),
                 'failures': failures,

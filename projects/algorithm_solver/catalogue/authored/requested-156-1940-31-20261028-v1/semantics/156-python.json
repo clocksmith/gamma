@@ -1,10 +1,25 @@
 {
   "candidate_design": "Iterative pointer rotation down the left spine.",
+  "charged_costs": {
+    "native": {
+      "level_order_conversion": "O(n) time, O(n) space when the input is a level-order list"
+    },
+    "solve": {
+      "input_deep_copy": "O(n) time, O(n) space; iterative with a seen map that rejects a node reached twice (cycle or shared child)",
+      "level_order_conversion": "O(n) time, O(n) space when the input is a level-order list"
+    }
+  },
   "comparison": "exact typed JSON result",
-  "complexity_target": "O(n) time, O(1) auxiliary space",
-  "effects": "arguments unchanged",
+  "complexity_target": "solve: O(n) time, O(n) auxiliary space (charged deep copy of a native TreeNode input); native: O(n) time, O(1) auxiliary space",
+  "effects": "solve: arguments unchanged and the result shares no node with the input; Solution.upsideDownBinaryTree / upsideDownBinaryTree: rotates the caller TreeNode graph in place",
   "entrypoint": "solve",
   "language": "python",
+  "native_effects": {
+    "entry": "Solution.upsideDownBinaryTree / upsideDownBinaryTree",
+    "list_input": "converted to fresh nodes; the caller list is not mutated",
+    "mutates_inputs": true,
+    "returns": "new root of the rotated caller graph"
+  },
   "official_interface": {
     "name": "upsideDownBinaryTree",
     "params": [
@@ -29,10 +44,14 @@
     "status": "unknown"
   },
   "schema": "gamma.authored-scalar-semantics.v1",
+  "solve_effects": {
+    "inputMutation": "forbidden",
+    "outputAliasing": "forbidden"
+  },
   "source_reasoning": {
     "candidate_design": "Iterative pointer rotation down the left spine.",
-    "complexity_target": "O(n) time, O(1) auxiliary space",
+    "complexity_target": "solve: O(n) time, O(n) auxiliary space (charged deep copy of a native TreeNode input); native: O(n) time, O(1) auxiliary space",
     "reference": "Iterative left-spine rotation"
   },
-  "source_sha256": "2ec17343a60a5af23675e6638d41237f34db37f20ac1a30d8689f26812b6cd22"
+  "source_sha256": "6549d45ab3d408287a50d32d45006fb0c3de1452c83debeb44e8afe0ee0265d6"
 }
