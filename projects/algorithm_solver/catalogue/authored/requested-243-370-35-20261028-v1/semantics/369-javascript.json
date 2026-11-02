@@ -1,10 +1,21 @@
 {
   "candidate_design": "Locate rightmost non-9 digit, increment it, and zero trailing 9s.",
+  "charged_costs": {
+    "solve": {
+      "input_deep_copy": "O(n) time, O(n) space; a node reached twice (cycle) is rejected"
+    }
+  },
   "comparison": "exact typed JSON result",
-  "complexity_target": "O(n) time, O(1) space",
-  "effects": "arguments unchanged",
+  "complexity_target": "solve: O(n) time, O(n) auxiliary space (charged copy of a native ListNode input); native: O(n) time, O(1) auxiliary space",
+  "effects": "solve: arguments unchanged and the result shares no node with the input; plusOne: increments the caller ListNode list in place",
   "entrypoint": "solve",
   "language": "javascript",
+  "native_effects": {
+    "entry": "plusOne",
+    "list_input": "digit arrays use the pure path; the caller array is not mutated",
+    "mutates_inputs": true,
+    "returns": "head of the incremented caller list (a new head node when every digit is 9)"
+  },
   "official_interface": {
     "name": "plusOne",
     "params": [
@@ -29,10 +40,14 @@
     "status": "unknown"
   },
   "schema": "gamma.authored-scalar-semantics.v1",
+  "solve_effects": {
+    "inputMutation": "forbidden",
+    "outputAliasing": "forbidden"
+  },
   "source_reasoning": {
     "candidate_design": "Locate rightmost non-9 digit, increment it, and zero trailing 9s.",
-    "complexity_target": "O(n) time, O(1) space",
+    "complexity_target": "solve: O(n) time, O(n) auxiliary space (charged copy of a native ListNode input); native: O(n) time, O(1) auxiliary space",
     "reference": "Rightmost non-9 pointer"
   },
-  "source_sha256": "345746fd41fa1bc858ce44dc5d5f92925576e00f11aa0ae386d540f9cf35f29d"
+  "source_sha256": "4dfad23ecb5dbe358b308b2eeca761efc6fdc2250e13d1ed4e33d245b807625d"
 }

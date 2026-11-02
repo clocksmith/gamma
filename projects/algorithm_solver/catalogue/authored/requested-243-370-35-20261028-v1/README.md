@@ -34,6 +34,14 @@ generated rows to 154 per language: `("\U0001F600a", 1)` expects 1; `("\U0001F60
 candidate failed both). The amendments are dated in `pre-source-reference-freeze.json`; superseded bytes are in
 `study-history/blobs/`. Qualification stays unknown.
 
+## Native node effects (appended 2026-11-02)
+
+369's `solve` copies a native `ListNode` input (a cycle is rejected) instead of incrementing the caller's list in
+place; the old version also returned caller nodes and looped forever on a cyclic list. `plusOne` / `Solution.plusOne`
+increments in place (`native_effects.mutates_inputs: true`). The tree problems 250, 270, 272, 298, 314, 333 and 366
+were already read-only; their semantics now declare `solve_effects` and read-only `native_effects`, and
+`../../development-66-20261029-v1/check_native_abi.py` exercises them on foreign node objects.
+
 
 ```sh
 python3 run_candidates.py > /dev/null

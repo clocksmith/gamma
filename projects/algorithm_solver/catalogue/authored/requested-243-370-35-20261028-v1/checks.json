@@ -833,6 +833,12 @@
       "change": "340: semantics pin string_unit unicode_codepoint; javascript/340.js iterates Array.from(s) code points (charged O(n) array) instead of UTF-16 code units; cases.py adds three non-BMP canary rows whose expected values come from the unchanged ref_340. ('\\U0001F600a', 1) expects 1; ('\\U0001F600\\U0001F600a', 1) expects 2 and ('a\\U0001F600b\\U0001F600', 2) expects 3, where UTF-16 code units would give 1 and 2; the previous JavaScript candidate failed both.",
       "evidence_after": "run_candidates.py: all 154 rows (151 + 3 canaries) pass in both languages through both entries; test_oracles.py passes; development-66 check_native_abi.py passes.",
       "qualification": "unknown"
+    },
+    {
+      "at": "2026-11-02",
+      "change": "369: solve copies a native ListNode input (cycle rejected) instead of incrementing the caller list in place, returning caller nodes and looping forever on a cyclic list; plusOne / Solution.plusOne increments in place (native_effects.mutates_inputs true). 250, 270, 272, 298, 314, 333 and 366 semantics declare solve_effects and read-only native_effects; their sources are unchanged.",
+      "evidence_after": "run_candidates.py all rows pass; check_native_abi.py drives solve and the official entry on checker-owned (foreign) TreeNode/ListNode graphs built from every case: node inputs stay structurally and identically intact, no output node aliases an input node, results equal the reference, and read-only official entries leave inputs intact.",
+      "qualification": "unknown"
     }
   ],
   "python_candidate_ast_parses": 35,

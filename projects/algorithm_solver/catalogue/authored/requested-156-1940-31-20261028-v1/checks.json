@@ -760,6 +760,12 @@
       "change": "286: wallsAndGates / Solution.wallsAndGates rewrites rooms in place row by row and returns nothing; contracts.json and semantics declare official_interface.in_place_arg 0 and the copy costs in charged_costs. solve is unchanged.",
       "evidence_after": "run_candidates.py: all 117 rows pass in both languages through both entries (280 and 286 official judged in place); development-66 check_native_abi.py passes.",
       "qualification": "unknown"
+    },
+    {
+      "at": "2026-11-02",
+      "change": "742, 1214 and 1740 semantics declare solve_effects and read-only native_effects; their sources are unchanged.",
+      "evidence_after": "check_native_abi.py drives solve and the official entry on checker-owned (foreign) TreeNode/ListNode graphs built from every case: node inputs stay structurally and identically intact, no output node aliases an input node, results equal the reference, and read-only official entries leave inputs intact.",
+      "qualification": "unknown"
     }
   ],
   "python_candidate_ast_parses": 31,

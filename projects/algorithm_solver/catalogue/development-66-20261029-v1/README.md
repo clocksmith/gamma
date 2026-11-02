@@ -83,7 +83,9 @@ explicit `supersedes` lineage.
 
 `runs/native-abi-20261102/results.json` records 8 programs and 40 passing calls for
 156, 280, 340 and 903 on the revised sources. `runs/native-abi-286-20261102/results.json` records 2 programs and 6 passing
-calls for the revised 286 sources. The study extensions were revised
+calls for the revised 286 sources. `runs/native-nodes-20261102/results.json` records 22 programs
+and 86 passing calls for the 11 native node problems (250, 270, 272, 298, 314, 333, 366,
+369, 742, 1214, 1740), which the checker also drives on foreign node objects. The study extensions were revised
 with `build-study.py --revise`; earlier records and receipts are retained.
 `runs/guarded/` keeps its original source hashes as history.
 

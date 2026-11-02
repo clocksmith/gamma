@@ -177,6 +177,60 @@
       "new_sha256": "9ca0d001bdcc19b1ca778898fd0163b3cf388817240f26e7e1e9b35a6bd30a7e",
       "change": "official_interface.in_place_arg 0, solve_effects, native_effects, charged_costs; source_sha256 rebound",
       "reason": "keep the semantics binding to the current source and its declared effects"
+    },
+    {
+      "file": "semantics/742-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "5ef9a4a4ee3757ac0d2d7b2ab062bd57b5fe82c5e55a50bd41f43b89c3f11c11",
+      "new_sha256": "56c8ebf57d97a1deb80d116655aced22590a547e0744b3003ab9aa4053351820",
+      "change": "solve_effects (input mutation and output aliasing forbidden) and native_effects.mutates_inputs false; source_sha256 unchanged",
+      "reason": "declare native node effects so check_native_abi.py exercises foreign node inputs"
+    },
+    {
+      "file": "semantics/742-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "bb29ba615097937806dc3a69e1397aaaa45ba27f3818cc1b1d57d4d213a15ce2",
+      "new_sha256": "6c51f38859545dbda8fe6a8d386a58fcdf5a39dd82bc3e80f53e1682c00cf213",
+      "change": "solve_effects (input mutation and output aliasing forbidden) and native_effects.mutates_inputs false; source_sha256 unchanged",
+      "reason": "declare native node effects so check_native_abi.py exercises foreign node inputs"
+    },
+    {
+      "file": "semantics/1214-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "0babeb3f567c6ddecb593cac46e31aa79a5769a8ce20aa0b50f6c7d07eca99e5",
+      "new_sha256": "65343f70a4f3405037510e7e50b933d63792cd5fe6b6d2342f46bdd669cfcd9a",
+      "change": "solve_effects (input mutation and output aliasing forbidden) and native_effects.mutates_inputs false; source_sha256 unchanged",
+      "reason": "declare native node effects so check_native_abi.py exercises foreign node inputs"
+    },
+    {
+      "file": "semantics/1214-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "f611869c402cfde8020512848306fc908d9ddf5734cce55d042d23d3b455ae3d",
+      "new_sha256": "d17e1a61bfadbf621919f9cd77e76416c37dc07ed6e04d2c9595a8ba5adfe7ff",
+      "change": "solve_effects (input mutation and output aliasing forbidden) and native_effects.mutates_inputs false; source_sha256 unchanged",
+      "reason": "declare native node effects so check_native_abi.py exercises foreign node inputs"
+    },
+    {
+      "file": "semantics/1740-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "f8c0e55fe43a92127b012dde13df7b9961e13277d5c4a342f7d35d6934e85d97",
+      "new_sha256": "547411110eaee14b5cf372ba535b1afc5e3e1a0afd831024fbe4c0131d55b143",
+      "change": "solve_effects (input mutation and output aliasing forbidden) and native_effects.mutates_inputs false; source_sha256 unchanged",
+      "reason": "declare native node effects so check_native_abi.py exercises foreign node inputs"
+    },
+    {
+      "file": "semantics/1740-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "fc92bf5f6f363f402180b9ca81f3e21c5464f383ca4e6ba1f8bbddb6ce3dcfe4",
+      "new_sha256": "0c0959b585693092dac5ce7d5902f210631b1e0e65ca7b8d6643e8de476537bf",
+      "change": "solve_effects (input mutation and output aliasing forbidden) and native_effects.mutates_inputs false; source_sha256 unchanged",
+      "reason": "declare native node effects so check_native_abi.py exercises foreign node inputs"
     }
   ],
   "amendment_notes": "authoring-catalog.json is unchanged and still pins the pre-amendment manifest and 903 source/semantics hashes. cases.py, contracts.json, design.json and test_oracles.py are unchanged. No other reference or expected-value rule changed.",
@@ -187,5 +241,5 @@
     "contracts.json": "2c04f3a41fa3c24784f333ca2ac41e6f1c5b56c21bdc54527c969d12d3ef795b",
     "design.json": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe"
   },
-  "amendment_notes_2026_11_02": "Supersedes the authoring-catalog.json sentence of amendment_notes: manifest.json source_inventory and authoring-catalog.json now carry the corrected 903 hashes, with the pre-fix hashes and catalog variant IDs under supersedes. contracts.json changed for 280 (official_interface.in_place_arg 0); 156 and 280 sources and semantics changed for the native-ABI split (amendments dated 2026-11-02). oracles.py, cases.py, design.json and test_oracles.py are unchanged by these amendments. A second 2026-11-02 revision changed contracts.json for 286 (official_interface.in_place_arg 0) and the 286 sources and semantics for the same in-place split."
+  "amendment_notes_2026_11_02": "Supersedes the authoring-catalog.json sentence of amendment_notes: manifest.json source_inventory and authoring-catalog.json now carry the corrected 903 hashes, with the pre-fix hashes and catalog variant IDs under supersedes. contracts.json changed for 280 (official_interface.in_place_arg 0); 156 and 280 sources and semantics changed for the native-ABI split (amendments dated 2026-11-02). oracles.py, cases.py, design.json and test_oracles.py are unchanged by these amendments. A second 2026-11-02 revision changed contracts.json for 286 (official_interface.in_place_arg 0) and the 286 sources and semantics for the same in-place split. A third 2026-11-02 revision declared native node effects in the 742, 1214 and 1740 semantics (sources unchanged)."
 }

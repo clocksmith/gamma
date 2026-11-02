@@ -53,6 +53,9 @@ Every changed file has a dated amendment in `pre-source-reference-freeze.json`; 
 `../../development-66-20261029-v1/check_native_abi.py` is the regression gate (a gate over declared contracts, not a
 purity proof or qualification). Qualification stays unknown.
 
+The read-only tree problems 742, 1214 and 1740 declare `solve_effects` and read-only `native_effects`; the checker
+drives them on foreign node objects. Their sources are unchanged.
+
 
 ```sh
 python3 test_oracles.py

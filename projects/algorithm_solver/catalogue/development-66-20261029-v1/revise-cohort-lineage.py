@@ -72,6 +72,25 @@ REVISIONS = [
     }),
 ]
 
+NATIVE_369 = ('Native-ABI split: solve copies a native ListNode input (seen set rejects a cycle) so it neither mutates nor '
+              'aliases caller nodes; plusOne / Solution.plusOne increments the caller list in place.')
+NODE_DECLARATION = ('solve_effects (input mutation and output aliasing forbidden) and native_effects.mutates_inputs false; '
+                    'source_sha256 unchanged', 'declare native node effects so check_native_abi.py exercises foreign node inputs')
+NODE_FAMILY = {
+    'requested-243-370-35-20261028-v1': [250, 270, 272, 298, 314, 333, 366],
+    'requested-156-1940-31-20261028-v1': [742, 1214, 1740],
+}
+REVISIONS.append(('2026-11-02', {
+    cohort: {f'semantics/{pid}-{lang}.json': NODE_DECLARATION for pid in ids for lang in ('python', 'javascript')}
+    for cohort, ids in NODE_FAMILY.items()
+}))
+REVISIONS[-1][1]['requested-243-370-35-20261028-v1'].update({
+    'python/369.py': (NATIVE_369, 'solve previously incremented a native ListNode input in place, returned caller nodes and looped forever on a cyclic list'),
+    'javascript/369.js': (NATIVE_369, 'solve previously incremented a native ListNode input in place, returned caller nodes and looped forever on a cyclic list'),
+    'semantics/369-python.json': ('solve_effects, native_effects (mutates_inputs true), charged_costs and complexity; source_sha256 rebound', 'keep the semantics binding to the current source and its declared effects'),
+    'semantics/369-javascript.json': ('solve_effects, native_effects (mutates_inputs true), charged_costs and complexity; source_sha256 rebound', 'keep the semantics binding to the current source and its declared effects'),
+})
+
 
 def latest_reasons(cohort):
     merged = {}

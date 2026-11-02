@@ -33,6 +33,7 @@ import copy
 import hashlib
 import importlib.util
 import json
+import signal
 import subprocess
 import sys
 
@@ -83,34 +84,52 @@ for (const [key, path, official] of job) {
 process.stdout.write(JSON.stringify(out));
 """
 
-JS_TREE = r"""
+JS_NODES = r"""
+// Native node graphs use checker-owned classes (LeetCode supplies its own), so
+// modules must accept foreign TreeNode/ListNode objects, not only their own.
 const job = JSON.parse(require('fs').readFileSync(0, 'utf8'));
 const m = require(job.path);
-const T = m.TreeNode;
-function build(a) {
+function T(val, left, right) { this.val = val; this.left = left ?? null; this.right = right ?? null; }
+function L(val, next) { this.val = val; this.next = next ?? null; }
+function tree(a) {
   if (!a.length || a[0] === null) return null;
   const n = a.map(v => v === null ? null : new T(v)); let i = 1;
   for (const x of n) { if (x === null) continue; if (i < n.length) x.left = n[i++]; if (i < n.length) x.right = n[i++]; }
   return n[0];
 }
+function list(a) { let h = null; for (let i = a.length - 1; i >= 0; i--) h = new L(a[i], h); return h; }
+const make = (args) => args.map((a, i) => job.types[i] === 'TreeNode' ? tree(a) : job.types[i] === 'ListNode' ? list(a) : JSON.parse(JSON.stringify(a)));
 function level(r) {
   const out = [], q = [r];
   for (let i = 0; i < q.length; i++) { const x = q[i]; if (x == null) out.push(null); else { out.push(x.val); q.push(x.left, x.right); } }
   while (out.length && out[out.length - 1] === null) out.pop(); return out;
 }
-function nodes(r) { const s = new Map(), st = r ? [r] : []; while (st.length) { const x = st.pop(); if (s.has(x) || s.size > 100000) continue; s.set(x, [x.val, x.left, x.right]); if (x.left) st.push(x.left); if (x.right) st.push(x.right); } return s; }
+function flat(h) { const out = []; for (let x = h, n = 0; x != null && n < 100000; x = x.next, n++) out.push(x.val); return out; }
+const value = (v) => v === undefined ? null : job.ret === 'TreeNode' ? level(v) : job.ret === 'ListNode' ? flat(v) : v;
+function nodes(args) {
+  const s = new Map(), st = args.filter(a => a instanceof T || a instanceof L);
+  while (st.length) { const x = st.pop(); if (x == null || s.has(x) || s.size > 100000) continue; s.set(x, [x.val, x.left, x.right, x.next]); st.push(x.left, x.right, x.next); }
+  return s;
+}
+const intactOf = (before) => [...before].every(([x, [v, l, r, n]]) => x.val === v && x.left === l && x.right === r && x.next === n);
 const res = [];
 for (const c of job.cases) {
-  const root = build(c.args[0]); const before = nodes(root);
-  const out = m.solve(root);
-  const intact = [...before].every(([x, [v, l, r]]) => x.val === v && x.left === l && x.right === r);
-  const aliased = [...nodes(out).keys()].filter(x => before.has(x)).length;
-  const nroot = build(c.args[0]); const nout = m[job.official](nroot);
-  res.push({solve: level(out), intact, aliased, native: level(nout)});
+  const args = make(c.args); const before = nodes(args);
+  const out = m.solve(...args);
+  const after = (out instanceof T || out instanceof L) ? nodes([out]) : new Map();
+  const aliased = [...after.keys()].filter(x => before.has(x)).length;
+  const nargs = make(c.args); const nbefore = nodes(nargs);
+  const nout = m[job.official](...nargs);
+  res.push({solve: value(out), intact: intactOf(before), aliased, native: value(nout), nativeIntact: intactOf(nbefore)});
 }
-let cycle;
-try { const a = new T(1); a.left = new T(2); a.left.left = a; m.solve(a); cycle = 'accepted'; }
-catch (e) { cycle = 'rejected'; }
+let cycle = null;
+if (job.cycle) {
+  const k = job.types.findIndex(t => t === 'TreeNode' || t === 'ListNode');
+  const args = make(job.cases[0].args);
+  if (job.types[k] === 'TreeNode') { const a = new T(1); a.left = new T(2); a.left.left = a; args[k] = a; }
+  else { const a = new L(1); a.next = new L(2, a); args[k] = a; }
+  try { m.solve(...args); cycle = 'accepted'; } catch (e) { cycle = 'rejected'; }
+}
 process.stdout.write(JSON.stringify({res, cycle}));
 """
 
@@ -178,13 +197,26 @@ def check_875(report):
                   'qualified:875.js', 'object-footer module loads and solves through run-case.cjs')
 
 
-def py_tree_checks(report, where, module, official, rows):
-    T = module.TreeNode
+class CheckerTreeNode:
+    """Checker-owned node classes: LeetCode supplies its own, so modules must accept foreign nodes."""
 
-    def build(a):
+    def __init__(self, val=0, left=None, right=None):
+        self.val, self.left, self.right = val, left, right
+
+
+class CheckerListNode:
+    def __init__(self, val=0, next=None):
+        self.val, self.next = val, next
+
+
+NODE_TYPES = ('TreeNode', 'ListNode')
+
+
+def native_args(args, types):
+    def tree(a):
         if not a or a[0] is None:
             return None
-        n = [None if v is None else T(v) for v in a]
+        n = [None if v is None else CheckerTreeNode(v) for v in a]
         kids = n[::-1]
         head = kids.pop()
         for x in n:
@@ -195,36 +227,97 @@ def py_tree_checks(report, where, module, official, rows):
                     x.right = kids.pop()
         return head
 
-    def nodes(r):
-        seen, stack = {}, [r] if r is not None else []
-        while stack:
-            x = stack.pop()
-            if id(x) in seen:
-                continue
-            seen[id(x)] = (x, x.val, x.left, x.right)
-            stack.extend(c for c in (x.left, x.right) if c is not None)
-        return seen
+    def linked(a):
+        head = None
+        for v in reversed(a):
+            head = CheckerListNode(v, head)
+        return head
 
-    for i, row in enumerate(rows):
-        root = build(row['args'][0])
-        before = nodes(root)
-        out = module.solve(root)
-        intact = all(x.val == v and x.left is l and x.right is r for x, v, l, r in before.values())
-        aliased = sum(1 for k in nodes(out) if k in before)
-        report.expect(intact, f'{where}:case{i}', 'solve leaves native TreeNode input intact (inputMutation forbidden)')
-        report.expect(aliased == 0, f'{where}:case{i}', f'solve output shares no input node (outputAliasing forbidden); shared={aliased}')
-        report.expect(module._to_level(out) == row['expected'], f'{where}:case{i}', 'solve result on native input')
-        nout = getattr(module.Solution(), official)(build(row['args'][0]))
-        report.expect(module._to_level(nout) == row['expected'], f'{where}:case{i}', 'native entry result')
-    a = T(1)
-    a.left = T(2)
-    a.left.left = a
-    try:
-        module.solve(a)
-        rejected = False
-    except ValueError:
-        rejected = True
-    report.expect(rejected, f'{where}:cycle', 'solve rejects a cyclic node graph')
+    return [tree(a) if t == 'TreeNode' else linked(a) if t == 'ListNode' else copy.deepcopy(a)
+            for a, t in zip(args, types)]
+
+
+def graph(objs):
+    seen, stack = {}, [o for o in objs if hasattr(o, 'val') and (hasattr(o, 'left') or hasattr(o, 'next'))]
+    while stack and len(seen) < 100000:
+        x = stack.pop()
+        if x is None or id(x) in seen:
+            continue
+        links = tuple(getattr(x, k, None) for k in ('left', 'right', 'next'))
+        seen[id(x)] = (x, x.val) + links
+        stack.extend(links)
+    return seen
+
+
+def intact(before):
+    return all(x.val == v and getattr(x, 'left', None) is l and getattr(x, 'right', None) is r and
+               getattr(x, 'next', None) is n for x, v, l, r, n in before.values())
+
+
+def node_value(v, ret):
+    if ret == 'TreeNode':
+        out, q = [], [v]
+        while q:
+            x = q.pop(0)
+            if x is None:
+                out.append(None)
+            else:
+                out.append(x.val)
+                q.extend((x.left, x.right))
+        while out and out[-1] is None:
+            out.pop()
+        return out
+    if ret == 'ListNode':
+        out = []
+        while v is not None and len(out) < 100000:
+            out.append(v.val)
+            v = v.next
+        return out
+    return v
+
+
+def py_node_checks(module, official, types, ret, rows, cycle):
+    """Mirror of JS_NODES for Python; returns the same result shape."""
+    entry = (lambda *a: getattr(module.Solution(), official)(*a)) if hasattr(module, 'Solution') else getattr(module, official)
+    res = []
+    for row in rows:
+        args = native_args(row['args'], types)
+        before = graph(args)
+        out = module.solve(*args)
+        aliased = sum(1 for k in graph([out]) if k in before) if ret in NODE_TYPES else 0
+        nargs = native_args(row['args'], types)
+        nbefore = graph(nargs)
+        nout = entry(*nargs)
+        res.append({'solve': node_value(out, ret), 'intact': intact(before), 'aliased': aliased,
+                    'native': node_value(nout, ret), 'nativeIntact': intact(nbefore)})
+    verdict = None
+    if cycle:
+        k = next(i for i, t in enumerate(types) if t in NODE_TYPES)
+        args = native_args(rows[0]['args'], types)
+        if types[k] == 'TreeNode':
+            a = CheckerTreeNode(1, CheckerTreeNode(2))
+            a.left.left = a
+        else:
+            a = CheckerListNode(1, CheckerListNode(2))
+            a.next.next = a
+        args[k] = a
+
+        def stalled(signum, frame):
+            raise TimeoutError('cycle probe exceeded 5 s')
+
+        previous = signal.signal(signal.SIGALRM, stalled)
+        signal.alarm(5)
+        try:
+            module.solve(*args)
+            verdict = 'accepted'
+        except (ValueError, TypeError):
+            verdict = 'rejected'
+        except TimeoutError:
+            verdict = 'timeout'
+        finally:
+            signal.alarm(0)
+            signal.signal(signal.SIGALRM, previous)
+    return {'res': res, 'cycle': verdict}
 
 
 def check_effects(report, base, contracts, cases):
@@ -240,6 +333,9 @@ def check_effects(report, base, contracts, cases):
             if in_place is not None:
                 report.expect(bool(native and native.get('mutates_inputs') and native.get('in_place_arg') == in_place),
                               where, 'in_place_arg is declared as native_effects.mutates_inputs')
+            if any(q['type'] in NODE_TYPES for q in official['params']):
+                report.expect(bool(sem.get('solve_effects')) and native is not None and 'mutates_inputs' in native,
+                              where, 'native node problem declares solve_effects and native_effects.mutates_inputs')
             if not (native or sem.get('solve_effects') or sem.get('string_unit')):
                 continue
             if sem.get('solve_effects'):
@@ -247,17 +343,26 @@ def check_effects(report, base, contracts, cases):
                               where, 'solve_effects forbids input mutation and output aliasing')
             rows = cases.build_cases(pid, include_maximum=True)
             path = base / language / f'{pid}.{ext}'
-            tree = official['params'] and official['params'][0]['type'] == 'TreeNode'
-            if tree:
+            types = [q['type'] for q in official['params']]
+            if any(t in NODE_TYPES for t in types):
+                ret = official.get('return', {}).get('type')
+                cycle = 'input_deep_copy' in sem.get('charged_costs', {}).get('solve', {})
+                mutates = bool(native and native.get('mutates_inputs'))
                 if language == 'python':
-                    py_tree_checks(report, where, load_module(f'abi_tree_{pid}', path), official['name'], rows)
+                    got = py_node_checks(load_module(f'abi_nodes_{base.name}_{pid}'.replace('-', '_'), path),
+                                         official['name'], types, ret, rows, cycle)
                 else:
-                    got = node(JS_TREE, {'path': str(path), 'official': official['name'], 'cases': rows})
-                    for i, (row, g) in enumerate(zip(rows, got['res'])):
-                        report.expect(g['intact'], f'{where}:case{i}', 'solve leaves native TreeNode input intact')
-                        report.expect(g['aliased'] == 0, f'{where}:case{i}', f"solve output shares no input node; shared={g['aliased']}")
-                        report.expect(g['solve'] == row['expected'], f'{where}:case{i}', 'solve result on native input')
-                        report.expect(g['native'] == row['expected'], f'{where}:case{i}', 'native entry result')
+                    got = node(JS_NODES, {'path': str(path), 'official': official['name'], 'types': types, 'ret': ret,
+                                          'cases': rows, 'cycle': cycle})
+                for i, (row, g) in enumerate(zip(rows, got['res'])):
+                    w = f'{where}:case{i}'
+                    report.expect(g['intact'], w, 'solve leaves native node inputs intact (inputMutation forbidden)')
+                    report.expect(g['aliased'] == 0, w, f"solve output shares no input node (outputAliasing forbidden); shared={g['aliased']}")
+                    report.expect(g['solve'] == row['expected'], w, 'solve result on native node input')
+                    report.expect(g['native'] == row['expected'], w, 'native entry result on native node input')
+                    if not mutates:
+                        report.expect(g['nativeIntact'], w, 'native entry without mutates_inputs leaves node inputs intact')
+                if cycle:
                     report.expect(got['cycle'] == 'rejected', f'{where}:cycle', 'solve rejects a cyclic node graph')
                 continue
             if language == 'python':

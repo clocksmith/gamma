@@ -5,6 +5,11 @@
   "effects": "arguments unchanged",
   "entrypoint": "solve",
   "language": "python",
+  "native_effects": {
+    "entry": "Solution.findLeaves / findLeaves",
+    "mutates_inputs": false,
+    "node_inputs": "read only; foreign TreeNode objects with val/left/right are accepted"
+  },
   "official_interface": {
     "name": "findLeaves",
     "params": [
@@ -29,6 +34,10 @@
     "status": "unknown"
   },
   "schema": "gamma.authored-scalar-semantics.v1",
+  "solve_effects": {
+    "inputMutation": "forbidden",
+    "outputAliasing": "forbidden"
+  },
   "source_reasoning": {
     "candidate_design": "Post-order DFS bucketing nodes by height from leaves.",
     "complexity_target": "O(n) time, O(n) space",

@@ -5,6 +5,11 @@
   "effects": "arguments unchanged",
   "entrypoint": "solve",
   "language": "python",
+  "native_effects": {
+    "entry": "Solution.findDistance / findDistance",
+    "mutates_inputs": false,
+    "node_inputs": "read only; foreign TreeNode objects with val/left/right are accepted"
+  },
   "official_interface": {
     "name": "findDistance",
     "params": [
@@ -45,6 +50,10 @@
     "status": "unknown"
   },
   "schema": "gamma.authored-scalar-semantics.v1",
+  "solve_effects": {
+    "inputMutation": "forbidden",
+    "outputAliasing": "forbidden"
+  },
   "source_reasoning": {
     "candidate_design": "Find lowest common ancestor of p and q and sum depths from LCA.",
     "complexity_target": "O(n) time, O(h) space",

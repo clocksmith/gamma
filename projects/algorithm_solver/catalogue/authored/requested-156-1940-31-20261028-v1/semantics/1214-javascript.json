@@ -5,6 +5,11 @@
   "effects": "arguments unchanged",
   "entrypoint": "solve",
   "language": "javascript",
+  "native_effects": {
+    "entry": "twoSumBSTs",
+    "mutates_inputs": false,
+    "node_inputs": "read only; foreign TreeNode objects with val/left/right are accepted"
+  },
   "official_interface": {
     "name": "twoSumBSTs",
     "params": [
@@ -45,6 +50,10 @@
     "status": "unknown"
   },
   "schema": "gamma.authored-scalar-semantics.v1",
+  "solve_effects": {
+    "inputMutation": "forbidden",
+    "outputAliasing": "forbidden"
+  },
   "source_reasoning": {
     "candidate_design": "Collect first tree values into hash set and probe target - y from second tree.",
     "complexity_target": "O(n1 + n2) time, O(n1 + n2) space",
