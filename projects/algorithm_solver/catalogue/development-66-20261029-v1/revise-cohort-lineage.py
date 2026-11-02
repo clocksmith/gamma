@@ -129,6 +129,15 @@ REVISIONS.append(('2026-11-02', {
     },
 }))
 
+MULTI = ('comparator for the official any-order / any-valid-answer acceptance (comparators.py)',
+         'exact comparison against the reference answer rejected other valid answers')
+REVISIONS.append(('2026-11-02', {
+    'requested-243-370-35-20261028-v1': {f'semantics/{pid}-{lang}.json': MULTI for pid in (247, 249, 254, 267, 269, 320, 358, 366)
+                                         for lang in ('python', 'javascript')},
+    'requested-156-1940-31-20261028-v1': {f'semantics/{pid}-{lang}.json': MULTI for pid in (280, 742)
+                                          for lang in ('python', 'javascript')},
+}))
+
 
 def latest_reasons(cohort):
     merged = {}

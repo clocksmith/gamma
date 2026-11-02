@@ -1,6 +1,11 @@
 {
   "candidate_design": "Extract adjacent word precedence constraints and run lexicographical Kahn topological sort.",
-  "comparison": "exact typed JSON result",
+  "comparator": {
+    "basis": "The official problem accepts any letter order consistent with the words; \"\" only when no order exists.",
+    "kind": "valid_alien_order",
+    "reference_answer": "one valid answer; comparators.py validates candidates against the case arguments"
+  },
+  "comparison": "validity check against the case arguments (valid_alien_order)",
   "complexity_target": "O(C + V log V) time, O(V + E) space",
   "effects": "arguments unchanged",
   "entrypoint": "solve",

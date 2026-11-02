@@ -5,7 +5,9 @@ For each problem id, builds cases with cases.build_cases(pid, include_maximum=Tr
     problem the native class driven directly through the operation trace
   * node --jitless: javascript/<pid>.js callable export `solve(...args)`, plus the official named export
     (native class driven through the trace for a class problem)
-Each call gets a fresh deep copy of the arguments; the copy must be unchanged afterwards. Results are compared
+Each call gets a fresh deep copy of the arguments; the copy must be unchanged afterwards.
+Results are accepted by the semantics `comparator` when one is declared (tolerance, any order, or a validity
+check against the case arguments; see ../../development-66-20261029-v1/comparators.py); otherwise they are compared
 with the expected value from the cohort reference under JSON typing (Python: bool, int, float, str, None, list
 and dict kinds must match; JavaScript: JSON numbers compare by value). Per-call CPU time is measured with
 time.process_time (Python) and process.cpuUsage user+system (JavaScript). Writes JSON to stdout.
@@ -65,6 +67,17 @@ def exact(got, want, json_numbers=False):
     if kg == 'dict':
         return set(got) == set(want) and all(exact(got[k], want[k], json_numbers) for k in got)
     return got == want
+
+
+# Declared official comparators (tolerance, any order, any valid answer) are owned by the
+# development harness; without a semantics declaration the exact comparison above applies.
+COMPARATORS = load('development_comparators', HERE.parents[1] / 'development-66-20261029-v1' / 'comparators.py')
+
+
+def accept(pid, language, got, row, json_numbers=False):
+    semantics = json.loads((HERE / 'semantics' / f'{pid}-{language}.json').read_text())
+    return COMPARATORS.compare(got, row['expected'], semantics.get('comparator'), row['args'], language,
+                               lambda a, b: exact(a, b, json_numbers))
 
 
 def sha(path):
@@ -147,7 +160,7 @@ def run_python(pid, rows, official):
             except Exception as exc:  # recorded as failure
                 value, error = None, repr(exc)
             cpu = time.process_time() - t0
-            entry[label] = {'ok': error is None and exact(value, row['expected']), 'unchanged': args == row['args'],
+            entry[label] = {'ok': error is None and accept(pid, 'python', value, row), 'unchanged': args == row['args'],
                             'cpu': cpu, 'error': error, 'value': value}
         results.append(entry)
     return results
@@ -177,7 +190,7 @@ def run_javascript(pid, rows, official):
             if g.get('missing'):
                 entry[label] = {'missing': True}
                 continue
-            entry[label] = {'ok': g['error'] is None and exact(g['value'], row['expected'], json_numbers=True),
+            entry[label] = {'ok': g['error'] is None and accept(pid, 'javascript', g['value'], row, json_numbers=True),
                             'unchanged': g['unchanged'], 'cpu': g['cpu'], 'error': g['error'], 'value': g['value']}
         results.append(entry)
     return results

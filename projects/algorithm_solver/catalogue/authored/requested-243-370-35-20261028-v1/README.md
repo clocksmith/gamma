@@ -20,8 +20,7 @@ qualification; qualification status stays unknown.
 The Python `solve` bodies of 22 problems repeat the reference statement for statement, so agreement there is
 self-agreement. `crosscheck_bruteforce.py` therefore compares the references with independent brute-force
 restatements on 5140 seeded random small inputs; there were no mismatches. No candidate, reference, case or
-expected value changed. Known gaps: 302 scans in O(m*n) although the public problem asks for less; several
-multi-answer problems are compared exactly against the reference's order; the generated maximum rows are far below
+expected value changed. Known gaps: 302 scans in O(m*n) although the public problem asks for less; the generated maximum rows are far below
 the public limits.
 
 ## 340 string unit (appended 2026-11-02)
@@ -50,7 +49,9 @@ tie-break by code point; `cases.py` adds non-BMP rows for 267, 269, 320 and 358,
 code-point order differs from UTF-16 code-unit order. Expected values come from the unchanged references.
 
 270's semantics pin the official tie rule (smaller value on equal distance); 272's pin an `unordered_multiset`
-comparator, since the official problem accepts any order and guarantees a unique k-set.
+comparator, since the official problem accepts any order and guarantees a unique k-set. 247, 249, 254, 267, 320 and
+366 declare any-order comparators, and 269 and 358 declare validity comparators (any consistent letter order, any
+rearrangement with equal characters at least k apart) from `../../development-66-20261029-v1/comparators.py`.
 
 
 ```sh

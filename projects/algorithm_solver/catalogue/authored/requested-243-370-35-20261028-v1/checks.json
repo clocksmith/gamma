@@ -851,6 +851,12 @@
       "change": "270 semantics pin the official tie rule (smaller value on equal distance; the 3.5 case exercises it). 272 semantics pin an unordered_multiset comparator (official any-order acceptance) and record that ties at the window boundary are outside the official unique-set domain. Sources unchanged.",
       "evidence_after": "check_native_abi.py applies the comparator on native node inputs.",
       "qualification": "unknown"
+    },
+    {
+      "at": "2026-11-02",
+      "change": "Semantics for 247, 249, 254, 267, 269, 320, 358 and 366 declare the official acceptance comparator (any order, any valid answer); run_candidates.py, development-66 run.py and check_native_abi.py judge results with development-66-20261029-v1/comparators.py, whose validators recompute validity from the case arguments.",
+      "evidence_after": "run_candidates.py all rows pass; test_comparators.py accepts alternate valid answers and rejects invalid ones; check_native_abi.py requires every comparator to accept the reference value.",
+      "qualification": "unknown"
     }
   ],
   "python_candidate_ast_parses": 35,

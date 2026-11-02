@@ -7,7 +7,9 @@ For each problem id, builds cases with cases.build_cases(pid, include_maximum=Tr
     (native class driven through the trace for a class problem)
 Each call gets a fresh deep copy of the arguments; the copy must be unchanged afterwards, except for an official
 entry whose contract declares `official_interface.in_place_arg` k (native in-place ABI): there args_after[k] must
-equal the expected value, every other argument must be unchanged, and the return value is not judged. Results are compared
+equal the expected value, every other argument must be unchanged, and the return value is not judged.
+Results are accepted by the semantics `comparator` when one is declared (tolerance, any order, or a validity
+check against the case arguments; see ../../development-66-20261029-v1/comparators.py); otherwise they are compared
 with the expected value from the cohort reference under JSON typing (Python: bool, int, float, str, None, list
 and dict kinds must match; JavaScript: JSON numbers compare by value). Per-call CPU time is measured with
 time.process_time (Python) and process.cpuUsage user+system (JavaScript). Writes JSON to stdout.
@@ -69,6 +71,17 @@ def exact(got, want, json_numbers=False):
     return got == want
 
 
+# Declared official comparators (tolerance, any order, any valid answer) are owned by the
+# development harness; without a semantics declaration the exact comparison above applies.
+COMPARATORS = load('development_comparators', HERE.parents[1] / 'development-66-20261029-v1' / 'comparators.py')
+
+
+def accept(pid, language, got, row, json_numbers=False):
+    semantics = json.loads((HERE / 'semantics' / f'{pid}-{language}.json').read_text())
+    return COMPARATORS.compare(got, row['expected'], semantics.get('comparator'), row['args'], language,
+                               lambda a, b: exact(a, b, json_numbers))
+
+
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -127,22 +140,23 @@ def native(cls, ops, arg_lists):
     return [None] + [getattr(receiver, op)(*a) for op, a in zip(ops[1:], arg_lists[1:])]
 
 
-def judge(label, value, error, args_before, args_after, expected, in_place_arg, json_numbers=False):
+def judge(label, value, error, args_before, args_after, row, in_place_arg, pid, language, json_numbers=False):
     """One entry verdict. `ok` is the full pass condition; `unchanged` is reported as observed.
 
     solve (and any official entry without in_place_arg): no exception, args_after == args_before and
-    result == expected. An official entry declaring in_place_arg k (native in-place ABI): no exception,
-    args_after[k] == expected and every other argument unchanged; its return value is not judged.
+    the result is accepted against the expected value (semantics comparator, else exact). An official entry
+    declaring in_place_arg k (native in-place ABI): no exception, args_after[k] accepted against the expected
+    value and every other argument unchanged; its return value is not judged.
     """
     unchanged = exact(args_after, args_before, json_numbers)
     if label == 'official' and in_place_arg is not None:
         others = [i for i in range(len(args_before)) if i != in_place_arg]
         ok = (error is None and len(args_after) == len(args_before)
-              and exact(args_after[in_place_arg], expected, json_numbers)
+              and accept(pid, language, args_after[in_place_arg], row, json_numbers)
               and all(exact(args_after[i], args_before[i], json_numbers) for i in others))
         return {'ok': ok, 'effects': 'in_place_arg', 'in_place_arg': in_place_arg, 'unchanged': unchanged,
                 'mutated_arg': args_after[in_place_arg] if len(args_after) > in_place_arg else None}
-    ok = error is None and unchanged and exact(value, expected, json_numbers)
+    ok = error is None and unchanged and accept(pid, language, value, row, json_numbers)
     return {'ok': ok, 'effects': 'arguments_unchanged', 'unchanged': unchanged}
 
 
@@ -167,7 +181,7 @@ def run_python(pid, rows, official, in_place_arg=None):
             except Exception as exc:  # recorded as failure
                 value, error = None, repr(exc)
             cpu = time.process_time() - t0
-            entry[label] = {**judge(label, value, error, row['args'], args, row['expected'], in_place_arg),
+            entry[label] = {**judge(label, value, error, row['args'], args, row, in_place_arg, pid, 'python'),
                             'cpu': cpu, 'error': error, 'value': value}
         results.append(entry)
     return results
@@ -197,8 +211,8 @@ def run_javascript(pid, rows, official, in_place_arg=None):
             if g.get('missing'):
                 entry[label] = {'missing': True}
                 continue
-            entry[label] = {**judge(label, g['value'], g['error'], row['args'], g['after'], row['expected'],
-                                    in_place_arg, json_numbers=True),
+            entry[label] = {**judge(label, g['value'], g['error'], row['args'], g['after'], row,
+                                    in_place_arg, pid, 'javascript', json_numbers=True),
                             'cpu': g['cpu'], 'error': g['error'], 'value': g['value']}
         results.append(entry)
     return results

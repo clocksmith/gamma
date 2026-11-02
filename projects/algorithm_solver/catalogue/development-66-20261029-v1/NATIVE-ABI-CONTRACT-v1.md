@@ -57,6 +57,7 @@ admits, promotes or qualifies a source.
 | 4 | 340 | Semantics pin `string_unit: unicode_codepoint`; JavaScript iterates `Array.from(s)`. Canary rows use oracle-computed expected values. The proposed `("\u{1F600}a", 1)` row expects **1**, not 2, and does not tell code points from UTF-16 units. The added rows `("\u{1F600}\u{1F600}a", 1)` and `("a\u{1F600}b\u{1F600}", 2)` expect 2 and 3, where UTF-16 units give 1 and 2. |
 | 4b | String units | Every problem with string/character parameters (21) declares `string_unit`: `unicode_codepoint` (159, 161, 267, 269, 320, 340, 358, 758, 1933) with non-BMP canary rows, `ascii` (246, 248, 249, 294, 302, 361, 751, 772, 903) with ASCII-only rows checked, or `opaque` (243, 245, 737). JavaScript 159, 161, 267, 320, 358 and 1933 previously split surrogate pairs (358 and 267 also sorted or tie-broke by UTF-16 unit) and failed their canaries; they now use code points. 758 and 269 canaries are unit-agnostic for well-formed strings and are kept as pins, not discriminators. |
 | 4c | Float and tie contracts | 1924's reference and Python candidate returned integer centre coordinates for a single point; both now return floats (dated `oracles.py` amendment, duplicate-point row added). 774, 1230 and 1924 pin the official absolute tolerance as `float_abs_tolerance` (Python results must be float); every double-valued result must declare one. 270 pins the official smaller-value tie rule; 272 pins `unordered_multiset` with ties outside the official unique-set domain. |
+| 4d | Multi-answer acceptance | [`comparators.py`](comparators.py) implements the official acceptance rules: any order (247, 267, 320; nested for 249, 254; within rounds for 366) and validity checks recomputed from the case arguments (280 wiggle, 742 nearest leaf, 269 alien order, 358 k-distance rearrangement). `run_candidates.py`, `run.py` and the checker use it; every declared comparator must accept the reference value, and [`test_comparators.py`](test_comparators.py) checks that alternate valid answers pass and invalid ones fail. |
 | 5 | 903 | `manifest.json` `source_inventory` and `authoring-catalog.json` now carry the corrected hashes (`5bbc2828…` Python, `88ab1b44…` JavaScript). The pre-fix hashes, prior catalog variant IDs, freeze amendments and history blobs are recorded under explicit `supersedes` entries. Historical blobs stay in `study-history/blobs/`. |
 
 [`revise-cohort-lineage.py`](revise-cohort-lineage.py) performed the rebinding
@@ -68,8 +69,6 @@ verbatim. Revised IDs follow the rule stated in each catalog's
 
 ## Remaining boundaries
 
-- Multi-answer problems other than 272 (for example 280, 742, 269, 358, 247, 254, 320) are still compared
-  exactly against the reference's chosen answer; no any-valid-answer comparators exist for them yet.
 - Native effects are declared for 156, 280, 286, 340 and the 11 node problems; the
   remaining cohort problems keep their existing wrapper semantics. Export shape is checked for all 66.
 - Official-domain maxima, independent qualification and serving admission remain

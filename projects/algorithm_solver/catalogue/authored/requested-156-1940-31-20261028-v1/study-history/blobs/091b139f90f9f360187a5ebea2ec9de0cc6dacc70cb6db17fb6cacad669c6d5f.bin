@@ -1,0 +1,57 @@
+{
+  "candidate_design": "Single pass swapping adjacent elements when parity order is violated.",
+  "charged_costs": {
+    "native": {
+      "result_writeback": "nums[:] = solve(nums): O(n) time, O(n) auxiliary space for the intermediate solve result"
+    },
+    "solve": {
+      "input_copy": "O(n) time, O(n) space"
+    }
+  },
+  "comparison": "exact typed JSON result",
+  "complexity_target": "O(n) time, O(n) space",
+  "effects": "solve: arguments unchanged, returns a new list; Solution.wiggleSort / wiggleSort: rewrites nums (argument 0) in place and returns nothing",
+  "entrypoint": "solve",
+  "language": "python",
+  "native_effects": {
+    "entry": "Solution.wiggleSort / wiggleSort",
+    "in_place_arg": 0,
+    "mutates_inputs": true,
+    "returns": "nothing (None/undefined); the judged output is nums after the call"
+  },
+  "official_interface": {
+    "in_place_arg": 0,
+    "name": "wiggleSort",
+    "params": [
+      {
+        "name": "nums",
+        "type": "integer[]"
+      }
+    ],
+    "return": {
+      "type": "integer[]"
+    }
+  },
+  "parameters": [
+    {
+      "name": "nums",
+      "type": "list[int]"
+    }
+  ],
+  "problem_id": 280,
+  "qualification": {
+    "reason": "No candidate execution; source-free references and static syntax only",
+    "status": "unknown"
+  },
+  "schema": "gamma.authored-scalar-semantics.v1",
+  "solve_effects": {
+    "inputMutation": "forbidden",
+    "outputAliasing": "forbidden"
+  },
+  "source_reasoning": {
+    "candidate_design": "Single pass swapping adjacent elements when parity order is violated.",
+    "complexity_target": "O(n) time, O(n) space",
+    "reference": "Single pass adjacent swap"
+  },
+  "source_sha256": "1499b102160a360e86b6e32992d9ac95955f5e840c3dcd1bf7c473c3e99a5315"
+}

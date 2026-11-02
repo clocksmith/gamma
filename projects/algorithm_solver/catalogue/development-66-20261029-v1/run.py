@@ -36,13 +36,20 @@ def equal(actual, expected):
     return type(actual) is type(expected) and actual==expected
 
 
+COMPARATORS_SPEC=importlib.util.spec_from_file_location('development_comparators',HERE/'comparators.py');COMPARATORS=importlib.util.module_from_spec(COMPARATORS_SPEC);COMPARATORS_SPEC.loader.exec_module(COMPARATORS)
+def accepted(base,pid,language,actual,case):
+    # Declared official comparator (tolerance, any order, any valid answer); exact typed JSON otherwise.
+    comparator=load(base/'semantics'/f'{pid}-{language}.json').get('comparator')
+    return COMPARATORS.compare(actual,case['expected'],comparator,case['args'],language,equal)
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--output',required=True);parser.add_argument('--only',type=int,nargs='+');args=parser.parse_args()
     declared={int(row['id']) for cohort in COHORTS for row in load(ROOT/'projects/algorithm_solver/catalogue/authored'/cohort/'contracts.json')['problems']}
     if args.only is not None and set(args.only)-declared:raise ValueError('Unknown requested development IDs: '+str(sorted(set(args.only)-declared)))
     out=Path(args.output).resolve();out.mkdir(parents=True,exist_ok=False)
     gate=load(ROOT/GATE);allowed={int(row['problem_id']) for row in gate['rows'] if row['source_access']=='authorized-prospective-source-and-statement-acquisition'}
-    policy={'schema':'gamma.development-comparison-policy.v1','startedAt':stamp(),'comparison':'Exact typed JSON under the existing cohort contract; nonunique/float/native discrepancies are failures to investigate, not silently accepted.','candidateEntrypoint':'solve JSON wrapper; native ABI is a separate check','expectedResults':'Retained in controller only, never passed to candidates','budget':{'perCallSeconds':1,'rssBytes':1024**3,'processTimeoutSeconds':3,'nodeHeapMiB':512,'nodeJitless':True},'qualification':'unknown','gateMetadataSha256':digest((ROOT/GATE).read_bytes()),'runtimes':{'python':platform.python_version(),'node':subprocess.check_output(['node','--version'],text=True).strip()},'tools':{p.name:digest(p.read_bytes()) for p in (HERE/'run.py',HERE/'run-case.py',HERE/'run-case.cjs')}}
+    policy={'schema':'gamma.development-comparison-policy.v1','startedAt':stamp(),'comparison':'Declared semantics comparator (comparators.py: official tolerance, any order or validity against the case arguments); exact typed JSON otherwise. Undeclared discrepancies are failures to investigate, not silently accepted.','candidateEntrypoint':'solve JSON wrapper; native ABI is a separate check','expectedResults':'Retained in controller only, never passed to candidates','budget':{'perCallSeconds':1,'rssBytes':1024**3,'processTimeoutSeconds':3,'nodeHeapMiB':512,'nodeJitless':True},'qualification':'unknown','gateMetadataSha256':digest((ROOT/GATE).read_bytes()),'runtimes':{'python':platform.python_version(),'node':subprocess.check_output(['node','--version'],text=True).strip()},'tools':{p.name:digest(p.read_bytes()) for p in (HERE/'run.py',HERE/'run-case.py',HERE/'run-case.cjs',HERE/'comparators.py')}}
     (out/'policy.json').write_text(json.dumps(policy,indent=2)+'\n')
     report={'schema':'gamma.author-development-execution.v1','startedAt':policy['startedAt'],'policySha256':digest((out/'policy.json').read_bytes()),'qualification':'unknown','independentQualification':0,'admissions':0,'results':[],'failures':[],'inputs':[]}
     with tempfile.TemporaryDirectory(prefix='gamma-dev66-') as temporary:
@@ -72,7 +79,7 @@ def main():
                                 if response['sourceSha256']!=source_hash:raise RuntimeError('Executed source hash mismatch')
                                 if response['exception']:failure='exception'
                                 elif not equal(response['argumentsAfter'],case['args']):failure='wrapper-input-mutation'
-                                elif not equal(actual,case['expected']):failure='result-mismatch'
+                                elif not accepted(base,pid,language,actual,case):failure='result-mismatch'
                                 elif response['elapsedSeconds']>=1:failure='call-time-budget'
                                 elif response['rssBytes']>=1024**3:failure='memory-budget'
                             except Exception as error:

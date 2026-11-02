@@ -736,7 +736,7 @@
   "observations": [
     "280 and 286: the official entries (wiggleSort / Solution.wiggleSort since 2026-11-02, wallsAndGates / Solution.wallsAndGates since a later 2026-11-02 revision) rewrite their first argument in place (official_interface.in_place_arg 0) and are judged on that argument after the call; solve still returns a new value with its arguments unchanged.",
     "1924: until 2026-11-02 the reference and the Python candidate returned integer centre coordinates for a single distinct point (for example [3, 3, 0.0]) although the contract return type is double[]; both now return floats ([3.0, 3.0, 0.0]).",
-    "Exact comparison fixes one answer where the public problem accepts several: 280 (any wiggle order), 742 (any nearest leaf), and rounding to 6, 10 and 5 decimals for 774, 1230 and 1924 where the public problem accepts a tolerance.",
+    "Since 2026-11-02 multi-answer and tolerance problems are judged by declared comparators: 280 (any wiggle arrangement), 742 (any nearest leaf), and the official tolerances for 774, 1230 and 1924.",
     "1740: the candidates use a lowest-common-ancestor search while the reference uses BFS on an undirected graph, so that pair is independent; most other pairs are not (see reference_candidate_independence).",
     "MAX_ARGS rows are far below the public input limits, so the CPU samples do not establish behaviour at the limits."
   ],
@@ -777,6 +777,12 @@
       "at": "2026-11-02",
       "change": "1924: ref_1924 and python/1924.py start the single-point circle from float coordinates; cases.py adds a duplicate-point row. 774, 1230 and 1924 semantics pin the official absolute tolerance (1e-6, 1e-5, 1e-5) as a float_abs_tolerance comparator with Python float results.",
       "evidence_after": "test_oracles.py and crosscheck_bruteforce.py pass; run_candidates.py all rows pass; check_native_abi.py applies the comparators.",
+      "qualification": "unknown"
+    },
+    {
+      "at": "2026-11-02",
+      "change": "Semantics for 280 and 742 declare the official acceptance comparator (any order, any valid answer); run_candidates.py, development-66 run.py and check_native_abi.py judge results with development-66-20261029-v1/comparators.py, whose validators recompute validity from the case arguments.",
+      "evidence_after": "run_candidates.py all rows pass; test_comparators.py accepts alternate valid answers and rejects invalid ones; check_native_abi.py requires every comparator to accept the reference value.",
       "qualification": "unknown"
     }
   ],

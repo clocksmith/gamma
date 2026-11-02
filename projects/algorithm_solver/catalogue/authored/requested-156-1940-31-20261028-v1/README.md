@@ -25,8 +25,7 @@ exposed the disagreement, and enumerating permutations confirmed it. `oracles.py
 small inputs across all 31 references, and every candidate passes again.
 
 The Python `solve` bodies of 24 problems repeat the reference statement for statement, so agreement there is
-self-agreement; the brute-force cross-check is the independent evidence. Known gaps: several multi-answer problems are compared exactly against the
-reference order; the generated maximum rows are far
+self-agreement; the brute-force cross-check is the independent evidence. Known gaps: the generated maximum rows are far
 below the public limits.
 
 ## Native-ABI split and lineage reconciliation (appended 2026-11-02)
@@ -62,7 +61,8 @@ domains), and `opaque` for 737 (whole-string equality only).
 
 1924's reference and Python candidate now return float centre coordinates for a single or duplicated point
 (previously `[3, 3, 0.0]`). 774, 1230 and 1924 semantics pin the official absolute tolerance (1e-6, 1e-5, 1e-5) as a
-`float_abs_tolerance` comparator; `run_candidates.py` still requires exact agreement with the rounded reference, which
+`float_abs_tolerance` comparator, and 280 (any wiggle arrangement) and 742 (any nearest leaf) declare validity
+comparators from `../../development-66-20261029-v1/comparators.py`; `run_candidates.py` still requires exact agreement with the rounded reference, which
 is stricter.
 
 
