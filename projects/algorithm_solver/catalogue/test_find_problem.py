@@ -35,6 +35,11 @@ class FindProblemIndexTests(unittest.TestCase):
         lc = self.stats["leetcode"]
         self.assertEqual(lc["total"], 4096)
         self.assertEqual(lc["with_both_py_and_js"], 3574)
+        self.assertGreaterEqual(lc["with_difficulty"], 3380)
+        self.assertGreaterEqual(lc["with_topics"], 3258)
+        self.assertGreaterEqual(lc["with_method"], 1280)
+        self.assertGreaterEqual(lc["with_complexity"], 750)
+        self.assertGreaterEqual(lc["with_design_summary"], 825)
         self.assertEqual(lc["by_status"]["qualified"], 518)
         self.assertEqual(lc["by_status"]["development-executed"], 66)
         self.assertEqual(lc["by_status"]["missing-reserved"], 80)
@@ -44,7 +49,11 @@ class FindProblemIndexTests(unittest.TestCase):
         self.assertEqual(h2h["total"], 1048)
         self.assertEqual(h2h["coding_variants"], 805)
         self.assertEqual(h2h["coding_with_both_py_and_js"], 805)
+        self.assertEqual(h2h["coding_with_method"], 805)
+        self.assertEqual(h2h["coding_with_complexity"], 805)
+        self.assertEqual(h2h["coding_with_design_summary"], 805)
         self.assertEqual(h2h["coding_with_study_record"], 805)
+        self.assertEqual(h2h["coding_with_contract_record"], 805)
 
     def test_canonical_duplicate_resolution_and_study_version(self) -> None:
         # 286 must resolve to authored cohort, never quarantined, and pick latest v7 study record.

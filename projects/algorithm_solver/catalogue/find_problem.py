@@ -154,6 +154,67 @@ def _collect_source_paths() -> tuple[dict[str, list[tuple[str, int, str]]], dict
     return py_by_key, js_by_key
 
 
+def _extract_method_from_interface(oi: object) -> str | None:
+    if not isinstance(oi, dict):
+        return None
+    for k in ("name", "leetcode_method", "javascript_entry", "method"):
+        val = oi.get(k)
+        if isinstance(val, str) and val.strip() and val.strip() != "solve":
+            return val.strip()
+    cls_name = oi.get("classname") or oi.get("class")
+    if isinstance(cls_name, str) and cls_name.strip():
+        if cls_name.strip() != "Solution":
+            return cls_name.strip()
+        methods = oi.get("methods")
+        if isinstance(methods, list) and methods and isinstance(methods[0], dict) and methods[0].get("name"):
+            return str(methods[0]["name"]).strip()
+    meta = oi.get("metadata")
+    if isinstance(meta, dict):
+        res = _extract_method_from_interface(meta)
+        if res:
+            return res
+    act = oi.get("actual_interface")
+    if isinstance(act, dict):
+        exports = act.get("exports")
+        if isinstance(exports, dict):
+            js_exp = exports.get("javascript")
+            if isinstance(js_exp, list) and js_exp and str(js_exp[0]).strip() != "solve":
+                return str(js_exp[0]).strip()
+    ep = oi.get("entrypoint")
+    if isinstance(ep, str) and ep.strip() and ep.strip() != "solve":
+        return ep.strip()
+    return None
+
+
+def _extract_method_from_declaration(decl: str) -> str | None:
+    for fn in re.findall(r"\bdef\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(", decl):
+        if fn not in ("solve", "__init__"):
+            return fn
+    for cls_name in re.findall(r"\bclass\s+([A-Za-z_][A-Za-z0-9_]*)\s*[:(]", decl):
+        if cls_name != "Solution":
+            return cls_name
+    for fn in re.findall(r"\bfunction\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(", decl):
+        if fn != "solve":
+            return fn
+    for fn in re.findall(r"module\.exports\.([A-Za-z_][A-Za-z0-9_]*)\s*\(", decl):
+        if fn != "solve":
+            return fn
+    return None
+
+
+def _infer_cohort_difficulty(repo_rel_path: str | None) -> str | None:
+    if not repo_rel_path:
+        return None
+    low = repo_rel_path.lower()
+    if "/leetcode-easy" in low or "/easy" in low:
+        return "Easy"
+    if "/leetcode-medium" in low or "/medium" in low:
+        return "Medium"
+    if "/leetcode-hard" in low or "/hard" in low:
+        return "Hard"
+    return None
+
+
 def _collect_authored_metadata() -> dict[str, dict[str, object]]:
     """Read JSON metadata files under catalogue/authored/ without opening candidate code."""
     authored = HERE / "authored"
@@ -176,18 +237,10 @@ def _collect_authored_metadata() -> dict[str, dict[str, object]]:
                 m.setdefault("difficulty", str(item["difficulty"]))
             if item.get("method"):
                 m.setdefault("method", str(item["method"]))
-            ext = item.get("external_interface") or {}
-            if isinstance(ext, dict):
-                fn = (
-                    ext.get("leetcode_method")
-                    or (ext.get("metadata") or {}).get("name")
-                    or ext.get("entrypoint")
-                )
-                if fn and fn != "solve":
-                    m.setdefault("method", str(fn))
-            oi = item.get("official_interface") or {}
-            if isinstance(oi, dict) and oi.get("name"):
-                m.setdefault("method", str(oi["name"]))
+            for iface_key in ("official_interface", "official_api", "external_interface"):
+                fn = _extract_method_from_interface(item.get(iface_key))
+                if fn:
+                    m.setdefault("method", fn)
             nc = item.get("numeric_complexity_contract") or {}
             if isinstance(nc, dict):
                 if nc.get("complexity_target"):
@@ -206,35 +259,33 @@ def _collect_authored_metadata() -> dict[str, dict[str, object]]:
     for p in sorted(authored.glob("*/contracts.json")):
         d = json.loads(p.read_text())
         probs = d.get("problems", d) if isinstance(d, dict) else {}
+        rows: list[tuple[object, dict[str, object]]] = []
         if isinstance(probs, dict):
-            for k, v in probs.items():
-                if not isinstance(v, dict):
-                    continue
-                key = _norm_key(k)
-                m = meta[key]
-                oi = v.get("official_interface") or {}
-                if isinstance(oi, dict) and oi.get("name"):
-                    m["method"] = str(oi["name"])
-                if v.get("complexity_target"):
-                    m["complexity"] = str(v["complexity_target"])
-                if v.get("candidate_design"):
-                    m["design"] = str(v["candidate_design"])
+            rows = [(k, v) for k, v in probs.items() if isinstance(v, dict)]
         elif isinstance(probs, list):
-            for v in probs:
-                if not isinstance(v, dict):
-                    continue
-                raw_k = v.get("problem_id") or v.get("id")
-                if not raw_k:
-                    continue
-                key = _norm_key(raw_k)
-                m = meta[key]
-                oi = v.get("official_interface") or {}
-                if isinstance(oi, dict) and oi.get("name"):
-                    m["method"] = str(oi["name"])
-                if v.get("complexity_target"):
-                    m["complexity"] = str(v["complexity_target"])
-                if v.get("candidate_design"):
-                    m["design"] = str(v["candidate_design"])
+            rows = [
+                (v.get("variant_id") or v.get("problem_id") or v.get("id"), v)
+                for v in probs
+                if isinstance(v, dict) and (v.get("variant_id") or v.get("problem_id") or v.get("id"))
+            ]
+        for raw_k, v in rows:
+            key = _norm_key(raw_k)
+            m = meta[key]
+            for iface_key in (
+                "official_interface",
+                "official_api",
+                "inferred_interface",
+                "external_interface",
+                "interface",
+            ):
+                fn = _extract_method_from_interface(v.get(iface_key))
+                if fn:
+                    m["method"] = fn
+                    break
+            if v.get("complexity_target"):
+                m["complexity"] = str(v["complexity_target"])
+            if v.get("candidate_design"):
+                m["design"] = str(v["candidate_design"])
 
     # 3. design.json
     for p in sorted(authored.glob("*/design.json")):
@@ -266,16 +317,26 @@ def _collect_authored_metadata() -> dict[str, dict[str, object]]:
                     if nc.get("candidate_design"):
                         m["design"] = str(nc["candidate_design"])
 
-    # 4. native-bindings.json & source-completion*/manifest.json & delivery.original.json
+    # 4. native-bindings.json, source-interfaces.json, source-completion*/manifest.json, delivery.original.json, batch*/manifest.json
     for p in sorted(authored.glob("*/native-bindings.json")):
         d = json.loads(p.read_text())
         for route in d.get("routes", []):
             if not isinstance(route, dict) or not route.get("id"):
                 continue
             key = _norm_key(route["id"])
-            napi = route.get("native_api") or {}
-            if isinstance(napi, dict) and napi.get("name"):
-                meta[key].setdefault("method", str(napi["name"]))
+            fn = _extract_method_from_interface(route.get("native_api"))
+            if fn:
+                meta[key].setdefault("method", fn)
+
+    for p in sorted(authored.glob("*/source-interfaces.json")):
+        d = json.loads(p.read_text())
+        ifaces = d.get("interfaces") or {}
+        if isinstance(ifaces, dict):
+            for raw_k, v in ifaces.items():
+                key = _norm_key(raw_k)
+                fn = _extract_method_from_interface(v)
+                if fn:
+                    meta[key].setdefault("method", fn)
 
     for p in sorted(authored.glob("source-completion*/manifest.json")):
         d = json.loads(p.read_text())
@@ -286,16 +347,73 @@ def _collect_authored_metadata() -> dict[str, dict[str, object]]:
             if v.get("entrypoint"):
                 meta[key].setdefault("method", str(v["entrypoint"]))
 
-    for p in sorted(authored.glob("*/delivery.original.json")):
+    for p in sorted(authored.glob("request-*/batch*/manifest.json")):
         d = json.loads(p.read_text())
-        for v in d.get("problems", []):
-            if not isinstance(v, dict) or not v.get("problem_id"):
+        entries = d if isinstance(d, list) else (d.get("entries") or d.get("problems") or []) if isinstance(d, dict) else []
+        for row in entries:
+            if not isinstance(row, dict):
                 continue
-            key = _norm_key(v["problem_id"])
-            if v.get("method"):
-                meta[key].setdefault("method", str(v["method"]))
-            if v.get("difficulty"):
-                meta[key].setdefault("difficulty", str(v["difficulty"]))
+            raw_k = row.get("problem_id") or row.get("id")
+            if not raw_k:
+                continue
+            key = _norm_key(raw_k)
+            m = meta[key]
+            if row.get("complexity"):
+                m.setdefault("complexity", str(row["complexity"]))
+            for dk in ("algorithm", "correctness_argument", "notes", "contract"):
+                if isinstance(row.get(dk), str) and row[dk].strip():
+                    m.setdefault("design", row[dk].strip())
+                    break
+
+    # 4b. study-content.json & study-notes.json
+    for p in sorted(authored.glob("*/study-content.json")):
+        d = json.loads(p.read_text())
+        variants = d.get("variants") or d.get("problems") or {}
+        if isinstance(variants, dict):
+            for raw_k, v in variants.items():
+                if not isinstance(v, dict):
+                    continue
+                key = _norm_key(raw_k)
+                m = meta[key]
+                if isinstance(v.get("complexity"), str) and v["complexity"].strip():
+                    m.setdefault("complexity", v["complexity"].strip())
+                elif isinstance(v.get("complexity"), dict):
+                    c_dict = v["complexity"]
+                    t_v = c_dict.get("time") or c_dict.get("target")
+                    s_v = c_dict.get("space") or c_dict.get("auxiliary_space")
+                    if t_v:
+                        m.setdefault("complexity", f"{t_v} time" + (f", {s_v} space" if s_v else ""))
+                for dk in ("approach", "candidate_design", "summary", "variantLabel"):
+                    val = v.get(dk)
+                    if isinstance(val, str) and val.strip():
+                        m.setdefault("design", val.strip())
+                        break
+                    if isinstance(val, dict) and isinstance(val.get("title"), str) and val["title"].strip():
+                        m.setdefault("design", val["title"].strip())
+                        break
+                ifaces = v.get("interfaces")
+                if isinstance(ifaces, list):
+                    for iface in ifaces:
+                        decl = iface.get("declaration") if isinstance(iface, dict) else iface
+                        if isinstance(decl, str):
+                            fn = _extract_method_from_declaration(decl)
+                            if fn:
+                                m.setdefault("method", fn)
+                                break
+
+    for p in sorted(authored.glob("*/study-notes.json")):
+        d = json.loads(p.read_text())
+        probs = d.get("problems") or {}
+        if isinstance(probs, dict):
+            for raw_k, v in probs.items():
+                if not isinstance(v, dict):
+                    continue
+                key = _norm_key(raw_k)
+                m = meta[key]
+                if v.get("complexity_target"):
+                    m.setdefault("complexity", str(v["complexity_target"]))
+                if v.get("candidate_design"):
+                    m.setdefault("design", str(v["candidate_design"]))
 
     # 5. semantics/*.json (per-language or per-problem metadata)
     for p in sorted(authored.glob("*/semantics/*.json")):
@@ -321,36 +439,36 @@ def _collect_authored_metadata() -> dict[str, dict[str, object]]:
             m["semantics_js_path"] = repo_rel
         else:
             m.setdefault("semantics_shared_path", repo_rel)
-        oi = d.get("official_interface") or {}
-        ext = d.get("external_interface") or {}
-        if isinstance(oi, dict) and oi.get("name"):
-            m["method"] = str(oi["name"])
-        elif isinstance(ext, dict):
-            fn = (
-                ext.get("leetcode_method")
-                or (ext.get("metadata") or {}).get("name")
-                or ext.get("entrypoint")
-            )
-            if fn and fn != "solve":
-                m.setdefault("method", str(fn))
-        elif d.get("entrypoint") and d.get("entrypoint") != "solve":
-            m.setdefault("method", str(d["entrypoint"]))
+        p_contract = d.get("problem_contract") if isinstance(d.get("problem_contract"), dict) else {}
+        for iface_obj in (
+            d.get("official_interface"),
+            d.get("official_api"),
+            d.get("inferred_interface"),
+            d.get("external_interface"),
+            d.get("interface"),
+            p_contract.get("external_interface"),
+            d,
+        ):
+            fn = _extract_method_from_interface(iface_obj)
+            if fn:
+                m["method"] = fn
+                break
         if d.get("complexity_target"):
             m["complexity"] = str(d["complexity_target"])
         if d.get("candidate_design"):
             m["design"] = str(d["candidate_design"])
-        nc = d.get("numeric_complexity_contract") or {}
-        if isinstance(nc, dict):
-            if nc.get("complexity_target"):
-                m.setdefault("complexity", str(nc["complexity_target"]))
-            elif nc.get("time"):
-                t_val = nc["time"]
-                sp = nc.get("auxiliary_memory") or nc.get("auxiliary_space") or nc.get("space")
-                m.setdefault("complexity", f"{t_val} time" + (f", {sp} space" if sp else ""))
-            if nc.get("candidate_design"):
-                m.setdefault("design", str(nc["candidate_design"]))
+        for nc_obj in (d.get("numeric_complexity_contract"), p_contract.get("numeric_complexity_contract")):
+            if isinstance(nc_obj, dict):
+                if nc_obj.get("complexity_target"):
+                    m.setdefault("complexity", str(nc_obj["complexity_target"]))
+                elif nc_obj.get("time"):
+                    t_val = nc_obj["time"]
+                    sp = nc_obj.get("auxiliary_memory") or nc_obj.get("auxiliary_space") or nc_obj.get("space")
+                    m.setdefault("complexity", f"{t_val} time" + (f", {sp} space" if sp else ""))
+                if nc_obj.get("candidate_design"):
+                    m.setdefault("design", str(nc_obj["candidate_design"]))
 
-    # 6. study-records/*.json (resolve highest version per record ID)
+    # 6. study-records/*.json (resolve highest version per record ID across approach, contract, artifact)
     latest_study: dict[tuple[str, str], tuple[int, str, dict[str, object]]] = {}
     for p in sorted(authored.glob("*/study-records/*.json")):
         d = json.loads(p.read_text())
@@ -364,24 +482,115 @@ def _collect_authored_metadata() -> dict[str, dict[str, object]]:
         if k not in latest_study or ver > latest_study[k][0]:
             latest_study[k] = (ver, repo_rel, d)
 
-    for (kind, rid), (ver, repo_rel, d) in sorted(latest_study.items()):
-        if kind != "approach":
-            continue
+    def _study_record_key(rid: str, d: dict[str, object]) -> str:
+        vid = d.get("variantId")
+        if isinstance(vid, str) and vid.strip():
+            return _norm_key(vid.strip())
+        if isinstance(vid, dict) and vid.get("status") == "present" and vid.get("value"):
+            return _norm_key(vid["value"])
         parts = rid.split(":")
         if len(parts) >= 4 and parts[1] == "hack2hire" and re.fullmatch(r"[0-9a-f]{24}", parts[3]):
-            key = f"hack2hire:{parts[3]}"
-        else:
-            key = _norm_key(d.get("problemId", ""))
+            return f"hack2hire:{parts[3]}"
+        return _norm_key(d.get("problemId", ""))
+
+    for (kind, rid), (ver, repo_rel, d) in sorted(latest_study.items()):
+        key = _study_record_key(rid, d)
         if not key:
             continue
         m = meta[key]
-        m["study_path"] = repo_rel
-        m["study_version"] = ver
-        title_field = d.get("title")
-        if isinstance(title_field, dict) and title_field.get("status") == "present" and title_field.get("value"):
-            m.setdefault("design", str(title_field["value"]))
+        if kind == "approach":
+            m["study_path"] = repo_rel
+            m["study_version"] = ver
+            title_field = d.get("title")
+            if isinstance(title_field, dict) and title_field.get("status") == "present" and title_field.get("value"):
+                m.setdefault("design", str(title_field["value"]))
+            expl_field = d.get("explanation")
+            if isinstance(expl_field, dict) and expl_field.get("status") == "present" and expl_field.get("value"):
+                m_comp = re.search(r"Complexity target:\s*([^\n.]+(?:\.[^\n.]*)?)", str(expl_field["value"]))
+                if m_comp:
+                    m.setdefault("complexity", m_comp.group(1).strip().rstrip("."))
+        elif kind == "contract":
+            m["contract_path"] = repo_rel
+            ifaces = d.get("interfaces")
+            if isinstance(ifaces, list):
+                for iface in ifaces:
+                    if not isinstance(iface, dict):
+                        continue
+                    nm_obj = iface.get("nativeMetadata")
+                    nm_val = nm_obj.get("value") if isinstance(nm_obj, dict) else None
+                    fn = _extract_method_from_interface(nm_val)
+                    if not fn:
+                        decl_obj = iface.get("declaration")
+                        decl_val = decl_obj.get("value") if isinstance(decl_obj, dict) else decl_obj
+                        fn = (
+                            _extract_method_from_interface(decl_val)
+                            if isinstance(decl_val, dict)
+                            else _extract_method_from_declaration(str(decl_val or ""))
+                        )
+                    if fn:
+                        m.setdefault("method", fn)
+                        break
+        elif kind == "artifact":
+            cc = d.get("complexityClaims")
+            if isinstance(cc, dict) and cc.get("status") == "present":
+                cc_val = cc.get("value")
+                if isinstance(cc_val, list) and cc_val:
+                    m.setdefault("complexity", str(cc_val[0]))
+                elif isinstance(cc_val, str) and cc_val.strip():
+                    m.setdefault("complexity", cc_val.strip())
+            nm = d.get("nativeMetadata")
+            if isinstance(nm, dict) and nm.get("status") == "present" and isinstance(nm.get("value"), dict):
+                nm_val = nm["value"]
+                if nm_val.get("complexity_target"):
+                    m.setdefault("complexity", str(nm_val["complexity_target"]))
+                if nm_val.get("candidate_design"):
+                    m.setdefault("design", str(nm_val["candidate_design"]))
 
     return meta
+
+
+def _collect_corpus_metadata(slug_to_key: dict[str, str]) -> dict[str, dict[str, object]]:
+    """Read metadata-only difficulty, topic tags, and reviewed objectives from findings/recovery."""
+    extra: dict[str, dict[str, object]] = defaultdict(dict)
+
+    inv_path = ALG_ROOT / "findings/library-answer-audit-v2/inventory.jsonl"
+    if inv_path.exists():
+        for line in inv_path.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            key: str | None = None
+            for mem in row.get("members") or []:
+                if isinstance(mem, str) and (mem.startswith("lcd:") or mem.startswith("doocs:")):
+                    num = mem.split(":", 1)[1]
+                    if num.isdigit():
+                        key = f"leetcode:{int(num)}"
+                        break
+            if not key and row.get("family"):
+                key = slug_to_key.get(str(row["family"]))
+            if not key:
+                continue
+            if row.get("difficulty"):
+                extra[key]["difficulty"] = str(row["difficulty"])
+            if row.get("tags"):
+                extra[key]["topics"] = [str(t) for t in row["tags"] if str(t).strip()]
+
+    docs_path = (
+        HERE
+        / "private-recovery-20261026/qualified-sources/owner-artifacts/originals/workspace/shared/gamma-recognition-documents-102-v1-20261025-2146/documents.json"
+    )
+    if docs_path.exists():
+        docs_data = json.loads(docs_path.read_text(encoding="utf-8"))
+        for doc in docs_data.get("documents") or []:
+            if not isinstance(doc, dict) or not doc.get("text_changed"):
+                continue
+            pkey = _norm_key(doc.get("problem_id", ""))
+            txt = str(doc.get("text", ""))
+            m_obj = re.search(r'Objective:\s*"([^"]+)"', txt)
+            if m_obj:
+                extra[pkey].setdefault("design", m_obj.group(1).strip())
+
+    return extra
 
 
 def build_records() -> list[dict[str, object]]:
@@ -440,6 +649,47 @@ def build_records() -> list[dict[str, object]]:
 
     lc_meta_path = REPO_ROOT / "projects/question_bank/hack2hire/leetcode-metadata.json"
     lc_meta = json.loads(lc_meta_path.read_text())
+    slug_to_key = {
+        str(item["slug"]): f"leetcode:{int(item['id'])}"
+        for item in lc_meta
+        if item.get("slug") and item.get("id")
+    }
+    corpus_meta = _collect_corpus_metadata(slug_to_key)
+
+    # Pre-scan Hack2Hire bank to collect related_hack2hire and company overlaps for LeetCode IDs
+    bank_path = REPO_ROOT / "projects/question_bank/hack2hire/bank.json"
+    desc_path = REPO_ROOT / "projects/question_bank/hack2hire/descriptions.json"
+    bank_data = json.loads(bank_path.read_text())
+    desc_by_post: dict[str, dict[str, object]] = {}
+    if desc_path.exists():
+        for r in json.loads(desc_path.read_text()).get("records", []):
+            if r.get("source_post_id"):
+                desc_by_post[str(r["source_post_id"])] = r
+
+    lc_to_h2h: dict[str, list[str]] = defaultdict(list)
+    lc_to_companies: dict[str, list[str]] = defaultdict(list)
+    for group in bank_data.get("records", []):
+        post_id = str(group.get("source_post_id", ""))
+        group_uid = str(group.get("uid", f"hack2hire:{post_id}"))
+        g_companies = [str(c) for c in (group.get("companies") or [])]
+        desc_rec = desc_by_post.get(post_id, {})
+        for cand in (group.get("leetcode_overlap") or {}).get("candidates", []):
+            if isinstance(cand, dict) and cand.get("leetcode_id"):
+                lck = f"leetcode:{cand['leetcode_id']}"
+                if group_uid not in lc_to_h2h[lck]:
+                    lc_to_h2h[lck].append(group_uid)
+                if cand.get("match_type") == "exact_title":
+                    for c in g_companies:
+                        if c not in lc_to_companies[lck]:
+                            lc_to_companies[lck].append(c)
+        for rel in desc_rec.get("source_leetcode_relationships", []) or []:
+            if isinstance(rel, dict) and rel.get("leetcode_id"):
+                lck = f"leetcode:{rel['leetcode_id']}"
+                if group_uid not in lc_to_h2h[lck]:
+                    lc_to_h2h[lck].append(group_uid)
+                for c in g_companies:
+                    if c not in lc_to_companies[lck]:
+                        lc_to_companies[lck].append(c)
 
     records: list[dict[str, object]] = []
 
@@ -450,6 +700,7 @@ def build_records() -> list[dict[str, object]]:
         py_list = py_by_key.get(key, [])
         js_list = js_by_key.get(key, [])
         m = authored_meta.get(key, {})
+        cm = corpus_meta.get(key, {})
 
         py_path = py_list[0][2] if py_list else None
         js_path = js_list[0][2] if js_list else None
@@ -489,6 +740,12 @@ def build_records() -> list[dict[str, object]]:
         sem_py = m.get("semantics_py_path")
         sem_js = m.get("semantics_js_path")
         sem_shared = m.get("semantics_shared_path")
+        diff_val = (
+            m.get("difficulty")
+            or cm.get("difficulty")
+            or _infer_cohort_difficulty(py_path or js_path)
+        )
+        topics_val = list(cm.get("topics") or [])
         records.append(
             {
                 "key": key,
@@ -498,7 +755,7 @@ def build_records() -> list[dict[str, object]]:
                 "category": "coding",
                 "slug": item.get("slug", ""),
                 "title": item.get("title", ""),
-                "difficulty": m.get("difficulty"),
+                "difficulty": diff_val,
                 "paid_only": bool(item.get("paid_only", False)),
                 "url": item.get("url"),
                 "method": m.get("method"),
@@ -514,24 +771,17 @@ def build_records() -> list[dict[str, object]]:
                 "semantics_py_path": sem_py or sem_shared,
                 "semantics_js_path": sem_js or sem_shared,
                 "study_path": m.get("study_path"),
-                "companies": [],
-                "topics": [],
+                "contract_path": m.get("contract_path"),
+                "companies": lc_to_companies.get(key, []),
+                "topics": topics_val,
                 "related_leetcode": [],
+                "related_hack2hire": lc_to_h2h.get(key, []),
                 "complexity": m.get("complexity"),
-                "design": m.get("design"),
+                "design": m.get("design") or cm.get("design"),
             }
         )
 
     # 2. Hack2Hire question bank entries and variants
-    bank_path = REPO_ROOT / "projects/question_bank/hack2hire/bank.json"
-    desc_path = REPO_ROOT / "projects/question_bank/hack2hire/descriptions.json"
-    bank_data = json.loads(bank_path.read_text())
-    desc_by_post: dict[str, dict[str, object]] = {}
-    if desc_path.exists():
-        for r in json.loads(desc_path.read_text()).get("records", []):
-            if r.get("source_post_id"):
-                desc_by_post[str(r["source_post_id"])] = r
-
     for group in bank_data.get("records", []):
         post_id = str(group.get("source_post_id", ""))
         group_uid = str(group.get("uid", f"hack2hire:{post_id}"))
@@ -578,6 +828,11 @@ def build_records() -> list[dict[str, object]]:
             var_slug = slug if len(variants) == 1 else f"{slug}-v{ordinal}"
             sem_py = m.get("semantics_py_path")
             sem_js = m.get("semantics_js_path")
+            sem_shared = m.get("semantics_shared_path")
+
+            desc_obj = desc_rec.get("description") if isinstance(desc_rec.get("description"), dict) else {}
+            excerpt = str(desc_obj.get("excerpt") or "").strip()
+            design_val = m.get("design") or (f"Public preview: {excerpt}" if excerpt else None)
 
             records.append(
                 {
@@ -600,15 +855,17 @@ def build_records() -> list[dict[str, object]]:
                     "js_path": js_path,
                     "alternate_py_paths": [x[2] for x in py_list[1:]],
                     "alternate_js_paths": [x[2] for x in js_list[1:]],
-                    "semantics_path": sem_py or sem_js,
-                    "semantics_py_path": sem_py,
-                    "semantics_js_path": sem_js,
+                    "semantics_path": sem_py or sem_js or sem_shared,
+                    "semantics_py_path": sem_py or sem_shared,
+                    "semantics_js_path": sem_js or sem_shared,
                     "study_path": m.get("study_path"),
+                    "contract_path": m.get("contract_path"),
                     "companies": companies,
                     "topics": topics,
                     "related_leetcode": related_lc,
+                    "related_hack2hire": [],
                     "complexity": m.get("complexity"),
-                    "design": m.get("design"),
+                    "design": design_val,
                 }
             )
 
@@ -731,9 +988,12 @@ def compute_stats(records: list[dict[str, object]]) -> dict[str, object]:
         "leetcode": {
             "total": len(lc),
             "with_both_py_and_js": sum(1 for r in lc if r["py_path"] and r["js_path"]),
+            "with_difficulty": sum(1 for r in lc if r["difficulty"]),
+            "with_topics": sum(1 for r in lc if r["topics"]),
             "with_method": sum(1 for r in lc if r["method"]),
             "with_semantics": sum(1 for r in lc if r["semantics_path"]),
             "with_study_record": sum(1 for r in lc if r["study_path"]),
+            "with_complexity": sum(1 for r in lc if r["complexity"]),
             "with_design_summary": sum(1 for r in lc if r["design"]),
             "by_status": dict(Counter(str(r["status"]) for r in lc)),
             "by_tier": dict(Counter(str(r["tier"]) for r in lc)),
@@ -744,7 +1004,11 @@ def compute_stats(records: list[dict[str, object]]) -> dict[str, object]:
             "coding_with_both_py_and_js": sum(
                 1 for r in h2h_coding if r["py_path"] and r["js_path"]
             ),
+            "coding_with_method": sum(1 for r in h2h_coding if r["method"]),
+            "coding_with_complexity": sum(1 for r in h2h_coding if r["complexity"]),
+            "coding_with_design_summary": sum(1 for r in h2h_coding if r["design"]),
             "coding_with_study_record": sum(1 for r in h2h_coding if r["study_path"]),
+            "coding_with_contract_record": sum(1 for r in h2h_coding if r.get("contract_path")),
             "by_category": dict(Counter(str(r["category"]) for r in h2h)),
             "by_status": dict(Counter(str(r["status"]) for r in h2h)),
         },
