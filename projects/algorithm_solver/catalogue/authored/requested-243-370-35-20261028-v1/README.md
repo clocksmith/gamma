@@ -42,6 +42,13 @@ increments in place (`native_effects.mutates_inputs: true`). The tree problems 2
 were already read-only; their semantics now declare `solve_effects` and read-only `native_effects`, and
 `../../development-66-20261029-v1/check_native_abi.py` exercises them on foreign node objects.
 
+## String units (appended 2026-11-02)
+
+Semantics pin `unicode_codepoint` for 267, 269, 320, 340 and 358, `ascii` for 246, 248, 249, 302 and 361 (official
+domains), and `opaque` for 243 and 245 (whole-string equality only). JavaScript 267, 320 and 358 now count, sort and
+tie-break by code point; `cases.py` adds non-BMP rows for 267, 269, 320 and 358, including U+FF5A rows whose
+code-point order differs from UTF-16 code-unit order. Expected values come from the unchanged references.
+
 
 ```sh
 python3 run_candidates.py > /dev/null

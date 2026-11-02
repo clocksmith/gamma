@@ -1,0 +1,497 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:leetcode:1933:requested-156-1940-31-20261028-v1:1933:v1",
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+      "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+      "selector": "/1933"
+    }
+  ],
+  "problemId": "leetcode:1933",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:leetcode:1933:requested-156-1940-31-20261028-v1:1933:authored-v1",
+    "version": 5,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/contract--contract_leetcode_1933_requested-156-1940-31-20261028-v1_1933_authored-v1--v5.json",
+    "sha256": "91d905f219847ac3d08a434c4c1365b973020f57bd1dfa69e819ab5736e3d6d8"
+  },
+  "title": {
+    "status": "present",
+    "value": "Verify run lengths mod 3 have zero 1s and exactly one 2.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/design.json",
+        "sha256": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe",
+        "selector": "/problems/29/numeric_complexity_contract/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "Verify run lengths mod 3 have zero 1s and exactly one 2. Each maximal equal-character run contributes a remainder modulo three. A remainder of one is impossible, and exactly one remainder-two contribution is required globally.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1933/explanation"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Track how many runs need a pair rather than generating every partition.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1933/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "A remainder of one is impossible, and exactly one remainder-two contribution is required globally.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1933/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "Each maximal equal-character run contributes a remainder modulo three."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1933/invariant"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "Track how many runs need a pair rather than generating every partition.",
+      "Each maximal equal-character run contributes a remainder modulo three.",
+      "Verify run lengths mod 3 have zero 1s and exactly one 2.",
+      "A remainder of one is impossible, and exactly one remainder-two contribution is required globally."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1933/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Establish the invariant",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/0/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Track how many runs need a pair rather than generating every partition.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/0/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Check whether a digit string can be partitioned into equal-character triples and exactly one equal-character pair. Each maximal equal-character run contributes a remainder modulo three.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/0/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Identify the information that must survive each step before choosing code.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/0/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/0/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Track how many runs need a pair rather than generating every partition."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/0/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:1933:requested-156-1940-31-20261028-v1:1933:approach-native:v1",
+        "version": 5,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1933_requested-156-1940-31-20261028-v1_1933_approach-native_v1--v5.json",
+        "sha256": "2958591a617a3dcb5eb2a536911357f3f59aa7b4c073556910b6c62008fdd9d4"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Implement the state transition",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/1/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which state changes make the next step preserve this invariant?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/1/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Verify run lengths mod 3 have zero 1s and exactly one 2. Each maximal equal-character run contributes a remainder modulo three.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/1/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "A remainder of one is impossible, and exactly one remainder-two contribution is required globally.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/1/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Verify run lengths mod 3 have zero 1s and exactly one 2.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/1/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Each maximal equal-character run contributes a remainder modulo three.",
+          "Verify run lengths mod 3 have zero 1s and exactly one 2."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/1/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:1933:requested-156-1940-31-20261028-v1:1933:python:v1",
+          "version": 6,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1933_requested-156-1940-31-20261028-v1_1933_python_v1--v6.json",
+          "sha256": "72da1669b4f5a1a38b27eb9e5b7bec23e96bb3ec911d549bceebdd4efbf4b66c"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:1933:requested-156-1940-31-20261028-v1:1933:javascript:v1",
+          "version": 6,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1933_requested-156-1940-31-20261028-v1_1933_javascript_v1--v6.json",
+          "sha256": "96efe171fe38610b827c996677cc85b4bb9f4cc161abe4e9e9a2c111f6009bb2"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:1933:requested-156-1940-31-20261028-v1:1933:approach-native:v1",
+        "version": 5,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1933_requested-156-1940-31-20261028-v1_1933_approach-native_v1--v5.json",
+        "sha256": "2958591a617a3dcb5eb2a536911357f3f59aa7b4c073556910b6c62008fdd9d4"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Challenge the boundary",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/2/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "What boundary or counterexample would expose this mistake?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/2/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "A remainder of one is impossible, and exactly one remainder-two contribution is required globally. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/2/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/2/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/2/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "A remainder of one is impossible, and exactly one remainder-two contribution is required globally."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/stages/2/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1933/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:1933:requested-156-1940-31-20261028-v1:1933:development-suite:v1",
+          "version": 6,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1933_requested-156-1940-31-20261028-v1_1933_development-suite_v1--v6.json",
+          "sha256": "fd37eb7c65642f01770961b6ef915f98c51010b4655f9a6170ee4d684f7a3bab"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:1933:requested-156-1940-31-20261028-v1:1933:approach-native:v1",
+        "version": 5,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1933_requested-156-1940-31-20261028-v1_1933_approach-native_v1--v5.json",
+        "sha256": "2958591a617a3dcb5eb2a536911357f3f59aa7b4c073556910b6c62008fdd9d4"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:leetcode:1933:requested-156-1940-31-20261028-v1:1933:approach-native:v1",
+    "version": 5,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1933_requested-156-1940-31-20261028-v1_1933_approach-native_v1--v5.json",
+    "sha256": "2958591a617a3dcb5eb2a536911357f3f59aa7b4c073556910b6c62008fdd9d4"
+  },
+  "version": 6
+}

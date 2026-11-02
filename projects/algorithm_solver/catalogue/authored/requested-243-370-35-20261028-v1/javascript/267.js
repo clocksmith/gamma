@@ -1,9 +1,10 @@
 "use strict";
 
+// string_unit = unicode_codepoint: counts and sorts code points (matching Python
+// str iteration and sorted()), so a non-BMP character is never split.
 function solve(s) {
   const cnt = new Map();
-  for (let i = 0; i < s.length; i++) {
-    const ch = s[i];
+  for (const ch of s) {
     cnt.set(ch, (cnt.get(ch) || 0) + 1);
   }
   const odds = [];
@@ -14,7 +15,7 @@ function solve(s) {
   }
   if (odds.length > 1) return [];
   const mid = odds.length === 1 ? odds[0] : "";
-  half.sort();
+  half.sort((x, y) => x.codePointAt(0) - y.codePointAt(0));
   const m = half.length;
   const used = new Uint8Array(m);
   const res = [];
@@ -47,3 +48,4 @@ function generatePalindromes(s) {
 module.exports = solve;
 module.exports.solve = solve;
 module.exports.generatePalindromes = generatePalindromes;
+if (typeof Solution !== "undefined") solve.Solution = Solution;

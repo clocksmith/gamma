@@ -1,0 +1,497 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:leetcode:247:requested-243-370-35-20261028-v1:247:v1",
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+      "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+      "selector": "/247"
+    }
+  ],
+  "problemId": "leetcode:247",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:leetcode:247:requested-243-370-35-20261028-v1:247:authored-v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/contract--contract_leetcode_247_requested-243-370-35-20261028-v1_247_authored-v1--v2.json",
+    "sha256": "d60d0827a64d81895080350d906f5d84d6eeb5702c5d07974d021d3f79b3470d"
+  },
+  "title": {
+    "status": "present",
+    "value": "Recursive center-out expansion skipping leading zeros on outer layer.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/design.json",
+        "sha256": "09edd466fb1151dbd090203dc900164b726d6c3e0d91a5525f91b21d0d0e593f",
+        "selector": "/problems/3/numeric_complexity_contract/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "Recursive center-out expansion skipping leading zeros on outer layer. A valid interior stays valid when surrounded by a compatible rotated digit pair. Zero is allowed as an interior pair but not as the outermost pair of a multi-digit result.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/247/explanation"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Construct from the center instead of testing every length-n decimal string.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/247/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "Zero is allowed as an interior pair but not as the outermost pair of a multi-digit result.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/247/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "A valid interior stays valid when surrounded by a compatible rotated digit pair."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/247/invariant"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "Construct from the center instead of testing every length-n decimal string.",
+      "A valid interior stays valid when surrounded by a compatible rotated digit pair.",
+      "Recursive center-out expansion skipping leading zeros on outer layer.",
+      "Zero is allowed as an interior pair but not as the outermost pair of a multi-digit result."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/247/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Establish the invariant",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/0/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Construct from the center instead of testing every length-n decimal string.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/0/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Generate length-n decimal strings that are unchanged by 180-degree rotation, excluding multi-digit leading zeros. A valid interior stays valid when surrounded by a compatible rotated digit pair.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/0/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Identify the information that must survive each step before choosing code.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/0/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/0/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Construct from the center instead of testing every length-n decimal string."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/0/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:247:requested-243-370-35-20261028-v1:247:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_247_requested-243-370-35-20261028-v1_247_approach-native_v1--v2.json",
+        "sha256": "458fcba5260f379b40d2797bfb6e21bf7ec91e1ae18c15b6a1a2b9d101a13df4"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Implement the state transition",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/1/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which state changes make the next step preserve this invariant?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/1/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Recursive center-out expansion skipping leading zeros on outer layer. A valid interior stays valid when surrounded by a compatible rotated digit pair.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/1/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Zero is allowed as an interior pair but not as the outermost pair of a multi-digit result.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/1/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Recursive center-out expansion skipping leading zeros on outer layer.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/1/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "A valid interior stays valid when surrounded by a compatible rotated digit pair.",
+          "Recursive center-out expansion skipping leading zeros on outer layer."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/1/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:247:requested-243-370-35-20261028-v1:247:python:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_247_requested-243-370-35-20261028-v1_247_python_v1--v2.json",
+          "sha256": "8800a4219a524cbef4550b07f135e238c2affd820297d0a3fd45da54d62ed491"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:247:requested-243-370-35-20261028-v1:247:javascript:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_247_requested-243-370-35-20261028-v1_247_javascript_v1--v2.json",
+          "sha256": "c13443d5920e58c40948cf796a61cd7eaac7e2d21dd6db33e48b8162532c5f22"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:247:requested-243-370-35-20261028-v1:247:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_247_requested-243-370-35-20261028-v1_247_approach-native_v1--v2.json",
+        "sha256": "458fcba5260f379b40d2797bfb6e21bf7ec91e1ae18c15b6a1a2b9d101a13df4"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Challenge the boundary",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/2/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "What boundary or counterexample would expose this mistake?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/2/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Zero is allowed as an interior pair but not as the outermost pair of a multi-digit result. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/2/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/2/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/2/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Zero is allowed as an interior pair but not as the outermost pair of a multi-digit result."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/stages/2/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/247/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:247:requested-243-370-35-20261028-v1:247:development-suite:v1",
+          "version": 4,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_247_requested-243-370-35-20261028-v1_247_development-suite_v1--v4.json",
+          "sha256": "b67e78969465797b25c3fb352e5b59434b43f1fb2a18c23fe487043b3cb26dda"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:247:requested-243-370-35-20261028-v1:247:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_247_requested-243-370-35-20261028-v1_247_approach-native_v1--v2.json",
+        "sha256": "458fcba5260f379b40d2797bfb6e21bf7ec91e1ae18c15b6a1a2b9d101a13df4"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:leetcode:247:requested-243-370-35-20261028-v1:247:approach-native:v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_247_requested-243-370-35-20261028-v1_247_approach-native_v1--v2.json",
+    "sha256": "458fcba5260f379b40d2797bfb6e21bf7ec91e1ae18c15b6a1a2b9d101a13df4"
+  },
+  "version": 4
+}

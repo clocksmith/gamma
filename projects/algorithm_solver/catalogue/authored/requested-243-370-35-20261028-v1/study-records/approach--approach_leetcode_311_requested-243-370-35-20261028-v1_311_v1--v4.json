@@ -1,0 +1,497 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:leetcode:311:requested-243-370-35-20261028-v1:311:v1",
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+      "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+      "selector": "/311"
+    }
+  ],
+  "problemId": "leetcode:311",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:leetcode:311:requested-243-370-35-20261028-v1:311:authored-v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/contract--contract_leetcode_311_requested-243-370-35-20261028-v1_311_authored-v1--v2.json",
+    "sha256": "fc3e3ef464317e356cee0154bf438ef14df206f744f611b6e3fe81ac6857f9a6"
+  },
+  "title": {
+    "status": "present",
+    "value": "Skip zero entries during row-by-column accumulation.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/design.json",
+        "sha256": "09edd466fb1151dbd090203dc900164b726d6c3e0d91a5525f91b21d0d0e593f",
+        "selector": "/problems/20/numeric_complexity_contract/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "Skip zero entries during row-by-column accumulation. Each nonzero A entry contributes its value times the corresponding B row to one result row. Skipping zeros is an optimization, not a different multiplication rule; signed values and rectangular dimensions still matter.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/311/explanation"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Reorder multiplication loops so zero entries skip useful amounts of work.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/311/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "Skipping zeros is an optimization, not a different multiplication rule; signed values and rectangular dimensions still matter.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/311/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "Each nonzero A entry contributes its value times the corresponding B row to one result row."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/311/invariant"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "Reorder multiplication loops so zero entries skip useful amounts of work.",
+      "Each nonzero A entry contributes its value times the corresponding B row to one result row.",
+      "Skip zero entries during row-by-column accumulation.",
+      "Skipping zeros is an optimization, not a different multiplication rule; signed values and rectangular dimensions still matter."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+        "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+        "selector": "/311/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Establish the invariant",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/0/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Reorder multiplication loops so zero entries skip useful amounts of work.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/0/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Multiply two compatible integer matrices while exploiting zero entries. Each nonzero A entry contributes its value times the corresponding B row to one result row.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/0/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Identify the information that must survive each step before choosing code.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/0/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/0/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Reorder multiplication loops so zero entries skip useful amounts of work."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/0/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:311:requested-243-370-35-20261028-v1:311:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_311_requested-243-370-35-20261028-v1_311_approach-native_v1--v2.json",
+        "sha256": "bf59ba8eae6d016a7e38cb778233035ab5d013204c601098619d4f55aa841cc6"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Implement the state transition",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/1/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which state changes make the next step preserve this invariant?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/1/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Skip zero entries during row-by-column accumulation. Each nonzero A entry contributes its value times the corresponding B row to one result row.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/1/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Skipping zeros is an optimization, not a different multiplication rule; signed values and rectangular dimensions still matter.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/1/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Skip zero entries during row-by-column accumulation.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/1/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Each nonzero A entry contributes its value times the corresponding B row to one result row.",
+          "Skip zero entries during row-by-column accumulation."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/1/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:311:requested-243-370-35-20261028-v1:311:python:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_311_requested-243-370-35-20261028-v1_311_python_v1--v2.json",
+          "sha256": "0216815ad6bec8ef27a0872bf3ef8c523b3f28bed8b60d37ce92508edfa3f681"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:311:requested-243-370-35-20261028-v1:311:javascript:v1",
+          "version": 2,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_311_requested-243-370-35-20261028-v1_311_javascript_v1--v2.json",
+          "sha256": "8e0339bb0d408c95fc67b9eda5c1b62714b9a80b6e987e9f11938e4c50bfa12a"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:311:requested-243-370-35-20261028-v1:311:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_311_requested-243-370-35-20261028-v1_311_approach-native_v1--v2.json",
+        "sha256": "bf59ba8eae6d016a7e38cb778233035ab5d013204c601098619d4f55aa841cc6"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Challenge the boundary",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/2/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "What boundary or counterexample would expose this mistake?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/2/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Skipping zeros is an optimization, not a different multiplication rule; signed values and rectangular dimensions still matter. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/2/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/2/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/2/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Skipping zeros is an optimization, not a different multiplication rule; signed values and rectangular dimensions still matter."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/stages/2/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-history/authoring/study-content-d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54.json",
+            "sha256": "d6c493bf8dd93a34f0377fe4cf7b38061401ceb0d8aa63c5d12acf678ab3ac54",
+            "selector": "/311/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:311:requested-243-370-35-20261028-v1:311:development-suite:v1",
+          "version": 4,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_311_requested-243-370-35-20261028-v1_311_development-suite_v1--v4.json",
+          "sha256": "9074adf6722cdb95ad5c775f333694eeb4209982089d999df5ffaeb31cb86886"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:311:requested-243-370-35-20261028-v1:311:approach-native:v1",
+        "version": 2,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_311_requested-243-370-35-20261028-v1_311_approach-native_v1--v2.json",
+        "sha256": "bf59ba8eae6d016a7e38cb778233035ab5d013204c601098619d4f55aa841cc6"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:leetcode:311:requested-243-370-35-20261028-v1:311:approach-native:v1",
+    "version": 2,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-243-370-35-20261028-v1/study-records/artifact--artifact_leetcode_311_requested-243-370-35-20261028-v1_311_approach-native_v1--v2.json",
+    "sha256": "bf59ba8eae6d016a7e38cb778233035ab5d013204c601098619d4f55aa841cc6"
+  },
+  "version": 4
+}

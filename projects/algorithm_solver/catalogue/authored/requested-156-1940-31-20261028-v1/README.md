@@ -56,6 +56,10 @@ purity proof or qualification). Qualification stays unknown.
 The read-only tree problems 742, 1214 and 1740 declare `solve_effects` and read-only `native_effects`; the checker
 drives them on foreign node objects. Their sources are unchanged.
 
+String units are pinned in semantics: `unicode_codepoint` for 159, 161, 758 and 1933 (non-BMP canary rows in
+`cases.py`; JavaScript 159, 161 and 1933 now iterate code points), `ascii` for 294, 751, 772 and 903 (official
+domains), and `opaque` for 737 (whole-string equality only).
+
 
 ```sh
 python3 test_oracles.py

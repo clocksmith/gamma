@@ -1,5 +1,10 @@
 {
   "candidate_design": "Enumerate bitmasks 0..2^n-1 compressing consecutive 1-bits into run lengths.",
+  "charged_costs": {
+    "solve": {
+      "code_point_iteration": "Array.from / for-of code-point iteration: O(n) time, O(n) space where an array is materialized"
+    }
+  },
   "comparison": "exact typed JSON result",
   "complexity_target": "O(n * 2^n) time, O(n * 2^n) space",
   "effects": "arguments unchanged",
@@ -34,5 +39,7 @@
     "complexity_target": "O(n * 2^n) time, O(n * 2^n) space",
     "reference": "Bitmask run-length encoding"
   },
-  "source_sha256": "f684ece4c3e4821f72d666c1d958a630b31cf0ffdf9fbab56747578731c093ce"
+  "source_sha256": "9019b96b2cf36bd1f8f03ee58125ef77f2bf5de4cc951db9820cf17bc475604c",
+  "string_unit": "unicode_codepoint",
+  "string_unit_basis": "Character-level operations count, index, sort or compare Unicode code points; a non-BMP character is one unit (Python str semantics). Non-BMP canary rows check both languages."
 }

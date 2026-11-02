@@ -1,5 +1,10 @@
 {
   "candidate_design": "Find first mismatch index and verify remaining suffixes match.",
+  "charged_costs": {
+    "solve": {
+      "code_point_iteration": "Array.from / for-of code-point iteration: O(n) time, O(n) space where an array is materialized"
+    }
+  },
   "comparison": "exact typed JSON result",
   "complexity_target": "O(n) time, O(1) space",
   "effects": "arguments unchanged",
@@ -42,5 +47,7 @@
     "complexity_target": "O(n) time, O(1) space",
     "reference": "First mismatch suffix check"
   },
-  "source_sha256": "23dcd9e2181dc3040a06cfbf3d959725895cc4cb4b5110810a2fdb438de93fc1"
+  "source_sha256": "5abcc0de638db56a00bf120504b5561a63ebeb0b68722bbc72a154a5e67a07d4",
+  "string_unit": "unicode_codepoint",
+  "string_unit_basis": "Character-level operations count, index, sort or compare Unicode code points; a non-BMP character is one unit (Python str semantics). Non-BMP canary rows check both languages."
 }

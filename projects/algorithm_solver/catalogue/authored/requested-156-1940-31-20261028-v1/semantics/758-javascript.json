@@ -1,5 +1,10 @@
 {
   "candidate_design": "Boolean coverage mask over substring matches and tag wrapping.",
+  "charged_costs": {
+    "solve": {
+      "code_point_iteration": "Array.from / for-of code-point iteration: O(n) time, O(n) space where an array is materialized"
+    }
+  },
   "comparison": "exact typed JSON result",
   "complexity_target": "O(W * n) time, O(n) space",
   "effects": "arguments unchanged",
@@ -42,5 +47,7 @@
     "complexity_target": "O(W * n) time, O(n) space",
     "reference": "Boolean mask interval tagging"
   },
-  "source_sha256": "770687c35a927afeca413ac02630f6b97cf2d9072e4a59329fdf0f917cfaa666"
+  "source_sha256": "770687c35a927afeca413ac02630f6b97cf2d9072e4a59329fdf0f917cfaa666",
+  "string_unit": "unicode_codepoint",
+  "string_unit_basis": "Character-level operations count, index, sort or compare Unicode code points; a non-BMP character is one unit (Python str semantics). Non-BMP canary rows check both languages."
 }

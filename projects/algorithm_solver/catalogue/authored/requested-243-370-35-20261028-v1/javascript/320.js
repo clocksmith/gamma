@@ -1,7 +1,10 @@
 "use strict";
 
+// string_unit = unicode_codepoint: a non-BMP character is one unit, matching
+// Python str and the reference. The Array.from copy is charged as O(n) space.
 function solve(word) {
-  const n = word.length;
+  const chars = Array.from(word);
+  const n = chars.length;
   const total = 1 << n;
   const out = new Array(total);
   for (let mask = 0; mask < total; mask++) {
@@ -15,7 +18,7 @@ function solve(word) {
           s += String(cnt);
           cnt = 0;
         }
-        s += word[i];
+        s += chars[i];
       }
     }
     if (cnt > 0) s += String(cnt);
@@ -31,3 +34,4 @@ function generateAbbreviations(word) {
 module.exports = solve;
 module.exports.solve = solve;
 module.exports.generateAbbreviations = generateAbbreviations;
+if (typeof Solution !== "undefined") solve.Solution = Solution;

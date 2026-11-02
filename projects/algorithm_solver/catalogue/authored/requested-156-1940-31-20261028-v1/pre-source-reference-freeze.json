@@ -231,15 +231,213 @@
       "new_sha256": "0c0959b585693092dac5ce7d5902f210631b1e0e65ca7b8d6643e8de476537bf",
       "change": "solve_effects (input mutation and output aliasing forbidden) and native_effects.mutates_inputs false; source_sha256 unchanged",
       "reason": "declare native node effects so check_native_abi.py exercises foreign node inputs"
+    },
+    {
+      "file": "semantics/159-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "975ec104bc13cd60a149f079833f2162406149e5019704f9e1b701ad96768e24",
+      "new_sha256": "c63aab3b65f61e73f99874118d818f502d46ad2d05de84bd54e9fecf9a3a2655",
+      "change": "string_unit unicode_codepoint with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/159-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "f26ce3e615f9cf8e159a990f7e00fce791611e5bd122a05dbacb2fce2df6ebc2",
+      "new_sha256": "1ae45bff57e036ab9437a326845d4ef04de1ab4e86831e307513df101eeab838",
+      "change": "string_unit unicode_codepoint with string_unit_basis; source_sha256 rebound",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "javascript/159.js",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "01fd27becc5794e07395a96d40c27c656ad4c030960c0425f35a8b3666fe94fe",
+      "new_sha256": "a24f3692793d63e365e1037cbab6c13c2202eca7bedc510c9f9227df79b235af",
+      "change": "iterate, count, sort and tie-break by Unicode code point (Array.from / for-of / codePointAt) instead of UTF-16 code units",
+      "reason": "the previous candidate split non-BMP characters and disagreed with the reference on the non-BMP canary rows"
+    },
+    {
+      "file": "semantics/161-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "1573785c53dd29aa650891ad3c72bbbab33c3acd97cf729f3285c38ef1bf9aab",
+      "new_sha256": "923e6ca3038ef7ec88099d9511c9ce8a1dd4c893281ab023acaa71e12c4443ad",
+      "change": "string_unit unicode_codepoint with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/161-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "5d5d4411e76182c761536141a3250828fc68e1748463edaecdb8628c238c684c",
+      "new_sha256": "42578d64553aa3feb50baed0c3aa8b1f723d46dcd0cb7cf34b8e6d8b7c770e7e",
+      "change": "string_unit unicode_codepoint with string_unit_basis; source_sha256 rebound",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "javascript/161.js",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "23dcd9e2181dc3040a06cfbf3d959725895cc4cb4b5110810a2fdb438de93fc1",
+      "new_sha256": "5abcc0de638db56a00bf120504b5561a63ebeb0b68722bbc72a154a5e67a07d4",
+      "change": "iterate, count, sort and tie-break by Unicode code point (Array.from / for-of / codePointAt) instead of UTF-16 code units",
+      "reason": "the previous candidate split non-BMP characters and disagreed with the reference on the non-BMP canary rows"
+    },
+    {
+      "file": "semantics/758-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "cd9109be6ec1a74fc2207539e0f1f2fabef97942a771aaec3537e0500041ed78",
+      "new_sha256": "bae9f0a7567b321c2e1da78851b1448e8d7ffc0d19d3729fb9c0c404c16bc188",
+      "change": "string_unit unicode_codepoint with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/758-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "e1a0dee08ef006f8a2f85238f2b0902b257f13923f0ac1d343045e685402dc91",
+      "new_sha256": "a6157b8e64febe0624c87f84070ca486ca570a02f63f76192fb60a87ec07d030",
+      "change": "string_unit unicode_codepoint with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/1933-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "ed2d968b3d34134975e005af6feebf8240fa1a9f5ee2da0cf523afd6397059a7",
+      "new_sha256": "34a01070b136cf037203e043b6e14ac039bfefd184d5b8a4d3dc5ede523448f1",
+      "change": "string_unit unicode_codepoint with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/1933-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "41148da55d9dcb59e46ccb8df130391a9227be5b981e450680fe6546ea57d4c8",
+      "new_sha256": "b4513ae8c530785d6ba1a1122994dd7dd8aa75556b4e4434575e879a21a6f309",
+      "change": "string_unit unicode_codepoint with string_unit_basis; source_sha256 rebound",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "javascript/1933.js",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "1db878e36ac3cb1a0e771dd47cd5126598c8a355903db2ec712f65e38798716e",
+      "new_sha256": "add4e52ebedeeecefb78e99585da3c35fb791f651bf9d728d5a68bf0145fc02c",
+      "change": "iterate, count, sort and tie-break by Unicode code point (Array.from / for-of / codePointAt) instead of UTF-16 code units",
+      "reason": "the previous candidate split non-BMP characters and disagreed with the reference on the non-BMP canary rows"
+    },
+    {
+      "file": "semantics/294-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "d36ce4fe7f918e5444b42a7a35361375c238ae4103d593683a92c77734f8ff67",
+      "new_sha256": "ad36b65b91e3d0c53fc87028341375d8e45f800d3d0ce1c93eb729e1837f8ca6",
+      "change": "string_unit ascii with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/294-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "046af6053f11fc5b2ea2a0397f3b0146e0b7d498c854918a67a665554f7740bb",
+      "new_sha256": "88bb973626bb6dbbbc37d104bf30667efd2c79fcb5c137e2a782cb206088e445",
+      "change": "string_unit ascii with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/751-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "109d8d2ac188a35ce800ee65ef6af90b05eedd944419d4d83ae90b36679f1dbc",
+      "new_sha256": "aad4a659cf3f2eef8f8ef1530edcadd4b44c99ebbf17093a23c6971efd01badf",
+      "change": "string_unit ascii with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/751-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "8aedab62fb7643cef86b2ea54790d75569a0d49c47b2be7c63bab10166312ba2",
+      "new_sha256": "8720cdbc2080c9b2e8421445ec557d02bf7e56fc97fa688583b68daf4b114b47",
+      "change": "string_unit ascii with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/772-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "ef0aeab150d2dd0ac74c817605e004f81411759a57ac11854317259d75056bec",
+      "new_sha256": "f30f95e51369d1dd22c7949421ee7db6e7cdf5ed09d588a8c11af50b004ddbac",
+      "change": "string_unit ascii with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/772-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "c4de334c81be479277cf9a9e16afb694a666d0c6b6c7199373bc4c92a87a643c",
+      "new_sha256": "df0a69e3a8b859d4d9bef6d6eea33b52ca8a5fa2ea8d148edfe76f1f574e1495",
+      "change": "string_unit ascii with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/903-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "1bd5c33b25bb872c4dc83f86baf797cdfd46a57333b027ad481311a941ac652b",
+      "new_sha256": "8c103aed9a62ee99c8f62a7aea1d1892fe599053277fe937142c3bfd364d4c05",
+      "change": "string_unit ascii with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/903-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "c84537c11e5487704c9dee777f232140df35aeaa6b54b3dee14f1fa9197140ad",
+      "new_sha256": "53bd5dd7069e5d60fce93b1f51102674452b82d07028b7e0e1767af37830e575",
+      "change": "string_unit ascii with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/737-python.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "782746b59ad2dfbc86b095f58315b660849176f523637bacbaa09f1f1ddc72d7",
+      "new_sha256": "1b5276fb936f5d124847f27230627249bb20b00b7208a105c1c9babcde19819b",
+      "change": "string_unit opaque with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "semantics/737-javascript.json",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "8e177d22c0694a172f7ed3d7c22efb1e24f67ec1b115871b6d0fff5da611eab0",
+      "new_sha256": "e31c77cce9b1b84f9a9a4d38304ed1fedd13b3cd40d734fdee67505a707bdf48",
+      "change": "string_unit opaque with string_unit_basis",
+      "reason": "pin the string unit that check_native_abi.py enforces"
+    },
+    {
+      "file": "cases.py",
+      "after_candidates_existed": true,
+      "at": "2026-11-02",
+      "old_sha256": "6e4197ecad3d1b19f4c5ff27676f894cf686e2d8ca437e4b6f2d6eefdd1222bb",
+      "new_sha256": "e731eea97c7de1747f101f350086cf76c151cb999b123fdf4de9f626ed2b55cd",
+      "change": "non-BMP canary rows for 159, 161, 758 and 1933; expected values come from the unchanged references",
+      "reason": "pin string_unit unicode_codepoint"
     }
   ],
   "amendment_notes": "authoring-catalog.json is unchanged and still pins the pre-amendment manifest and 903 source/semantics hashes. cases.py, contracts.json, design.json and test_oracles.py are unchanged. No other reference or expected-value rule changed.",
   "current_sha256": {
     "oracles.py": "9addc57c0d4055af2d7e44272558fdb57feb94ccd8d9a7460823fe5aae5158ee",
     "test_oracles.py": "426f525925a0baec43cd3f33aee5bb2016ef0bea5d750cdcb19f7a8f2dc93668",
-    "cases.py": "6e4197ecad3d1b19f4c5ff27676f894cf686e2d8ca437e4b6f2d6eefdd1222bb",
+    "cases.py": "e731eea97c7de1747f101f350086cf76c151cb999b123fdf4de9f626ed2b55cd",
     "contracts.json": "2c04f3a41fa3c24784f333ca2ac41e6f1c5b56c21bdc54527c969d12d3ef795b",
     "design.json": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe"
   },
-  "amendment_notes_2026_11_02": "Supersedes the authoring-catalog.json sentence of amendment_notes: manifest.json source_inventory and authoring-catalog.json now carry the corrected 903 hashes, with the pre-fix hashes and catalog variant IDs under supersedes. contracts.json changed for 280 (official_interface.in_place_arg 0); 156 and 280 sources and semantics changed for the native-ABI split (amendments dated 2026-11-02). oracles.py, cases.py, design.json and test_oracles.py are unchanged by these amendments. A second 2026-11-02 revision changed contracts.json for 286 (official_interface.in_place_arg 0) and the 286 sources and semantics for the same in-place split. A third 2026-11-02 revision declared native node effects in the 742, 1214 and 1740 semantics (sources unchanged)."
+  "amendment_notes_2026_11_02": "Supersedes the authoring-catalog.json sentence of amendment_notes: manifest.json source_inventory and authoring-catalog.json now carry the corrected 903 hashes, with the pre-fix hashes and catalog variant IDs under supersedes. contracts.json changed for 280 (official_interface.in_place_arg 0); 156 and 280 sources and semantics changed for the native-ABI split (amendments dated 2026-11-02). oracles.py, cases.py, design.json and test_oracles.py are unchanged by these amendments. A second 2026-11-02 revision changed contracts.json for 286 (official_interface.in_place_arg 0) and the 286 sources and semantics for the same in-place split. A third 2026-11-02 revision declared native node effects in the 742, 1214 and 1740 semantics (sources unchanged). A fourth 2026-11-02 revision pinned string units: cases.py gained non-BMP canary rows (expected values from the unchanged references), JavaScript 159, 161 and 1933 iterate code points, and string semantics declare string_unit."
 }

@@ -766,6 +766,12 @@
       "change": "742, 1214 and 1740 semantics declare solve_effects and read-only native_effects; their sources are unchanged.",
       "evidence_after": "check_native_abi.py drives solve and the official entry on checker-owned (foreign) TreeNode/ListNode graphs built from every case: node inputs stay structurally and identically intact, no output node aliases an input node, results equal the reference, and read-only official entries leave inputs intact.",
       "qualification": "unknown"
+    },
+    {
+      "at": "2026-11-02",
+      "change": "String units pinned in semantics: unicode_codepoint for 159, 161, 758, 1933; ascii (official domain) for 294, 751, 772, 903; opaque (whole-string equality only) for 737. JavaScript 159, 161, 1933 now iterate, count, sort and tie-break by code point instead of UTF-16 code units. cases.py gains 4 non-BMP canary rows with reference-computed expected values; the previous JavaScript candidates failed every unit-sensitive canary.",
+      "evidence_after": "run_candidates.py all rows pass in both languages through both entries; check_native_abi.py passes (canaries, ASCII rows, declarations).",
+      "qualification": "unknown"
     }
   ],
   "python_candidate_ast_parses": 31,

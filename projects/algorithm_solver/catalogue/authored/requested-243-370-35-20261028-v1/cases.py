@@ -50,12 +50,16 @@ BASE_ARGS = {
         ([[1, 3], [2, 4]],),
         ([[8]],),
     ],
-    267: [("aabb",), ("abc",), ("aaa",), ("aabbc",)],
+    # Non-BMP canaries pin string_unit = unicode_codepoint for 267, 269, 320 and 358 (expected
+    # values come from the references). The fullwidth U+FF5A rows check code-point ordering
+    # against a non-BMP character, which UTF-16 code-unit sorting would reverse.
+    267: [("aabb",), ("abc",), ("aaa",), ("aabbc",), ("\U0001F600\U0001F600a",), ("\U0001F600\U0001F600\uFF5A\uFF5A",)],
     269: [
         (["wrt", "wrf", "er", "ett", "rftt"],),
         (["z", "x"],),
         (["z", "x", "z"],),
         (["abc", "ab"],),
+        (["\U0001F600a", "\U0001F600b"],),
     ],
     270: [
         ([4, 2, 5, 1, 3], 3.714286),
@@ -98,7 +102,7 @@ BASE_ARGS = {
         ([[1, 0]],),
         ([[1]],),
     ],
-    320: [("word",), ("a",), ("ab",)],
+    320: [("word",), ("a",), ("ab",), ("\U0001F600b",)],
     325: [([1, -1, 5, -2, 3], 3), ([-2, -1, 2, 1], 1), ([1, 2, 3], 10)],
     333: [
         ([10, 5, 15, 1, 8, None, 7],),
@@ -112,7 +116,7 @@ BASE_ARGS = {
           ("\U0001F600a", 1), ("\U0001F600\U0001F600a", 1), ("a\U0001F600b\U0001F600", 2)],
     351: [(1, 1), (1, 2), (2, 3)],
     356: [([[1, 1], [-1, 1]],), ([[1, 1], [-1, -1]],), ([[0, 0]],)],
-    358: [("aabbcc", 3), ("aaabc", 3), ("aaadbbcc", 2), ("a", 0)],
+    358: [("aabbcc", 3), ("aaabc", 3), ("aaadbbcc", 2), ("a", 0), ("\U0001F600\U0001F600\uFF5A\uFF5A", 2)],
     360: [
         ([-4, -2, 2, 4], 1, 3, 5),
         ([-4, -2, 2, 4], -1, 3, 5),

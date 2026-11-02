@@ -1,0 +1,497 @@
+{
+  "schema": "study.record.v1",
+  "kind": "approach",
+  "id": "approach:leetcode:1213:requested-156-1940-31-20261028-v1:1213:v1",
+  "origin": [
+    {
+      "repository": "gamma",
+      "revision": null,
+      "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+      "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+      "selector": "/1213"
+    }
+  ],
+  "problemId": "leetcode:1213",
+  "contract": {
+    "kind": "contract",
+    "id": "contract:leetcode:1213:requested-156-1940-31-20261028-v1:1213:authored-v1",
+    "version": 5,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/contract--contract_leetcode_1213_requested-156-1940-31-20261028-v1_1213_authored-v1--v5.json",
+    "sha256": "0829d68befadb56c2faf29fa4ef67da7ea4da91e6c10012182a84f03f91d1eaf"
+  },
+  "title": {
+    "status": "present",
+    "value": "Three-pointer synchronized scan.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/design.json",
+        "sha256": "d16f809f41a15137ce51592717822b4827b1135968d77716fa87ec66bbe6bbbe",
+        "selector": "/problems/16/numeric_complexity_contract/candidate_design"
+      }
+    ]
+  },
+  "representation": "coding",
+  "explanation": {
+    "status": "present",
+    "value": "Three-pointer synchronized scan. Advancing pointers whose values are below the current maximum cannot skip a common value. Advance all pointers after finding a match so an output value is emitted only once.",
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1213/explanation"
+      }
+    ]
+  },
+  "chooseWhen": {
+    "status": "present",
+    "value": [
+      "Coordinate three monotone scans rather than comparing every combination.",
+      "Use the stated invariant only when the problem and interface assumptions hold."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1213/chooseWhen"
+      }
+    ]
+  },
+  "tradeoffs": {
+    "status": "present",
+    "value": [
+      "Advance all pointers after finding a match so an output value is emitted only once.",
+      "The existing complexity target is an inherited claim, not an independent measurement; wrapper serialization may add memory."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1213/tradeoffs"
+      }
+    ]
+  },
+  "invariants": {
+    "status": "present",
+    "value": [
+      "Advancing pointers whose values are below the current maximum cannot skip a common value."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1213/invariant"
+      }
+    ]
+  },
+  "hints": {
+    "status": "present",
+    "value": [
+      "Coordinate three monotone scans rather than comparing every combination.",
+      "Advancing pointers whose values are below the current maximum cannot skip a common value.",
+      "Three-pointer synchronized scan.",
+      "Advance all pointers after finding a match so an output value is emitted only once."
+    ],
+    "provenance": [
+      {
+        "repository": "gamma",
+        "revision": null,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+        "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+        "selector": "/1213/hints"
+      }
+    ]
+  },
+  "stages": [
+    {
+      "id": "reasoning",
+      "type": "reasoning",
+      "title": {
+        "status": "present",
+        "value": "Establish the invariant",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/0/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Coordinate three monotone scans rather than comparing every combination.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/0/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Return values common to three strictly increasing integer arrays. Advancing pointers whose values are below the current maximum cannot skip a common value.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/0/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Identify the information that must survive each step before choosing code.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/0/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "State the input/output contract.",
+          "Explain why the invariant is sufficient."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/0/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Coordinate three monotone scans rather than comparing every combination."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/0/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:1213:requested-156-1940-31-20261028-v1:1213:approach-native:v1",
+        "version": 5,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1213_requested-156-1940-31-20261028-v1_1213_approach-native_v1--v5.json",
+        "sha256": "165d36e875e2d09015ab6801398c60444e3091127b245fb1869fa0954c2c71d3"
+      }
+    },
+    {
+      "id": "coding",
+      "type": "coding",
+      "title": {
+        "status": "present",
+        "value": "Implement the state transition",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/1/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "Which state changes make the next step preserve this invariant?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/1/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Three-pointer synchronized scan. Advancing pointers whose values are below the current maximum cannot skip a common value.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/1/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "Advance all pointers after finding a match so an output value is emitted only once.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/1/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Three-pointer synchronized scan.",
+          "Keep JSON-wrapper effects distinct from native object effects."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/1/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Advancing pointers whose values are below the current maximum cannot skip a common value.",
+          "Three-pointer synchronized scan."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/1/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:1213:requested-156-1940-31-20261028-v1:1213:python:v1",
+          "version": 5,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1213_requested-156-1940-31-20261028-v1_1213_python_v1--v5.json",
+          "sha256": "186e3b4c05c3333d8e5161b584eb77931c67390b085151c2a472ec147ba3f449"
+        },
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:1213:requested-156-1940-31-20261028-v1:1213:javascript:v1",
+          "version": 5,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1213_requested-156-1940-31-20261028-v1_1213_javascript_v1--v5.json",
+          "sha256": "a779f42fea1702af4a507956e4c6e17d15d8883a710c421e5b2032d2b7809ac6"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:1213:requested-156-1940-31-20261028-v1:1213:approach-native:v1",
+        "version": 5,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1213_requested-156-1940-31-20261028-v1_1213_approach-native_v1--v5.json",
+        "sha256": "165d36e875e2d09015ab6801398c60444e3091127b245fb1869fa0954c2c71d3"
+      }
+    },
+    {
+      "id": "validation",
+      "type": "validation",
+      "title": {
+        "status": "present",
+        "value": "Challenge the boundary",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/2/title"
+          }
+        ]
+      },
+      "question": {
+        "status": "present",
+        "value": "What boundary or counterexample would expose this mistake?",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/2/question"
+          }
+        ]
+      },
+      "explanation": {
+        "status": "present",
+        "value": "Advance all pointers after finding a match so an output value is emitted only once. Check the returned value and input ownership independently. The existing base and extended cases cover selected examples; they do not establish complete domain coverage or native-interface compatibility.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/2/explanation"
+          }
+        ]
+      },
+      "rationale": {
+        "status": "present",
+        "value": "A successful sample run is not a substitute for a contract and counterexamples.",
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/2/rationale"
+          }
+        ]
+      },
+      "instructions": {
+        "status": "present",
+        "value": [
+          "Run both languages against the pinned cohort cases.",
+          "Inspect numeric, order and ownership assumptions separately."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/2/instructions"
+          }
+        ]
+      },
+      "observations": {
+        "status": "missing",
+        "reason": "No interactive study observations authored"
+      },
+      "hints": {
+        "status": "present",
+        "value": [
+          "Advance all pointers after finding a match so an output value is emitted only once."
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/stages/2/hints"
+          }
+        ]
+      },
+      "requirementIds": {
+        "status": "present",
+        "value": [
+          "r0",
+          "r1"
+        ],
+        "provenance": [
+          {
+            "repository": "gamma",
+            "revision": null,
+            "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-history/authoring/study-content-a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825.json",
+            "sha256": "a0fd72d5280680c02e1744b2ca4a0da91c64265f4877b438bb9e21bc54652825",
+            "selector": "/1213/requirements"
+          }
+        ]
+      },
+      "checks": [],
+      "artifacts": [
+        {
+          "kind": "artifact",
+          "id": "artifact:leetcode:1213:requested-156-1940-31-20261028-v1:1213:development-suite:v1",
+          "version": 6,
+          "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1213_requested-156-1940-31-20261028-v1_1213_development-suite_v1--v6.json",
+          "sha256": "6219710f5805d22ded2ad7b683e664fd6ed99fcac8a6efd1283251cc06ac501e"
+        }
+      ],
+      "native": {
+        "kind": "artifact",
+        "id": "artifact:leetcode:1213:requested-156-1940-31-20261028-v1:1213:approach-native:v1",
+        "version": 5,
+        "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1213_requested-156-1940-31-20261028-v1_1213_approach-native_v1--v5.json",
+        "sha256": "165d36e875e2d09015ab6801398c60444e3091127b245fb1869fa0954c2c71d3"
+      }
+    }
+  ],
+  "sequenceStatus": "draft",
+  "native": {
+    "kind": "artifact",
+    "id": "artifact:leetcode:1213:requested-156-1940-31-20261028-v1:1213:approach-native:v1",
+    "version": 5,
+    "path": "projects/algorithm_solver/catalogue/authored/requested-156-1940-31-20261028-v1/study-records/artifact--artifact_leetcode_1213_requested-156-1940-31-20261028-v1_1213_approach-native_v1--v5.json",
+    "sha256": "165d36e875e2d09015ab6801398c60444e3091127b245fb1869fa0954c2c71d3"
+  },
+  "version": 6
+}

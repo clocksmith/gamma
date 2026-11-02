@@ -18,8 +18,10 @@ and not catalogue qualification. Qualification stays unknown. It checks:
    - `official_interface.in_place_arg` k: solve leaves args unchanged and returns
      the expected value; the native entry leaves args[k] equal to the expected
      value and every other argument unchanged.
-3. `string_unit = unicode_codepoint`: the case set contains non-BMP rows and both
-   languages return the oracle value on them.
+3. String units: every problem with string/character parameters declares
+   `string_unit` (unicode_codepoint, ascii or opaque) with a basis. For
+   unicode_codepoint the case set contains non-BMP rows and both languages return
+   the oracle value on them; for ascii every case string is ASCII.
 4. Hash-supersession lineage: manifest files, source_inventory, semantics
    `source_sha256`, SHA256SUMS and authoring-catalog.json agree with the bytes on
    disk; every `supersedes` entry names different, retrievable bytes (history blob
@@ -210,6 +212,16 @@ class CheckerListNode:
 
 
 NODE_TYPES = ('TreeNode', 'ListNode')
+STRING_UNITS = ('unicode_codepoint', 'ascii', 'opaque')
+
+
+def strings(value):
+    """Every str nested in a case argument list."""
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, (list, tuple)):
+        for item in value:
+            yield from strings(item)
 
 
 def native_args(args, types):
@@ -333,6 +345,9 @@ def check_effects(report, base, contracts, cases):
             if in_place is not None:
                 report.expect(bool(native and native.get('mutates_inputs') and native.get('in_place_arg') == in_place),
                               where, 'in_place_arg is declared as native_effects.mutates_inputs')
+            if any('string' in q['type'] or 'character' in q['type'] for q in official['params']):
+                report.expect(sem.get('string_unit') in STRING_UNITS and bool(sem.get('string_unit_basis')),
+                              where, f"string problem declares string_unit in {STRING_UNITS} with a basis")
             if any(q['type'] in NODE_TYPES for q in official['params']):
                 report.expect(bool(sem.get('solve_effects')) and native is not None and 'mutates_inputs' in native,
                               where, 'native node problem declares solve_effects and native_effects.mutates_inputs')
@@ -392,12 +407,15 @@ def check_effects(report, base, contracts, cases):
                     report.expect(g['nativeReturn'] == row['expected'], w, 'native entry returns the expected value')
             if sem.get('string_unit') == 'unicode_codepoint':
                 canaries = [i for i, row in enumerate(rows)
-                            if any(isinstance(a, str) and any(ord(ch) > 0xFFFF for ch in a) for a in row['args'])]
+                            if any(ord(ch) > 0xFFFF for text in strings(row['args']) for ch in text)]
                 report.expect(bool(canaries), where, 'string_unit unicode_codepoint has non-BMP canary cases')
                 for i in canaries:
                     report.expect(got[i]['value'] == rows[i]['expected'], f'{where}:case{i}',
                                   'non-BMP canary returns the code-point oracle value')
-            elif any(isinstance(a, str) and any(ord(ch) > 0xFFFF for ch in a) for row in rows for a in row['args']):
+            elif sem.get('string_unit') == 'ascii':
+                report.expect(all(ord(ch) < 128 for row in rows for text in strings(row['args']) for ch in text), where,
+                              'string_unit ascii: every case string is ASCII')
+            elif sem.get('string_unit') != 'opaque' and any(ord(ch) > 0xFFFF for row in rows for text in strings(row['args']) for ch in text):
                 report.expect(False, where, 'non-BMP case without a declared string_unit')
 
 

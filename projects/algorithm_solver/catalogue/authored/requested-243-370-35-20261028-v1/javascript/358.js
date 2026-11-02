@@ -1,15 +1,18 @@
 "use strict";
 
+// string_unit = unicode_codepoint: counts code points and breaks ties by code
+// point (matching the reference's ord), so non-BMP characters are never split.
 function solve(s, k) {
   if (k <= 1) return s;
   const cnt = new Map();
-  for (let i = 0; i < s.length; i++) {
-    const ch = s[i];
+  let total = 0;
+  for (const ch of s) {
     cnt.set(ch, (cnt.get(ch) || 0) + 1);
+    total++;
   }
   const avail = [];
   for (const [ch, c] of cnt.entries()) {
-    avail.push([-c, ch.charCodeAt(0), ch]);
+    avail.push([-c, ch.codePointAt(0), ch]);
   }
   const q = [];
   let qHead = 0;
@@ -24,7 +27,7 @@ function solve(s, k) {
       if (item[0] < 0) avail.push(item);
     }
   }
-  return res.length === s.length ? res.join("") : "";
+  return res.length === total ? res.join("") : "";
 }
 
 function rearrangeString(s, k) {
@@ -34,3 +37,4 @@ function rearrangeString(s, k) {
 module.exports = solve;
 module.exports.solve = solve;
 module.exports.rearrangeString = rearrangeString;
+if (typeof Solution !== "undefined") solve.Solution = Solution;

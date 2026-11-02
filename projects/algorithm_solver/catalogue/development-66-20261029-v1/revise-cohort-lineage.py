@@ -91,6 +91,28 @@ REVISIONS[-1][1]['requested-243-370-35-20261028-v1'].update({
     'semantics/369-javascript.json': ('solve_effects, native_effects (mutates_inputs true), charged_costs and complexity; source_sha256 rebound', 'keep the semantics binding to the current source and its declared effects'),
 })
 
+STRING_FAMILY = {
+    'requested-156-1940-31-20261028-v1': {'unicode_codepoint': [159, 161, 758, 1933], 'ascii': [294, 751, 772, 903], 'opaque': [737]},
+    'requested-243-370-35-20261028-v1': {'unicode_codepoint': [267, 269, 320, 340, 358], 'ascii': [246, 248, 249, 302, 361],
+                                         'opaque': [243, 245]},
+}
+JS_CODEPOINT = {159, 161, 1933, 267, 320, 358}
+STRING_REVISION = {}
+for cohort, units in STRING_FAMILY.items():
+    table = STRING_REVISION.setdefault(cohort, {})
+    for unit, ids in units.items():
+        for pid in ids:
+            for lang in ('python', 'javascript'):
+                rebound = '; source_sha256 rebound' if lang == 'javascript' and pid in JS_CODEPOINT else ''
+                table[f'semantics/{pid}-{lang}.json'] = (f'string_unit {unit} with string_unit_basis{rebound}',
+                                                         'pin the string unit that check_native_abi.py enforces')
+            if pid in JS_CODEPOINT:
+                table[f'javascript/{pid}.js'] = ('iterate, count, sort and tie-break by Unicode code point (Array.from / for-of / codePointAt) instead of UTF-16 code units',
+                                                 'the previous candidate split non-BMP characters and disagreed with the reference on the non-BMP canary rows')
+STRING_REVISION['requested-156-1940-31-20261028-v1']['cases.py'] = ('non-BMP canary rows for 159, 161, 758 and 1933; expected values come from the unchanged references', 'pin string_unit unicode_codepoint')
+STRING_REVISION['requested-243-370-35-20261028-v1']['cases.py'] = ('non-BMP canary rows for 267, 269, 320 and 358 (with U+FF5A ordering rows); expected values come from the unchanged references', 'pin string_unit unicode_codepoint')
+REVISIONS.append(('2026-11-02', STRING_REVISION))
+
 
 def latest_reasons(cohort):
     merged = {}
