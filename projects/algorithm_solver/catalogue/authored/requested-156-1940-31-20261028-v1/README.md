@@ -25,8 +25,8 @@ exposed the disagreement, and enumerating permutations confirmed it. `oracles.py
 small inputs across all 31 references, and every candidate passes again.
 
 The Python `solve` bodies of 24 problems repeat the reference statement for statement, so agreement there is
-self-agreement; the brute-force cross-check is the independent evidence. Known gaps: 1924 returns integer centre coordinates for
-a single point; several multi-answer or tolerance problems are compared exactly; the generated maximum rows are far
+self-agreement; the brute-force cross-check is the independent evidence. Known gaps: several multi-answer problems are compared exactly against the
+reference order; the generated maximum rows are far
 below the public limits.
 
 ## Native-ABI split and lineage reconciliation (appended 2026-11-02)
@@ -59,6 +59,11 @@ drives them on foreign node objects. Their sources are unchanged.
 String units are pinned in semantics: `unicode_codepoint` for 159, 161, 758 and 1933 (non-BMP canary rows in
 `cases.py`; JavaScript 159, 161 and 1933 now iterate code points), `ascii` for 294, 751, 772 and 903 (official
 domains), and `opaque` for 737 (whole-string equality only).
+
+1924's reference and Python candidate now return float centre coordinates for a single or duplicated point
+(previously `[3, 3, 0.0]`). 774, 1230 and 1924 semantics pin the official absolute tolerance (1e-6, 1e-5, 1e-5) as a
+`float_abs_tolerance` comparator; `run_candidates.py` still requires exact agreement with the rounded reference, which
+is stricter.
 
 
 ```sh

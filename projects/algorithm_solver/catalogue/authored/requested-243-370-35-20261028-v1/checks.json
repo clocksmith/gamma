@@ -845,6 +845,12 @@
       "change": "String units pinned in semantics: unicode_codepoint for 267, 269, 320, 340, 358; ascii (official domain) for 246, 248, 249, 302, 361; opaque (whole-string equality only) for 243, 245. JavaScript 267, 320, 358 now iterate, count, sort and tie-break by code point instead of UTF-16 code units. cases.py gains 5 non-BMP canary rows with reference-computed expected values; the previous JavaScript candidates failed every unit-sensitive canary.",
       "evidence_after": "run_candidates.py all rows pass in both languages through both entries; check_native_abi.py passes (canaries, ASCII rows, declarations).",
       "qualification": "unknown"
+    },
+    {
+      "at": "2026-11-02",
+      "change": "270 semantics pin the official tie rule (smaller value on equal distance; the 3.5 case exercises it). 272 semantics pin an unordered_multiset comparator (official any-order acceptance) and record that ties at the window boundary are outside the official unique-set domain. Sources unchanged.",
+      "evidence_after": "check_native_abi.py applies the comparator on native node inputs.",
+      "qualification": "unknown"
     }
   ],
   "python_candidate_ast_parses": 35,

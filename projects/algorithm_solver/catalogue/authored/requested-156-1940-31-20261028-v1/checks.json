@@ -735,7 +735,7 @@
   "note": "Author-local development checks only. No isolated runner, no independent qualification, no admission. Qualification status remains unknown everywhere.",
   "observations": [
     "280 and 286: the official entries (wiggleSort / Solution.wiggleSort since 2026-11-02, wallsAndGates / Solution.wallsAndGates since a later 2026-11-02 revision) rewrite their first argument in place (official_interface.in_place_arg 0) and are judged on that argument after the call; solve still returns a new value with its arguments unchanged.",
-    "1924: for a single distinct point the reference and the Python candidate return integer centre coordinates (for example [3, 3, 0.0]) although the contract return type is double[]. JSON values are equal and JavaScript cannot distinguish them; recorded, not changed.",
+    "1924: until 2026-11-02 the reference and the Python candidate returned integer centre coordinates for a single distinct point (for example [3, 3, 0.0]) although the contract return type is double[]; both now return floats ([3.0, 3.0, 0.0]).",
     "Exact comparison fixes one answer where the public problem accepts several: 280 (any wiggle order), 742 (any nearest leaf), and rounding to 6, 10 and 5 decimals for 774, 1230 and 1924 where the public problem accepts a tolerance.",
     "1740: the candidates use a lowest-common-ancestor search while the reference uses BFS on an undirected graph, so that pair is independent; most other pairs are not (see reference_candidate_independence).",
     "MAX_ARGS rows are far below the public input limits, so the CPU samples do not establish behaviour at the limits."
@@ -771,6 +771,12 @@
       "at": "2026-11-02",
       "change": "String units pinned in semantics: unicode_codepoint for 159, 161, 758, 1933; ascii (official domain) for 294, 751, 772, 903; opaque (whole-string equality only) for 737. JavaScript 159, 161, 1933 now iterate, count, sort and tie-break by code point instead of UTF-16 code units. cases.py gains 4 non-BMP canary rows with reference-computed expected values; the previous JavaScript candidates failed every unit-sensitive canary.",
       "evidence_after": "run_candidates.py all rows pass in both languages through both entries; check_native_abi.py passes (canaries, ASCII rows, declarations).",
+      "qualification": "unknown"
+    },
+    {
+      "at": "2026-11-02",
+      "change": "1924: ref_1924 and python/1924.py start the single-point circle from float coordinates; cases.py adds a duplicate-point row. 774, 1230 and 1924 semantics pin the official absolute tolerance (1e-6, 1e-5, 1e-5) as a float_abs_tolerance comparator with Python float results.",
+      "evidence_after": "test_oracles.py and crosscheck_bruteforce.py pass; run_candidates.py all rows pass; check_native_abi.py applies the comparators.",
       "qualification": "unknown"
     }
   ],

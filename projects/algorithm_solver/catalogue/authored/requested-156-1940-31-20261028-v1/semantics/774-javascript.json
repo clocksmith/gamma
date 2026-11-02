@@ -1,6 +1,14 @@
 {
   "candidate_design": "Fixed-iteration binary search on maximum adjacent station distance.",
-  "comparison": "exact typed JSON result",
+  "comparator": {
+    "abs_tol": 1e-06,
+    "basis": "Answers within 1e-6 of the actual value are accepted (official)",
+    "element_wise": true,
+    "kind": "float_abs_tolerance",
+    "python_result_type": "float",
+    "reference_rounding": "the reference rounds; exact agreement in run_candidates.py is stricter than this comparator"
+  },
+  "comparison": "float absolute tolerance 1e-06, element-wise; Python results must be float",
   "complexity_target": "O(n log(M / eps)) time, O(n) space",
   "effects": "arguments unchanged",
   "entrypoint": "solve",

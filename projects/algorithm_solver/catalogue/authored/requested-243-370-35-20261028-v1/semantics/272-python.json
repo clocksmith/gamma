@@ -1,6 +1,11 @@
 {
   "candidate_design": "Inorder traversal with size-k sliding window.",
-  "comparison": "exact typed JSON result",
+  "comparator": {
+    "basis": "The official problem accepts the k values in any order",
+    "kind": "unordered_multiset",
+    "reference_order": "ascending in-order window; run_candidates.py compares that order exactly (stricter)"
+  },
+  "comparison": "unordered multiset of the k values",
   "complexity_target": "O(n) time, O(n) space",
   "effects": "arguments unchanged",
   "entrypoint": "solve",
@@ -59,5 +64,6 @@
     "complexity_target": "O(n) time, O(n) space",
     "reference": "Inorder sliding window"
   },
-  "source_sha256": "6870a05c8078a9692751608ecc0825973d9bd509fbe8cc3cf0cb3b88f164f593"
+  "source_sha256": "6870a05c8078a9692751608ecc0825973d9bd509fbe8cc3cf0cb3b88f164f593",
+  "tie_rule": "The official domain guarantees a unique set of k closest values, so equal-distance ties at the window boundary are outside the contract; the reference keeps the smaller values."
 }

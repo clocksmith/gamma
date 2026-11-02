@@ -113,6 +113,22 @@ STRING_REVISION['requested-156-1940-31-20261028-v1']['cases.py'] = ('non-BMP can
 STRING_REVISION['requested-243-370-35-20261028-v1']['cases.py'] = ('non-BMP canary rows for 267, 269, 320 and 358 (with U+FF5A ordering rows); expected values come from the unchanged references', 'pin string_unit unicode_codepoint')
 REVISIONS.append(('2026-11-02', STRING_REVISION))
 
+FLOAT_1924 = ('ref_1924 / candidate: the single-point circle starts from float coordinates, so the centre is double[] '
+              '(for example [3.0, 3.0, 0.0], previously [3, 3, 0.0])', 'the contract return type is double[]; integer coordinates broke Python typed comparison')
+TOLERANCE = ('comparator float_abs_tolerance (official tolerance) with python_result_type float; comparison text updated',
+             'pin the official tolerance comparator that check_native_abi.py applies')
+REVISIONS.append(('2026-11-02', {
+    'requested-156-1940-31-20261028-v1': {
+        'oracles.py': FLOAT_1924, 'python/1924.py': FLOAT_1924,
+        'cases.py': ('1924 gains a duplicate-point row; expected values come from the corrected reference', 'pin the double[] centre for collapsed inputs'),
+        **{f'semantics/{pid}-{lang}.json': TOLERANCE for pid in (774, 1230, 1924) for lang in ('python', 'javascript')},
+    },
+    'requested-243-370-35-20261028-v1': {
+        **{f'semantics/270-{lang}.json': ('tie_rule: equal distance returns the smaller value (official)', 'pin the official tie rule; the 3.5 case exercises it') for lang in ('python', 'javascript')},
+        **{f'semantics/272-{lang}.json': ('comparator unordered_multiset and tie_rule (unique k-set guaranteed by the official domain)', 'pin the official any-order acceptance') for lang in ('python', 'javascript')},
+    },
+}))
+
 
 def latest_reasons(cohort):
     merged = {}

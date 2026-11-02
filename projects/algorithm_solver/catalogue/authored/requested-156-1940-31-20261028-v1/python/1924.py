@@ -27,10 +27,11 @@ def solve(trees):
         uy = (a2 * (cx - bx) + b2 * (ax - cx) + c2 * (bx - ax)) / d
         return (ux, uy, math.hypot(ux - ax, uy - ay))
 
-    c = (pts[0][0], pts[0][1], 0.0)
+    # float() keeps the double[] contract when the circle is a single point.
+    c = (float(pts[0][0]), float(pts[0][1]), 0.0)
     for i in range(len(pts)):
         if dist((c[0], c[1]), pts[i]) > c[2] + 1e-9:
-            c = (pts[i][0], pts[i][1], 0.0)
+            c = (float(pts[i][0]), float(pts[i][1]), 0.0)
             for j in range(i):
                 if dist((c[0], c[1]), pts[j]) > c[2] + 1e-9:
                     c = circle2(pts[i], pts[j])

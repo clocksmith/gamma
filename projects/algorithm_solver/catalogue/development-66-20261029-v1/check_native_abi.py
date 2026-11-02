@@ -22,6 +22,9 @@ and not catalogue qualification. Qualification stays unknown. It checks:
    `string_unit` (unicode_codepoint, ascii or opaque) with a basis. For
    unicode_codepoint the case set contains non-BMP rows and both languages return
    the oracle value on them; for ascii every case string is ASCII.
+   Float-valued results declare a float_abs_tolerance comparator (Python results
+   must be float); declared comparators (tolerance, unordered multiset) are
+   applied to solve and native results.
 4. Hash-supersession lineage: manifest files, source_inventory, semantics
    `source_sha256`, SHA256SUMS and authoring-catalog.json agree with the bytes on
    disk; every `supersedes` entry names different, retrievable bytes (history blob
@@ -213,6 +216,27 @@ class CheckerListNode:
 
 NODE_TYPES = ('TreeNode', 'ListNode')
 STRING_UNITS = ('unicode_codepoint', 'ascii', 'opaque')
+COMPARATORS = ('float_abs_tolerance', 'unordered_multiset')
+
+
+def matches(got, expected, comparator, language):
+    """Declared result comparator; exact JSON equality when none is declared."""
+    kind = (comparator or {}).get('kind')
+    if kind == 'unordered_multiset':
+        return isinstance(got, list) and sorted(map(json.dumps, got)) == sorted(map(json.dumps, expected))
+    if kind == 'float_abs_tolerance':
+        tol = comparator['abs_tol']
+
+        def close(a, b):
+            if isinstance(b, list):
+                return isinstance(a, list) and len(a) == len(b) and all(close(x, y) for x, y in zip(a, b))
+            if isinstance(a, bool) or not isinstance(a, (int, float)):
+                return False
+            if language == 'python' and comparator.get('python_result_type') == 'float' and not isinstance(a, float):
+                return False
+            return abs(a - b) <= tol + 1e-12
+        return close(got, expected)
+    return got == expected
 
 
 def strings(value):
@@ -348,10 +372,17 @@ def check_effects(report, base, contracts, cases):
             if any('string' in q['type'] or 'character' in q['type'] for q in official['params']):
                 report.expect(sem.get('string_unit') in STRING_UNITS and bool(sem.get('string_unit_basis')),
                               where, f"string problem declares string_unit in {STRING_UNITS} with a basis")
+            comparator = sem.get('comparator')
+            if comparator is not None:
+                report.expect(comparator.get('kind') in COMPARATORS, where, f'comparator kind in {COMPARATORS}')
+            if 'double' in official.get('return', {}).get('type', ''):
+                report.expect(bool(comparator) and comparator.get('kind') == 'float_abs_tolerance' and
+                              0 < comparator.get('abs_tol', 0) <= 1e-5, where,
+                              'float-valued result declares a float_abs_tolerance comparator (abs_tol <= 1e-5)')
             if any(q['type'] in NODE_TYPES for q in official['params']):
                 report.expect(bool(sem.get('solve_effects')) and native is not None and 'mutates_inputs' in native,
                               where, 'native node problem declares solve_effects and native_effects.mutates_inputs')
-            if not (native or sem.get('solve_effects') or sem.get('string_unit')):
+            if not (native or sem.get('solve_effects') or sem.get('string_unit') or comparator):
                 continue
             if sem.get('solve_effects'):
                 report.expect(sem['solve_effects'] == {'inputMutation': 'forbidden', 'outputAliasing': 'forbidden'},
@@ -373,8 +404,8 @@ def check_effects(report, base, contracts, cases):
                     w = f'{where}:case{i}'
                     report.expect(g['intact'], w, 'solve leaves native node inputs intact (inputMutation forbidden)')
                     report.expect(g['aliased'] == 0, w, f"solve output shares no input node (outputAliasing forbidden); shared={g['aliased']}")
-                    report.expect(g['solve'] == row['expected'], w, 'solve result on native node input')
-                    report.expect(g['native'] == row['expected'], w, 'native entry result on native node input')
+                    report.expect(matches(g['solve'], row['expected'], comparator, language), w, 'solve result on native node input')
+                    report.expect(matches(g['native'], row['expected'], comparator, language), w, 'native entry result on native node input')
                     if not mutates:
                         report.expect(g['nativeIntact'], w, 'native entry without mutates_inputs leaves node inputs intact')
                 if cycle:
@@ -394,7 +425,7 @@ def check_effects(report, base, contracts, cases):
             for i, (row, g) in enumerate(zip(rows, got)):
                 w = f'{where}:case{i}'
                 report.expect(g['after'] == row['args'], w, 'solve leaves arguments unchanged')
-                report.expect(g['value'] == row['expected'], w, 'solve returns the expected value')
+                report.expect(matches(g['value'], row['expected'], comparator, language), w, 'solve returns the expected value')
                 if in_place is not None:
                     others = [j for j in range(len(row['args'])) if j != in_place]
                     report.expect(g['nativeAfter'][in_place] == row['expected'], w,
@@ -404,13 +435,13 @@ def check_effects(report, base, contracts, cases):
                     report.expect(g['nativeReturn'] is None, w, 'void native entry returns nothing')
                 else:
                     report.expect(g['nativeAfter'] == row['args'], w, 'native entry leaves arguments unchanged')
-                    report.expect(g['nativeReturn'] == row['expected'], w, 'native entry returns the expected value')
+                    report.expect(matches(g['nativeReturn'], row['expected'], comparator, language), w, 'native entry returns the expected value')
             if sem.get('string_unit') == 'unicode_codepoint':
                 canaries = [i for i, row in enumerate(rows)
                             if any(ord(ch) > 0xFFFF for text in strings(row['args']) for ch in text)]
                 report.expect(bool(canaries), where, 'string_unit unicode_codepoint has non-BMP canary cases')
                 for i in canaries:
-                    report.expect(got[i]['value'] == rows[i]['expected'], f'{where}:case{i}',
+                    report.expect(matches(got[i]['value'], rows[i]['expected'], comparator, language), f'{where}:case{i}',
                                   'non-BMP canary returns the code-point oracle value')
             elif sem.get('string_unit') == 'ascii':
                 report.expect(all(ord(ch) < 128 for row in rows for text in strings(row['args']) for ch in text), where,

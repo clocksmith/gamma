@@ -49,6 +49,9 @@ domains), and `opaque` for 243 and 245 (whole-string equality only). JavaScript 
 tie-break by code point; `cases.py` adds non-BMP rows for 267, 269, 320 and 358, including U+FF5A rows whose
 code-point order differs from UTF-16 code-unit order. Expected values come from the unchanged references.
 
+270's semantics pin the official tie rule (smaller value on equal distance); 272's pin an `unordered_multiset`
+comparator, since the official problem accepts any order and guarantees a unique k-set.
+
 
 ```sh
 python3 run_candidates.py > /dev/null
