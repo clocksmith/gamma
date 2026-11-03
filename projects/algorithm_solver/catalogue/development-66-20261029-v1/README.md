@@ -89,7 +89,8 @@ and 86 passing calls for the 11 native node problems (250, 270, 272, 298, 314, 3
 programs and 210 passing calls for the 21 string-parameter problems, whose semantics pin
 `string_unit` (unicode_codepoint, ascii or opaque). `runs/float-ties-20261102/results.json` records 10 programs and
 40 passing calls for 270, 272, 774, 1230 and 1924 after the 1924 float-centre fix and the
-tolerance/tie comparator declarations. The study extensions were revised
+tolerance/tie comparator declarations. `runs/comparators-20261102/results.json` records 20 programs and 98
+passing calls for the multi-answer problems judged by [comparators.py](comparators.py). The study extensions were revised
 with `build-study.py --revise`; earlier records and receipts are retained.
 `runs/guarded/` keeps its original source hashes as history.
 
