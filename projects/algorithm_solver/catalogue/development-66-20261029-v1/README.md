@@ -100,3 +100,30 @@ python3 projects/algorithm_solver/catalogue/development-66-20261029-v1/check_nat
 
 The checker is a regression gate over declared contracts. It is not a purity
 proof or qualification.
+
+## Small-sample canonicalization projection (Task 1.2)
+
+[CANONICALIZATION-PROJECTION-v1.md](CANONICALIZATION-PROJECTION-v1.md) and
+`runs/canonicalization-9-20261102/results.json` compare `raw`, `formatted`
+(AST-normalized formatting) and `compact_palette` (AST-aware capture-safe local
+binding renaming to `a, b, c, ...` plus compact token emission) across 9 problems
+(revised: 156, 280, 286, 340, 903; untouched controls: 250, 270, 737, 1214). All
+54 temporary module variants pass pure `solve` execution and `check_native_abi`
+while leaving authored source files in `catalogue/authored/` untouched.
+
+```sh
+python3 projects/algorithm_solver/catalogue/development-66-20261029-v1/measure_canonicalization.py
+```
+
+## Independent qualification eligibility & dry-run plan (Task 1.3)
+
+[QUALIFICATION-DRY-RUN-PLAN-v1.md](QUALIFICATION-DRY-RUN-PLAN-v1.md) and
+[QUALIFICATION-ELIGIBILITY-v1.json](QUALIFICATION-ELIGIBILITY-v1.json) inventory
+all 66 problems (132 candidate sources) against `ALL4081-STATUS-v4.json`,
+`ADMITTED-SIX-SERVICE-v1.json` and `findings/library-answer-audit-v2/inventory.jsonl`,
+grouping them into five verifier dry-run tiers without executing qualification
+or modifying any status or admission file.
+
+```sh
+python3 projects/algorithm_solver/catalogue/development-66-20261029-v1/plan_qualification_dry_run.py
+```
