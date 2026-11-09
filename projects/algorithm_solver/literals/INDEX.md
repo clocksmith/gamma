@@ -4,6 +4,19 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Fully charged macro / fragment comparison — 2026-11-09
+
+[Matched comparison](macro-fragment-compare-v1/README.md) resumes the owner's
+64/128/256-entry experiment on the existing 300-fit/100-exposed-development
+partition. Exact JavaScript and Python source arms compare counted fragments,
+a matched prefix literal control and fixed-arity AST source macros. Operands,
+CONCAT counts, spelling, framing and padding are charged. Compact Python is a
+separate static diagnostic with original fallbacks retained; it adds no native
+qualification. [Findings](macro-fragment-compare-v1/FINDINGS.md),
+[results](macro-fragment-compare-v1/RESULTS.md) and
+[independent packet replay](macro-fragment-compare-v1/verification.json) retain
+the measurement evidence. No autonomous-solving, optimal-codebook or M1 claim.
+
 ## Joint path-cap attribution — 2026-10-24
 
 [Item60](joint-path-cap-v1/README.md) freshly replays the original inputs and

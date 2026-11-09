@@ -77,6 +77,13 @@ no source qualification, protected reservation or M1 threshold changes implicitl
 
 ## Operating Loops
 
+On 2026-11-09 the owner explicitly resumed the bounded
+[64/128/256-entry macro/fragment comparison](projects/algorithm_solver/literals/macro-fragment-compare-v1/CONTRACT.md).
+This authorizes matched representation measurements on the existing exposed
+development partition, including a separately unqualified compact-Python
+diagnostic. It does not reopen protected populations or imply a new autonomous
+solver, native qualification, publication, or a broader priority change.
+
 Freeze contracts and budgets; execute bounded experiments; independently verify
 outputs and costs; preserve failures; rebuild reports; choose the next hypothesis.
 Joint composition alternates qualified source alternatives and vocabulary search.
