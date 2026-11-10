@@ -10,8 +10,21 @@ import tokenize
 from pathlib import Path
 
 
+def python_physical_lines(source):
+    """Keep byte offsets aligned with AST/tokenize physical LF/CRLF rows.
+
+    str.splitlines also splits Unicode separators and vertical tabs inside valid
+    literals. Those are not Python parser line boundaries. Bare CR source mode
+    differs between ast and StringIO/tokenize, so reject it instead of guessing.
+    """
+    if '\r' in source.replace('\r\n', ''):
+        raise ValueError('bare CR Python source newlines are unsupported; preserve LF or CRLF bytes')
+    parts = source.split('\n')
+    return [part + '\n' for part in parts[:-1]] + [parts[-1]]
+
+
 def python_shape(source):
-    lines=source.splitlines(keepends=True); starts=[0]
+    lines=python_physical_lines(source); starts=[0]
     for line in lines: starts.append(starts[-1]+len(line.encode()))
     def span(n): return (starts[n.lineno-1]+n.col_offset, starts[n.end_lineno-1]+n.end_col_offset)
     tree=ast.parse(source);nodes=[];banned=[]

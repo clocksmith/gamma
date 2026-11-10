@@ -214,4 +214,25 @@ class CodecTests(unittest.TestCase):
                 for (x,y),suffix in zip(holes,parts[1:]):value+=raw[x:y]+suffix
                 self.assertEqual(value,raw[a:b])
 
+
+class PhysicalPythonOffsetTests(unittest.TestCase):
+    def test_unicode_separators_inside_strings_are_not_physical_rows(self):
+        for separator in ('\u2028','\u2029','\x0b','\x0c','\x85'):
+            for newline in ('\n','\r\n'):
+                source=newline.join(['def f():',f'    value = "a{separator}b"','    total += value','    return total',''])
+                raw=source.encode(); shape=shapes.python_shape(source)
+                updates=[raw[a:b] for a,b,children,kind in shape['nodes'] if kind=='AugAssign']
+                self.assertEqual(updates,[b'total += value'])
+                self.assertIn(b'value',[raw[a:b] for a,b in shape['tokens']])
+                for a,b,children,kind in shape['nodes']:
+                    raw[a:b].decode('utf-8')
+                    self.assertLessEqual(b,len(raw))
+
+    def test_bare_cr_fails_closed_instead_of_disagreeing_with_tokenize(self):
+        with self.assertRaisesRegex(ValueError,'bare CR'):
+            shapes.python_shape('def f():\r    return 1\r')
+        output,errors=shapes.shapes({'cr':'def f():\r    return 1\r'},'python')
+        self.assertEqual(output,{})
+        self.assertIn('bare CR',errors['cr'])
+
 if __name__=='__main__':unittest.main()
