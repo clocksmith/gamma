@@ -1,5 +1,9 @@
 # Mars BITS readiness and frozen experiment preparation
 
+Superseded for the current source by [mars-bits-readiness-20261110-alias-closure](../mars-bits-readiness-20261110-alias-closure/README.md);
+this folder's `receipt.json` remains the sealed record for baseline `52ab15e8`
+(check it with `--receipt` against that baseline's sources).
+
 This record captures the verified environment state on Mars (`macOS 26.6.2`,
 Apple M3, `24 GiB` RAM, `14.04 GiB` available workspace disk at measurement),
 the fail-closed Linux sandbox check, the source-free authorized-development

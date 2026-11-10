@@ -29,7 +29,8 @@ from algsolve.synth import semantic_allowlist, semantic_target_pipeline, typed_c
 
 
 SCHEMA = "gamma.mars-bits-readiness.v1"
-DEFAULT_RECEIPT = Path(__file__).resolve().parent / "receipt.json"
+# The current receipt; this folder's receipt.json is the sealed record for baseline 52ab15e8.
+DEFAULT_RECEIPT = Path(__file__).resolve().parents[1] / "mars-bits-readiness-20261110-alias-closure" / "receipt.json"
 BOUND_SOURCES = (
     "projects/algorithm_solver/algsolve/synth/semantic_target_pipeline.py",
     "projects/algorithm_solver/algsolve/synth/semantic_allowlist.py",
@@ -353,7 +354,10 @@ def main() -> None:
     parser.add_argument("--check", action="store_true", help="Verify committed receipt and allowlist bindings")
     parser.add_argument("--receipt", type=Path, default=DEFAULT_RECEIPT, help="Receipt path for --check")
     args = parser.parse_args()
+    # Receipt paths are reported relative to the repository root, so resolve them first.
+    args.receipt = args.receipt.resolve()
     if args.write_receipt is not None:
+        args.write_receipt = args.write_receipt.resolve()
         receipt = build_receipt()
         args.write_receipt.parent.mkdir(parents=True, exist_ok=True)
         args.write_receipt.write_text(json.dumps(receipt, indent=2, sort_keys=True, allow_nan=False) + "\n",
