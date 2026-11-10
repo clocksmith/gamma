@@ -1,0 +1,154 @@
+{
+  "schema": "algsolve.bits-mars-jupiter-pilot-proposal.v1",
+  "status": "prepared_not_authorized_not_started",
+  "name": "bits-base-v2-mars-jupiter-pilot-v1",
+  "research_question": "Test whether a deliberately small, executable semantic language (base-v2, 53 words / 43 predictor labels, fully costed across operations, bindings, structure, constants and types) makes it easier for a bounded non-autoregressive learner (TypedPredictor) to construct correct programs for unfamiliar problems under explicit training and inference budgets, measuring expressibility, discoverability, unfamiliar combinations and unfamiliar families separately.",
+  "host_split": {
+    "mars": {
+      "platform": "macOS-arm64",
+      "role": "prepare_and_review_frozen_experiment",
+      "executes_sandbox_judge": false,
+      "stores_dataset_payloads": false,
+      "stores_encoder_weights": false,
+      "receives_from_jupiter": [
+        "manifests",
+        "checkpoints",
+        "aggregate_receipts"
+      ]
+    },
+    "jupiter": {
+      "platform": "linux",
+      "role": "native_sandbox_qualification_embeddings_and_training",
+      "pre_launch_gate": "Verify Jupiter /usr/bin/bwrap and /usr/bin/prlimit sandbox controls (findings/semantic-target-native-v1/verify.py) and GPU/CPU compute readiness before any corpus qualification or training run.",
+      "sandbox_policy": "unchanged repository Linux bwrap/prlimit judge only; no macOS or unsandboxed execution fallback"
+    }
+  },
+  "authorization_boundary": {
+    "gamma_policy": "gamma/AGENTS.md: Model downloads, remote providers, and compute jobs require user authority.",
+    "recorded_november_9_exception_scope": "literals/macro-fragment-compare-v1/CONTRACT.md authorizes resuming only the macro/fragment literal representation comparison over 300+100 KnownSpecService sources; it does not automatically authorize a new teacher-generated corpus, dataset/encoder downloads, or TypedPredictor training.",
+    "required_separate_authorizations": {
+      "dataset_provisioning": "Authorized AllowlistDatasetAdapter access on Jupiter to pinned LeetCodeDataset-train.jsonl (revision 215604aeed660029df7de2fea5a4d7b6ed476a08, 93643427 bytes, sha256 ef7d64d34b092859607c1010bdd23540860a8cfff2ed7aeb0fe82e0ad524919b), enforcing the frozen allowlist before exposing payloads.",
+      "encoder_provisioning_and_embeddings": "Authorized Qwen/Qwen3-Embedding-0.6B weights and embedding compute on Jupiter (revision 97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3, model.safetensors 1191586416 bytes sha256 0437e45c94563b09e13cb7a64478fc406947a93cb34a7e05870fc8dcd48e23fd, tokenizer.json 11423705 bytes sha256 def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a).",
+      "isolated_teacher_inference": "Separately authorized isolated offline teacher with pinned model_id, model_revision, prompt_sha256, and max_proposals <= 4 receiving only _public_input (statement, starter_code, params, public_examples) and zero reference solutions, independent tests, or judge verdicts.",
+      "student_training_and_evaluation": "Authorized single bounded non-autoregressive TypedPredictor training run and matched 4-route evaluation on Jupiter."
+    },
+    "downloads_performed": false,
+    "compute_launched": false,
+    "protected_scoring": false
+  },
+  "allowlist_and_boundary": {
+    "compiler": "algsolve.synth.semantic_allowlist.compile_committed_allowlist_and_boundary",
+    "allowlist_sha256": "d29c4495b1cd9c062a31ec7d0dd6a62abdbe47cd8b1864aabd36690aeb7ea034",
+    "boundary_sha256": "5628ff61a6ecbeba848fad815fbd38b152f3b68edb29e23102de45e29c6c399e",
+    "committed_sources_sha256": {
+      "catalogue/PROBLEM_INDEX.jsonl": "ea756f2682277983dd4d586245dfcf244ac7ed028df1c3a861164394b609b023",
+      "contracts/js_corpus_reservations_v1.json": "97f8290c6549cf65bfc118fa5b0469de09c9b49ddbc7566ed6a5b946c9cef6fe",
+      "contracts/sample_manifest.json": "40da673a01f48bab08fe6c07a07f493c603e0a34c858c72c2282fcd487fb1bd5",
+      "contracts/typed_confirmation_v1.json": "756cc54f2cf4e761f480a151bc98c25f01e70dd9ac3a82e960669f7d43081e3d",
+      "findings/known-lookup-release-v2/approved-library.json": "104cae9f9bdd1a3993d772d3b7e05de5ad89637ce27a69da115ddadd6cd8ccd8",
+      "literals/cost-decomposition-v1/contract.json": "a2c501792e4ef369a1f2630fd4ffd3b6623c1146ca3d7aac7115b469efe8cd61",
+      "literals/scale-v2/protected-boundary.json": "2ac829a3bca4aac395845ae4e6c3fc5ad3c6a38e606b2441dfe841e0be9fa0ea"
+    },
+    "counts": {
+      "problem_index_total": 5144,
+      "previously_authorized_400": 400,
+      "non_allowlisted_problem_index_rows": 4744,
+      "contaminated_authorized_rows": 103,
+      "self_contained_allowlisted_rows": 297,
+      "excluded_design_or_paid_rows": 61,
+      "functional_non_paid_candidates": 236,
+      "functional_dev_fit_candidates": 175,
+      "functional_dev_val_candidates": 61,
+      "payload_files_opened": 0
+    },
+    "exclusion_rules": [
+      "Explicit allowlist seeded strictly from previously_authorized_400 == literals/cost-decomposition-v1 300 dev_fit + 100 dev_val.",
+      "Exclude all 4,744 non-allowlisted PROBLEM_INDEX rows (historical_reserved382, final100_exact_id_reserved, known_corpus_nonreserved_pending_independent_review, unresolved_global_identity_alias_metadata_only, outside-4081-freeze, hack2hire-public-preview).",
+      "Exclude all reservations in sample_manifest.json, typed_confirmation_v1.json (66-entry pool plus 8 development_audit identities), js_corpus_reservations_v1.json (waves W001 and W002), and approved-library.json protected_composition_alias entries.",
+      "Transitively exclude every connected component across aliases, semantic families, slug sibling_base stems, and group_id structural groups touching any excluded or reserved entry."
+    ]
+  },
+  "representation_boundary": {
+    "vocabulary": "base-v2",
+    "word_count": 53,
+    "predictor_label_count": 43,
+    "codec_path": "contracts/typed_codec_v1.json",
+    "codec_file_sha256": "e95bf0248acfbabd343ade89a3a047eb099d2f2febce47b465318b177755bd1e",
+    "frozen_codec_sha256": "e91aee58994ae952e2b43406606127689e10688404f2b5c774380dc7a77df7ad",
+    "vector_v1_boundary": "57-entry vector-v1 adds three vector effects and one vector type not expressible by the 43-label base-v2 predictor; typed_stream_contract rejects incompatible conversion instead of coercing schemas.",
+    "complete_cost_accounting": {
+      "contract_module": "algsolve/synth/typed_stream_contract.py",
+      "accounted_roles": [
+        "operation",
+        "binding",
+        "structure",
+        "constant",
+        "type"
+      ],
+      "includes_expanded_recipes": true,
+      "note": "6-, 7- and 8-bit encodings of the same semantic vocabulary share identical operations; widening token IDs alone is not a comparison of richer 64-, 128- and 256-operation languages."
+    }
+  },
+  "evaluation_axes_and_splits": {
+    "planner": "algsolve.synth.semantic_target_pipeline.freeze_plan",
+    "splits": {
+      "development_fit": "Fitting components within the 175 allowlisted functional dev_fit pool not assigned to heldout_family or heldout_combination; sole partition eligible for offline teacher target construction and student loss/retrieval.",
+      "heldout_combination": "Predeclared fitting UIDs (--recombination-uid) inside seen semantic families where each family retains >= 1 development_fit example; tests unfamiliar combinations of seen operations/motifs without opening payloads during target construction.",
+      "heldout_family": "Predeclared semantic family components (--holdout-family, taken from reviewed families within the 61 allowlisted functional dev_val pool and selected disjoint families); tests genuinely unfamiliar problem families with zero family, sibling-stem, alias or structural-group overlap.",
+      "excluded_unallowlisted": "Any non-allowlisted entry or connected component touching a non-allowlisted alias/family/structure; never opened.",
+      "excluded_existing": "Any existing protected solving, recognition, confirmation, JS wave, or alias reservation component; takes highest precedence and is never opened."
+    },
+    "measured_quantities": [
+      "expressibility: fraction of reviewed development_fit problems admitting a sandbox-qualified base-v2 program passing public tests, independent tests, and declared_bound_probe (with explicit denominators and unsupported_requirements abstentions preserved)",
+      "discoverability_fit: student and comparator pass rates on development_fit under matched inference budgets",
+      "transfer_unfamiliar_combinations: pass rates on heldout_combination (public decision sealed before independent-test scoring)",
+      "transfer_unfamiliar_families: pass rates on heldout_family (public decision sealed before independent-test scoring)",
+      "complete_costs: operations, bindings, structure, constants, types, wall time, model forward count, repair/search candidates, retries, and sandbox verifications"
+    ]
+  },
+  "student_and_comparators": {
+    "autonomous_goal": "non-autoregressive parallel graph prediction (TypedPredictor)",
+    "student_configuration": {
+      "architecture": "TypedPredictor",
+      "steps": 400,
+      "checkpoint_selection": "fixed final step only; no validation sweep, early stopping, or holdout-driven retries",
+      "seed": 17,
+      "width": 64,
+      "transformer_layers": 2,
+      "optimizer": "AdamW",
+      "learning_rate": 0.001,
+      "loss": "minimum qualified graph loss per development_fit problem; heldout_combination, heldout_family, and independent tests excluded from loss and retrieval",
+      "retrieval_k": 4,
+      "decision_wall_seconds": 2.0
+    },
+    "matched_routes": [
+      {
+        "route": "raw",
+        "description": "Single parallel non-autoregressive forward pass of TypedPredictor without structural repair or public-example reranking."
+      },
+      {
+        "route": "constrained",
+        "description": "Bounded structural repair and public-example selection over TypedPredictor logits within the frozen 2.0s decision budget."
+      },
+      {
+        "route": "nearest_training_graph",
+        "description": "Retrieval-only comparator selecting the nearest compatible development_fit graph without neural composition."
+      },
+      {
+        "route": "direct_bits_search",
+        "description": "Non-neural bounded example-conditioned BITS search comparator under the identical 2.0s wall budget and public-example ceiling."
+      }
+    ],
+    "preserve_denominators_and_negative_results": true
+  },
+  "commands_when_authorized": {
+    "mars_verify_readiness_and_allowlist": [
+      "PYTHONPATH=projects/algorithm_solver .venv/bin/python -m algsolve.synth.semantic_allowlist",
+      "PYTHONPATH=projects/algorithm_solver .venv/bin/python projects/algorithm_solver/findings/mars-bits-readiness-20261110/verify_mars_readiness.py --check"
+    ],
+    "jupiter_pre_launch_checks": [
+      "PYTHONPATH=projects/algorithm_solver .venv/bin/python projects/algorithm_solver/findings/semantic-target-native-v1/verify.py --output /tmp/jupiter-native-selfcheck",
+      "PYTHONPATH=projects/algorithm_solver .venv/bin/python -m unittest discover -s projects/algorithm_solver/tests -p 'test_*.py'"
+    ]
+  }
+}

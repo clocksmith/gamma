@@ -13,6 +13,7 @@ import copy
 import hashlib
 import json
 from pathlib import Path
+import sys
 
 from ..records import Problem
 from ..splits import sibling_base
@@ -57,12 +58,55 @@ def _identities(row):
             | {"structure:" + value for value in row["structural_groups"]})
 
 
-def freeze_plan(metadata, boundary, holdout_families):
+def _validate_allowlist(allowlist):
+    if not isinstance(allowlist, dict) or set(allowlist) != {"uids", "keys", "sources_sha256"}:
+        raise ValueError("Allowlist must contain uids, keys and sources_sha256")
+    cleaned = copy.deepcopy(allowlist)
+    for field in ("uids", "keys"):
+        cleaned[field] = _strings(cleaned[field], f"allowlist.{field}")
+    if not cleaned["uids"] and not cleaned["keys"]:
+        raise ValueError("Allowlist must declare at least one authorized uid or key")
+    sources = cleaned["sources_sha256"]
+    if not isinstance(sources, dict) or not sources:
+        raise ValueError("Allowlist must name its source hashes")
+    for name, value in sources.items():
+        _string(name, "allowlist source")
+        _hash(value)
+    return cleaned
+
+
+def _row_is_allowlisted(row, allowlist):
+    uid_set = set(allowlist["uids"])
+    key_set = set(allowlist["keys"])
+    if uid_set and row["uid"] not in uid_set:
+        return False
+    if key_set and row["key"] not in key_set:
+        return False
+    for alias in row["aliases"]:
+        if key_set and alias.startswith("lc:") and alias not in key_set:
+            return False
+        if uid_set and not alias.startswith("lc:") and alias not in uid_set:
+            return False
+    return True
+
+
+def require_linux_unchanged_sandbox():
+    if sys.platform != "linux":
+        raise RuntimeError("Native qualification requires the unchanged Linux sandbox; no macOS fallback")
+    from ..judge import sandbox
+    sandbox.check_available()
+
+
+def freeze_plan(metadata, boundary, holdout_families, *, allowlist=None, recombination_uids=None):
     """Return a sealed plan using metadata, never statements, sources or tests.
 
     ``boundary`` is the caller's metadata-only union of existing reservations,
     including recorded aliases and structural groups. Its source hashes bind
     the existing authority; this function never edits or supersedes it.
+    When ``allowlist`` is provided, unknown/unallowlisted entries and every
+    connected alias, family or structural-group component stay excluded.
+    When ``recombination_uids`` is provided, those fitting UIDs are held out
+    for unfamiliar-combination testing while keeping seen families populated.
     Family labels must include known semantic relatedness, not just slug stems.
     """
     if set(boundary) != {"uids", "keys", "families", "structural_groups", "sources_sha256"}:
@@ -76,6 +120,12 @@ def freeze_plan(metadata, boundary, holdout_families):
     for name, value in sources.items():
         _string(name, "boundary source")
         _hash(value)
+    if allowlist is not None:
+        allowlist = _validate_allowlist(allowlist)
+    if recombination_uids is not None:
+        recombination_uids = _strings(recombination_uids, "recombination_uids")
+        if not recombination_uids:
+            raise ValueError("Declare nonempty recombination_uids when enabled")
     rows = []
     for original in metadata:
         if set(original) != METADATA_FIELDS:
@@ -89,8 +139,11 @@ def freeze_plan(metadata, boundary, holdout_families):
             _hash(row[field])
         rows.append(row)
     rows.sort(key=lambda row: row["uid"])
-    if not rows or len({row["uid"] for row in rows}) != len(rows):
+    uid_set = {row["uid"] for row in rows}
+    if not rows or len(uid_set) != len(rows):
         raise ValueError("Metadata must contain unique problem UIDs")
+    if recombination_uids is not None and not set(recombination_uids) <= uid_set:
+        raise ValueError("recombination_uids must reference metadata UIDs")
     holdouts = _strings(holdout_families, "holdout_families")
     known = set().union(*(_identities(row) for row in rows))
     if not holdouts or not {"family:" + f for f in holdouts} <= known:
@@ -117,19 +170,37 @@ def freeze_plan(metadata, boundary, holdout_families):
     protected |= {"family:" + sibling_base(k[3:]) for k in boundary["keys"] if k.startswith("lc:")}
     protected |= {"structure:" + v for v in boundary["structural_groups"]}
     protected_roots = {root(value) for value in protected & known}
+    unallowlisted_roots = set()
+    if allowlist is not None:
+        for row in rows:
+            if not _row_is_allowlisted(row, allowlist):
+                unallowlisted_roots.add(root("identity:" + row["uid"]))
     held_roots = {root("family:" + value) for value in holdouts}
+    recomb_set = set(recombination_uids or ())
     members = {}
     for value in sorted(known):
         members.setdefault(root(value), []).append(value)
     assignments = []
     for row in rows:
         group = root("identity:" + row["uid"])
-        split = ("excluded_existing" if group in protected_roots else
-                 "heldout_family" if group in held_roots else "development_fit")
+        split = (
+            "excluded_existing" if group in protected_roots else
+            "excluded_unallowlisted" if group in unallowlisted_roots else
+            "heldout_family" if group in held_roots else
+            "heldout_combination" if row["uid"] in recomb_set else
+            "development_fit"
+        )
         assignments.append({**row, "split": split, "split_group_sha256": digest(members[group])})
     counts = Counter(row["split"] for row in assignments)
     if not counts["development_fit"] or not counts["heldout_family"]:
         raise ValueError("Plan needs both training and newly held-out family components")
+    if recombination_uids is not None:
+        if counts["heldout_combination"] != len(recomb_set):
+            raise ValueError("recombination_uids cannot target excluded or heldout_family rows")
+        fit_families = {row["family"] for row in assignments if row["split"] == "development_fit"}
+        recomb_families = {row["family"] for row in assignments if row["split"] == "heldout_combination"}
+        if not recomb_families <= fit_families:
+            raise ValueError("heldout_combination families must retain at least one development_fit example")
     body = {
         "schema": SCHEMA, "metadata_sha256": digest(rows),
         "boundary": boundary, "holdout_families": holdouts,
@@ -137,6 +208,10 @@ def freeze_plan(metadata, boundary, holdout_families):
         "policy": "freeze before payload loading or generation; never build held-out or existing protected rows",
         "protected_scoring": False, "training": False,
     }
+    if allowlist is not None:
+        body["allowlist"] = allowlist
+    if recombination_uids is not None:
+        body["recombination_uids"] = recombination_uids
     return {**body, "plan_sha256": digest(body)}
 
 
@@ -144,7 +219,13 @@ def validate_plan(plan):
     if not isinstance(plan, dict) or plan.get("schema") != SCHEMA:
         raise ValueError("Unsupported semantic target plan")
     metadata = [{k: v for k, v in row.items() if k in METADATA_FIELDS} for row in plan["rows"]]
-    expected = freeze_plan(metadata, plan["boundary"], plan["holdout_families"])
+    expected = freeze_plan(
+        metadata,
+        plan["boundary"],
+        plan["holdout_families"],
+        allowlist=plan.get("allowlist"),
+        recombination_uids=plan.get("recombination_uids"),
+    )
     if plan != expected:
         raise ValueError("Frozen family plan changed or has inconsistent assignments")
     return expected
@@ -202,6 +283,7 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
     identity = typed_codec.frozen(codec_path)
     test_double = judge is not None
     if judge is None:
+        require_linux_unchanged_sandbox()
         from ..validate import judge_problem
         judge = judge_problem
     output = Path(output)
@@ -214,6 +296,8 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
         "verification_authority": "injected-test-double" if test_double else "repository-sandbox",
         "training": False, "protected_scoring": False,
     }
+    if "allowlist" in plan:
+        binding["allowlist_sources_sha256"] = copy.deepcopy(plan["allowlist"]["sources_sha256"])
     _write_json(output / "contract.json", binding)
     (output / "attempts").mkdir()
     counts = Counter()
@@ -232,6 +316,8 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
         attempt = {"uid": row["uid"], "split_group_sha256": row["split_group_sha256"], "proposals": []}
         stage = "load_problem"
         try:
+            if plan.get("allowlist") is not None and not _row_is_allowlisted(row, plan["allowlist"]):
+                raise PermissionError(f"Row {row['uid']} is not in the frozen development allowlist")
             problem = load_problem(copy.deepcopy(row))
             if not isinstance(problem, Problem) or problem.uid != row["uid"]:
                 raise ValueError("Problem adapter returned a different identity")
@@ -305,10 +391,14 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
                                        "qualification": "finite public/independent tests and declared probe; not formal proof or benchmark acceptance"},
                     }
                     pairs.append(pair)
+                except PermissionError:
+                    raise
                 except (ValueError, KeyError, TypeError, SyntaxError, RuntimeError, OSError) as error:
                     record["error"] = f"{type(error).__name__}: {error}"
                 counts[record["reason"]] += 1
             attempt["reason"] = "processed"
+        except PermissionError:
+            raise
         except (ValueError, KeyError, TypeError, RuntimeError, OSError) as error:
             attempt.update(reason="blocked", stage=stage, error=f"{type(error).__name__}: {error}")
             counts["blocked"] += 1
@@ -341,10 +431,19 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--metadata", type=Path, required=True, help="Identity-only JSON array")
     parser.add_argument("--boundary", type=Path, required=True, help="Existing reservation metadata union")
+    parser.add_argument("--allowlist", type=Path, default=None, help="Explicit authorized development allowlist JSON")
     parser.add_argument("--holdout-family", action="append", required=True)
+    parser.add_argument("--recombination-uid", action="append", default=None, help="Fitting UID held out for unfamiliar combinations")
     parser.add_argument("--output", type=Path, required=True, help="New immutable plan file")
     args = parser.parse_args()
-    plan = freeze_plan(json.loads(args.metadata.read_text()), json.loads(args.boundary.read_text()), args.holdout_family)
+    allowlist = json.loads(args.allowlist.read_text()) if args.allowlist else None
+    plan = freeze_plan(
+        json.loads(args.metadata.read_text()),
+        json.loads(args.boundary.read_text()),
+        args.holdout_family,
+        allowlist=allowlist,
+        recombination_uids=args.recombination_uid,
+    )
     write_plan(args.output, plan)
     print(json.dumps({"plan_sha256": plan["plan_sha256"], "counts": plan["counts"]}, sort_keys=True))
 

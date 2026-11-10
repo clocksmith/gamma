@@ -36,14 +36,23 @@ From the repository root:
 PYTHONPATH=projects/algorithm_solver python3 -m algsolve.synth.semantic_target_pipeline \
   --metadata /authorized/identity-metadata.json \
   --boundary /authorized/existing-reservation-union.json \
+  --allowlist /authorized/development-allowlist.json \
   --holdout-family selected-family \
+  --recombination-uid lcd:selected-combination-uid \
   --output /new-run/family-plan.json
 ```
 
 All aliases, same-family problems and declared shared structures stay in one
-connected component. Existing protection takes precedence over new holdouts.
-Other components become `development_fit`. There must be at least one fitting
-component and one new held-out component. The plan is deterministic, hash-bound
+connected component. Existing protection (`excluded_existing`) takes precedence
+over all other splits. When `--allowlist` (`uids`, `keys`, `sources_sha256`) is
+supplied, any unallowlisted entry or unallowlisted alias marks its entire
+connected alias, family and structural-group component `excluded_unallowlisted`
+so unknown entries, non-allowlisted catalogue rows and cross-family aliases stay
+excluded. When `--recombination-uid` is supplied, selected fitting UIDs within
+seen families become `heldout_combination` while requiring every such family to
+retain at least one `development_fit` example. Other components become
+`development_fit`. There must be at least one fitting component and one new
+held-out component (`heldout_family`). The plan is deterministic, hash-bound
 and write-once. Slug sibling closure is additional protection, not a substitute
 for semantic family review. Do not discover held-out structure by generating or
 inspecting targets after the split.
@@ -72,9 +81,11 @@ load_problem=..., propose=..., load_independent_tests=...)` from a local driver:
 The existing frozen typed codec validates bindings and expands the AST. Python
 compilation checks syntax without executing the target. Public, independent and
 declared-bound tests then run through the existing repository sandbox judge;
-incomplete or failed receipts emit no target. No direct-execution fallback is
-provided when the teacher or sandbox is missing. The declared bound probe is
-not independent evidence of asymptotic complexity.
+incomplete or failed receipts emit no target. Native qualification (`judge=None`)
+requires Linux with the unchanged `bwrap` and `prlimit` sandbox and fails closed
+before creating an output directory on macOS or hosts missing those tools; no
+direct-execution fallback is provided when the teacher or sandbox is missing. The
+declared bound probe is not independent evidence of asymptotic complexity.
 
 Successful pairs retain all family/group identities, feature and pattern hashes,
 source attribution, codec, teacher, implementation and plan bindings. Every raw
