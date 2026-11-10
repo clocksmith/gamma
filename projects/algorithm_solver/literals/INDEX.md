@@ -4,6 +4,19 @@ Start here for source versions, experiments and the working literal languages.
 This is a navigation index over existing manifests and reports, not a second
 results ledger. Completed runs below retain their source, dictionary and execution identities.
 
+## Pure literals with fixed ASCII alphabets — 2026-11-10
+
+[The no-fallback comparison](pure-literal-compare-v1/README.md) reconstructs all
+400 existing development programs per language at 7/8 bits. On the exposed
+100-program validation set, 8-bit medians are 89.5 JavaScript / 163.5 Python
+selections. Matched payload bits fall 19.62% / 39.41% versus the prior mixed
+macro/spelling protocol; complete packet bytes change +0.94% / -29.21% because
+the existing literal header is larger. Six-bit coverage remains 71/100 and
+82/100. The original fit-only alphabet's coverage failures are retained.
+No source rewriting, fresh native qualification, autonomous solving, protected
+evaluation, 1,000-problem claim or M1 promotion. Exact tables stay private;
+source-free receipts and independent minimum-cost packet replay are linked.
+
 ## Fully charged macro / fragment comparison — 2026-11-09
 
 [Matched comparison](macro-fragment-compare-v1/README.md) resumes the owner's
