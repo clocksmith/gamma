@@ -1,4 +1,5 @@
 import importlib.util
+import itertools
 from functools import lru_cache
 from pathlib import Path
 import random
@@ -59,6 +60,43 @@ class CodecTest(unittest.TestCase):
                 source = ''.join(rng.choice('abcx') for _ in range(rng.randrange(1, 10)))
                 self.assertEqual(codec.encode(source, words, width).input_presses,
                                  independent_cost(source, words, width))
+
+    def test_prefix_matching_preserves_lower_entry_id_ties(self):
+        for width in (6, 7, 8):
+            for entries, codes in [(['aba', 'ab', 'ba'], (1, 3)),
+                                   (['ab', 'aba', 'ba'], (1, 2))]:
+                words = dictionary(width, entries)
+                packet = codec.FragmentEncoder(words, width).encode('ababa')
+                self.assertEqual(packet.bits, ''.join(format(i, f'0{width}b') for i in codes))
+
+    def test_reusable_encoder_matches_exhaustive_oracle_and_isolates_calls(self):
+        for width in (6, 7, 8):
+            words = dictionary(width, ['ab', 'ba', 'aa', 'aba', 'café', '🙂x'])
+            encoder = codec.FragmentEncoder(words, width)
+            for size in range(7):
+                for letters in itertools.product('abx', repeat=size):
+                    source = ''.join(letters)
+                    packet = encoder.encode(source)
+                    self.assertEqual(packet.input_presses, independent_cost(source, words, width))
+                    self.assertEqual(codec.decode_packet(codec.packet_bytes(packet), words, width), source)
+            for source in ['café🙂x', '', 'zabz', '🙂café', 'ababa']:
+                self.assertEqual(encoder.encode(source), codec.encode(source, words, width))
+            # Mutation of the original list must not alter this codebook.
+            original = encoder.encode('aba')
+            words[0] = 'changed'
+            self.assertEqual(encoder.encode('aba'), original)
+
+    def test_maximum_utf8_source_roundtrips_with_reused_dictionary(self):
+        for width in (6, 7, 8):
+            words = dictionary(width, ['aa', '🙂x', 'éé'])
+            encoder = codec.FragmentEncoder(words, width)
+            for source in ['a' * codec.MAX_SOURCE_BYTES,
+                           '🙂' * (codec.MAX_SOURCE_BYTES // 4)]:
+                packet = encoder.encode(source)
+                self.assertEqual(packet.source_bytes, codec.MAX_SOURCE_BYTES)
+                self.assertEqual(codec.decode_packet(codec.packet_bytes(packet), words, width), source)
+            with self.assertRaises(ValueError):
+                encoder.encode('🙂' * (codec.MAX_SOURCE_BYTES // 4) + 'a')
 
     def test_partial_codewords_invalid_utf8_and_unclosed_modes_refuse(self):
         words = dictionary(6, ['ab'])

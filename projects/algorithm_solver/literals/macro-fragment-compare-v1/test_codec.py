@@ -1,5 +1,7 @@
 import itertools
 import unittest
+import sys
+from unittest.mock import patch
 from functools import lru_cache
 import codec
 import shapes
@@ -28,6 +30,104 @@ class CodecTests(unittest.TestCase):
         self.assertEqual(out,raw);self.assertGreater(stats['macro_calls'],0)
         self.assertGreater(stats['concat_count_bits'],0)
         self.assertEqual(len(bits),stats['primary_selections']*6+stats['spelling_payload_bits']+stats['transition_bits']+stats['concat_count_bits'])
+    def test_nesting_boundary_roundtrips_at_every_width(self):
+        table = ((b'(', b')'),)
+        for width in (6, 7, 8):
+            for nesting in (codec.MAX_DEPTH, codec.MAX_DEPTH + 1):
+                raw = b'(' * nesting + b'x' + b')' * nesting
+                occurrences = [(i, len(raw)-i, table[0], ((i+1, len(raw)-i-1),))
+                               for i in range(nesting)]
+                bits, _ = codec.Encoder(raw, table, width, occurrences).encode()
+                self.assertEqual(codec.decode(bits, table, width)[0], raw)
+                # At most MAX_DEPTH shells can surround the innermost spelling.
+                expected = codec.MAX_DEPTH * width + width + 1 + 9 * (1 + 2 * (nesting-codec.MAX_DEPTH))
+                self.assertEqual(len(bits), expected)
+
+    def test_concat_consumes_its_own_depth(self):
+        table = ((b'f(', b')'), (b'ab',), (b'cd',))
+        raw = b'f(abcd)'
+        occurrences = [(0, len(raw), table[0], ((2, 6),))]
+        for width in (6, 7, 8):
+            count_bits = ((16 + width - 1) // width) * width
+            for limit in (1, 2):
+                with patch.object(codec, 'MAX_DEPTH', limit):
+                    bits, _ = codec.Encoder(raw, table, width, occurrences).encode()
+                    decoded, stats = codec.decode(bits, table, width)
+                    self.assertEqual(decoded, raw)
+                    expected = 2 * width + 37 if limit == 1 else 4 * width + count_bits
+                    self.assertEqual(len(bits), expected)
+                    self.assertEqual(stats['count_words'], 0 if limit == 1 else count_bits // width)
+
+    def test_depth_constrained_cost_against_independent_oracle(self):
+        table = ((b'f(', b')'), (b'ab',), (b'cd',))
+        for width in (6, 7, 8):
+            for nesting in (1, 2, 3):
+                raw = b'f(' * nesting + b'abcd' + b')' * nesting
+                occurrences = [(2*i, len(raw)-i, table[0], ((2*i+2, len(raw)-i-1),))
+                               for i in range(nesting)]
+                for limit in (0, 1, 2, 3):
+                    @lru_cache(None)
+                    def options(start, end, depth):
+                        values = [(stop, width+9*(stop-start)+1, True)
+                                  for stop in range(start+1, end+1)]
+                        for parts in table:
+                            if len(parts) == 1 and raw.startswith(parts[0], start) and start+len(parts[0]) <= end:
+                                values.append((start+len(parts[0]), width, False))
+                        if depth < limit:
+                            for a, b, parts, holes in occurrences:
+                                if a == start and b <= end:
+                                    values.append((b, width+sum(single(x, y, depth+1) for x, y in holes), False))
+                        return values
+
+                    @lru_cache(None)
+                    def sequences(start, end, depth, previous_raw=False):
+                        if start == end:
+                            return {0: 0}
+                        costs = {}
+                        for stop, cost, is_raw in options(start, end, depth):
+                            if previous_raw and is_raw:
+                                continue
+                            for count, suffix in sequences(stop, end, depth, is_raw).items():
+                                costs[count+1] = min(costs.get(count+1, float('inf')), cost+suffix)
+                        return costs
+
+                    @lru_cache(None)
+                    def single(start, end, depth):
+                        best = min(cost for stop, cost, _ in options(start, end, depth) if stop == end)
+                        if depth < limit:
+                            overhead = width + ((16+width-1)//width)*width
+                            for count, cost in sequences(start, end, depth+1).items():
+                                if count >= 2:
+                                    best = min(best, overhead+cost)
+                        return best
+
+                    expected = min(sequences(0, len(raw), 0).values())
+                    with patch.object(codec, 'MAX_DEPTH', limit):
+                        bits, _ = codec.Encoder(raw, table, width, occurrences).encode()
+                        self.assertEqual(len(bits), expected)
+                        self.assertEqual(codec.decode(bits, table, width)[0], raw)
+
+    def test_iterative_encoder_and_explicit_state_budget(self):
+        raw = b'(' * 110 + b'x' + b')' * 110
+        table = ((b'(', b')'),)
+        occurrences = [(i, len(raw)-i, table[0], ((i+1, len(raw)-i-1),)) for i in range(110)]
+        old_limit = sys.getrecursionlimit()
+        try:
+            sys.setrecursionlimit(200)
+            bits, _ = codec.Encoder(raw, table, 6, occurrences).encode()
+        finally:
+            sys.setrecursionlimit(old_limit)
+        self.assertEqual(codec.decode(bits, table, 6)[0], raw)
+        encoder = codec.Encoder(raw, table, 6, occurrences)
+        with patch.object(codec, 'MAX_DP_STATES', 32):
+            with self.assertRaisesRegex(ValueError, 'Optimizer state limit'):
+                encoder.encode()
+        self.assertFalse(encoder._cache)
+        self.assertEqual(codec.decode(encoder.encode()[0], table, 6)[0], raw)
+        raw = b'x' * codec.MAX_BYTES
+        bits, _ = codec.Encoder(raw, (), 8).encode()
+        self.assertEqual(codec.decode(bits, (), 8)[0], raw)
+
     def test_unicode_and_exact_integer_bytes(self):
         raw='return 900719925474099312345 + len("猫")\n'.encode()
         for width in (6,7,8):

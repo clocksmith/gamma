@@ -32,7 +32,7 @@ input presses are not stored bytes.
 
 ## Delivery state
 
-The codec and seven focused tests are implemented. No fitted dictionaries,
+The codec and focused tests are implemented. No fitted dictionaries,
 new corpus freeze, guide publication, browser integration or human-effort result
 is claimed. The larger paired corpus still needs source-specific evidence joins;
 qualification of a canonical source does not qualify historical guide variants.
@@ -42,3 +42,29 @@ Run from Gamma:
 ```sh
 python3 projects/algorithm_solver/literals/fragment-spelling-v1/test_codec.py
 ```
+
+## Indexed corpus encoding (2026-11-10)
+
+`FragmentEncoder(fragments, width)` validates and indexes one stable dictionary
+for reuse across sources. It preserves the original minimum-cost parse,
+code-to-fragment mapping, lower-ID tie-breaking, packet bytes and complete
+spelling costs. Each call owns its parse state. The one-shot `encode` API remains
+compatible. This changes encoding throughput, not vocabulary quality or coverage.
+
+The [bounded synthetic measurement](indexed-encoder-benchmark-20261110.json)
+compares predecessor `5589e95a1` with the indexed encoder on 24 deterministic
+mixed-syntax strings (33,524 UTF-8 bytes), three alternating-order repetitions
+per width, on dot's Linux/Python 3.12.14 environment. Median encoding speedups
+were 8.01x, 15.19x and 28.45x at widths 6, 7 and 8, respectively. All packets and
+accounting fields matched the predecessor exactly. These are synthetic encoder
+measurements, not qualified-program throughput, complete solving latency or
+larger-problem coverage results.
+
+```sh
+python3 projects/algorithm_solver/literals/fragment-spelling-v1/test_codec.py
+python3 projects/algorithm_solver/literals/fragment-spelling-v1/benchmark_encoder.py
+```
+
+The ten tests cover independent exhaustive minimum costs, overlapping-prefix
+ID ties, dictionary reuse/isolation, exact Unicode/whitespace/NUL bytes,
+maximum 64-KiB inputs, and packet rejection/accounting.

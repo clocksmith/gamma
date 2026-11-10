@@ -50,7 +50,9 @@ def main():
         metadata, _ = shapes.shapes(source_sets['fit'], language)
         literals, macros, _, original_banned, support = shapes.mine(source_sets['fit'], metadata)
         populations = [(folder, data, source_sets, literals, macros, support)]
-        if language == 'python':
+        if 'compact_static_diagnostic' in data:
+            assert language == 'python'
+            transform = run.load_transform()
             diagnostic = data['compact_static_diagnostic']
             assert diagnostic['qualified_successors'] == 0
             compact = {}
@@ -60,7 +62,7 @@ def main():
                 assert records.keys() == sources.keys()
                 for pid, source in sources.items():
                     if records[pid]['status'] == 'transformed':
-                        candidate, _ = run.TRANSFORM.transform(source)
+                        candidate, _ = transform.transform(source)
                         assert digest(candidate.encode()) == records[pid]['candidate_sha256']
                     else:
                         candidate = source
@@ -68,6 +70,8 @@ def main():
             metadata, _ = shapes.shapes(compact['fit'], 'python')
             literals, macros, _, _, support = shapes.mine(compact['fit'], metadata, original_banned)
             populations.append((folder / 'compact-static', diagnostic, compact, literals, macros, support))
+        elif language == 'python':
+            assert result['contract'].get('compact_diagnostic') == 'omitted_by_request'
         for location, population, sources, literals, macros, support in populations:
             seal_bytes = (location / 'sealed-tables.json').read_bytes()
             assert digest(seal_bytes) == population['seal_sha256']

@@ -44,59 +44,90 @@ class Packet:
         return len(self.bits)
 
 
-def encode(source, fragments, width):
-    """Minimum binary press parse; fitting/qualification are outside this codec.
+class FragmentEncoder:
+    """Validated fixed dictionary reusable across independently encoded sources.
 
-    Two states at each UTF-8 byte boundary, at most 64KiB. Ties keep the first
-    action: lower fragment ID before spelling; no uncharged names or operands.
-    O(source bytes * dictionary size + matching bytes), O(source bytes) state.
+    Only the byte-prefix trie is retained. Parsing state belongs to each call,
+    so one source cannot influence the encoding of the next. The caller's
+    dictionary is copied to preserve the selected code-to-fragment mapping.
     """
-    dictionary = validate_dictionary(fragments, width)
-    raw = source.encode('utf-8', errors='strict')
-    if len(raw) > MAX_SOURCE_BYTES:
-        raise ValueError('Source exceeds 64KiB')
-    n = len(raw)
-    normal, spelling = [0] * (n + 1), [0] * (n + 1)
-    selected, keep_spelling = [0] * n, [False] * n
-    spelling[n] = 1  # Closing spelling is mandatory, including at EOF.
-    for offset in range(n - 1, -1, -1):
-        best, choice = width + 9 + spelling[offset + 1], 0
-        for index, fragment in enumerate(dictionary, 1):
-            if raw.startswith(fragment, offset):
-                cost = width + normal[offset + len(fragment)]
-                if cost < best or (cost == best and (choice == 0 or index < choice)):
-                    best, choice = cost, index
-        normal[offset], selected[offset] = best, choice
-        # Exit may immediately select a fragment or open a new spelling run.
-        # Reopening is costlier than staying, so no zero-length cycle exists.
-        stay, leave = 9 + spelling[offset + 1], 1 + normal[offset]
-        spelling[offset], keep_spelling[offset] = (stay, True) if stay < leave else (leave, False)
-    bits, offset, in_spelling = [], 0, False
-    fragments_used = bytes_spelled = switches = 0
-    while offset < n:
+
+    def __init__(self, fragments, width):
+        self.dictionary = validate_dictionary(fragments, width)
+        self.fragments = tuple(fragments)
+        self.width = width
+        self.trie = {}
+        for index, fragment in enumerate(self.dictionary, 1):
+            node = self.trie
+            for byte in fragment:
+                node = node.setdefault(byte, {})
+            node[None] = index
+
+    def encode(self, source):
+        """Minimum binary press parse with the original deterministic tie-break.
+
+        Two states at each UTF-8 byte boundary, at most 64KiB. Lower fragment
+        ID wins ties before spelling. Dictionary matching walks only matching
+        byte prefixes, independent of unrelated fragment count. Parsing uses
+        O(source bytes) state plus the dictionary trie.
+        """
+        fragments, dictionary, width = self.fragments, self.dictionary, self.width
+        raw = source.encode('utf-8', errors='strict')
+        if len(raw) > MAX_SOURCE_BYTES:
+            raise ValueError('Source exceeds 64KiB')
+        n = len(raw)
+        normal, spelling = [0] * (n + 1), [0] * (n + 1)
+        selected, keep_spelling = [0] * n, [False] * n
+        spelling[n] = 1  # Closing spelling is mandatory, including at EOF.
+        for offset in range(n - 1, -1, -1):
+            best, choice = width + 9 + spelling[offset + 1], 0
+            node, stop = self.trie, offset
+            while stop < n:
+                node = node.get(raw[stop])
+                if node is None:
+                    break
+                stop += 1
+                index = node.get(None)
+                if index is not None:
+                    cost = width + normal[stop]
+                    if cost < best or (cost == best and (choice == 0 or index < choice)):
+                        best, choice = cost, index
+            normal[offset], selected[offset] = best, choice
+            # Exit may immediately select a fragment or open a new spelling run.
+            # Reopening is costlier than staying, so no zero-length cycle exists.
+            stay, leave = 9 + spelling[offset + 1], 1 + normal[offset]
+            spelling[offset], keep_spelling[offset] = (stay, True) if stay < leave else (leave, False)
+        bits, offset, in_spelling = [], 0, False
+        fragments_used = bytes_spelled = switches = 0
+        while offset < n:
+            if in_spelling:
+                if keep_spelling[offset]:
+                    bits.append('1' + format(raw[offset], '08b'))
+                    bytes_spelled += 1
+                    offset += 1
+                else:
+                    bits.append('0'); switches += 1; in_spelling = False
+            else:
+                entry = selected[offset]
+                bits.append(format(entry, f'0{width}b'))
+                if entry:
+                    offset += len(dictionary[entry - 1]); fragments_used += 1
+                else:
+                    switches += width; in_spelling = True
+                    bits.append('1' + format(raw[offset], '08b'))
+                    bytes_spelled += 1; offset += 1
         if in_spelling:
-            if keep_spelling[offset]:
-                bits.append('1' + format(raw[offset], '08b'))
-                bytes_spelled += 1
-                offset += 1
-            else:
-                bits.append('0'); switches += 1; in_spelling = False
-        else:
-            entry = selected[offset]
-            bits.append(format(entry, f'0{width}b'))
-            if entry:
-                offset += len(dictionary[entry - 1]); fragments_used += 1
-            else:
-                switches += width; in_spelling = True
-                bits.append('1' + format(raw[offset], '08b'))
-                bytes_spelled += 1; offset += 1
-    if in_spelling:
-        bits.append('0'); switches += 1
-    encoded = ''.join(bits)
-    assert len(encoded) == normal[0]
-    assert decode(encoded, fragments, width) == source
-    return Packet(width, encoded, sha256(raw).hexdigest(), n, fragments_used,
-                  fragments_used * width, bytes_spelled, bytes_spelled * 9, switches)
+            bits.append('0'); switches += 1
+        encoded = ''.join(bits)
+        assert len(encoded) == normal[0]
+        assert decode(encoded, fragments, width) == source
+        return Packet(width, encoded, sha256(raw).hexdigest(), n, fragments_used,
+                      fragments_used * width, bytes_spelled, bytes_spelled * 9, switches)
+
+
+def encode(source, fragments, width):
+    """Encode once; use FragmentEncoder to reuse a dictionary across sources."""
+    return FragmentEncoder(fragments, width).encode(source)
 
 
 def decode(bits, fragments, width):

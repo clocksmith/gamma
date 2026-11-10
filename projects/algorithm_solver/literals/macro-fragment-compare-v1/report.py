@@ -1,4 +1,5 @@
 """Render measured aggregates without selecting or refitting any dictionary."""
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -7,7 +8,11 @@ import statistics
 HERE=Path(__file__).resolve().parent
 
 def main():
-    r=json.loads((HERE/'results.json').read_text())
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--results',type=Path,default=HERE/'results.json')
+    parser.add_argument('--output',type=Path,default=HERE/'RESULTS.md')
+    args=parser.parse_args()
+    r=json.loads(args.results.read_text())
     if r.get('status')!='completed':raise ValueError('Incomplete comparison')
     lines=['# Matched macro / fragment comparison', '',
            'This measures encoding of existing qualified solutions, not finding solutions from problem descriptions. '
@@ -50,30 +55,36 @@ def main():
             for name,label in labels.items():
                 s=d['validation'][f'{width}-{name}']['summary'];m=s['packet_word_equivalents']
                 lines.append(f"| {language} | {width} | {label} | {m['mean']:.2f} | {m['p50']:.2f} | {m['p95']:.2f} | {s['primary_selections']['mean']:.2f} | {s['count_words']['mean']:.2f} | {s['spelling_payload_bits']['mean']:.2f} | {s['transition_bits']['mean']:.2f} |")
-    lines+=['','## Static compact-Python diagnostic', '',
-             'Fit dictionaries were sealed before validation transformation. Unsupported transforms retain original source bytes in the full denominator. '
-             'These successor sources have no fresh native qualification: the table is a static representation measurement, not newly qualified coverage.', '',
-             '| Width | Representation | Full validation intersection | Mean payload words-equivalent | p50 | p95 | Transformed-only n / mean / p50 / p95 |',
-             '|---|---|---:|---:|---:|---:|---|']
-    diagnostic=r['languages']['python']['compact_static_diagnostic']
-    for w in (6,7,8):
-        for name,label in labels.items():
-            key=f'{w}-{name}';s=diagnostic['validation'][key]['summary'];m=s['payload_word_equivalents']
-            t=diagnostic['validation_transformed_only'][key]['payload_word_equivalents']
-            subset=f"{t['n']} / {t['mean']:.2f} / {t['p50']:.2f} / {t['p95']:.2f}" if t else 'none'
-            lines.append(f"| {w} | {label} | {s['represented']}/100 | {m['mean']:.2f} | {m['p50']:.2f} | {m['p95']:.2f} | {subset} |")
-    transformed=sum(x['status']=='transformed' for x in diagnostic['validation_source_rows'])
-    lines+=['',f"Validation transformer: {transformed} transformed; {len(diagnostic['validation_source_rows'])-transformed} original fallbacks. Freshly qualified successors: 0.", '',
+    if 'compact_static_diagnostic' in r['languages'].get('python',{}):
+        lines+=['','## Static compact-Python diagnostic', '',
+                 'Fit dictionaries were sealed before validation transformation. Unsupported transforms retain original source bytes in the full denominator. '
+                 'These successor sources have no fresh native qualification: the table is a static representation measurement, not newly qualified coverage.', '',
+                 '| Width | Representation | Full validation intersection | Mean payload words-equivalent | p50 | p95 | Transformed-only n / mean / p50 / p95 |',
+                 '|---|---|---:|---:|---:|---:|---|']
+        diagnostic=r['languages']['python']['compact_static_diagnostic']
+        for w in (6,7,8):
+            for name,label in labels.items():
+                key=f'{w}-{name}';s=diagnostic['validation'][key]['summary'];m=s['payload_word_equivalents']
+                t=diagnostic['validation_transformed_only'][key]['payload_word_equivalents']
+                subset=f"{t['n']} / {t['mean']:.2f} / {t['p50']:.2f} / {t['p95']:.2f}" if t else 'none'
+                lines.append(f"| {w} | {label} | {s['represented']}/100 | {m['mean']:.2f} | {m['p50']:.2f} | {m['p95']:.2f} | {subset} |")
+        transformed=sum(x['status']=='transformed' for x in diagnostic['validation_source_rows'])
+        lines+=['',f"Validation transformer: {transformed} transformed; {len(diagnostic['validation_source_rows'])-transformed} original fallbacks. Freshly qualified successors: 0."]
+    else:
+        if r['contract'].get('compact_diagnostic') != 'omitted_by_request':
+            raise ValueError('Missing compact diagnostic without an explicit omission contract')
+        lines+=['','## Static compact-Python diagnostic','','Not run: this exact-source-only comparison explicitly omitted the separately unqualified compact-Python diagnostic.']
+    lines+=['',
              '## Reproduction and limits', '',
              '- [Counting contract](CONTRACT.md); [machine-readable results](results.json).',
              '- `run.py` requires the existing hash-pinned KnownSpecService configuration and an out-of-repository private output directory. It refuses source outside the guarded service.',
              '- Private source files, dictionaries and packets are retained outside Git. Public results bind their source, receipt, table and packet hashes.',
              '- `test_codec.py` checks exhaustive short-string optimal segmentation, nested macro operands, exact integer/Unicode bytes, malformed packets, ownership and AST spans.',
-             '- The prerequisite lane checks passed; 27 native judge tests were skipped because this host lacks bubblewrap/prlimit. No candidate was executed without the required sandbox.',
+             ('- Development checks are separate: this runner does not execute or attest native judge qualification. See the accompanying check receipts.' if 'development_checks' in r else '- The prerequisite lane checks passed; 27 native judge tests were skipped because this host lacks bubblewrap/prlimit. No candidate was executed without the required sandbox.'),
              '- No protected source, model call, training, publication, new native qualification, autonomous solving, or human-fluency result is claimed.',
              '- Whole fit sources/function units/bodies are excluded as table entries. Literals and macro shells must recur in at least two distinct fitting source hashes. Spelling remains an explicit general fallback.',
              '- Decoder and dictionary byte sizes, source membership failures, packet overheads and every fit trial are retained in results.json.', '',
-             f"Measured process elapsed: {r['elapsed_seconds']:.3f} seconds. Runtime: {r['runtime']['platform']}. Results SHA-256: `{hashlib.sha256((HERE/'results.json').read_bytes()).hexdigest()}`.", '']
-    (HERE/'RESULTS.md').write_text('\n'.join(lines))
+             f"Measured process elapsed: {r['elapsed_seconds']:.3f} seconds. Runtime: {r['runtime']['platform']}. Results SHA-256: `{hashlib.sha256(args.results.read_bytes()).hexdigest()}`.", '']
+    args.output.write_text('\n'.join(lines))
 
 if __name__=='__main__':main()

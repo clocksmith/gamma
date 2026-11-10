@@ -22,7 +22,14 @@ import select_literals
 def module(name,path):
     spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);sys.modules[name]=m;spec.loader.exec_module(m);return m
 FSP=module('matched_fragment_spelling',HERE.parent/'fragment-spelling-v1/codec.py')
-TRANSFORM=module('matched_python_compact',HERE.parent/'python-compact-v1/transform.py')
+def load_transform():
+    path=HERE.parent/'python-compact-v1/transform.py'
+    if not path.is_file():
+        raise FileNotFoundError('Compact Python transformer is not provisioned: '+str(path)+
+            '. Use --exact-only for the qualified exact-source comparison; '
+            'this omits, rather than reproduces, the historical compact diagnostic.')
+    return module('matched_python_compact',path)
+
 def sha(raw):return hashlib.sha256(raw).hexdigest()
 def packed(x):return (json.dumps(x,sort_keys=True,indent=2)+'\n').encode()
 def write(p,x):p.write_bytes(packed(x))
@@ -49,10 +56,12 @@ def materialize(service,ids,language,directory):
 
 def evaluate(sources,table,width,occ,protocol,output=None):
     rows=[];uses=Counter()
+    if protocol=='fragment':
+        dictionary=[p[0].decode() for p in table]
+        fragment_encoder=FSP.FragmentEncoder(dictionary,width)
     for pid,source in sources.items():
         if protocol=='fragment':
-            dictionary=[p[0].decode() for p in table]
-            p=FSP.encode(source,dictionary,width);binary=FSP.packet_bytes(p)
+            p=fragment_encoder.encode(source);binary=FSP.packet_bytes(p)
             if FSP.decode_packet(binary,dictionary,width)!=source:raise ValueError('FSP roundtrip')
             bits=p.bits;runs=p.mode_switch_bits//(width+1)
             stats={'primary_selections':p.fragment_selections+runs,'spelling_payload_bits':p.spelling_bits,
@@ -121,7 +130,9 @@ def train(fit,language,folder,original_banned=()):
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--service',type=Path,required=True);p.add_argument('--service-sha256',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--report',type=Path,required=True)
+    p.add_argument('--exact-only',action='store_true',help='Run exact-source arms without the separately unqualified compact-Python diagnostic')
     p.add_argument('--prior-attempt',type=Path,help='Optional retained comparison report, for audit linkage only');a=p.parse_args()
+    transform=None if a.exact_only else load_transform()
     if a.output.resolve().is_relative_to(ROOT):raise ValueError('Private output must be outside repository')
     a.output.mkdir(parents=True,exist_ok=False)
     service=KnownSpecService.from_config(a.service.resolve(),a.service_sha256)
@@ -130,11 +141,13 @@ def main():
     assert len(fitids)==300 and len(validids)==100 and not set(fitids)&set(validids)
     pins={p.name:sha(p.read_bytes()) for p in HERE.iterdir() if p.suffix in ('.py','.cjs','.md')}
     pins['fragment-spelling-v1/codec.py']=sha((HERE.parent/'fragment-spelling-v1/codec.py').read_bytes())
-    pins['python-compact-v1/transform.py']=sha((HERE.parent/'python-compact-v1/transform.py').read_bytes())
+    if transform is not None:
+        pins['python-compact-v1/transform.py']=sha((HERE.parent/'python-compact-v1/transform.py').read_bytes())
     contract={'service_sha256':a.service_sha256,'partition_sha256':sha(partition_path.read_bytes()),'code_pins':pins,'widths':[6,7,8],
-              'fit_ids':fitids,'validation_ids':validids,'source_execution':False,'source_publication':False,'validation_fit':False,'macro_trials':24}
+              'fit_ids':fitids,'validation_ids':validids,'source_execution':False,'source_publication':False,'validation_fit':False,'macro_trials':24,
+              'compact_diagnostic':'omitted_by_request' if a.exact_only else 'included'}
     write(a.output/'run-contract.json',contract)
-    result={'schema':'gamma.macro-fragment-development-comparison.v1','contract_sha256':sha(packed(contract)),'contract':contract,'languages':{},'limits':['Exposed development comparison, not autonomous solving or unseen generalization.','Native judge checks skipped where bubblewrap/prlimit unavailable; exact byte reconstruction reuses historical source qualification only.','Heuristic vocabulary selection; no optimality or novelty claim.','Python compact diagnostics are static only and do not increase qualified coverage.']}
+    result={'schema':'gamma.macro-fragment-development-comparison.v1','contract_sha256':sha(packed(contract)),'contract':contract,'languages':{},'development_checks':{'native_execution':False,'fresh_native_qualification':False,'prerequisite_receipt':'not_recorded_by_runner'},'limits':['Exposed development comparison, not autonomous solving or unseen generalization.','No candidate execution occurs in this representation runner; exact byte reconstruction reuses historical source qualification only.','Heuristic vocabulary selection; no optimality or novelty claim.','Python compact diagnostics are static only and do not increase qualified coverage.']}
     start=time.monotonic()
     for language in ['javascript','python']:
         folder=a.output/language;folder.mkdir();(folder/'fit').mkdir();(folder/'validation').mkdir()
@@ -152,14 +165,14 @@ def main():
                 reports[f'{width}-{name}']['summary']['population']=100
         data={'fit_membership':membership,'validation_membership':validmembership,'fit_population':300,'validation_population':100,
               'fit_parse_errors':mining['parse_errors'],'validation_parse_errors':verrors,'literal_candidates':mining['literal_candidates'],'macro_candidates':mining['macro_candidates'],'seal_sha256':sealhash,'trials':traces,'fit':fitreports,'validation':reports}
-        if language=='python':
+        if language=='python' and transform is not None:
             def compact_sources(sources):
                 compact={};rows=[]
                 for pid,source in sources.items():
                     try:
-                        transformed,proof=TRANSFORM.transform(source);compact[pid]=transformed
+                        transformed,proof=transform.transform(source);compact[pid]=transformed
                         rows.append({'id':int(pid),'status':'transformed','source_sha256':sha(source.encode()),'candidate_sha256':sha(transformed.encode()),'proof':proof})
-                    except (TRANSFORM.Unsupported,SyntaxError,ValueError) as error:
+                    except (transform.Unsupported,SyntaxError,ValueError) as error:
                         compact[pid]=source;rows.append({'id':int(pid),'status':'original-fallback','reason':str(error)})
                 return compact,rows
             compact,transformrows=compact_sources(fit)

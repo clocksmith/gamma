@@ -1,9 +1,10 @@
 """Lossless prefix source macros. The decoder needs only the table and packet."""
-from functools import lru_cache
 import math
 
 MAX_BYTES = 65536
 MAX_DEPTH = 128
+# Bound adversarial optimizer state growth independently of the byte limit.
+MAX_DP_STATES = 1000000
 
 
 def validate(table, width):
@@ -30,6 +31,7 @@ class Encoder:
         if len(raw) > MAX_BYTES:
             raise ValueError('Source limit')
         raw.decode('utf8')
+        self._cache = {}
         self.raw, self.table, self.width = raw, table, width
         self.count_bits = math.ceil(16 / width) * width
         self.trie = {}
@@ -57,29 +59,100 @@ class Encoder:
                 if None in node: matches.append((pos, node[None]))
             self.matches[start] = matches
 
-    @lru_cache(None)
-    def options(self, start, end):
-        values = [(stop, self.width, ('entry', code)) for stop, code in self.matches[start] if stop <= end]
-        for stop, code, holes in self.macros.get(start, ()):
-            if stop <= end:
-                operands = [self.single(a, b) for a, b in holes]
-                values.append((stop, self.width + sum(x[0] for x in operands), ('macro', code, tuple(x[1] for x in operands))))
-        return values
+    def _solve(self, kind, start, end, depth):
+        """Evaluate the depth-bounded DP without using Python's call stack."""
+        key = (kind, start, end, depth)
+        if key in self._cache:
+            return self._cache[key]
+        stack = [(key, self._compute(*key))]
+        value = None
+        while stack:
+            current, job = stack[-1]
+            try:
+                dependency = job.send(value)
+            except StopIteration as done:
+                value = self._cache[current] = done.value
+                stack.pop()
+                continue
+            if dependency in self._cache:
+                value = self._cache[dependency]
+            else:
+                if len(self._cache) + len(stack) >= MAX_DP_STATES:
+                    raise ValueError('Optimizer state limit')
+                stack.append((dependency, self._compute(*dependency)))
+                value = None
+        return value
 
-    @lru_cache(None)
-    def stream(self, start, end):
+    def options(self, start, end, depth=0):
+        return self._solve('options', start, end, depth)
+
+    def stream(self, start, end, depth=0):
+        return self._solve('stream', start, end, depth)
+
+    def single(self, start, end, depth=0):
+        return self._solve('single', start, end, depth)
+
+    def _compute(self, kind, start, end, depth):
+        if depth is not None:
+            if not 0 <= depth <= MAX_DEPTH:
+                raise ValueError('Nesting limit')
+            unconstrained = yield (kind, start, end, None)
+            if kind == 'options':
+                tokens = [x[2] for x in unconstrained]
+            elif kind == 'single':
+                tokens = [unconstrained[1]]
+            else:
+                tokens = unconstrained[1]
+            pending = [(token, depth) for token in tokens]
+            fits = True
+            while pending:
+                token, level = pending.pop()
+                if level > MAX_DEPTH:
+                    fits = False
+                    break
+                children = token[2] if token[0] == 'macro' else token[1] if token[0] == 'concat' else ()
+                pending.extend((child, level + 1) for child in children)
+            if fits:
+                return unconstrained
+        child_depth = None if depth is None else depth + 1
+        if kind == 'options':
+            values = [(stop, self.width, ('entry', code))
+                      for stop, code in self.matches.get(start, ()) if stop <= end]
+            if depth is None or depth < MAX_DEPTH:
+                for stop, code, holes in self.macros.get(start, ()):
+                    if stop <= end:
+                        operands = []
+                        for a, b in holes:
+                            operands.append((yield ('single', a, b, child_depth)))
+                        values.append((stop, self.width + sum(x[0] for x in operands),
+                                       ('macro', code, tuple(x[1] for x in operands))))
+            return values
+        if kind == 'single':
+            # A CONCAT consumes one level itself. Its children must be optimized
+            # at the remaining depth, not reused from an unconstrained stream.
+            best = (self.width + 9 * (end-start) + 1, ('raw', self.raw[start:end]))
+            if depth is None or depth < MAX_DEPTH:
+                cost, seq = yield ('stream', start, end, child_depth)
+                if 2 <= len(seq) < 65536:
+                    candidate = (cost + self.width + self.count_bits, ('concat', seq))
+                    if candidate[0] <= best[0]:
+                        best = candidate
+            for stop, cost, token in (yield ('options', start, end, depth)):
+                if stop == end and cost < best[0]:
+                    best = (cost, token)
+            return best
         # Backward two-state exact DP: normal and already-open spelling mode.
         costs = {end: 0}; opened = {end: 1}; choices = {}; spell_choices = {}
         for pos in range(end-1, start-1, -1):
+            options = yield ('options', pos, end, depth)
             best = 9 + opened[pos+1]; spell_choices[pos] = ('byte',)
-            # Closing spelling then taking an entry cannot reopen at this byte.
-            for stop, cost, token in self.options(pos, end):
+            for stop, cost, token in options:
                 value = 1 + cost + costs[stop]
                 if value < best: best = value; spell_choices[pos] = ('entry', stop, token)
             opened[pos] = best
             costs[pos] = self.width + 9 + opened[pos+1]
             choices[pos] = ('spell',)
-            for stop, cost, token in self.options(pos, end):
+            for stop, cost, token in options:
                 value = cost + costs[stop]
                 if value < costs[pos]: costs[pos] = value; choices[pos] = ('entry', stop, token)
         result = []; pos = start
@@ -94,31 +167,29 @@ class Encoder:
                 _, pos, token = spell_choices[pos]; result.append(token)
         return costs[start], tuple(result)
 
-    @lru_cache(None)
-    def single(self, start, end):
-        cost, seq = self.stream(start, end)
-        if len(seq) == 1: return cost, seq[0]
-        best = (cost + self.width + self.count_bits, ('concat', seq))
-        raw = (self.width + 9 * (end-start) + 1, ('raw', self.raw[start:end]))
-        if raw[0] < best[0]: best = raw
-        for stop, cost, token in self.options(start, end):
-            if stop == end and cost < best[0]: best = (cost, token)
-        return best
-
     def encode(self):
         if not self.raw: return '', []
-        _, seq = self.stream(0, len(self.raw))
-        def emit(token):
-            kind = token[0]
-            if kind == 'raw': return spelling(token[1], self.width)
-            if kind == 'entry': return format(token[1], f'0{self.width}b')
-            if kind == 'macro': return format(token[1], f'0{self.width}b') + ''.join(emit(x) for x in token[2])
-            if len(token[1]) >= 65536: raise ValueError('Concat count limit')
-            return format(1, f'0{self.width}b') + format(len(token[1]), f'0{self.count_bits}b') + ''.join(emit(x) for x in token[1])
-        bits = ''.join(emit(x) for x in seq)
-        assert len(bits) == self.stream(0, len(self.raw))[0]
-        self.options.cache_clear(); self.stream.cache_clear(); self.single.cache_clear()
-        return bits, seq
+        try:
+            cost, seq = self.stream(0, len(self.raw))
+            pieces = []
+            pending = list(reversed(seq))
+            while pending:
+                token = pending.pop()
+                kind = token[0]
+                if kind == 'raw': pieces.append(spelling(token[1], self.width))
+                elif kind == 'entry': pieces.append(format(token[1], f'0{self.width}b'))
+                elif kind == 'macro':
+                    pieces.append(format(token[1], f'0{self.width}b'))
+                    pending.extend(reversed(token[2]))
+                else:
+                    pieces.append(format(1, f'0{self.width}b'))
+                    pieces.append(format(len(token[1]), f'0{self.count_bits}b'))
+                    pending.extend(reversed(token[1]))
+            bits = ''.join(pieces)
+            assert len(bits) == cost
+            return bits, seq
+        finally:
+            self._cache.clear()
 
 
 def decode(bits, table, width):
