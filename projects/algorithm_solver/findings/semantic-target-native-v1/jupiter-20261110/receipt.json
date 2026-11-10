@@ -1,0 +1,114 @@
+{
+  "schema": "gamma.semantic-target-native-controls.v1",
+  "evidence_class": "authored integration controls through real sandbox",
+  "git_head": "540ef55823d8ef5eb2d5bd0065d76d3066784ac4",
+  "python": "3.14.4",
+  "platform": "Linux-7.0.0-42-generic-x86_64-with-glibc2.43",
+  "sources_sha256": {
+    "projects/algorithm_solver/findings/semantic-target-native-v1/verify.py": "704d38475ecf8feabebf46fb2c213b5e3aff411e6936405b987343064b69ae33",
+    "projects/algorithm_solver/tests/test_semantic_target_pipeline.py": "0cc5c43cd414cc223d773cd23d7a3b9dc6987f13da280c830e2cd49f7969eaa4"
+  },
+  "results": {
+    "correct-length": {
+      "counts": {
+        "qualified": 1,
+        "heldout_family": 1,
+        "excluded_existing": 1
+      },
+      "emitted_pairs": 1,
+      "candidate_reason": "qualified",
+      "verdicts": {
+        "declared_bound_probe": {
+          "first_failure": null,
+          "passed": true,
+          "reason": null,
+          "stderr_tail": "",
+          "tests_passed": 1,
+          "tests_total": 1,
+          "wall_seconds": 0.02425431297160685
+        },
+        "independent": {
+          "first_failure": null,
+          "passed": true,
+          "reason": null,
+          "stderr_tail": "",
+          "tests_passed": 1,
+          "tests_total": 1,
+          "wall_seconds": 0.025854949024505913
+        },
+        "public": {
+          "first_failure": null,
+          "passed": true,
+          "reason": null,
+          "stderr_tail": "",
+          "tests_passed": 1,
+          "tests_total": 1,
+          "wall_seconds": 0.03055184194818139
+        }
+      },
+      "adapter_events": [
+        "payload",
+        "teacher",
+        "tests"
+      ]
+    },
+    "wrong-constant": {
+      "counts": {
+        "rejected": 1,
+        "heldout_family": 1,
+        "excluded_existing": 1
+      },
+      "emitted_pairs": 0,
+      "candidate_reason": "rejected",
+      "verdicts": {
+        "independent": {
+          "first_failure": {
+            "expected": 3,
+            "i": 0,
+            "observed": 1,
+            "reason": "wrong_answer"
+          },
+          "passed": false,
+          "reason": "wrong_answer",
+          "stderr_tail": "",
+          "tests_passed": 0,
+          "tests_total": 1,
+          "wall_seconds": 0.025644080014899373
+        },
+        "public": {
+          "first_failure": null,
+          "passed": true,
+          "reason": null,
+          "stderr_tail": "",
+          "tests_passed": 1,
+          "tests_total": 1,
+          "wall_seconds": 0.029847444966435432
+        }
+      },
+      "adapter_events": [
+        "payload",
+        "teacher",
+        "tests"
+      ]
+    }
+  },
+  "judge_injected": false,
+  "model_run": false,
+  "training": false,
+  "protected_payloads_loaded": false,
+  "corpus_qualification": false,
+  "artifacts_sha256": {
+    "correct-length/output/attempts/000000-proposals.json": "ef3017b181480a04cd461347236b98969a8add1fc7361ecda53b1c557261371d",
+    "correct-length/output/attempts/000000-receipt.json": "ee7839431c4fb3a47bd922c9d34040ce8fead13c4e96286f8339bae4646b0e80",
+    "correct-length/output/contract.json": "faa131763404b85c5ec317f18ad23ecfcc28eee2d2b4e5e73e352b5e294136c9",
+    "correct-length/output/pairs.jsonl": "78a5af896520a7e3c89b6f462b267d8c3191d234020e4dce56b131b16d046b77",
+    "correct-length/output/summary.json": "4daa80a47ffeb0e750fb288c7ce8b7f2cd7e455122b74c22d16f53b9bec92218",
+    "correct-length/plan.json": "d2fd36b95487026c4997e229963fb4b56fb5fcbd6475470df6705a19fcc65c6d",
+    "wrong-constant/output/attempts/000000-proposals.json": "be60952cf9ee939e50d97bfc2a53709706133b19d6a0f1dcb0af6989eef21b0d",
+    "wrong-constant/output/attempts/000000-receipt.json": "02c145ce20e0c0a9ef30d2d3049fcd8241bcf5c85849b534e5b0cfb3981bdb78",
+    "wrong-constant/output/contract.json": "faa131763404b85c5ec317f18ad23ecfcc28eee2d2b4e5e73e352b5e294136c9",
+    "wrong-constant/output/pairs.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "wrong-constant/output/summary.json": "f499ecd99c694e698a314a2195b84af2d88b8ee3e763cf43fd4feaa09834079b",
+    "wrong-constant/plan.json": "d2fd36b95487026c4997e229963fb4b56fb5fcbd6475470df6705a19fcc65c6d"
+  }
+}

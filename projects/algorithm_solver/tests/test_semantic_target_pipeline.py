@@ -3,6 +3,7 @@ import copy
 import json
 from pathlib import Path
 import tempfile
+import sys
 from types import SimpleNamespace
 import unittest
 
@@ -284,6 +285,47 @@ class TargetBuilderTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "max_proposals"):
                 self.build(max_proposals=limit)
         self.assertFalse((self.root / "output").exists())
+
+
+@unittest.skipUnless(sys.platform == "linux" and Path("/usr/bin/bwrap").exists()
+                     and Path("/usr/bin/prlimit").exists(),
+                     "Native target qualification requires Linux bubblewrap/prlimit")
+class NativeTargetBuilderTests(unittest.TestCase):
+    """Authored integration controls, not a trained-composer result or corpus."""
+
+    def setUp(self):
+        self.fixture = TargetBuilderTests()
+        self.fixture.setUp()
+        self.addCleanup(self.fixture.doCleanups)
+
+    def test_native_qualification_emits_only_after_all_three_stages(self):
+        summary = self.fixture.build(judge=None)
+        receipt = self.fixture.receipt()
+        self.assertEqual(summary["emitted_pairs"], 1, receipt)
+        self.assertEqual(summary["training_eligible_pairs"], 1)
+        pair = json.loads((self.fixture.root / "output/pairs.jsonl").read_text())
+        self.assertEqual(pair["provenance"]["verification_authority"], "repository-sandbox")
+        candidate = receipt["proposals"][0]
+        self.assertEqual(candidate["reason"], "qualified")
+        self.assertEqual(set(candidate["verdicts"]), {"public", "independent", "declared_bound_probe"})
+        self.assertTrue(all(verdict["passed"] for verdict in candidate["verdicts"].values()))
+        self.assertEqual(self.fixture.events, ["payload", "teacher", "tests"])
+
+    def test_native_independent_rejection_never_emits_a_pair(self):
+        # This constant passes the public one-element example but fails length 3.
+        self.fixture.proposal["program"]["return"] = {"literal": 1}
+        summary = self.fixture.build(judge=None)
+        receipt = self.fixture.receipt()
+        self.assertEqual(summary["emitted_pairs"], 0, receipt)
+        self.assertEqual(summary["training_eligible_pairs"], 0)
+        self.assertEqual((self.fixture.root / "output/pairs.jsonl").read_text(), "")
+        candidate = receipt["proposals"][0]
+        self.assertTrue(candidate["verdicts"]["public"]["passed"])
+        self.assertFalse(candidate["verdicts"]["independent"]["passed"])
+        self.assertEqual(candidate["reason"], "rejected")
+        self.assertEqual(candidate["stage"], "independent")
+        self.assertNotIn("declared_bound_probe", candidate["verdicts"])
+        self.assertEqual(self.fixture.events, ["payload", "teacher", "tests"])
 
 
 if __name__ == "__main__":
