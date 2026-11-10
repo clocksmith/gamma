@@ -892,6 +892,15 @@ naming budgets beat the pointwise maximum of61/63, with peak integer gains
 165/198. Positive ranges stay9/4 and full256 stays-24549/-25172; no additional
 positive exclusion or M1 change. Endpoint predictions P2–P5 are false.
 
+## 2026-11-10: direct BITS development composition
+
+[Direct semantic evaluation](direct-bits-development-v1/README.md) adds generic
+finite example-conditioned search over the unchanged 57-entry typed vocabulary.
+24 authored list-processing specifications pass 971 independent development cases
+at each of 6/7/8 bits; two unsupported controls abstain. Full selection/rejection
+traces and charged packages are retained. This does not count catalogue problems,
+qualify native source, open protected populations or complete M1–M6.
+
 ## Maintenance rules
 
 Add a short row and links when a scoped experiment closes; update current status

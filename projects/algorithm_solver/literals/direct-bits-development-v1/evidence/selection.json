@@ -1,0 +1,1711 @@
+{
+  "candidates_tested": 4764,
+  "evidence_scope": "Synthetic example-conditioned development search only. No task identity, oracle callable, test input or test answer reaches the composer. No protected/generalization/native qualification.",
+  "failed_training_executions": 0,
+  "grammar": {
+    "candidate_order": "stage-count, stage Cartesian product order, terminal order",
+    "execution_budget": 100000,
+    "max_candidates": 10000,
+    "max_examples": 64,
+    "max_stages": 2,
+    "schema": "algsolve.direct-bits-search.v1",
+    "selection": "first exact training match; no test-guided repair",
+    "stages": [
+      [
+        "map",
+        0
+      ],
+      [
+        "map",
+        1
+      ],
+      [
+        "map",
+        [
+          "neg",
+          "x"
+        ]
+      ],
+      [
+        "map",
+        [
+          "neg",
+          0
+        ]
+      ],
+      [
+        "map",
+        [
+          "neg",
+          1
+        ]
+      ],
+      [
+        "map",
+        [
+          "add",
+          "x",
+          "x"
+        ]
+      ],
+      [
+        "map",
+        [
+          "add",
+          "x",
+          0
+        ]
+      ],
+      [
+        "map",
+        [
+          "add",
+          "x",
+          1
+        ]
+      ],
+      [
+        "map",
+        [
+          "add",
+          0,
+          0
+        ]
+      ],
+      [
+        "map",
+        [
+          "add",
+          0,
+          1
+        ]
+      ],
+      [
+        "map",
+        [
+          "add",
+          1,
+          1
+        ]
+      ],
+      [
+        "map",
+        [
+          "sub",
+          "x",
+          "x"
+        ]
+      ],
+      [
+        "map",
+        [
+          "sub",
+          "x",
+          0
+        ]
+      ],
+      [
+        "map",
+        [
+          "sub",
+          "x",
+          1
+        ]
+      ],
+      [
+        "map",
+        [
+          "sub",
+          0,
+          "x"
+        ]
+      ],
+      [
+        "map",
+        [
+          "sub",
+          0,
+          0
+        ]
+      ],
+      [
+        "map",
+        [
+          "sub",
+          0,
+          1
+        ]
+      ],
+      [
+        "map",
+        [
+          "sub",
+          1,
+          "x"
+        ]
+      ],
+      [
+        "map",
+        [
+          "sub",
+          1,
+          0
+        ]
+      ],
+      [
+        "map",
+        [
+          "sub",
+          1,
+          1
+        ]
+      ],
+      [
+        "map",
+        [
+          "mul",
+          "x",
+          "x"
+        ]
+      ],
+      [
+        "map",
+        [
+          "mul",
+          "x",
+          0
+        ]
+      ],
+      [
+        "map",
+        [
+          "mul",
+          "x",
+          1
+        ]
+      ],
+      [
+        "map",
+        [
+          "mul",
+          0,
+          0
+        ]
+      ],
+      [
+        "map",
+        [
+          "mul",
+          0,
+          1
+        ]
+      ],
+      [
+        "map",
+        [
+          "mul",
+          1,
+          1
+        ]
+      ],
+      [
+        "map",
+        [
+          "choose_negative",
+          [
+            "neg",
+            "x"
+          ],
+          "x"
+        ]
+      ],
+      [
+        "filter",
+        "positive"
+      ],
+      [
+        "filter",
+        "negative"
+      ],
+      [
+        "filter",
+        "nonzero"
+      ],
+      [
+        "scan",
+        "add"
+      ],
+      [
+        "sort",
+        false
+      ],
+      [
+        "sort",
+        true
+      ],
+      [
+        "distinct"
+      ]
+    ],
+    "terminals": [
+      "list",
+      "sum",
+      "product",
+      "length"
+    ]
+  },
+  "grammar_sha256": "e8003a60050ae831a3aeed70077962f95fe2685b5793b56787ee1eea0f13e068",
+  "phase": "frozen-selection",
+  "rows": [
+    {
+      "selection": null,
+      "status": "search_exhausted",
+      "task": "reverse_input",
+      "training_examples": 18
+    },
+    {
+      "selection": null,
+      "status": "search_exhausted",
+      "task": "adjacent_differences",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "680b1b31ce83af8c0326bb16dc50508bdeb8c2b53a0917df00f31f9cc5105bb5",
+        "ordinal": 1,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 186,
+          "numeric_and_control_selections": 31,
+          "one_program_with_support_bits": 286656,
+          "packet_bits": 1136,
+          "padding_bits": 4,
+          "payload_bits": 276,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 46,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 7,
+            "BIT1": 10,
+            "BLOCK": 2,
+            "END": 13,
+            "FOR": 1,
+            "INT": 1,
+            "P:add": 1,
+            "POS": 1,
+            "PROGRAM": 1,
+            "REF": 4,
+            "SET": 1,
+            "T:int": 2,
+            "T:list": 1,
+            "VAR": 1
+          }
+        },
+        "packet_hex": "545749520106010000002e0093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb204e34f0ce3c82cd3c538d3c734f04e3c438f40e34f1ce3c738d3c738f0",
+        "packet_sha256": "c28eacc51da12c285c7120efda071006b399fa1e105248440bf17ede288ead82",
+        "plan": {
+          "stages": [],
+          "terminal": "sum"
+        }
+      },
+      "status": "selected",
+      "task": "sum",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "9a7d9630b6c117bcb74a98703aab14458e67d94405eda9004f8b4ccd6a6eb5f4",
+        "ordinal": 115,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 336,
+          "numeric_and_control_selections": 56,
+          "one_program_with_support_bits": 286848,
+          "packet_bits": 1328,
+          "padding_bits": 4,
+          "payload_bits": 468,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 78,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 14,
+            "BIT1": 19,
+            "BLOCK": 4,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 22,
+            "FOR": 1,
+            "IF": 1,
+            "INT": 1,
+            "P:len": 1,
+            "P:lt": 1,
+            "POS": 1,
+            "PROGRAM": 1,
+            "REF": 6,
+            "T:int": 2,
+            "T:list": 1
+          }
+        },
+        "packet_hex": "545749520106010000004e0093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb204e38fb4e3cd3c538d3c734f04e3c658e34f20b34f1ce34f04e3ec38e3ce34f1ce3c738d3c134fb8e34d3ce3c738f54e3c738d34f0",
+        "packet_sha256": "45232803f10aadb206d011c97f59a946d623566e75bca83a6d0d244bb030d4e4",
+        "plan": {
+          "stages": [
+            [
+              "filter",
+              "positive"
+            ]
+          ],
+          "terminal": "length"
+        }
+      },
+      "status": "selected",
+      "task": "count_positive",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "9bed89e6acb78b5c75cfef58f7251301db1dca625b6712506c2f8c60090bbb34",
+        "ordinal": 3893,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 864,
+          "numeric_and_control_selections": 144,
+          "one_program_with_support_bits": 287488,
+          "packet_bits": 1968,
+          "padding_bits": 2,
+          "payload_bits": 1110,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 185,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 46,
+            "BIT1": 52,
+            "BLOCK": 6,
+            "E:vector.append": 2,
+            "E:vector.new": 2,
+            "E:vector.snapshot": 2,
+            "END": 44,
+            "FOR": 3,
+            "IF": 1,
+            "INT": 2,
+            "P:add": 1,
+            "P:lt": 1,
+            "P:mul": 1,
+            "POS": 2,
+            "PROGRAM": 1,
+            "REF": 14,
+            "SET": 1,
+            "T:int": 2,
+            "T:list": 1,
+            "VAR": 1
+          }
+        },
+        "packet_hex": "54574952010601000000b90093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb204e34d34fb4e3cd3c538d3c734f04e3c658e34f20b34f1ce34f04e3ec38e3ce34f1ce3c738d3c134fb8e34d3ce3c738fb4e34e3cd3c538e34f1ce34d3c138fb0e38e3ce34f1ce34e3d738d3c738e34f1ce38d3ee38d34d3ce3c738d38f0ce34d38f20b34f14e34e34f1ce34d34f04e3c438d34e3d038d3c738d34e3c738d38d3c738d34e3c",
+        "packet_sha256": "74bd906975fe9c08054ca41e6e8e20d9057554b6b1b3ddb5630e4ca4dafe46b7",
+        "plan": {
+          "stages": [
+            [
+              "filter",
+              "positive"
+            ],
+            [
+              "map",
+              [
+                "mul",
+                "x",
+                "x"
+              ]
+            ]
+          ],
+          "terminal": "sum"
+        }
+      },
+      "status": "selected",
+      "task": "sum_positive_squares",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "e957697c34cce18b2d63c9203abb0f55a4fe1e3a1d2723c2bc5bde8dfb53d979",
+        "ordinal": 85,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 480,
+          "numeric_and_control_selections": 80,
+          "one_program_with_support_bits": 287016,
+          "packet_bits": 1496,
+          "padding_bits": 4,
+          "payload_bits": 636,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 106,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 21,
+            "BIT1": 31,
+            "BLOCK": 3,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 27,
+            "FOR": 2,
+            "INT": 1,
+            "P:add": 1,
+            "P:mul": 1,
+            "POS": 1,
+            "PROGRAM": 1,
+            "REF": 9,
+            "SET": 1,
+            "T:int": 2,
+            "T:list": 1,
+            "VAR": 1
+          }
+        },
+        "packet_hex": "545749520106010000006a0093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb204e34e3ed38f34f14e34f1cd3c138fb0e38f38d3c738f5ce34f1ce34f1ce34fb8e34d3ce3c738f0ce34e3c82cd3c538e34f1ce34d3c138f10e34e3d038d3c738d38f1ce38d3c738d38f0",
+        "packet_sha256": "d90e3d27e22742722b95b4ad251b0e3fd30273d86dbec2553b2099eb5f700d76",
+        "plan": {
+          "stages": [
+            [
+              "map",
+              [
+                "mul",
+                "x",
+                "x"
+              ]
+            ]
+          ],
+          "terminal": "sum"
+        }
+      },
+      "status": "selected",
+      "task": "sum_squares",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "fd7872589cbd0bdfde550c0ec2309c45366f5629a48fa854a9eb4848a9464699",
+        "ordinal": 109,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 654,
+          "numeric_and_control_selections": 109,
+          "one_program_with_support_bits": 287256,
+          "packet_bits": 1736,
+          "padding_bits": 4,
+          "payload_bits": 876,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 146,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 22,
+            "BIT1": 47,
+            "BLOCK": 5,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 37,
+            "FOR": 2,
+            "IF": 1,
+            "INT": 3,
+            "P:add": 1,
+            "P:lt": 1,
+            "P:neg": 1,
+            "POS": 3,
+            "PROGRAM": 1,
+            "REF": 11,
+            "SET": 3,
+            "T:int": 2,
+            "T:list": 1,
+            "VAR": 2
+          }
+        },
+        "packet_hex": "54574952010601000000920093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb204e34e3ed38f34f14e34f1cd3c138e3c338e3c82cd3c658e34f1ce34f20b34f04e3c438e3d838f1ce34f04e3c438e3c738d3ec38d34f38d3c738f1ce38fb8e34e3ce3c738f0ce38d3c82cd3c538e38f1ce34e3c138f10e38d3d038d3c738e34f1ce38e3c738e34f0",
+        "packet_sha256": "797f7b48fd76bc540a64454fa54b74c761a2425b3595d1cc5264d84eee58c63b",
+        "plan": {
+          "stages": [
+            [
+              "map",
+              [
+                "choose_negative",
+                [
+                  "neg",
+                  "x"
+                ],
+                "x"
+              ]
+            ]
+          ],
+          "terminal": "sum"
+        }
+      },
+      "status": "selected",
+      "task": "sum_absolute",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "1d77f878d0d619af04dc77c402332425ca38b8fbfe887f150b35f4be74bc8718",
+        "ordinal": 123,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 348,
+          "numeric_and_control_selections": 58,
+          "one_program_with_support_bits": 286864,
+          "packet_bits": 1344,
+          "padding_bits": 2,
+          "payload_bits": 486,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 81,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 14,
+            "BIT1": 20,
+            "BLOCK": 4,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 23,
+            "FOR": 1,
+            "IF": 1,
+            "INT": 1,
+            "P:eq": 1,
+            "P:len": 1,
+            "P:not": 1,
+            "POS": 1,
+            "PROGRAM": 1,
+            "REF": 6,
+            "T:int": 2,
+            "T:list": 1
+          }
+        },
+        "packet_hex": "54574952010601000000510093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb204e38fb4e3cd3c538d3c734f04e3c664e3d338d3c738d3c82cd3c138fb0e38f38d3c738f1ce34f04d3ee38d34f38f1ce3d538f1ce34d3c",
+        "packet_sha256": "b42215d97145c261f0ea5cccb2f868d9d5b4d7f3482894417cf48fa50cd5167e",
+        "plan": {
+          "stages": [
+            [
+              "filter",
+              "nonzero"
+            ]
+          ],
+          "terminal": "length"
+        }
+      },
+      "status": "selected",
+      "task": "count_nonzero",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "783b73a00cd4628d9678ce3ad6fb51070040ff54e1157cf0c3854c31db175b4e",
+        "ordinal": 2,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 186,
+          "numeric_and_control_selections": 31,
+          "one_program_with_support_bits": 286656,
+          "packet_bits": 1136,
+          "padding_bits": 4,
+          "payload_bits": 276,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 46,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 6,
+            "BIT1": 11,
+            "BLOCK": 2,
+            "END": 13,
+            "FOR": 1,
+            "INT": 1,
+            "P:mul": 1,
+            "POS": 1,
+            "PROGRAM": 1,
+            "REF": 4,
+            "SET": 1,
+            "T:int": 2,
+            "T:list": 1,
+            "VAR": 1
+          }
+        },
+        "packet_hex": "545749520106010000002e0093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb204e34f0ce3c82ce3c538d3c734f04e3c438f5ce34f1ce3c738d3c738f0",
+        "packet_sha256": "13636d9f8d1f534ec0915030a934d83747d3f41e86aa3ec6e8f4c41d5feb7790",
+        "plan": {
+          "stages": [],
+          "terminal": "product"
+        }
+      },
+      "status": "selected",
+      "task": "product",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "57026a62a1274ce4a3a85182e5c2c28e28c5ed49113cb909f764014e3302a24b",
+        "ordinal": 117,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 522,
+          "numeric_and_control_selections": 87,
+          "one_program_with_support_bits": 287080,
+          "packet_bits": 1560,
+          "padding_bits": 2,
+          "payload_bits": 702,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 117,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 23,
+            "BIT1": 32,
+            "BLOCK": 5,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 30,
+            "FOR": 2,
+            "IF": 1,
+            "INT": 2,
+            "P:add": 1,
+            "P:lt": 1,
+            "POS": 2,
+            "PROGRAM": 1,
+            "REF": 9,
+            "SET": 1,
+            "T:int": 2,
+            "T:list": 1,
+            "VAR": 1
+          }
+        },
+        "packet_hex": "54574952010601000000750093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb204e34e3ed38f34f14e34f1cd3c138f19638d3c738d3c82cd3c138fb0e38f38d3c738f1ce34f04d3ee38d34f38f1ce3c338d38f20b34f14e38d3c738d34f04e3c438d38f40e34f1ce34e3c738e34f1ce34e3c",
+        "packet_sha256": "11c0c5eed0f4a08a6fa471c7c5c4dcc702c37d286472b3397cd33e9d2e7ca3a8",
+        "plan": {
+          "stages": [
+            [
+              "filter",
+              "negative"
+            ]
+          ],
+          "terminal": "sum"
+        }
+      },
+      "status": "selected",
+      "task": "sum_negative",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "458c6cd9ba753f24de4242e49438172ffdc77b25eaeeb3b4e8bb033a2ecc1c9f",
+        "ordinal": 33,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 480,
+          "numeric_and_control_selections": 80,
+          "one_program_with_support_bits": 287016,
+          "packet_bits": 1496,
+          "padding_bits": 4,
+          "payload_bits": 636,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 106,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 20,
+            "BIT1": 31,
+            "BLOCK": 3,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 27,
+            "FOR": 2,
+            "INT": 2,
+            "P:add": 2,
+            "POS": 2,
+            "PROGRAM": 1,
+            "REF": 8,
+            "SET": 1,
+            "T:int": 2,
+            "T:list": 1,
+            "VAR": 1
+          }
+        },
+        "packet_hex": "545749520106010000006a0093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb204e34e3ed38f34f14e34f1cd3c138fb0e38f38d3c738f40e34f1ce34f20b38fb8e34d3ce3c738f0ce34e3c82cd3c538e34f1ce34d3c138f10e34e3d038d3c738d38f1ce38d3c738d38f0",
+        "packet_sha256": "7ea0c9701eb256bbeaeec42aedb904266437eaf7233cd3b153924889dd5213ad",
+        "plan": {
+          "stages": [
+            [
+              "map",
+              [
+                "add",
+                "x",
+                1
+              ]
+            ]
+          ],
+          "terminal": "sum"
+        }
+      },
+      "status": "selected",
+      "task": "sum_incremented",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "accb312e027a76d6452117e6bf4abb62169eec9178463d0cd6dd82ed9e3adb85",
+        "ordinal": 112,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 324,
+          "numeric_and_control_selections": 54,
+          "one_program_with_support_bits": 286832,
+          "packet_bits": 1312,
+          "padding_bits": 0,
+          "payload_bits": 456,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 76,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 14,
+            "BIT1": 18,
+            "BLOCK": 4,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 21,
+            "FOR": 1,
+            "IF": 1,
+            "INT": 1,
+            "P:lt": 1,
+            "POS": 1,
+            "PROGRAM": 1,
+            "REF": 6,
+            "T:int": 2,
+            "T:list": 2
+          }
+        },
+        "packet_hex": "545749520106010000004c0093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138e3ed38f34f14e34f1cd3c138f19638d3c82cd3c738d3c138fb0e38f38d3c738f1ce34f04d3ee38d34f38f1ce3c738d34f",
+        "packet_sha256": "8524211f81da63b2d036e6f07db7bbaa98d92613b85a6b1b2114b8c315c5f7ba",
+        "plan": {
+          "stages": [
+            [
+              "filter",
+              "positive"
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "filter_positive",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "18187c414a2e5bdfc9079b7260c393c78475de7747d9c937c052b0e2429bd719",
+        "ordinal": 116,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 324,
+          "numeric_and_control_selections": 54,
+          "one_program_with_support_bits": 286832,
+          "packet_bits": 1312,
+          "padding_bits": 0,
+          "payload_bits": 456,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 76,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 14,
+            "BIT1": 18,
+            "BLOCK": 4,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 21,
+            "FOR": 1,
+            "IF": 1,
+            "INT": 1,
+            "P:lt": 1,
+            "POS": 1,
+            "PROGRAM": 1,
+            "REF": 6,
+            "T:int": 2,
+            "T:list": 2
+          }
+        },
+        "packet_hex": "545749520106010000004c0093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138e3ed38f34f14e34f1cd3c138f19638d3c738d3c82cd3c138fb0e38f38d3c738f1ce34f04d3ee38d34f38f1ce3c738d34f",
+        "packet_sha256": "2e2c75e725e947036294821c2ed58f215cff072175791d4dbc934144456b4ede",
+        "plan": {
+          "stages": [
+            [
+              "filter",
+              "negative"
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "filter_negative",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "4618df55721659e4a78d9ef82d7e08ba38cdf44f21ec5fb7aabcf6f9e86df5d3",
+        "ordinal": 120,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 336,
+          "numeric_and_control_selections": 56,
+          "one_program_with_support_bits": 286856,
+          "packet_bits": 1336,
+          "padding_bits": 6,
+          "payload_bits": 474,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 79,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 14,
+            "BIT1": 19,
+            "BLOCK": 4,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 22,
+            "FOR": 1,
+            "IF": 1,
+            "INT": 1,
+            "P:eq": 1,
+            "P:not": 1,
+            "POS": 1,
+            "PROGRAM": 1,
+            "REF": 6,
+            "T:int": 2,
+            "T:list": 2
+          }
+        },
+        "packet_hex": "545749520106010000004f0093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138e3ed38f34f14e34f1cd3c138f19938f4ce34f1ce34f20b34f04e3ec38e3ce34f1ce3c738d3c134fb8e34d3ce3c738f1ce34d3c0",
+        "packet_sha256": "b983d81ca329afe62aa1699abe1797b5153fb9ed0977cf99e32e78834211b716",
+        "plan": {
+          "stages": [
+            [
+              "filter",
+              "nonzero"
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "filter_nonzero",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "14615edd836be8224fb7017090cff68f1fa85128b6ae6bc79f678b1fe0d1cf7c",
+        "ordinal": 84,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 282,
+          "numeric_and_control_selections": 47,
+          "one_program_with_support_bits": 286768,
+          "packet_bits": 1248,
+          "padding_bits": 2,
+          "payload_bits": 390,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 65,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 12,
+            "BIT1": 17,
+            "BLOCK": 2,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 18,
+            "FOR": 1,
+            "P:mul": 1,
+            "PROGRAM": 1,
+            "REF": 6,
+            "T:int": 2,
+            "T:list": 2
+          }
+        },
+        "packet_hex": "54574952010601000000410093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138e3ed38f34f14e34f1cd3c138fb0e38f38d3c738f5ce34f1ce34f1ce34fb8e34d3ce3c738f1ce34d3c",
+        "packet_sha256": "a1df1b877a99728e1ccc0267ca5411d05d2b30762535a051c924be2819885c4a",
+        "plan": {
+          "stages": [
+            [
+              "map",
+              [
+                "mul",
+                "x",
+                "x"
+              ]
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "map_square",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "cb3b1b7f39f71794853660f7fde436a10010ae0c66d0486bd498ad5569214099",
+        "ordinal": 12,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 258,
+          "numeric_and_control_selections": 43,
+          "one_program_with_support_bits": 286736,
+          "packet_bits": 1216,
+          "padding_bits": 0,
+          "payload_bits": 360,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 60,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 10,
+            "BIT1": 16,
+            "BLOCK": 2,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 17,
+            "FOR": 1,
+            "P:neg": 1,
+            "PROGRAM": 1,
+            "REF": 5,
+            "T:int": 2,
+            "T:list": 2
+          }
+        },
+        "packet_hex": "545749520106010000003c0093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138e3ed38f34f14e34f1cd3c138fb0e38f38d3c738f60e3c738d3ee38d34f38f1ce3c738d34f",
+        "packet_sha256": "6bb20cbd52c36bd71c967fed81d61d6fac75c66523c5ce368672c511dce3290c",
+        "plan": {
+          "stages": [
+            [
+              "map",
+              [
+                "neg",
+                "x"
+              ]
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "map_negate",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "aaa34ae9e4c3065c09fdced03886f77c8504a1f7469229263128e84ee40d430a",
+        "ordinal": 108,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 456,
+          "numeric_and_control_selections": 76,
+          "one_program_with_support_bits": 287008,
+          "packet_bits": 1488,
+          "padding_bits": 2,
+          "payload_bits": 630,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 105,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 15,
+            "BIT1": 31,
+            "BLOCK": 4,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 28,
+            "FOR": 1,
+            "IF": 1,
+            "INT": 2,
+            "P:lt": 1,
+            "P:neg": 1,
+            "POS": 2,
+            "PROGRAM": 1,
+            "REF": 8,
+            "SET": 2,
+            "T:int": 2,
+            "T:list": 2,
+            "VAR": 1
+          }
+        },
+        "packet_hex": "54574952010601000000690093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138e3ed38f34f14e34f1cd3c138e3c338e3c82cd3c658e34f1ce34f20b34f04e3c438e3d838f1ce34f04e3c438e3c738d3ec38d34f38d3c738f1ce38fb8e34e3ce3c738f1ce34e3c",
+        "packet_sha256": "fb20f863b2d52b014b1382bca6e746a56dcda59608b53e023a48c3d1ad8a408f",
+        "plan": {
+          "stages": [
+            [
+              "map",
+              [
+                "choose_negative",
+                [
+                  "neg",
+                  "x"
+                ],
+                "x"
+              ]
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "map_absolute",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "26fff29c3581bc0124e67f280a08658b3917b7303f0960edfa75829c060978e3",
+        "ordinal": 24,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 282,
+          "numeric_and_control_selections": 47,
+          "one_program_with_support_bits": 286768,
+          "packet_bits": 1248,
+          "padding_bits": 2,
+          "payload_bits": 390,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 65,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 12,
+            "BIT1": 17,
+            "BLOCK": 2,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 18,
+            "FOR": 1,
+            "P:add": 1,
+            "PROGRAM": 1,
+            "REF": 6,
+            "T:int": 2,
+            "T:list": 2
+          }
+        },
+        "packet_hex": "54574952010601000000410093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138e3ed38f34f14e34f1cd3c138fb0e38f38d3c738f40e34f1ce34f1ce34fb8e34d3ce3c738f1ce34d3c",
+        "packet_sha256": "75d17102a0a984bf7aa6f81d41afc527e19fec96a6e99a6f1b119a85d3645be3",
+        "plan": {
+          "stages": [
+            [
+              "map",
+              [
+                "add",
+                "x",
+                "x"
+              ]
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "map_double",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "94f778e4ac4ab83653111ade7d81130f029fe4b884c86cb546235e9e765ec8fd",
+        "ordinal": 32,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 282,
+          "numeric_and_control_selections": 47,
+          "one_program_with_support_bits": 286768,
+          "packet_bits": 1248,
+          "padding_bits": 2,
+          "payload_bits": 390,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 65,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 11,
+            "BIT1": 17,
+            "BLOCK": 2,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 18,
+            "FOR": 1,
+            "INT": 1,
+            "P:add": 1,
+            "POS": 1,
+            "PROGRAM": 1,
+            "REF": 5,
+            "T:int": 2,
+            "T:list": 2
+          }
+        },
+        "packet_hex": "54574952010601000000410093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138e3ed38f34f14e34f1cd3c138fb0e38f38d3c738f40e34f1ce34f20b38fb8e34d3ce3c738f1ce34d3c",
+        "packet_sha256": "5a7567bd4649b4fb8224cab8021bdead39ae3d6e9874dd5e978635e11f9fb037",
+        "plan": {
+          "stages": [
+            [
+              "map",
+              [
+                "add",
+                "x",
+                1
+              ]
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "map_increment",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "ad735d0f6add3ca58db2b5dfa44559fa490d1465793251431add328bf2fb412d",
+        "ordinal": 124,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 372,
+          "numeric_and_control_selections": 62,
+          "one_program_with_support_bits": 286880,
+          "packet_bits": 1360,
+          "padding_bits": 0,
+          "payload_bits": 504,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 84,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 17,
+            "BIT1": 22,
+            "BLOCK": 2,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 22,
+            "FOR": 1,
+            "INT": 1,
+            "P:add": 1,
+            "POS": 1,
+            "PROGRAM": 1,
+            "REF": 7,
+            "SET": 1,
+            "T:int": 2,
+            "T:list": 2,
+            "VAR": 1
+          }
+        },
+        "packet_hex": "54574952010601000000540093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138d34fb4e3cd3c338d3c82cd3c538e3c734f04e34f10e34f40e34f1ce34f1ce38fb0e34d3ce34f1ce3c738d3ee38d38f38f1ce3c738d38f",
+        "packet_sha256": "1362407ef1b9e5817650eaaaefd8e3e3d3f53aea34c58f2065e2a099e5387c8c",
+        "plan": {
+          "stages": [
+            [
+              "scan",
+              "add"
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "prefix_sum",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "beca80fd7d4d46b12c3fca4a7bdf12d07712ea154afcdbd62024de521736bccc",
+        "ordinal": 128,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 492,
+          "numeric_and_control_selections": 82,
+          "one_program_with_support_bits": 287024,
+          "packet_bits": 1504,
+          "padding_bits": 6,
+          "payload_bits": 642,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 107,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 23,
+            "BIT1": 31,
+            "BLOCK": 3,
+            "E:heap.new": 1,
+            "E:heap.pop": 1,
+            "E:heap.push": 1,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 28,
+            "FOR": 2,
+            "PROGRAM": 1,
+            "REF": 9,
+            "T:int": 2,
+            "T:list": 2
+          }
+        },
+        "packet_hex": "545749520106010000006b0093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138d38fb4e3cd3e138d3cd3c538e3c734f04e3e338d34f38d3c738d3c738e3c538d38f1cd3c138d3e238e34f38f1ce34fb0e38e3ce34f1ce3c738e34fb8e34d34f38f1ce3c738d34d3c0",
+        "packet_sha256": "6977a7f87e0b2d04a8bb342c1cb7fb4ae0189c4fa441e0a07270eafac854e7de",
+        "plan": {
+          "stages": [
+            [
+              "sort",
+              false
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "sort_ascending",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "fc2cc6b2eca0e66cad837b51d24dcdcd1cd1433ecde03c70dd9c79ce5e38e803",
+        "ordinal": 132,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 516,
+          "numeric_and_control_selections": 86,
+          "one_program_with_support_bits": 287056,
+          "packet_bits": 1536,
+          "padding_bits": 2,
+          "payload_bits": 678,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 113,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 23,
+            "BIT1": 33,
+            "BLOCK": 3,
+            "E:heap.new": 1,
+            "E:heap.pop": 1,
+            "E:heap.push": 1,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 30,
+            "FOR": 2,
+            "P:neg": 2,
+            "PROGRAM": 1,
+            "REF": 9,
+            "T:int": 2,
+            "T:list": 2
+          }
+        },
+        "packet_hex": "54574952010601000000710093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138d38fb4e3cd3e138d3cd3c538e3c734f04e3e338d34f38d3c738d3d838f1ce38f14e34e3c734f04e34f88e38d3ce3c738d3ec38e38f38d3c738f60e3c738e34fb8e34d34f38f1ce3c738d34d3c",
+        "packet_sha256": "d8a43b8389eb971ade4671f517557b6c8f49ed620a746a2835ce53ca8419935a",
+        "plan": {
+          "stages": [
+            [
+              "sort",
+              true
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "sort_descending",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "73d5f1eaedfcd176ee163fa21bb720ce0222b6c5959d4c74cfd7871fdbd776d8",
+        "ordinal": 136,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 534,
+          "numeric_and_control_selections": 89,
+          "one_program_with_support_bits": 287088,
+          "packet_bits": 1568,
+          "padding_bits": 4,
+          "payload_bits": 708,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 118,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 20,
+            "BIT1": 37,
+            "BLOCK": 4,
+            "E:map.has": 1,
+            "E:map.new": 1,
+            "E:map.set": 1,
+            "E:vector.append": 1,
+            "E:vector.new": 1,
+            "E:vector.snapshot": 1,
+            "END": 31,
+            "FOR": 1,
+            "IF": 1,
+            "INT": 1,
+            "P:not": 1,
+            "POS": 1,
+            "PROGRAM": 1,
+            "REF": 10,
+            "T:int": 2,
+            "T:list": 2
+          }
+        },
+        "packet_hex": "54574952010601000000760093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138d34fb4e3cd3e638d3cd3c538e3c734f04e34f94e34d3ce34f1ce34f1ce38f19938f1ce34d3c138d3e738d38f38e3c738d3c738e3c82ce3ec38e34f38d3c738f1ce38f04d3ee38e38f38f1ce3c738e38f0",
+        "packet_sha256": "978ef0ac008be801519e809fafecf32e751b47ef231f1b1d2a4fbed9c733ed58",
+        "plan": {
+          "stages": [
+            [
+              "distinct"
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "stable_distinct",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "f629ad0001a4b1b8287b96c883337d455b349ce0be141cf2074981d801f3aa01",
+        "ordinal": 4488,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 1146,
+          "numeric_and_control_selections": 191,
+          "one_program_with_support_bits": 287808,
+          "packet_bits": 2288,
+          "padding_bits": 4,
+          "payload_bits": 1428,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 238,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 53,
+            "BIT1": 82,
+            "BLOCK": 6,
+            "E:heap.new": 1,
+            "E:heap.pop": 1,
+            "E:heap.push": 1,
+            "E:map.has": 1,
+            "E:map.new": 1,
+            "E:map.set": 1,
+            "E:vector.append": 2,
+            "E:vector.new": 2,
+            "E:vector.snapshot": 2,
+            "END": 55,
+            "FOR": 3,
+            "IF": 1,
+            "INT": 1,
+            "P:not": 1,
+            "POS": 1,
+            "PROGRAM": 1,
+            "REF": 18,
+            "T:int": 2,
+            "T:list": 2
+          }
+        },
+        "packet_hex": "54574952010601000000ee0093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138d34e3ed38f34f84e34f34f14e38f1cd3c138f8ce34d3ce34f1ce34f1ce38f14e34e3c734f04e34f88e38d3ce3c738d3ec38e38f38d3c738f1ce38d3ee38d34d3ce3c738fb4e34d38f34f98e34e34f34f14e34e38f1ce34d34f04e34f94e38d34f38d3c738d38d3c738d38e3c664e3c738e34d3c138d3e738e34e3ce38f1ce34e34f1ce34e38f20b38fb0e38e34f38d3c738d34e3c738d38e3c134fb8e38e38f38f1ce34d38f1ce38e38f0",
+        "packet_sha256": "4a8093933f6030ce5c39ba3b8a9e0734a8658e93a1bd3b0c2869fcdc2c0a8ab3",
+        "plan": {
+          "stages": [
+            [
+              "sort",
+              false
+            ],
+            [
+              "distinct"
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "sorted_distinct",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "919222dbe132f2cf53fd75aec288b68dabf9d1d2efe97226d003cd5072d36316",
+        "ordinal": 3808,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 1074,
+          "numeric_and_control_selections": 179,
+          "one_program_with_support_bits": 287760,
+          "packet_bits": 2240,
+          "padding_bits": 4,
+          "payload_bits": 1380,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 230,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 48,
+            "BIT1": 73,
+            "BLOCK": 7,
+            "E:map.has": 1,
+            "E:map.new": 1,
+            "E:map.set": 1,
+            "E:vector.append": 2,
+            "E:vector.new": 2,
+            "E:vector.snapshot": 2,
+            "END": 55,
+            "FOR": 2,
+            "IF": 2,
+            "INT": 3,
+            "P:lt": 1,
+            "P:neg": 1,
+            "P:not": 1,
+            "POS": 3,
+            "PROGRAM": 1,
+            "REF": 17,
+            "SET": 2,
+            "T:int": 2,
+            "T:list": 2,
+            "VAR": 1
+          }
+        },
+        "packet_hex": "54574952010601000000e60093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138e38fb4e3cd3c538d3c734f04e38f0ce38f20b34f19638d3c738d3c82cd3c138f10e38f60e3c738d3c138f10e38f1ce34fb0e34d3ce34f1ce3c738e3ee38d38f38f1ce3ed38e34f34f98e38e3cd3c538d34d3c738d38f04e34f94e34d38f38d3c738e38f1ce34d34f19938f1ce34d38f04e34f9ce34e34f38e3c738e38f1ce34d34f20b38fb0e34e38f38d3c738e34f1ce34d34f04d3ee38e34d3ce3c738e34f1ce38d34f0",
+        "packet_sha256": "d7aaedd78e6b35e470108e9f8611a13639f8636dafb282be5090aae4ddf79944",
+        "plan": {
+          "stages": [
+            [
+              "map",
+              [
+                "choose_negative",
+                [
+                  "neg",
+                  "x"
+                ],
+                "x"
+              ]
+            ],
+            [
+              "distinct"
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "stable_distinct_absolute",
+      "training_examples": 18
+    },
+    {
+      "selection": {
+        "graph_sha256": "042948a75899459d7a69a372bf52ee5e7c13f08350fa1671b2af7bce104907b6",
+        "ordinal": 2992,
+        "packet_cost": {
+          "decoder_storage_bits": 123208,
+          "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+          "dictionary_storage_bits": 7288,
+          "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+          "framing_bits": 856,
+          "numeric_and_control_bits": 876,
+          "numeric_and_control_selections": 146,
+          "one_program_with_support_bits": 287496,
+          "packet_bits": 1976,
+          "padding_bits": 4,
+          "payload_bits": 1116,
+          "profile": "vector-v1",
+          "runtime_storage_bits": 155024,
+          "selections": 186,
+          "width": 6,
+          "word_counts": {
+            "BIT0": 37,
+            "BIT1": 63,
+            "BLOCK": 5,
+            "E:map.has": 1,
+            "E:map.new": 1,
+            "E:map.set": 1,
+            "E:vector.append": 2,
+            "E:vector.new": 2,
+            "E:vector.snapshot": 2,
+            "END": 45,
+            "FOR": 2,
+            "IF": 1,
+            "INT": 1,
+            "P:mul": 1,
+            "P:not": 1,
+            "POS": 1,
+            "PROGRAM": 1,
+            "REF": 15,
+            "T:int": 2,
+            "T:list": 2
+          }
+        },
+        "packet_hex": "54574952010601000000ba0093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f7cb7c8138e38fb4e3cd3c538d3c734f04e3ec38e3ce34f1ce3d738d3c738d3c738d3ee38d34f38f1ce3ed38d38f34f98e38d3cd3c538e38f1ce34d3c138d3e538d34d3ce34f1ce38d3c738e38f19938f1ce34d34f04e34f9ce34d38f38e3c738e34f1ce38e3c82ce3ec38d38d3ce34f1ce34e3c738e38f04d3ee38d38e3ce3c738d38f1ce34e38f0",
+        "packet_sha256": "57bfab17ff5af4179e6b42d955abaad5cacb79b02c2a834124138d8468f9f737",
+        "plan": {
+          "stages": [
+            [
+              "map",
+              [
+                "mul",
+                "x",
+                "x"
+              ]
+            ],
+            [
+              "distinct"
+            ]
+          ],
+          "terminal": "list"
+        }
+      },
+      "status": "selected",
+      "task": "stable_distinct_squares",
+      "training_examples": 18
+    }
+  ],
+  "schema": "algsolve.direct-bits-development-evidence.v1",
+  "source_bindings": {
+    "algsolve/__init__.py": {
+      "bytes": 85,
+      "sha256": "7a1ce5251c6cd27f692441d7ea8704d44f910b5ca62e65472a69c23849b9b68e"
+    },
+    "algsolve/synth/__init__.py": {
+      "bytes": 77,
+      "sha256": "861d3f4368f3feab5ece7688c27b86480dcbbbf25fd714fe6f150b4154085d34"
+    },
+    "algsolve/synth/direct_bits_oracles.py": {
+      "bytes": 7864,
+      "sha256": "717900d1bdcf10d4442abde5057328810e6919c692dea07294e686ec582f74ba"
+    },
+    "algsolve/synth/direct_bits_search.py": {
+      "bytes": 15229,
+      "sha256": "2f42068f242c7873f974953244920a2c7cb62a82205fc8bf4b5e9353ee732462"
+    },
+    "algsolve/synth/typed_vector_program.py": {
+      "bytes": 19378,
+      "sha256": "4826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4b"
+    },
+    "algsolve/synth/typed_word_codec.py": {
+      "bytes": 15401,
+      "sha256": "d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb0804"
+    },
+    "literals/direct-bits-development-v1/measure.py": {
+      "bytes": 11917,
+      "sha256": "7e5267f41ab8ede690c01c0d365acc5d0f9245eeb5f938313347f7b21cb6862e"
+    }
+  },
+  "trace_bytes": 1447070,
+  "trace_sha256": "31580ebad1d6e79c757601a50e4851510b6f3b9348e0bb80ee2c2e445cdeabf3",
+  "training_attempted_operation_units": 5320950,
+  "training_executions": 85752,
+  "training_operation_units": 5320950,
+  "training_sha256": "e19352bb7541d864cd832e88e65a2cf2b2056d93a997ff15a487ec39d9063573"
+}
