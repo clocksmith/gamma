@@ -1,0 +1,2818 @@
+{
+  "contract": {
+    "bindings": "Inputs retain positional order. Prediction references use input index or 8 + declaration slot; word references/declarations use sequential bN indices. Recipe expansion introduces additional charged lexical bindings.",
+    "compatibility": "Prediction conversion accepts base-v2 only. Vector operations, resource ownership and runtime schema are not lowered or relabeled.",
+    "constants": "Integers preserve signed 128-bit magnitude bounds. Prediction magnitude bits are LSB-first; stream magnitude words are canonical MSB-first. Booleans remain distinct from integers.",
+    "not_measured": [
+      "prediction transport bytes",
+      "model/optimizer storage and inference cost",
+      "human navigation, corrections and completion time",
+      "native qualification",
+      "unseen solving"
+    ],
+    "prediction_labels": 43,
+    "prediction_mapping": [
+      {
+        "conversion": "prediction padding only; not a stream word",
+        "prediction_code": 0,
+        "prediction_label": "EMPTY",
+        "word_codes": {
+          "base-v2": [],
+          "vector-v1": []
+        },
+        "word_tokens": []
+      },
+      {
+        "conversion": "serialize ordered parameter signature, output type, body and return",
+        "prediction_code": 1,
+        "prediction_label": "root",
+        "word_codes": {
+          "base-v2": [
+            0
+          ],
+          "vector-v1": [
+            0
+          ]
+        },
+        "word_tokens": [
+          "PROGRAM"
+        ]
+      },
+      {
+        "conversion": "serialize statement count and ordered body",
+        "prediction_code": 2,
+        "prediction_label": "sequence",
+        "word_codes": {
+          "base-v2": [
+            1
+          ],
+          "vector-v1": [
+            1
+          ]
+        },
+        "word_tokens": [
+          "BLOCK"
+        ]
+      },
+      {
+        "conversion": "serialize statement shape and all bindings/operands",
+        "prediction_code": 3,
+        "prediction_label": "let",
+        "word_codes": {
+          "base-v2": [
+            2
+          ],
+          "vector-v1": [
+            2
+          ]
+        },
+        "word_tokens": [
+          "LET"
+        ]
+      },
+      {
+        "conversion": "serialize statement shape and all bindings/operands",
+        "prediction_code": 4,
+        "prediction_label": "var",
+        "word_codes": {
+          "base-v2": [
+            3
+          ],
+          "vector-v1": [
+            3
+          ]
+        },
+        "word_tokens": [
+          "VAR"
+        ]
+      },
+      {
+        "conversion": "serialize statement shape and all bindings/operands",
+        "prediction_code": 5,
+        "prediction_label": "set",
+        "word_codes": {
+          "base-v2": [
+            4
+          ],
+          "vector-v1": [
+            4
+          ]
+        },
+        "word_tokens": [
+          "SET"
+        ]
+      },
+      {
+        "conversion": "serialize statement shape and all bindings/operands",
+        "prediction_code": 6,
+        "prediction_label": "for",
+        "word_codes": {
+          "base-v2": [
+            5
+          ],
+          "vector-v1": [
+            5
+          ]
+        },
+        "word_tokens": [
+          "FOR"
+        ]
+      },
+      {
+        "conversion": "serialize statement shape and all bindings/operands",
+        "prediction_code": 7,
+        "prediction_label": "if",
+        "word_codes": {
+          "base-v2": [
+            6
+          ],
+          "vector-v1": [
+            6
+          ]
+        },
+        "word_tokens": [
+          "IF"
+        ]
+      },
+      {
+        "conversion": "remap input/declaration slot to sequential lexical binding index",
+        "prediction_code": 8,
+        "prediction_label": "ref",
+        "word_codes": {
+          "base-v2": [
+            7
+          ],
+          "vector-v1": [
+            7
+          ]
+        },
+        "word_tokens": [
+          "REF"
+        ]
+      },
+      {
+        "conversion": "129 prediction bits to sign and canonical MSB magnitude words plus END",
+        "prediction_code": 9,
+        "prediction_label": "int",
+        "word_codes": {
+          "base-v2": [
+            8
+          ],
+          "vector-v1": [
+            8
+          ]
+        },
+        "word_tokens": [
+          "INT"
+        ]
+      },
+      {
+        "conversion": "129 prediction bits to exactly one TRUE or FALSE word",
+        "prediction_code": 10,
+        "prediction_label": "bool",
+        "word_codes": {
+          "base-v2": [
+            9,
+            10
+          ],
+          "vector-v1": [
+            9,
+            10
+          ]
+        },
+        "word_tokens": [
+          "TRUE",
+          "FALSE"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 11,
+        "prediction_label": "pure:add",
+        "word_codes": {
+          "base-v2": [
+            16
+          ],
+          "vector-v1": [
+            16
+          ]
+        },
+        "word_tokens": [
+          "P:add"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 12,
+        "prediction_label": "pure:append",
+        "word_codes": {
+          "base-v2": [
+            17
+          ],
+          "vector-v1": [
+            17
+          ]
+        },
+        "word_tokens": [
+          "P:append"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 13,
+        "prediction_label": "pure:empty_ints",
+        "word_codes": {
+          "base-v2": [
+            18
+          ],
+          "vector-v1": [
+            18
+          ]
+        },
+        "word_tokens": [
+          "P:empty_ints"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 14,
+        "prediction_label": "pure:eq",
+        "word_codes": {
+          "base-v2": [
+            19
+          ],
+          "vector-v1": [
+            19
+          ]
+        },
+        "word_tokens": [
+          "P:eq"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 15,
+        "prediction_label": "pure:field",
+        "word_codes": {
+          "base-v2": [
+            20
+          ],
+          "vector-v1": [
+            20
+          ]
+        },
+        "word_tokens": [
+          "P:field"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 16,
+        "prediction_label": "pure:len",
+        "word_codes": {
+          "base-v2": [
+            21
+          ],
+          "vector-v1": [
+            21
+          ]
+        },
+        "word_tokens": [
+          "P:len"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 17,
+        "prediction_label": "pure:lt",
+        "word_codes": {
+          "base-v2": [
+            22
+          ],
+          "vector-v1": [
+            22
+          ]
+        },
+        "word_tokens": [
+          "P:lt"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 18,
+        "prediction_label": "pure:mul",
+        "word_codes": {
+          "base-v2": [
+            23
+          ],
+          "vector-v1": [
+            23
+          ]
+        },
+        "word_tokens": [
+          "P:mul"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 19,
+        "prediction_label": "pure:neg",
+        "word_codes": {
+          "base-v2": [
+            24
+          ],
+          "vector-v1": [
+            24
+          ]
+        },
+        "word_tokens": [
+          "P:neg"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 20,
+        "prediction_label": "pure:not",
+        "word_codes": {
+          "base-v2": [
+            25
+          ],
+          "vector-v1": [
+            25
+          ]
+        },
+        "word_tokens": [
+          "P:not"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 21,
+        "prediction_label": "pure:range",
+        "word_codes": {
+          "base-v2": [
+            26
+          ],
+          "vector-v1": [
+            26
+          ]
+        },
+        "word_tokens": [
+          "P:range"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 22,
+        "prediction_label": "pure:sort_by",
+        "word_codes": {
+          "base-v2": [
+            27
+          ],
+          "vector-v1": [
+            27
+          ]
+        },
+        "word_tokens": [
+          "P:sort_by"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 23,
+        "prediction_label": "pure:sub",
+        "word_codes": {
+          "base-v2": [
+            28
+          ],
+          "vector-v1": [
+            28
+          ]
+        },
+        "word_tokens": [
+          "P:sub"
+        ]
+      },
+      {
+        "conversion": "operation with charged arity and operands",
+        "prediction_code": 24,
+        "prediction_label": "pure:tuple",
+        "word_codes": {
+          "base-v2": [
+            29
+          ],
+          "vector-v1": [
+            29
+          ]
+        },
+        "word_tokens": [
+          "P:tuple"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 25,
+        "prediction_label": "call:dsu.find",
+        "word_codes": {
+          "base-v2": [
+            30
+          ],
+          "vector-v1": [
+            30
+          ]
+        },
+        "word_tokens": [
+          "E:dsu.find"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 26,
+        "prediction_label": "call:dsu.new",
+        "word_codes": {
+          "base-v2": [
+            31
+          ],
+          "vector-v1": [
+            31
+          ]
+        },
+        "word_tokens": [
+          "E:dsu.new"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 27,
+        "prediction_label": "call:dsu.union",
+        "word_codes": {
+          "base-v2": [
+            32
+          ],
+          "vector-v1": [
+            32
+          ]
+        },
+        "word_tokens": [
+          "E:dsu.union"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 28,
+        "prediction_label": "call:heap.new",
+        "word_codes": {
+          "base-v2": [
+            33
+          ],
+          "vector-v1": [
+            33
+          ]
+        },
+        "word_tokens": [
+          "E:heap.new"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 29,
+        "prediction_label": "call:heap.pop",
+        "word_codes": {
+          "base-v2": [
+            34
+          ],
+          "vector-v1": [
+            34
+          ]
+        },
+        "word_tokens": [
+          "E:heap.pop"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 30,
+        "prediction_label": "call:heap.push",
+        "word_codes": {
+          "base-v2": [
+            35
+          ],
+          "vector-v1": [
+            35
+          ]
+        },
+        "word_tokens": [
+          "E:heap.push"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 31,
+        "prediction_label": "call:map.get",
+        "word_codes": {
+          "base-v2": [
+            36
+          ],
+          "vector-v1": [
+            36
+          ]
+        },
+        "word_tokens": [
+          "E:map.get"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 32,
+        "prediction_label": "call:map.has",
+        "word_codes": {
+          "base-v2": [
+            37
+          ],
+          "vector-v1": [
+            37
+          ]
+        },
+        "word_tokens": [
+          "E:map.has"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 33,
+        "prediction_label": "call:map.new",
+        "word_codes": {
+          "base-v2": [
+            38
+          ],
+          "vector-v1": [
+            38
+          ]
+        },
+        "word_tokens": [
+          "E:map.new"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 34,
+        "prediction_label": "call:map.set",
+        "word_codes": {
+          "base-v2": [
+            39
+          ],
+          "vector-v1": [
+            39
+          ]
+        },
+        "word_tokens": [
+          "E:map.set"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 35,
+        "prediction_label": "call:queue.new",
+        "word_codes": {
+          "base-v2": [
+            40
+          ],
+          "vector-v1": [
+            40
+          ]
+        },
+        "word_tokens": [
+          "E:queue.new"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 36,
+        "prediction_label": "call:queue.pop",
+        "word_codes": {
+          "base-v2": [
+            41
+          ],
+          "vector-v1": [
+            41
+          ]
+        },
+        "word_tokens": [
+          "E:queue.pop"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 37,
+        "prediction_label": "call:queue.push",
+        "word_codes": {
+          "base-v2": [
+            42
+          ],
+          "vector-v1": [
+            42
+          ]
+        },
+        "word_tokens": [
+          "E:queue.push"
+        ]
+      },
+      {
+        "conversion": "effect with charged output binding, arity and operands",
+        "prediction_code": 38,
+        "prediction_label": "call:queue.size",
+        "word_codes": {
+          "base-v2": [
+            43
+          ],
+          "vector-v1": [
+            43
+          ]
+        },
+        "word_tokens": [
+          "E:queue.size"
+        ]
+      },
+      {
+        "conversion": "hygienically inline full base recipe; no recipe opcode",
+        "prediction_code": 39,
+        "prediction_label": "recipe:cycle_weight",
+        "word_codes": {
+          "base-v2": [],
+          "vector-v1": []
+        },
+        "word_tokens": []
+      },
+      {
+        "conversion": "hygienically inline full base recipe; no recipe opcode",
+        "prediction_code": 40,
+        "prediction_label": "recipe:forest",
+        "word_codes": {
+          "base-v2": [],
+          "vector-v1": []
+        },
+        "word_tokens": []
+      },
+      {
+        "conversion": "hygienically inline full base recipe; no recipe opcode",
+        "prediction_code": 41,
+        "prediction_label": "recipe:heap_sort",
+        "word_codes": {
+          "base-v2": [],
+          "vector-v1": []
+        },
+        "word_tokens": []
+      },
+      {
+        "conversion": "hygienically inline full base recipe; no recipe opcode",
+        "prediction_code": 42,
+        "prediction_label": "recipe:stable_unique",
+        "word_codes": {
+          "base-v2": [],
+          "vector-v1": []
+        },
+        "word_tokens": []
+      }
+    ],
+    "prediction_program_schema": "algsolve.typed-program.v2",
+    "prediction_schema": "algsolve.typed-prediction.v1",
+    "profiles": {
+      "base-v2": {
+        "decoder_sha256": "d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb0804",
+        "decoder_source_bytes": 15401,
+        "dictionary_bytes": 834,
+        "dictionary_sha256": "1ec26262b935f8b424bbc3bc68f438ce19c02a12c410957136615323e4e199a3",
+        "entries": 53,
+        "header_bytes": 107,
+        "max_graph_nodes": 4096,
+        "max_integer_bits": 128,
+        "max_words": 262144,
+        "profile": "base-v2",
+        "program_schema": "algsolve.typed-program.v2",
+        "runtime_sha256": "487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734",
+        "runtime_source_bytes": 18910,
+        "schema": "algsolve.typed-word-codec.v1",
+        "scope": "representation of supplied typed graphs only; not source qualification or unseen solving",
+        "widths": [
+          6,
+          7,
+          8
+        ],
+        "words": [
+          "PROGRAM",
+          "BLOCK",
+          "LET",
+          "VAR",
+          "SET",
+          "FOR",
+          "IF",
+          "REF",
+          "INT",
+          "TRUE",
+          "FALSE",
+          "POS",
+          "NEG",
+          "BIT0",
+          "BIT1",
+          "END",
+          "P:add",
+          "P:append",
+          "P:empty_ints",
+          "P:eq",
+          "P:field",
+          "P:len",
+          "P:lt",
+          "P:mul",
+          "P:neg",
+          "P:not",
+          "P:range",
+          "P:sort_by",
+          "P:sub",
+          "P:tuple",
+          "E:dsu.find",
+          "E:dsu.new",
+          "E:dsu.union",
+          "E:heap.new",
+          "E:heap.pop",
+          "E:heap.push",
+          "E:map.get",
+          "E:map.has",
+          "E:map.new",
+          "E:map.set",
+          "E:queue.new",
+          "E:queue.pop",
+          "E:queue.push",
+          "E:queue.size",
+          "T:bool",
+          "T:dsu",
+          "T:heap_int",
+          "T:int",
+          "T:map_int_int",
+          "T:queue_int",
+          "T:unit",
+          "T:list",
+          "T:tuple"
+        ]
+      },
+      "vector-v1": {
+        "decoder_sha256": "d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb0804",
+        "decoder_source_bytes": 15401,
+        "dictionary_bytes": 911,
+        "dictionary_sha256": "0093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e0522",
+        "entries": 57,
+        "header_bytes": 107,
+        "max_graph_nodes": 4096,
+        "max_integer_bits": 128,
+        "max_words": 262144,
+        "profile": "vector-v1",
+        "program_schema": "algsolve.typed-program.vector.v1",
+        "runtime_sha256": "4826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4b",
+        "runtime_source_bytes": 19378,
+        "schema": "algsolve.typed-word-codec.v1",
+        "scope": "representation of supplied typed graphs only; not source qualification or unseen solving",
+        "widths": [
+          6,
+          7,
+          8
+        ],
+        "words": [
+          "PROGRAM",
+          "BLOCK",
+          "LET",
+          "VAR",
+          "SET",
+          "FOR",
+          "IF",
+          "REF",
+          "INT",
+          "TRUE",
+          "FALSE",
+          "POS",
+          "NEG",
+          "BIT0",
+          "BIT1",
+          "END",
+          "P:add",
+          "P:append",
+          "P:empty_ints",
+          "P:eq",
+          "P:field",
+          "P:len",
+          "P:lt",
+          "P:mul",
+          "P:neg",
+          "P:not",
+          "P:range",
+          "P:sort_by",
+          "P:sub",
+          "P:tuple",
+          "E:dsu.find",
+          "E:dsu.new",
+          "E:dsu.union",
+          "E:heap.new",
+          "E:heap.pop",
+          "E:heap.push",
+          "E:map.get",
+          "E:map.has",
+          "E:map.new",
+          "E:map.set",
+          "E:queue.new",
+          "E:queue.pop",
+          "E:queue.push",
+          "E:queue.size",
+          "E:vector.append",
+          "E:vector.new",
+          "E:vector.snapshot",
+          "T:bool",
+          "T:dsu",
+          "T:heap_int",
+          "T:int",
+          "T:map_int_int",
+          "T:queue_int",
+          "T:unit",
+          "T:vector_int",
+          "T:list",
+          "T:tuple"
+        ]
+      }
+    },
+    "schema": "algsolve.typed-stream-contract.v1",
+    "sources": {
+      "typed_codec.py": {
+        "sha256": "c837ac847a095e91d0e30544f6073d592b7721b6861a0efd9d30bf6a4d2c5cf4",
+        "storage_bits": 39280
+      },
+      "typed_prediction_codec.py": {
+        "sha256": "8aefee443e32d29362ba6494552b16187ad27accb6abe69b9b0c857432552dbd",
+        "storage_bits": 75976
+      },
+      "typed_program.py": {
+        "sha256": "487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734",
+        "storage_bits": 151280
+      },
+      "typed_recipes.py": {
+        "sha256": "bff29b26931d89301e0f1560ef256677b166a2467c405755ee57aa577537c7c2",
+        "storage_bits": 54280
+      },
+      "typed_stream_contract.py": {
+        "sha256": "89508fca8955853fc268bf4e3a3839339b08fe944284d5bc02b958f373bd0d93",
+        "storage_bits": 91224
+      },
+      "typed_word_codec.py": {
+        "sha256": "d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb0804",
+        "storage_bits": 123208
+      }
+    },
+    "structure": "first-child/next-sibling links become charged prefix grammar, block counts and argument counts; no edge table is required by the resulting packet",
+    "types": "Prediction type IDs are fitted side information. Stream types and compound arity are explicit words; no fitted type table is required to decode the packet.",
+    "vector_only_words": [
+      "E:vector.append",
+      "E:vector.new",
+      "E:vector.snapshot",
+      "T:vector_int"
+    ]
+  },
+  "evidence_scope": "Five authored fixtures at three widths. Predictor codes are supplied perfect graph encodings, not model predictions. No protected/source evaluation, native qualification, human measurement or solver result.",
+  "measurement_source_sha256": "5d9dd0bec5a14a553064382f42d285e80e056bd3f8e310553ab9c33fc410f259",
+  "rows": [
+    {
+      "authored_expected": -257,
+      "canonical_program_sha256": "d8c3f8f2d63737cbf06014c99db6a69ca4450251a68ba55674996d47e605d4d6",
+      "categories": {
+        "bindings": {
+          "bits": 0,
+          "selections": 0
+        },
+        "constants": {
+          "bits": 72,
+          "selections": 12
+        },
+        "operations": {
+          "bits": 0,
+          "selections": 0
+        },
+        "structure": {
+          "bits": 36,
+          "selections": 6
+        },
+        "types": {
+          "bits": 6,
+          "selections": 1
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 6672,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 90,
+        "numeric_and_control_selections": 15,
+        "one_program_with_support_bits": 282136,
+        "packet_bits": 976,
+        "padding_bits": 6,
+        "payload_bits": 114,
+        "profile": "base-v2",
+        "runtime_storage_bits": 151280,
+        "selections": 19,
+        "width": 6,
+        "word_counts": {
+          "BIT0": 9,
+          "BIT1": 2,
+          "BLOCK": 1,
+          "END": 3,
+          "INT": 1,
+          "NEG": 1,
+          "PROGRAM": 1,
+          "T:int": 1
+        }
+      },
+      "execution_matches": true,
+      "fixture": "signed_constant",
+      "input_parameters": [],
+      "packet_hex": "54574952010600000000131ec26262b935f8b424bbc3bc68f438ce19c02a12c410957136615323e4e199a3487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400d3ef04d3c830e34d34d34d34e3c0",
+      "packet_sha256": "cc4dfc09b55f81c20cea949e897c9e736f032498bebf91061421bb5beb280ca4",
+      "positional_inputs": [],
+      "prediction_codes_sha256": "ca03efaeee5a61a18d40cc3e5bd749169b984c582adc281c704c103935bdc545",
+      "prediction_descriptor": {
+        "bindings": "input index or 8 + declaration slot; validator enforces lexical scope",
+        "input_slots": 8,
+        "literal_bits": 129,
+        "operators": [
+          "EMPTY",
+          "root",
+          "sequence",
+          "let",
+          "var",
+          "set",
+          "for",
+          "if",
+          "ref",
+          "int",
+          "bool",
+          "pure:add",
+          "pure:append",
+          "pure:empty_ints",
+          "pure:eq",
+          "pure:field",
+          "pure:len",
+          "pure:lt",
+          "pure:mul",
+          "pure:neg",
+          "pure:not",
+          "pure:range",
+          "pure:sort_by",
+          "pure:sub",
+          "pure:tuple",
+          "call:dsu.find",
+          "call:dsu.new",
+          "call:dsu.union",
+          "call:heap.new",
+          "call:heap.pop",
+          "call:heap.push",
+          "call:map.get",
+          "call:map.has",
+          "call:map.new",
+          "call:map.set",
+          "call:queue.new",
+          "call:queue.pop",
+          "call:queue.push",
+          "call:queue.size",
+          "recipe:cycle_weight",
+          "recipe:forest",
+          "recipe:heap_sort",
+          "recipe:stable_unique"
+        ],
+        "schema": "algsolve.typed-prediction.v1",
+        "slots": 512,
+        "structure": "preorder first-child/next-sibling tree; all slots predicted in parallel",
+        "target": "frozen typed IR, no arbitrary expression holes",
+        "types": [
+          "\"int\""
+        ]
+      },
+      "prediction_tensor": {
+        "active_nodes": 3,
+        "binding_fields": 512,
+        "edge_fields": 1024,
+        "literal_bit_fields": 66048,
+        "op_fields": 512,
+        "slots": 512,
+        "type_fields": 9,
+        "wire_bits": null
+      },
+      "primitive_packet_roundtrip_exact": true,
+      "profile": "base-v2",
+      "width": 6
+    },
+    {
+      "authored_expected": -257,
+      "canonical_program_sha256": "d8c3f8f2d63737cbf06014c99db6a69ca4450251a68ba55674996d47e605d4d6",
+      "categories": {
+        "bindings": {
+          "bits": 0,
+          "selections": 0
+        },
+        "constants": {
+          "bits": 84,
+          "selections": 12
+        },
+        "operations": {
+          "bits": 0,
+          "selections": 0
+        },
+        "structure": {
+          "bits": 42,
+          "selections": 6
+        },
+        "types": {
+          "bits": 7,
+          "selections": 1
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 6672,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 105,
+        "numeric_and_control_selections": 15,
+        "one_program_with_support_bits": 282152,
+        "packet_bits": 992,
+        "padding_bits": 3,
+        "payload_bits": 133,
+        "profile": "base-v2",
+        "runtime_storage_bits": 151280,
+        "selections": 19,
+        "width": 7,
+        "word_counts": {
+          "BIT0": 9,
+          "BIT1": 2,
+          "BLOCK": 1,
+          "END": 3,
+          "INT": 1,
+          "NEG": 1,
+          "PROGRAM": 1,
+          "T:int": 1
+        }
+      },
+      "execution_matches": true,
+      "fixture": "signed_constant",
+      "input_parameters": [],
+      "packet_hex": "54574952010700000000131ec26262b935f8b424bbc3bc68f438ce19c02a12c410957136615323e4e199a3487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400347af0234788183868d1a3468d1a3878",
+      "packet_sha256": "3000a64758f9980bca7c7411df1b6837b74d3b5188bdab33ed69203ecfe7e43e",
+      "positional_inputs": [],
+      "prediction_codes_sha256": "ca03efaeee5a61a18d40cc3e5bd749169b984c582adc281c704c103935bdc545",
+      "prediction_descriptor": {
+        "bindings": "input index or 8 + declaration slot; validator enforces lexical scope",
+        "input_slots": 8,
+        "literal_bits": 129,
+        "operators": [
+          "EMPTY",
+          "root",
+          "sequence",
+          "let",
+          "var",
+          "set",
+          "for",
+          "if",
+          "ref",
+          "int",
+          "bool",
+          "pure:add",
+          "pure:append",
+          "pure:empty_ints",
+          "pure:eq",
+          "pure:field",
+          "pure:len",
+          "pure:lt",
+          "pure:mul",
+          "pure:neg",
+          "pure:not",
+          "pure:range",
+          "pure:sort_by",
+          "pure:sub",
+          "pure:tuple",
+          "call:dsu.find",
+          "call:dsu.new",
+          "call:dsu.union",
+          "call:heap.new",
+          "call:heap.pop",
+          "call:heap.push",
+          "call:map.get",
+          "call:map.has",
+          "call:map.new",
+          "call:map.set",
+          "call:queue.new",
+          "call:queue.pop",
+          "call:queue.push",
+          "call:queue.size",
+          "recipe:cycle_weight",
+          "recipe:forest",
+          "recipe:heap_sort",
+          "recipe:stable_unique"
+        ],
+        "schema": "algsolve.typed-prediction.v1",
+        "slots": 512,
+        "structure": "preorder first-child/next-sibling tree; all slots predicted in parallel",
+        "target": "frozen typed IR, no arbitrary expression holes",
+        "types": [
+          "\"int\""
+        ]
+      },
+      "prediction_tensor": {
+        "active_nodes": 3,
+        "binding_fields": 512,
+        "edge_fields": 1024,
+        "literal_bit_fields": 66048,
+        "op_fields": 512,
+        "slots": 512,
+        "type_fields": 9,
+        "wire_bits": null
+      },
+      "primitive_packet_roundtrip_exact": true,
+      "profile": "base-v2",
+      "width": 7
+    },
+    {
+      "authored_expected": -257,
+      "canonical_program_sha256": "d8c3f8f2d63737cbf06014c99db6a69ca4450251a68ba55674996d47e605d4d6",
+      "categories": {
+        "bindings": {
+          "bits": 0,
+          "selections": 0
+        },
+        "constants": {
+          "bits": 96,
+          "selections": 12
+        },
+        "operations": {
+          "bits": 0,
+          "selections": 0
+        },
+        "structure": {
+          "bits": 48,
+          "selections": 6
+        },
+        "types": {
+          "bits": 8,
+          "selections": 1
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 6672,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 120,
+        "numeric_and_control_selections": 15,
+        "one_program_with_support_bits": 282168,
+        "packet_bits": 1008,
+        "padding_bits": 0,
+        "payload_bits": 152,
+        "profile": "base-v2",
+        "runtime_storage_bits": 151280,
+        "selections": 19,
+        "width": 8,
+        "word_counts": {
+          "BIT0": 9,
+          "BIT1": 2,
+          "BLOCK": 1,
+          "END": 3,
+          "INT": 1,
+          "NEG": 1,
+          "PROGRAM": 1,
+          "T:int": 1
+        }
+      },
+      "execution_matches": true,
+      "fixture": "signed_constant",
+      "input_parameters": [],
+      "packet_hex": "54574952010800000000131ec26262b935f8b424bbc3bc68f438ce19c02a12c410957136615323e4e199a3487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb0804000d0f2f010d0f080c0e0d0d0d0d0d0d0d0e0f",
+      "packet_sha256": "b181f48ee4a086a9ef6cf1260c542882362100f019590f0c268671358bf7d14a",
+      "positional_inputs": [],
+      "prediction_codes_sha256": "ca03efaeee5a61a18d40cc3e5bd749169b984c582adc281c704c103935bdc545",
+      "prediction_descriptor": {
+        "bindings": "input index or 8 + declaration slot; validator enforces lexical scope",
+        "input_slots": 8,
+        "literal_bits": 129,
+        "operators": [
+          "EMPTY",
+          "root",
+          "sequence",
+          "let",
+          "var",
+          "set",
+          "for",
+          "if",
+          "ref",
+          "int",
+          "bool",
+          "pure:add",
+          "pure:append",
+          "pure:empty_ints",
+          "pure:eq",
+          "pure:field",
+          "pure:len",
+          "pure:lt",
+          "pure:mul",
+          "pure:neg",
+          "pure:not",
+          "pure:range",
+          "pure:sort_by",
+          "pure:sub",
+          "pure:tuple",
+          "call:dsu.find",
+          "call:dsu.new",
+          "call:dsu.union",
+          "call:heap.new",
+          "call:heap.pop",
+          "call:heap.push",
+          "call:map.get",
+          "call:map.has",
+          "call:map.new",
+          "call:map.set",
+          "call:queue.new",
+          "call:queue.pop",
+          "call:queue.push",
+          "call:queue.size",
+          "recipe:cycle_weight",
+          "recipe:forest",
+          "recipe:heap_sort",
+          "recipe:stable_unique"
+        ],
+        "schema": "algsolve.typed-prediction.v1",
+        "slots": 512,
+        "structure": "preorder first-child/next-sibling tree; all slots predicted in parallel",
+        "target": "frozen typed IR, no arbitrary expression holes",
+        "types": [
+          "\"int\""
+        ]
+      },
+      "prediction_tensor": {
+        "active_nodes": 3,
+        "binding_fields": 512,
+        "edge_fields": 1024,
+        "literal_bit_fields": 66048,
+        "op_fields": 512,
+        "slots": 512,
+        "type_fields": 9,
+        "wire_bits": null
+      },
+      "primitive_packet_roundtrip_exact": true,
+      "profile": "base-v2",
+      "width": 8
+    },
+    {
+      "authored_expected": 11,
+      "canonical_program_sha256": "4f3978a25b766709e89ffe97d01c42f2e772d7d6636e04dc7429bdbcec6c7adb",
+      "categories": {
+        "bindings": {
+          "bits": 132,
+          "selections": 22
+        },
+        "constants": {
+          "bits": 24,
+          "selections": 4
+        },
+        "operations": {
+          "bits": 18,
+          "selections": 3
+        },
+        "structure": {
+          "bits": 84,
+          "selections": 14
+        },
+        "types": {
+          "bits": 18,
+          "selections": 3
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 6672,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 186,
+        "numeric_and_control_selections": 31,
+        "one_program_with_support_bits": 282296,
+        "packet_bits": 1136,
+        "padding_bits": 4,
+        "payload_bits": 276,
+        "profile": "base-v2",
+        "runtime_storage_bits": 151280,
+        "selections": 46,
+        "width": 6,
+        "word_counts": {
+          "BIT0": 7,
+          "BIT1": 10,
+          "BLOCK": 2,
+          "END": 13,
+          "FOR": 1,
+          "INT": 1,
+          "P:add": 1,
+          "POS": 1,
+          "PROGRAM": 1,
+          "REF": 4,
+          "SET": 1,
+          "T:int": 2,
+          "T:list": 1,
+          "VAR": 1
+        }
+      },
+      "execution_matches": true,
+      "fixture": "mutable_sum",
+      "input_parameters": [
+        "values"
+      ],
+      "packet_hex": "545749520106000000002e1ec26262b935f8b424bbc3bc68f438ce19c02a12c410957136615323e4e199a3487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f3bef04e34f0ce3c82cd3c538d3c734f04e3c438f40e34f1ce3c738d3c738f0",
+      "packet_sha256": "f2447218304044301f706f4fb8e45620f8e1cc56682818796510361c74827dc5",
+      "positional_inputs": [
+        [
+          4,
+          -2,
+          9
+        ]
+      ],
+      "prediction_codes_sha256": "77e5bd5e2911f122f5177a3f726494a33449efb996c284a4b340158901d58110",
+      "prediction_descriptor": {
+        "bindings": "input index or 8 + declaration slot; validator enforces lexical scope",
+        "input_slots": 8,
+        "literal_bits": 129,
+        "operators": [
+          "EMPTY",
+          "root",
+          "sequence",
+          "let",
+          "var",
+          "set",
+          "for",
+          "if",
+          "ref",
+          "int",
+          "bool",
+          "pure:add",
+          "pure:append",
+          "pure:empty_ints",
+          "pure:eq",
+          "pure:field",
+          "pure:len",
+          "pure:lt",
+          "pure:mul",
+          "pure:neg",
+          "pure:not",
+          "pure:range",
+          "pure:sort_by",
+          "pure:sub",
+          "pure:tuple",
+          "call:dsu.find",
+          "call:dsu.new",
+          "call:dsu.union",
+          "call:heap.new",
+          "call:heap.pop",
+          "call:heap.push",
+          "call:map.get",
+          "call:map.has",
+          "call:map.new",
+          "call:map.set",
+          "call:queue.new",
+          "call:queue.pop",
+          "call:queue.push",
+          "call:queue.size",
+          "recipe:cycle_weight",
+          "recipe:forest",
+          "recipe:heap_sort",
+          "recipe:stable_unique"
+        ],
+        "schema": "algsolve.typed-prediction.v1",
+        "slots": 512,
+        "structure": "preorder first-child/next-sibling tree; all slots predicted in parallel",
+        "target": "frozen typed IR, no arbitrary expression holes",
+        "types": [
+          "\"int\"",
+          "[\"list\",\"int\"]"
+        ]
+      },
+      "prediction_tensor": {
+        "active_nodes": 12,
+        "binding_fields": 512,
+        "edge_fields": 1024,
+        "literal_bit_fields": 66048,
+        "op_fields": 512,
+        "slots": 512,
+        "type_fields": 9,
+        "wire_bits": null
+      },
+      "primitive_packet_roundtrip_exact": true,
+      "profile": "base-v2",
+      "width": 6
+    },
+    {
+      "authored_expected": 11,
+      "canonical_program_sha256": "4f3978a25b766709e89ffe97d01c42f2e772d7d6636e04dc7429bdbcec6c7adb",
+      "categories": {
+        "bindings": {
+          "bits": 154,
+          "selections": 22
+        },
+        "constants": {
+          "bits": 28,
+          "selections": 4
+        },
+        "operations": {
+          "bits": 21,
+          "selections": 3
+        },
+        "structure": {
+          "bits": 98,
+          "selections": 14
+        },
+        "types": {
+          "bits": 21,
+          "selections": 3
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 6672,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 217,
+        "numeric_and_control_selections": 31,
+        "one_program_with_support_bits": 282344,
+        "packet_bits": 1184,
+        "padding_bits": 6,
+        "payload_bits": 322,
+        "profile": "base-v2",
+        "runtime_storage_bits": 151280,
+        "selections": 46,
+        "width": 7,
+        "word_counts": {
+          "BIT0": 7,
+          "BIT1": 10,
+          "BLOCK": 2,
+          "END": 13,
+          "FOR": 1,
+          "INT": 1,
+          "P:add": 1,
+          "POS": 1,
+          "PROGRAM": 1,
+          "REF": 4,
+          "SET": 1,
+          "T:int": 2,
+          "T:list": 1,
+          "VAR": 1
+        }
+      },
+      "execution_matches": true,
+      "fixture": "mutable_sum",
+      "input_parameters": [
+        "values"
+      ],
+      "packet_hex": "545749520107000000002e1ec26262b935f8b424bbc3bc68f438ce19c02a12c410957136615323e4e199a3487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb0804003878d1ecd7af023868f063878816347851c347871a3c08e1e1070f203868f0e387871c347871c3c0",
+      "packet_sha256": "e43c6c85cb7222ffefeb0ce218d8abf97992543ae486fa84650e32958fd0d18a",
+      "positional_inputs": [
+        [
+          4,
+          -2,
+          9
+        ]
+      ],
+      "prediction_codes_sha256": "77e5bd5e2911f122f5177a3f726494a33449efb996c284a4b340158901d58110",
+      "prediction_descriptor": {
+        "bindings": "input index or 8 + declaration slot; validator enforces lexical scope",
+        "input_slots": 8,
+        "literal_bits": 129,
+        "operators": [
+          "EMPTY",
+          "root",
+          "sequence",
+          "let",
+          "var",
+          "set",
+          "for",
+          "if",
+          "ref",
+          "int",
+          "bool",
+          "pure:add",
+          "pure:append",
+          "pure:empty_ints",
+          "pure:eq",
+          "pure:field",
+          "pure:len",
+          "pure:lt",
+          "pure:mul",
+          "pure:neg",
+          "pure:not",
+          "pure:range",
+          "pure:sort_by",
+          "pure:sub",
+          "pure:tuple",
+          "call:dsu.find",
+          "call:dsu.new",
+          "call:dsu.union",
+          "call:heap.new",
+          "call:heap.pop",
+          "call:heap.push",
+          "call:map.get",
+          "call:map.has",
+          "call:map.new",
+          "call:map.set",
+          "call:queue.new",
+          "call:queue.pop",
+          "call:queue.push",
+          "call:queue.size",
+          "recipe:cycle_weight",
+          "recipe:forest",
+          "recipe:heap_sort",
+          "recipe:stable_unique"
+        ],
+        "schema": "algsolve.typed-prediction.v1",
+        "slots": 512,
+        "structure": "preorder first-child/next-sibling tree; all slots predicted in parallel",
+        "target": "frozen typed IR, no arbitrary expression holes",
+        "types": [
+          "\"int\"",
+          "[\"list\",\"int\"]"
+        ]
+      },
+      "prediction_tensor": {
+        "active_nodes": 12,
+        "binding_fields": 512,
+        "edge_fields": 1024,
+        "literal_bit_fields": 66048,
+        "op_fields": 512,
+        "slots": 512,
+        "type_fields": 9,
+        "wire_bits": null
+      },
+      "primitive_packet_roundtrip_exact": true,
+      "profile": "base-v2",
+      "width": 7
+    },
+    {
+      "authored_expected": 11,
+      "canonical_program_sha256": "4f3978a25b766709e89ffe97d01c42f2e772d7d6636e04dc7429bdbcec6c7adb",
+      "categories": {
+        "bindings": {
+          "bits": 176,
+          "selections": 22
+        },
+        "constants": {
+          "bits": 32,
+          "selections": 4
+        },
+        "operations": {
+          "bits": 24,
+          "selections": 3
+        },
+        "structure": {
+          "bits": 112,
+          "selections": 14
+        },
+        "types": {
+          "bits": 24,
+          "selections": 3
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 6672,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 248,
+        "numeric_and_control_selections": 31,
+        "one_program_with_support_bits": 282384,
+        "packet_bits": 1224,
+        "padding_bits": 0,
+        "payload_bits": 368,
+        "profile": "base-v2",
+        "runtime_storage_bits": 151280,
+        "selections": 46,
+        "width": 8,
+        "word_counts": {
+          "BIT0": 7,
+          "BIT1": 10,
+          "BLOCK": 2,
+          "END": 13,
+          "FOR": 1,
+          "INT": 1,
+          "P:add": 1,
+          "POS": 1,
+          "PROGRAM": 1,
+          "REF": 4,
+          "SET": 1,
+          "T:int": 2,
+          "T:list": 1,
+          "VAR": 1
+        }
+      },
+      "execution_matches": true,
+      "fixture": "mutable_sum",
+      "input_parameters": [
+        "values"
+      ],
+      "packet_hex": "545749520108000000002e1ec26262b935f8b424bbc3bc68f438ce19c02a12c410957136615323e4e199a3487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb0804000e0f0d0f332f2f010e0d0f030e0f080b0d0f050e0d0f070d0f010e0f040e0f100e0d0f070e0f070e0d0f070e0f",
+      "packet_sha256": "c130f3d474e3373bf27b98445712dd3fc3189fe462630d818d5a015005903eeb",
+      "positional_inputs": [
+        [
+          4,
+          -2,
+          9
+        ]
+      ],
+      "prediction_codes_sha256": "77e5bd5e2911f122f5177a3f726494a33449efb996c284a4b340158901d58110",
+      "prediction_descriptor": {
+        "bindings": "input index or 8 + declaration slot; validator enforces lexical scope",
+        "input_slots": 8,
+        "literal_bits": 129,
+        "operators": [
+          "EMPTY",
+          "root",
+          "sequence",
+          "let",
+          "var",
+          "set",
+          "for",
+          "if",
+          "ref",
+          "int",
+          "bool",
+          "pure:add",
+          "pure:append",
+          "pure:empty_ints",
+          "pure:eq",
+          "pure:field",
+          "pure:len",
+          "pure:lt",
+          "pure:mul",
+          "pure:neg",
+          "pure:not",
+          "pure:range",
+          "pure:sort_by",
+          "pure:sub",
+          "pure:tuple",
+          "call:dsu.find",
+          "call:dsu.new",
+          "call:dsu.union",
+          "call:heap.new",
+          "call:heap.pop",
+          "call:heap.push",
+          "call:map.get",
+          "call:map.has",
+          "call:map.new",
+          "call:map.set",
+          "call:queue.new",
+          "call:queue.pop",
+          "call:queue.push",
+          "call:queue.size",
+          "recipe:cycle_weight",
+          "recipe:forest",
+          "recipe:heap_sort",
+          "recipe:stable_unique"
+        ],
+        "schema": "algsolve.typed-prediction.v1",
+        "slots": 512,
+        "structure": "preorder first-child/next-sibling tree; all slots predicted in parallel",
+        "target": "frozen typed IR, no arbitrary expression holes",
+        "types": [
+          "\"int\"",
+          "[\"list\",\"int\"]"
+        ]
+      },
+      "prediction_tensor": {
+        "active_nodes": 12,
+        "binding_fields": 512,
+        "edge_fields": 1024,
+        "literal_bit_fields": 66048,
+        "op_fields": 512,
+        "slots": 512,
+        "type_fields": 9,
+        "wire_bits": null
+      },
+      "primitive_packet_roundtrip_exact": true,
+      "profile": "base-v2",
+      "width": 8
+    },
+    {
+      "authored_expected": 0,
+      "canonical_program_sha256": "e930b883be61826e1e599adfc2ad5b21b4de09383714f5cb49bf184d818acaf0",
+      "categories": {
+        "bindings": {
+          "bits": 102,
+          "selections": 17
+        },
+        "constants": {
+          "bits": 144,
+          "selections": 24
+        },
+        "operations": {
+          "bits": 18,
+          "selections": 3
+        },
+        "structure": {
+          "bits": 90,
+          "selections": 15
+        },
+        "types": {
+          "bits": 6,
+          "selections": 1
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 6672,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 282,
+        "numeric_and_control_selections": 47,
+        "one_program_with_support_bits": 282376,
+        "packet_bits": 1216,
+        "padding_bits": 0,
+        "payload_bits": 360,
+        "profile": "base-v2",
+        "runtime_storage_bits": 151280,
+        "selections": 60,
+        "width": 6,
+        "word_counts": {
+          "BIT0": 11,
+          "BIT1": 17,
+          "BLOCK": 1,
+          "E:map.get": 1,
+          "E:map.new": 1,
+          "E:map.set": 1,
+          "END": 15,
+          "INT": 4,
+          "POS": 4,
+          "PROGRAM": 1,
+          "REF": 3,
+          "T:int": 1
+        }
+      },
+      "execution_matches": true,
+      "fixture": "map_zero_default",
+      "input_parameters": [],
+      "packet_hex": "545749520106000000003c1ec26262b935f8b424bbc3bc68f438ce19c02a12c410957136615323e4e199a3487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400d3ef04e38f98d3cd3e738f38e3c734f20b38e3c82cd3e438d3ce38f1cd3c82ce38f20b38e34d34e38f1ce34f",
+      "packet_sha256": "160dfae4bb91b84775a3b6f29408c75fde7210e3301eb0502d510659aa83eff9",
+      "positional_inputs": [],
+      "prediction_codes_sha256": "e5c4d8f6ccf1969961e7a509407c00fa53b31cefa7b157d167c1306979d8be3f",
+      "prediction_descriptor": {
+        "bindings": "input index or 8 + declaration slot; validator enforces lexical scope",
+        "input_slots": 8,
+        "literal_bits": 129,
+        "operators": [
+          "EMPTY",
+          "root",
+          "sequence",
+          "let",
+          "var",
+          "set",
+          "for",
+          "if",
+          "ref",
+          "int",
+          "bool",
+          "pure:add",
+          "pure:append",
+          "pure:empty_ints",
+          "pure:eq",
+          "pure:field",
+          "pure:len",
+          "pure:lt",
+          "pure:mul",
+          "pure:neg",
+          "pure:not",
+          "pure:range",
+          "pure:sort_by",
+          "pure:sub",
+          "pure:tuple",
+          "call:dsu.find",
+          "call:dsu.new",
+          "call:dsu.union",
+          "call:heap.new",
+          "call:heap.pop",
+          "call:heap.push",
+          "call:map.get",
+          "call:map.has",
+          "call:map.new",
+          "call:map.set",
+          "call:queue.new",
+          "call:queue.pop",
+          "call:queue.push",
+          "call:queue.size",
+          "recipe:cycle_weight",
+          "recipe:forest",
+          "recipe:heap_sort",
+          "recipe:stable_unique"
+        ],
+        "schema": "algsolve.typed-prediction.v1",
+        "slots": 512,
+        "structure": "preorder first-child/next-sibling tree; all slots predicted in parallel",
+        "target": "frozen typed IR, no arbitrary expression holes",
+        "types": [
+          "\"int\""
+        ]
+      },
+      "prediction_tensor": {
+        "active_nodes": 12,
+        "binding_fields": 512,
+        "edge_fields": 1024,
+        "literal_bit_fields": 66048,
+        "op_fields": 512,
+        "slots": 512,
+        "type_fields": 9,
+        "wire_bits": null
+      },
+      "primitive_packet_roundtrip_exact": true,
+      "profile": "base-v2",
+      "width": 6
+    },
+    {
+      "authored_expected": 0,
+      "canonical_program_sha256": "e930b883be61826e1e599adfc2ad5b21b4de09383714f5cb49bf184d818acaf0",
+      "categories": {
+        "bindings": {
+          "bits": 119,
+          "selections": 17
+        },
+        "constants": {
+          "bits": 168,
+          "selections": 24
+        },
+        "operations": {
+          "bits": 21,
+          "selections": 3
+        },
+        "structure": {
+          "bits": 105,
+          "selections": 15
+        },
+        "types": {
+          "bits": 7,
+          "selections": 1
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 6672,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 329,
+        "numeric_and_control_selections": 47,
+        "one_program_with_support_bits": 282440,
+        "packet_bits": 1280,
+        "padding_bits": 4,
+        "payload_bits": 420,
+        "profile": "base-v2",
+        "runtime_storage_bits": 151280,
+        "selections": 60,
+        "width": 7,
+        "word_counts": {
+          "BIT0": 11,
+          "BIT1": 17,
+          "BLOCK": 1,
+          "E:map.get": 1,
+          "E:map.new": 1,
+          "E:map.set": 1,
+          "END": 15,
+          "INT": 4,
+          "POS": 4,
+          "PROGRAM": 1,
+          "REF": 3,
+          "T:int": 1
+        }
+      },
+      "execution_matches": true,
+      "fixture": "map_zero_default",
+      "input_parameters": [],
+      "packet_hex": "545749520107000000003c1ec26262b935f8b424bbc3bc68f438ce19c02a12c410957136615323e4e199a3487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400347af023870f4c3478d1e9c70f1c387871a3c40b1c3878816347a41c3478e1c3c38d1e2058e1c3c40b1c3868d1a3870f0e3868f0",
+      "packet_sha256": "78b868b8e2ec86c2907e7bb62077425b8257179d520ca41178bd5454aabdcb1c",
+      "positional_inputs": [],
+      "prediction_codes_sha256": "e5c4d8f6ccf1969961e7a509407c00fa53b31cefa7b157d167c1306979d8be3f",
+      "prediction_descriptor": {
+        "bindings": "input index or 8 + declaration slot; validator enforces lexical scope",
+        "input_slots": 8,
+        "literal_bits": 129,
+        "operators": [
+          "EMPTY",
+          "root",
+          "sequence",
+          "let",
+          "var",
+          "set",
+          "for",
+          "if",
+          "ref",
+          "int",
+          "bool",
+          "pure:add",
+          "pure:append",
+          "pure:empty_ints",
+          "pure:eq",
+          "pure:field",
+          "pure:len",
+          "pure:lt",
+          "pure:mul",
+          "pure:neg",
+          "pure:not",
+          "pure:range",
+          "pure:sort_by",
+          "pure:sub",
+          "pure:tuple",
+          "call:dsu.find",
+          "call:dsu.new",
+          "call:dsu.union",
+          "call:heap.new",
+          "call:heap.pop",
+          "call:heap.push",
+          "call:map.get",
+          "call:map.has",
+          "call:map.new",
+          "call:map.set",
+          "call:queue.new",
+          "call:queue.pop",
+          "call:queue.push",
+          "call:queue.size",
+          "recipe:cycle_weight",
+          "recipe:forest",
+          "recipe:heap_sort",
+          "recipe:stable_unique"
+        ],
+        "schema": "algsolve.typed-prediction.v1",
+        "slots": 512,
+        "structure": "preorder first-child/next-sibling tree; all slots predicted in parallel",
+        "target": "frozen typed IR, no arbitrary expression holes",
+        "types": [
+          "\"int\""
+        ]
+      },
+      "prediction_tensor": {
+        "active_nodes": 12,
+        "binding_fields": 512,
+        "edge_fields": 1024,
+        "literal_bit_fields": 66048,
+        "op_fields": 512,
+        "slots": 512,
+        "type_fields": 9,
+        "wire_bits": null
+      },
+      "primitive_packet_roundtrip_exact": true,
+      "profile": "base-v2",
+      "width": 7
+    },
+    {
+      "authored_expected": 0,
+      "canonical_program_sha256": "e930b883be61826e1e599adfc2ad5b21b4de09383714f5cb49bf184d818acaf0",
+      "categories": {
+        "bindings": {
+          "bits": 136,
+          "selections": 17
+        },
+        "constants": {
+          "bits": 192,
+          "selections": 24
+        },
+        "operations": {
+          "bits": 24,
+          "selections": 3
+        },
+        "structure": {
+          "bits": 120,
+          "selections": 15
+        },
+        "types": {
+          "bits": 8,
+          "selections": 1
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 6672,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 376,
+        "numeric_and_control_selections": 47,
+        "one_program_with_support_bits": 282496,
+        "packet_bits": 1336,
+        "padding_bits": 0,
+        "payload_bits": 480,
+        "profile": "base-v2",
+        "runtime_storage_bits": 151280,
+        "selections": 60,
+        "width": 8,
+        "word_counts": {
+          "BIT0": 11,
+          "BIT1": 17,
+          "BLOCK": 1,
+          "E:map.get": 1,
+          "E:map.new": 1,
+          "E:map.set": 1,
+          "END": 15,
+          "INT": 4,
+          "POS": 4,
+          "PROGRAM": 1,
+          "REF": 3,
+          "T:int": 1
+        }
+      },
+      "execution_matches": true,
+      "fixture": "map_zero_default",
+      "input_parameters": [],
+      "packet_hex": "545749520108000000003c1ec26262b935f8b424bbc3bc68f438ce19c02a12c410957136615323e4e199a3487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb0804000d0f2f010e0e0f260d0f0d0f270e0f0e0e0f070d0f080b0e0e0f080b0d0f240e0d0f0e0e0f070d0f080b0e0e0f080b0e0e0d0d0d0e0e0f070e0d0f",
+      "packet_sha256": "d3d37bf86ea30087e416749a80a433a1f9d6c0528e6670629f461e3590fac4cc",
+      "positional_inputs": [],
+      "prediction_codes_sha256": "e5c4d8f6ccf1969961e7a509407c00fa53b31cefa7b157d167c1306979d8be3f",
+      "prediction_descriptor": {
+        "bindings": "input index or 8 + declaration slot; validator enforces lexical scope",
+        "input_slots": 8,
+        "literal_bits": 129,
+        "operators": [
+          "EMPTY",
+          "root",
+          "sequence",
+          "let",
+          "var",
+          "set",
+          "for",
+          "if",
+          "ref",
+          "int",
+          "bool",
+          "pure:add",
+          "pure:append",
+          "pure:empty_ints",
+          "pure:eq",
+          "pure:field",
+          "pure:len",
+          "pure:lt",
+          "pure:mul",
+          "pure:neg",
+          "pure:not",
+          "pure:range",
+          "pure:sort_by",
+          "pure:sub",
+          "pure:tuple",
+          "call:dsu.find",
+          "call:dsu.new",
+          "call:dsu.union",
+          "call:heap.new",
+          "call:heap.pop",
+          "call:heap.push",
+          "call:map.get",
+          "call:map.has",
+          "call:map.new",
+          "call:map.set",
+          "call:queue.new",
+          "call:queue.pop",
+          "call:queue.push",
+          "call:queue.size",
+          "recipe:cycle_weight",
+          "recipe:forest",
+          "recipe:heap_sort",
+          "recipe:stable_unique"
+        ],
+        "schema": "algsolve.typed-prediction.v1",
+        "slots": 512,
+        "structure": "preorder first-child/next-sibling tree; all slots predicted in parallel",
+        "target": "frozen typed IR, no arbitrary expression holes",
+        "types": [
+          "\"int\""
+        ]
+      },
+      "prediction_tensor": {
+        "active_nodes": 12,
+        "binding_fields": 512,
+        "edge_fields": 1024,
+        "literal_bit_fields": 66048,
+        "op_fields": 512,
+        "slots": 512,
+        "type_fields": 9,
+        "wire_bits": null
+      },
+      "primitive_packet_roundtrip_exact": true,
+      "profile": "base-v2",
+      "width": 8
+    },
+    {
+      "authored_expected": [
+        3,
+        1,
+        -5
+      ],
+      "canonical_program_sha256": "9b5f65dbfdade66a924891a89abd1809e0ecf67b64a01774d1822cb29af95e94",
+      "categories": {
+        "bindings": {
+          "bits": 1836,
+          "selections": 306
+        },
+        "constants": {
+          "bits": 48,
+          "selections": 8
+        },
+        "operations": {
+          "bits": 180,
+          "selections": 30
+        },
+        "structure": {
+          "bits": 588,
+          "selections": 98
+        },
+        "types": {
+          "bits": 24,
+          "selections": 4
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 6672,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 2178,
+        "numeric_and_control_selections": 363,
+        "one_program_with_support_bits": 284696,
+        "packet_bits": 3536,
+        "padding_bits": 4,
+        "payload_bits": 2676,
+        "profile": "base-v2",
+        "runtime_storage_bits": 151280,
+        "selections": 446,
+        "width": 6,
+        "word_counts": {
+          "BIT0": 118,
+          "BIT1": 151,
+          "BLOCK": 9,
+          "E:map.has": 2,
+          "E:map.new": 2,
+          "E:map.set": 2,
+          "E:queue.new": 2,
+          "E:queue.pop": 2,
+          "E:queue.push": 2,
+          "E:queue.size": 2,
+          "END": 92,
+          "FOR": 4,
+          "IF": 2,
+          "INT": 2,
+          "LET": 4,
+          "P:append": 2,
+          "P:empty_ints": 2,
+          "P:not": 2,
+          "P:range": 2,
+          "POS": 2,
+          "PROGRAM": 1,
+          "REF": 31,
+          "SET": 2,
+          "T:int": 2,
+          "T:list": 2,
+          "VAR": 2
+        }
+      },
+      "execution_matches": true,
+      "fixture": "repeated_recipe",
+      "input_parameters": [
+        "values"
+      ],
+      "packet_hex": "54574952010600000001be1ec26262b935f8b424bbc3bc68f438ce19c02a12c410957136615323e4e199a3487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400e3cd3f3bf3bc138d34d34f08e3c734f98e34f34fa0e38f34f14e34d3c738f04e34f94e34e3ce34f1ce34f1ce34d3c664e3c738d38f04e34f9ce38d3ce38f1ce34f1ce34d3c82ce3ea38e38f38d3c738e3c738d34f04d3eb38d34d3ce3c738e3c338d34e3d234f14e34e34f68e3c738d34d3c138d3e938d38e3ce3c738e3c438d34e3d138d3c738d34e3c738d38e3c238e34d3c738d34e3c238e34e3c738e34d3e638e38d3cd3e838e38e3cd3c538d34d34f1ce38d38f04e34f94e34d34e3ce34f1ce38e34f1ce34d34d3c664e3c738d34d38f04e34f9ce34d38d3ce38f1ce38e34f1ce34d34d3c82ce3ea38d34e38f38d3c738e38e3c738d34d34f04d3eb38d38d34f38f1ce38e38f0ce34e34e3d234f14e34e38d3da38f1ce34e34d3c138d3e938d38e38f38f1ce38e38f10e34e34e3d138d3c738d38d38f1ce34e38e3c238e34d34f1ce34e34e3c738e34d34f0",
+      "packet_sha256": "fd58836906c023a486524f08ca93823debcea73979cc10a79d42911e7e2b4d05",
+      "positional_inputs": [
+        [
+          3,
+          1,
+          3,
+          -5,
+          1
+        ]
+      ],
+      "prediction_codes_sha256": "50c7991a927bcf9814d787229626bd9df4fe4a20197134ddc23f4b9acc834e26",
+      "prediction_descriptor": {
+        "bindings": "input index or 8 + declaration slot; validator enforces lexical scope",
+        "input_slots": 8,
+        "literal_bits": 129,
+        "operators": [
+          "EMPTY",
+          "root",
+          "sequence",
+          "let",
+          "var",
+          "set",
+          "for",
+          "if",
+          "ref",
+          "int",
+          "bool",
+          "pure:add",
+          "pure:append",
+          "pure:empty_ints",
+          "pure:eq",
+          "pure:field",
+          "pure:len",
+          "pure:lt",
+          "pure:mul",
+          "pure:neg",
+          "pure:not",
+          "pure:range",
+          "pure:sort_by",
+          "pure:sub",
+          "pure:tuple",
+          "call:dsu.find",
+          "call:dsu.new",
+          "call:dsu.union",
+          "call:heap.new",
+          "call:heap.pop",
+          "call:heap.push",
+          "call:map.get",
+          "call:map.has",
+          "call:map.new",
+          "call:map.set",
+          "call:queue.new",
+          "call:queue.pop",
+          "call:queue.push",
+          "call:queue.size",
+          "recipe:cycle_weight",
+          "recipe:forest",
+          "recipe:heap_sort",
+          "recipe:stable_unique"
+        ],
+        "schema": "algsolve.typed-prediction.v1",
+        "slots": 512,
+        "structure": "preorder first-child/next-sibling tree; all slots predicted in parallel",
+        "target": "frozen typed IR, no arbitrary expression holes",
+        "types": [
+          "[\"list\",\"int\"]"
+        ]
+      },
+      "prediction_tensor": {
+        "active_nodes": 7,
+        "binding_fields": 512,
+        "edge_fields": 1024,
+        "literal_bit_fields": 66048,
+        "op_fields": 512,
+        "slots": 512,
+        "type_fields": 9,
+        "wire_bits": null
+      },
+      "primitive_packet_roundtrip_exact": true,
+      "profile": "base-v2",
+      "width": 6
+    },
+    {
+      "authored_expected": [
+        3,
+        1,
+        -5
+      ],
+      "canonical_program_sha256": "9b5f65dbfdade66a924891a89abd1809e0ecf67b64a01774d1822cb29af95e94",
+      "categories": {
+        "bindings": {
+          "bits": 2142,
+          "selections": 306
+        },
+        "constants": {
+          "bits": 56,
+          "selections": 8
+        },
+        "operations": {
+          "bits": 210,
+          "selections": 30
+        },
+        "structure": {
+          "bits": 686,
+          "selections": 98
+        },
+        "types": {
+          "bits": 28,
+          "selections": 4
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 6672,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 2541,
+        "numeric_and_control_selections": 363,
+        "one_program_with_support_bits": 285144,
+        "packet_bits": 3984,
+        "padding_bits": 6,
+        "payload_bits": 3122,
+        "profile": "base-v2",
+        "runtime_storage_bits": 151280,
+        "selections": 446,
+        "width": 7,
+        "word_counts": {
+          "BIT0": 118,
+          "BIT1": 151,
+          "BLOCK": 9,
+          "E:map.has": 2,
+          "E:map.new": 2,
+          "E:map.set": 2,
+          "E:queue.new": 2,
+          "E:queue.pop": 2,
+          "E:queue.push": 2,
+          "E:queue.size": 2,
+          "END": 92,
+          "FOR": 4,
+          "IF": 2,
+          "INT": 2,
+          "LET": 4,
+          "P:append": 2,
+          "P:empty_ints": 2,
+          "P:not": 2,
+          "P:range": 2,
+          "POS": 2,
+          "PROGRAM": 1,
+          "REF": 31,
+          "SET": 2,
+          "T:int": 2,
+          "T:list": 2,
+          "VAR": 2
+        }
+      },
+      "execution_matches": true,
+      "fixture": "repeated_recipe",
+      "input_parameters": [
+        "values"
+      ],
+      "packet_hex": "54574952010700000001be1ec26262b935f8b424bbc3bc68f438ce19c02a12c410957136615323e4e199a3487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb0804003878d1ecd7b35e0470d1a3468f04387871a3d30e1a3c68f503870f1a3c28e1a347871c3c08e1a3d28e1a3878e1a3c38e1a3c38e1a3478632387871c3470f023868f4e3870d1e3870f0e3868f0e3868d1e2058e1ea870e1c3c70d1e1c70e1e1c70d1a3c08d1eac70d1a3478e1e1c70e1e0c70d1a387921a3c28e1a3868f34387871c3468d1e0470d1ea470d1c3878e1e1c70e1e1070d1a387911c347871c3468e1e1c70d1c387821c3868d1e1c70d1a387821c3868e1e1c70e1a347a61c3870d1e347a81c3870e1e347851c3468d1a3c38e1c3470f023868f4a3868d1a3878e1a3c38e1c3868f0e3868d1a3478632387871c3468d1c3c08e1a3d38e1a3470d1e3870f0e3870e1a3c38e1a3468d1e2058e1ea870d1a3870f1c347871c3870e1e1c70d1a3468f02347ab1c3470d1a3c70f0e3870e1c3c18e1a3868e1e4868f0a3868e1c3479a1c3c38e1a3868d1e0470d1ea470d1c3870f1c3c38e1c3870f083868e1a387911c347871c3470d1c3c38e1a3870e1e0870e1a3468f0e3868e1a387871c3868d1a3c0",
+      "packet_sha256": "c4b5f4d591d615fd9283c0851eb7829a4a938c147b29f701e485b6a01cfedad7",
+      "positional_inputs": [
+        [
+          3,
+          1,
+          3,
+          -5,
+          1
+        ]
+      ],
+      "prediction_codes_sha256": "50c7991a927bcf9814d787229626bd9df4fe4a20197134ddc23f4b9acc834e26",
+      "prediction_descriptor": {
+        "bindings": "input index or 8 + declaration slot; validator enforces lexical scope",
+        "input_slots": 8,
+        "literal_bits": 129,
+        "operators": [
+          "EMPTY",
+          "root",
+          "sequence",
+          "let",
+          "var",
+          "set",
+          "for",
+          "if",
+          "ref",
+          "int",
+          "bool",
+          "pure:add",
+          "pure:append",
+          "pure:empty_ints",
+          "pure:eq",
+          "pure:field",
+          "pure:len",
+          "pure:lt",
+          "pure:mul",
+          "pure:neg",
+          "pure:not",
+          "pure:range",
+          "pure:sort_by",
+          "pure:sub",
+          "pure:tuple",
+          "call:dsu.find",
+          "call:dsu.new",
+          "call:dsu.union",
+          "call:heap.new",
+          "call:heap.pop",
+          "call:heap.push",
+          "call:map.get",
+          "call:map.has",
+          "call:map.new",
+          "call:map.set",
+          "call:queue.new",
+          "call:queue.pop",
+          "call:queue.push",
+          "call:queue.size",
+          "recipe:cycle_weight",
+          "recipe:forest",
+          "recipe:heap_sort",
+          "recipe:stable_unique"
+        ],
+        "schema": "algsolve.typed-prediction.v1",
+        "slots": 512,
+        "structure": "preorder first-child/next-sibling tree; all slots predicted in parallel",
+        "target": "frozen typed IR, no arbitrary expression holes",
+        "types": [
+          "[\"list\",\"int\"]"
+        ]
+      },
+      "prediction_tensor": {
+        "active_nodes": 7,
+        "binding_fields": 512,
+        "edge_fields": 1024,
+        "literal_bit_fields": 66048,
+        "op_fields": 512,
+        "slots": 512,
+        "type_fields": 9,
+        "wire_bits": null
+      },
+      "primitive_packet_roundtrip_exact": true,
+      "profile": "base-v2",
+      "width": 7
+    },
+    {
+      "authored_expected": [
+        3,
+        1,
+        -5
+      ],
+      "canonical_program_sha256": "9b5f65dbfdade66a924891a89abd1809e0ecf67b64a01774d1822cb29af95e94",
+      "categories": {
+        "bindings": {
+          "bits": 2448,
+          "selections": 306
+        },
+        "constants": {
+          "bits": 64,
+          "selections": 8
+        },
+        "operations": {
+          "bits": 240,
+          "selections": 30
+        },
+        "structure": {
+          "bits": 784,
+          "selections": 98
+        },
+        "types": {
+          "bits": 32,
+          "selections": 4
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 6672,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 2904,
+        "numeric_and_control_selections": 363,
+        "one_program_with_support_bits": 285584,
+        "packet_bits": 4424,
+        "padding_bits": 0,
+        "payload_bits": 3568,
+        "profile": "base-v2",
+        "runtime_storage_bits": 151280,
+        "selections": 446,
+        "width": 8,
+        "word_counts": {
+          "BIT0": 118,
+          "BIT1": 151,
+          "BLOCK": 9,
+          "E:map.has": 2,
+          "E:map.new": 2,
+          "E:map.set": 2,
+          "E:queue.new": 2,
+          "E:queue.pop": 2,
+          "E:queue.push": 2,
+          "E:queue.size": 2,
+          "END": 92,
+          "FOR": 4,
+          "IF": 2,
+          "INT": 2,
+          "LET": 4,
+          "P:append": 2,
+          "P:empty_ints": 2,
+          "P:not": 2,
+          "P:range": 2,
+          "POS": 2,
+          "PROGRAM": 1,
+          "REF": 31,
+          "SET": 2,
+          "T:int": 2,
+          "T:list": 2,
+          "VAR": 2
+        }
+      },
+      "execution_matches": true,
+      "fixture": "repeated_recipe",
+      "input_parameters": [
+        "values"
+      ],
+      "packet_hex": "54574952010800000001be1ec26262b935f8b424bbc3bc68f438ce19c02a12c410957136615323e4e199a3487ec034e4c0c2a5601d374efb910f46c62091d4ed8fa9f26577833032dca734d14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb0804000e0f0d0f332f332f010e0d0d0d0d0f020e0f070d0f260e0d0f0d0f280e0e0f0d0f050e0d0d0f070e0f010e0d0f250e0d0e0f0e0d0f070e0d0f070e0d0d0f06190e0f070e0d0e0f010e0d0f270e0e0d0f0e0e0f070e0d0f070e0d0d0f080b0e0f2a0e0e0e0f0e0d0f070e0e0f070e0d0d0f010d0f2b0e0d0d0d0f0e0f070e0e0f030e0d0d0e0f120d0f050e0d0e0d0f1a0e0f070e0d0d0d0f010e0d0f290e0d0e0e0f0e0f070e0e0f040e0d0d0e0f110e0d0f070e0d0d0e0f070e0d0e0e0f020e0e0d0d0f070e0d0d0e0f020e0e0d0e0f070e0e0d0d0f260e0e0e0d0f0d0f280e0e0e0e0f0d0f050e0d0d0d0d0f070e0e0d0e0f010e0d0f250e0d0d0d0e0f0e0d0f070e0e0e0d0f070e0d0d0d0d0f06190e0f070e0d0d0d0e0f010e0d0f270e0d0d0e0d0f0e0e0f070e0e0e0d0f070e0d0d0d0d0f080b0e0f2a0e0d0d0e0e0f0e0d0f070e0e0e0e0f070e0d0d0d0d0f010d0f2b0e0d0e0d0d0f0e0f070e0e0e0e0f030e0d0e0d0e0f120d0f050e0d0e0e0d0f1a0e0f070e0d0e0d0d0f010e0d0f290e0d0e0e0e0f0e0f070e0e0e0e0f040e0d0e0d0e0f110e0d0f070e0d0e0d0e0f070e0d0e0e0e0f020e0e0d0d0d0f070e0d0e0d0e0f070e0e0d0d0d0f",
+      "packet_sha256": "8569e95aaeaa725fe6f0d2140d50230207f902aaa0abf18ee4a2ea9816f91cd7",
+      "positional_inputs": [
+        [
+          3,
+          1,
+          3,
+          -5,
+          1
+        ]
+      ],
+      "prediction_codes_sha256": "50c7991a927bcf9814d787229626bd9df4fe4a20197134ddc23f4b9acc834e26",
+      "prediction_descriptor": {
+        "bindings": "input index or 8 + declaration slot; validator enforces lexical scope",
+        "input_slots": 8,
+        "literal_bits": 129,
+        "operators": [
+          "EMPTY",
+          "root",
+          "sequence",
+          "let",
+          "var",
+          "set",
+          "for",
+          "if",
+          "ref",
+          "int",
+          "bool",
+          "pure:add",
+          "pure:append",
+          "pure:empty_ints",
+          "pure:eq",
+          "pure:field",
+          "pure:len",
+          "pure:lt",
+          "pure:mul",
+          "pure:neg",
+          "pure:not",
+          "pure:range",
+          "pure:sort_by",
+          "pure:sub",
+          "pure:tuple",
+          "call:dsu.find",
+          "call:dsu.new",
+          "call:dsu.union",
+          "call:heap.new",
+          "call:heap.pop",
+          "call:heap.push",
+          "call:map.get",
+          "call:map.has",
+          "call:map.new",
+          "call:map.set",
+          "call:queue.new",
+          "call:queue.pop",
+          "call:queue.push",
+          "call:queue.size",
+          "recipe:cycle_weight",
+          "recipe:forest",
+          "recipe:heap_sort",
+          "recipe:stable_unique"
+        ],
+        "schema": "algsolve.typed-prediction.v1",
+        "slots": 512,
+        "structure": "preorder first-child/next-sibling tree; all slots predicted in parallel",
+        "target": "frozen typed IR, no arbitrary expression holes",
+        "types": [
+          "[\"list\",\"int\"]"
+        ]
+      },
+      "prediction_tensor": {
+        "active_nodes": 7,
+        "binding_fields": 512,
+        "edge_fields": 1024,
+        "literal_bit_fields": 66048,
+        "op_fields": 512,
+        "slots": 512,
+        "type_fields": 9,
+        "wire_bits": null
+      },
+      "primitive_packet_roundtrip_exact": true,
+      "profile": "base-v2",
+      "width": 8
+    },
+    {
+      "authored_expected": [
+        [
+          4
+        ],
+        [
+          4,
+          9
+        ]
+      ],
+      "categories": {
+        "bindings": {
+          "bits": 210,
+          "selections": 35
+        },
+        "constants": {
+          "bits": 78,
+          "selections": 13
+        },
+        "operations": {
+          "bits": 36,
+          "selections": 6
+        },
+        "structure": {
+          "bits": 138,
+          "selections": 23
+        },
+        "types": {
+          "bits": 48,
+          "selections": 8
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 7288,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 384,
+        "numeric_and_control_selections": 64,
+        "one_program_with_support_bits": 286888,
+        "packet_bits": 1368,
+        "padding_bits": 2,
+        "payload_bits": 510,
+        "profile": "vector-v1",
+        "runtime_storage_bits": 155024,
+        "selections": 85,
+        "width": 6,
+        "word_counts": {
+          "BIT0": 22,
+          "BIT1": 18,
+          "BLOCK": 1,
+          "E:vector.append": 2,
+          "E:vector.new": 1,
+          "E:vector.snapshot": 2,
+          "END": 22,
+          "INT": 2,
+          "P:tuple": 1,
+          "POS": 2,
+          "PROGRAM": 1,
+          "REF": 6,
+          "T:int": 2,
+          "T:list": 2,
+          "T:tuple": 1
+        }
+      },
+      "execution_matches": true,
+      "fixture": "owned_vector_snapshot",
+      "packet_hex": "54574952010601000000550093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400d3f838d3f7cb7c8138d38fb4d3cd3ec38f38d3c734f20b38d34fb8e34f38f1cd3ec38e3ce34f1cd3c82ce34d38fb8e34d3ce3c734f74e34f1ce34f1ce34d3c",
+      "packet_sha256": "84819cc60216aeb17167624fa3ff1ea3665522a1bc8e61c62b1e8e3b99ea9b09",
+      "positional_inputs": [],
+      "prediction_conversion": "rejected: incompatible runtime profile",
+      "profile": "vector-v1",
+      "width": 6
+    },
+    {
+      "authored_expected": [
+        [
+          4
+        ],
+        [
+          4,
+          9
+        ]
+      ],
+      "categories": {
+        "bindings": {
+          "bits": 245,
+          "selections": 35
+        },
+        "constants": {
+          "bits": 91,
+          "selections": 13
+        },
+        "operations": {
+          "bits": 42,
+          "selections": 6
+        },
+        "structure": {
+          "bits": 161,
+          "selections": 23
+        },
+        "types": {
+          "bits": 56,
+          "selections": 8
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 7288,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 448,
+        "numeric_and_control_selections": 64,
+        "one_program_with_support_bits": 286976,
+        "packet_bits": 1456,
+        "padding_bits": 5,
+        "payload_bits": 595,
+        "profile": "vector-v1",
+        "runtime_storage_bits": 155024,
+        "selections": 85,
+        "width": 7,
+        "word_counts": {
+          "BIT0": 22,
+          "BIT1": 18,
+          "BLOCK": 1,
+          "E:vector.append": 2,
+          "E:vector.new": 1,
+          "E:vector.snapshot": 2,
+          "END": 22,
+          "INT": 2,
+          "P:tuple": 1,
+          "POS": 2,
+          "PROGRAM": 1,
+          "REF": 6,
+          "T:int": 2,
+          "T:list": 2,
+          "T:tuple": 1
+        }
+      },
+      "execution_matches": true,
+      "fixture": "owned_vector_snapshot",
+      "packet_hex": "54574952010701000000550093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb080400347b81c347b764dd9011c3470f5a3478d1eb070f1c347871a3c40b1c3468f5c3868f1c3c38d1eb070e1e3868f0e34788163868d1c3d70e1a3478e1e1c68f3a3868f0e3868f0e3868d1e0",
+      "packet_sha256": "07d469528e9756aae603f9878ae1806909bce8dfb43dd0479f30edc65bd91b57",
+      "positional_inputs": [],
+      "prediction_conversion": "rejected: incompatible runtime profile",
+      "profile": "vector-v1",
+      "width": 7
+    },
+    {
+      "authored_expected": [
+        [
+          4
+        ],
+        [
+          4,
+          9
+        ]
+      ],
+      "categories": {
+        "bindings": {
+          "bits": 280,
+          "selections": 35
+        },
+        "constants": {
+          "bits": 104,
+          "selections": 13
+        },
+        "operations": {
+          "bits": 48,
+          "selections": 6
+        },
+        "structure": {
+          "bits": 184,
+          "selections": 23
+        },
+        "types": {
+          "bits": 64,
+          "selections": 8
+        }
+      },
+      "costs": {
+        "decoder_storage_bits": 123208,
+        "dependency_scope": "Python interpreter and standard library are external environment dependencies, not included in source storage",
+        "dictionary_storage_bits": 7288,
+        "evidence_scope": "typed graph representation only; no native/source qualification or independent solving",
+        "framing_bits": 856,
+        "numeric_and_control_bits": 512,
+        "numeric_and_control_selections": 64,
+        "one_program_with_support_bits": 287056,
+        "packet_bits": 1536,
+        "padding_bits": 0,
+        "payload_bits": 680,
+        "profile": "vector-v1",
+        "runtime_storage_bits": 155024,
+        "selections": 85,
+        "width": 8,
+        "word_counts": {
+          "BIT0": 22,
+          "BIT1": 18,
+          "BLOCK": 1,
+          "E:vector.append": 2,
+          "E:vector.new": 1,
+          "E:vector.snapshot": 2,
+          "END": 22,
+          "INT": 2,
+          "P:tuple": 1,
+          "POS": 2,
+          "PROGRAM": 1,
+          "REF": 6,
+          "T:int": 2,
+          "T:list": 2,
+          "T:tuple": 1
+        }
+      },
+      "execution_matches": true,
+      "fixture": "owned_vector_snapshot",
+      "packet_hex": "54574952010801000000550093730564d53af92fe461ffd197e413da83375cad08b07dda7195c5f16e05224826ee31674d8d28cf7d426479256265e1dadf86cb0cf06d05da63e0e5bc8e4bd14a34f1d41459068359b248099c773c654c051b3eea7729e75de27f96eb0804000d0f380e0d0f37323732010e0d0e0f2d0d0f0d0f2c0e0f0e0d0f070d0f080b0e0d0d0f2e0e0d0f0e0f070d0f2c0e0e0f0e0d0f070d0f080b0e0d0d0e0f2e0e0d0d0f0e0f070d0f1d0e0d0f070e0d0f070e0d0d0f",
+      "packet_sha256": "00bc500ddce30e7d64d201da465c2095c301f77d88bf1355110b8ef651868f63",
+      "positional_inputs": [],
+      "prediction_conversion": "rejected: incompatible runtime profile",
+      "profile": "vector-v1",
+      "width": 8
+    }
+  ],
+  "schema": "algsolve.typed-stream-authored-evidence.v1"
+}
