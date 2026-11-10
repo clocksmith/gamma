@@ -94,6 +94,69 @@ class FamilyPlanTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "changed"):
             pipeline.validate_plan(plan)
 
+    def test_recombination_rejects_partial_exact_alias_components(self):
+        relationships = {
+            "direct_uid": [{"aliases": ["alias"]}, {}],
+            "shared_key": [{"key": "lc:same-problem"}, {"key": "lc:same-problem"}],
+            "shared_alias": [{"aliases": ["external:shared"]}, {"aliases": ["external:shared"]}],
+            "transitive": [{"aliases": ["external:first"]},
+                           {"aliases": ["external:first", "external:second"]},
+                           {"aliases": ["external:second"]}],
+        }
+        for relation, changes in relationships.items():
+            with self.subTest(relation=relation):
+                uids = ["selected", "alias", "alias-tail"][:len(changes)]
+                rows = [metadata(uid, "seen", **change) for uid, change in zip(uids, changes)]
+                rows += [metadata("other-fit", "seen"), metadata("held", "unseen")]
+                selected = uids[:-1]  # Cross even the last edge of a transitive alias chain.
+                identities = {value for row in rows for value in [row["uid"], row["key"], *row["aliases"]]}
+                allowlist = {"uids": sorted(value for value in identities if not value.startswith("lc:")),
+                             "keys": sorted(value for value in identities if value.startswith("lc:")),
+                             "sources_sha256": {"synthetic-allowlist": "4" * 64}}
+                for allowed in (None, allowlist):
+                    with self.subTest(allowlisted=allowed is not None):
+                        with self.assertRaisesRegex(ValueError, "all exact aliases"):
+                            pipeline.freeze_plan(rows, boundary(), ["unseen"], allowlist=allowed,
+                                                 recombination_uids=selected)
+
+    def test_recombination_all_aliases_can_hold_out_with_distinct_seen_problem(self):
+        rows = [metadata("selected", "seen", aliases=["alias"]),
+                metadata("alias", "seen"), metadata("other-fit", "seen"),
+                metadata("held", "unseen")]
+        saved = copy.deepcopy(rows)
+        plan = pipeline.freeze_plan(rows, boundary(), ["unseen"],
+                                    recombination_uids=["selected", "alias"])
+        self.assertEqual({row["uid"]: row["split"] for row in plan["rows"]}, {
+            "selected": "heldout_combination", "alias": "heldout_combination",
+            "other-fit": "development_fit", "held": "heldout_family",
+        })
+        self.assertEqual(rows, saved)
+        self.assertEqual(plan, pipeline.freeze_plan(list(reversed(rows)), boundary(), ["unseen"],
+                                                   recombination_uids=["alias", "selected"]))
+        self.assertEqual(pipeline.validate_plan(plan), plan)
+
+    def test_resealed_plan_cannot_reintroduce_fit_alias_of_combination_holdout(self):
+        rows = [metadata("selected", "seen", aliases=["alias"]), metadata("alias", "seen"),
+                metadata("other-fit", "seen"), metadata("held", "unseen")]
+        plan = pipeline.freeze_plan(rows, boundary(), ["unseen"],
+                                    recombination_uids=["selected", "alias"])
+        next(row for row in plan["rows"] if row["uid"] == "alias")["split"] = "development_fit"
+        plan["recombination_uids"] = ["selected"]
+        plan["counts"]["development_fit"] += 1
+        plan["counts"]["heldout_combination"] -= 1
+        plan["plan_sha256"] = pipeline.digest({key: value for key, value in plan.items()
+                                              if key != "plan_sha256"})
+        with self.assertRaisesRegex(ValueError, "all exact aliases"):
+            pipeline.validate_plan(plan)
+
+    def test_recombination_cannot_use_alias_as_its_only_seen_training_example(self):
+        rows = [metadata("selected", "seen", aliases=["alias"]), metadata("alias", "seen"),
+                metadata("other-fit", "other"), metadata("held", "unseen")]
+        with self.assertRaisesRegex(ValueError, "all exact aliases"):
+            pipeline.freeze_plan(rows, boundary(), ["unseen"], recombination_uids=["selected"])
+        with self.assertRaisesRegex(ValueError, "retain at least one"):
+            pipeline.freeze_plan(rows, boundary(), ["unseen"], recombination_uids=["selected", "alias"])
+
     def test_plan_is_write_once(self):
         plan = pipeline.freeze_plan(self.fixture(), boundary(), ["held"])
         with tempfile.TemporaryDirectory() as tmp:

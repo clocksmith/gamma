@@ -49,8 +49,11 @@ supplied, any unallowlisted entry or unallowlisted alias marks its entire
 connected alias, family and structural-group component `excluded_unallowlisted`
 so unknown entries, non-allowlisted catalogue rows and cross-family aliases stay
 excluded. When `--recombination-uid` is supplied, selected fitting UIDs within
-seen families become `heldout_combination` while requiring every such family to
-retain at least one `development_fit` example. Other components become
+seen families become `heldout_combination`. The explicit selection must include
+all metadata rows connected by exact problem identities (UIDs, keys or aliases),
+including transitive aliases; a partial selection fails closed rather than
+silently expanding the holdout. Every such family must retain at least one
+distinct `development_fit` problem. Other components become
 `development_fit`. There must be at least one fitting component and one new
 held-out component (`heldout_family`). The plan is deterministic, hash-bound
 and write-once. Slug sibling closure is additional protection, not a substitute

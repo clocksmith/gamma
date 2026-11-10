@@ -107,6 +107,8 @@ def freeze_plan(metadata, boundary, holdout_families, *, allowlist=None, recombi
     connected alias, family or structural-group component stay excluded.
     When ``recombination_uids`` is provided, those fitting UIDs are held out
     for unfamiliar-combination testing while keeping seen families populated.
+    Every exact-alias component must be selected in full; it cannot straddle
+    development_fit and heldout_combination even when its family is seen.
     Family labels must include known semantic relatedness, not just slug stems.
     """
     if set(boundary) != {"uids", "keys", "families", "structural_groups", "sources_sha256"}:
@@ -197,6 +199,20 @@ def freeze_plan(metadata, boundary, holdout_families, *, allowlist=None, recombi
     if recombination_uids is not None:
         if counts["heldout_combination"] != len(recomb_set):
             raise ValueError("recombination_uids cannot target excluded or heldout_family rows")
+        # Seen families may span fit and combination holdout, but exact problem
+        # identities may not. Keeping every shared-identity edge on one side
+        # also closes transitive alias chains without expanding the requested set.
+        identity_selections = {}
+        for row in rows:
+            selected = row["uid"] in recomb_set
+            for identity in sorted({row["uid"], row["key"], *row["aliases"]}):
+                previous = identity_selections.get(identity)
+                if previous is not None and previous[0] != selected:
+                    raise ValueError(
+                        "recombination_uids must include all exact aliases of selected problems: "
+                        f"{previous[1]} and {row['uid']} share {identity}"
+                    )
+                identity_selections[identity] = (selected, row["uid"])
         fit_families = {row["family"] for row in assignments if row["split"] == "development_fit"}
         recomb_families = {row["family"] for row in assignments if row["split"] == "heldout_combination"}
         if not recomb_families <= fit_families:
