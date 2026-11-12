@@ -17,7 +17,7 @@ from .typed_prediction_codec import OPS, rejection_details
 
 
 def semantic_search(encoding, codes, raw_codes, logits, params, config, evaluate, *, deadline, literal_filter=None,
-                    literal_policy=None):
+                    literal_policy=None, followup_family=None):
     literal_policy = literal_policy or literal_search
     started = time.perf_counter()
     deadline = min(deadline, started + config['wall_seconds'])
@@ -96,6 +96,19 @@ def semantic_search(encoding, codes, raw_codes, logits, params, config, evaluate
             result['executions'] += literal['executions']
             for k in ['reason','infrastructure_failure','graph','final_codes','edits']:
                 result[k] = literal[k]
+        # Opt-in: one further proposal family under the same remaining budget.
+        if (followup_family is not None and result['graph'] is None and not result['infrastructure_failure']
+                and time.perf_counter() < deadline and result['executions'] < config['max_executions']):
+            from .typed_family_repair import family_search
+            remaining_config = {**config, 'max_executions': config['max_executions']-result['executions']}
+            family = family_search(followup_family, encoding, codes, logits, params, remaining_config,
+                                   evaluate, deadline=deadline, candidate_filter=literal_filter)
+            result['family_repair'] = {k: v for k, v in family.items() if k not in ('graph', 'final_codes')}
+            result['attempts'].extend(family['attempts'])
+            result['executions'] += family['executions']
+            if family['graph'] is not None or family['infrastructure_failure']:
+                for k in ['reason', 'infrastructure_failure', 'graph', 'final_codes', 'edits']:
+                    result[k] = family[k]
     except INVALID as error:
         result.update(reason='invalid_semantic_capture', capture_failure=str(error),
                       capture_failure_details=rejection_details(error))
@@ -104,7 +117,8 @@ def semantic_search(encoding, codes, raw_codes, logits, params, config, evaluate
 
 
 def run_semantic_route(control, problem, logits, encoding, identity, config, budget,
-                       *, judge=validate.judge_problem, literal_filter=None, literal_policy=None):
+                       *, judge=validate.judge_problem, literal_filter=None, literal_policy=None,
+                       followup_family=None):
     started = time.perf_counter()
     result = copy.deepcopy(control)
     result.update(route='semantic_constrained', semantic_repair=None)
@@ -135,7 +149,7 @@ def run_semantic_route(control, problem, logits, encoding, identity, config, bud
     repair = semantic_search(encoding, control['correction']['final_codes'], control['raw_codes'],
                              logits, [p[0] for p in problem.params], config, evaluate,
                              deadline=started+remaining, literal_filter=literal_filter,
-                             literal_policy=literal_policy)
+                             literal_policy=literal_policy, followup_family=followup_family)
     graph = repair.pop('graph'); result['semantic_repair'] = repair
     result['infrastructure_failure'] |= repair['infrastructure_failure']
     if graph is not None:
