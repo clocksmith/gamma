@@ -1,0 +1,117 @@
+{
+ "authorizations_sha256": "f801eafcb1d1e40c21fae9c0ab36701bf27a84f2e0aa0bc000c0a828914002d8",
+ "build_pairs_sha256": "9000b57d669c725f34025ac2cd393895633a7fa9063499862009ca9edf62aa84",
+ "build_summary_sha256": "bc94ee8fa2380c2182cb58e31b74783873db95c67a610dc6ac368a99339b40c9",
+ "codec_sha256": "e91aee58994ae952e2b43406606127689e10688404f2b5c774380dc7a77df7ad",
+ "config": {
+  "decision_wall_seconds": 2.0,
+  "layers": 2,
+  "learning_rate": 0.001,
+  "optimizer": "AdamW",
+  "retrieval_k": 4,
+  "seed": 17,
+  "steps": 400,
+  "width": 64
+ },
+ "embedding_weights": {
+  "model.safetensors": "0437e45c94563b09e13cb7a64478fc406947a93cb34a7e05870fc8dcd48e23fd",
+  "tokenizer.json": "def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a"
+ },
+ "literal_config": {
+  "max_edits": 2,
+  "max_executions": 4,
+  "pool_size": 8,
+  "wall_seconds": 0.25
+ },
+ "plan_sha256": "c951e1d5163a31e2c1e0b904cf77163d239367d0deb7cf793727b2f4b34c1742",
+ "prediction_encoding": {
+  "bindings": "input index or 8 + declaration slot; validator enforces lexical scope",
+  "input_slots": 8,
+  "literal_bits": 129,
+  "operators": [
+   "EMPTY",
+   "root",
+   "sequence",
+   "let",
+   "var",
+   "set",
+   "for",
+   "if",
+   "ref",
+   "int",
+   "bool",
+   "pure:add",
+   "pure:append",
+   "pure:empty_ints",
+   "pure:eq",
+   "pure:field",
+   "pure:len",
+   "pure:lt",
+   "pure:mul",
+   "pure:neg",
+   "pure:not",
+   "pure:range",
+   "pure:sort_by",
+   "pure:sub",
+   "pure:tuple",
+   "call:dsu.find",
+   "call:dsu.new",
+   "call:dsu.union",
+   "call:heap.new",
+   "call:heap.pop",
+   "call:heap.push",
+   "call:map.get",
+   "call:map.has",
+   "call:map.new",
+   "call:map.set",
+   "call:queue.new",
+   "call:queue.pop",
+   "call:queue.push",
+   "call:queue.size",
+   "recipe:cycle_weight",
+   "recipe:forest",
+   "recipe:heap_sort",
+   "recipe:stable_unique"
+  ],
+  "schema": "algsolve.typed-prediction.v1",
+  "slots": 320,
+  "structure": "preorder first-child/next-sibling tree; all slots predicted in parallel",
+  "target": "frozen typed IR, no arbitrary expression holes",
+  "types": [
+   "\"bool\"",
+   "\"int\"",
+   "[\"list\",\"int\"]",
+   "[\"list\",[\"list\",\"int\"]]"
+  ]
+ },
+ "routes": [
+  "raw",
+  "constrained",
+  "repaired",
+  "nearest_training_graph",
+  "direct_bits_search"
+ ],
+ "schema": "algsolve.bits-pilot.v1",
+ "selection": "fixed final step; no sweep, early stopping or held-out-driven retries",
+ "split_checks": {
+  "heldout_in_training": 0,
+  "retrieval_memory": "development_fit target graphs only",
+  "teacher_inputs": "development_fit public inputs only (build contract)",
+  "training_pairs": 61,
+  "training_problems": 61
+ },
+ "structural_config": {
+  "alternatives_per_field": 2,
+  "fields": [
+   "op",
+   "first",
+   "next",
+   "binding",
+   "types"
+  ],
+  "max_candidates": 128,
+  "max_edit_options": 64,
+  "max_edits": 2,
+  "wall_seconds": 0.2
+ }
+}
