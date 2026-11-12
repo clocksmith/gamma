@@ -1,0 +1,5707 @@
+{
+ "plan_sha256": "c951e1d5163a31e2c1e0b904cf77163d239367d0deb7cf793727b2f4b34c1742",
+ "review": {
+  "method": "From public statements, starter code and public examples only: a reviewer-written reference function per problem had to reproduce every public example under the judge's exact comparison before computing the expected outputs of 1-3 boundary inputs chosen at the stated constraint limits with a unique correct answer. Unsupported requirements list only mandatory statement requirements finite tests cannot verify, or a checker the available exact tests cannot provide.",
+  "reviewer": "Claude Opus 5.5 agent session and its reviewer subagents (separate from the teacher calls; not an owner review)"
+ },
+ "rows": {
+  "lcd:1001": {
+   "boundary_cases": [
+    {
+     "args": [
+      1,
+      [
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ],
+      [
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        0
+       ]
+      ]
+     ],
+     "expected": [
+      1,
+      0
+     ],
+     "reason": "n=1 minimum; duplicate lamp listed twice must be turned off by one query"
+    },
+    {
+     "args": [
+      1,
+      [],
+      [
+       [
+        0,
+        0
+       ]
+      ]
+     ],
+     "expected": [
+      0
+     ],
+     "reason": "no lamps (lamps.length=0)"
+    },
+    {
+     "args": [
+      1000000000,
+      [
+       [
+        0,
+        0
+       ]
+      ],
+      [
+       [
+        999999999,
+        999999999
+       ]
+      ]
+     ],
+     "expected": [
+      1
+     ],
+     "reason": "n=10^9 maximum; opposite corner lit via main diagonal"
+    }
+   ],
+   "problem_sha256": "d401c8486fe2d4a42c9ef1a152c0abbecafe53936fd0bc1d1191727b54b0d9e3",
+   "unsupported_requirements": []
+  },
+  "lcd:1006": {
+   "boundary_cases": [
+    {
+     "args": [
+      1
+     ],
+     "expected": 1,
+     "reason": "minimum n: no operations"
+    },
+    {
+     "args": [
+      2
+     ],
+     "expected": 2,
+     "reason": "only a multiply"
+    },
+    {
+     "args": [
+      10000
+     ],
+     "expected": 10001,
+     "reason": "maximum n"
+    }
+   ],
+   "problem_sha256": "309eb2c06bd9203bb744d892ac0d252eaa736271e7f895281972a1d37062d46c",
+   "unsupported_requirements": []
+  },
+  "lcd:1009": {
+   "boundary_cases": [
+    {
+     "args": [
+      0
+     ],
+     "expected": 1,
+     "reason": "minimum n=0: binary '0' complements to 1"
+    },
+    {
+     "args": [
+      1
+     ],
+     "expected": 0,
+     "reason": "single-bit 1 -> 0"
+    },
+    {
+     "args": [
+      999999999
+     ],
+     "expected": 73741824,
+     "reason": "largest allowed n"
+    }
+   ],
+   "problem_sha256": "160fc9f5c5385c37e210379e0bae97424f3f55723dbfad618e73d246c98b5319",
+   "unsupported_requirements": []
+  },
+  "lcd:1010": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       60
+      ]
+     ],
+     "expected": 0,
+     "reason": "single song: no pairs possible"
+    },
+    {
+     "args": [
+      [
+       30,
+       30,
+       30
+      ]
+     ],
+     "expected": 3,
+     "reason": "all-equal values pairing with themselves"
+    },
+    {
+     "args": [
+      [
+       500,
+       500,
+       1
+      ]
+     ],
+     "expected": 0,
+     "reason": "maximum allowed values, no valid pair"
+    }
+   ],
+   "problem_sha256": "0d500e4bfe5bf67d2c0b408cd171d3f4756d934a1fb676e34d473635412e32ef",
+   "unsupported_requirements": []
+  },
+  "lcd:1014": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1,
+       1
+      ]
+     ],
+     "expected": 1,
+     "reason": "minimum length 2 with minimum values"
+    },
+    {
+     "args": [
+      [
+       1000,
+       1000,
+       1000
+      ]
+     ],
+     "expected": 1999,
+     "reason": "all equal maximum values"
+    },
+    {
+     "args": [
+      [
+       1,
+       1000,
+       1,
+       1,
+       1000
+      ]
+     ],
+     "expected": 1997,
+     "reason": "best pair is far apart vs near"
+    }
+   ],
+   "problem_sha256": "31e24a86004f0fd067860bf239e651488daa2a68d735ef23ccbb8bd58bd04cde",
+   "unsupported_requirements": []
+  },
+  "lcd:1015": {
+   "boundary_cases": [
+    {
+     "args": [
+      100000
+     ],
+     "expected": -1,
+     "reason": "maximum k, even so no repunit divides"
+    },
+    {
+     "args": [
+      99999
+     ],
+     "expected": 45,
+     "reason": "large odd k not divisible by 5"
+    },
+    {
+     "args": [
+      7
+     ],
+     "expected": 6,
+     "reason": "small prime needing a long repunit"
+    }
+   ],
+   "problem_sha256": "4425ee08c2fa6ed2a2be6ce887f510645ac4566ff2807390d1ff6f175a44757e",
+   "unsupported_requirements": []
+  },
+  "lcd:1016": {
+   "boundary_cases": [
+    {
+     "args": [
+      "1",
+      1
+     ],
+     "expected": true,
+     "reason": "minimum length s and n=1, present"
+    },
+    {
+     "args": [
+      "0",
+      1
+     ],
+     "expected": false,
+     "reason": "single zero char cannot contain '1'"
+    },
+    {
+     "args": [
+      "0110",
+      1000000000
+     ],
+     "expected": false,
+     "reason": "maximum n with short s"
+    }
+   ],
+   "problem_sha256": "0d5d46c57218bcaa956cde8b1319076b2f123573254a44d903eb0229b801f2e7",
+   "unsupported_requirements": []
+  },
+  "lcd:1017": {
+   "boundary_cases": [
+    {
+     "args": [
+      0
+     ],
+     "expected": "0",
+     "reason": "minimum n; only case allowed to be '0'"
+    },
+    {
+     "args": [
+      1
+     ],
+     "expected": "1",
+     "reason": "smallest positive n"
+    },
+    {
+     "args": [
+      1000000000
+     ],
+     "expected": "1001100111011111101111000000000",
+     "reason": "maximum n"
+    }
+   ],
+   "problem_sha256": "83e222d9a8e25d4f047ef6c5cc1b7fdebda485f57b164b68ee28673e837666c4",
+   "unsupported_requirements": []
+  },
+  "lcd:1018": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0
+      ]
+     ],
+     "expected": [
+      true
+     ],
+     "reason": "single element zero (0 divisible by 5)"
+    },
+    {
+     "args": [
+      [
+       1
+      ]
+     ],
+     "expected": [
+      false
+     ],
+     "reason": "single element one"
+    },
+    {
+     "args": [
+      [
+       1,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       1,
+       1,
+       1
+      ]
+     ],
+     "expected": [
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true
+     ],
+     "reason": "prefix 5 then longer values (1010 = 10, 10100000=160, ...)"
+    }
+   ],
+   "problem_sha256": "818b2a5e62d08ac542b0c248c5137ff6cc24920849605717d00e7d5f0e83ac06",
+   "unsupported_requirements": []
+  },
+  "lcd:1020": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        1
+       ]
+      ]
+     ],
+     "expected": 0,
+     "reason": "1x1 grid: single land cell is on the boundary"
+    },
+    {
+     "args": [
+      [
+       [
+        0,
+        0,
+        0
+       ],
+       [
+        0,
+        1,
+        0
+       ],
+       [
+        0,
+        0,
+        0
+       ]
+      ]
+     ],
+     "expected": 1,
+     "reason": "single fully enclosed land cell"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        1,
+        1
+       ],
+       [
+        1,
+        1,
+        1
+       ],
+       [
+        1,
+        1,
+        1
+       ]
+      ]
+     ],
+     "expected": 0,
+     "reason": "all land: interior connects to boundary"
+    }
+   ],
+   "problem_sha256": "52492398f68a2a8aa91a1f9d52ee1322faea04688df2b7d88ebf03c4e2ffc45f",
+   "unsupported_requirements": []
+  },
+  "lcd:1024": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        0,
+        0
+       ]
+      ],
+      1
+     ],
+     "expected": -1,
+     "reason": "single zero-length clip cannot cover time=1"
+    },
+    {
+     "args": [
+      [
+       [
+        0,
+        100
+       ]
+      ],
+      100
+     ],
+     "expected": 1,
+     "reason": "single clip covering maximum time"
+    },
+    {
+     "args": [
+      [
+       [
+        0,
+        1
+       ],
+       [
+        1,
+        2
+       ],
+       [
+        0,
+        1
+       ]
+      ],
+      2
+     ],
+     "expected": 2,
+     "reason": "duplicate clips, contiguous chain"
+    }
+   ],
+   "problem_sha256": "c5e098bc96a0c00b0f40d329a9f33ee1ba2cd6a8b9984628c5d8f62d2bec85ba",
+   "unsupported_requirements": []
+  },
+  "lcd:1027": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0,
+       0
+      ]
+     ],
+     "expected": 2,
+     "reason": "minimum length 2 with minimum values"
+    },
+    {
+     "args": [
+      [
+       500,
+       0
+      ]
+     ],
+     "expected": 2,
+     "reason": "extreme values, minimum length"
+    },
+    {
+     "args": [
+      [
+       7,
+       7,
+       7,
+       7
+      ]
+     ],
+     "expected": 4,
+     "reason": "all-equal values form difference-0 sequence"
+    }
+   ],
+   "problem_sha256": "f295e4a3f876c8adf6c59fe2f853245a7e0a3c0d9ec0cc140a697573e7512564",
+   "unsupported_requirements": []
+  },
+  "lcd:1034": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        1
+       ]
+      ],
+      0,
+      0,
+      1000
+     ],
+     "expected": [
+      [
+       1000
+      ]
+     ],
+     "reason": "1x1 grid minimum; single cell is on the grid boundary"
+    },
+    {
+     "args": [
+      [
+       [
+        5,
+        5,
+        5,
+        5
+       ],
+       [
+        5,
+        5,
+        5,
+        5
+       ],
+       [
+        5,
+        5,
+        5,
+        5
+       ],
+       [
+        5,
+        5,
+        5,
+        5
+       ]
+      ],
+      2,
+      2,
+      5
+     ],
+     "expected": [
+      [
+       5,
+       5,
+       5,
+       5
+      ],
+      [
+       5,
+       5,
+       5,
+       5
+      ],
+      [
+       5,
+       5,
+       5,
+       5
+      ],
+      [
+       5,
+       5,
+       5,
+       5
+      ]
+     ],
+     "reason": "all equal, color equals existing color"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        2,
+        1
+       ],
+       [
+        2,
+        1,
+        2
+       ],
+       [
+        1,
+        2,
+        1
+       ]
+      ],
+      1,
+      1,
+      7
+     ],
+     "expected": [
+      [
+       1,
+       2,
+       1
+      ],
+      [
+       2,
+       7,
+       2
+      ],
+      [
+       1,
+       2,
+       1
+      ]
+     ],
+     "reason": "component of a single interior cell surrounded by other colors"
+    }
+   ],
+   "problem_sha256": "1bdffc94783863b0a8764147c352523f217ec9ef5b9d573ebe74a6ae125c2544",
+   "unsupported_requirements": []
+  },
+  "lcd:1042": {
+   "boundary_cases": [
+    {
+     "args": [
+      1,
+      []
+     ],
+     "expected": [
+      1
+     ],
+     "reason": "minimum n with no paths (any type 1-4 is valid; greedy smallest gives 1)"
+    }
+   ],
+   "problem_sha256": "8318d497cf9cdb50d6c3a4d77e1a534558bfff6a12be181261a728cb5c7dc1c9",
+   "unsupported_requirements": [
+    "Any valid assignment is accepted (\"return any such a choice\"), but every available test compares exactly, so finite tests cannot qualify a program"
+   ]
+  },
+  "lcd:1048": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       "a"
+      ]
+     ],
+     "expected": 1,
+     "reason": "single word"
+    },
+    {
+     "args": [
+      [
+       "abcdefghijklmnop"
+      ]
+     ],
+     "expected": 1,
+     "reason": "single word of maximum length 16"
+    },
+    {
+     "args": [
+      [
+       "a",
+       "ab",
+       "abc",
+       "abcd"
+      ]
+     ],
+     "expected": 4,
+     "reason": "full chain of consecutive lengths"
+    }
+   ],
+   "problem_sha256": "dbf827463a8a6d7b9342ab5134c0167fbd9baebccd6ffa3a64b7b37695f1e9ff",
+   "unsupported_requirements": []
+  },
+  "lcd:1051": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ]
+     ],
+     "expected": 0,
+     "reason": "single student"
+    },
+    {
+     "args": [
+      [
+       100,
+       1
+      ]
+     ],
+     "expected": 2,
+     "reason": "extreme values reversed"
+    },
+    {
+     "args": [
+      [
+       5,
+       5,
+       5
+      ]
+     ],
+     "expected": 0,
+     "reason": "all-equal heights"
+    }
+   ],
+   "problem_sha256": "3a33c4a8053908547baf8550f0ce3196bb3570ec1925580956ae3bc57a7529f0",
+   "unsupported_requirements": []
+  },
+  "lcd:1053": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ]
+     ],
+     "expected": [
+      1
+     ],
+     "reason": "single element: no swap possible, return same"
+    },
+    {
+     "args": [
+      [
+       3,
+       1,
+       1,
+       3
+      ]
+     ],
+     "expected": [
+      1,
+      3,
+      1,
+      3
+     ],
+     "reason": "duplicates: must swap with the leftmost of equal candidates -> [1,3,1,3]"
+    },
+    {
+     "args": [
+      [
+       7,
+       7,
+       7
+      ]
+     ],
+     "expected": [
+      7,
+      7,
+      7
+     ],
+     "reason": "all equal: already smallest"
+    }
+   ],
+   "problem_sha256": "ddbdb6f570305bdfcc0d7ed8a250c829dbb9cddb7fde31485c90e938e18d8ffa",
+   "unsupported_requirements": []
+  },
+  "lcd:1072": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        0
+       ]
+      ]
+     ],
+     "expected": 1,
+     "reason": "1x1 matrix"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        0
+       ],
+       [
+        1,
+        0
+       ],
+       [
+        0,
+        1
+       ]
+      ]
+     ],
+     "expected": 3,
+     "reason": "duplicate rows plus complement row all alignable"
+    }
+   ],
+   "problem_sha256": "7c3350bd6c5bd6c2bbc5aa1932b3c6a6d75a85bfadb86cf91bf8a02d59a049fa",
+   "unsupported_requirements": []
+  },
+  "lcd:1079": {
+   "boundary_cases": [
+    {
+     "args": [
+      "AAAAAAA"
+     ],
+     "expected": 7,
+     "reason": "maximum length, all tiles equal"
+    },
+    {
+     "args": [
+      "ABCDEFG"
+     ],
+     "expected": 13699,
+     "reason": "maximum length, all tiles distinct"
+    }
+   ],
+   "problem_sha256": "8ba54ab7c674d90392bbe3783e36dddb99442753351cec176b8563ff38dd33e2",
+   "unsupported_requirements": []
+  },
+  "lcd:1080": {
+   "boundary_cases": [
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        5
+       ]
+      },
+      6
+     ],
+     "expected": null,
+     "reason": "single node below limit: whole tree deleted"
+    },
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        5
+       ]
+      },
+      5
+     ],
+     "expected": {
+      "__tree_node__": [
+       5
+      ]
+     },
+     "reason": "single node exactly at limit: kept"
+    },
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        -100000,
+        100000
+       ]
+      },
+      -1000000000
+     ],
+     "expected": {
+      "__tree_node__": [
+       -100000,
+       100000
+      ]
+     },
+     "reason": "extreme node values with minimum limit"
+    }
+   ],
+   "problem_sha256": "65dcd4bfab775efcca9c6be2ee38ef2b5143e2fb8df58f2c748824e088bc3b7b",
+   "unsupported_requirements": []
+  },
+  "lcd:1091": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        0
+       ]
+      ]
+     ],
+     "expected": 1,
+     "reason": "n=1, open cell: path length 1"
+    },
+    {
+     "args": [
+      [
+       [
+        1
+       ]
+      ]
+     ],
+     "expected": -1,
+     "reason": "n=1, blocked cell: -1"
+    },
+    {
+     "args": [
+      [
+       [
+        0,
+        0
+       ],
+       [
+        0,
+        1
+       ]
+      ]
+     ],
+     "expected": -1,
+     "reason": "destination blocked: -1"
+    }
+   ],
+   "problem_sha256": "75f64ae99646fd94b9749f8dd14440704a391ba9626dc5bad17c84babd7b45a5",
+   "unsupported_requirements": []
+  },
+  "lcd:1094": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        100,
+        0,
+        1000
+       ]
+      ],
+      100
+     ],
+     "expected": true,
+     "reason": "single trip spanning full range exactly at capacity"
+    },
+    {
+     "args": [
+      [
+       [
+        100,
+        0,
+        1000
+       ]
+      ],
+      99
+     ],
+     "expected": false,
+     "reason": "single trip one over capacity"
+    },
+    {
+     "args": [
+      [
+       [
+        3,
+        2,
+        5
+       ],
+       [
+        3,
+        5,
+        7
+       ]
+      ],
+      3
+     ],
+     "expected": true,
+     "reason": "drop-off and pick-up at the same location"
+    }
+   ],
+   "problem_sha256": "d09fd4e6999d0e5aba5a9ee6ec1ef53c567eb680864ac4de226d0abee750a630",
+   "unsupported_requirements": []
+  },
+  "lcd:1103": {
+   "boundary_cases": [
+    {
+     "args": [
+      1,
+      1
+     ],
+     "expected": [
+      1
+     ],
+     "reason": "minimum candies and people"
+    },
+    {
+     "args": [
+      1000000000,
+      1
+     ],
+     "expected": [
+      1000000000
+     ],
+     "reason": "maximum candies to a single person"
+    },
+    {
+     "args": [
+      1,
+      5
+     ],
+     "expected": [
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     "reason": "fewer candies than people; trailing zeros"
+    }
+   ],
+   "problem_sha256": "f4f074464137c9a6c6b5129eb6bdb06080bb89359b0e8d0b41c8025a501daa38",
+   "unsupported_requirements": []
+  },
+  "lcd:1105": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        1000,
+        1000
+       ]
+      ],
+      1000
+     ],
+     "expected": 1000,
+     "reason": "single book at maximum thickness/height filling the shelf"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        1
+       ],
+       [
+        1,
+        1
+       ]
+      ],
+      1
+     ],
+     "expected": 2,
+     "reason": "minimum width forces one book per shelf"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        5
+       ],
+       [
+        1,
+        5
+       ],
+       [
+        1,
+        5
+       ]
+      ],
+      3
+     ],
+     "expected": 5,
+     "reason": "all-equal books fitting exactly on one shelf"
+    }
+   ],
+   "problem_sha256": "d1691708e467f84211134767767a07035078ae2463d9228573f8a7bd157157a5",
+   "unsupported_requirements": []
+  },
+  "lcd:1108": {
+   "boundary_cases": [
+    {
+     "args": [
+      "0.0.0.0"
+     ],
+     "expected": "0[.]0[.]0[.]0",
+     "reason": "minimum octets"
+    },
+    {
+     "args": [
+      "255.255.255.255"
+     ],
+     "expected": "255[.]255[.]255[.]255",
+     "reason": "maximum octets"
+    }
+   ],
+   "problem_sha256": "8054d7435cb4fa4557327bbc352de336e27c1721824997e79d3d6a0d204bcd73",
+   "unsupported_requirements": []
+  },
+  "lcd:1109": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        1,
+        1,
+        10000
+       ]
+      ],
+      1
+     ],
+     "expected": [
+      10000
+     ],
+     "reason": "minimum n, max seats"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        3,
+        5
+       ],
+       [
+        1,
+        3,
+        5
+       ]
+      ],
+      3
+     ],
+     "expected": [
+      10,
+      10,
+      10
+     ],
+     "reason": "duplicate bookings covering all flights"
+    }
+   ],
+   "problem_sha256": "0da3095aa69cf785499d18f5bbac158251a92d0732f20cfeda1919e73b98de0b",
+   "unsupported_requirements": []
+  },
+  "lcd:1129": {
+   "boundary_cases": [
+    {
+     "args": [
+      1,
+      [],
+      []
+     ],
+     "expected": [
+      0
+     ],
+     "reason": "single node, no edges"
+    },
+    {
+     "args": [
+      3,
+      [
+       [
+        0,
+        1
+       ],
+       [
+        1,
+        2
+       ]
+      ],
+      [
+       [
+        1,
+        1
+       ]
+      ]
+     ],
+     "expected": [
+      0,
+      1,
+      3
+     ],
+     "reason": "path needs a blue self-edge between two reds"
+    },
+    {
+     "args": [
+      2,
+      [
+       [
+        0,
+        1
+       ]
+      ],
+      [
+       [
+        0,
+        1
+       ]
+      ]
+     ],
+     "expected": [
+      0,
+      1
+     ],
+     "reason": "parallel red and blue edges"
+    }
+   ],
+   "problem_sha256": "d50eea0612f0bb730220e091333ef20d6576df88b83705420e6c7d7c444ffddd",
+   "unsupported_requirements": []
+  },
+  "lcd:1130": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1,
+       1
+      ]
+     ],
+     "expected": 1,
+     "reason": "minimum length with minimum values"
+    },
+    {
+     "args": [
+      [
+       15,
+       15,
+       15
+      ]
+     ],
+     "expected": 450,
+     "reason": "all-equal maximum values"
+    },
+    {
+     "args": [
+      [
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15,
+       15
+      ]
+     ],
+     "expected": 8775,
+     "reason": "maximum length with maximum values"
+    }
+   ],
+   "problem_sha256": "22cfe5254509ce05bf61c6e75310a5539124608bf6538312e60eca68f3e0ab03",
+   "unsupported_requirements": []
+  },
+  "lcd:1131": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       0
+      ]
+     ],
+     "expected": 1,
+     "reason": "minimum length, all equal: answer is index distance 1"
+    },
+    {
+     "args": [
+      [
+       -1000000,
+       1000000
+      ],
+      [
+       1000000,
+       -1000000
+      ]
+     ],
+     "expected": 4000001,
+     "reason": "extreme values"
+    },
+    {
+     "args": [
+      [
+       5,
+       5,
+       5
+      ],
+      [
+       -3,
+       -3,
+       -3
+      ]
+     ],
+     "expected": 2,
+     "reason": "all equal values, length 3"
+    }
+   ],
+   "problem_sha256": "145d462a85b3d5e22ec5215e9618997352720ee61ce6d8b94227e835af306c86",
+   "unsupported_requirements": []
+  },
+  "lcd:1139": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        0
+       ]
+      ]
+     ],
+     "expected": 0,
+     "reason": "1x1 grid with no 1: answer 0"
+    },
+    {
+     "args": [
+      [
+       [
+        1
+       ]
+      ]
+     ],
+     "expected": 1,
+     "reason": "1x1 grid with a 1"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        1
+       ],
+       [
+        1,
+        1
+       ]
+      ]
+     ],
+     "expected": 4,
+     "reason": "all ones 2x2"
+    }
+   ],
+   "problem_sha256": "dff25b07a36b6dcc2e892353f7a496c52f1bc8969c67ee6c01ad6f9be4a31cca",
+   "unsupported_requirements": []
+  },
+  "lcd:1144": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ]
+     ],
+     "expected": 0,
+     "reason": "single element is already zigzag"
+    },
+    {
+     "args": [
+      [
+       5,
+       5
+      ]
+     ],
+     "expected": 1,
+     "reason": "two equal values need one move"
+    },
+    {
+     "args": [
+      [
+       1000,
+       1,
+       1000,
+       1
+      ]
+     ],
+     "expected": 0,
+     "reason": "already zigzag with extreme values"
+    }
+   ],
+   "problem_sha256": "a22a8be526e827ff3e3c93943ccd54665b7d37114a57724ca624cc5f5786fc8d",
+   "unsupported_requirements": []
+  },
+  "lcd:1145": {
+   "boundary_cases": [
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        1,
+        2,
+        3
+       ]
+      },
+      3,
+      2
+     ],
+     "expected": true,
+     "reason": "smallest n with x at a leaf: take the parent"
+    },
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        1,
+        null,
+        2,
+        null,
+        3
+       ]
+      },
+      3,
+      2
+     ],
+     "expected": false,
+     "reason": "chain with x in the middle splits the tree evenly"
+    },
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        2,
+        1,
+        3
+       ]
+      },
+      3,
+      3
+     ],
+     "expected": true,
+     "reason": "x at the right leaf of a balanced 3-node tree"
+    }
+   ],
+   "problem_sha256": "b29873e00f278d7edac66948fca0c266fd37a73b0b2bae0efd6f4d66877d5347",
+   "unsupported_requirements": []
+  },
+  "lcd:1154": {
+   "boundary_cases": [
+    {
+     "args": [
+      "1900-01-01"
+     ],
+     "expected": 1,
+     "reason": "earliest allowed date"
+    },
+    {
+     "args": [
+      "1900-12-31"
+     ],
+     "expected": 365,
+     "reason": "1900 is not a leap year (century rule): 365"
+    },
+    {
+     "args": [
+      "2000-03-01"
+     ],
+     "expected": 61,
+     "reason": "2000 is a leap year (400 rule): 61"
+    }
+   ],
+   "problem_sha256": "086ade67e8ea5768115d6f874afcda1ce24d4e97159b400fd9704c88548d0fc8",
+   "unsupported_requirements": []
+  },
+  "lcd:1155": {
+   "boundary_cases": [
+    {
+     "args": [
+      1,
+      1,
+      1
+     ],
+     "expected": 1,
+     "reason": "minimum n, k, target"
+    },
+    {
+     "args": [
+      1,
+      1,
+      1000
+     ],
+     "expected": 0,
+     "reason": "target unreachable"
+    },
+    {
+     "args": [
+      30,
+      30,
+      900
+     ],
+     "expected": 1,
+     "reason": "max n, k with target equal to max sum"
+    }
+   ],
+   "problem_sha256": "c418b7181c5be90bc16e6f355241c716b2b6e9cf452f14b61e8593c4c368b8a1",
+   "unsupported_requirements": []
+  },
+  "lcd:1156": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a"
+     ],
+     "expected": 1,
+     "reason": "single character"
+    },
+    {
+     "args": [
+      "ab"
+     ],
+     "expected": 1,
+     "reason": "two distinct characters, swap cannot help"
+    },
+    {
+     "args": [
+      "aaabbaaa"
+     ],
+     "expected": 4,
+     "reason": "two-character gap cannot be bridged"
+    }
+   ],
+   "problem_sha256": "67b3973e4da600a441ed442bd6bc64725bc3f8ba5d214e02ca55b383c07867d5",
+   "unsupported_requirements": []
+  },
+  "lcd:1163": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a"
+     ],
+     "expected": "a",
+     "reason": "single character"
+    },
+    {
+     "args": [
+      "zzz"
+     ],
+     "expected": "zzz",
+     "reason": "all-equal characters"
+    },
+    {
+     "args": [
+      "zaz"
+     ],
+     "expected": "zaz",
+     "reason": "repeated maximum letter; tie broken by later characters"
+    }
+   ],
+   "problem_sha256": "5aad295dad3f726c3f408d871331aca44cd93032706ef96c514512d6ab4d7c1c",
+   "unsupported_requirements": []
+  },
+  "lcd:1171": {
+   "boundary_cases": [
+    {
+     "args": [
+      {
+       "__list_node__": [
+        0
+       ]
+      }
+     ],
+     "expected": null,
+     "reason": "single zero node: everything removed, empty list"
+    },
+    {
+     "args": [
+      {
+       "__list_node__": [
+        1000
+       ]
+      }
+     ],
+     "expected": {
+      "__list_node__": [
+       1000
+      ]
+     },
+     "reason": "single node at max value, nothing removed"
+    },
+    {
+     "args": [
+      {
+       "__list_node__": [
+        1000,
+        -1000,
+        5
+       ]
+      }
+     ],
+     "expected": {
+      "__list_node__": [
+       5
+      ]
+     },
+     "reason": "extreme values cancel; unique result [5]"
+    }
+   ],
+   "problem_sha256": "164e22700927a0b9a59ef44152d554aac0d7682a4438f5b4de6411c1eb20e59d",
+   "unsupported_requirements": []
+  },
+  "lcd:1175": {
+   "boundary_cases": [
+    {
+     "args": [
+      1
+     ],
+     "expected": 1,
+     "reason": "minimum n: no primes"
+    },
+    {
+     "args": [
+      2
+     ],
+     "expected": 1,
+     "reason": "single prime"
+    },
+    {
+     "args": [
+      3
+     ],
+     "expected": 2,
+     "reason": "small n with two primes"
+    }
+   ],
+   "problem_sha256": "0e3de1b5bae0f192fcf27729ab3f707f2b574359265992a360b3c3f79ff320e2",
+   "unsupported_requirements": []
+  },
+  "lcd:1325": {
+   "boundary_cases": [
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        1
+       ]
+      },
+      1
+     ],
+     "expected": null,
+     "reason": "single node equal to target: whole tree removed"
+    },
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        1
+       ]
+      },
+      2
+     ],
+     "expected": {
+      "__tree_node__": [
+       1
+      ]
+     },
+     "reason": "single node not equal to target"
+    },
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        2,
+        2,
+        2
+       ]
+      },
+      2
+     ],
+     "expected": null,
+     "reason": "all nodes equal target, cascading removal"
+    }
+   ],
+   "problem_sha256": "3edd94717f52e7930e18d5ba58e97b5bf85418aae9328824696a3d4044a28f14",
+   "unsupported_requirements": []
+  },
+  "lcd:1328": {
+   "boundary_cases": [
+    {
+     "args": [
+      "z"
+     ],
+     "expected": "",
+     "reason": "single character cannot be broken"
+    },
+    {
+     "args": [
+      "aaa"
+     ],
+     "expected": "aab",
+     "reason": "all 'a': must change last character to 'b'"
+    },
+    {
+     "args": [
+      "aba"
+     ],
+     "expected": "abb",
+     "reason": "only the middle is non-'a'; changing it keeps a palindrome"
+    }
+   ],
+   "problem_sha256": "4d41fc784d01620d5eed29992aa8ea533839db50406e1c6baa3f8bfdc3709f0e",
+   "unsupported_requirements": []
+  },
+  "lcd:1346": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0,
+       0
+      ]
+     ],
+     "expected": true,
+     "reason": "two zeros: 0 == 2*0 with i != j"
+    },
+    {
+     "args": [
+      [
+       0,
+       1
+      ]
+     ],
+     "expected": false,
+     "reason": "single zero cannot pair with itself"
+    },
+    {
+     "args": [
+      [
+       -1000,
+       -500
+      ]
+     ],
+     "expected": true,
+     "reason": "negative extreme values"
+    }
+   ],
+   "problem_sha256": "7cef767b86b307b4b3bbd3e6f54460e4ab2fcf4c6d2eb3406a00ad0dd47631c2",
+   "unsupported_requirements": []
+  },
+  "lcd:1375": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ]
+     ],
+     "expected": 1,
+     "reason": "minimum n"
+    },
+    {
+     "args": [
+      [
+       5,
+       4,
+       3,
+       2,
+       1
+      ]
+     ],
+     "expected": 1,
+     "reason": "reverse order: aligned only at the end"
+    },
+    {
+     "args": [
+      [
+       1,
+       2,
+       3
+      ]
+     ],
+     "expected": 3,
+     "reason": "in order: aligned at every step"
+    }
+   ],
+   "problem_sha256": "02e8448403f679feda7c555e1123b2ac272be147169444dcc5f02248caa2f3a8",
+   "unsupported_requirements": []
+  },
+  "lcd:1419": {
+   "boundary_cases": [
+    {
+     "args": [
+      "c"
+     ],
+     "expected": -1,
+     "reason": "single character, unfinished croak"
+    },
+    {
+     "args": [
+      "croak"
+     ],
+     "expected": 1,
+     "reason": "exactly one croak"
+    },
+    {
+     "args": [
+      "ccrrooaakk"
+     ],
+     "expected": 2,
+     "reason": "two fully interleaved croaks"
+    }
+   ],
+   "problem_sha256": "49b49c64e95b63f11c3711e2cc007990262dd3f1f787b35586eb2c1e47a2437d",
+   "unsupported_requirements": []
+  },
+  "lcd:1464": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1,
+       1
+      ]
+     ],
+     "expected": 0,
+     "reason": "minimum length, minimum values: product 0"
+    },
+    {
+     "args": [
+      [
+       1000,
+       1000
+      ]
+     ],
+     "expected": 998001,
+     "reason": "maximum duplicated values"
+    },
+    {
+     "args": [
+      [
+       1,
+       1000
+      ]
+     ],
+     "expected": 0,
+     "reason": "extremes in a minimum-length array"
+    }
+   ],
+   "problem_sha256": "d59236d0b42fee2d55d427b1abc9621145c8c9ab951eb9d6c28fa18993da308c",
+   "unsupported_requirements": []
+  },
+  "lcd:1534": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0,
+       0,
+       0
+      ],
+      0,
+      0,
+      0
+     ],
+     "expected": 1,
+     "reason": "minimum length, all equal, zero tolerances"
+    },
+    {
+     "args": [
+      [
+       0,
+       1000,
+       0
+      ],
+      1000,
+      1000,
+      1000
+     ],
+     "expected": 1,
+     "reason": "extreme values with max tolerances"
+    },
+    {
+     "args": [
+      [
+       0,
+       1000,
+       0,
+       1000
+      ],
+      999,
+      1000,
+      1000
+     ],
+     "expected": 1,
+     "reason": "a just below needed difference"
+    }
+   ],
+   "problem_sha256": "d943249dd3d53a8f478598cfd77b9c9030bb741f68c4f4f1694a35834244ee3b",
+   "unsupported_requirements": []
+  },
+  "lcd:1545": {
+   "boundary_cases": [
+    {
+     "args": [
+      1,
+      1
+     ],
+     "expected": "0",
+     "reason": "minimum n and k"
+    },
+    {
+     "args": [
+      20,
+      1048575
+     ],
+     "expected": "1",
+     "reason": "max n, last bit"
+    },
+    {
+     "args": [
+      20,
+      524288
+     ],
+     "expected": "1",
+     "reason": "max n, middle bit"
+    }
+   ],
+   "problem_sha256": "cd126c371003d5f62589034dc03ee04bba7cf8a1629e012d43d67923048c2fca",
+   "unsupported_requirements": []
+  },
+  "lcd:1574": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0
+      ]
+     ],
+     "expected": 0,
+     "reason": "single element"
+    },
+    {
+     "args": [
+      [
+       7,
+       7,
+       7
+      ]
+     ],
+     "expected": 0,
+     "reason": "all equal values already non-decreasing"
+    },
+    {
+     "args": [
+      [
+       1000000000,
+       0
+      ]
+     ],
+     "expected": 1,
+     "reason": "two extreme values in decreasing order"
+    }
+   ],
+   "problem_sha256": "f274c0fa1192f9f47d02cddff34bafd647a2894e3b67ee1faf32c14df36e4797",
+   "unsupported_requirements": []
+  },
+  "lcd:1636": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       5
+      ]
+     ],
+     "expected": [
+      5
+     ],
+     "reason": "single element"
+    },
+    {
+     "args": [
+      [
+       -100,
+       100
+      ]
+     ],
+     "expected": [
+      100,
+      -100
+     ],
+     "reason": "extreme values, equal frequency: decreasing order"
+    },
+    {
+     "args": [
+      [
+       7,
+       7,
+       7
+      ]
+     ],
+     "expected": [
+      7,
+      7,
+      7
+     ],
+     "reason": "all-equal values"
+    }
+   ],
+   "problem_sha256": "ddf0bdaa85d806884439bc7c73824b111885cfdfc0fca8d698d8367a5bcd062b",
+   "unsupported_requirements": []
+  },
+  "lcd:1685": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1,
+       1
+      ]
+     ],
+     "expected": [
+      0,
+      0
+     ],
+     "reason": "minimum length, equal elements"
+    },
+    {
+     "args": [
+      [
+       1,
+       10000
+      ]
+     ],
+     "expected": [
+      9999,
+      9999
+     ],
+     "reason": "extreme values"
+    },
+    {
+     "args": [
+      [
+       3,
+       3,
+       3,
+       7
+      ]
+     ],
+     "expected": [
+      4,
+      4,
+      4,
+      12
+     ],
+     "reason": "duplicates"
+    }
+   ],
+   "problem_sha256": "efe65d32a00338c9ce1b62a1d496ebd2b59698643ca760c5dd1bdc798d011dc5",
+   "unsupported_requirements": []
+  },
+  "lcd:1696": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       5
+      ],
+      1
+     ],
+     "expected": 5,
+     "reason": "single element"
+    },
+    {
+     "args": [
+      [
+       -10000,
+       -10000,
+       -10000
+      ],
+      1
+     ],
+     "expected": -30000,
+     "reason": "k=1 forces every index, min values"
+    },
+    {
+     "args": [
+      [
+       1,
+       -5,
+       -5,
+       2
+      ],
+      3
+     ],
+     "expected": 3,
+     "reason": "k reaches last index directly"
+    }
+   ],
+   "problem_sha256": "8a66d27b853a763105e7c79f12994212330870c868ad23f339829a2e031a3b48",
+   "unsupported_requirements": []
+  },
+  "lcd:1710": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        1,
+        1
+       ]
+      ],
+      1
+     ],
+     "expected": 1,
+     "reason": "minimum values"
+    },
+    {
+     "args": [
+      [
+       [
+        1000,
+        1000
+       ]
+      ],
+      1000000
+     ],
+     "expected": 1000000,
+     "reason": "truck larger than total boxes"
+    },
+    {
+     "args": [
+      [
+       [
+        5,
+        3
+       ],
+       [
+        5,
+        3
+       ]
+      ],
+      6
+     ],
+     "expected": 18,
+     "reason": "duplicate box types"
+    }
+   ],
+   "problem_sha256": "ae15a7327c09f68f83a97dfac041a488879089436cd905047478b8ba2e3c07e9",
+   "unsupported_requirements": []
+  },
+  "lcd:1717": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a",
+      1,
+      1
+     ],
+     "expected": 0,
+     "reason": "single character, nothing removable"
+    },
+    {
+     "args": [
+      "aba",
+      1,
+      10000
+     ],
+     "expected": 10000,
+     "reason": "overlapping pairs; prefer the higher-valued 'ba'"
+    },
+    {
+     "args": [
+      "abab",
+      10000,
+      10000
+     ],
+     "expected": 20000,
+     "reason": "equal maximum scores"
+    }
+   ],
+   "problem_sha256": "93e3b148de5396b3f94973b4fbd7337e9c976c0b4231a9b39b5693eda729f4a1",
+   "unsupported_requirements": []
+  },
+  "lcd:1725": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        1,
+        2
+       ]
+      ]
+     ],
+     "expected": 1,
+     "reason": "single rectangle, minimum values"
+    },
+    {
+     "args": [
+      [
+       [
+        1000000000,
+        999999999
+       ],
+       [
+        999999999,
+        1000000000
+       ]
+      ]
+     ],
+     "expected": 2,
+     "reason": "maximum values"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        1000000000
+       ],
+       [
+        2,
+        3
+       ]
+      ]
+     ],
+     "expected": 1,
+     "reason": "huge length does not help; min side matters"
+    }
+   ],
+   "problem_sha256": "51e48d484e0129dafc834ec3ea8011939d4060ed124a34ca82f884c0cb4cbba9",
+   "unsupported_requirements": []
+  },
+  "lcd:1732": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       -100
+      ]
+     ],
+     "expected": 0,
+     "reason": "single negative gain: start point is highest"
+    },
+    {
+     "args": [
+      [
+       100,
+       100
+      ]
+     ],
+     "expected": 200,
+     "reason": "max gains"
+    }
+   ],
+   "problem_sha256": "a5f28c06aff4a10208e1770040154fe9e2b9e808980360ac2db251bc9c086d85",
+   "unsupported_requirements": []
+  },
+  "lcd:1748": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ]
+     ],
+     "expected": 1,
+     "reason": "single element"
+    },
+    {
+     "args": [
+      [
+       100,
+       100
+      ]
+     ],
+     "expected": 0,
+     "reason": "only duplicates at max value"
+    }
+   ],
+   "problem_sha256": "780f2b664d759f48e89ab09c01f188a84899242303a9faa9ddef70539a50834b",
+   "unsupported_requirements": []
+  },
+  "lcd:1752": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ]
+     ],
+     "expected": true,
+     "reason": "single element"
+    },
+    {
+     "args": [
+      [
+       1,
+       1,
+       1
+      ]
+     ],
+     "expected": true,
+     "reason": "all-equal values"
+    },
+    {
+     "args": [
+      [
+       2,
+       1,
+       2
+      ]
+     ],
+     "expected": true,
+     "reason": "duplicates across the rotation point"
+    }
+   ],
+   "problem_sha256": "0965e01d3472e3d0d1857d83d59713902d42f0c7795abbf76e63bb5eec802527",
+   "unsupported_requirements": []
+  },
+  "lcd:1754": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a",
+      "a"
+     ],
+     "expected": "aa",
+     "reason": "minimum lengths, equal"
+    },
+    {
+     "args": [
+      "z",
+      "a"
+     ],
+     "expected": "za",
+     "reason": "single chars, different"
+    },
+    {
+     "args": [
+      "ab",
+      "aba"
+     ],
+     "expected": "ababa",
+     "reason": "equal prefix tie-break requiring suffix comparison"
+    }
+   ],
+   "problem_sha256": "5748adaf82be8a5c60a0d2057bbd8f655a57b8d6be0d10f3433a78890990b40e",
+   "unsupported_requirements": []
+  },
+  "lcd:1785": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ],
+      1,
+      -1000000000
+     ],
+     "expected": 1000000001,
+     "reason": "min limit, extreme negative goal"
+    },
+    {
+     "args": [
+      [
+       5
+      ],
+      5,
+      5
+     ],
+     "expected": 0,
+     "reason": "already at goal"
+    },
+    {
+     "args": [
+      [
+       -1
+      ],
+      1,
+      1000000000
+     ],
+     "expected": 1000000001,
+     "reason": "extreme positive goal"
+    }
+   ],
+   "problem_sha256": "7430630c127ccf56bafe7a674ce4e3008d291386c62124dae09c35307a68f5f8",
+   "unsupported_requirements": []
+  },
+  "lcd:1791": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        1,
+        2
+       ],
+       [
+        2,
+        3
+       ]
+      ]
+     ],
+     "expected": 2,
+     "reason": "minimum n=3, center is the middle node"
+    },
+    {
+     "args": [
+      [
+       [
+        3,
+        1
+       ],
+       [
+        1,
+        2
+       ]
+      ]
+     ],
+     "expected": 1,
+     "reason": "minimum n=3, center listed second then first"
+    }
+   ],
+   "problem_sha256": "97eea03ea63ad257d1e3525da225779cc0e7c119d4e169594601b9bd58feb975",
+   "unsupported_requirements": []
+  },
+  "lcd:1823": {
+   "boundary_cases": [
+    {
+     "args": [
+      1,
+      1
+     ],
+     "expected": 1,
+     "reason": "minimum n and k"
+    },
+    {
+     "args": [
+      500,
+      1
+     ],
+     "expected": 500,
+     "reason": "maximum n with k=1: last friend wins"
+    },
+    {
+     "args": [
+      500,
+      500
+     ],
+     "expected": 69,
+     "reason": "maximum n and k"
+    }
+   ],
+   "problem_sha256": "f3cc0d9a08a176052dd73eb7a77120f7ecac73c37db7bb720023b1fa34f962c4",
+   "unsupported_requirements": []
+  },
+  "lcd:1846": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1000000000
+      ]
+     ],
+     "expected": 1,
+     "reason": "single element at max value: must become 1"
+    },
+    {
+     "args": [
+      [
+       1,
+       1,
+       1
+      ]
+     ],
+     "expected": 1,
+     "reason": "all ones"
+    },
+    {
+     "args": [
+      [
+       1000000000,
+       1000000000,
+       1000000000
+      ]
+     ],
+     "expected": 3,
+     "reason": "all equal maximum values"
+    }
+   ],
+   "problem_sha256": "6903a5b207da05961f51c272c14bdd9556d509293647ad1ca249e96724296c03",
+   "unsupported_requirements": []
+  },
+  "lcd:1848": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       2,
+       1,
+       2
+      ],
+      2,
+      1
+     ],
+     "expected": 1,
+     "reason": "target equidistant on both sides"
+    },
+    {
+     "args": [
+      [
+       10000,
+       1,
+       1
+      ],
+      10000,
+      2
+     ],
+     "expected": 2,
+     "reason": "max value target at far end"
+    }
+   ],
+   "problem_sha256": "68ae0a0e9f30540537ffcb2cdea5723d889a834a117dac634ef45e785f303577",
+   "unsupported_requirements": []
+  },
+  "lcd:1967": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       "a"
+      ],
+      "a"
+     ],
+     "expected": 1,
+     "reason": "single one-letter pattern equal to word"
+    },
+    {
+     "args": [
+      [
+       "ab"
+      ],
+      "a"
+     ],
+     "expected": 0,
+     "reason": "pattern longer than word"
+    }
+   ],
+   "problem_sha256": "185e3dde1c6c3bc5445c502563fe736f27fb2d93df4bdf486abfcc365401088f",
+   "unsupported_requirements": []
+  },
+  "lcd:1979": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1,
+       1000
+      ]
+     ],
+     "expected": 1,
+     "reason": "extreme values"
+    },
+    {
+     "args": [
+      [
+       1000,
+       1000
+      ]
+     ],
+     "expected": 1000,
+     "reason": "duplicate maximum values"
+    },
+    {
+     "args": [
+      [
+       999,
+       1000
+      ]
+     ],
+     "expected": 1,
+     "reason": "coprime adjacent large values"
+    }
+   ],
+   "problem_sha256": "69ef5ed6bdf022199b76ccbe743a07b26e1aafebd85bfa60d31d524db8a1c6e4",
+   "unsupported_requirements": []
+  },
+  "lcd:2027": {
+   "boundary_cases": [
+    {
+     "args": [
+      "OOX"
+     ],
+     "expected": 1,
+     "reason": "minimum length; X at the end"
+    },
+    {
+     "args": [
+      "XOOX"
+     ],
+     "expected": 2,
+     "reason": "X at both ends, separated by more than 2"
+    },
+    {
+     "args": [
+      "OOO"
+     ],
+     "expected": 0,
+     "reason": "minimum length, no X"
+    }
+   ],
+   "problem_sha256": "4e60f41218e0f7c6f3f5ac364ec41c81a88cdfebbd000f9cab08842bf7a3fd57",
+   "unsupported_requirements": []
+  },
+  "lcd:2037": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ],
+      [
+       100
+      ]
+     ],
+     "expected": 99,
+     "reason": "single student at max distance"
+    },
+    {
+     "args": [
+      [
+       5,
+       5
+      ],
+      [
+       5,
+       5
+      ]
+     ],
+     "expected": 0,
+     "reason": "all equal positions"
+    }
+   ],
+   "problem_sha256": "f3e3f413afd1e6d8f7795deb9c6d11260245d65de9e6ace0945914009a34d798",
+   "unsupported_requirements": []
+  },
+  "lcd:2054": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        1,
+        1,
+        1
+       ],
+       [
+        1,
+        1,
+        1
+       ]
+      ]
+     ],
+     "expected": 1,
+     "reason": "two identical overlapping events: only one may be taken"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        1,
+        1
+       ],
+       [
+        2,
+        2,
+        1
+       ]
+      ]
+     ],
+     "expected": 2,
+     "reason": "adjacent events at t and t+1 are allowed together"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        1000000000,
+        1000000
+       ],
+       [
+        1,
+        1,
+        1
+       ]
+      ]
+     ],
+     "expected": 1000000,
+     "reason": "extreme times and values, overlapping"
+    }
+   ],
+   "problem_sha256": "fe2c83757e7e3b776e2e0b828e2ae6b6fbb73a31e5ac2bfbd52a447b2ad865f5",
+   "unsupported_requirements": []
+  },
+  "lcd:2086": {
+   "boundary_cases": [
+    {
+     "args": [
+      "H"
+     ],
+     "expected": -1,
+     "reason": "single hamster, impossible"
+    },
+    {
+     "args": [
+      "."
+     ],
+     "expected": 0,
+     "reason": "no hamsters: zero buckets"
+    },
+    {
+     "args": [
+      "H.H"
+     ],
+     "expected": 1,
+     "reason": "one bucket shared by two hamsters"
+    }
+   ],
+   "problem_sha256": "3880eb2bbee07d8b185d344fdd33b25561d848e34f67c7ee74e1994a99bd99fe",
+   "unsupported_requirements": []
+  },
+  "lcd:2200": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ],
+      1,
+      1
+     ],
+     "expected": [
+      0
+     ],
+     "reason": "single element, k = nums.length"
+    },
+    {
+     "args": [
+      [
+       5,
+       1,
+       1,
+       1,
+       1
+      ],
+      5,
+      1
+     ],
+     "expected": [
+      0,
+      1
+     ],
+     "reason": "key only at the start, k=1"
+    },
+    {
+     "args": [
+      [
+       1000,
+       1,
+       1,
+       1000
+      ],
+      1000,
+      4
+     ],
+     "expected": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "reason": "k equals length, covers everything"
+    }
+   ],
+   "problem_sha256": "a0bde10f3b1426799f0587eeb7e2acccd7630ca927c8e8a68578c8f4f9771be7",
+   "unsupported_requirements": []
+  },
+  "lcd:2287": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a",
+      "a"
+     ],
+     "expected": 1,
+     "reason": "minimum lengths"
+    },
+    {
+     "args": [
+      "a",
+      "b"
+     ],
+     "expected": 0,
+     "reason": "letter missing: zero copies"
+    },
+    {
+     "args": [
+      "aaaa",
+      "aa"
+     ],
+     "expected": 2,
+     "reason": "repeated letter in target"
+    }
+   ],
+   "problem_sha256": "d1434e139fdb60e3f19ede2784d7e66558688a5da4c25677b8837e68ebcb6c4a",
+   "unsupported_requirements": []
+  },
+  "lcd:2295": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ],
+      [
+       [
+        1,
+        2
+       ]
+      ]
+     ],
+     "expected": [
+      2
+     ],
+     "reason": "minimum n and m"
+    },
+    {
+     "args": [
+      [
+       1000000
+      ],
+      [
+       [
+        1000000,
+        1
+       ],
+       [
+        1,
+        1000000
+       ]
+      ]
+     ],
+     "expected": [
+      1000000
+     ],
+     "reason": "value replaced and later restored at max value"
+    }
+   ],
+   "problem_sha256": "188b69a0a1533e2d02695f5eba2da178e933be12a498de7cab4cf59d45a2962e",
+   "unsupported_requirements": []
+  },
+  "lcd:2338": {
+   "boundary_cases": [
+    {
+     "args": [
+      2,
+      1
+     ],
+     "expected": 1,
+     "reason": "minimum n and maxValue: only [1,1]"
+    },
+    {
+     "args": [
+      10000,
+      1
+     ],
+     "expected": 1,
+     "reason": "maximum n with maxValue 1"
+    },
+    {
+     "args": [
+      10000,
+      10000
+     ],
+     "expected": 22940607,
+     "reason": "maximum n and maxValue (modulo applies)"
+    }
+   ],
+   "problem_sha256": "5e0d87fbe31923b8ba0cfdbee8fb3ea96dfceb1a58e01df7d1e4995d206e4e92",
+   "unsupported_requirements": []
+  },
+  "lcd:2341": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       100
+      ]
+     ],
+     "expected": [
+      0,
+      1
+     ],
+     "reason": "single element at max value"
+    },
+    {
+     "args": [
+      [
+       0,
+       0,
+       0
+      ]
+     ],
+     "expected": [
+      1,
+      1
+     ],
+     "reason": "all equal, odd count"
+    },
+    {
+     "args": [
+      [
+       100,
+       100,
+       0,
+       0
+      ]
+     ],
+     "expected": [
+      2,
+      0
+     ],
+     "reason": "two pairs, nothing left"
+    }
+   ],
+   "problem_sha256": "c193d0fb7b9e60d2b555f76106f4e84bb17fcdb47bf24613b624eb03bc9d3916",
+   "unsupported_requirements": []
+  },
+  "lcd:2357": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0,
+       0
+      ]
+     ],
+     "expected": 0,
+     "reason": "all zeros"
+    },
+    {
+     "args": [
+      [
+       100,
+       100,
+       100
+      ]
+     ],
+     "expected": 1,
+     "reason": "all equal max values"
+    }
+   ],
+   "problem_sha256": "e9074f9cd2718ef9c03a58405819af92c2cc752eb49fd66b0b059f54c375ab2e",
+   "unsupported_requirements": []
+  },
+  "lcd:2367": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0,
+       1,
+       2
+      ],
+      1
+     ],
+     "expected": 1,
+     "reason": "minimum length, one triplet"
+    },
+    {
+     "args": [
+      [
+       0,
+       1,
+       3
+      ],
+      1
+     ],
+     "expected": 0,
+     "reason": "minimum length, no triplet"
+    },
+    {
+     "args": [
+      [
+       0,
+       50,
+       100
+      ],
+      50
+     ],
+     "expected": 1,
+     "reason": "maximum diff"
+    }
+   ],
+   "problem_sha256": "df127adf7cf6bcec016b65c6418b14edb4d2be9b01edd8d78051f59f96f40d97",
+   "unsupported_requirements": []
+  },
+  "lcd:2379": {
+   "boundary_cases": [
+    {
+     "args": [
+      "W",
+      1
+     ],
+     "expected": 1,
+     "reason": "minimum n and k, needs one recolor"
+    },
+    {
+     "args": [
+      "B",
+      1
+     ],
+     "expected": 0,
+     "reason": "minimum n and k, already black"
+    },
+    {
+     "args": [
+      "WWW",
+      3
+     ],
+     "expected": 3,
+     "reason": "k equals n, all white"
+    }
+   ],
+   "problem_sha256": "b249292fd1c02edaae1a03abcc14ce6e5ec36dcb5c38dbcd342be6ef31258907",
+   "unsupported_requirements": []
+  },
+  "lcd:2395": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1,
+       1
+      ]
+     ],
+     "expected": false,
+     "reason": "minimum length: only one subarray"
+    },
+    {
+     "args": [
+      [
+       -1000000000,
+       1000000000,
+       -1000000000
+      ]
+     ],
+     "expected": true,
+     "reason": "extreme values; equal sums 0"
+    },
+    {
+     "args": [
+      [
+       1000000000,
+       1000000000,
+       999999999
+      ]
+     ],
+     "expected": false,
+     "reason": "extreme values, distinct sums"
+    }
+   ],
+   "problem_sha256": "a8c23162486947f502ce0ea3718d0a68e858e7238e07b38404cdbc03130b48f9",
+   "unsupported_requirements": []
+  },
+  "lcd:2430": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a"
+     ],
+     "expected": 1,
+     "reason": "minimum length"
+    },
+    {
+     "args": [
+      "aaaaaaaaaa"
+     ],
+     "expected": 10,
+     "reason": "all equal letters"
+    },
+    {
+     "args": [
+      "ab"
+     ],
+     "expected": 1,
+     "reason": "no prefix deletion possible"
+    }
+   ],
+   "problem_sha256": "438546dd7477121d49a563fb70eed09da4c2d1b6400dac9e1dccce2a7e213e95",
+   "unsupported_requirements": []
+  },
+  "lcd:2468": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a",
+      1
+     ],
+     "expected": [],
+     "reason": "minimum limit: impossible, empty result"
+    },
+    {
+     "args": [
+      "a",
+      6
+     ],
+     "expected": [
+      "a<1/1>"
+     ],
+     "reason": "smallest limit that fits one character"
+    },
+    {
+     "args": [
+      "abc",
+      7
+     ],
+     "expected": [
+      "ab<1/2>",
+      "c<2/2>"
+     ],
+     "reason": "two parts with last part shorter"
+    }
+   ],
+   "problem_sha256": "fde85373e9df19c18778e400f51d7043ccc8697f062e91efa19c76cfcedc7921",
+   "unsupported_requirements": []
+  },
+  "lcd:2491": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1,
+       1
+      ]
+     ],
+     "expected": 1,
+     "reason": "minimum length and values"
+    },
+    {
+     "args": [
+      [
+       1000,
+       1000,
+       1,
+       1
+      ]
+     ],
+     "expected": 2000,
+     "reason": "extreme values pairing min with max"
+    },
+    {
+     "args": [
+      [
+       1,
+       2,
+       2,
+       2
+      ]
+     ],
+     "expected": -1,
+     "reason": "duplicates where equal division is impossible"
+    }
+   ],
+   "problem_sha256": "1807bcf02a4b7eef2ff79918f3b540f1592341da61b2b0fee20d2153d51b9059",
+   "unsupported_requirements": []
+  },
+  "lcd:2670": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       50
+      ]
+     ],
+     "expected": [
+      1
+     ],
+     "reason": "single element: suffix empty"
+    },
+    {
+     "args": [
+      [
+       1,
+       1,
+       1
+      ]
+     ],
+     "expected": [
+      0,
+      0,
+      1
+     ],
+     "reason": "all equal"
+    }
+   ],
+   "problem_sha256": "6fc54df22874e43bf2bd59e339b17b48e4b1bed64315eadc6fe1e97e0375ec5e",
+   "unsupported_requirements": []
+  },
+  "lcd:2740": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1,
+       1
+      ]
+     ],
+     "expected": 0,
+     "reason": "minimum length, duplicates"
+    },
+    {
+     "args": [
+      [
+       1,
+       1000000000
+      ]
+     ],
+     "expected": 999999999,
+     "reason": "extreme values"
+    }
+   ],
+   "problem_sha256": "87e64e716fe326484b47f7e54aa7c17550d3c027e7a2d53b36d645b4f8a8cebf",
+   "unsupported_requirements": []
+  },
+  "lcd:2808": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ]
+     ],
+     "expected": 0,
+     "reason": "single element"
+    },
+    {
+     "args": [
+      [
+       1,
+       2
+      ]
+     ],
+     "expected": 1,
+     "reason": "two distinct values"
+    },
+    {
+     "args": [
+      [
+       1,
+       2,
+       3
+      ]
+     ],
+     "expected": 1,
+     "reason": "all values distinct, odd length"
+    }
+   ],
+   "problem_sha256": "59e118ddcd4c1fa6f4235d5d727b2d8fa20f2a0033cda75fb9b2050d0c45060f",
+   "unsupported_requirements": []
+  },
+  "lcd:2810": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a"
+     ],
+     "expected": "a",
+     "reason": "single character"
+    },
+    {
+     "args": [
+      "aii"
+     ],
+     "expected": "a",
+     "reason": "consecutive 'i' reversals cancel"
+    },
+    {
+     "args": [
+      "abi"
+     ],
+     "expected": "ba",
+     "reason": "trailing 'i' reverses everything"
+    }
+   ],
+   "problem_sha256": "8b3ba8be52c7562b667ce11d0e45371a35ce5315d53a2c5040d8ed3a3c95b4fc",
+   "unsupported_requirements": []
+  },
+  "lcd:2836": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0
+      ],
+      10000000000
+     ],
+     "expected": 0,
+     "reason": "single player passing to itself, k at maximum 10^10"
+    },
+    {
+     "args": [
+      [
+       1,
+       0
+      ],
+      10000000000
+     ],
+     "expected": 5000000001,
+     "reason": "two-cycle with maximum k (score 5000000001)"
+    },
+    {
+     "args": [
+      [
+       0,
+       0,
+       1
+      ],
+      1
+     ],
+     "expected": 3,
+     "reason": "k=1 minimum"
+    }
+   ],
+   "problem_sha256": "e441a7fc1b10485333d60d2a09b5a5b64c04b137a8513c0efb450a39c2e6b2b8",
+   "unsupported_requirements": []
+  },
+  "lcd:2902": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0
+      ],
+      0,
+      0
+     ],
+     "expected": 2,
+     "reason": "only zero: empty and {0} both sum 0"
+    },
+    {
+     "args": [
+      [
+       0
+      ],
+      1,
+      1
+     ],
+     "expected": 0,
+     "reason": "range above reachable sums"
+    },
+    {
+     "args": [
+      [
+       20000
+      ],
+      0,
+      20000
+     ],
+     "expected": 2,
+     "reason": "max element and full range"
+    }
+   ],
+   "problem_sha256": "43330ab2b04e4939aec3cfce23eea54d3620d36294dc0a7a0015ef160aa3f1ad",
+   "unsupported_requirements": []
+  },
+  "lcd:2942": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       "a"
+      ],
+      "a"
+     ],
+     "expected": [
+      0
+     ],
+     "reason": "single word containing x"
+    },
+    {
+     "args": [
+      [
+       "b"
+      ],
+      "a"
+     ],
+     "expected": [],
+     "reason": "single word not containing x: empty result"
+    }
+   ],
+   "problem_sha256": "9d15726248919206ac72f185ac3c0d8afb2e5acb95eea8bad1340d374996419e",
+   "unsupported_requirements": []
+  },
+  "lcd:3147": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       -1000,
+       -1000
+      ],
+      1
+     ],
+     "expected": -1000,
+     "reason": "minimum length, all minimum values"
+    },
+    {
+     "args": [
+      [
+       1000,
+       1000
+      ],
+      1
+     ],
+     "expected": 2000,
+     "reason": "minimum length, all maximum values"
+    },
+    {
+     "args": [
+      [
+       5,
+       -1,
+       3
+      ],
+      2
+     ],
+     "expected": 8,
+     "reason": "k = length-1: every start except index 0 is a single magician"
+    }
+   ],
+   "problem_sha256": "703b7ef566381a6261dbccf801d17217821eea9c2c09919afac97241d855466b",
+   "unsupported_requirements": []
+  },
+  "lcd:3210": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a",
+      10000
+     ],
+     "expected": "a",
+     "reason": "single char, maximum k"
+    },
+    {
+     "args": [
+      "abc",
+      10000
+     ],
+     "expected": "bca",
+     "reason": "k much larger than length (10000 % 3 = 1)"
+    },
+    {
+     "args": [
+      "ab",
+      1
+     ],
+     "expected": "ba",
+     "reason": "minimum k"
+    }
+   ],
+   "problem_sha256": "f4c98063996e1534d9dd4751405ff9dede70821670a46c1f908d440628abd35f",
+   "unsupported_requirements": []
+  },
+  "lcd:3233": {
+   "boundary_cases": [
+    {
+     "args": [
+      1,
+      1
+     ],
+     "expected": 1,
+     "reason": "minimum l=r=1"
+    },
+    {
+     "args": [
+      1,
+      1000000000
+     ],
+     "expected": 999996599,
+     "reason": "full range"
+    },
+    {
+     "args": [
+      4,
+      4
+     ],
+     "expected": 0,
+     "reason": "single special number"
+    }
+   ],
+   "problem_sha256": "b454da5a1958aca22e870f14956e2834ea633cf406d4cead3b03ac3b7dc3eae7",
+   "unsupported_requirements": []
+  },
+  "lcd:553": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       2
+      ]
+     ],
+     "expected": "2",
+     "reason": "single number, no division"
+    },
+    {
+     "args": [
+      [
+       2,
+       3
+      ]
+     ],
+     "expected": "2/3",
+     "reason": "two numbers, no parentheses needed"
+    },
+    {
+     "args": [
+      [
+       1000,
+       1000,
+       1000
+      ]
+     ],
+     "expected": "1000/(1000/1000)",
+     "reason": "all-equal extreme values"
+    }
+   ],
+   "problem_sha256": "e66eb141db7cf340aee28bba7824ca8dd30069508d9b863999c49f3f438f6d3f",
+   "unsupported_requirements": []
+  },
+  "lcd:554": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        2147483647
+       ]
+      ]
+     ],
+     "expected": 1,
+     "reason": "single row single brick of maximum width"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        1
+       ],
+       [
+        1,
+        1
+       ]
+      ]
+     ],
+     "expected": 0,
+     "reason": "all edges aligned: zero crossings"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        1
+       ],
+       [
+        2
+       ]
+      ]
+     ],
+     "expected": 1,
+     "reason": "one row with no interior edge"
+    }
+   ],
+   "problem_sha256": "f228db7a200bbb567cde6a2a6e002ffa71aa4defd84df5dfdbe99b2b24f17c1d",
+   "unsupported_requirements": []
+  },
+  "lcd:566": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        -1000
+       ]
+      ],
+      1,
+      1
+     ],
+     "expected": [
+      [
+       -1000
+      ]
+     ],
+     "reason": "1x1 to 1x1, extreme value"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        2,
+        3
+       ]
+      ],
+      3,
+      1
+     ],
+     "expected": [
+      [
+       1
+      ],
+      [
+       2
+      ],
+      [
+       3
+      ]
+     ],
+     "reason": "row vector to column vector"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        2
+       ],
+       [
+        3,
+        4
+       ]
+      ],
+      300,
+      300
+     ],
+     "expected": [
+      [
+       1,
+       2
+      ],
+      [
+       3,
+       4
+      ]
+     ],
+     "reason": "maximum r, c; illegal -> original"
+    }
+   ],
+   "problem_sha256": "60f77fa4fb9c215c386fa25722a59b6d6270300f9ec38d5e1848b83db32346eb",
+   "unsupported_requirements": []
+  },
+  "lcd:567": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a",
+      "a"
+     ],
+     "expected": true,
+     "reason": "minimum lengths, equal"
+    },
+    {
+     "args": [
+      "ab",
+      "a"
+     ],
+     "expected": false,
+     "reason": "s1 longer than s2"
+    },
+    {
+     "args": [
+      "aa",
+      "aaa"
+     ],
+     "expected": true,
+     "reason": "repeated letters"
+    }
+   ],
+   "problem_sha256": "a1e70f84464b3f365f03808d3fdf5c22fa65a68d4d3ad41bff6eaee69e6223a2",
+   "unsupported_requirements": []
+  },
+  "lcd:575": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1,
+       1
+      ]
+     ],
+     "expected": 1,
+     "reason": "minimum n, one type"
+    },
+    {
+     "args": [
+      [
+       -100000,
+       100000
+      ]
+     ],
+     "expected": 1,
+     "reason": "minimum n, extreme distinct values"
+    }
+   ],
+   "problem_sha256": "754db376debc0a9cf5b11afe7b3e7109d8b94a2b08036a10931996e3801c28b4",
+   "unsupported_requirements": []
+  },
+  "lcd:576": {
+   "boundary_cases": [
+    {
+     "args": [
+      1,
+      1,
+      0,
+      0,
+      0
+     ],
+     "expected": 0,
+     "reason": "zero moves allowed"
+    },
+    {
+     "args": [
+      1,
+      1,
+      1,
+      0,
+      0
+     ],
+     "expected": 4,
+     "reason": "single cell, one move: all four directions exit"
+    },
+    {
+     "args": [
+      50,
+      50,
+      50,
+      49,
+      49
+     ],
+     "expected": 678188903,
+     "reason": "maximum grid and moves from a corner"
+    }
+   ],
+   "problem_sha256": "618a9a43ce8f52682e2e6f1eb5f183f8e13cdec0a1679820d77f7ade1ca7a086",
+   "unsupported_requirements": []
+  },
+  "lcd:581": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       100000,
+       -100000
+      ]
+     ],
+     "expected": 2,
+     "reason": "two extreme values, reversed"
+    },
+    {
+     "args": [
+      [
+       3,
+       3,
+       3
+      ]
+     ],
+     "expected": 0,
+     "reason": "all equal"
+    },
+    {
+     "args": [
+      [
+       1,
+       3,
+       2,
+       2,
+       2
+      ]
+     ],
+     "expected": 4,
+     "reason": "duplicates extend the unsorted range to the end"
+    }
+   ],
+   "problem_sha256": "4f049c2abd6c2e019b92475e25f4dfb65612616027e8d2b002a7e12ca607477e",
+   "unsupported_requirements": []
+  },
+  "lcd:594": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ]
+     ],
+     "expected": 0,
+     "reason": "single element"
+    },
+    {
+     "args": [
+      [
+       -1000000000,
+       -999999999
+      ]
+     ],
+     "expected": 2,
+     "reason": "extreme negative values"
+    }
+   ],
+   "problem_sha256": "a1f6ac79d3af6342d2cf716621a971b006a4ca72e296bc101c7908a8240f62d0",
+   "unsupported_requirements": []
+  },
+  "lcd:599": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       "a"
+      ],
+      [
+       "a"
+      ]
+     ],
+     "expected": [
+      "a"
+     ],
+     "reason": "single-element lists"
+    },
+    {
+     "args": [
+      [
+       "a",
+       "b"
+      ],
+      [
+       "c",
+       "b"
+      ]
+     ],
+     "expected": [
+      "b"
+     ],
+     "reason": "only common string at the last positions"
+    }
+   ],
+   "problem_sha256": "4ef4ab2fe4d3ac041c759c6450238d7861d7371c828b6c0614139d23dd5e147f",
+   "unsupported_requirements": []
+  },
+  "lcd:605": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0
+      ],
+      1
+     ],
+     "expected": true,
+     "reason": "single empty plot, n equals length"
+    },
+    {
+     "args": [
+      [
+       1
+      ],
+      0
+     ],
+     "expected": true,
+     "reason": "n = 0 is always possible"
+    },
+    {
+     "args": [
+      [
+       0,
+       0
+      ],
+      2
+     ],
+     "expected": false,
+     "reason": "n equals length but adjacency forbids it"
+    }
+   ],
+   "problem_sha256": "5065ae9741da98eaf9035c5d94039be49b16a0810ce91fd618c33ab184e7b6cb",
+   "unsupported_requirements": []
+  },
+  "lcd:611": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       5
+      ]
+     ],
+     "expected": 0,
+     "reason": "single element: no triplet"
+    },
+    {
+     "args": [
+      [
+       0,
+       0,
+       0
+      ]
+     ],
+     "expected": 0,
+     "reason": "zeros never form a triangle"
+    },
+    {
+     "args": [
+      [
+       1000,
+       1000,
+       1000,
+       1
+      ]
+     ],
+     "expected": 4,
+     "reason": "maximum values, degenerate-adjacent small side"
+    }
+   ],
+   "problem_sha256": "ad779a8cef1a2c7393146a01ecb1bb2f374e482e3a21205b7830ad19403a55a5",
+   "unsupported_requirements": []
+  },
+  "lcd:633": {
+   "boundary_cases": [
+    {
+     "args": [
+      0
+     ],
+     "expected": true,
+     "reason": "minimum c"
+    },
+    {
+     "args": [
+      2147483647
+     ],
+     "expected": false,
+     "reason": "maximum c"
+    },
+    {
+     "args": [
+      1
+     ],
+     "expected": true,
+     "reason": "0^2 + 1^2"
+    }
+   ],
+   "problem_sha256": "7610b746cb17fabde2b8190cae2095364e3341bc3f866435088c534ef8abb6c1",
+   "unsupported_requirements": []
+  },
+  "lcd:647": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a"
+     ],
+     "expected": 1,
+     "reason": "single character"
+    },
+    {
+     "args": [
+      "zzzz"
+     ],
+     "expected": 10,
+     "reason": "all characters equal"
+    }
+   ],
+   "problem_sha256": "74035abcba8549407ca0e7942bf6866a7fbe650daf75745c40b8c9c19b7c4491",
+   "unsupported_requirements": []
+  },
+  "lcd:658": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ],
+      1,
+      -10000
+     ],
+     "expected": [
+      1
+     ],
+     "reason": "single element, extreme x"
+    },
+    {
+     "args": [
+      [
+       1,
+       3
+      ],
+      1,
+      2
+     ],
+     "expected": [
+      1
+     ],
+     "reason": "equal distance tie broken by smaller value"
+    },
+    {
+     "args": [
+      [
+       2,
+       2,
+       2
+      ],
+      2,
+      2
+     ],
+     "expected": [
+      2,
+      2
+     ],
+     "reason": "all-equal duplicates"
+    }
+   ],
+   "problem_sha256": "86783e77a65c0e7be600cdbb0edd3828e27d3760d2507eae1dba838e74892490",
+   "unsupported_requirements": []
+  },
+  "lcd:670": {
+   "boundary_cases": [
+    {
+     "args": [
+      0
+     ],
+     "expected": 0,
+     "reason": "minimum value"
+    },
+    {
+     "args": [
+      100000000
+     ],
+     "expected": 100000000,
+     "reason": "maximum value 10^8: swapping would lower it"
+    },
+    {
+     "args": [
+      1993
+     ],
+     "expected": 9913,
+     "reason": "duplicate max digit: swap with the last occurrence -> 9913"
+    }
+   ],
+   "problem_sha256": "dabd437b9208aabd9e72d4f1bdba26040ca6eacfd84646237f11d60646c1f261",
+   "unsupported_requirements": []
+  },
+  "lcd:696": {
+   "boundary_cases": [
+    {
+     "args": [
+      "0"
+     ],
+     "expected": 0,
+     "reason": "minimum length"
+    },
+    {
+     "args": [
+      "01"
+     ],
+     "expected": 1,
+     "reason": "smallest valid substring"
+    },
+    {
+     "args": [
+      "0000"
+     ],
+     "expected": 0,
+     "reason": "all equal"
+    }
+   ],
+   "problem_sha256": "76b5a84dd4704d9fe4a8a30fed881a2ab9d79612f437710ea77c01c2c38649d8",
+   "unsupported_requirements": []
+  },
+  "lcd:704": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       5
+      ],
+      5
+     ],
+     "expected": 0,
+     "reason": "single element found"
+    },
+    {
+     "args": [
+      [
+       5
+      ],
+      -5
+     ],
+     "expected": -1,
+     "reason": "single element not found"
+    },
+    {
+     "args": [
+      [
+       -9999,
+       9999
+      ],
+      9999
+     ],
+     "expected": 1,
+     "reason": "extreme values, target last"
+    }
+   ],
+   "problem_sha256": "8f9be354a6b5add63d46e4a3a3c5c910b9590c1f35c849616c1edbbb282d522e",
+   "unsupported_requirements": [
+    "You must write an algorithm with O(log n) runtime complexity."
+   ]
+  },
+  "lcd:728": {
+   "boundary_cases": [
+    {
+     "args": [
+      1,
+      1
+     ],
+     "expected": [
+      1
+     ],
+     "reason": "minimum range"
+    },
+    {
+     "args": [
+      10000,
+      10000
+     ],
+     "expected": [],
+     "reason": "maximum value contains zero: empty result"
+    },
+    {
+     "args": [
+      9999,
+      10000
+     ],
+     "expected": [
+      9999
+     ],
+     "reason": "upper edge of range"
+    }
+   ],
+   "problem_sha256": "dfeba16a9aa20d75b8024b17084a7931bb4b77284f74d07d3e0f387d14e8d3d5",
+   "unsupported_requirements": []
+  },
+  "lcd:733": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        0
+       ]
+      ],
+      0,
+      0,
+      65535
+     ],
+     "expected": [
+      [
+       65535
+      ]
+     ],
+     "reason": "1x1 image, maximum color value 2^16-1"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        1
+       ],
+       [
+        1,
+        1
+       ]
+      ],
+      1,
+      1,
+      0
+     ],
+     "expected": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       0
+      ]
+     ],
+     "reason": "all equal, filled entirely"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        0,
+        1
+       ],
+       [
+        0,
+        1,
+        0
+       ]
+      ],
+      0,
+      0,
+      2
+     ],
+     "expected": [
+      [
+       2,
+       0,
+       1
+      ],
+      [
+       0,
+       1,
+       0
+      ]
+     ],
+     "reason": "diagonal same-colored pixels are not connected"
+    }
+   ],
+   "problem_sha256": "00366a3ad19b8dc2209c80c9361086abe59b7a510f7c3c0c946792df6b292034",
+   "unsupported_requirements": []
+  },
+  "lcd:740": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ]
+     ],
+     "expected": 1,
+     "reason": "single minimum element"
+    },
+    {
+     "args": [
+      [
+       10000,
+       10000,
+       10000
+      ]
+     ],
+     "expected": 30000,
+     "reason": "duplicates at max value"
+    },
+    {
+     "args": [
+      [
+       1,
+       2
+      ]
+     ],
+     "expected": 2,
+     "reason": "adjacent values"
+    }
+   ],
+   "problem_sha256": "187314fba37156c6fc81407a180237db288aa3ab8bb0a6e8703c9e4d05884efb",
+   "unsupported_requirements": []
+  },
+  "lcd:744": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       "a",
+       "b"
+      ],
+      "z"
+     ],
+     "expected": "a",
+     "reason": "minimum length, wrap-around"
+    },
+    {
+     "args": [
+      [
+       "a",
+       "b"
+      ],
+      "a"
+     ],
+     "expected": "b",
+     "reason": "minimum length, target equals first"
+    },
+    {
+     "args": [
+      [
+       "a",
+       "a",
+       "b"
+      ],
+      "a"
+     ],
+     "expected": "b",
+     "reason": "duplicates equal to target are skipped"
+    }
+   ],
+   "problem_sha256": "0b5fcc694d28552e69083fd016132cecb3ba1e21037dcd432a3a6e57a901ce20",
+   "unsupported_requirements": []
+  },
+  "lcd:747": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0,
+       1
+      ]
+     ],
+     "expected": 1,
+     "reason": "minimum length with zero"
+    },
+    {
+     "args": [
+      [
+       100,
+       50
+      ]
+     ],
+     "expected": 0,
+     "reason": "exactly twice at maximum values"
+    },
+    {
+     "args": [
+      [
+       100,
+       51,
+       0
+      ]
+     ],
+     "expected": -1,
+     "reason": "just below twice"
+    }
+   ],
+   "problem_sha256": "6ac1d36a69ac028482c683caa7e414a2f14c02a865281cbab7655f71dd8b6433",
+   "unsupported_requirements": []
+  },
+  "lcd:763": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a"
+     ],
+     "expected": [
+      1
+     ],
+     "reason": "single character"
+    },
+    {
+     "args": [
+      "abc"
+     ],
+     "expected": [
+      1,
+      1,
+      1
+     ],
+     "reason": "all distinct: each its own part"
+    },
+    {
+     "args": [
+      "aaaa"
+     ],
+     "expected": [
+      4
+     ],
+     "reason": "all equal"
+    }
+   ],
+   "problem_sha256": "3f8e7f86a149abb6e2addae27b39a5ef4c799c338a1ca398994fb1ca40aeae53",
+   "unsupported_requirements": []
+  },
+  "lcd:786": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1,
+       2
+      ],
+      1
+     ],
+     "expected": [
+      1,
+      2
+     ],
+     "reason": "minimum length"
+    },
+    {
+     "args": [
+      [
+       1,
+       2,
+       3,
+       5
+      ],
+      6
+     ],
+     "expected": [
+      2,
+      3
+     ],
+     "reason": "k at its maximum n(n-1)/2"
+    }
+   ],
+   "problem_sha256": "6b7fbcc6dd6624c5e62e8e91c3c3cccf5f590a2a37ae784d3a2d52984a562e6d",
+   "unsupported_requirements": []
+  },
+  "lcd:806": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10,
+       10
+      ],
+      "a"
+     ],
+     "expected": [
+      1,
+      10
+     ],
+     "reason": "single character"
+    },
+    {
+     "args": [
+      [
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2
+      ],
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+     ],
+     "expected": [
+      1,
+      100
+     ],
+     "reason": "fills exactly 100 pixels on one line"
+    },
+    {
+     "args": [
+      [
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2,
+       2
+      ],
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+     ],
+     "expected": [
+      2,
+      2
+     ],
+     "reason": "one character spills to second line"
+    }
+   ],
+   "problem_sha256": "c0b08fa4e9e4723b1ef5d24333dc89a92301125c49f20d048d73789c7783eef9",
+   "unsupported_requirements": []
+  },
+  "lcd:821": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a",
+      "a"
+     ],
+     "expected": [
+      0
+     ],
+     "reason": "single character equal to c"
+    },
+    {
+     "args": [
+      "bbbbz",
+      "z"
+     ],
+     "expected": [
+      4,
+      3,
+      2,
+      1,
+      0
+     ],
+     "reason": "c only at the end"
+    },
+    {
+     "args": [
+      "aaa",
+      "a"
+     ],
+     "expected": [
+      0,
+      0,
+      0
+     ],
+     "reason": "every character is c"
+    }
+   ],
+   "problem_sha256": "22efefa453fbcd6575b223a43e78c2094290c820bddfa537cc2c778face7ccf5",
+   "unsupported_requirements": []
+  },
+  "lcd:824": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a"
+     ],
+     "expected": "amaa",
+     "reason": "single-letter vowel word, minimum length"
+    },
+    {
+     "args": [
+      "b"
+     ],
+     "expected": "bmaa",
+     "reason": "single-letter consonant word"
+    },
+    {
+     "args": [
+      "Apple U x"
+     ],
+     "expected": "Applemaa Umaaa xmaaaa",
+     "reason": "uppercase vowels at word start"
+    }
+   ],
+   "problem_sha256": "afee99372a628ee109e04a5578e029d54285d6557349e28c102d9578c503f59a",
+   "unsupported_requirements": []
+  },
+  "lcd:830": {
+   "boundary_cases": [
+    {
+     "args": [
+      "aaa"
+     ],
+     "expected": [
+      [
+       0,
+       2
+      ]
+     ],
+     "reason": "whole string is one large group"
+    },
+    {
+     "args": [
+      "a"
+     ],
+     "expected": [],
+     "reason": "minimum length"
+    },
+    {
+     "args": [
+      "aab"
+     ],
+     "expected": [],
+     "reason": "group of 2 is not large"
+    }
+   ],
+   "problem_sha256": "37d41b73c71bfc0727f9040bfc15c73256e476b6ae7951c02b26d0cc814de14c",
+   "unsupported_requirements": []
+  },
+  "lcd:837": {
+   "boundary_cases": [
+    {
+     "args": [
+      0,
+      0,
+      1
+     ],
+     "expected": 1.0,
+     "reason": "k=0 and n=0: no draws"
+    },
+    {
+     "args": [
+      1,
+      1,
+      2
+     ],
+     "expected": 0.5,
+     "reason": "single draw, half chance"
+    },
+    {
+     "args": [
+      10000,
+      10000,
+      10000
+     ],
+     "expected": 0.0002717874139411285,
+     "reason": "maximum n, k and maxPts"
+    }
+   ],
+   "problem_sha256": "9b7f6dcaf2335209edb6ee34b79c0447e4329566cb0fe2a105ea700dfc524ed2",
+   "unsupported_requirements": []
+  },
+  "lcd:844": {
+   "boundary_cases": [
+    {
+     "args": [
+      "#",
+      "a#"
+     ],
+     "expected": true,
+     "reason": "backspace on empty text vs deleted letter"
+    },
+    {
+     "args": [
+      "a",
+      "b"
+     ],
+     "expected": false,
+     "reason": "single letters differ"
+    },
+    {
+     "args": [
+      "##a",
+      "a"
+     ],
+     "expected": true,
+     "reason": "multiple backspaces on empty text"
+    }
+   ],
+   "problem_sha256": "548bc2a258f7699148716cbd8f4c49a6e3ca7e4df3ff0c0184baaea9c7dbf611",
+   "unsupported_requirements": []
+  },
+  "lcd:845": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0
+      ]
+     ],
+     "expected": 0,
+     "reason": "single element"
+    },
+    {
+     "args": [
+      [
+       0,
+       10000,
+       0
+      ]
+     ],
+     "expected": 3,
+     "reason": "minimal mountain with extreme values"
+    },
+    {
+     "args": [
+      [
+       1,
+       2,
+       2,
+       1
+      ]
+     ],
+     "expected": 0,
+     "reason": "plateau at top is not a mountain"
+    }
+   ],
+   "problem_sha256": "9c81e0f2be5e78273e344db4536bf2e71f6c5cba6f396cac3a2ba4554ba38b4d",
+   "unsupported_requirements": []
+  },
+  "lcd:846": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0
+      ],
+      1
+     ],
+     "expected": true,
+     "reason": "minimum hand, groupSize 1"
+    },
+    {
+     "args": [
+      [
+       1,
+       1,
+       2,
+       2,
+       3,
+       3
+      ],
+      3
+     ],
+     "expected": true,
+     "reason": "duplicate cards"
+    },
+    {
+     "args": [
+      [
+       1000000000,
+       999999999
+      ],
+      2
+     ],
+     "expected": true,
+     "reason": "extreme values"
+    }
+   ],
+   "problem_sha256": "21cd5bcdda50259c1c4e57e6346055ccb3be3ba5f7b94867e25a61b9269324a9",
+   "unsupported_requirements": []
+  },
+  "lcd:849": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1,
+       0
+      ]
+     ],
+     "expected": 1,
+     "reason": "minimum length, empty seat at end"
+    },
+    {
+     "args": [
+      [
+       0,
+       0,
+       1
+      ]
+     ],
+     "expected": 2,
+     "reason": "leading empty seats"
+    },
+    {
+     "args": [
+      [
+       1,
+       0,
+       0,
+       1
+      ]
+     ],
+     "expected": 1,
+     "reason": "even-width interior gap"
+    }
+   ],
+   "problem_sha256": "ceafc73dcf2d61b1568ed423869d729f0de53b5d11879b26037b8560ca4d645d",
+   "unsupported_requirements": []
+  },
+  "lcd:858": {
+   "boundary_cases": [
+    {
+     "args": [
+      1,
+      1
+     ],
+     "expected": 1,
+     "reason": "minimum p and q: ray goes straight to the corner"
+    },
+    {
+     "args": [
+      1000,
+      1000
+     ],
+     "expected": 1,
+     "reason": "maximum p equal to q"
+    },
+    {
+     "args": [
+      1000,
+      1
+     ],
+     "expected": 2,
+     "reason": "maximum p, minimum q"
+    }
+   ],
+   "problem_sha256": "9290b0fbab2f3a32f0c771819abfdb6e2a0fe4a6afa30cd4c11b9590ce2db43f",
+   "unsupported_requirements": []
+  },
+  "lcd:859": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a",
+      "a"
+     ],
+     "expected": false,
+     "reason": "single char: no two indices to swap"
+    },
+    {
+     "args": [
+      "ab",
+      "abc"
+     ],
+     "expected": false,
+     "reason": "different lengths"
+    },
+    {
+     "args": [
+      "abab",
+      "abab"
+     ],
+     "expected": true,
+     "reason": "equal strings with repeated letter"
+    }
+   ],
+   "problem_sha256": "12fc3ac3899af25edd94e5c1d4913c813bcca531fa8105d04facdfa2dadff1b4",
+   "unsupported_requirements": []
+  },
+  "lcd:867": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       [
+        5
+       ]
+      ]
+     ],
+     "expected": [
+      [
+       5
+      ]
+     ],
+     "reason": "1x1 matrix"
+    },
+    {
+     "args": [
+      [
+       [
+        1,
+        2,
+        3
+       ]
+      ]
+     ],
+     "expected": [
+      [
+       1
+      ],
+      [
+       2
+      ],
+      [
+       3
+      ]
+     ],
+     "reason": "single row"
+    },
+    {
+     "args": [
+      [
+       [
+        -1000000000
+       ],
+       [
+        1000000000
+       ]
+      ]
+     ],
+     "expected": [
+      [
+       -1000000000,
+       1000000000
+      ]
+     ],
+     "reason": "single column, extreme values"
+    }
+   ],
+   "problem_sha256": "b5b0146c8dfdb15a8a39a3b02392bc5201595fb2db2afc88edd424248c0e161d",
+   "unsupported_requirements": []
+  },
+  "lcd:868": {
+   "boundary_cases": [
+    {
+     "args": [
+      1
+     ],
+     "expected": 0,
+     "reason": "minimum n, single 1 bit"
+    },
+    {
+     "args": [
+      3
+     ],
+     "expected": 1,
+     "reason": "adjacent ones distance 1"
+    },
+    {
+     "args": [
+      536870913
+     ],
+     "expected": 29,
+     "reason": "2^29+1: widest gap under 10^9"
+    }
+   ],
+   "problem_sha256": "d41f19269b534a201940799232c9be0af1313dcd740b7d2d927a646994b7911f",
+   "unsupported_requirements": []
+  },
+  "lcd:893": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       "a"
+      ]
+     ],
+     "expected": 1,
+     "reason": "single word of length 1"
+    },
+    {
+     "args": [
+      [
+       "ab",
+       "ab"
+      ]
+     ],
+     "expected": 1,
+     "reason": "duplicate words"
+    },
+    {
+     "args": [
+      [
+       "ab",
+       "ba"
+      ]
+     ],
+     "expected": 2,
+     "reason": "length-2 swap across parity is not allowed"
+    }
+   ],
+   "problem_sha256": "5a2e0c7c1205311bc234b6c66c86d557c19c3819a63d14b957340f82bdbe0462",
+   "unsupported_requirements": []
+  },
+  "lcd:896": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       100000
+      ]
+     ],
+     "expected": true,
+     "reason": "single element"
+    },
+    {
+     "args": [
+      [
+       -100000,
+       -100000,
+       -100000
+      ]
+     ],
+     "expected": true,
+     "reason": "all equal extreme values"
+    },
+    {
+     "args": [
+      [
+       100000,
+       -100000,
+       100000
+      ]
+     ],
+     "expected": false,
+     "reason": "extreme values zigzag"
+    }
+   ],
+   "problem_sha256": "2728d44879f8249ccd9c87a5fee7b1473e51f4ca58966fc887f0496d28f3044d",
+   "unsupported_requirements": []
+  },
+  "lcd:897": {
+   "boundary_cases": [
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        0
+       ]
+      }
+     ],
+     "expected": {
+      "__tree_node__": [
+       0
+      ]
+     },
+     "reason": "single node"
+    },
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        1000,
+        999,
+        null,
+        998
+       ]
+      }
+     ],
+     "expected": {
+      "__tree_node__": [
+       998,
+       null,
+       999,
+       null,
+       1000
+      ]
+     },
+     "reason": "left-skewed chain"
+    }
+   ],
+   "problem_sha256": "1d935b7b69d1d6ec226986f7f3707384e40b7e89b64d78d20acb2bed282b3048",
+   "unsupported_requirements": []
+  },
+  "lcd:914": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ]
+     ],
+     "expected": false,
+     "reason": "single card cannot form a group"
+    },
+    {
+     "args": [
+      [
+       0,
+       0
+      ]
+     ],
+     "expected": true,
+     "reason": "two equal cards, minimum value"
+    },
+    {
+     "args": [
+      [
+       1,
+       1,
+       2,
+       2,
+       2,
+       2
+      ]
+     ],
+     "expected": true,
+     "reason": "counts with gcd 2 but different sizes"
+    }
+   ],
+   "problem_sha256": "cf5704170993bf1d4f3e9b92ace992bcf25edf4c5a07497a482e68808410dff8",
+   "unsupported_requirements": []
+  },
+  "lcd:917": {
+   "boundary_cases": [
+    {
+     "args": [
+      "!"
+     ],
+     "expected": "!",
+     "reason": "single non-letter (ASCII 33)"
+    },
+    {
+     "args": [
+      "a"
+     ],
+     "expected": "a",
+     "reason": "single letter"
+    },
+    {
+     "args": [
+      "[a]z"
+     ],
+     "expected": "[z]a",
+     "reason": "brackets between 'Z' and 'a' in ASCII are not letters"
+    }
+   ],
+   "problem_sha256": "b13f72ba4194fc25f9b7720178507b06df559ea710e8cd68d2f0dc9af54450de",
+   "unsupported_requirements": []
+  },
+  "lcd:925": {
+   "boundary_cases": [
+    {
+     "args": [
+      "a",
+      "a"
+     ],
+     "expected": true,
+     "reason": "minimum lengths, equal"
+    },
+    {
+     "args": [
+      "a",
+      "b"
+     ],
+     "expected": false,
+     "reason": "minimum lengths, different"
+    },
+    {
+     "args": [
+      "ab",
+      "a"
+     ],
+     "expected": false,
+     "reason": "typed shorter than name"
+    }
+   ],
+   "problem_sha256": "350568bd95c2eeb36bafb58c024faff61c8dd3e40741fc86abdf2ba7412286b0",
+   "unsupported_requirements": []
+  },
+  "lcd:929": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       "a@a.com"
+      ]
+     ],
+     "expected": 1,
+     "reason": "single email"
+    },
+    {
+     "args": [
+      [
+       "a+b@x.com",
+       "a@x.com",
+       "a@y.com"
+      ]
+     ],
+     "expected": 2,
+     "reason": "same local, different domains"
+    }
+   ],
+   "problem_sha256": "cf054a0eb118689386f502e8a91f433089a233d35a14141ba43db7f10b0f22c3",
+   "unsupported_requirements": []
+  },
+  "lcd:937": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       "d1 0"
+      ]
+     ],
+     "expected": [
+      "d1 0"
+     ],
+     "reason": "single digit-log of minimum length"
+    },
+    {
+     "args": [
+      [
+       "b art can",
+       "a art can",
+       "c 1"
+      ]
+     ],
+     "expected": [
+      "a art can",
+      "b art can",
+      "c 1"
+     ],
+     "reason": "letter-logs with equal contents ordered by identifier"
+    }
+   ],
+   "problem_sha256": "532312a1094ab23df21b5283e849007dd9a7be822c45a46874a8005b18d6f7fa",
+   "unsupported_requirements": []
+  },
+  "lcd:941": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1
+      ]
+     ],
+     "expected": false,
+     "reason": "single element"
+    },
+    {
+     "args": [
+      [
+       0,
+       10000,
+       0
+      ]
+     ],
+     "expected": true,
+     "reason": "smallest valid mountain with extreme values"
+    },
+    {
+     "args": [
+      [
+       1,
+       2,
+       3
+      ]
+     ],
+     "expected": false,
+     "reason": "strictly increasing, no descent"
+    }
+   ],
+   "problem_sha256": "745c3ebab438be71d7a37432a917e298516b17785f225d72e58305ea2a3d62ea",
+   "unsupported_requirements": []
+  },
+  "lcd:948": {
+   "boundary_cases": [
+    {
+     "args": [
+      [],
+      0
+     ],
+     "expected": 0,
+     "reason": "empty bag"
+    },
+    {
+     "args": [
+      [
+       0,
+       0
+      ],
+      0
+     ],
+     "expected": 2,
+     "reason": "zero-valued tokens can be played face-up with zero power"
+    },
+    {
+     "args": [
+      [
+       9999
+      ],
+      9999
+     ],
+     "expected": 1,
+     "reason": "single token at max value, power exactly equal"
+    }
+   ],
+   "problem_sha256": "2772135c06dd0932de16e0a411a182cd8fb6cf51c380f58bb1df106dd74716d9",
+   "unsupported_requirements": []
+  },
+  "lcd:949": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0,
+       0,
+       0,
+       0
+      ]
+     ],
+     "expected": "00:00",
+     "reason": "all zeros: earliest time"
+    },
+    {
+     "args": [
+      [
+       9,
+       5,
+       3,
+       2
+      ]
+     ],
+     "expected": "23:59",
+     "reason": "latest possible time 23:59"
+    }
+   ],
+   "problem_sha256": "4b0fb10f3971329f8dcab90936ae43504783b835c29a0d9c212a7f5a3e7bfd9e",
+   "unsupported_requirements": []
+  },
+  "lcd:951": {
+   "boundary_cases": [
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        1
+       ]
+      },
+      {
+       "__tree_node__": [
+        1
+       ]
+      }
+     ],
+     "expected": true,
+     "reason": "single identical nodes"
+    },
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        0
+       ]
+      },
+      {
+       "__tree_node__": [
+        99
+       ]
+      }
+     ],
+     "expected": false,
+     "reason": "single nodes with extreme differing values"
+    },
+    {
+     "args": [
+      {
+       "__tree_node__": [
+        0,
+        1
+       ]
+      },
+      {
+       "__tree_node__": [
+        0,
+        null,
+        1
+       ]
+      }
+     ],
+     "expected": true,
+     "reason": "one child flipped from left to right"
+    }
+   ],
+   "problem_sha256": "a2205c2e7dc7bf501a57a3b18e64f4cbffb740234831d60a26188757f6cb4000",
+   "unsupported_requirements": []
+  },
+  "lcd:957": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      1
+     ],
+     "expected": [
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0
+     ],
+     "reason": "minimum n, all vacant"
+    },
+    {
+     "args": [
+      [
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1
+      ],
+      1000000000
+     ],
+     "expected": [
+      0,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      0
+     ],
+     "reason": "maximum n, all occupied"
+    },
+    {
+     "args": [
+      [
+       1,
+       0,
+       1,
+       0,
+       1,
+       0,
+       1,
+       0
+      ],
+      1
+     ],
+     "expected": [
+      0,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      0
+     ],
+     "reason": "alternating pattern, one day"
+    }
+   ],
+   "problem_sha256": "4214abf6308512e05e4805b3d10d66eb48d8381cc10196f4d7afbfd57121456b",
+   "unsupported_requirements": []
+  },
+  "lcd:966": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       "a"
+      ],
+      [
+       "E"
+      ]
+     ],
+     "expected": [
+      "a"
+     ],
+     "reason": "single-letter words, vowel error with case change"
+    },
+    {
+     "args": [
+      [
+       "b"
+      ],
+      [
+       "c"
+      ]
+     ],
+     "expected": [
+      ""
+     ],
+     "reason": "no match: empty string"
+    },
+    {
+     "args": [
+      [
+       "AeIoUuu",
+       "aeiouuu"
+      ],
+      [
+       "UUUUUUU",
+       "aeiouuu"
+      ]
+     ],
+     "expected": [
+      "AeIoUuu",
+      "aeiouuu"
+     ],
+     "reason": "length 7 max; vowel match picks first, exact match wins"
+    }
+   ],
+   "problem_sha256": "7987986b7d529b3e21b73d14106be9548c5c366080625ac39ae21e5673156a68",
+   "unsupported_requirements": []
+  },
+  "lcd:967": {
+   "boundary_cases": [
+    {
+     "args": [
+      2,
+      9
+     ],
+     "expected": [
+      90
+     ],
+     "reason": "minimum n, maximum k: single result"
+    },
+    {
+     "args": [
+      9,
+      9
+     ],
+     "expected": [
+      909090909
+     ],
+     "reason": "maximum n and k: single result"
+    }
+   ],
+   "problem_sha256": "7b7a03565ff08e786feda1aebf69f0957ab9e526d1342daec93feab12a3291c3",
+   "unsupported_requirements": []
+  },
+  "lcd:976": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       1,
+       1,
+       1
+      ]
+     ],
+     "expected": 3,
+     "reason": "minimum length, equilateral"
+    },
+    {
+     "args": [
+      [
+       1,
+       1,
+       2
+      ]
+     ],
+     "expected": 0,
+     "reason": "degenerate triangle has zero area"
+    },
+    {
+     "args": [
+      [
+       1000000,
+       1000000,
+       1000000
+      ]
+     ],
+     "expected": 3000000,
+     "reason": "maximum side lengths"
+    }
+   ],
+   "problem_sha256": "0d9e78af161d7fdd85751f60c4879a5e0b74800e6ed5ce7035af9c74f54f76d5",
+   "unsupported_requirements": []
+  },
+  "lcd:977": {
+   "boundary_cases": [
+    {
+     "args": [
+      [
+       -10000
+      ]
+     ],
+     "expected": [
+      100000000
+     ],
+     "reason": "single minimum value"
+    },
+    {
+     "args": [
+      [
+       -5,
+       -5,
+       5
+      ]
+     ],
+     "expected": [
+      25,
+      25,
+      25
+     ],
+     "reason": "duplicates and equal-magnitude opposite signs"
+    },
+    {
+     "args": [
+      [
+       -10000,
+       0,
+       10000
+      ]
+     ],
+     "expected": [
+      0,
+      100000000,
+      100000000
+     ],
+     "reason": "extreme values"
+    }
+   ],
+   "problem_sha256": "712e3ea35c966761672c77289a62c83df3cd5891ff3fdcea7e7627fd94a28fbb",
+   "unsupported_requirements": []
+  },
+  "lcd:991": {
+   "boundary_cases": [
+    {
+     "args": [
+      1,
+      1
+     ],
+     "expected": 0,
+     "reason": "minimum values, already equal"
+    },
+    {
+     "args": [
+      1000000000,
+      1
+     ],
+     "expected": 999999999,
+     "reason": "target far below start: only decrements"
+    },
+    {
+     "args": [
+      1,
+      1000000000
+     ],
+     "expected": 39,
+     "reason": "target far above start"
+    }
+   ],
+   "problem_sha256": "785db9efae94c39e0da852d6e00b025e113279771b79f65a1519cbccd6de85d1",
+   "unsupported_requirements": []
+  }
+ },
+ "schema": "algsolve.reviewed-requirements.v1"
+}
