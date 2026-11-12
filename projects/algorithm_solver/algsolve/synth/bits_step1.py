@@ -157,6 +157,35 @@ def review_inputs(args):
     print(json.dumps({"wrote": str(args.out), "rows": len(out)}))
 
 
+def build(args):
+    """Frozen plan + reviewed requirements + isolated Opus teacher -> qualified targets (Linux sandbox)."""
+    from .bits_step1_teacher import make_generate_fn, template_sha256
+    records, records_sha = load_authorizations(args.authorizations)
+    teacher_auth = records["isolated_teacher_inference"]
+    if teacher_auth.get("prompt_sha256") != template_sha256(args.prompt):
+        raise PermissionError("Teacher prompt file differs from the authorized prompt_sha256")
+    compiled, adapter = open_adapter(args.dataset, records)
+    plan_path = Path(args.plan)
+    adapter.bind_plan(pipeline.validate_plan(json.loads(plan_path.read_bytes())))
+    output = Path(args.output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    generate, cli_version = make_generate_fn(args.prompt, model=teacher_auth["model_id"],
+                                             log_path=output.parent / (output.name + "-teacher-calls.jsonl"))
+    teacher = allowlist_mod.IsolatedTeacherAdapter(generate, authorization=teacher_auth)
+    summary = pipeline.build_targets(
+        plan_path, output,
+        codec_path=Path(pipeline.__file__).parents[2] / "contracts/typed_codec_v1.json",
+        teacher_identity=teacher.teacher_identity,
+        load_problem=adapter.load_problem, propose=teacher.propose,
+        load_independent_tests=adapter.load_independent_tests,
+        reviewed_requirements=args.reviewed_requirements,
+        max_proposals=teacher.max_proposals,
+        authorizations={"records_sha256": records_sha, "records": records,
+                        "dataset_receipt": adapter.file_receipt, "teacher_cli_version": cli_version},
+    )
+    print(json.dumps({key: summary[key] for key in ("counts", "emitted_pairs", "training_eligible_pairs")}))
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -178,6 +207,14 @@ def main(argv=None):
     rin.add_argument("--plan", required=True, type=Path)
     rin.add_argument("--out", required=True, type=Path)
     rin.set_defaults(run=review_inputs)
+    bld = sub.add_parser("build")
+    bld.add_argument("--dataset", required=True, type=Path)
+    bld.add_argument("--authorizations", required=True, type=Path)
+    bld.add_argument("--plan", required=True, type=Path)
+    bld.add_argument("--reviewed-requirements", required=True, type=Path)
+    bld.add_argument("--prompt", required=True, type=Path)
+    bld.add_argument("--output", required=True, type=Path)
+    bld.set_defaults(run=build)
     args = parser.parse_args(argv)
     args.run(args)
 
