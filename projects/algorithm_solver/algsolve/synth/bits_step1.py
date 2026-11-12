@@ -94,6 +94,50 @@ def inventory(args):
                       "unusable": sum(r["status"] != "parsed" for r in rows)}))
 
 
+def load_family_review(path):
+    raw = Path(path).read_bytes()
+    review = json.loads(raw)
+    if not isinstance(review, dict) or review.get("schema") != "algsolve.bits-step1-family-review.v1":
+        raise ValueError("Unsupported family review")
+    for field in ("family_by_uid", "structural_groups_by_uid", "aliases_by_uid", "holdout_families", "recombination_uids"):
+        if field not in review:
+            raise ValueError(f"Family review lacks {field}")
+    return review, hashlib.sha256(raw).hexdigest()
+
+
+def freeze(args):
+    """Hash the reviewed metadata through the adapter and write the frozen plan."""
+    records, records_sha = load_authorizations(args.authorizations)
+    review, review_sha = load_family_review(args.family_review)
+    compiled, adapter = open_adapter(args.dataset, records)
+    metadata, unusable = adapter.extract_allowlisted_metadata_hashes(
+        review["family_by_uid"],
+        structural_groups_by_uid=review["structural_groups_by_uid"],
+        aliases_by_uid=review["aliases_by_uid"],
+    )
+    plan = pipeline.freeze_plan(
+        metadata, compiled["boundary"], review["holdout_families"],
+        allowlist=compiled["allowlist"], recombination_uids=review["recombination_uids"],
+    )
+    pipeline.write_plan(args.plan, plan)
+    splits = {}
+    for row in plan["rows"]:
+        splits[row["split"]] = splits.get(row["split"], 0) + 1
+    receipt = {
+        "schema": "algsolve.bits-step1-plan-receipt.v1",
+        "plan_sha256": plan["plan_sha256"],
+        "plan_file_sha256": hashlib.sha256(Path(args.plan).read_bytes()).hexdigest(),
+        "authorizations_sha256": records_sha, "family_review_sha256": review_sha,
+        "dataset_receipt": adapter.file_receipt,
+        "allowlist_sha256": compiled["audit"]["allowlist_sha256"],
+        "boundary_sha256": compiled["audit"]["boundary_sha256"],
+        "metadata_rows": len(metadata), "unusable_by_uid": unusable, "splits": dict(sorted(splits.items())),
+        "development_fit_uids": sorted(row["uid"] for row in plan["rows"] if row["split"] == "development_fit"),
+    }
+    _write_new(args.receipt, receipt)
+    print(json.dumps({key: receipt[key] for key in ("plan_sha256", "metadata_rows", "splits")}))
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -102,6 +146,13 @@ def main(argv=None):
     inv.add_argument("--authorizations", required=True, type=Path)
     inv.add_argument("--out", required=True, type=Path)
     inv.set_defaults(run=inventory)
+    frz = sub.add_parser("freeze")
+    frz.add_argument("--dataset", required=True, type=Path)
+    frz.add_argument("--authorizations", required=True, type=Path)
+    frz.add_argument("--family-review", required=True, type=Path)
+    frz.add_argument("--plan", required=True, type=Path)
+    frz.add_argument("--receipt", required=True, type=Path)
+    frz.set_defaults(run=freeze)
     args = parser.parse_args(argv)
     args.run(args)
 
