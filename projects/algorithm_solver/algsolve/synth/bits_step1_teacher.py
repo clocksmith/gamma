@@ -55,9 +55,16 @@ def make_generate_fn(template_path, *, model, log_path, claude="claude", timeout
                  "--strict-mcp-config", "--mcp-config", '{"mcpServers":{}}', "--setting-sources", "",
                  "--no-session-persistence", "--system-prompt", SYSTEM_PROMPT],
                 input=prompt, capture_output=True, text=True, timeout=timeout, env=env)
-            if completed.returncode != 0:
-                raise RuntimeError(f"claude exited {completed.returncode}: {completed.stderr[:300]}")
-            envelope = json.loads(completed.stdout)
+            envelope = None
+            try:
+                envelope = json.loads(completed.stdout) if completed.stdout.strip() else None
+            except json.JSONDecodeError:
+                envelope = None
+            if completed.returncode != 0 or (envelope or {}).get("is_error"):
+                # The CLI reports failures such as an expired login in the stdout
+                # envelope ("result"), often with an empty stderr.
+                detail = (envelope or {}).get("result") or completed.stderr or completed.stdout
+                raise RuntimeError(f"claude exited {completed.returncode}: {str(detail)[:300]}")
             entry.update(cost_usd=envelope.get("total_cost_usd"), is_error=envelope.get("is_error"))
             proposals = json.loads(_unfenced(envelope.get("result")))
             if not isinstance(proposals, list):
@@ -76,3 +83,35 @@ def make_generate_fn(template_path, *, model, log_path, claude="claude", timeout
                 stream.write(json.dumps(entry, sort_keys=True) + "\n")
 
     return generate, version
+
+
+def public_input_sha256(public_input):
+    return hashlib.sha256(json.dumps(public_input, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def make_recorded_fn(path):
+    """Teacher that replays proposals recorded by `bits_step1 teach`, bound to input hashes.
+
+    A row is answered only when the adapter's public input hashes to the value
+    recorded with the proposals; any difference blocks that row.
+    """
+    records = {}
+    for line in Path(path).read_text(encoding="utf-8").splitlines():
+        record = json.loads(line)
+        if record["uid"] in records:
+            raise ValueError(f"Duplicate recorded teacher output for {record['uid']}")
+        records[record["uid"]] = record
+
+    def generate(uid, isolated_input, plan_sha256, config):
+        record = records.get(uid)
+        if record is None:
+            raise ValueError("No recorded teacher output for this problem")
+        if record["public_input_sha256"] != public_input_sha256(isolated_input):
+            raise PermissionError("Recorded teacher output was produced for a different public input")
+        if record["plan_sha256"] != plan_sha256 or record["prompt_sha256"] != config.get("prompt_sha256"):
+            raise PermissionError("Recorded teacher output is bound to a different plan or prompt")
+        if record.get("error"):
+            raise ValueError("Recorded teacher call failed: " + record["error"])
+        return record["proposals"]
+
+    return generate, records

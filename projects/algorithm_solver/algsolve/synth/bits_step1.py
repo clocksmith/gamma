@@ -157,6 +157,54 @@ def review_inputs(args):
     print(json.dumps({"wrote": str(args.out), "rows": len(out)}))
 
 
+def teach(args):
+    """Run the frozen teacher over the plan's development_fit public inputs (no dataset access).
+
+    The public inputs come from `review-inputs`; each record is bound to the
+    SHA-256 of its exact public input so `build --teacher-outputs` replays it
+    only when the adapter reproduces that input. Rows the reviewer marked
+    unsupported are skipped, as the builder blocks them before the teacher.
+    """
+    from concurrent.futures import ThreadPoolExecutor
+    import platform
+    from .bits_step1_teacher import make_generate_fn, public_input_sha256, template_sha256
+    records, _ = load_authorizations(args.authorizations)
+    teacher_auth = records["isolated_teacher_inference"]
+    prompt_sha = template_sha256(args.prompt)
+    if teacher_auth.get("prompt_sha256") != prompt_sha:
+        raise PermissionError("Teacher prompt file differs from the authorized prompt_sha256")
+    inputs = json.loads(Path(args.review_inputs).read_text())
+    reviewed = json.loads(Path(args.reviewed_requirements).read_text())
+    if inputs["plan_sha256"] != reviewed["plan_sha256"]:
+        raise ValueError("Review inputs and reviewed requirements belong to different plans")
+    out = Path(args.out)
+    done = set()
+    if out.exists():
+        done = {json.loads(line)["uid"] for line in out.read_text().splitlines() if line.strip()}
+    generate, version = make_generate_fn(args.prompt, model=teacher_auth["model_id"],
+                                         log_path=out.with_suffix(".calls.jsonl"))
+    rows = [r for r in inputs["rows"] if r["uid"] not in done
+            and not reviewed["rows"][r["uid"]]["unsupported_requirements"]]
+    def one(row):
+        public = {k: row[k] for k in allowlist_mod.IsolatedTeacherAdapter.REQUIRED_INPUT_FIELDS}
+        public = allowlist_mod.IsolatedTeacherAdapter._verify_isolated_input(public)
+        config = {"model_id": teacher_auth["model_id"], "model_revision": teacher_auth["model_revision"],
+                  "prompt_sha256": prompt_sha, "max_proposals": teacher_auth["max_proposals"]}
+        record = {"uid": row["uid"], "plan_sha256": inputs["plan_sha256"], "prompt_sha256": prompt_sha,
+                  "public_input_sha256": public_input_sha256(public), "model": teacher_auth["model_id"],
+                  "cli_version": version, "host": "Mars", "machine": platform.machine()}
+        try:
+            record["proposals"] = generate(row["uid"], public, inputs["plan_sha256"], config)
+        except Exception as error:
+            record["error"] = f"{type(error).__name__}: {str(error)[:300]}"
+        return record
+    with ThreadPoolExecutor(max_workers=args.workers) as pool, out.open("a", encoding="utf-8") as stream:
+        for record in pool.map(one, rows):
+            stream.write(json.dumps(record, sort_keys=True) + "\n"); stream.flush()
+            print(json.dumps({"uid": record["uid"], "proposals": len(record.get("proposals") or []),
+                              "error": record.get("error")}), flush=True)
+
+
 def build(args):
     """Frozen plan + reviewed requirements + isolated Opus teacher -> qualified targets (Linux sandbox)."""
     from .bits_step1_teacher import make_generate_fn, template_sha256
@@ -169,8 +217,13 @@ def build(args):
     adapter.bind_plan(pipeline.validate_plan(json.loads(plan_path.read_bytes())))
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    generate, cli_version = make_generate_fn(args.prompt, model=teacher_auth["model_id"],
-                                             log_path=output.parent / (output.name + "-teacher-calls.jsonl"))
+    if args.teacher_outputs:
+        from .bits_step1_teacher import make_recorded_fn
+        generate, recorded = make_recorded_fn(args.teacher_outputs)
+        cli_version = sorted({r["cli_version"] + " on " + r["host"] for r in recorded.values()})
+    else:
+        generate, cli_version = make_generate_fn(args.prompt, model=teacher_auth["model_id"],
+                                                 log_path=output.parent / (output.name + "-teacher-calls.jsonl"))
     teacher = allowlist_mod.IsolatedTeacherAdapter(generate, authorization=teacher_auth)
     summary = pipeline.build_targets(
         plan_path, output,
@@ -181,7 +234,9 @@ def build(args):
         reviewed_requirements=args.reviewed_requirements,
         max_proposals=teacher.max_proposals,
         authorizations={"records_sha256": records_sha, "records": records,
-                        "dataset_receipt": adapter.file_receipt, "teacher_cli_version": cli_version},
+                        "dataset_receipt": adapter.file_receipt, "teacher_cli_version": cli_version,
+                        "teacher_outputs_sha256": (hashlib.sha256(Path(args.teacher_outputs).read_bytes()).hexdigest()
+                                                   if args.teacher_outputs else None)},
     )
     print(json.dumps({key: summary[key] for key in ("counts", "emitted_pairs", "training_eligible_pairs")}))
 
@@ -214,7 +269,17 @@ def main(argv=None):
     bld.add_argument("--reviewed-requirements", required=True, type=Path)
     bld.add_argument("--prompt", required=True, type=Path)
     bld.add_argument("--output", required=True, type=Path)
+    bld.add_argument("--teacher-outputs", type=Path, default=None,
+                     help="Replay hash-bound teacher outputs recorded by `teach` instead of calling the CLI")
     bld.set_defaults(run=build)
+    tch = sub.add_parser("teach")
+    tch.add_argument("--authorizations", required=True, type=Path)
+    tch.add_argument("--review-inputs", required=True, type=Path)
+    tch.add_argument("--reviewed-requirements", required=True, type=Path)
+    tch.add_argument("--prompt", required=True, type=Path)
+    tch.add_argument("--out", required=True, type=Path)
+    tch.add_argument("--workers", type=int, default=4)
+    tch.set_defaults(run=teach)
     args = parser.parse_args(argv)
     args.run(args)
 
