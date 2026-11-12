@@ -60,11 +60,17 @@ def make_generate_fn(template_path, *, model, log_path, claude="claude", timeout
                 envelope = json.loads(completed.stdout) if completed.stdout.strip() else None
             except json.JSONDecodeError:
                 envelope = None
-            if completed.returncode != 0 or (envelope or {}).get("is_error"):
+            fields = envelope if isinstance(envelope, dict) else {}
+            if completed.returncode != 0 or fields.get("is_error"):
                 # The CLI reports failures such as an expired login in the stdout
-                # envelope ("result"), often with an empty stderr.
-                detail = (envelope or {}).get("result") or completed.stderr or completed.stdout
+                # envelope ("result"), often with an empty stderr. Checked before the
+                # envelope's shape so a failed call always reports the CLI's own error.
+                detail = fields.get("result") or completed.stderr or completed.stdout
                 raise RuntimeError(f"claude exited {completed.returncode}: {str(detail)[:300]}")
+            if envelope is None:
+                raise ValueError("Teacher CLI output is empty or invalid JSON")
+            if not isinstance(envelope, dict):
+                raise ValueError("Teacher CLI output envelope is not a JSON object")
             entry.update(cost_usd=envelope.get("total_cost_usd"), is_error=envelope.get("is_error"))
             proposals = json.loads(_unfenced(envelope.get("result")))
             if not isinstance(proposals, list):
@@ -110,6 +116,9 @@ def make_recorded_fn(path):
             raise PermissionError("Recorded teacher output was produced for a different public input")
         if record["plan_sha256"] != plan_sha256 or record["prompt_sha256"] != config.get("prompt_sha256"):
             raise PermissionError("Recorded teacher output is bound to a different plan or prompt")
+        if record.get("model") != config.get("model_id"):
+            # Records without a model (written before this check) do not replay.
+            raise PermissionError("Recorded teacher output was produced by a different model")
         if record.get("error"):
             raise ValueError("Recorded teacher call failed: " + record["error"])
         return record["proposals"]
