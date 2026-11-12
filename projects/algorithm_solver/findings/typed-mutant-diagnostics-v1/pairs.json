@@ -1,0 +1,753 @@
+{
+  "schema": "gamma.authored-mutant-diagnostics.v1",
+  "scope": "Synthetic authored diagnostic fixtures, not training targets, protected evaluation, model results or corpus qualification.",
+  "runtime_source_sha256": "af87ad916d6d2ee6b983f9b8acdf8106de7589d0c57c60c4ea985dfd239c1af1",
+  "pairs": [
+    {
+      "id": "M01",
+      "task": "Return seven times x for integer x in [-100,100].",
+      "mutation_class": "integer literal",
+      "correct": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "x"
+        ],
+        "inputs": {
+          "x": "int"
+        },
+        "body": [],
+        "return": {
+          "op": "mul",
+          "args": [
+            {
+              "ref": "x"
+            },
+            {
+              "literal": 7
+            }
+          ]
+        },
+        "output_type": "int"
+      },
+      "mutant": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "x"
+        ],
+        "inputs": {
+          "x": "int"
+        },
+        "body": [],
+        "return": {
+          "op": "mul",
+          "args": [
+            {
+              "ref": "x"
+            },
+            {
+              "literal": 6
+            }
+          ]
+        },
+        "output_type": "int"
+      },
+      "distinguishing_example": {
+        "inputs": {
+          "x": 5
+        },
+        "expected": 35,
+        "mutant_output": 30
+      }
+    },
+    {
+      "id": "M02",
+      "task": "Stable-sort integer pairs by first field ascending. At most 16 pairs, components in [-100,100].",
+      "mutation_class": "boolean literal",
+      "correct": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "xs"
+        ],
+        "inputs": {
+          "xs": [
+            "list",
+            [
+              "tuple",
+              "int",
+              "int"
+            ]
+          ]
+        },
+        "body": [],
+        "return": {
+          "op": "sort_by",
+          "args": [
+            {
+              "ref": "xs"
+            },
+            {
+              "literal": 0
+            },
+            {
+              "literal": false
+            }
+          ]
+        },
+        "output_type": [
+          "list",
+          [
+            "tuple",
+            "int",
+            "int"
+          ]
+        ]
+      },
+      "mutant": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "xs"
+        ],
+        "inputs": {
+          "xs": [
+            "list",
+            [
+              "tuple",
+              "int",
+              "int"
+            ]
+          ]
+        },
+        "body": [],
+        "return": {
+          "op": "sort_by",
+          "args": [
+            {
+              "ref": "xs"
+            },
+            {
+              "literal": 0
+            },
+            {
+              "literal": true
+            }
+          ]
+        },
+        "output_type": [
+          "list",
+          [
+            "tuple",
+            "int",
+            "int"
+          ]
+        ]
+      },
+      "distinguishing_example": {
+        "inputs": {
+          "xs": [
+            [
+              3,
+              9
+            ],
+            [
+              1,
+              8
+            ],
+            [
+              2,
+              7
+            ]
+          ]
+        },
+        "expected": [
+          [
+            1,
+            8
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            9
+          ]
+        ],
+        "mutant_output": [
+          [
+            3,
+            9
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            1,
+            8
+          ]
+        ]
+      }
+    },
+    {
+      "id": "M03",
+      "task": "Return a+b for integers a,b in [-100,100].",
+      "mutation_class": "operation substitution",
+      "correct": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "a",
+          "b"
+        ],
+        "inputs": {
+          "a": "int",
+          "b": "int"
+        },
+        "body": [],
+        "return": {
+          "op": "add",
+          "args": [
+            {
+              "ref": "a"
+            },
+            {
+              "ref": "b"
+            }
+          ]
+        },
+        "output_type": "int"
+      },
+      "mutant": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "a",
+          "b"
+        ],
+        "inputs": {
+          "a": "int",
+          "b": "int"
+        },
+        "body": [],
+        "return": {
+          "op": "sub",
+          "args": [
+            {
+              "ref": "a"
+            },
+            {
+              "ref": "b"
+            }
+          ]
+        },
+        "output_type": "int"
+      },
+      "distinguishing_example": {
+        "inputs": {
+          "a": 8,
+          "b": 3
+        },
+        "expected": 11,
+        "mutant_output": 5
+      }
+    },
+    {
+      "id": "M04",
+      "task": "Return a-b for integers a,b in [-100,100].",
+      "mutation_class": "operand order",
+      "correct": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "a",
+          "b"
+        ],
+        "inputs": {
+          "a": "int",
+          "b": "int"
+        },
+        "body": [],
+        "return": {
+          "op": "sub",
+          "args": [
+            {
+              "ref": "a"
+            },
+            {
+              "ref": "b"
+            }
+          ]
+        },
+        "output_type": "int"
+      },
+      "mutant": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "a",
+          "b"
+        ],
+        "inputs": {
+          "a": "int",
+          "b": "int"
+        },
+        "body": [],
+        "return": {
+          "op": "sub",
+          "args": [
+            {
+              "ref": "b"
+            },
+            {
+              "ref": "a"
+            }
+          ]
+        },
+        "output_type": "int"
+      },
+      "distinguishing_example": {
+        "inputs": {
+          "a": 9,
+          "b": 4
+        },
+        "expected": 5,
+        "mutant_output": -5
+      }
+    },
+    {
+      "id": "M05",
+      "task": "Return a+2*b for integers a,b in [-100,100].",
+      "mutation_class": "same-type reference",
+      "correct": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "a",
+          "b"
+        ],
+        "inputs": {
+          "a": "int",
+          "b": "int"
+        },
+        "body": [],
+        "return": {
+          "op": "add",
+          "args": [
+            {
+              "ref": "a"
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "literal": 2
+                },
+                {
+                  "ref": "b"
+                }
+              ]
+            }
+          ]
+        },
+        "output_type": "int"
+      },
+      "mutant": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "a",
+          "b"
+        ],
+        "inputs": {
+          "a": "int",
+          "b": "int"
+        },
+        "body": [],
+        "return": {
+          "op": "add",
+          "args": [
+            {
+              "ref": "a"
+            },
+            {
+              "op": "mul",
+              "args": [
+                {
+                  "literal": 2
+                },
+                {
+                  "ref": "a"
+                }
+              ]
+            }
+          ]
+        },
+        "output_type": "int"
+      },
+      "distinguishing_example": {
+        "inputs": {
+          "a": 3,
+          "b": 8
+        },
+        "expected": 19,
+        "mutant_output": 9
+      }
+    },
+    {
+      "id": "M06",
+      "task": "Return max(a,b) for integers a,b in [-100,100].",
+      "mutation_class": "branch placement",
+      "correct": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "a",
+          "b"
+        ],
+        "inputs": {
+          "a": "int",
+          "b": "int"
+        },
+        "body": [
+          {
+            "op": "var",
+            "name": "answer",
+            "value": {
+              "ref": "a"
+            }
+          },
+          {
+            "op": "if",
+            "condition": {
+              "op": "lt",
+              "args": [
+                {
+                  "ref": "a"
+                },
+                {
+                  "ref": "b"
+                }
+              ]
+            },
+            "then": [
+              {
+                "op": "set",
+                "name": "answer",
+                "value": {
+                  "ref": "b"
+                }
+              }
+            ],
+            "else": []
+          }
+        ],
+        "return": {
+          "ref": "answer"
+        },
+        "output_type": "int"
+      },
+      "mutant": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "a",
+          "b"
+        ],
+        "inputs": {
+          "a": "int",
+          "b": "int"
+        },
+        "body": [
+          {
+            "op": "var",
+            "name": "answer",
+            "value": {
+              "ref": "a"
+            }
+          },
+          {
+            "op": "if",
+            "condition": {
+              "op": "lt",
+              "args": [
+                {
+                  "ref": "a"
+                },
+                {
+                  "ref": "b"
+                }
+              ]
+            },
+            "then": [],
+            "else": [
+              {
+                "op": "set",
+                "name": "answer",
+                "value": {
+                  "ref": "b"
+                }
+              }
+            ]
+          }
+        ],
+        "return": {
+          "ref": "answer"
+        },
+        "output_type": "int"
+      },
+      "distinguishing_example": {
+        "inputs": {
+          "a": 2,
+          "b": 9
+        },
+        "expected": 9,
+        "mutant_output": 2
+      }
+    },
+    {
+      "id": "M07",
+      "task": "Return sum of integers 0 through n-1, for n in [1,100].",
+      "mutation_class": "loop-bound structure",
+      "correct": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "n"
+        ],
+        "inputs": {
+          "n": "int"
+        },
+        "body": [
+          {
+            "op": "var",
+            "name": "total",
+            "value": {
+              "literal": 0
+            }
+          },
+          {
+            "op": "for",
+            "item": "i",
+            "in": {
+              "op": "range",
+              "args": [
+                {
+                  "ref": "n"
+                }
+              ]
+            },
+            "body": [
+              {
+                "op": "set",
+                "name": "total",
+                "value": {
+                  "op": "add",
+                  "args": [
+                    {
+                      "ref": "total"
+                    },
+                    {
+                      "ref": "i"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "return": {
+          "ref": "total"
+        },
+        "output_type": "int"
+      },
+      "mutant": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "n"
+        ],
+        "inputs": {
+          "n": "int"
+        },
+        "body": [
+          {
+            "op": "var",
+            "name": "total",
+            "value": {
+              "literal": 0
+            }
+          },
+          {
+            "op": "for",
+            "item": "i",
+            "in": {
+              "op": "range",
+              "args": [
+                {
+                  "op": "sub",
+                  "args": [
+                    {
+                      "ref": "n"
+                    },
+                    {
+                      "literal": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            "body": [
+              {
+                "op": "set",
+                "name": "total",
+                "value": {
+                  "op": "add",
+                  "args": [
+                    {
+                      "ref": "total"
+                    },
+                    {
+                      "ref": "i"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "return": {
+          "ref": "total"
+        },
+        "output_type": "int"
+      },
+      "distinguishing_example": {
+        "inputs": {
+          "n": 5
+        },
+        "expected": 10,
+        "mutant_output": 6
+      }
+    },
+    {
+      "id": "M08",
+      "task": "Enqueue a then b in a fresh FIFO queue and return the first dequeue. Integers in [-100,100].",
+      "mutation_class": "effect order",
+      "correct": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "a",
+          "b"
+        ],
+        "inputs": {
+          "a": "int",
+          "b": "int"
+        },
+        "body": [
+          {
+            "op": "call",
+            "operator": "queue.new",
+            "out": "q",
+            "args": []
+          },
+          {
+            "op": "call",
+            "operator": "queue.push",
+            "out": "pushA",
+            "args": [
+              {
+                "ref": "q"
+              },
+              {
+                "ref": "a"
+              }
+            ]
+          },
+          {
+            "op": "call",
+            "operator": "queue.push",
+            "out": "pushB",
+            "args": [
+              {
+                "ref": "q"
+              },
+              {
+                "ref": "b"
+              }
+            ]
+          },
+          {
+            "op": "call",
+            "operator": "queue.pop",
+            "out": "first",
+            "args": [
+              {
+                "ref": "q"
+              }
+            ]
+          }
+        ],
+        "return": {
+          "ref": "first"
+        },
+        "output_type": "int"
+      },
+      "mutant": {
+        "schema": "algsolve.typed-program.v2",
+        "parameters": [
+          "a",
+          "b"
+        ],
+        "inputs": {
+          "a": "int",
+          "b": "int"
+        },
+        "body": [
+          {
+            "op": "call",
+            "operator": "queue.new",
+            "out": "q",
+            "args": []
+          },
+          {
+            "op": "call",
+            "operator": "queue.push",
+            "out": "pushB",
+            "args": [
+              {
+                "ref": "q"
+              },
+              {
+                "ref": "b"
+              }
+            ]
+          },
+          {
+            "op": "call",
+            "operator": "queue.push",
+            "out": "pushA",
+            "args": [
+              {
+                "ref": "q"
+              },
+              {
+                "ref": "a"
+              }
+            ]
+          },
+          {
+            "op": "call",
+            "operator": "queue.pop",
+            "out": "first",
+            "args": [
+              {
+                "ref": "q"
+              }
+            ]
+          }
+        ],
+        "return": {
+          "ref": "first"
+        },
+        "output_type": "int"
+      },
+      "distinguishing_example": {
+        "inputs": {
+          "a": 4,
+          "b": 12
+        },
+        "expected": 4,
+        "mutant_output": 12
+      }
+    }
+  ]
+}
