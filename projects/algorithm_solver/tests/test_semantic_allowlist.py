@@ -14,6 +14,18 @@ from algsolve.synth import semantic_allowlist as allowlist_mod
 from algsolve.synth import semantic_target_pipeline as pipeline
 
 
+def write_reviewed(path, plan):
+    """Separately reviewed requirements for every development-fit row of a plan."""
+    rows = {row["uid"]: {"problem_sha256": row["problem_sha256"], "unsupported_requirements": [],
+                         "boundary_cases": [{"args": [[]], "expected": 0, "reason": "empty input"}]}
+            for row in plan["rows"] if row["split"] == "development_fit"}
+    Path(path).write_text(json.dumps({"schema": pipeline.REVIEWED_REQUIREMENTS_SCHEMA,
+                                      "plan_sha256": plan["plan_sha256"],
+                                      "review": {"reviewer": "synthetic reviewer", "method": "synthetic unit test"},
+                                      "rows": rows}))
+    return Path(path)
+
+
 def _meta(uid: str, family: str, *, key: str | None = None, aliases: list[str] | None = None,
           groups: list[str] | None = None) -> dict:
     return {
@@ -246,6 +258,7 @@ class AdapterAndLinuxGateTests(unittest.TestCase):
                     load_problem=lambda row: (_ for _ in ()).throw(AssertionError("must not load")),
                     propose=lambda *args: (_ for _ in ()).throw(AssertionError("must not propose")),
                     load_independent_tests=lambda row: (_ for _ in ()).throw(AssertionError("must not load tests")),
+                    reviewed_requirements=write_reviewed(self.root / "reviewed.json", plan),
                     judge=None,
                 )
         self.assertFalse(out_dir.exists())
@@ -392,6 +405,7 @@ class AdapterAndLinuxGateTests(unittest.TestCase):
             load_problem=adapter.load_problem,
             propose=teacher.propose,
             load_independent_tests=adapter.load_independent_tests,
+            reviewed_requirements=write_reviewed(self.root / "reviewed.json", plan),
             judge=lambda problem, source, cases: SimpleNamespace(
                 to_dict=lambda: {
                     "passed": True,

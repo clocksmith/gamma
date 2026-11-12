@@ -63,7 +63,8 @@ inspecting targets after the split.
 ## Build through authorized offline adapters
 
 Call `build_targets(plan_path, output, codec_path=..., teacher_identity=...,
-load_problem=..., propose=..., load_independent_tests=...)` from a local driver:
+load_problem=..., propose=..., load_independent_tests=...,
+reviewed_requirements=..., authorizations=...)` from a local driver:
 
 - `load_problem(row)` returns a normalized `Problem` matching the frozen UID and
   complete payload digest. Only `development_fit` rows are passed to it.
@@ -71,7 +72,22 @@ load_problem=..., propose=..., load_independent_tests=...)` from a local driver:
   `max_proposals` proposals, four by default. Each proposal has exactly `variant`,
   `program`, `requirements`, and `bound_probe`. `program` uses the existing typed
   AST schema; `requirements.unsupported_requirements` must be an empty array;
-  `bound_probe` is one declared test with `args` and `expected`.
+  `bound_probe` is one declared test with `args` and `expected`. Both are the
+  teacher's claims and are kept as claims; neither qualifies a target.
+- `reviewed_requirements` is the path of a separately reviewed file
+  (`algsolve.reviewed-requirements.v1`), written after the plan is frozen and
+  before generation: `plan_sha256`, `review` (`reviewer`, `method`) and `rows`
+  keyed by exactly the `development_fit` UIDs. Each row has the frozen
+  `problem_sha256`, the reviewer's `unsupported_requirements` (requirements the
+  target language cannot meet, such as a complexity bound) and at least one
+  `boundary_cases` entry (`args`, `expected`, `reason`). A row the reviewer marks
+  unsupported is blocked before the teacher is called, whatever the teacher
+  would declare. Reviewed boundary cases run in the judge after the independent
+  tests and before the teacher's probe, and are loaded only after the raw
+  proposals are retained. The file's hash and reviewer are bound into the
+  contract and every pair; changing it during a build aborts.
+- `authorizations` records the dataset and teacher authorization evidence the
+  caller holds; it is bound into `contract.json` as given.
 - The teacher receives only statement, starter, parameter types and public
   examples, along with the identity and frozen plan hash. It does not receive
   reference solutions, independent tests, or qualification feedback. Supply
@@ -82,13 +98,15 @@ load_problem=..., propose=..., load_independent_tests=...)` from a local driver:
   failure receipts stay outside the model input. No teacher retry sees them.
 
 The existing frozen typed codec validates bindings and expands the AST. Python
-compilation checks syntax without executing the target. Public, independent and
-declared-bound tests then run through the existing repository sandbox judge;
+compilation checks syntax without executing the target. Public, independent,
+reviewed boundary and declared-bound tests then run through the existing
+repository sandbox judge;
 incomplete or failed receipts emit no target. Native qualification (`judge=None`)
 requires Linux with the unchanged `bwrap` and `prlimit` sandbox and fails closed
 before creating an output directory on macOS or hosts missing those tools; no
 direct-execution fallback is provided when the teacher or sandbox is missing. The
-declared bound probe is not independent evidence of asymptotic complexity.
+declared bound probe is not independent evidence of asymptotic complexity, and
+reviewed boundary cases are finite review evidence, not a complexity proof.
 
 Successful pairs retain all family/group identities, feature and pattern hashes,
 source attribution, codec, teacher, implementation and plan bindings. Every raw

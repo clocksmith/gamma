@@ -19,6 +19,20 @@ def metadata(uid, family, *, key=None, aliases=None, groups=None):
     }
 
 
+def write_reviewed(path, plan, *, unsupported=None, cases=None, reviewer="synthetic reviewer"):
+    """Separately reviewed requirements for every development-fit row of a plan."""
+    rows = {row["uid"]: {"problem_sha256": row["problem_sha256"],
+                         "unsupported_requirements": list(unsupported or []),
+                         "boundary_cases": copy.deepcopy(cases) if cases is not None else
+                         [{"args": [[]], "expected": 0, "reason": "empty input"}]}
+            for row in plan["rows"] if row["split"] == "development_fit"}
+    Path(path).write_text(json.dumps({"schema": pipeline.REVIEWED_REQUIREMENTS_SCHEMA,
+                                      "plan_sha256": plan["plan_sha256"],
+                                      "review": {"reviewer": reviewer, "method": "synthetic unit test"},
+                                      "rows": rows}))
+    return Path(path)
+
+
 def boundary(**updates):
     value = {"uids": [], "keys": [], "families": [], "structural_groups": [],
              "sources_sha256": {"synthetic-reservation-metadata": "3" * 64}}
@@ -191,6 +205,7 @@ class TargetBuilderTests(unittest.TestCase):
         self.plan = pipeline.freeze_plan(rows, boundary(families=["secret"]), ["held"])
         self.plan_path = self.root / "plan.json"
         pipeline.write_plan(self.plan_path, self.plan)
+        self.reviewed_path = write_reviewed(self.root / "reviewed.json", self.plan)
         self.events = []
 
     def load_problem(self, row):
@@ -224,7 +239,8 @@ class TargetBuilderTests(unittest.TestCase):
     def build(self, **updates):
         args = {"codec_path": LANE_ROOT / "contracts/typed_codec_v1.json", "teacher_identity": "synthetic-unit-test",
                 "load_problem": self.load_problem, "propose": self.propose,
-                "load_independent_tests": self.load_tests, "judge": self.judge}
+                "load_independent_tests": self.load_tests, "judge": self.judge,
+                "reviewed_requirements": self.reviewed_path}
         args.update(updates)
         return pipeline.build_targets(self.plan_path, self.root / "output", **args)
 
@@ -233,7 +249,7 @@ class TargetBuilderTests(unittest.TestCase):
 
     def test_freezes_before_any_payload_and_never_calls_adapters_for_holdouts(self):
         summary = self.build()
-        self.assertEqual(self.events, ["payload", "teacher", "tests", "judge", "judge", "judge"])
+        self.assertEqual(self.events, ["payload", "teacher", "tests", "judge", "judge", "judge", "judge"])
         self.assertEqual(summary["emitted_pairs"], 1)
         self.assertEqual(summary["training_eligible_pairs"], 0)  # Mock receipts never authorize training.
         self.assertEqual(summary["counts"]["excluded_existing"], 1)
@@ -337,6 +353,65 @@ class TargetBuilderTests(unittest.TestCase):
         self.assertEqual(summary["emitted_pairs"], 0)
         self.assertNotIn("judge", self.events)
 
+    def test_reviewed_unsupported_requirement_blocks_before_teacher_despite_teacher_declaration(self):
+        write_reviewed(self.reviewed_path, self.plan, unsupported=["must run in O(log n)"])
+        summary = self.build()
+        self.assertEqual(summary["emitted_pairs"], 0)
+        self.assertEqual(self.events, ["payload"])
+        receipt = self.receipt()
+        self.assertEqual((receipt["reason"], receipt["stage"]), ("blocked", "reviewed_requirements"))
+
+    def test_failed_reviewed_boundary_case_rejects_after_independent_tests(self):
+        reviewed_case = {"args": [[]], "expected": 0}
+        def judge(problem, source, cases):
+            self.events.append("judge")
+            passed = cases != [reviewed_case]
+            return SimpleNamespace(to_dict=lambda: {"passed": passed, "tests_passed": len(cases) if passed else 0,
+                                                   "tests_total": len(cases), "reason": "passed" if passed else "wrong_answer"})
+        summary = self.build(judge=judge)
+        self.assertEqual(summary["emitted_pairs"], 0)
+        candidate = self.receipt()["proposals"][0]
+        self.assertEqual(candidate["stage"], "reviewed_boundary")
+        self.assertNotIn("declared_bound_probe", candidate["verdicts"])
+
+    def test_reviewed_cases_reach_only_the_judge_after_proposals_are_retained(self):
+        seen = []
+        def judge(problem, source, cases):
+            seen.append(copy.deepcopy(cases))
+            return self.judge(problem, source, cases)
+        summary = self.build(judge=judge)
+        self.assertEqual(summary["emitted_pairs"], 1)
+        self.assertIn([{"args": [[]], "expected": 0}], seen)
+        pair = json.loads((self.root / "output/pairs.jsonl").read_text())
+        self.assertEqual(pair["provenance"]["reviewed_boundary_cases_passed"], 1)
+        self.assertEqual(pair["reviewed_requirements"]["sha256"],
+                         json.loads((self.root / "output/contract.json").read_text())["reviewed_requirements_sha256"])
+
+    def test_reviewed_requirements_must_match_plan_and_cover_exactly_fit_rows(self):
+        reviewed = json.loads(self.reviewed_path.read_text())
+        for mutate, message in (
+            (lambda value: value.update(plan_sha256="0" * 64), "different plan"),
+            (lambda value: value["rows"].update(held={"problem_sha256": "1" * 64, "unsupported_requirements": [],
+                                                      "boundary_cases": [{"args": [[]], "expected": 0, "reason": "x"}]}),
+             "exactly the development-fit"),
+            (lambda value: value["rows"]["fit"].update(boundary_cases=[]), "at least one boundary case"),
+            (lambda value: value["rows"]["fit"].update(problem_sha256="9" * 64), "different problem payload"),
+            (lambda value: value["review"].pop("reviewer"), "reviewer"),
+        ):
+            value = copy.deepcopy(reviewed)
+            mutate(value)
+            self.reviewed_path.write_text(json.dumps(value))
+            with self.assertRaisesRegex(ValueError, message):
+                self.build()
+            self.assertFalse((self.root / "output").exists())
+
+    def test_contract_binds_reviewer_and_authorization_records(self):
+        authorizations = {"dataset": {"authorized": True, "authority": "owner", "scope": "development_fit"}}
+        self.build(authorizations=authorizations)
+        contract = json.loads((self.root / "output/contract.json").read_text())
+        self.assertEqual(contract["requirements_reviewer"], "synthetic reviewer")
+        self.assertEqual(contract["authorizations"], authorizations)
+
     def test_missing_bound_probe_cannot_become_target(self):
         self.proposal["bound_probe"] = {}
         summary = self.build()
@@ -361,7 +436,7 @@ class NativeTargetBuilderTests(unittest.TestCase):
         self.fixture.setUp()
         self.addCleanup(self.fixture.doCleanups)
 
-    def test_native_qualification_emits_only_after_all_three_stages(self):
+    def test_native_qualification_emits_only_after_all_four_stages(self):
         summary = self.fixture.build(judge=None)
         receipt = self.fixture.receipt()
         self.assertEqual(summary["emitted_pairs"], 1, receipt)
@@ -370,7 +445,7 @@ class NativeTargetBuilderTests(unittest.TestCase):
         self.assertEqual(pair["provenance"]["verification_authority"], "repository-sandbox")
         candidate = receipt["proposals"][0]
         self.assertEqual(candidate["reason"], "qualified")
-        self.assertEqual(set(candidate["verdicts"]), {"public", "independent", "declared_bound_probe"})
+        self.assertEqual(set(candidate["verdicts"]), {"public", "independent", "reviewed_boundary", "declared_bound_probe"})
         self.assertTrue(all(verdict["passed"] for verdict in candidate["verdicts"].values()))
         self.assertEqual(self.fixture.events, ["payload", "teacher", "tests"])
 
@@ -387,6 +462,7 @@ class NativeTargetBuilderTests(unittest.TestCase):
         self.assertFalse(candidate["verdicts"]["independent"]["passed"])
         self.assertEqual(candidate["reason"], "rejected")
         self.assertEqual(candidate["stage"], "independent")
+        self.assertNotIn("reviewed_boundary", candidate["verdicts"])
         self.assertNotIn("declared_bound_probe", candidate["verdicts"])
         self.assertEqual(self.fixture.events, ["payload", "teacher", "tests"])
 

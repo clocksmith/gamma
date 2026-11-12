@@ -278,8 +278,58 @@ def _implementation_hashes():
     return {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest() for path in paths}
 
 
+REVIEWED_REQUIREMENTS_SCHEMA = "algsolve.reviewed-requirements.v1"
+
+
+def load_reviewed_requirements(path, plan):
+    """Load the separately reviewed requirements frozen for a plan's fit rows.
+
+    The teacher's own ``unsupported_requirements`` declaration and boundary probe
+    are claims, not qualification. This file, written by a reviewer after the plan
+    is frozen and before generation, is the authority: for every development-fit
+    row it names the requirements the target language cannot meet and at least
+    one boundary case with its expected output. It must cover exactly the
+    development-fit rows, so no held-out row is reviewed or loaded through it.
+    """
+    path = Path(path)
+    raw = path.read_bytes()
+    reviewed = json.loads(raw)
+    if not isinstance(reviewed, dict) or set(reviewed) != {"schema", "plan_sha256", "review", "rows"}:
+        raise ValueError("Reviewed requirements must have exactly schema, plan_sha256, review and rows")
+    if reviewed["schema"] != REVIEWED_REQUIREMENTS_SCHEMA:
+        raise ValueError("Unsupported reviewed requirements schema")
+    if reviewed["plan_sha256"] != plan["plan_sha256"]:
+        raise ValueError("Reviewed requirements were written for a different plan")
+    review = reviewed["review"]
+    if not isinstance(review, dict) or set(review) != {"reviewer", "method"}:
+        raise ValueError("Reviewed requirements must name the reviewer and the review method")
+    _string(review["reviewer"], "reviewer")
+    _string(review["method"], "review method")
+    fit = {row["uid"]: row for row in plan["rows"] if row["split"] == "development_fit"}
+    rows = reviewed["rows"]
+    if not isinstance(rows, dict) or set(rows) != set(fit):
+        raise ValueError("Reviewed requirements must cover exactly the development-fit rows")
+    for uid, entry in rows.items():
+        if not isinstance(entry, dict) or set(entry) != {"problem_sha256", "unsupported_requirements", "boundary_cases"}:
+            raise ValueError(f"Malformed reviewed requirements for {uid}")
+        if entry["problem_sha256"] != fit[uid]["problem_sha256"]:
+            raise ValueError(f"Reviewed requirements for {uid} name a different problem payload")
+        unsupported = entry["unsupported_requirements"]
+        if not isinstance(unsupported, list) or any(not isinstance(item, str) or not item.strip() for item in unsupported):
+            raise ValueError(f"Reviewed unsupported requirements for {uid} must be a list of strings")
+        cases = entry["boundary_cases"]
+        if not isinstance(cases, list) or not cases:
+            raise ValueError(f"Reviewed requirements for {uid} need at least one boundary case")
+        for case in cases:
+            if not isinstance(case, dict) or set(case) != {"args", "expected", "reason"} or not isinstance(case["args"], list):
+                raise ValueError(f"Malformed reviewed boundary case for {uid}")
+            _string(case["reason"], "boundary case reason")
+    return reviewed, hashlib.sha256(raw).hexdigest()
+
+
 def build_targets(plan_path, output, *, codec_path, teacher_identity, load_problem,
-                  propose, load_independent_tests, max_proposals=4, judge=None):
+                  propose, load_independent_tests, reviewed_requirements, max_proposals=4,
+                  judge=None, authorizations=None):
     """Build only the preselected development partition through lazy adapters.
 
     ``propose(uid, public_input, plan_sha256)`` returns a bounded list of offline
@@ -287,6 +337,10 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
     ``load_problem(row)`` and ``load_independent_tests(row)`` must use already
     authorized local data. Their contents are checked against frozen hashes.
     Injecting ``judge`` is for unit tests only and disables training eligibility.
+    ``reviewed_requirements`` is the path of the reviewed requirements file (see
+    ``load_reviewed_requirements``); its boundary cases are loaded only after the
+    teacher's proposals are retained. ``authorizations`` records the dataset and
+    teacher authorization evidence the caller holds, bound into the contract.
     A caller must separately authorize teacher compute or student training.
     """
     if type(max_proposals) is not int or not 1 <= max_proposals <= 32:
@@ -297,6 +351,10 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
     plan = validate_plan(json.loads(plan_bytes))
     codec_path = Path(codec_path)
     identity = typed_codec.frozen(codec_path)
+    reviewed_path = Path(reviewed_requirements)
+    reviewed, reviewed_sha256 = load_reviewed_requirements(reviewed_path, plan)
+    if authorizations is not None and not isinstance(authorizations, dict):
+        raise ValueError("authorizations must be a mapping of authorization records")
     test_double = judge is not None
     if judge is None:
         require_linux_unchanged_sandbox()
@@ -310,6 +368,9 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
         "teacher": teacher_identity, "max_proposals_per_problem": max_proposals,
         "sources_sha256": _implementation_hashes(),
         "verification_authority": "injected-test-double" if test_double else "repository-sandbox",
+        "reviewed_requirements_sha256": reviewed_sha256, "requirements_reviewer": reviewed["review"]["reviewer"],
+        "requirements_review_method": reviewed["review"]["method"],
+        "authorizations": copy.deepcopy(authorizations) if authorizations is not None else None,
         "training": False, "protected_scoring": False,
     }
     if "allowlist" in plan:
@@ -321,8 +382,9 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
 
     def unchanged():
         if (plan_path.read_bytes() != plan_bytes or typed_codec.frozen(codec_path) != identity
-                or _implementation_hashes() != binding["sources_sha256"]):
-            raise ValueError("Frozen plan, codec or implementation changed during target construction")
+                or _implementation_hashes() != binding["sources_sha256"]
+                or hashlib.sha256(reviewed_path.read_bytes()).hexdigest() != reviewed_sha256):
+            raise ValueError("Frozen plan, codec, reviewed requirements or implementation changed during target construction")
 
     for index, row in enumerate(plan["rows"]):
         if row["split"] != "development_fit":
@@ -341,6 +403,11 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
                 raise ValueError("Problem payload differs from the pre-generation metadata")
             if problem.io_mode != "functional" or not problem.public_tests or problem.evidence_ceiling != "independent_tests_passed":
                 raise ValueError("Need functional public and independent test authority")
+            stage = "reviewed_requirements"
+            review = reviewed["rows"][row["uid"]]
+            if review["unsupported_requirements"]:
+                # The reviewer, not the teacher, decides the target language cannot meet this problem.
+                raise ValueError("Reviewed requirements are unsupported: " + "; ".join(review["unsupported_requirements"]))
             stage = "offline_teacher"
             proposals = propose(row["uid"], _public_input(problem), plan["plan_sha256"])
             if not isinstance(proposals, list) or not 1 <= len(proposals) <= max_proposals:
@@ -353,6 +420,9 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
             independent = load_independent_tests(copy.deepcopy(row))
             if not isinstance(independent, list) or not independent or digest(independent) != row["independent_tests_sha256"]:
                 raise ValueError("Independent tests absent or changed from the frozen authority")
+            # Reviewed boundary cases are used only after the proposals are retained.
+            reviewed_cases = [{"args": copy.deepcopy(case["args"]), "expected": copy.deepcopy(case["expected"])}
+                              for case in review["boundary_cases"]]
             variants = set()
             for proposal in proposals:
                 record = {"reason": "rejected", "stage": "compile"}
@@ -380,7 +450,7 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
                     record["source_sha256"] = hashlib.sha256(source.encode()).hexdigest()
                     record["verdicts"] = {}
                     for label, cases in (("public", problem.public_tests), ("independent", independent),
-                                         ("declared_bound_probe", [probe])):
+                                         ("reviewed_boundary", reviewed_cases), ("declared_bound_probe", [probe])):
                         record["stage"] = label
                         verdict = judge(problem, source, cases).to_dict()
                         record["verdicts"][label] = verdict
@@ -395,7 +465,11 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
                         "pattern_sha256": typed_support.pattern(proposal["program"]),
                         "required_features": features,
                         "recipe_usage": [feature.removeprefix("recipe:") for feature in features if feature.startswith("recipe:")],
-                        "requirements": requirements, "learning_split": "development_fit",
+                        "requirements": requirements,
+                        "reviewed_requirements": {"unsupported_requirements": [],
+                                                  "boundary_cases": len(reviewed_cases),
+                                                  "sha256": reviewed_sha256},
+                        "learning_split": "development_fit",
                         "split_group_sha256": row["split_group_sha256"], "training_eligible": not test_double,
                         "provenance": {**binding, "problem_sha256": row["problem_sha256"],
                                        "independent_tests_sha256": row["independent_tests_sha256"],
@@ -403,8 +477,9 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
                                        "license": problem.license, "attribution": problem.attribution,
                                        "public_tests_passed": len(problem.public_tests),
                                        "independent_tests_passed": len(independent),
+                                       "reviewed_boundary_cases_passed": len(reviewed_cases),
                                        "declared_bound_probe_passed": True,
-                                       "qualification": "finite public/independent tests and declared probe; not formal proof or benchmark acceptance"},
+                                       "qualification": "finite public/independent tests, separately reviewed requirements and boundary cases, and the teacher's declared probe; not formal proof or benchmark acceptance"},
                     }
                     pairs.append(pair)
                 except PermissionError:
@@ -433,6 +508,7 @@ def build_targets(plan_path, output, *, codec_path, teacher_identity, load_probl
         "limits": ["This build supplies labels, not student or generalization evidence.",
                    "Held-out families remain unopened; no protected target coverage is inferred.",
                    "Semantic family and structural metadata completeness requires independent review.",
+                   "Reviewed requirements and boundary cases are finite review evidence, not a complexity proof.",
                    "Teacher compute authority and future training/evaluation are separate decisions."],
     }
     summary["artifacts_sha256"] = {
