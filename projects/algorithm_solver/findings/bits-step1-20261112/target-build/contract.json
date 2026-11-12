@@ -1,0 +1,84 @@
+{
+  "allowlist_sources_sha256": {
+    "catalogue/PROBLEM_INDEX.jsonl": "ea756f2682277983dd4d586245dfcf244ac7ed028df1c3a861164394b609b023",
+    "contracts/js_corpus_reservations_v1.json": "97f8290c6549cf65bfc118fa5b0469de09c9b49ddbc7566ed6a5b946c9cef6fe",
+    "contracts/sample_manifest.json": "40da673a01f48bab08fe6c07a07f493c603e0a34c858c72c2282fcd487fb1bd5",
+    "contracts/typed_confirmation_v1.json": "756cc54f2cf4e761f480a151bc98c25f01e70dd9ac3a82e960669f7d43081e3d",
+    "findings/known-lookup-release-v2/approved-library.json": "104cae9f9bdd1a3993d772d3b7e05de5ad89637ce27a69da115ddadd6cd8ccd8",
+    "literals/cost-decomposition-v1/contract.json": "a2c501792e4ef369a1f2630fd4ffd3b6623c1146ca3d7aac7115b469efe8cd61",
+    "literals/scale-v2/protected-boundary.json": "2ac829a3bca4aac395845ae4e6c3fc5ad3c6a38e606b2441dfe841e0be9fa0ea"
+  },
+  "authorizations": {
+    "dataset_receipt": {
+      "bytes": 93643427,
+      "identity": "sha256:ef7d64d34b092859607c1010bdd23540860a8cfff2ed7aeb0fe82e0ad524919b",
+      "sha256": "ef7d64d34b092859607c1010bdd23540860a8cfff2ed7aeb0fe82e0ad524919b"
+    },
+    "records": {
+      "dataset_provisioning": {
+        "authority": "owner (clocksmith), 2026-11-12: 'Yes, download to Jupiter'",
+        "authorized": true,
+        "scope": "Pinned LeetCodeDataset-train.jsonl (revision 215604aeed660029df7de2fea5a4d7b6ed476a08, 93643427 bytes, sha256 ef7d64d34b092859607c1010bdd23540860a8cfff2ed7aeb0fe82e0ad524919b) on Jupiter, read only through AllowlistDatasetAdapter with the committed allowlist and reservation boundary. Problem text stays out of the repository (local research use only)."
+      },
+      "heldout_payload_hashing": {
+        "authority": "owner (clocksmith), 2026-11-12: 'Yes, hashing is fine'",
+        "authorized": true,
+        "scope": "extract_allowlisted_metadata_hashes may parse allowlisted rows that will become held out, only to compute the frozen problem and independent-test digests before the split exists."
+      },
+      "isolated_teacher_inference": {
+        "authority": "owner (clocksmith), 2026-11-12: 'Claude Opus 5.5 via claude -p'",
+        "authorized": true,
+        "max_proposals": 4,
+        "model_id": "claude-opus-5-5",
+        "model_revision": "anthropic-api-alias:claude-opus-5-5 (no finer revision pin is exposed; the CLI version is recorded per run)",
+        "prompt_sha256": "564bf6df17dcf70b8e1e98e06ca7dd09047ce5ea381fe5798923b441dd857f4e",
+        "scope": "Offline teacher proposals for development_fit rows only, through IsolatedTeacherAdapter (statement, starter code, parameter types and public examples; no reference solutions, independent tests or verdicts)."
+      },
+      "pilot_training_and_evaluation": {
+        "authority": "owner (clocksmith), 2026-11-12: 'I authorize the Qwen3-Embedding-0.6B download and the specified 400-update TypedPredictor training and evaluation once the qualified targets and split checks are ready.'",
+        "authorized": true,
+        "encoder": "Qwen/Qwen3-Embedding-0.6B revision 97b0c614; the verified local copy on Jupiter is used, so no download was needed.",
+        "scope": "One TypedPredictor run with the pilot proposal's student configuration (400 steps, seed 17, width 64, 2 layers, AdamW 0.001, minimum loss over qualified alternatives, retrieval k=4) on the qualified development_fit targets, and the matched four-route comparison (raw, constrained, nearest_training_graph, bounded base-v2 search) under the frozen 2 s decision budget on development_fit, heldout_combination and heldout_family. Held-out payloads stay out of training, teacher generation, retrieval and tuning; their public inputs are read only to make route decisions and their independent tests only after all decisions are sealed."
+      },
+      "recorded": "2026-11-12",
+      "review": {
+        "authority": "owner (clocksmith), 2026-11-12: 'you do everything'",
+        "reviewer": "Claude Opus 5.5 agent session that prepared this step (separate from the teacher calls; not an owner review)",
+        "scope": "Family labels, aliases, structural groups, holdout selections, reviewed unsupported requirements and boundary cases, prepared from public statements only."
+      },
+      "schema": "algsolve.bits-step1-authorizations.v1",
+      "source": "Owner answers and instructions in the agent sessions that prepared Gamma BITS step 1 and the pilot. Each record covers only the scope stated."
+    },
+    "records_sha256": "f801eafcb1d1e40c21fae9c0ab36701bf27a84f2e0aa0bc000c0a828914002d8",
+    "teacher_cli_version": [
+      "2.1.322 (Claude Code) on Mars"
+    ],
+    "teacher_outputs_sha256": "8da3bea0cae98ee5b74223946e2df053163a5f601538a366cb55c48280d36426"
+  },
+  "codec_sha256": "e91aee58994ae952e2b43406606127689e10688404f2b5c774380dc7a77df7ad",
+  "max_proposals_per_problem": 4,
+  "plan_file_sha256": "d678c7088a9022364c4cf4978142caf5d913fc7c2a435cd12fc84d631d7a2b32",
+  "plan_sha256": "c951e1d5163a31e2c1e0b904cf77163d239367d0deb7cf793727b2f4b34c1742",
+  "protected_scoring": false,
+  "requirements_review_method": "From public statements, starter code and public examples only: a reviewer-written reference function per problem had to reproduce every public example under the judge's exact comparison before computing the expected outputs of 1-3 boundary inputs chosen at the stated constraint limits with a unique correct answer. Unsupported requirements list only mandatory statement requirements finite tests cannot verify, or a checker the available exact tests cannot provide.",
+  "requirements_reviewer": "Claude Opus 5.5 agent session and its reviewer subagents (separate from the teacher calls; not an owner review)",
+  "reviewed_requirements_sha256": "72b44791924cb0f7d54e322966ec9b701cd7060dc9e9577077cce59e53e5b11b",
+  "schema": "algsolve.semantic-target-build.v1",
+  "sources_sha256": {
+    "judge/__init__.py": "d1fac6bdb78f7df48b856327880c6bfecbe455f9c4e3bef3c33134f5855d34eb",
+    "judge/declared_comparison.py": "49e3529015997d3a8bc476d160930d4bd75d57ce2e79a960657f3f6be744d58f",
+    "judge/functional_semantics.py": "97bf41aad075a2bc1c57bd4eea64829c4e34562906b489541f00f6909f6e4eb9",
+    "judge/harness_functional.py": "f6f5bc02f851a5facfb65c7fa248f52e8c0a543eb344cbc5923569c3d3ae7fbf",
+    "judge/judge.py": "6ab683dd684e2be103cdaf0c0b7a265d58f7cfa7ecd98c417496e3ce396466c9",
+    "judge/pinned_runtime.py": "c711c2593aaf4b3d0a917e04e25bbdb2e2b7d8a36b7f48a25e97e58c8e97224e",
+    "judge/sandbox.py": "04fe78fcc41dac4c22430d0cacc1d2b40c40daafc2b609ebfe47246030c3fd74",
+    "judge/test_pinned_runtime.py": "336d302d8945319bc9fbda0c5f6820d118f2f66a23161ef78044cd7c00fd8031",
+    "records.py": "71b90820ac33fb18daafe542e79d9f475718ccf1ca0b2e45c8dd06acd2793a82",
+    "synth/semantic_target_pipeline.py": "525ed4a9940a999f55b8622f846d47076b8681ab7319c92ae10e1c474bbcce54",
+    "synth/typed_support.py": "95c9d01d6e1bb5e72c5e80003bf7c05a72429f6894002bb299b9637de3c86b0e",
+    "validate.py": "0471fb0d95708230670aad58a4ffdc750e242191b6d940241ec8fa34ab4b763b"
+  },
+  "teacher": "claude-opus-5-5@anthropic-api-alias:claude-opus-5-5 (no finer revision pin is exposed; the CLI version is recorded per run)#prompt:564bf6df17dcf70b",
+  "training": false,
+  "verification_authority": "repository-sandbox"
+}
