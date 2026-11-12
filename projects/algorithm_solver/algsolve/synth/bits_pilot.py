@@ -98,6 +98,49 @@ class EvaluationReader:
         return problem, tests
 
 
+class PoolReader:
+    """Reads a frozen fresh evaluation pool from the pinned dataset, under the pilot authorization.
+
+    Only the pool's problem IDs are kept while scanning; reference solutions are
+    dropped on read. Public inputs are used to decide; independent tests only
+    after ``seal``.
+    """
+
+    def __init__(self, adapter, pool, authorization):
+        if not isinstance(authorization, dict) or authorization.get('authorized') is not True:
+            raise PermissionError('Fresh-pool evaluation requires the pilot training and evaluation authorization')
+        if pool.get('status') != 'frozen' or not pool.get('frozen_by'):
+            raise PermissionError('The evaluation pool must be frozen by the owner before use')
+        self.adapter, self.sealed = adapter, None
+        wanted = {row['uid'] for row in pool['rows']}
+        self.raw = {}
+        with Path(adapter.dataset_path).open(encoding='utf-8') as stream:
+            for line in stream:
+                if not line.strip():
+                    continue
+                record = json.loads(line)
+                uid = f"lcd:{record['question_id']}"
+                if uid in wanted:
+                    self.raw[uid] = {k: str(record[k]) if k not in ('tags',) else list(record.get(k) or [])
+                                     for k in ('question_id', 'task_id', 'entry_point', 'starter_code',
+                                               'problem_description', 'test', 'estimated_date', 'difficulty', 'tags')}
+        missing = wanted - set(self.raw)
+        if missing:
+            raise ValueError(f'Pool rows absent from the pinned dataset: {sorted(missing)[:5]}')
+        self.rows = {row['uid']: dict(row, split='fresh_pool') for row in pool['rows']}
+
+    def problem(self, uid):
+        return self.adapter._parse_normalized_pair(self.raw[uid])
+
+    def seal(self, decisions_sha256):
+        self.sealed = decisions_sha256
+
+    def independent_tests(self, uid):
+        if self.sealed is None:
+            raise PermissionError('Independent tests are read only after every decision is sealed')
+        return self.problem(uid)
+
+
 def verify_build(build, plan):
     contract = json.loads((build / 'contract.json').read_text())
     summary = json.loads((build / 'summary.json').read_text())
@@ -129,7 +172,14 @@ def main():
     parser.add_argument('--plan', required=True, type=Path)
     parser.add_argument('--build', required=True, type=Path)
     parser.add_argument('--name', required=True)
+    parser.add_argument('--steps', type=int, default=CONFIG['steps'],
+                        help='Training steps (the pilot contract froze 400; the approved reproduction uses 4000)')
+    parser.add_argument('--pool', type=Path, default=None,
+                        help='Frozen fresh evaluation pool; the plan held-out rows are then reported as development_heldout')
     args = parser.parse_args()
+    steps = args.steps
+    if type(steps) is not int or steps < 1:
+        raise ValueError('steps must be a positive integer')
     if not args.name.replace('-', '').isalnum():
         raise ValueError('Invalid run name')
     records, records_sha = bits_step1.load_authorizations(args.authorizations)
@@ -164,7 +214,8 @@ def main():
     query = torch.from_numpy(fit_vectors); memory = torch.from_numpy(contracts[np.array(neighbor_index)])
     row_of = {uid: i for i, uid in enumerate(fit_uids)}
     targets = [row_of[p['uid']] for p in pairs]
-    contract = {'schema': 'algsolve.bits-pilot.v1', 'config': CONFIG, 'structural_config': STRUCTURAL,
+    contract = {'schema': 'algsolve.bits-pilot.v1', 'config': {**CONFIG, 'steps': steps}, 'structural_config': STRUCTURAL,
+                'evaluation_pool_sha256': sha(args.pool) if args.pool else None,
                 'literal_config': LITERAL, 'codec_sha256': identity, 'prediction_encoding': encoding.descriptor(),
                 'plan_sha256': plan['plan_sha256'], 'build_summary_sha256': sha(args.build / 'summary.json'),
                 'build_pairs_sha256': sha(args.build / 'pairs.jsonl'), 'authorizations_sha256': records_sha,
@@ -176,7 +227,7 @@ def main():
           'schedule=full_batch runtime_mode=cpu sweep_mode=after_train', flush=True)
     started = time.perf_counter(); model.train()
     with (output / 'metrics.jsonl').open('w') as stream:
-        for step in range(CONFIG['steps']):
+        for step in range(steps):
             optimizer.zero_grad()
             logits = model(query[targets], memory[targets])
             per_target = per_example_loss(logits, labels)
@@ -187,6 +238,17 @@ def main():
                 stream.write(json.dumps(metric) + '\n'); stream.flush(); print('[train] ' + json.dumps(metric), flush=True)
     training_seconds = time.perf_counter() - started
     torch.save({'state_dict': model.state_dict(), 'contract': contract}, output / 'model.pt')
+    # Everything needed to reload the trained predictor for inference without the training code.
+    write(output / 'codec.json', encoding.descriptor())
+    write(output / 'inference.json', {'model': 'model.pt', 'architecture': 'TypedPredictor', 'width': CONFIG['width'],
+                                      'embedding_dim': int(fit_vectors.shape[1]), 'slots': encoding.slots,
+                                      'type_count': len(encoding.types), 'codec': 'codec.json', 'codec_sha256': identity,
+                                      'embedding_weights': EXPECTED_SHA256, 'query_instruction': INSTRUCTION,
+                                      'retrieval_k': CONFIG['retrieval_k'],
+                                      'retrieval_memory': 'development_fit target graphs of the build pairs, in pairs.jsonl order',
+                                      'build_pairs_sha256': sha(args.build / 'pairs.jsonl'),
+                                      'structural_config': STRUCTURAL, 'literal_config': LITERAL,
+                                      'decision_wall_seconds': CONFIG['decision_wall_seconds'], 'routes': ROUTES})
     model.eval()
 
     # Phase 3: decisions from public inputs only, sealed before scoring.
@@ -194,9 +256,17 @@ def main():
     adapter.bind_plan(plan)
     reader = EvaluationReader(adapter, plan, authorization)
     requests = [row for row in plan['rows'] if row['split'] in SPLITS]
+    pool_reader = None
+    if args.pool is not None:
+        pool_reader = PoolReader(adapter, json.loads(args.pool.read_text()), authorization)
+        # The plan's held-out rows were evaluated by the first pilot: development only.
+        requests = [dict(row, split='development_fit' if row['split'] == 'development_fit' else 'development_heldout')
+                    for row in requests] + list(pool_reader.rows.values())
+    def reader_for(uid):
+        return pool_reader if pool_reader is not None and uid in pool_reader.rows else reader
     request_rows = []
     for row in requests:
-        problem, _ = reader.problem(row['uid'])
+        problem, _ = reader_for(row['uid']).problem(row['uid'])
         public = pipeline._public_input(problem)
         pair = {'uid': row['uid'], 'learning_split': row['split'], 'input': public, 'problem_family': row['family']}
         params = [p[0] for p in problem.params]
@@ -252,11 +322,13 @@ def main():
     write(output / 'decisions.json', request_rows)
     decisions_sha = sha(output / 'decisions.json')
     reader.seal(decisions_sha)
+    if pool_reader is not None:
+        pool_reader.seal(decisions_sha)
 
     # Phase 4: independent scoring after the seal.
     scored = []
     for record in request_rows:
-        problem, tests = reader.independent_tests(record['uid'])
+        problem, tests = reader_for(record['uid']).independent_tests(record['uid'])
         row = {'uid': record['uid'], 'split': record['split'], 'routes': {}}
         for name, route in record['routes'].items():
             started = time.perf_counter()
@@ -277,7 +349,7 @@ def main():
                'checkpoint_sha256': sha(output / 'model.pt'), 'training_seconds': training_seconds,
                'embedder_load_seconds': embedder_load, 'memory_embedding_seconds': memory_seconds,
                'split_checks': split_checks, 'splits': {}}
-    for split in SPLITS:
+    for split in dict.fromkeys(r['split'] for r in scored):
         rows = [r for r in scored if r['split'] == split]
         summary['splits'][split] = {'problems': len(rows), 'routes': {}}
         for name in ROUTES:
@@ -293,7 +365,7 @@ def main():
                 'independent_scoring_seconds': sum(r['independent_scoring_seconds'] for r in rs)}
     summary['first_pass_vs_repaired'] = {s: {'first_pass': summary['splits'][s]['routes']['constrained']['accepted_correct'],
                                              'repaired': summary['splits'][s]['routes']['repaired']['accepted_correct']}
-                                         for s in SPLITS}
+                                         for s in summary['splits']}
     summary['limits'] = ['One seed and one fixed configuration; not a generalization claim beyond these splits.',
                          'Targets come from one teacher run; problems without a qualified target are absent from training, not from evaluation.',
                          'Decision timing includes embedding, retrieval, prediction, repair and public checks; memory embedding setup is separate.']

@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 from algsolve.synth import typed_program as ir
 from algsolve.synth.typed_base_search import search
-from algsolve.synth.bits_pilot import EvaluationReader
+from algsolve.synth.bits_pilot import EvaluationReader, PoolReader
 
 
 class BaseSearchTests(unittest.TestCase):
@@ -33,6 +33,15 @@ class EvaluationReaderTests(unittest.TestCase):
         reader = EvaluationReader(SimpleNamespace(), plan, {'authorized': True})
         with self.assertRaises(PermissionError):
             reader.independent_tests('u')
+
+
+class PoolReaderTests(unittest.TestCase):
+    def test_refuses_an_unfrozen_pool_or_missing_authorization(self):
+        pool = {'status': 'draft_not_frozen', 'rows': [{'uid': 'lcd:1'}]}
+        with self.assertRaises(PermissionError):
+            PoolReader(SimpleNamespace(dataset_path='/nonexistent'), pool, {'authorized': True})
+        with self.assertRaises(PermissionError):
+            PoolReader(SimpleNamespace(dataset_path='/nonexistent'), dict(pool, status='frozen', frozen_by='owner'), {'authorized': False})
 
 
 if __name__ == '__main__':
