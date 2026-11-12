@@ -1,0 +1,29 @@
+{
+  "schema": "algsolve.bits-step1-authorizations.v1",
+  "recorded": "2026-11-12",
+  "source": "Owner answers to explicit questions in the agent session that prepared Gamma BITS step 1. Each record covers only the scope stated; encoder provisioning, embeddings, student training and evaluation are not authorized here.",
+  "dataset_provisioning": {
+    "authorized": true,
+    "authority": "owner (clocksmith), 2026-11-12: 'Yes, download to Jupiter'",
+    "scope": "Pinned LeetCodeDataset-train.jsonl (revision 215604aeed660029df7de2fea5a4d7b6ed476a08, 93643427 bytes, sha256 ef7d64d34b092859607c1010bdd23540860a8cfff2ed7aeb0fe82e0ad524919b) on Jupiter, read only through AllowlistDatasetAdapter with the committed allowlist and reservation boundary. Problem text stays out of the repository (local research use only)."
+  },
+  "isolated_teacher_inference": {
+    "authorized": true,
+    "authority": "owner (clocksmith), 2026-11-12: 'Claude Opus 5.5 via claude -p'",
+    "scope": "Offline teacher proposals for development_fit rows only, through IsolatedTeacherAdapter (statement, starter code, parameter types and public examples; no reference solutions, independent tests or verdicts).",
+    "model_id": "claude-opus-5-5",
+    "model_revision": "anthropic-api-alias:claude-opus-5-5 (no finer revision pin is exposed; the CLI version is recorded per run)",
+    "prompt_sha256": null,
+    "max_proposals": 4
+  },
+  "heldout_payload_hashing": {
+    "authorized": true,
+    "authority": "owner (clocksmith), 2026-11-12: 'Yes, hashing is fine'",
+    "scope": "extract_allowlisted_metadata_hashes may parse allowlisted rows that will become held out, only to compute the frozen problem and independent-test digests before the split exists."
+  },
+  "review": {
+    "authority": "owner (clocksmith), 2026-11-12: 'you do everything'",
+    "reviewer": "Claude Opus 5.5 agent session that prepared this step (separate from the teacher calls; not an owner review)",
+    "scope": "Family labels, aliases, structural groups, holdout selections, reviewed unsupported requirements and boundary cases, prepared from public statements only."
+  }
+}
