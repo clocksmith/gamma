@@ -9,7 +9,7 @@ import numpy as np
 
 from .. import validate, values
 from . import typed_codec
-from .typed_correction import correct, validate_codes
+from .typed_correction import correct, validate_codes, validate_codes_detailed
 
 
 def interface(pair):
@@ -64,14 +64,17 @@ def run_route(route, problem, raw, logits, encoding, identity, shared_seconds,
               'final_graph': None, 'graph_sha256': None, 'source': None,
               'validation_failures': [], 'correction': None, 'structurally_valid': False,
               'decision': 'abstain', 'reason': None, 'public': None, 'infrastructure_failure': False,
-              'baseline_graph_sha256': baseline_hash,
+              'baseline_graph_sha256': baseline_hash, 'stages': [],
               'timing': {'shared_inference_seconds': (shared_seconds if route != 'nearest_training_graph' else baseline_seconds),
                          'construction_seconds': baseline_construction_seconds if route == 'nearest_training_graph' else 0.,
                          'correction_seconds': 0., 'assembly_seconds': 0., 'execution_seconds': 0.}}
     params = [p[0] for p in problem.params]
     phase = time.perf_counter()
     if route == 'raw':
-        graph, failure = validate_codes(encoding, raw, params)
+        graph, details = validate_codes_detailed(encoding, raw, params)
+        failure = None if details is None else details['message']
+        result['stages'].append({'stage': 'decode', 'outcome': 'valid' if graph is not None else 'rejected',
+                                 'details': details})
         if failure:
             result['validation_failures'].append(failure)
         result['reason'] = 'invalid_prediction' if graph is None else None
@@ -85,9 +88,13 @@ def run_route(route, problem, raw, logits, encoding, identity, shared_seconds,
         result['validation_failures'] = [v for v in [repair['raw_validation_failure'],
             *[a['validation_failure'] for a in repair['attempts']]] if v is not None]
         result['reason'] = repair['reason'] if graph is None else None
+        result['stages'].append({'stage': 'correction', 'outcome': repair['reason'],
+                                 'details': repair.get('raw_validation_details'),
+                                 'attempts': len(repair['attempts'])})
     elif route == 'nearest_training_graph':
         graph = baseline_graph
         result['reason'] = baseline_reason
+        result['stages'].append({'stage': 'baseline', 'outcome': 'selected' if graph is not None else baseline_reason})
     else:
         raise ValueError('Unknown comparison route')
     if graph is not None:
@@ -95,6 +102,7 @@ def run_route(route, problem, raw, logits, encoding, identity, shared_seconds,
         # Baseline and repaired programs receive the same strict IR validation.
         target = typed_codec.encode(graph, identity)
         result.update(structurally_valid=True, final_graph=graph, graph_sha256=typed_codec.digest(target))
+        result['stages'].append({'stage': 'encode', 'outcome': 'valid', 'graph_sha256': result['graph_sha256']})
         result['timing']['construction_seconds'] += time.perf_counter()-phase
         phase = time.perf_counter()
         source = typed_codec.render(target, identity, method=problem.entry['method'], params=params)
@@ -110,10 +118,15 @@ def run_route(route, problem, raw, logits, encoding, identity, shared_seconds,
             result['infrastructure_failure'] = verdict.reason in ('sandbox_error', 'checker_error')
             result['decision'] = 'answered' if verdict.passed else 'abstain'
             result['reason'] = 'public_passed' if verdict.passed else 'public_failure'
+            result['stages'].append({'stage': 'public_check', 'outcome': result['reason'],
+                                     'verdict_reason': verdict.reason})
         else:
             result['reason'] = 'decision_budget'
+            result['stages'].append({'stage': 'public_check', 'outcome': 'skipped_no_budget'})
     result['timing']['total_seconds'] = inherited+time.perf_counter()-started
     if result['timing']['total_seconds'] > budget:
+        result['stages'].append({'stage': 'budget_override', 'outcome': 'decision_budget',
+                                 'overridden_reason': result['reason'], 'overridden_decision': result['decision']})
         result.update(decision='abstain', reason='decision_budget')
     return result
 

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.metadata
+import hashlib
 import json
 import platform
 from pathlib import Path
@@ -179,9 +180,13 @@ def main():
     with torch.inference_mode():
         model(torch.from_numpy(warmup_vector[None]), torch.from_numpy(contracts[:4][None]))
     warmup_seconds = time.perf_counter()-started
-    # No test outputs are consulted in model capture. Retain logits because the
-    # correction consumes their rankings. No recomputation on later verdicts.
+    # No test outputs are consulted in model capture. Every head's logits are
+    # retained: the routes consume 'logits' (all heads but the literal bits, as
+    # before) and 'literal_logits' keeps the bit head for diagnosis and literal
+    # repair. Each row binds the checkpoint, codec, descriptor and request it was
+    # captured under. No recomputation on later verdicts.
     captures = []
+    descriptor_sha256 = typed_codec.digest(descriptor)
     for i,pair in enumerate(requests):
         phase = time.perf_counter()
         vector = embedder.encode([query_text(pair)], query=True, instruction=INSTRUCTION)[0]
@@ -194,9 +199,16 @@ def main():
             logits = model(torch.from_numpy(vector[None]), torch.from_numpy(contracts[neighbors][None]))
             raw = decisions(logits)
             scores = {k:v[0].tolist() for k,v in logits.items() if k!='bits'}
+            literal_logits = logits['bits'][0].tolist()
         prediction = time.perf_counter()-phase
         capture = {'uid': pair['uid'], 'split':pair['learning_split'], 'codes':raw,
-                   'logits': scores, 'similarities': similarities.tolist(),
+                   'logits': scores, 'literal_logits': literal_logits, 'heads': sorted(logits),
+                   'neighbors': [int(n) for n in neighbors],
+                   'vector_sha256': hashlib.sha256(np.ascontiguousarray(vector).tobytes()).hexdigest(),
+                   'identity': {'checkpoint_sha256': config['checkpoint_sha256'], 'codec_sha256': identity,
+                                'prediction_descriptor_sha256': descriptor_sha256,
+                                'request_sha256': typed_codec.digest(pair['input'])},
+                   'similarities': similarities.tolist(),
                    'embedding_seconds':embedding, 'retrieval_seconds':retrieval, 'prediction_seconds':prediction}
         captures.append(capture)
         print(json.dumps({'captured':i+1,'total':len(requests)}),flush=True)

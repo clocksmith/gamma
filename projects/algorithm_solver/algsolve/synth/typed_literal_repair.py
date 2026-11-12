@@ -12,8 +12,8 @@ import time
 
 from .. import validate
 from . import typed_codec
-from .typed_correction import INVALID, validate_codes
-from .typed_prediction_codec import BITS, OPS
+from .typed_correction import INVALID, validate_codes, validate_codes_detailed
+from .typed_prediction_codec import BITS, OPS, rejection_details
 
 
 def literal_search(encoding, codes, logits, params, config, evaluate, *, deadline, candidate_filter=None, captured_bits=None, frozen_slots=()):
@@ -51,6 +51,7 @@ def literal_search(encoding, codes, logits, params, config, evaluate, *, deadlin
             bits = range(BITS) if label == 'int' else [1] if label == 'bool' else []
             for bit in bits:
                 pool.append((abs(float(logits[slot][bit])), slot, bit))
+        result['pool_size_before_cut'] = len(pool)
         pool = sorted(pool)[:config['pool_size']]
         result['pool'] = [dict(penalty=p, slot=s, bit=b, logit=logits[s][b]) for p,s,b in pool]
         proposals = []
@@ -58,7 +59,11 @@ def literal_search(encoding, codes, logits, params, config, evaluate, *, deadlin
             for combo in itertools.combinations(pool, size):
                 coordinates = tuple(sorted((s,b) for _,s,b in combo))
                 proposals.append((sum(p for p,_,_ in combo), coordinates))
-        for penalty, coordinates in sorted(proposals):
+        proposals = sorted(proposals)
+        # Diagnostic only: the complete proposal order, fixed before any execution.
+        result['proposal_order'] = [dict(penalty=penalty, coordinates=[list(c) for c in coordinates])
+                                    for penalty, coordinates in proposals]
+        for penalty, coordinates in proposals:
             if time.perf_counter() >= deadline:
                 result['reason'] = 'literal_budget'; break
             if result['executions'] >= config['max_executions']:
@@ -70,9 +75,10 @@ def literal_search(encoding, codes, logits, params, config, evaluate, *, deadlin
                 candidate['bits'][slot][bit] = 1-before
                 edits.append(dict(slot=slot, bit=bit, before=before, after=1-before,
                                   logit=logits[slot][bit], reason='captured model margin; no target values'))
-            graph, failure = validate_codes(encoding, candidate, params)
+            graph, details = validate_codes_detailed(encoding, candidate, params)
+            failure = None if details is None else details['message']
             attempt = dict(edits=edits, logit_penalty=penalty, validation_failure=failure,
-                           public=None, execution_seconds=0.)
+                           validation_details=details, public=None, execution_seconds=0.)
             result['attempts'].append(attempt)
             if failure:
                 continue
@@ -96,9 +102,25 @@ def literal_search(encoding, codes, logits, params, config, evaluate, *, deadlin
             if verdict['passed']:
                 result.update(final_codes=candidate, graph=graph, edits=edits, reason='literal_public_passed'); break
     except INVALID as error:
-        result.update(reason='invalid_literal_capture', capture_failure=str(error))
+        result.update(reason='invalid_literal_capture', capture_failure=str(error),
+                      capture_failure_details=rejection_details(error))
     result['seconds'] = time.perf_counter()-started
     return result
+
+
+def _skip_reason(control, problem):
+    """Why repair does not run for this control (None when it runs); same conditions as before."""
+    if control['decision'] == 'answered':
+        return 'control_answered'
+    if not control['structurally_valid']:
+        return 'control_invalid'
+    if control['infrastructure_failure']:
+        return 'control_infrastructure_failure'
+    if control['reason'] != 'public_failure':
+        return 'control_' + str(control['reason'])
+    if not problem.public_tests:
+        return 'no_public_tests'
+    return None
 
 
 def run_literal_route(control, problem, bit_logits, encoding, identity, config, budget,
@@ -109,19 +131,23 @@ def run_literal_route(control, problem, bit_logits, encoding, identity, config, 
     result['route'] = 'literal_constrained'
     result['literal_repair'] = None
     result['timing']['literal_seconds'] = 0.
+    result['literal_stage'] = {'skipped': None, 'budget_override': None}
     def finish():
         result['timing']['literal_seconds'] = time.perf_counter()-started
         result['timing']['total_seconds'] = control['timing']['total_seconds'] + result['timing']['literal_seconds']
-        if (result['timing']['total_seconds'] > budget or
-                (result['literal_repair'] is not None and result['timing']['literal_seconds'] > config['wall_seconds'])):
+        over_total = result['timing']['total_seconds'] > budget
+        over_repair = result['literal_repair'] is not None and result['timing']['literal_seconds'] > config['wall_seconds']
+        if over_total or over_repair:
+            result['literal_stage']['budget_override'] = 'total_budget' if over_total else 'repair_wall'
             result.update(decision='abstain', reason='literal_budget')
         return result
-    if (control['decision'] == 'answered' or not control['structurally_valid']
-            or control['infrastructure_failure'] or control['reason'] != 'public_failure'
-            or not problem.public_tests):
+    skip = _skip_reason(control, problem)
+    if skip:
+        result['literal_stage']['skipped'] = skip
         return finish()
     remaining = budget-control['timing']['total_seconds']
     if remaining <= 0:
+        result['literal_stage']['skipped'] = 'no_remaining_budget'
         return finish()
     def evaluate(graph, seconds):
         target = typed_codec.encode(graph, identity)

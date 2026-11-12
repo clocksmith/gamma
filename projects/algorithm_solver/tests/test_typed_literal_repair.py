@@ -35,6 +35,18 @@ class LiteralRepairTests(unittest.TestCase):
         for k in before:
             if k!='bits':self.assertEqual(result['final_codes'][k],before[k])
 
+    def test_records_complete_proposal_order_and_pool_size_without_changing_it(self):
+        def evaluate(program, seconds):
+            value=typed_program.execute(program,{'x':0})
+            return dict(passed=value==3,reason=None if value==3 else 'wrong_answer')
+        result=self.search(evaluate)
+        order=[[tuple(c) for c in p['coordinates']] for p in result['proposal_order']]
+        executed=[[(e['slot'],e['bit']) for e in a['edits']] for a in result['attempts']]
+        self.assertEqual(order[:len(executed)],executed)
+        self.assertEqual(len(order),3)  # two single flips and their pair
+        self.assertGreaterEqual(result['pool_size_before_cut'],len(result['pool']))
+        self.assertTrue(all('validation_details' in a for a in result['attempts']))
+
     def test_rejects_nonfinite_or_mismatched_capture_before_execution(self):
         for corrupt in ['nan','mismatch']:
             with self.subTest(corrupt=corrupt):

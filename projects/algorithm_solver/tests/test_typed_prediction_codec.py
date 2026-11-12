@@ -2,7 +2,7 @@ import copy
 import unittest
 
 from algsolve.synth import typed_codec, typed_development, typed_support
-from algsolve.synth.typed_prediction_codec import PredictionCodec, OPS, INPUTS
+from algsolve.synth.typed_prediction_codec import PredictionCodec, OPS, INPUTS, DecodeRejected, rejection_details
 
 
 class PredictionCodecTests(unittest.TestCase):
@@ -44,6 +44,23 @@ class PredictionCodecTests(unittest.TestCase):
         slot=next(i for i,v in enumerate(original['op']) if OPS[v]=='int')
         codes=copy.deepcopy(original); codes['bits'][slot][0]=2
         with self.assertRaises(ValueError): self.codec.decode(codes,['nums'])
+
+    def test_rejections_carry_stable_codes_and_locations_with_unchanged_messages(self):
+        original=self.codec.encode(self.rows[0]['program'])
+        slot=next(i for i,v in enumerate(original['op']) if OPS[v]=='int')
+        codes=copy.deepcopy(original); codes['bits'][slot][0]=2
+        with self.assertRaises(DecodeRejected) as caught: self.codec.decode(codes,['nums'])
+        self.assertIsInstance(caught.exception,ValueError)
+        self.assertEqual(str(caught.exception),'Invalid literal bits')
+        self.assertEqual((caught.exception.code,caught.exception.slot,caught.exception.field),
+                         ('invalid_literal_bits',slot,'bits'))
+        ref=next(i for i,v in enumerate(original['op']) if OPS[v]=='ref')
+        codes=copy.deepcopy(original); codes['binding'][ref]=INPUTS+self.codec.slots-1
+        try: self.codec.decode(codes,['nums'])
+        except ValueError as error: details=rejection_details(error)
+        self.assertEqual((details['class'],details['code'],details['slot'],details['field']),
+                         ('DecodeRejected','unbound_binding',ref,'binding'))
+        self.assertEqual(rejection_details(TypeError('x'))['code'],'unclassified')
 
 
 if __name__=='__main__': unittest.main()

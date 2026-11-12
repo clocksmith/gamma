@@ -6,16 +6,22 @@ import heapq
 import math
 import time
 
-from .typed_prediction_codec import INPUTS, OPS
+from .typed_prediction_codec import INPUTS, OPS, rejection_details
 
 INVALID = (ValueError, TypeError, KeyError, IndexError, RecursionError)
 
 
-def validate_codes(encoding, codes, params):
+def validate_codes_detailed(encoding, codes, params):
+    """Like validate_codes, with the rejection's class, code and location."""
     try:
         return encoding.decode(codes, params), None
     except INVALID as error:
-        return None, str(error)
+        return None, rejection_details(error)
+
+
+def validate_codes(encoding, codes, params):
+    graph, details = validate_codes_detailed(encoding, codes, params)
+    return graph, None if details is None else details['message']
 
 
 def correct(encoding, raw, logits, params, config, *, deadline=None):
@@ -28,8 +34,9 @@ def correct(encoding, raw, logits, params, config, *, deadline=None):
     started = time.perf_counter()
     deadline = min(deadline if deadline is not None else math.inf,
                    started + config['wall_seconds'])
-    graph, error = validate_codes(encoding, raw, params)
-    result = {'raw_validation_failure': error, 'attempts': [], 'edits': [],
+    graph, details = validate_codes_detailed(encoding, raw, params)
+    error = None if details is None else details['message']
+    result = {'raw_validation_failure': error, 'raw_validation_details': details, 'attempts': [], 'edits': [],
               'final_codes': None, 'graph': None, 'reason': 'unresolved_invalid_graph'}
     if graph is not None:
         return {**result, 'graph': graph, 'final_codes': copy.deepcopy(raw),
@@ -88,7 +95,11 @@ def correct(encoding, raw, logits, params, config, *, deadline=None):
                     penalty = float(scores[original])-float(scores[value])
                     pool.append((penalty, field, slot, value))
         pool.sort()
+        # Diagnostic only: the ranked pool before and after the bound.
+        result['pool_size_before_cut'] = len(pool)
         pool = pool[:config['max_edit_options']]
+        result['pool'] = [{'penalty': penalty, 'field': field, 'slot': slot, 'value': value}
+                          for penalty, field, slot, value in pool]
         queue = [(edit[0], (i,)) for i, edit in enumerate(pool)]
         heapq.heapify(queue)
         while queue and len(result['attempts']) < config['max_candidates']:
@@ -103,9 +114,12 @@ def correct(encoding, raw, logits, params, config, *, deadline=None):
                 edits.append({'field': field, 'slot': slot, 'from': raw[field][slot], 'to': value,
                               'reason': 'model-ranked alternative subject to schema/type/scope/effect validation'})
                 candidate[field][slot] = value
-            graph, failure = validate_codes(encoding, candidate, params)
+            graph, details = validate_codes_detailed(encoding, candidate, params)
+            failure = None if details is None else details['message']
             result['attempts'].append({'edits': edits, 'logit_penalty': penalty,
-                                       'validation_failure': failure})
+                                       'validation_failure': failure, 'validation_details': details})
+            # Timing is kept apart from the deterministic attempt records.
+            result.setdefault('attempt_remaining_seconds', []).append(deadline-time.perf_counter())
             if graph is not None and time.perf_counter() < deadline:
                 result.update(graph=graph, final_codes=candidate, edits=edits, reason='schema_repaired')
                 break
@@ -117,8 +131,10 @@ def correct(encoding, raw, logits, params, config, *, deadline=None):
                         heapq.heappush(queue, (penalty+edit[0], (*indices, index)))
         else:
             result['reason'] = 'candidate_budget' if queue else 'no_valid_correction'
+        result['queue_left'] = len(queue)
     except INVALID as failure:
         result['reason'] = 'invalid_capture'
         result['capture_failure'] = str(failure)
+        result['capture_failure_details'] = rejection_details(failure)
     result['seconds'] = time.perf_counter()-started
     return result

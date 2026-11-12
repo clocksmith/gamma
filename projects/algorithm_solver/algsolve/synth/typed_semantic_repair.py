@@ -11,9 +11,9 @@ import time
 
 from .. import validate
 from . import typed_codec
-from .typed_correction import INVALID, validate_codes
-from .typed_literal_repair import literal_search
-from .typed_prediction_codec import OPS
+from .typed_correction import INVALID, validate_codes, validate_codes_detailed
+from .typed_literal_repair import _skip_reason, literal_search
+from .typed_prediction_codec import OPS, rejection_details
 
 
 def semantic_search(encoding, codes, raw_codes, logits, params, config, evaluate, *, deadline, literal_filter=None):
@@ -45,6 +45,7 @@ def semantic_search(encoding, codes, raw_codes, logits, params, config, evaluate
                                   key=lambda i: (-op_logits[slot][i], i))[:2]
             for after in alternatives:
                 proposals.append((op_logits[slot][before]-op_logits[slot][after], slot, after))
+        result['pool_size_before_cut'] = len(proposals)
         proposals = sorted(proposals)[:4]
         result['pool'] = [dict(penalty=p, slot=s, after=OPS[a]) for p,s,a in proposals]
         for penalty, slot, after in proposals:
@@ -56,9 +57,10 @@ def semantic_search(encoding, codes, raw_codes, logits, params, config, evaluate
             before = candidate['op'][slot]; candidate['op'][slot] = after
             edits = [dict(slot=slot, field='op', before=OPS[before], after=OPS[after],
                           reason='captured model recipe rank; no target values')]
-            graph, failure = validate_codes(encoding, candidate, params)
+            graph, details = validate_codes_detailed(encoding, candidate, params)
+            failure = None if details is None else details['message']
             attempt = dict(edits=edits, logit_penalty=penalty, validation_failure=failure,
-                           public=None, execution_seconds=0.)
+                           validation_details=details, public=None, execution_seconds=0.)
             result['attempts'].append(attempt)
             if failure:
                 continue
@@ -75,8 +77,15 @@ def semantic_search(encoding, codes, raw_codes, logits, params, config, evaluate
                 result['reason'] = 'semantic_budget'; break
             if verdict['passed']:
                 result.update(final_codes=candidate, graph=graph, edits=edits, reason='recipe_public_passed'); break
-        if (result['graph'] is None and not result['infrastructure_failure']
-                and time.perf_counter() < deadline and result['executions'] < config['max_executions']):
+        # Diagnostic only: the recipe stage's own outcome, and whether literal search follows.
+        result['recipe_stage_reason'] = result['reason']
+        handoff = (result['graph'] is None and not result['infrastructure_failure']
+                   and time.perf_counter() < deadline and result['executions'] < config['max_executions'])
+        result['literal_handoff'] = 'literal_search' if handoff else (
+            'recipe_passed' if result['graph'] is not None else
+            'infrastructure_failure' if result['infrastructure_failure'] else
+            'execution_budget' if result['executions'] >= config['max_executions'] else 'deadline')
+        if handoff:
             remaining_config = {**config, 'max_executions': config['max_executions']-result['executions']}
             literal = literal_search(encoding, codes, logits['bits'], params, remaining_config,
                                      evaluate, deadline=deadline, candidate_filter=literal_filter)
@@ -86,7 +95,8 @@ def semantic_search(encoding, codes, raw_codes, logits, params, config, evaluate
             for k in ['reason','infrastructure_failure','graph','final_codes','edits']:
                 result[k] = literal[k]
     except INVALID as error:
-        result.update(reason='invalid_semantic_capture', capture_failure=str(error))
+        result.update(reason='invalid_semantic_capture', capture_failure=str(error),
+                      capture_failure_details=rejection_details(error))
     result['seconds'] = time.perf_counter()-started
     return result
 
@@ -96,20 +106,24 @@ def run_semantic_route(control, problem, logits, encoding, identity, config, bud
     started = time.perf_counter()
     result = copy.deepcopy(control)
     result.update(route='semantic_constrained', semantic_repair=None)
+    result['semantic_stage'] = {'skipped': None, 'budget_override': None}
     def finish():
         elapsed = time.perf_counter()-started
         result['timing']['semantic_seconds'] = elapsed
         result['timing']['total_seconds'] = control['timing']['total_seconds']+elapsed
-        if (result['timing']['total_seconds'] > budget or
-                (result['semantic_repair'] is not None and elapsed > config['wall_seconds'])):
+        over_total = result['timing']['total_seconds'] > budget
+        over_repair = result['semantic_repair'] is not None and elapsed > config['wall_seconds']
+        if over_total or over_repair:
+            result['semantic_stage']['budget_override'] = 'total_budget' if over_total else 'repair_wall'
             result.update(decision='abstain', reason='semantic_budget')
         return result
-    if (control['decision'] == 'answered' or not control['structurally_valid']
-            or control['infrastructure_failure'] or control['reason'] != 'public_failure'
-            or not problem.public_tests):
+    skip = _skip_reason(control, problem)
+    if skip:
+        result['semantic_stage']['skipped'] = skip
         return finish()
     remaining = budget-control['timing']['total_seconds']
     if remaining <= 0:
+        result['semantic_stage']['skipped'] = 'no_remaining_budget'
         return finish()
     def render(graph):
         return typed_codec.render(typed_codec.encode(graph, identity), identity,

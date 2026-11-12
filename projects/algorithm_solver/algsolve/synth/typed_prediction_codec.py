@@ -20,6 +20,36 @@ OPS += ['call:'+x for x in sorted(ir.EFFECTS)]
 OPS += ['recipe:'+x for x in sorted(typed_recipes.catalog())]
 
 
+class DecodeRejected(ValueError):
+    """A decode rejection with a stable diagnostic code and its location.
+
+    The message is unchanged from the plain ValueError it replaces, so callers
+    that match on ValueError or str(error) behave exactly as before; ``code``,
+    ``slot`` and ``field`` are diagnostic additions only.
+    """
+
+    def __init__(self, code, message, *, slot=None, field=None):
+        super().__init__(message)
+        self.code = code
+        self.slot = slot
+        self.field = field
+
+
+def rejection_details(error):
+    """Structured description of any decode or validation rejection."""
+    details = {"class": type(error).__name__, "message": str(error),
+               "code": getattr(error, "code", None), "slot": getattr(error, "slot", None),
+               "field": getattr(error, "field", None)}
+    if details["code"] is None:
+        if isinstance(error, ir.BudgetExceeded):
+            details["code"] = "ir_budget_exceeded"
+        elif isinstance(error, ir.Invalid):
+            details["code"] = "ir_invalid"
+        else:
+            details["code"] = "unclassified"
+    return details
+
+
 def flatten(program):
     ir.validate(program, typed_recipes.catalog())
     if len(program['parameters']) > INPUTS:
@@ -102,48 +132,48 @@ class PredictionCodec:
         return result
 
     def decode(self,codes,params):
-        if len(params)>INPUTS or len(set(params))!=len(params): raise ValueError('Invalid inputs')
+        if len(params)>INPUTS or len(set(params))!=len(params): raise DecodeRejected('invalid_inputs','Invalid inputs')
         if any(len(codes[k])!=self.slots for k in ('op','first','next','binding','bits')) or len(codes['types'])!=INPUTS+1:
-            raise ValueError('Prediction dimensions differ')
+            raise DecodeRejected('dimensions_differ','Prediction dimensions differ')
         def op(i):
             v=int(codes['op'][i])
-            if not 0<=v<len(OPS): raise ValueError('Invalid operation')
+            if not 0<=v<len(OPS): raise DecodeRejected('invalid_operation','Invalid operation',slot=i,field='op')
             return OPS[v]
         active=[i for i in range(self.slots) if op(i)!='EMPTY']
         if not active or active != list(range(len(active))) or op(0)!='root' or int(codes['next'][0])!=0:
-            raise ValueError('Invalid root or nontrailing empty slots')
+            raise DecodeRejected('invalid_root_or_trailing','Invalid root or nontrailing empty slots',field='op')
         used={0}
         def children(i):
             result=[]; pointer=int(codes['first'][i])
             while pointer:
                 child=pointer-1
                 if child<=i or child>=len(active) or child in used:
-                    raise ValueError('Invalid, shared or cyclic tree edge')
+                    raise DecodeRejected('invalid_edge','Invalid, shared or cyclic tree edge',slot=i,field='first' if pointer==int(codes['first'][i]) else 'next')
                 used.add(child); result.append(child); pointer=int(codes['next'][child])
             return result
         names={i:p for i,p in enumerate(params)}
         def declaration(i):
             name=f'slot_{i}'
-            if name in params: raise ValueError('Declaration collides with parameter')
+            if name in params: raise DecodeRejected('declaration_collision','Declaration collides with parameter',slot=i)
             names[INPUTS+i]=name
             return name
         def binding(i):
             v=int(codes['binding'][i])
-            if v not in names: raise ValueError('Binding has no preceding declaration')
+            if v not in names: raise DecodeRejected('unbound_binding','Binding has no preceding declaration',slot=i,field='binding')
             return names[v]
         def expr(i):
             label=op(i); cs=children(i)
             if label=='ref' and not cs: return {'ref':binding(i)}
             if label in ('int','bool') and not cs:
                 bits=[int(v) for v in codes['bits'][i]]
-                if len(bits)!=BITS or any(b not in (0,1) for b in bits): raise ValueError('Invalid literal bits')
+                if len(bits)!=BITS or any(b not in (0,1) for b in bits): raise DecodeRejected('invalid_literal_bits','Invalid literal bits',slot=i,field='bits')
                 v=sum(b<<k for k,b in enumerate(bits[1:])); v=-v if bits[0] else v
-                if label=='bool' and (bits[0] or v not in (0,1)): raise ValueError('Invalid Boolean')
+                if label=='bool' and (bits[0] or v not in (0,1)): raise DecodeRejected('invalid_boolean','Invalid Boolean',slot=i,field='bits')
                 return {'literal':bool(v) if label=='bool' else v}
             if label.startswith('pure:'): return {'op':label[5:],'args':[expr(c) for c in cs]}
-            raise ValueError('Expected expression')
+            raise DecodeRejected('expected_expression','Expected expression',slot=i,field='op')
         def sequence(i):
-            if op(i)!='sequence': raise ValueError('Expected statement sequence')
+            if op(i)!='sequence': raise DecodeRejected('expected_sequence','Expected statement sequence',slot=i,field='op')
             statements=[]
             for slot in children(i):
                 label=op(slot); cs=children(slot)
@@ -158,16 +188,16 @@ class PredictionCodec:
                     statement={'op':'for','item':name,'in':values,'body':sequence(cs[1])}
                 elif label=='if' and len(cs)==3:
                     statement={'op':'if','condition':expr(cs[0]),'then':sequence(cs[1]),'else':sequence(cs[2])}
-                else: raise ValueError('Invalid statement shape')
+                else: raise DecodeRejected('invalid_statement_shape','Invalid statement shape',slot=slot,field='op')
                 statements.append(statement)
             return statements
         root=children(0)
-        if len(root)!=2: raise ValueError('Root needs body and return')
+        if len(root)!=2: raise DecodeRejected('root_shape','Root needs body and return',slot=0,field='first')
         body=sequence(root[0]); answer=expr(root[1])
-        if used!=set(active): raise ValueError('Unreachable active nodes')
+        if used!=set(active): raise DecodeRejected('unreachable_nodes','Unreachable active nodes',slot=min(set(active)-used),field='first')
         def typ(i):
             code=int(codes['types'][i])
-            if not 0<=code<len(self.types): raise ValueError('Invalid type code')
+            if not 0<=code<len(self.types): raise DecodeRejected('invalid_type_code','Invalid type code',slot=i,field='types')
             return json.loads(self.types[code])
         program={'schema':ir.SCHEMA,'parameters':params,'inputs':{p:typ(i) for i,p in enumerate(params)},
                  'body':body,'return':answer,'output_type':typ(INPUTS)}
