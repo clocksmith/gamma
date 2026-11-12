@@ -1,7 +1,7 @@
 {
   "schema": "algsolve.bits-step1-authorizations.v1",
   "recorded": "2026-11-12",
-  "source": "Owner answers to explicit questions in the agent session that prepared Gamma BITS step 1. Each record covers only the scope stated; encoder provisioning, embeddings, student training and evaluation are not authorized here.",
+  "source": "Owner answers and instructions in the agent sessions that prepared Gamma BITS step 1 and the pilot. Each record covers only the scope stated.",
   "dataset_provisioning": {
     "authorized": true,
     "authority": "owner (clocksmith), 2026-11-12: 'Yes, download to Jupiter'",
@@ -25,5 +25,11 @@
     "authority": "owner (clocksmith), 2026-11-12: 'you do everything'",
     "reviewer": "Claude Opus 5.5 agent session that prepared this step (separate from the teacher calls; not an owner review)",
     "scope": "Family labels, aliases, structural groups, holdout selections, reviewed unsupported requirements and boundary cases, prepared from public statements only."
+  },
+  "pilot_training_and_evaluation": {
+    "authorized": true,
+    "authority": "owner (clocksmith), 2026-11-12: 'I authorize the Qwen3-Embedding-0.6B download and the specified 400-update TypedPredictor training and evaluation once the qualified targets and split checks are ready.'",
+    "scope": "One TypedPredictor run with the pilot proposal's student configuration (400 steps, seed 17, width 64, 2 layers, AdamW 0.001, minimum loss over qualified alternatives, retrieval k=4) on the qualified development_fit targets, and the matched four-route comparison (raw, constrained, nearest_training_graph, bounded base-v2 search) under the frozen 2 s decision budget on development_fit, heldout_combination and heldout_family. Held-out payloads stay out of training, teacher generation, retrieval and tuning; their public inputs are read only to make route decisions and their independent tests only after all decisions are sealed.",
+    "encoder": "Qwen/Qwen3-Embedding-0.6B revision 97b0c614; the verified local copy on Jupiter is used, so no download was needed."
   }
 }
