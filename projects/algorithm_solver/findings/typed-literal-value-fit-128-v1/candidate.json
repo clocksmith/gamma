@@ -1,0 +1,36 @@
+{
+ "arms": [
+  "control",
+  "bitflip",
+  "value"
+ ],
+ "decision_ceiling_seconds": 2.0,
+ "design_note": "literal-value-v1 was designed after the failure ledger showed these cases' witness literal differences",
+ "literal_config": {
+  "max_edits": 2,
+  "max_executions": 4,
+  "pool_size": 8,
+  "wall_seconds": 0.25
+ },
+ "policy": "literal-value-v1",
+ "scope": "consumed fit captures; development evidence only",
+ "structural_config": {
+  "alternatives_per_field": 2,
+  "feedback": "schema/type/scope/effect/resource validity only",
+  "fields": [
+   "op",
+   "first",
+   "next",
+   "binding",
+   "types"
+  ],
+  "include_interior_empty": true,
+  "literal_changes": false,
+  "max_candidates": 128,
+  "max_edit_options": 64,
+  "max_edits": 2,
+  "ordering": "summed logit penalty; then lexicographic field/slot/value edit indices",
+  "stop": "first strictly valid graph; unchanged valid raw graph; otherwise abstain",
+  "wall_seconds": 0.2
+ }
+}

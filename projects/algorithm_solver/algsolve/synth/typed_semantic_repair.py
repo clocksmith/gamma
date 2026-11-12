@@ -16,7 +16,9 @@ from .typed_literal_repair import _skip_reason, literal_search
 from .typed_prediction_codec import OPS, rejection_details
 
 
-def semantic_search(encoding, codes, raw_codes, logits, params, config, evaluate, *, deadline, literal_filter=None):
+def semantic_search(encoding, codes, raw_codes, logits, params, config, evaluate, *, deadline, literal_filter=None,
+                    literal_policy=None):
+    literal_policy = literal_policy or literal_search
     started = time.perf_counter()
     deadline = min(deadline, started + config['wall_seconds'])
     if not (0 <= config['pool_size'] <= 8 and 0 <= config['max_executions'] <= 4
@@ -87,7 +89,7 @@ def semantic_search(encoding, codes, raw_codes, logits, params, config, evaluate
             'execution_budget' if result['executions'] >= config['max_executions'] else 'deadline')
         if handoff:
             remaining_config = {**config, 'max_executions': config['max_executions']-result['executions']}
-            literal = literal_search(encoding, codes, logits['bits'], params, remaining_config,
+            literal = literal_policy(encoding, codes, logits['bits'], params, remaining_config,
                                      evaluate, deadline=deadline, candidate_filter=literal_filter)
             result['literal_repair'] = {k:v for k,v in literal.items() if k not in ('graph','final_codes')}
             result['attempts'].extend(literal['attempts'])
@@ -102,7 +104,7 @@ def semantic_search(encoding, codes, raw_codes, logits, params, config, evaluate
 
 
 def run_semantic_route(control, problem, logits, encoding, identity, config, budget,
-                       *, judge=validate.judge_problem, literal_filter=None):
+                       *, judge=validate.judge_problem, literal_filter=None, literal_policy=None):
     started = time.perf_counter()
     result = copy.deepcopy(control)
     result.update(route='semantic_constrained', semantic_repair=None)
@@ -132,7 +134,8 @@ def run_semantic_route(control, problem, logits, encoding, identity, config, bud
         return judge(problem, render(graph), problem.public_tests, wall_seconds=seconds).to_dict()
     repair = semantic_search(encoding, control['correction']['final_codes'], control['raw_codes'],
                              logits, [p[0] for p in problem.params], config, evaluate,
-                             deadline=started+remaining, literal_filter=literal_filter)
+                             deadline=started+remaining, literal_filter=literal_filter,
+                             literal_policy=literal_policy)
     graph = repair.pop('graph'); result['semantic_repair'] = repair
     result['infrastructure_failure'] |= repair['infrastructure_failure']
     if graph is not None:
