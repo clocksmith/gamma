@@ -1,5 +1,9 @@
 # Mars BITS readiness after exact-alias holdout closure
 
+Superseded for the current source by [mars-bits-readiness-20261112-reviewed-requirements](../mars-bits-readiness-20261112-reviewed-requirements/README.md);
+this folder's `receipt.json` remains the sealed record for baseline `348274c95`
+(check it with `--receipt` against that baseline's sources).
+
 This receipt re-measures Mars readiness for the planner revision that rejects
 exact-alias leakage into combination holdouts (`348274c95`). The earlier record,
 [mars-bits-readiness-20261110](../mars-bits-readiness-20261110/README.md),

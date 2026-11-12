@@ -30,7 +30,7 @@ from algsolve.synth import semantic_allowlist, semantic_target_pipeline, typed_c
 
 SCHEMA = "gamma.mars-bits-readiness.v1"
 # The current receipt; this folder's receipt.json is the sealed record for baseline 52ab15e8.
-DEFAULT_RECEIPT = Path(__file__).resolve().parents[1] / "mars-bits-readiness-20261110-alias-closure" / "receipt.json"
+DEFAULT_RECEIPT = Path(__file__).resolve().parents[1] / "mars-bits-readiness-20261112-reviewed-requirements" / "receipt.json"
 BOUND_SOURCES = (
     "projects/algorithm_solver/algsolve/synth/semantic_target_pipeline.py",
     "projects/algorithm_solver/algsolve/synth/semantic_allowlist.py",
