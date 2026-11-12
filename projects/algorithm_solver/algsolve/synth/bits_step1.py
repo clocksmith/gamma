@@ -138,6 +138,25 @@ def freeze(args):
     print(json.dumps({key: receipt[key] for key in ("plan_sha256", "metadata_rows", "splits")}))
 
 
+def review_inputs(args):
+    """Public inputs (the teacher's view) for the plan's development_fit rows, for review."""
+    records, _ = load_authorizations(args.authorizations)
+    compiled, adapter = open_adapter(args.dataset, records)
+    plan = pipeline.validate_plan(json.loads(Path(args.plan).read_bytes()))
+    adapter.bind_plan(plan)
+    out = []
+    for row in plan["rows"]:
+        if row["split"] != "development_fit":
+            continue
+        problem = adapter.load_problem(row)
+        out.append({"uid": row["uid"], "slug": problem.slug, "family": row["family"],
+                    "problem_sha256": row["problem_sha256"], "method": problem.entry["method"],
+                    **pipeline._public_input(problem)})
+    _write_new(args.out, {"schema": "algsolve.bits-step1-review-inputs.v1",
+                          "plan_sha256": plan["plan_sha256"], "rows": out})
+    print(json.dumps({"wrote": str(args.out), "rows": len(out)}))
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -153,6 +172,12 @@ def main(argv=None):
     frz.add_argument("--plan", required=True, type=Path)
     frz.add_argument("--receipt", required=True, type=Path)
     frz.set_defaults(run=freeze)
+    rin = sub.add_parser("review-inputs")
+    rin.add_argument("--dataset", required=True, type=Path)
+    rin.add_argument("--authorizations", required=True, type=Path)
+    rin.add_argument("--plan", required=True, type=Path)
+    rin.add_argument("--out", required=True, type=Path)
+    rin.set_defaults(run=review_inputs)
     args = parser.parse_args(argv)
     args.run(args)
 
