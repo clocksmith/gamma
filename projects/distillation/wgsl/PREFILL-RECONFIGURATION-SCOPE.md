@@ -15,6 +15,9 @@ The discovery is the mapping from prefill state to a useful transform; any rever
 transform is easy to build. A failed rule rejects that rule, not the idea of fast
 reconfiguration.
 
+WGSL shader writing is the first testbed. Specialization across domains, and shifting
+one model between several configurations, are the broader goal and remain unproven.
+
 ## Starting evidence (scope only)
 
 - WGSL Writer v2: three trained rank-32 LoRA seeds reached 16/16, 15/16 and 15/16
@@ -59,7 +62,7 @@ reconfiguration.
    - multiplicative, `U(z) W V(z)ᵀ` with near-identity structured `U` and `V`, applied
      as `U(W(Vᵀx))` on vectors, never by rewriting the matrix;
    - structured rotations such as Householder or Givens products acting on vectors.
-2. **Upper comparison, trained controller:** a small network maps prefill state to
+2. **Comparator, trained controller:** a small network maps prefill state to
    `z`. Size it first: start with coefficients over a shared set of fixed bases
    rather than predicting every LoRA parameter, and report its parameter count and
    cost per request. It does not test the no-training claim.
@@ -74,18 +77,22 @@ Each track runs three arms:
   from the cached base computation. Measure that divergence;
 - transform all projections and keep the base KV cache (the hybrid), with the
   divergence measured directly;
-- re-prefill with the transformed weights (exact, at roughly double the prefill
-  cost).
+- re-prefill with the transform applied (consistent, at roughly double the prefill
+  cost). `z` is computed once from the first base prefill and frozen before the prompt
+  is processed again; it is not recomputed from the transformed pass.
 
 ## Controls and comparisons (matched budgets)
 
-- the base model, given the transform's extra compute as more samples (best-of-k);
-- the trained WGSL v2 adapter as the reference ceiling: seed 47, the selected seed of
+- the base model, given the transform's extra compute as more samples (best-of-k). The
+  submitted sample is chosen using only the task's public checks (compilation and
+  dispatch on its visible inputs), ties going to the earliest sample; confirmation
+  checks are never used for selection;
+- the trained WGSL v2 adapter as a reference comparator, not a proven upper bound: seed 47, the selected seed of
   three (11, 29, 47), PEFT tree SHA-256
   `aa8ad92a5e57c04d359fa2a7095f40eda6f85728f4e1ef90f4a9e8e5633d200d`; reported 15/16
   (93.75%) on seed confirmation and 11/16 on checkpoint selection
   (`doppler/docs/status/wgsl-writer-v2-result-2026-07-14.md`). Those populations are
-  exposed, so its ceiling on the fresh tasks is measured, not assumed;
+  exposed, so its pass rate on the fresh tasks is measured, not assumed;
 - the same rule fed shuffled or unrelated context, a random `z` of the same size, and
   (for gain rules) the same gains permuted across channels, to show whether the
   prompt-specific assignment matters at all;
@@ -102,12 +109,15 @@ still required.
 
 ## Success criteria (proposed by A1; the owner freezes them before any run)
 
-No run starts until these numbers are frozen in this file. Measured once on the
-confirmation population after the rule and its settings are fixed on the selection
-population. A no-training rule is an interesting result only if all of these hold:
+No run starts until these numbers are frozen in this file. They are this experiment's
+decision rule, not a verdict on the idea. Measured once on the confirmation population
+after the rule and its settings are fixed on the selection population. A no-training
+rule is an interesting result only if all of these hold:
 
 1. **Prompt dependence:** it beats both the shuffled-context and random-`z` controls on
-   the same tasks; exact paired sign test on discordant tasks, p < 0.05.
+   the same tasks; exact one-sided paired sign test on discordant tasks, p < 0.05. That
+   needs at least 5 discordant tasks; with fewer, the comparison is reported as
+   underpowered, neither a pass nor a fail.
 2. **Gap closure:** it closes at least 50% of the semantic-pass gap from the base model
    (with matched best-of-k) to the seed-47 adapter, measured on the same tasks. If that
    gap is under 4 tasks, the comparison is uninformative and the result is reported as
