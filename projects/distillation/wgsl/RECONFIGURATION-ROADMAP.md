@@ -29,8 +29,9 @@ measured full overhead. Use the same frozen gains when isolating base-cache vers
 re-prefill behavior. Kernel fixtures alone do not establish model integration.
 
 **Non-claim:** this is an engineering capability, not a learning breakthrough or
-proof that the reconfiguration improves an answer. Current native primitives and
-artifact checks are partial evidence; the full model/cache comparison is incomplete.
+proof that the reconfiguration improves an answer. The [first smoke study](channel_gain/README.md) now supplies two-prompt native
+cache and exact reset observations. Concurrent isolation and broader qualification
+remain unproved.
 
 ## 2. Shader improvement
 
@@ -44,7 +45,8 @@ or success on exposed training examples.
 
 **Non-claim:** a positive result would be promising research in the scoped shader
 testbed. It would not establish general coding improvement, cheap specialization or
-recursive self-improvement. This is the current experiment; no confirmation exists.
+recursive self-improvement. The first study closed at budget admission: its smoke ran, both selection
+candidates remain untested, and no confirmation exists.
 
 ## 3. Efficient specialization
 

@@ -1,0 +1,46 @@
+Warning: maxDynamicUniformBuffersPerPipelineLayout artificially reduced from 500000 to 16 to fit dynamic offset allocation limit.
+Warning: maxDynamicStorageBuffersPerPipelineLayout artificially reduced from 500000 to 16 to fit dynamic offset allocation limit.
+[GPU] amd rdna-3, f16/subgroups, 4.0GB, submit probe: 0.6ms
+[965.3ms][Pipeline] Execution v1 enabled (steps=35, kernelPathInline=yes, pipelineInline=no)
+[965.5ms][Config] Using manifest-first config (source of truth)
+[970.8ms][Pipeline] Resolved session applied (qwen-3-5-9b-f16-af32): batchSize=12, stopCheckMode=batch, readbackInterval=32, disableCommandBatching=true
+[972.0ms][Pipeline] KernelPath: qwen-3-5-9b-f16-af32-execution-inline (15 decode steps, 10 kernels, source=execution-v1)
+[972.6ms][Pipeline] 32L/4096H/16heads (256dim), kernelPath=qwen-3-5-9b-f16-af32-execution-inline
+[973.3ms][Tokenizer] Loading bundled tokenizer from tokenizer.json
+[1095.5ms][Tokenizer] HuggingFace model.type="BPE", using type="bpe"
+[1240.7ms][Tokenizer] Loaded HuggingFace 248070 tokens (bpe), 26 special patterns, 247587 merges
+[1241.1ms][Pipeline] Tokenizer vocabSize=248070 differs from model=248320, using model size
+[1252.4ms][Pipeline] KV cache allocated: kvDtype=f16, maxSeqLen=8192, layout=contiguous, modelMaxSeqLen=262144, requestedKvDtype=f16, requestedMaxSeqLen=8192
+[1254.1ms][Pipeline] Execution plan: active=primary, dtype=f32, kernelPath=qwen-3-5-9b-f16-af32-execution-inline
+[1345.8ms][ShardCache] Custom shard loader configured
+[1346.1ms][Loader] Initializing...
+[1365.6ms][HeapManager] Allocated segment 0: 1024MB
+[1365.7ms][HeapManager] Segmented heap: 1GB per segment
+[1365.7ms][HeapManager] Initialized with strategy: SEGMENTED
+[1365.8ms][Loader] Initialized (f16, subgroups)
+[1366.4ms][Loader] Loading: qwen-3-5-9b-f16-af32
+[1367.2ms][Loader] [0.0s] Memory (start): | RSS=344.95 MB (heap=159.75 MB/195.96 MB, external=1.00 GB, arrayBuffers=1.00 GB) | GPU=0 B (0 active, 0 pooled, peak=0 B) | ShardCache=0 B (0 shards) | Layers=0, GPUBuffers=0
+[1367.7ms][Loader] Dense model on discrete GPU - performance limited. Consider MoE model.
+[8095.2ms][Loader] Embeddings tensor loaded: name=model.language_model.embed_tokens.weight, hasShape=true, shape=[248320,4096], isWeightBuffer=true
+[8095.7ms][Loader] Layers: 0-31
+[31387.2ms][Loader] [30.0s] Memory (loading): | RSS=386.00 MB (heap=102.99 MB/129.64 MB, external=1.07 GB, arrayBuffers=1.06 GB) | GPU=7.95 GB (217 active, 0 pooled, peak=7.95 GB) | ShardCache=0 B (0 shards) | Layers=14, GPUBuffers=214
+[55111.8ms][Loader] Layers: 32 complete (47.02s)
+[61392.2ms][Loader] [60.0s] Memory (loading): | RSS=393.07 MB (heap=99.42 MB/133.39 MB, external=1.04 GB, arrayBuffers=1.04 GB) | GPU=16.68 GB (459 active, 0 pooled, peak=16.68 GB) | ShardCache=0 B (0 shards) | Layers=32, GPUBuffers=458
+[61548.8ms][Loader] Complete: 16.68 GB in 60.17s (283.82 MB/s)
+[61549.8ms][Loader] [60.2s] Memory (complete): | RSS=393.07 MB (heap=94.30 MB/132.64 MB, external=1.05 GB, arrayBuffers=1.04 GB) | GPU=16.68 GB (459 active, 0 pooled, peak=16.68 GB) | ShardCache=0 B (0 shards) | Layers=32, GPUBuffers=459
+[61591.2ms][Pipeline] Model loaded successfully (60631ms)
+[62226.3ms][KernelSelect] matmul variant=f16w_f32a reason=path_override
+[62230.8ms][KernelSelect] matmul variant=f16w_f32a_tiled reason=default
+[63052.6ms][KernelSelect] attention variant=prefill_head256_f16kv reason=path_override:tiled_small
+[75814.2ms][KernelSelect] matmul variant=gemv_subgroup_vec4 reason=path_override
+[75819.8ms][KernelSelect] matmul variant=gemv_subgroup reason=gemv
+[75832.3ms][KernelSelect] attention variant=decode_online_f16kv reason=path_override:subgroup
+[75921.6ms][KernelSelect] matmul variant=gemv_subgroup_multicol reason=path_override
+[914865.1ms][KernelSelect] matmul variant=f32 reason=default
+[1009497.1ms][doppler] LoRA adapter unloaded
+[wgsl-verifier] dispatched 1/1
+[1912678.9ms][doppler] LoRA adapter unloaded
+[wgsl-verifier] dispatched 1/1
+[2112801.7ms][ExpertCache] Cache cleared
+[2112805.1ms][Pipeline] Unloaded
+{"runtimeLockSha256":"6be766a21347c52762c504d2fa348383bfe388f5a61fefcbaeb82e6a178ba2db","status":"smoke_complete","requestCount":22,"k":2,"eta":{"remainingRequests":184,"meanSeconds":19698.79913437347,"observedRangeSeconds":[16936.233282767997,23801.823633943997],"basis":"completed_frozen_model_smoke_request_timings_excluding_cold_load","requestCountBasis":"selection:two candidates x four tasks; confirmation:base+adapter+eight transformed requests+(k-1) extra base samples per task","additionalCacheDiagnosticSeconds":233.1654244080009}}

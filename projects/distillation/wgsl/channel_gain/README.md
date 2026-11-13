@@ -1,135 +1,163 @@
 # First prefill channel-gain experiment
 
-Status at 2026-11-13 03:09 UTC: **native smoke attempt 03 running; no confirmation**.
-The current machine-readable state is [execution-status.json](execution-status.json).
-The scope remains the first analytical MLP rule: no training, attention gains,
-other transform families, or trained controller.
+**Run closed at selection admission, 2026-11-13. No shader-improvement confirmation.**
+The complete two-task smoke and corrected public replay ran. The eight-request
+selection workload was not admitted under the unchanged 35.59 GPU-second cap;
+both candidates remain **untested**, with no winner and no confirmation requests.
+This outcome applies to this implementation and budget, not every gain rule or
+reconfiguration architecture.
 
-## Protocol and evidence boundaries
+The current state is [execution-status.json](execution-status.json). Detailed
+request, cost, cache, reset and memory tables are in [RESULTS-03.md](RESULTS-03.md)
+and [results-03.json](results-03.json). The [selection receipt](native-selection-03/selection-receipt.json)
+is the decision source of truth.
 
-[protocol.json](protocol.json) fixes the numerical criteria, beta ±0.05 candidates,
-clip 1, epsilon 1e-6, reference A, layers 30/31, 2/4/16 family splits and generation
-settings. [protocol-freeze.json](protocol-freeze.json) binds those bytes and task
-sources before [corpus materialization](corpus-v1/manifest.json).
+## What ran and what it showed
 
-[Amendment 01](protocol-amendment-01.json), recorded before the first model request,
-removes the author's extra requirement to charge fixed smoke work to candidate
-selection. The owner's numerical 1% criterion is unchanged: all work used to select
-settings is charged; smoke and confirmation are separately reported and cannot rank
-candidates. Smoke uses the first frozen candidate deterministically, without tuning.
+Qwen3.5-9B used the provisioned revision and an explicit native split-F32 MLP path
+on Jupiter's AMD GPU. The rule was fixed at beta +0.05 for smoke, layers 30/31,
+clip 1, epsilon 1e-6 and reference A. No offline training or additional transform
+family was introduced. Smoke did not rank the positive/negative candidates.
 
-Each task/control reuses identical immutable gains in MLP/base-cache and
-MLP/re-prefill. All-projections is **not applicable**, neither passed nor failed.
-Controls are base, public-check-selected best-of-k, shuffled-context, random-z,
-permuted-gain and the trained seed-47 adapter. Candidate ranking uses complete
-selection-family semantic checks. Confirmation-family checks never rank anything.
+There were 22 generated smoke responses: two base, sixteen actual/shuffled/random/
+permuted-gain responses across two cache arms, two seed-47 adapter responses, and
+two extra base samples. Public-only best-of-2 selected among the existing samples.
+All four gain types reused identical hashes between their cache arms on both tasks.
+All-projections is **not applicable**, neither passed nor failed.
 
-The exposure audit distinguishes the 22 constructed scalar expressions against
-24 historical families at its tested inputs. It does not establish external novelty
-or generic WGSL independence. This remains an elementwise-shader study.
+| Condition | Public tasks passed | Mean attributed request time |
+| --- | ---: | ---: |
+| Same-prompt base | 0/2 | 93.17 s |
+| Actual gain, base cache | 0/2 | 101.61 s |
+| Actual gain, re-prefill | 0/2 | 114.84 s |
+| Shuffled gains, base cache / re-prefill | 0/2 / 0/2 | 113.12 / 126.12 s |
+| Random gains, base cache / re-prefill | 0/2 / 0/2 | 102.03 / 114.69 s |
+| Permuted gains, base cache / re-prefill | 0/2 / 0/2 | 102.25 / 115.39 s |
+| Trained seed-47 adapter | 1/2 | 94.60 s |
+| Public-selected best-of-2 base | 0/2 | 192.96 s for both samples |
 
-## What ran
+The base and gain outputs failed the required workgroup-override source contract.
+The repaired verifier accepted the adapter's sign-bit shader. Its tent shader
+compiled/dispatched but failed the public numeric oracle (one of four elements).
+These are two smoke families, not a held-out quality estimate. Prompt-dependence,
+trained-adapter gap closure and wrong-acceptance criteria remain unevaluated on
+confirmation. The full best-of-2 base samples consumed 1.77x and 2.04x the primary gain
+request's attributed compute; base-favoring integer rounding is reported, not exact
+compute equality.
 
-- [Reference qualification](reference-qualification-summary.json): 22/22 reference
-  shaders and 286/286 checks passed on Apple Metal. Verifier intervals were
-  285.040, 294.881 and 1015.916 ms. These are reference checks, not model confirmation.
-- [Native artifact preflight](native-artifact-preflight.json): all 267 shards
-  (17.91 GB) verified, 19,261 scalar samples across all 427 text tensors matched
-  source-to-F16 conversion, and all architecture/attention-pattern checks passed.
-- Doppler native GPU tests passed on Apple M3 and Jupiter's Radeon 8060S, including
-  actual dense-FFN capture/application, both beta signs, controls, immutable gain
-  ownership, reset and frozen-state sharing. These are toy operator tests.
-- [Attempt 01](native-smoke-01.jsonl): cold model load 60.750 s, adapter preparation
-  0.302 s. The first base request generated 273 tokens in 92.660 s end-to-end and
-  failed its public contract (`WORKGROUP_SIZE` override missing). Transform capture
-  then failed because the scoped pipeline lacked the new method registration.
-- [Repair record](runtime-repair-01.json): Doppler `d8806094` fixes registration;
-  `79ce17bc` adds exact private-buffer allocation metadata. Gamma now destroys its
-  owned device before releasing the host and closes independent resources on error.
-  Attempt 01 sources are preserved under [attempt-01-sources](attempt-01-sources/).
-- [Runtime lock 02](native-runtime-lock-02.json) binds the repaired driver, native
-  sources, model and adapter before retry. It records the one previously observed
-  model request. No candidate has been selected and no confirmation has run.
+Mean paired added latency was 9.13% for base cache and 23.33% for re-prefill. Output
+lengths differed: base averaged 278.5 tokens and actual gains 270.0. These descriptive
+smoke observations do not pass or fail the confirmation latency criterion. Timing
+includes token preparation, reference/base prefill, gain derivation, snapshot
+restoration or re-prefill, decode, request cleanup and public verification. Shared
+setup is charged back to each arm; physical batch wall time is reported separately.
 
-- [Attempt 02](native-smoke-02.jsonl): nine requests completed on the first smoke
-  task, all failing the public contract. Same-gain cache arms were measured; the
-  layer-31 KV and logits differed under the same forced prefix. The trained adapter
-  then failed at a combined query/gate projection shape mismatch. The owned runtime
-  unloaded cleanly; the provider stayed active. [Repair 02](runtime-repair-02.json)
-  preserves the failure, source snapshot, timing and Doppler `64834f4b` fix.
-- [Adapter integration probe](adapter-probe-03.json): four unscored tokens completed
-  through the repaired prefill/decode path in 75.694 seconds including model load.
-  This is a geometry diagnostic, not a shader comparison or confirmation.
-- [Runtime lock 03](native-runtime-lock-03.json) starts a complete smoke rerun, with
-  request cleanup and the entire verifier call included in timing. A separately
-  timed reset diagnostic compares original base-prefill logits after all gains are
-  discarded. Criteria, candidates, splits and sampling settings are unchanged.
+## Cache, reset and memory
 
-Focused validation: 17 original Python tests, 14 original Node tests, and 13 native
-orchestration/memory/selection tests passed; see [driver validation](runtime-02-cpu-receipt.json).
-A failed model shader is a task outcome; the subsequent integration failure is not
-an outcome for or against the gain rule. No transformed-model improvement is claimed.
+Both same-prefix cache diagnostics measured nonzero differences at layer 31 only;
+earlier KV layers and all 24 recurrent states matched. Output-logit relative L2
+was 0.00173923 and 0.00219784, with unchanged top-1. After discarding gains, fresh
+base prefill reproduced all 248,320 original logits bit-for-bit on both prompts.
+This supports sequential reset and this cache comparison; it does not establish
+concurrent request isolation, cross-domain switching or full-model weight-byte
+invariance. Private gain ownership and unchanged toy weights have separate native
+operator tests.
 
-## Runtime, timing and budget
+Each frozen gain had 98,304 logical bytes and 131,072 allocated GPU bytes. The
+base-cache arm's measured retained increment was 131,072 bytes. Re-prefill retained
+326,201,344 bytes including the original snapshot kept by this interleaved harness;
+that exceeds the 232,821,904-byte adapter reference. This is the current harness's
+storage cost, not proof that re-prefill inherently requires an extra saved cache.
+The complete model-device process peak was 23,476,542,680 bytes. It is a process-wide
+GPUBuffer high-water mark, not per-request physical VRAM. Preparation scratch,
+baseline subtraction and diagnostic-only storage remain explicit in the receipts.
 
-The exact provisioned Qwen3.5-9B revision was converted in an isolated Jupiter
-execution directory, using the checked-in F16/F32 recipe. Source weights were not
-downloaded. The existing dirty Doppler checkout and live services were not changed.
-All arms use the same explicit split-F32 execution overlay in
-[native-jupiter-config.json](native-jupiter-config.json).
+## Timing and stopping decision
 
-Jupiter's provider remains active. A separate read-only [service guard](service_guard.py)
-checks service status, admission count, observation freshness and 32 GiB available
-RAM. The model driver checks admission before requests and every decoded token.
-No provider process is stopped or reset. Attempt 01's already-failed experiment
-process alone was terminated after its missing device teardown left it alive.
+- Complete smoke wall: **2,050.177 s (34.17 min)**; cold model load 60.668 s and
+  adapter preparation 0.289 s separately. Preparation across both tasks took
+  72.892 s; cache diagnostics 29.146 s and reset diagnostics 24.865 s, included in
+  physical smoke wall, not added again.
+- The measured 184-request selection-plus-confirmation projection was **5.47 h**,
+  with an observed request-duration range of **4.70–6.61 h**, excluding cold loads
+  and adding about 233 s for cache diagnostics. This was a workload forecast;
+  that work was not admitted or scheduled.
+- [Selection-budget provenance](selection-budget-receipt.json) derives a conservative
+  3,559-second single-GPU residency bound for historical seed-47 SFT. One percent is
+  **35.59 GPU-seconds**. It is allocated residency, not an active-time hardware meter;
+  the historical executed Python commit is not pinned by the training receipt.
+- The implementation's eight-request selection envelope was 782.517–843.332 s.
+  Admission therefore stopped before model loading, with zero selection GPU time,
+  no selected candidate and no confirmation-population read. This is an empirical
+  scheduling estimate, not a mathematical impossibility proof or a rejected rule.
+  The estimator was implemented after the original protocol freeze and pinned by
+  the stage lock before selection; it uses timing only, never smoke semantic scores.
 
-[Selection-budget provenance](selection-budget-receipt.json) establishes a
-conservative 3,559-second single-GPU residency lower bound from original metric
-inode timestamps and retained training code. Its 1% cap is **35.59 GPU-seconds**.
-This is derived allocated residency, not a GPU active-time meter. The old outer
-3,576.012-second wall interval is not used as an exact GPU-time denominator.
+Earlier failures are retained: attempt 01 completed one base request before a scoped
+operation-registration failure; attempt 02 completed nine requests before an adapter
+projection-shape failure. Their measured smoke intervals were 92.681 s and 831.936 s,
+plus separate cold loads. The four-token unscored adapter integration probe took
+75.694 s including loading and cleanup. These costs are not erased by attempt 03.
+The report lists all recorded intervals; it is not a complete meter of engineering,
+conversion CPU work, historical data preparation or idle residency during repairs.
 
-No full-smoke ETA exists yet. One base timing cannot establish all-control throughput.
-After the two-task smoke, the runner reports measured request timings, cold load,
-cache-diagnostic cost and an ETA derived from the remaining frozen request count.
-Selection admission compares the complete eight-request workload to the cap before
-loading another model. If it cannot fit, all unexplored candidates remain untested
-and confirmation is not admitted. The cap is not expanded to force a result.
+## Verifier repair and evidence provenance
 
-Memory reports distinguish exact logical/allocated gains, baseline-subtracted owned
-snapshots, extra re-prefill storage, preparation ownership and complete model-device
-GPUBuffer live/process-lifetime peak counters. Process-lifetime peak is not relabeled
-as request peak or physical VRAM. Cache diagnostics use the same forced token prefix
-and compare per-layer KV, recurrent state and logits.
+Attempt 03 initially used the frozen historical browser verifier. Its automatic
+pipeline layout omitted unused binding 1, but the harness still supplied all four
+contract buffers. This falsely blocked a valid unary adapter shader. The
+[versioned repair](contract_browser_verifier.mjs) supplies an explicit contract layout;
+parser, numeric checks, tolerances and canaries are unchanged. Historical bytes remain
+untouched. [Focused qualification](layout-repair-smoke-qualification.json) accepted a
+correct unused-binding shader and both smoke references, and rejected wrong arithmetic.
 
-## Implementation and commands
+Every completed model output/token sequence was sealed before [public replay](public-replay-03.json)
+on the same Jupiter browser adapter. The [seal](public-replay-03-seal.json) binds all
+sources, sample order and verifier identities. Replay took 0.757 s, including 0.392 s
+browser startup, and added zero model requests. Only public receipts and their
+verification-time contribution changed; k remained 2, and only the existing samples
+could be ranked. Original failures and costs remain in [raw smoke 03](native-smoke-03.json).
+This is explicitly mixed provenance: original model generation plus separately
+recorded repaired verification, not a silently rewritten monolithic run.
 
-`native_smoke.mjs` owns the bounded two-task smoke and runtime lock.
-`native_experiment.mjs` owns the later stage lock, budget admission, complete
-selection checks and single-use confirmation. `verify_selection.mjs` reads only
-selection-family checks. All confirmation submissions are locked before the first
-confirmation oracle read, with no subsequent model calls used for selection.
+[Runtime lock 03](native-runtime-lock-03.json) binds generation. [Stage lock 03](native-stage-lock-03.json)
+binds the original generation, replay, repaired verifier and admission code. The
+[original protocol](protocol.json), [freeze](protocol-freeze.json) and
+[pre-model amendment](protocol-amendment-01.json) preserve candidates, splits,
+thresholds and generation settings. The amendment separates fixed smoke cost from
+candidate-selection cost; all settings-selection work remains charged.
 
-The unchanged campaign prompt/parser/verifier is imported through
-`isolated_namespace.mjs`; shared `campaign/.namespace` is never rebuilt.
-`rule.py` and `torch_hooks.py` remain CPU/unfused research references, not native
-serving-cost evidence. `token_contract.mjs` rejects approximate token spans.
-`decision.py` and `evaluate.py` reduce authenticated experiment receipts; their
-unit fixtures are not experiment results.
+## Runtime safety and reproducibility
 
-From Gamma:
+The [service-window receipt](service-window-summary.json) records 1,021 allowed
+observations, no admitted provider work and at least 78.95 GiB available RAM. The
+existing provider stayed active with the same main PID and zero restarts. Our owned
+model/browser processes exited and our read-only monitor was stopped. No live service
+was reset, stopped or updated; Jupiter's dirty Doppler checkout was preserved.
+
+The converted artifact passed all 267 shard hashes and 19,261 source-to-F16 scalar
+samples across 427 text tensors. Known-reference qualification passed 22/22 shaders
+and 286/286 checks; those are reference tests, not model confirmation. Focused native
+operator, lifecycle, orchestration, timing, replay and reporting checks are recorded
+with their implementation commits. Model weights were not downloaded.
+
+Rebuild this report from Gamma without model or oracle execution:
 
 ```sh
-node --test projects/distillation/wgsl/channel_gain/test_native_smoke.mjs projects/distillation/wgsl/channel_gain/test_native_memory.mjs projects/distillation/wgsl/channel_gain/test_native_experiment.mjs
+python3 projects/distillation/wgsl/channel_gain/report_native_smoke.py \
+  --smoke projects/distillation/wgsl/channel_gain/native-smoke-03.json \
+  --public-replay projects/distillation/wgsl/channel_gain/public-replay-03.json \
+  --attempt projects/distillation/wgsl/channel_gain/native-smoke-01.jsonl \
+  --attempt projects/distillation/wgsl/channel_gain/native-smoke-02.jsonl \
+  --integration-probe projects/distillation/wgsl/channel_gain/adapter-probe-03.json \
+  --selection projects/distillation/wgsl/channel_gain/native-selection-03/selection-receipt.json \
+  --json-output projects/distillation/wgsl/channel_gain/results-03.json \
+  --markdown-output projects/distillation/wgsl/channel_gain/RESULTS-03.md \
+  --label 'Attempt 03 with sealed public-verifier repair' --overwrite
 ```
 
-Native driver actions are `lock`/`smoke`, then `stage-lock`/`selection`/`confirmation`.
-Every action requires explicit protocol, original freeze, amendment, budget, native
-config, corpus and runtime-lock paths. Model execution additionally requires the
-live service guard and `--gpu-authorized`. The corpus and locks already exist;
-exclusive creation prevents overwriting them. These tools do not silently relax
-rules or repair failed shaders.
-
-The broader roadmap and prospective standards live one directory above. They do
-not retroactively replace this study's frozen records.
+A confirmation study would need a separately frozen feasible execution plan; this
+run does not relax its cap or borrow smoke outcomes as confirmation. The broader
+[nine-rung roadmap](../RECONFIGURATION-ROADMAP.md), [shared standard](../EXPERIMENT-PROTOCOL.md),
+[registry](../EXPERIMENTS.md) and [template](../EXPERIMENT-TEMPLATE.md) remain separate
+from this run's immutable records.

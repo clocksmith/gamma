@@ -1,18 +1,39 @@
 {
   "schema": "gamma.channel-gain-execution-status/v1",
-  "updatedAt": "2026-11-13T03:09:43.023244+00:00",
-  "status": "native_smoke_03_running",
+  "updatedAt": "2026-11-13T03:50:24.260038+00:00",
+  "status": "closed_at_selection_budget_admission_no_confirmation",
   "protocolFreezeSha256": "f23dc4e50eb480c53ebc759c3aafb3ad457cd50fae4bab0e06595fb419561f3b",
-  "modelRequests": 11,
-  "modelSmokeRequests": 10,
+  "modelRequests": 33,
+  "modelSmokeRequests": 32,
   "selectionTasksEvaluated": 0,
   "selectedCandidate": null,
   "confirmationModelTasksEvaluated": 0,
   "offlineTrainingSteps": 0,
   "modelSmokeTimingMs": [
-    92660.32976500002
+    92044.75263499998,
+    105414.61682799995,
+    118457.52844699996,
+    115834.29429,
+    129357.20168100004,
+    105782.59344599997,
+    119129.08468199997,
+    102972.11613000004,
+    116939.93991600002,
+    94679.44008999999,
+    94291.82778200011,
+    97814.04830799998,
+    111231.35935900033,
+    110406.47566900008,
+    122887.02927100017,
+    98273.73168200009,
+    110255.94095700023,
+    101522.88208300035,
+    113841.27156700019,
+    94513.07638600004,
+    94588.500393,
+    105003.41571799996
   ],
-  "measuredModelEtaSeconds": null,
+  "measuredModelEtaSeconds": 19698.79913437347,
   "referenceQualification": {
     "tasksPassed": 22,
     "tasksTotal": 22,
@@ -28,31 +49,29 @@
     "nodeTestReportedMs": 100.814125
   },
   "cacheArms": {
-    "mlp_base_cache": "observed_on_one_smoke_task_not_confirmed",
-    "mlp_frozen_gain_reprefill": "observed_on_one_smoke_task_not_confirmed",
+    "mlp_base_cache": "smoke_measured_not_confirmed",
+    "mlp_frozen_gain_reprefill": "smoke_measured_not_confirmed",
     "all_projections": "not_applicable"
   },
   "comparators": {
-    "base": "observed_on_one_smoke_task_not_confirmed",
-    "base_matched_best_of_k": "not_run",
-    "shuffled_context": "observed_on_one_smoke_task_not_confirmed",
-    "random_z": "observed_on_one_smoke_task_not_confirmed",
-    "permuted_gain": "observed_on_one_smoke_task_not_confirmed",
-    "trained_seed47_adapter": "integration_probe_completed_full_comparison_pending"
+    "base": "smoke_public_replay_only_not_confirmation",
+    "base_matched_best_of_k": "smoke_public_replay_only_not_confirmation",
+    "shuffled_context": "smoke_public_replay_only_not_confirmation",
+    "random_z": "smoke_public_replay_only_not_confirmation",
+    "permuted_gain": "smoke_public_replay_only_not_confirmation",
+    "trained_seed47_adapter": "smoke_public_replay_only_not_confirmation"
   },
   "criteria": {
-    "promptDependence": "unmeasured",
-    "gapClosure": "unmeasured",
-    "setupBudget": "unmeasured",
-    "servingOverhead": "unmeasured",
-    "wrongAcceptances": "unmeasured"
+    "promptDependence": "not_evaluated_on_confirmation",
+    "gapClosure": "not_evaluated_on_confirmation",
+    "setupBudget": "selection_not_admitted_candidates_untested",
+    "servingOverhead": "smoke_descriptive_only",
+    "wrongAcceptances": "not_evaluated_on_confirmation"
   },
-  "blockers": [],
-  "nextWork": [
-    "Complete full two-task smoke03 under repaired adapter/runtime timing lock",
-    "Report measured ETA and apply conservative 35.59 GPU-second selection admission",
-    "Only if complete selection fits, freeze winner/submissions then run confirmation once"
+  "blockers": [
+    "Frozen 35.59 GPU-second selection cap does not admit the complete eight-request workload under its measured timing envelope. No winner or confirmation is authorized by this run."
   ],
+  "nextWork": [],
   "currentRuntimeLockSha256": "6be766a21347c52762c504d2fa348383bfe388f5a61fefcbaeb82e6a178ba2db",
   "priorAttempt": {
     "receipt": "runtime-repair-02.json",
@@ -64,10 +83,70 @@
   "runtimePreparation": {
     "modelArtifactPreflight": "native-artifact-preflight.json",
     "selectionBudget": "selection-budget-receipt.json",
-    "safeWindow": "Live provider remains active; stageAdmitted 0, memory floor 32 GiB; read-only guard revokes on change",
+    "safeWindow": "Finished. Owned model/browser exited; monitor stopped. Provider active, main PID1800927, zero restarts. 1,021 allowed guard observations.",
     "nativeRuntime": "Doppler 64834f4b with explicit F32 split execution overlay",
     "pythonFallbackUsed": false
   },
   "modelDiagnosticRequests": 1,
-  "incompleteModelRequests": 1
+  "incompleteModelRequests": 1,
+  "completedCurrentSmokeRequests": 22,
+  "measuredModelEtaStatus": "counterfactual_remaining_plan_not_admitted",
+  "finalReceipts": {
+    "rawSmoke": "native-smoke-03.json",
+    "repairedPublicReplay": "public-replay-03.json",
+    "publicReplaySeal": "public-replay-03-seal.json",
+    "stageLock": "native-stage-lock-03.json",
+    "selection": "native-selection-03/selection-receipt.json",
+    "report": "RESULTS-03.md",
+    "serviceWindow": "service-window-summary.json"
+  },
+  "selectionAdmission": {
+    "admitted": false,
+    "requiredRequests": 8,
+    "budgetGpuMs": 35590,
+    "requestBoundMs": 105416.51208399996,
+    "minimumObservedPlannedMs": 782517.3118399999,
+    "maximumObservedPlannedMs": 843332.0966719997,
+    "reason": "complete_selection_does_not_fit_observed_request_envelope",
+    "basis": "pre-selection timing admission only; no smoke semantic scores or confirmation checks used; bounds are empirical, not mathematical worst-case guarantees"
+  },
+  "candidateStatus": [
+    {
+      "candidate": "gain-positive",
+      "status": "untested",
+      "reason": "complete_selection_does_not_fit_observed_request_envelope"
+    },
+    {
+      "candidate": "gain-negative",
+      "status": "untested",
+      "reason": "complete_selection_does_not_fit_observed_request_envelope"
+    }
+  ],
+  "publicSmokePasses": {
+    "base": 0,
+    "base_best_of_2": 0,
+    "channel_gain_base_cache": 0,
+    "channel_gain_reprefill": 0,
+    "shuffled_context_each_arm": 0,
+    "random_z_each_arm": 0,
+    "permuted_gain_each_arm": 0,
+    "trained_seed47_adapter": 1,
+    "denominator_tasks": 2
+  },
+  "resetDiagnostics": {
+    "tasksMeasured": 2,
+    "exactBaseLogitsRestored": 2,
+    "logitsPerTask": 248320,
+    "concurrentIsolationTested": false,
+    "fullModelWeightBytesHashed": false
+  },
+  "limitations": [
+    "Public smoke is not confirmation. No gain candidate was ranked.",
+    "Replay uses original generation/runtime timing and separately sealed repaired public verification on the same device; original receipts and costs retained.",
+    "Admission envelope is empirical and implementation-specific, not a mathematical lower bound.",
+    "Per-request memory and process lifetime GPUBuffer peak have distinct accounting boundaries."
+  ],
+  "requestCountDefinition": "Completed generated responses: 32 across three smoke attempts plus one four-token integration probe. Capture/reference/reset diagnostic prefills are reported separately in preparation/diagnostic costs. One additional adapter generation started but failed during prefill.",
+  "completedGenerationRequests": 33,
+  "initiatedGenerationRequests": 34
 }

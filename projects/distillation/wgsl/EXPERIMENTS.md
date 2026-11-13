@@ -7,7 +7,7 @@ Prospective studies use [standard v1](EXPERIMENT-PROTOCOL.md), pin its content h
 and begin from the [template](EXPERIMENT-TEMPLATE.md). Existing freezes are not
 retroactively rewritten by that standard.
 
-## Active study
+## Current study
 
 | Field | Recorded value |
 | --- | --- |
@@ -18,7 +18,7 @@ retroactively rewritten by that standard.
 | Arms | MLP/base-cache and MLP/frozen-gain re-prefill, sharing identical gains |
 | All-projections | Not applicable to this rule; neither passed nor failed |
 | Populations | 2 smoke / 4 selection / 16 confirmation semantic families |
-| Status snapshot | Active work, experiment incomplete; no confirmation result |
+| Status snapshot | Closed at budget admission; candidates untested; no confirmation result |
 | Authority | Owner's first-rule request and MLP-only clarification, 2026-11-12 |
 
 The comparison protocol is SAME-R, not a model arm. The trained seed-47 adapter is a
@@ -74,6 +74,25 @@ Doppler fix. A [four-token adapter probe](channel_gain/adapter-probe-03.json)
 subsequently completed without shader scoring. [Runtime lock 03](channel_gain/native-runtime-lock-03.json)
 starts a full rerun with complete request lifecycle timing and base-reset logits.
 No candidate or numerical criterion changed, and no confirmation ran.
+
+**2026-11-13, completed smoke 03 and public repair:** [22 generated responses](channel_gain/native-smoke-03.json)
+completed in 2,050.177 seconds plus 60.668 seconds of model loading. Both reset
+checks restored all 248,320 base logits exactly. Same-gain cache diagnostics measured
+layer-31 differences. An automatic bind-layout bug falsely blocked a valid unused
+input; a [versioned repair](channel_gain/layout-repair-smoke-qualification.json) was
+qualified without changing historical bytes. All sources/tokens were then sealed
+and [public checks replayed](channel_gain/public-replay-03.json) on the same device,
+with k=2 unchanged and zero additional model requests. Corrected public smoke:
+base/gain/control/best-of-2 each 0/2, trained adapter 1/2. This is not confirmation.
+
+**2026-11-13, budget decision:** the [stage lock](channel_gain/native-stage-lock-03.json)
+binds original generation plus repaired public verification. The [admission receipt](channel_gain/native-selection-03/selection-receipt.json)
+projects 782.517–843.332 seconds for eight selection requests against the unchanged
+35.59-second cap. Selection was not admitted; both candidates remain untested, no
+candidate was chosen and no confirmation-population checks were read. The estimate
+is empirical and implementation-specific. The [final report](channel_gain/README.md)
+retains failures, costs, cache/memory boundaries and the explicit mixed provenance.
+The provider stayed active with zero restarts; owned experiment resources exited.
 
 Append subsequent attempts, deviations, costs and decisions here with their own
 receipts. Preserve these observations if a rerun succeeds. Smoke timing can support
