@@ -31,7 +31,7 @@ criteria belong to the frozen study documents, not this registry summary.
 
 | Study or check | Frozen scope / actual execution | Evidence and limits |
 | --- | --- | --- |
-| 27B cross-domain screen 01 | Same analytical gain-negative formula mapped to dense layers 62/63; six families, 24 requests, base-cache only; arithmetic, Python and structured text | [Protocol](../../reconfiguration/cross_domain_screen/protocol.draft.json), [runtime lock](../../reconfiguration/cross_domain_screen/screen-runtime-lock-01.json), [original report](../../reconfiguration/cross_domain_screen/RAW-RESULTS-01.md), [raw archive](../../reconfiguration/cross_domain_screen/screen-run-01/archive.json). Completed; base/gain/shuffled 4/6 each. Original permuted 3/6 contains an interpreter restriction, not demonstrated functional regression; corrected replay pending. Model and domains both changed. |
+| 27B cross-domain screen 01 | Same analytical gain-negative formula mapped to dense layers 62/63; six families, 24 requests, base-cache only; arithmetic, Python and structured text | [Protocol](../../reconfiguration/cross_domain_screen/protocol.draft.json), [runtime lock](../../reconfiguration/cross_domain_screen/screen-runtime-lock-01.json), [corrected replay](../../reconfiguration/cross_domain_screen/REPLAY-RESULTS-01.md), [original report](../../reconfiguration/cross_domain_screen/RAW-RESULTS-01.md), [raw archive](../../reconfiguration/cross_domain_screen/screen-run-01/archive.json). Completed; corrected behavioral scores 4/6 for all four conditions, no gain benefit. Original permuted 3/6 preserved; versioned syntax repair replayed all 24 existing outputs. Model and domains both changed. |
 | Mac synthetic gain/isolation/reset checks | Two live gain handles, alternating tiny dense-FFN dispatches, overlapping operation lifetimes, immutable shared input/weights, reset/discard and failure cleanup | Doppler [commit daede6a0](https://github.com/clocksmith/doppler/commit/daede6a0), [receipt](https://github.com/clocksmith/doppler/blob/daede6a0/reports/channel-gain-20261113/synthetic-isolation-receipt.json). Passed on Apple M3; zero model loads, one GPU queue, no full-model concurrency or quality claim. |
 
 ## Evidence map
@@ -135,12 +135,26 @@ shuffled context each had 0 wins, 0 losses and 6 ties against base. The original
 permuted score was 3/6 because the restricted Python interpreter rejected
 `sorted(..., key=lambda ...)`; the unchanged function passes all six frozen cases
 in ordinary Python. [The CPU diagnostic](../../reconfiguration/cross_domain_screen/screen-run-01/audit-summary.json)
-retains that distinction without rewriting the original scores. A versioned oracle
-repair and all-output replay are pending; no model rerun is needed. Three serial
+retains that distinction without rewriting the original scores. The versioned
+repair and all-output replay are recorded in the subsequent observation below.
+Three serial
 full-model resets reproduced all 248,320 logits exactly, and no response hit the
 256-token cap. The measured model-load-through-cleanup interval was 639.994 seconds.
 [Environment records](channel_gain/environment-04.jsonl) preserve overlap with the
 ongoing 9B confirmation; timings are contended, not isolated speed evidence.
+
+**2026-11-13, completed versioned evaluator replay:** the
+[corrected report](../../reconfiguration/cross_domain_screen/REPLAY-RESULTS-01.md)
+and [replay receipt](../../reconfiguration/cross_domain_screen/screen-run-01/oracle-replay-v2.json)
+record CPU-only scoring of all 24 original sealed outputs. The new interpreter
+accepts bounded pure inline lambdas and ordinary `sorted` key/reverse keywords;
+this is an explicit syntax interpretation/expansion. Expected behavioral cases,
+exact answers and pass combination are unchanged. Only the permuted-gain Python
+interval score changes, bringing all four conditions to 4/6. Every comparison
+against base has 0 wins, 0 losses and 6 ties; there is no observed gain benefit.
+Original scores remain preserved. Replay took 5.185 seconds with no new samples,
+model calls, GPU calls or selection. This is exploratory repaired evaluation,
+not confirmation or broad cross-domain transfer evidence.
 
 Append subsequent attempts, deviations, costs and decisions here with their own
 receipts. Preserve these observations if a rerun succeeds. Smoke timing can support

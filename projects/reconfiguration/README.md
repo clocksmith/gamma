@@ -10,10 +10,11 @@ maps the selected analytical MLP gain formula to the last two dense layers of
 the already-provisioned 27B model on fresh arithmetic, short Python and
 structured-text tasks. This changes model and layer indices; it is not a literal
 transfer of the 9B configuration. The [frozen screen](cross_domain_screen/README.md)
-completed all 24 requests across six families. Base, gain and shuffled context each
-passed 4/6 under the original oracle, with no paired gain advantage. The original
-permuted 3/6 includes an interpreter restriction; its unchanged Python function
-passes all six cases in ordinary Python, and corrected replay is pending. Preserve
+completed all 24 requests across six families. The
+[completed corrected replay](cross_domain_screen/REPLAY-RESULTS-01.md) scores
+all four conditions at 4/6, with no paired gain advantage. It expands the bounded
+interpreter's accepted syntax for inline lambdas and `sorted` keywords while
+preserving behavioral cases. The original permuted 3/6 remains recorded in
 the [original report](cross_domain_screen/RAW-RESULTS-01.md) and
 [raw archive](cross_domain_screen/screen-run-01/archive.json).
 

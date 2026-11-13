@@ -1,12 +1,14 @@
 # Six-family channel-gain screen
 
 This **frozen exploratory screen completed all 24 requests** on 2026-11-13.
-The [original report](RAW-RESULTS-01.md) and [raw archive](screen-run-01/archive.json)
-retain generation, scoring, timing and reset evidence. Base, channel gain and
-shuffled context each passed 4/6, with no paired gain advantage. The original
-permuted 3/6 includes a restricted-interpreter rejection: its unchanged function
-passes all six cases in ordinary Python. A versioned oracle repair and all-output
-replay are pending; the original scores remain historical evidence.
+The [corrected replay report](REPLAY-RESULTS-01.md) is the current behavioral
+result: base, channel gain, shuffled context and permuted gain each passed 4/6,
+with no paired gain advantage. The [original report](RAW-RESULTS-01.md) and
+[raw archive](screen-run-01/archive.json) preserve generation, original scoring,
+timing and reset evidence. The original permuted 3/6 included a restricted
+interpreter rejection. A versioned syntax interpretation supporting bounded
+inline lambdas and `sorted` keywords replayed all 24 sealed outputs without new
+model calls; expected cases and behavioral scoring stayed unchanged.
 It reuses the selected `gain-negative` MLP formula without candidate tuning,
 mapped prospectively from the original 9B model to the provisioned 27B model. The
 original [WGSL experiment](../../distillation/wgsl/channel_gain/README.md) and

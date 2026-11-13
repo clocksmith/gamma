@@ -82,12 +82,13 @@ consistent gains, including failures and negative transfer.
 
 **Non-claim:** a separate tuned rule per domain does not pass this rung. Shader
 results alone say nothing about the untested domains. The owner-authorized
-[27B screen](../../reconfiguration/cross_domain_screen/RAW-RESULTS-01.md) completed
+[27B screen](../../reconfiguration/cross_domain_screen/REPLAY-RESULTS-01.md) completed
 six families and 24 requests across arithmetic, Python and structured text. Base,
 channel gain and shuffled context each passed 4/6 under the frozen oracle, with
 zero gain wins or losses. The original permuted-gain 3/6 includes a restricted
-interpreter rejection whose unchanged function passes all six cases in ordinary
-Python; a versioned oracle replay is pending. Both model and domains changed, so
+interpreter rejection. The completed versioned replay expands bounded syntax
+support and scores all four conditions at 4/6, with zero wins or losses against
+base; behavioral cases are unchanged. Both model and domains changed, so
 this is not same-model 9B transfer. It provides exploratory evidence, not this
 rung's substantial, consistent gain or general-regression evidence.
 
