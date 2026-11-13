@@ -30,8 +30,12 @@ re-prefill behavior. Kernel fixtures alone do not establish model integration.
 
 **Non-claim:** this is an engineering capability, not a learning breakthrough or
 proof that the reconfiguration improves an answer. The [first smoke study](channel_gain/README.md) now supplies two-prompt native
-cache and exact reset observations. Concurrent isolation and broader qualification
-remain unproved.
+cache and exact reset observations. The [27B exploratory screen](../../reconfiguration/cross_domain_screen/RAW-RESULTS-01.md)
+adds three exact full-model reset observations, one per domain. A
+[Mac synthetic test](https://github.com/clocksmith/doppler/blob/daede6a0/reports/channel-gain-20261113/synthetic-isolation-receipt.json)
+exercises two live gain states, alternating tiny dense-FFN dispatches, overlapping
+operation lifetimes and failure cleanup. Full-model concurrent isolation and broader
+qualification remain unproved.
 
 ## 2. Shader improvement
 
@@ -77,8 +81,15 @@ a general-regression population. Require the prospective study's substantial,
 consistent gains, including failures and negative transfer.
 
 **Non-claim:** a separate tuned rule per domain does not pass this rung. Shader
-results alone say nothing about the untested domains. This is draft research scope,
-not an authorized multi-domain run or a frozen set of thresholds.
+results alone say nothing about the untested domains. The owner-authorized
+[27B screen](../../reconfiguration/cross_domain_screen/RAW-RESULTS-01.md) completed
+six families and 24 requests across arithmetic, Python and structured text. Base,
+channel gain and shuffled context each passed 4/6 under the frozen oracle, with
+zero gain wins or losses. The original permuted-gain 3/6 includes a restricted
+interpreter rejection whose unchanged function passes all six cases in ordinary
+Python; a versioned oracle replay is pending. Both model and domains changed, so
+this is not same-model 9B transfer. It provides exploratory evidence, not this
+rung's substantial, consistent gain or general-regression evidence.
 
 ## 5. Switching and persistence
 
@@ -93,7 +104,11 @@ throughput. State exactly what persists and what is recomputed.
 
 **Non-claim:** this establishes a fast specialist system architecture, not a single
 benchmark trick, broad intelligence or learning from the transitions. It requires
-useful rules plus runtime evidence beyond the current single-request experiment.
+useful rules plus runtime evidence beyond the current serial model studies. The
+[Mac toy receipt](https://github.com/clocksmith/doppler/blob/daede6a0/reports/channel-gain-20261113/synthetic-isolation-receipt.json)
+covers independent live gain handles, reset/discard and failure cleanup on tiny
+shared inputs/weights; one serialized GPU queue and a minimal reset fixture do not
+establish full-model concurrency. The three 27B reset checks were sequential.
 
 ## 6. Self-proposed rule improvement
 
@@ -154,14 +169,18 @@ and no current result supports that claim.
 
 ## Dependency and execution order
 
-Finish the current shader experiment first. If it yields a useful signal, compare
-stronger matched-compute alternatives and test another domain. Build a recursive
-proposal loop only after there is a useful, reproducible mechanism to improve.
+The original 9B shader confirmation remains active (59/176 generated requests
+observed at 13:19:17 UTC on 2026-11-13; no terminal result or quality conclusion).
+The owner authorized the bounded 27B screen and Mac synthetic checks in parallel;
+those have completed with separate evidence and recorded GPU contention. Stronger
+matched-compute comparisons and substantial cross-domain gains remain unestablished.
+Build a recursive proposal loop only after there is a useful, reproducible mechanism
+to improve. Rungs 6–9 remain unstarted.
 Request isolation and cache correctness remain prerequisites wherever the rule is
 used; concurrent switching needs separate system evidence. The broader rungs require
 new frozen studies, not reinterpretation of earlier receipts.
 
 A failed gain rule rejects that rule under its tested settings and budget. It does
 not reject every transform family or the whole reconfiguration architecture.
-Future rungs remain draft and unscheduled until a concrete study is registered;
+Stronger claims beyond the registered studies remain draft and unscheduled;
 this document is not a compute reservation or a speculative engineering timeline.

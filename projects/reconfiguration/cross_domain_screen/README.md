@@ -1,6 +1,12 @@
 # Six-family channel-gain screen
 
-This is a **frozen exploratory screen awaiting execution**. No model result exists here.
+This **frozen exploratory screen completed all 24 requests** on 2026-11-13.
+The [original report](RAW-RESULTS-01.md) and [raw archive](screen-run-01/archive.json)
+retain generation, scoring, timing and reset evidence. Base, channel gain and
+shuffled context each passed 4/6, with no paired gain advantage. The original
+permuted 3/6 includes a restricted-interpreter rejection: its unchanged function
+passes all six cases in ordinary Python. A versioned oracle repair and all-output
+replay are pending; the original scores remain historical evidence.
 It reuses the selected `gain-negative` MLP formula without candidate tuning,
 mapped prospectively from the original 9B model to the provisioned 27B model. The
 original [WGSL experiment](../../distillation/wgsl/channel_gain/README.md) and
@@ -33,10 +39,12 @@ Multi-token answers exercise later transformed decode. The frozen 256-token cap
 is smaller than the shader cap; every truncation and termination reason must be
 reported, with capped outputs retained in the denominator.
 
-The runner owner supplies `runner.mjs` and its tests. It must pin provisioned
+`runner.mjs` and its tests pin provisioned
 model/tokenizer/template, exact source identities, runtime/device and task/oracle
-bytes before generation. CPU token-boundary qualification must pass all six
-instruction spans before freeze. The runtime lock must bind the final settings and exact bytes before execution. Do not silently shorten prompts, substitute models or retry by quality.
+bytes before generation. CPU token-boundary qualification passed all six
+instruction spans. The [runtime lock](screen-runtime-lock-01.json) bound final
+settings and exact bytes before execution. No prompts, models or samples were
+replaced after observing quality.
 
 ## Scoring boundary
 
@@ -79,7 +87,15 @@ project or import its compression targets. The prospective
 [experiment standard v2](../../distillation/wgsl/EXPERIMENT-PROTOCOL.md) governs
 this new screen; its content hash is recorded in the draft protocol.
 
-The initial execution uses the six short prompts (89–164 tokens). The separate
-593/592-token WGSL probe remains unexecuted while the original9Bstudy is active,
-because a longer unchunked27Bprefill previously caused device loss. This preserves
-that distinction between provisioned model qualification and the new gain path.
+The completed execution used the six short prompts (89–164 tokens); responses
+were 14–128 tokens, with no output-cap hits. Three sequential full-model reset
+checks reproduced all baseline logits exactly. The 639.994-second load-through-
+cleanup interval overlapped the original 9B job, so timing is contended. The separate
+593/592-token WGSL probe remains unexecuted while the original 9B study is active,
+because a longer unchunked 27B prefill previously caused device loss. Short-prompt
+execution does not qualify that longer path. The original 9B confirmation remains
+active (59/176 observed at 13:19:17 UTC on 2026-11-13), with no quality conclusion.
+
+Separate [Mac synthetic checks](https://github.com/clocksmith/doppler/blob/daede6a0/reports/channel-gain-20261113/synthetic-isolation-receipt.json)
+exercise two live gain states and reset/failure cleanup on tiny shared tensors.
+They establish neither full-model concurrent switching nor cross-domain quality.

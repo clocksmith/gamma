@@ -1,8 +1,10 @@
 # Reconfiguration experiment registry
 
 This registry separates experiments from the [research roadmap](RECONFIGURATION-ROADMAP.md).
-Only the first channel-gain study below has a frozen concrete protocol. Later rungs
-are draft, unscheduled research directions, not nine completed or frozen studies.
+The original 9B channel-gain study and a separate 27B exploratory screen have
+frozen concrete protocols. Synthetic runtime checks supply narrower engineering
+evidence. These are not nine completed or frozen studies; later claim rungs retain
+their own evidence requirements.
 Prospective studies use [standard v2](EXPERIMENT-PROTOCOL.md), pin its content hash
 and begin from the [template](EXPERIMENT-TEMPLATE.md). Existing freezes are not
 retroactively rewritten by that standard.
@@ -18,12 +20,19 @@ retroactively rewritten by that standard.
 | Arms | MLP/base-cache and MLP/frozen-gain re-prefill, sharing identical gains |
 | All-projections | Not applicable to this rule; neither passed nor failed |
 | Populations | 2 smoke / 4 selection / 16 confirmation semantic families |
-| Status snapshot | Selection complete, gain-negative frozen; confirmation generation active; no confirmation result yet |
+| Status snapshot | Selection complete, gain-negative frozen; 59/176 confirmation generations observed at 13:19:17 UTC, 2026-11-13; no terminal receipt or confirmation quality result |
 | Authority | Owner's first-rule request and MLP-only clarification, 2026-11-12 |
 
 The comparison protocol is SAME-R, not a model arm. The trained seed-47 adapter is a
 reference comparator, not a proven upper bound. Full controls and numeric decision
 criteria belong to the frozen study documents, not this registry summary.
+
+## Additional registered evidence
+
+| Study or check | Frozen scope / actual execution | Evidence and limits |
+| --- | --- | --- |
+| 27B cross-domain screen 01 | Same analytical gain-negative formula mapped to dense layers 62/63; six families, 24 requests, base-cache only; arithmetic, Python and structured text | [Protocol](../../reconfiguration/cross_domain_screen/protocol.draft.json), [runtime lock](../../reconfiguration/cross_domain_screen/screen-runtime-lock-01.json), [original report](../../reconfiguration/cross_domain_screen/RAW-RESULTS-01.md), [raw archive](../../reconfiguration/cross_domain_screen/screen-run-01/archive.json). Completed; base/gain/shuffled 4/6 each. Original permuted 3/6 contains an interpreter restriction, not demonstrated functional regression; corrected replay pending. Model and domains both changed. |
+| Mac synthetic gain/isolation/reset checks | Two live gain handles, alternating tiny dense-FFN dispatches, overlapping operation lifetimes, immutable shared input/weights, reset/discard and failure cleanup | Doppler [commit daede6a0](https://github.com/clocksmith/doppler/commit/daede6a0), [receipt](https://github.com/clocksmith/doppler/blob/daede6a0/reports/channel-gain-20261113/synthetic-isolation-receipt.json). Passed on Apple M3; zero model loads, one GPU queue, no full-model concurrency or quality claim. |
 
 ## Evidence map
 
@@ -120,6 +129,19 @@ checks the stopped service and retains the memory floor. The original runtime,
 inputs and quality criteria are unchanged; serving-environment timing changes are
 recorded rather than presented as an unchanged isolated measurement window.
 
+**2026-11-13, completed 27B exploratory screen:** all 24 outputs were sealed
+before scoring. Base, channel gain and shuffled context each passed 4/6; gain and
+shuffled context each had 0 wins, 0 losses and 6 ties against base. The original
+permuted score was 3/6 because the restricted Python interpreter rejected
+`sorted(..., key=lambda ...)`; the unchanged function passes all six frozen cases
+in ordinary Python. [The CPU diagnostic](../../reconfiguration/cross_domain_screen/screen-run-01/audit-summary.json)
+retains that distinction without rewriting the original scores. A versioned oracle
+repair and all-output replay are pending; no model rerun is needed. Three serial
+full-model resets reproduced all 248,320 logits exactly, and no response hit the
+256-token cap. The measured model-load-through-cleanup interval was 639.994 seconds.
+[Environment records](channel_gain/environment-04.jsonl) preserve overlap with the
+ongoing 9B confirmation; timings are contended, not isolated speed evidence.
+
 Append subsequent attempts, deviations, costs and decisions here with their own
 receipts. Preserve these observations if a rerun succeeds. Smoke timing can support
 a scoped ETA only when the measured arm mix represents the remaining work; this
@@ -127,10 +149,12 @@ single base measurement does not supply transformed-arm throughput.
 
 ## Future studies
 
-Efficient specialization, cross-domain transfer, concurrent switching, bounded
-rule proposals, repeated bounded recursive improvement, broader self-improvement,
-and open-ended improvement are roadmap directions only. They have no allocated
-experiment IDs, task populations, numeric thresholds, resource budgets or execution
+Efficient specialization, substantial cross-domain improvement with general
+regression checks, full-model concurrent switching, bounded rule proposals, repeated
+bounded recursive improvement, broader self-improvement and open-ended improvement
+remain unestablished. The small registered cross-domain screen and synthetic
+isolation check do not satisfy those stronger claims. Rungs 6–9 are unstarted and
+have no frozen task populations, numeric thresholds, resource budgets or execution
 schedule here. Register a concrete study and freeze its contract before claiming
 that one is underway. ASI remains a separate extraordinary claim requiring
 independent evidence beyond this ladder's current experiments.
