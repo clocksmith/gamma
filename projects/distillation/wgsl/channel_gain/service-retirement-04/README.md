@@ -10,7 +10,8 @@ new monitor identity, command, timestamps, process absence and available-memory
 change. The original read-only monitor was suspended and terminated only after
 an independently validated replacement was live; the locked runtime guard path
 was atomically linked to its fresh output. This avoided interpreting the owner's
-requested shutdown as an experiment failure. No GPU/model process was stopped.
+requested shutdown as an experiment failure. No experiment GPU/model process was
+stopped; the retired provider's processes exited through its systemd service.
 
 The old provider was idle. The main experiment continued. Memory residency and
 any request overlapping service teardown are an environment deviation for timing

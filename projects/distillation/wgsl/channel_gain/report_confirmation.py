@@ -9,9 +9,10 @@ import json
 import subprocess
 from pathlib import Path
 from .evaluate import evaluate_confirmation
+from .environment_reporting import environment_markdown, load_environment
 
 
-def build_report(protocol, evidence):
+def build_report(protocol, evidence, environment=None):
     result = evaluate_confirmation(protocol, evidence)
     quality = {}
     for arm, outcome in result["cacheArms"].items():
@@ -37,6 +38,7 @@ def build_report(protocol, evidence):
             "setupEfficiency": evidence["setup"], "costs": evidence["costs"], "memory": evidence["memory"],
             "allProjections": "not_applicable", "evaluatorResult": result,
             "evidenceProvenance": evidence["provenance"], "limitations": evidence["limitations"],
+            "environment": environment or {"provided": False, "isolationQualification": "unknown"},
             "decisionBoundary": "Quality outcomes are reported independently of setup efficiency and memory qualification. qualityCriteriaAllMet means the existing prompt-dependence, gap-closure and wrong-acceptance criteria all met; it is not a replacement for the original joint decision. Underpowered and uninformative comparisons remain so."}
 
 
@@ -71,6 +73,7 @@ def markdown(report):
               f"Confirmation physical stage before receipt serialization: {fmt(costs['confirmationPhysicalStageBeforeReceiptMs']/1000 if costs['confirmationPhysicalStageBeforeReceiptMs'] is not None else None)} seconds.", ""]
     for stage in ("selectionTiming", "confirmationTiming"):
         lines.append(f"- {stage}: `{json.dumps(costs[stage], sort_keys=True)}`.")
+    lines += [""] + environment_markdown(report["environment"])
     lines += ["", report["decisionBoundary"], "", "## Limits", ""] + [f"- {value}" for value in report["limitations"]]
     lines += ["", "## Input provenance", ""]
     for name, record in report["evidenceProvenance"]["files"].items():
@@ -84,6 +87,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("protocol", "evidence", "json-output", "markdown-output"):
         parser.add_argument("--" + name, required=True)
+    parser.add_argument("--environment", help="Optional append-only environment JSONL history; descriptive only")
     args = parser.parse_args()
     protocol_bytes = Path(args.protocol).read_bytes()
     evidence_bytes = Path(args.evidence).read_bytes()
@@ -100,10 +104,14 @@ const {evidenceSha256,...body}=value;
 if(createHash('sha256').update(JSON.stringify(canonical(body))).digest('hex')!==evidenceSha256)throw Error('Assembled evidence checksum mismatch');
 """
     subprocess.run(["node", "--input-type=module", "-e", verifier, str(Path(args.evidence).resolve())], check=True, capture_output=True)
-    report = build_report(json.loads(protocol_bytes), evidence)
+    environment = load_environment(args.environment, evidence) if args.environment else None
+    report = build_report(json.loads(protocol_bytes), evidence, environment)
     report["evidenceFileSha256"] = hashlib.sha256(evidence_bytes).hexdigest()
     report["reporterSha256"] = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    report["environmentReporterSha256"] = hashlib.sha256(Path(__file__).with_name("environment_reporting.py").read_bytes()).hexdigest()
     inputs = {Path(args.protocol).resolve(), Path(args.evidence).resolve()}
+    if args.environment:
+        inputs.add(Path(args.environment).resolve())
     outputs = [Path(args.json_output).resolve(), Path(args.markdown_output).resolve()]
     if len(set(outputs)) != 2 or any(path in inputs or path.exists() for path in outputs):
         raise ValueError("Report output paths must be new, distinct files")
