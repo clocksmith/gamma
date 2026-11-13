@@ -247,6 +247,8 @@ def build_report(smoke, provenance, attempts, selection, selection_provenance, l
     for r in requests:
         grouped.setdefault((r["condition"], r["arm"]), []).append(r)
     groups = [{"condition": condition, "arm": arm, "requests": len(rows),
+               "displayLabel": "additional base samples" if condition == "base_matched_best_of_k" else condition,
+               "sampleScope": "additional_samples_only" if condition == "base_matched_best_of_k" else "individual_requests",
                "publicOutcomes": {name: sum(r["publicOutcome"] == name for r in rows) for name in ("passed", "failed", "unmeasured")},
                "tokens": stats([r["tokenCount"] for r in rows]),
                "attributedEndToEndMs": stats([r["timing"].get("end_to_end_ms") for r in rows]),
@@ -286,6 +288,12 @@ def build_report(smoke, provenance, attempts, selection, selection_provenance, l
             raise ValueError("Selection/smoke runtime identities differ")
     summary = run["summary"]
     best_of_k = corrected if corrected is not None else summary
+    requests_by_id = {r["id"]: r for r in requests}
+    best_tasks = []
+    for task in best_of_k.get("bestOfK", []):
+        outcome = requests_by_id.get(task.get("selectedId"), {}).get("publicOutcome")
+        best_tasks.append({**task, "selectedPublicPassed": outcome == "passed" if outcome in ("passed", "failed") else None,
+                           "fullSampleComputeMs": task.get("actualComputeMs")})
     preparations = [{k: v for k, v in p.items() if k != "memory"} | {"memory": compact_memory(p.get("memory", {}))} for p in run["preparation"]]
     probes, seen_probes = [], set()
     for value, source in integration_probes:
@@ -314,7 +322,7 @@ def build_report(smoke, provenance, attempts, selection, selection_provenance, l
                       "resetDiagnosticMs": stats([d.get("resetDiagnosticMs") for d in run["resetDiagnostics"]]),
                       "attributedTimingBreakdownMs": {key: stats([r["timing"].get(key) for r in requests]) for key in EXTRA_TIMING_FIELDS},
                       "selectionGpuMsCharged": summary.get("selectionGpuMsCharged"),
-                      "bestOfK": {"status": "recorded" if "bestOfK" in best_of_k else "pending", "k": best_of_k.get("k"), "tasks": best_of_k.get("bestOfK", [])},
+                      "bestOfK": {"status": "recorded" if "bestOfK" in best_of_k else "pending", "k": best_of_k.get("k"), "tasks": best_tasks},
                       "originalBestOfK": summary.get("bestOfK") if corrected is not None else None,
                       "eta": summary.get("eta") if run["status"] == "smoke_complete" else None},
             "selection": selected, "confirmation": {"status": "not_evaluated" if selected.get("status") == "selection_not_admitted" else "not_established_by_these_inputs", "statisticalConfirmationClaim": False},
@@ -354,13 +362,17 @@ def markdown(report):
              "| Condition / cache arm | Requests | Public pass / fail / unmeasured | Mean tokens | Mean attributed E2E ms | Mean physical request ms | Mean E2E change vs same-task base |",
              "| --- | ---: | --- | ---: | ---: | ---: | ---: |"]
     if report["publicReplay"]:
+        statement = report["publicReplay"].get("provenanceStatement") or ""
+        if statement.lower().startswith("mixed provenance:"):
+            statement = statement.split(":", 1)[1].lstrip()
         lines[5:5] = ["Displayed public scores, attributed verifier/E2E timings and best-of-k use the separately recorded repaired-verifier replay over unchanged original samples.",
-                      f"Mixed provenance: {report['publicReplay'].get('provenanceStatement')}", ""]
+                      f"Mixed provenance: {statement}", ""]
     for g in report["groups"]:
         o = g["publicOutcomes"]
         overhead = g["descriptiveMatchedBaseOverheadFraction"]["mean"]
         change = f"{100 * overhead:+.2f}%" if number(overhead) else "not recorded"
-        lines.append(f"| {cell(g['condition'])} / {cell(g['arm'])} | {g['requests']} | {o['passed']} / {o['failed']} / {o['unmeasured']} | {fmt(g['tokens']['mean'])} | {fmt(g['attributedEndToEndMs']['mean'])} | {fmt(g['physicalRequestMs']['mean'])} | {change} |")
+        lines.append(f"| {cell(g['displayLabel'])} / {cell(g['arm'])} | {g['requests']} | {o['passed']} / {o['failed']} / {o['unmeasured']} | {fmt(g['tokens']['mean'])} | {fmt(g['attributedEndToEndMs']['mean'])} | {fmt(g['physicalRequestMs']['mean'])} | {change} |")
+    lines += ["", "The additional-base-samples row summarizes only extra generated samples. Selected best-of-k public outcomes and total compute across all k samples appear below."]
     lines += ["", "## Costs and completeness", "", f"Physical smoke wall: {fmt(report['costs']['physicalSmokeWallMs'])} ms.", ""]
     for key in ("actualPreparationMs", "completedPhysicalRequestMs", "completedVerifierMs", "cacheDiagnosticMs", "resetDiagnosticMs"):
         s = report["costs"][key]
@@ -373,7 +385,7 @@ def markdown(report):
                   f"- Separate replay wall: {fmt(replay['replayPhysicalWallMs'])} ms; browser startup: {fmt(replay['verifier'].get('browserStartupMs'))} ms; replayed request-verifier intervals: {fmt(report['costs']['replayedVerifierMs']['sum'])} ms."]
     lines += [f"- Best-of-k: {report['costs']['bestOfK']['status']}; k={report['costs']['bestOfK']['k']}."]
     for task in report["costs"]["bestOfK"]["tasks"]:
-        lines.append(f"- {cell(task['taskId'])}: base samples {fmt(task.get('actualComputeMs'))} ms; transform {fmt(task.get('transformComputeMs'))} ms.")
+        lines.append(f"- {cell(task['taskId'])}: selected `{cell(task.get('selectedId'))}`; selected public pass={json.dumps(task.get('selectedPublicPassed'))}; full compute across all {task.get('k')} base samples {fmt(task.get('fullSampleComputeMs'))} ms; transform {fmt(task.get('transformComputeMs'))} ms.")
     lines += ["", "Per-request attributed timing components (already included in E2E, not additional costs):", "",
               "| Request | Input contract ms | Other setup ms | Setup cleanup ms | Request cleanup ms |",
               "| --- | ---: | ---: | ---: | ---: |"]
