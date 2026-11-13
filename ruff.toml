@@ -3,3 +3,15 @@ extend-exclude = ["projects/enwiki9", "*.ipynb"]
 
 [lint]
 select = ["E9", "F63", "F7", "F82"]
+
+# These exact judge fragments are not standalone modules; keep sealed bytes intact.
+# TreeNode comes from algsolve/judge/harness_functional.py or the literal harness.
+# repairs-v1/protocol.py appends native443.py to the selected Solution source.
+# Staged Rand10 accepts rand7_api or the host's rand7; it is not a standalone API.
+[lint.per-file-ignores]
+"projects/algorithm_solver/catalogue/authored/leetcode-easy96-v7/python/2331.py" = ["F821"]
+"projects/algorithm_solver/catalogue/authored/requested-54-20261029-v1/python/894.py" = ["F821"]
+"projects/algorithm_solver/catalogue/authored/requested-54-next-c-20261029-v1/python/919.py" = ["F821"]
+"projects/algorithm_solver/catalogue/candidates/requested-252-v1/python/3902.py" = ["F821"]
+"projects/algorithm_solver/catalogue/downloaded-batch04-independent-v1/repairs-v1/native443.py" = ["F821"]
+"projects/algorithm_solver/staged/missing-0382-0725-v1/python/0470.py" = ["F821"]
