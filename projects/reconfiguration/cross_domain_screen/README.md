@@ -93,10 +93,13 @@ The completed execution used the six short prompts (89–164 tokens); responses
 were 14–128 tokens, with no output-cap hits. Three sequential full-model reset
 checks reproduced all baseline logits exactly. The 639.994-second load-through-
 cleanup interval overlapped the original 9B job, so timing is contended. The separate
-593/592-token WGSL probe remains unexecuted while the original 9B study is active,
-because a longer unchunked 27B prefill previously caused device loss. Short-prompt
-execution does not qualify that longer path. The original 9B confirmation remains
-active (59/176 observed at 13:19:17 UTC on 2026-11-13), with no quality conclusion.
+[593/592-token WGSL probe](PROBE-RESULTS-01.md) subsequently completed after the
+9B study released its lock: four generations and two exact resets, with no device
+failure. Base and gain each scored 0/2 at the source-contract boundary, before
+compilation or numeric execution. This is exposed-task evidence, not confirmation
+or arbitrary-long-context qualification. The original [9B confirmation](../../distillation/wgsl/channel_gain/CONFIRMATION-RESULTS-04.md)
+completed all 176 requests: base/gain/controls 0/16, adapter 11/16. Non-adapter
+outputs failed source requirements before compilation; no gain benefit was found.
 
 Separate [Mac synthetic checks](https://github.com/clocksmith/doppler/blob/daede6a0/reports/channel-gain-20261113/synthetic-isolation-receipt.json)
 exercise two live gain states and reset/failure cleanup on tiny shared tensors.

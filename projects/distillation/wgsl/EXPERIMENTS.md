@@ -32,6 +32,7 @@ criteria belong to the frozen study documents, not this registry summary.
 | Study or check | Frozen scope / actual execution | Evidence and limits |
 | --- | --- | --- |
 | 27B cross-domain screen 01 | Same analytical gain-negative formula mapped to dense layers 62/63; six families, 24 requests, base-cache only; arithmetic, Python and structured text | [Protocol](../../reconfiguration/cross_domain_screen/protocol.draft.json), [runtime lock](../../reconfiguration/cross_domain_screen/screen-runtime-lock-01.json), [corrected replay](../../reconfiguration/cross_domain_screen/REPLAY-RESULTS-01.md), [original report](../../reconfiguration/cross_domain_screen/RAW-RESULTS-01.md), [raw archive](../../reconfiguration/cross_domain_screen/screen-run-01/archive.json). Completed; corrected behavioral scores 4/6 for all four conditions, no gain benefit. Original permuted 3/6 preserved; versioned syntax repair replayed all 24 existing outputs. Model and domains both changed. |
+| 27B exposed WGSL probe 01 | Four generations, base and fixed gain on two previously exposed smoke tasks; two reset prefills; scheduled after completed 9B study | [Report](../../reconfiguration/cross_domain_screen/PROBE-RESULTS-01.md), [archive](../../reconfiguration/cross_domain_screen/probe-archive-01/archive.json). Base and gain each 0/2; all four rejected before compilation (unrecognized override form or Markdown fences). Both 248,320-logit resets exact; 453.167 seconds load through cleanup. Exploratory mechanics/interface evidence, not fresh confirmation. |
 | Mac synthetic gain/isolation/reset checks | Two live gain handles, alternating tiny dense-FFN dispatches, overlapping operation lifetimes, immutable shared input/weights, reset/discard and failure cleanup | Doppler [commit daede6a0](https://github.com/clocksmith/doppler/commit/daede6a0), [receipt](https://github.com/clocksmith/doppler/blob/daede6a0/reports/channel-gain-20261113/synthetic-isolation-receipt.json). Passed on Apple M3; zero model loads, one GPU queue, no full-model concurrency or quality claim. |
 
 ## Evidence map
@@ -180,6 +181,19 @@ threshold. The environment ledger records provider retirement and a 639.994-seco
 27B screen overlap; timings are contended, not isolated performance. This completed
 study does not establish shader improvement or efficient specialization. It tests
 this rule and implementation, not every reconfiguration architecture.
+
+**2026-11-13, deferred 27B shader probe and closure:** after the original 9B
+receipt was complete, the frozen four-generation probe acquired the cooperative
+exclusive timing lock and completed without runtime or device failure. Base and
+gains each scored 0/2; both sign-bit outputs used unrecognized `override const`
+syntax, and both tent outputs included forbidden Markdown fences. None reached
+compilation or numeric checks. Two serial resets reproduced all 248,320 logits
+exactly. Model-load through cleanup took 453.167 seconds, separate from scheduler
+waiting. The [probe report](../../reconfiguration/cross_domain_screen/PROBE-RESULTS-01.md)
+retains those limitations and exact artifacts. [Runtime closure](channel_gain/closure-04/closure.json)
+records 2,683 allowed live guard observations followed by intentional monitor
+shutdown, no matching experiment processes remaining, and the retired provider
+inactive/dead with PID zero and zero restarts. No GPU recovery was needed.
 
 Append subsequent attempts, deviations, costs and decisions here with their own
 receipts. Preserve these observations if a rerun succeeds. Smoke timing can support

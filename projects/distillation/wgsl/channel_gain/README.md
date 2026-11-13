@@ -80,6 +80,16 @@ outputs and denominators were retained unchanged. Historical SFT residency is a
 conservative lower bound rather than an active GPU counter; historical data and
 engineering preparation costs are not fully metered.
 
+## Runtime closure
+
+[Closure evidence](closure-04/closure.json) records both the completed 9B study
+and deferred 27B probe receipts. All 2,683 live guard observations before the
+intentional monitor stop allowed execution; the final row records that stop.
+The retired provider was inactive/dead with PID zero and zero restarts. No
+processes matching the private experiment paths or named guard remained at the
+16:30:06 UTC observation; this is a scoped process check, not a global GPU audit.
+The exact guard history is compressed with raw and archive hashes in the closure.
+
 ## Historical attempt 03: smoke and admission stop
 
 The remainder records the earlier smoke-only outcome. Its claims about untested

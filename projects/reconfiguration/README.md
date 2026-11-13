@@ -2,7 +2,7 @@
 
 This component holds multi-domain evaluations owned by Gamma. The first
 [WGSL channel-gain study](../distillation/wgsl/channel_gain/README.md) remains in
-its original directory and continues under its own frozen protocol.
+its original directory and has completed its frozen selection/confirmation protocol.
 
 The owner's 2026-11-13 direction authorizes preparing and running small parallel
 tests where actual device capacity permits. The initial `cross_domain_screen`
@@ -20,12 +20,16 @@ the [original report](cross_domain_screen/RAW-RESULTS-01.md) and
 
 Use the existing [research roadmap](../distillation/wgsl/RECONFIGURATION-ROADMAP.md)
 and [experimental standard](../distillation/wgsl/EXPERIMENT-PROTOCOL.md). Keep the
-running shader study's evidence separate. Archived enwiki9 records may inform
+shader study's evidence separate. Archived enwiki9 records may inform
 methodology; this work does not resume that retired lane.
 
-The original 9B confirmation is still generating (59/176 observed at 13:19:17 UTC
-on 2026-11-13); no confirmation quality conclusion exists yet. Three 27B reset
-checks were sequential and exact. Separate [Mac synthetic checks](https://github.com/clocksmith/doppler/blob/daede6a0/reports/channel-gain-20261113/synthetic-isolation-receipt.json)
+The original [9B confirmation](../distillation/wgsl/channel_gain/CONFIRMATION-RESULTS-04.md)
+completed 176 generations: base and every gain/control condition scored 0/16,
+versus 11/16 for the adapter. All non-adapter sources failed the required interface
+before compilation. The subsequent [27B exposed shader probe](cross_domain_screen/PROBE-RESULTS-01.md)
+completed four responses, scoring base 0/2 and gain 0/2, also at the source-contract
+boundary. Its two resets and the screen's three resets were sequential and exact.
+No shader or cross-domain gain benefit has been established. Separate [Mac synthetic checks](https://github.com/clocksmith/doppler/blob/daede6a0/reports/channel-gain-20261113/synthetic-isolation-receipt.json)
 passed tiny two-state gain isolation, reset/discard and failure cleanup; they do not
 establish full-model concurrency. Later proposal and self-improvement rungs 6–9
 remain unstarted.

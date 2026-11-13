@@ -31,7 +31,11 @@ re-prefill behavior. Kernel fixtures alone do not establish model integration.
 **Non-claim:** this is an engineering capability, not a learning breakthrough or
 proof that the reconfiguration improves an answer. The [first smoke study](channel_gain/README.md) now supplies two-prompt native
 cache and exact reset observations. The [27B exploratory screen](../../reconfiguration/cross_domain_screen/RAW-RESULTS-01.md)
-adds three exact full-model reset observations, one per domain. A
+adds three exact full-model reset observations, one per domain. The
+[deferred 27B shader probe](../../reconfiguration/cross_domain_screen/PROBE-RESULTS-01.md)
+adds two more exact serial resets. The completed 9B confirmation supplies 16
+same-prefix cache comparisons: only layer-31 KV and logits changed, with no top-1
+changes. A
 [Mac synthetic test](https://github.com/clocksmith/doppler/blob/daede6a0/reports/channel-gain-20261113/synthetic-isolation-receipt.json)
 exercises two live gain states, alternating tiny dense-FFN dispatches, overlapping
 operation lifetimes and failure cleanup. Full-model concurrent isolation and broader
