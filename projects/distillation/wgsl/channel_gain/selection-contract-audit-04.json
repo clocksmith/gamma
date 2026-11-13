@@ -1,0 +1,406 @@
+{
+  "schema": "gamma.channel-gain-selection-contract-audit/v1",
+  "createdAt": "2026-11-13T11:42:08.350Z",
+  "stage": "selection-04",
+  "scope": "First six completed selection outputs already inspected; no inference about remaining outputs or confirmation results.",
+  "checkedSelectionOutputs": 6,
+  "checkedDistinctSelectionTasks": 4,
+  "selectionPromptFileSha256": "3367b9388532385552ae1cfc3b99aba332df224c3b96fa480478348602557af0",
+  "selectionPromptFileMatchesManifest": true,
+  "parserSource": "projects/distillation/wgsl/campaign/tools/lib/wgsl-writer-semantic-harness.js",
+  "parserSourceSha256": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+  "tokenContractSourceSha256": "74c50d04a9f6c371ce7f499eec95eec2fd748a33ef4766bae965aece549f304e",
+  "nativeRuntimeSourceSha256": "d35bc6386f8dc1ba9de303184e463779f54de7ef3f03cec42fc2d54511d9c2e7",
+  "selectionVerifierSourceSha256": "6a25b3bd4bf578b96fae250501e0ab6f5971d959b3467d86db5ee1d16b13675c",
+  "namespaceProvenance": {
+    "sourceHashes": {
+      "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+      "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+      "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+      "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+      "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+      "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+      "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+      "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+    },
+    "compatibilityAliases": {
+      "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+    },
+    "sharedNamespaceTouched": false
+  },
+  "parserContract": {
+    "maxCharacters": 100000,
+    "forbidMarkdownFences": true,
+    "requireComputeStage": true
+  },
+  "records": [
+    {
+      "id": "channel-gain-v1-selection-gain-cubic/gain-positive",
+      "taskId": "channel-gain-v1-selection-gain-cubic",
+      "source": "struct Params {\n  length: u32,\n  output_offset: u32,\n  first: f32,\n  second: f32,\n};\n\n@group(0) @binding(0) var<read> left_values: array<f32>;\n@group(0) @binding(1) var<read> right_values: array<f32>;\n@group(0) @binding(2) var<read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n\n@compute @workgroup_size(1, 1, 1)\n@override_required(WORKGROUP_SIZE = 1)\nfn main(@builtin(global_invocation_id) global_id: vec3<u32>) {\n  let i: u32 = global_id.x;\n  if (i >= params.length) {\n    return;\n  }\n  let x = left_values[i];\n  let y = right_values[i];\n  let result = (x * x) * x;\n  output_values[params.output_offset + i] = result;\n}",
+      "tokenCount": 253,
+      "sourceReceiptSha256": "d80688a412a1174fcda6fcc2d959846fe8a47122708b203644e4959b01f6f2dd",
+      "observedViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ],
+      "journal": {
+        "host": "jupiter",
+        "path": "/home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/native-selection-04/selection.jsonl",
+        "line": 2,
+        "lineSha256": "ffdea876aa0e90c97edf4fdb0c6a9330649cc776247bbb960d78251627ee75fa"
+      },
+      "promptSha256": "4031793d453e621b0ded13e889b2fb358c48297109343e1ece4bbff25fbbfdb9",
+      "outputSha256": "d80688a412a1174fcda6fcc2d959846fe8a47122708b203644e4959b01f6f2dd",
+      "parserOutput": {
+        "ok": false,
+        "source": "struct Params {\n  length: u32,\n  output_offset: u32,\n  first: f32,\n  second: f32,\n};\n\n@group(0) @binding(0) var<read> left_values: array<f32>;\n@group(0) @binding(1) var<read> right_values: array<f32>;\n@group(0) @binding(2) var<read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n\n@compute @workgroup_size(1, 1, 1)\n@override_required(WORKGROUP_SIZE = 1)\nfn main(@builtin(global_invocation_id) global_id: vec3<u32>) {\n  let i: u32 = global_id.x;\n  if (i >= params.length) {\n    return;\n  }\n  let x = left_values[i];\n  let y = right_values[i];\n  let result = (x * x) * x;\n  output_values[params.output_offset + i] = result;\n}",
+        "violations": [
+          "required_override_absent:WORKGROUP_SIZE"
+        ]
+      },
+      "parserOutputSha256": "5336060eaae637db4d21ee8887cf40d339df9d1dc05e3e21a564a4826e53b7a8",
+      "promptRegeneratedIdentically": true,
+      "requiredOverrides": [
+        {
+          "name": "WORKGROUP_SIZE",
+          "type": "u32"
+        }
+      ],
+      "publicDispatch": [
+        1,
+        1,
+        1
+      ],
+      "publicConstants": {
+        "WORKGROUP_SIZE": 32
+      }
+    },
+    {
+      "id": "channel-gain-v1-selection-gain-softsign/gain-positive",
+      "taskId": "channel-gain-v1-selection-gain-softsign",
+      "source": "struct Params {\n  length : u32,\n  output_offset : u32,\n  first : f32,\n  second : f32,\n};\n\n@group(0) @binding(0) var<read> left_values : array<f32>;\n@group(0) @binding(1) var<read> right_values : array<f32>;\n@group(0) @binding(2) var<read_write> output_values : array<f32>;\n@group(0) @binding(3) var<uniform> params : Params;\n\n@compute @workgroup_size(1, 1, 1)\n@override_required(WORKGROUP_SIZE = 1)\nfn main(@builtin(global_invocation_id) global_id : vec3<u32>) {\n  let i : u32 = global_id.x;\n  if (i >= params.length) {\n    return;\n  }\n  let x : f32 = left_values[i];\n  let y : f32 = right_values[i];\n  let abs_x : f32 = abs(x);\n  let divisor : f32 = 1.0 + abs_x;\n  let result : f32 = x / divisor;\n  output_values[params.output_offset + i] = result;\n}",
+      "tokenCount": 291,
+      "sourceReceiptSha256": "31cdba8bc1b9fac470ed2fb214be97b149d1d7f7d3ddedf9325272019b8f3f00",
+      "observedViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ],
+      "journal": {
+        "host": "jupiter",
+        "path": "/home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/native-selection-04/selection.jsonl",
+        "line": 3,
+        "lineSha256": "676544e7bbc4aadbdc78da8d0407cdecc43f4eeb4483668e99689168da5c0218"
+      },
+      "promptSha256": "ef572475e0d036dfe93b77d2515194b3d5f2f81786c511a69e62a2ffa2195430",
+      "outputSha256": "31cdba8bc1b9fac470ed2fb214be97b149d1d7f7d3ddedf9325272019b8f3f00",
+      "parserOutput": {
+        "ok": false,
+        "source": "struct Params {\n  length : u32,\n  output_offset : u32,\n  first : f32,\n  second : f32,\n};\n\n@group(0) @binding(0) var<read> left_values : array<f32>;\n@group(0) @binding(1) var<read> right_values : array<f32>;\n@group(0) @binding(2) var<read_write> output_values : array<f32>;\n@group(0) @binding(3) var<uniform> params : Params;\n\n@compute @workgroup_size(1, 1, 1)\n@override_required(WORKGROUP_SIZE = 1)\nfn main(@builtin(global_invocation_id) global_id : vec3<u32>) {\n  let i : u32 = global_id.x;\n  if (i >= params.length) {\n    return;\n  }\n  let x : f32 = left_values[i];\n  let y : f32 = right_values[i];\n  let abs_x : f32 = abs(x);\n  let divisor : f32 = 1.0 + abs_x;\n  let result : f32 = x / divisor;\n  output_values[params.output_offset + i] = result;\n}",
+        "violations": [
+          "required_override_absent:WORKGROUP_SIZE"
+        ]
+      },
+      "parserOutputSha256": "94068de35dfea756fc098656b9ab4c0d42dbc6c8176d7f86845090f3d2c9c7ff",
+      "promptRegeneratedIdentically": true,
+      "requiredOverrides": [
+        {
+          "name": "WORKGROUP_SIZE",
+          "type": "u32"
+        }
+      ],
+      "publicDispatch": [
+        1,
+        1,
+        1
+      ],
+      "publicConstants": {
+        "WORKGROUP_SIZE": 32
+      }
+    },
+    {
+      "id": "channel-gain-v1-selection-gain-gated_difference/gain-positive",
+      "taskId": "channel-gain-v1-selection-gain-gated_difference",
+      "source": "struct Params {\n  length : u32,\n  output_offset : u32,\n  first : f32,\n  second : f32,\n};\n\n@group(0) @binding(0) var<read> left_values : array<f32>;\n@group(0) @binding(1) var<read> right_values : array<f32>;\n@group(0) @binding(2) var<read_write> output_values : array<f32>;\n@group(0) @binding(3) var<uniform> params : Params;\n\n@compute @workgroup_size(1, 1, 1)\n@override_required(WORKGROUP_SIZE = 1)\nfn main(@builtin(global_invocation_id) global_id : vec3<u32>) {\n  let i : u32 = global_id.x;\n  if (i >= params.length) {\n    return;\n  }\n  let x : f32 = left_values[i];\n  let y : f32 = right_values[i];\n  let result : f32;\n  if (x >= params.first) {\n    result = x - y;\n  } else {\n    result = y - x;\n  }\n  output_values[params.output_offset + i] = result;\n}",
+      "tokenCount": 291,
+      "sourceReceiptSha256": "60b49aa05c35866fac7133b69f28dbab7f9d6abea278dd16e261f5e6e7bd8ff0",
+      "observedViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ],
+      "journal": {
+        "host": "jupiter",
+        "path": "/home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/native-selection-04/selection.jsonl",
+        "line": 4,
+        "lineSha256": "ee4d24eea0f5ac6802e73611888e826e2c1556bd0c3e27107d82fce52c53825e"
+      },
+      "promptSha256": "aad070c2313f9ec4d917d16ecdcc3a95dac3da83f64e4fe85160c17605e178dd",
+      "outputSha256": "60b49aa05c35866fac7133b69f28dbab7f9d6abea278dd16e261f5e6e7bd8ff0",
+      "parserOutput": {
+        "ok": false,
+        "source": "struct Params {\n  length : u32,\n  output_offset : u32,\n  first : f32,\n  second : f32,\n};\n\n@group(0) @binding(0) var<read> left_values : array<f32>;\n@group(0) @binding(1) var<read> right_values : array<f32>;\n@group(0) @binding(2) var<read_write> output_values : array<f32>;\n@group(0) @binding(3) var<uniform> params : Params;\n\n@compute @workgroup_size(1, 1, 1)\n@override_required(WORKGROUP_SIZE = 1)\nfn main(@builtin(global_invocation_id) global_id : vec3<u32>) {\n  let i : u32 = global_id.x;\n  if (i >= params.length) {\n    return;\n  }\n  let x : f32 = left_values[i];\n  let y : f32 = right_values[i];\n  let result : f32;\n  if (x >= params.first) {\n    result = x - y;\n  } else {\n    result = y - x;\n  }\n  output_values[params.output_offset + i] = result;\n}",
+        "violations": [
+          "required_override_absent:WORKGROUP_SIZE"
+        ]
+      },
+      "parserOutputSha256": "f8d945289f4648ce588902b9f9f0fd017ad966899ba76bbd4891fcfe62f6f160",
+      "promptRegeneratedIdentically": true,
+      "requiredOverrides": [
+        {
+          "name": "WORKGROUP_SIZE",
+          "type": "u32"
+        }
+      ],
+      "publicDispatch": [
+        1,
+        1,
+        1
+      ],
+      "publicConstants": {
+        "WORKGROUP_SIZE": 32
+      }
+    },
+    {
+      "id": "channel-gain-v1-selection-gain-rms_pair/gain-positive",
+      "taskId": "channel-gain-v1-selection-gain-rms_pair",
+      "source": "struct Params {\n  length: u32,\n  output_offset: u32,\n  first: f32,\n  second: f32,\n};\n\n@group(0) @binding(0) var<read> left_values: array<f32>;\n@group(0) @binding(1) var<read> right_values: array<f32>;\n@group(0) @binding(2) var<read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n\n@compute @workgroup_size(1, 1, 1)\n@override_required(WORKGROUP_SIZE = 1)\nfn main(@builtin(global_invocation_id) global_id: vec3<u32>) {\n  let i: u32 = global_id.x;\n  if (i >= params.length) {\n    return;\n  }\n  let x = left_values[i];\n  let y = right_values[i];\n  let sum_sq = x * x + y * y;\n  let rms = sqrt(sum_sq / 2.0);\n  output_values[params.output_offset + i] = rms;\n}",
+      "tokenCount": 268,
+      "sourceReceiptSha256": "6354f1b6c3f025c7bf72173a6dc8e3ed16db5c1982815f08e2f88c4a249a4907",
+      "observedViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ],
+      "journal": {
+        "host": "jupiter",
+        "path": "/home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/native-selection-04/selection.jsonl",
+        "line": 5,
+        "lineSha256": "a88d93d613876894eecdd738e9fc2806181dffc0e072dc39a15f92f8163df5fd"
+      },
+      "promptSha256": "961841d9169a2e971b723752081dde0a37c36787cd39d195ed76d5f5cde6d1f0",
+      "outputSha256": "6354f1b6c3f025c7bf72173a6dc8e3ed16db5c1982815f08e2f88c4a249a4907",
+      "parserOutput": {
+        "ok": false,
+        "source": "struct Params {\n  length: u32,\n  output_offset: u32,\n  first: f32,\n  second: f32,\n};\n\n@group(0) @binding(0) var<read> left_values: array<f32>;\n@group(0) @binding(1) var<read> right_values: array<f32>;\n@group(0) @binding(2) var<read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n\n@compute @workgroup_size(1, 1, 1)\n@override_required(WORKGROUP_SIZE = 1)\nfn main(@builtin(global_invocation_id) global_id: vec3<u32>) {\n  let i: u32 = global_id.x;\n  if (i >= params.length) {\n    return;\n  }\n  let x = left_values[i];\n  let y = right_values[i];\n  let sum_sq = x * x + y * y;\n  let rms = sqrt(sum_sq / 2.0);\n  output_values[params.output_offset + i] = rms;\n}",
+        "violations": [
+          "required_override_absent:WORKGROUP_SIZE"
+        ]
+      },
+      "parserOutputSha256": "19c813c26e8d90011dca45dff5dc3190f53961e0e55fde8a7332311d9c50f89d",
+      "promptRegeneratedIdentically": true,
+      "requiredOverrides": [
+        {
+          "name": "WORKGROUP_SIZE",
+          "type": "u32"
+        }
+      ],
+      "publicDispatch": [
+        1,
+        1,
+        1
+      ],
+      "publicConstants": {
+        "WORKGROUP_SIZE": 32
+      }
+    },
+    {
+      "id": "channel-gain-v1-selection-gain-cubic/gain-negative",
+      "taskId": "channel-gain-v1-selection-gain-cubic",
+      "source": "struct Params {\n  length : u32,\n  output_offset : u32,\n  first : f32,\n  second : f32,\n};\n\n@group(0) @binding(0) var<read> left_values : array<f32>;\n@group(0) @binding(1) var<read> right_values : array<f32>;\n@group(0) @binding(2) var<read_write> output_values : array<f32>;\n@group(0) @binding(3) var<uniform> params : Params;\n\n@compute @workgroup_size(1, 1, 1)\n@override_required(WORKGROUP_SIZE = 1)\nfn main(@builtin(global_invocation_id) global_id : vec3<u32>) {\n  let i : u32 = global_id.x;\n  if (i >= params.length) {\n    return;\n  }\n  let x : f32 = left_values[i];\n  let y : f32 = right_values[i];\n  let result : f32 = (x * x) * x;\n  output_values[params.output_offset + i] = result;\n}",
+      "tokenCount": 265,
+      "sourceReceiptSha256": "39cbda688f98251611af31709b064e9b1dba17ed190f4277c5e5efe11d092fea",
+      "observedViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ],
+      "journal": {
+        "host": "jupiter",
+        "path": "/home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/native-selection-04/selection.jsonl",
+        "line": 6,
+        "lineSha256": "0292cad60ea4f05c4780060a5635d867e0b969afe0b6457df18fc3d6b4ac633d"
+      },
+      "promptSha256": "4031793d453e621b0ded13e889b2fb358c48297109343e1ece4bbff25fbbfdb9",
+      "outputSha256": "39cbda688f98251611af31709b064e9b1dba17ed190f4277c5e5efe11d092fea",
+      "parserOutput": {
+        "ok": false,
+        "source": "struct Params {\n  length : u32,\n  output_offset : u32,\n  first : f32,\n  second : f32,\n};\n\n@group(0) @binding(0) var<read> left_values : array<f32>;\n@group(0) @binding(1) var<read> right_values : array<f32>;\n@group(0) @binding(2) var<read_write> output_values : array<f32>;\n@group(0) @binding(3) var<uniform> params : Params;\n\n@compute @workgroup_size(1, 1, 1)\n@override_required(WORKGROUP_SIZE = 1)\nfn main(@builtin(global_invocation_id) global_id : vec3<u32>) {\n  let i : u32 = global_id.x;\n  if (i >= params.length) {\n    return;\n  }\n  let x : f32 = left_values[i];\n  let y : f32 = right_values[i];\n  let result : f32 = (x * x) * x;\n  output_values[params.output_offset + i] = result;\n}",
+        "violations": [
+          "required_override_absent:WORKGROUP_SIZE"
+        ]
+      },
+      "parserOutputSha256": "9900388add6f9ac182b9e3945ffb72363bd5f436119e6207716ea1908373de8e",
+      "promptRegeneratedIdentically": true,
+      "requiredOverrides": [
+        {
+          "name": "WORKGROUP_SIZE",
+          "type": "u32"
+        }
+      ],
+      "publicDispatch": [
+        1,
+        1,
+        1
+      ],
+      "publicConstants": {
+        "WORKGROUP_SIZE": 32
+      }
+    },
+    {
+      "id": "channel-gain-v1-selection-gain-softsign/gain-negative",
+      "taskId": "channel-gain-v1-selection-gain-softsign",
+      "source": "struct Params {\n  length : u32,\n  output_offset : u32,\n  first : f32,\n  second : f32,\n};\n\n@group(0) @binding(0) var<read> left_values : array<f32>;\n@group(0) @binding(1) var<read> right_values : array<f32>;\n@group(0) @binding(2) var<read_write> output_values : array<f32>;\n@group(0) @binding(3) var<uniform> params : Params;\n\n@compute @workgroup_size(1, 1, 1)\n@override_required(WORKGROUP_SIZE = 1)\nfn main(@builtin(global_invocation_id) global_id : vec3<u32>) {\n  let i : u32 = global_id.x;\n  if (i >= params.length) {\n    return;\n  }\n  let x : f32 = left_values[i];\n  let y : f32 = right_values[i];\n  let abs_x : f32 = abs(x);\n  let divisor : f32 = 1.0 + abs_x;\n  let result : f32 = x / divisor;\n  output_values[params.output_offset + i] = result;\n}",
+      "tokenCount": 291,
+      "sourceReceiptSha256": "31cdba8bc1b9fac470ed2fb214be97b149d1d7f7d3ddedf9325272019b8f3f00",
+      "observedViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ],
+      "journal": {
+        "host": "jupiter",
+        "path": "/home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/native-selection-04/selection.jsonl",
+        "line": 7,
+        "lineSha256": "377e6050aabee74844d185513d07d56bb952ba6c5a8c13eab40b7173f99641f1"
+      },
+      "promptSha256": "ef572475e0d036dfe93b77d2515194b3d5f2f81786c511a69e62a2ffa2195430",
+      "outputSha256": "31cdba8bc1b9fac470ed2fb214be97b149d1d7f7d3ddedf9325272019b8f3f00",
+      "parserOutput": {
+        "ok": false,
+        "source": "struct Params {\n  length : u32,\n  output_offset : u32,\n  first : f32,\n  second : f32,\n};\n\n@group(0) @binding(0) var<read> left_values : array<f32>;\n@group(0) @binding(1) var<read> right_values : array<f32>;\n@group(0) @binding(2) var<read_write> output_values : array<f32>;\n@group(0) @binding(3) var<uniform> params : Params;\n\n@compute @workgroup_size(1, 1, 1)\n@override_required(WORKGROUP_SIZE = 1)\nfn main(@builtin(global_invocation_id) global_id : vec3<u32>) {\n  let i : u32 = global_id.x;\n  if (i >= params.length) {\n    return;\n  }\n  let x : f32 = left_values[i];\n  let y : f32 = right_values[i];\n  let abs_x : f32 = abs(x);\n  let divisor : f32 = 1.0 + abs_x;\n  let result : f32 = x / divisor;\n  output_values[params.output_offset + i] = result;\n}",
+        "violations": [
+          "required_override_absent:WORKGROUP_SIZE"
+        ]
+      },
+      "parserOutputSha256": "94068de35dfea756fc098656b9ab4c0d42dbc6c8176d7f86845090f3d2c9c7ff",
+      "promptRegeneratedIdentically": true,
+      "requiredOverrides": [
+        {
+          "name": "WORKGROUP_SIZE",
+          "type": "u32"
+        }
+      ],
+      "publicDispatch": [
+        1,
+        1,
+        1
+      ],
+      "publicConstants": {
+        "WORKGROUP_SIZE": 32
+      }
+    }
+  ],
+  "validDeclarationCases": [
+    {
+      "id": "ordinary_override",
+      "source": "override WORKGROUP_SIZE: u32 = 32u;\n@compute @workgroup_size(WORKGROUP_SIZE) fn main() {}",
+      "parserOutput": {
+        "ok": true,
+        "source": "override WORKGROUP_SIZE: u32 = 32u;\n@compute @workgroup_size(WORKGROUP_SIZE) fn main() {}",
+        "violations": []
+      }
+    },
+    {
+      "id": "attributed_override",
+      "source": "@id(0) override WORKGROUP_SIZE: u32 = 32u;\n@compute @workgroup_size(WORKGROUP_SIZE) fn main() {}",
+      "parserOutput": {
+        "ok": true,
+        "source": "@id(0) override WORKGROUP_SIZE: u32 = 32u;\n@compute @workgroup_size(WORKGROUP_SIZE) fn main() {}",
+        "violations": []
+      }
+    }
+  ],
+  "finding": {
+    "firstFailingBoundary": "Generated WGSL fails the explicit frozen requiredOverrides interface contract.",
+    "required": "override WORKGROUP_SIZE: u32 declaration",
+    "observed": "All six observed sources instead contain @override_required(WORKGROUP_SIZE = 1), with @workgroup_size(1, 1, 1), and no required override declaration.",
+    "classification": "model_generated_WGSL_interface_error",
+    "extraction": "Native runtime directly decodes generated tokens; the frozen parser only trims source before this check.",
+    "additionalSourceInspection": "Observed var<read> and var<read_write> declarations also omit WGSL storage address space. These are source-inspection findings, not compiler/GPU validation.",
+    "dispatchInference": "With the visible dispatch [1,1,1], a hardcoded workgroup size1 would invoke only one logical element for the four-element public input even if other syntax were corrected.",
+    "validImplementationWronglyRejected": false,
+    "limits": "Two minimal valid declaration forms pass the exact parser. This audit does not claim general parser completeness or GPU compilation of the observed shaders."
+  },
+  "gpuInvocations": 0,
+  "modelInvocations": 0,
+  "confirmationOutputsInspected": false,
+  "confirmationOracleFilesRead": false,
+  "lockedFilesModified": false,
+  "reproduction": {
+    "cwd": "/Users/xyz/deco/gamma",
+    "command": "node --input-type=module <<'JS'\nimport {readFile} from 'node:fs/promises';\nimport assert from 'node:assert/strict';\nimport {openIsolatedNamespace} from './projects/distillation/wgsl/channel_gain/isolated_namespace.mjs';\nimport {sha256} from './projects/distillation/wgsl/channel_gain/verify_shaders.mjs';\nimport {replayHash} from './projects/distillation/wgsl/channel_gain/public_verifier_replay.mjs';\nconst root='./projects/distillation/wgsl/channel_gain/';\nconst audit=JSON.parse(await readFile(root+'selection-contract-audit-04.json','utf8'));\nconst promptBytes=await readFile(root+'corpus-v1/selection/prompts.jsonl');\nassert.equal(sha256(promptBytes),audit.selectionPromptFileSha256);\nassert.equal(sha256(await readFile(root+'../campaign/tools/lib/wgsl-writer-semantic-harness.js')),audit.parserSourceSha256);\nconst rows=promptBytes.toString().trim().split('\\n').map(JSON.parse),ns=await openIsolatedNamespace();\ntry {\nconst outputs=audit.records.map(record=>{const row=rows.find(r=>r.taskId===record.taskId),prompt=ns.buildWgslWriterPrompt(row,{responseContract:'complete_wgsl_compute_shader_only_v1'}),parsed=ns.parseCompleteWgslResponse(record.source,audit.parserContract,row.interfaceContract);assert.equal(prompt,row.prompt);assert.equal(sha256(prompt),record.promptSha256);assert.equal(sha256(record.source),record.outputSha256);assert.equal(replayHash(parsed),record.parserOutputSha256);return {id:record.id,promptSha256:sha256(prompt),outputSha256:sha256(record.source),parserOutputSha256:replayHash(parsed),ok:parsed.ok,violations:parsed.violations};});\nconst cases=audit.validDeclarationCases.map(c=>{const parsed=ns.parseCompleteWgslResponse(c.source,audit.parserContract,rows[0].interfaceContract);assert.deepEqual(parsed,c.parserOutput);return {id:c.id,ok:parsed.ok,violations:parsed.violations};});\nconsole.log(JSON.stringify({checkedSelectionOutputs:outputs.length,outputs,cases,gpuInvocations:0,confirmationOutputsInspected:false,confirmationOracleFilesRead:false},null,2));\n} finally {await ns.close();}\nJS",
+    "output": {
+      "checkedSelectionOutputs": 6,
+      "outputs": [
+        {
+          "id": "channel-gain-v1-selection-gain-cubic/gain-positive",
+          "promptSha256": "4031793d453e621b0ded13e889b2fb358c48297109343e1ece4bbff25fbbfdb9",
+          "outputSha256": "d80688a412a1174fcda6fcc2d959846fe8a47122708b203644e4959b01f6f2dd",
+          "parserOutputSha256": "5336060eaae637db4d21ee8887cf40d339df9d1dc05e3e21a564a4826e53b7a8",
+          "ok": false,
+          "violations": [
+            "required_override_absent:WORKGROUP_SIZE"
+          ]
+        },
+        {
+          "id": "channel-gain-v1-selection-gain-softsign/gain-positive",
+          "promptSha256": "ef572475e0d036dfe93b77d2515194b3d5f2f81786c511a69e62a2ffa2195430",
+          "outputSha256": "31cdba8bc1b9fac470ed2fb214be97b149d1d7f7d3ddedf9325272019b8f3f00",
+          "parserOutputSha256": "94068de35dfea756fc098656b9ab4c0d42dbc6c8176d7f86845090f3d2c9c7ff",
+          "ok": false,
+          "violations": [
+            "required_override_absent:WORKGROUP_SIZE"
+          ]
+        },
+        {
+          "id": "channel-gain-v1-selection-gain-gated_difference/gain-positive",
+          "promptSha256": "aad070c2313f9ec4d917d16ecdcc3a95dac3da83f64e4fe85160c17605e178dd",
+          "outputSha256": "60b49aa05c35866fac7133b69f28dbab7f9d6abea278dd16e261f5e6e7bd8ff0",
+          "parserOutputSha256": "f8d945289f4648ce588902b9f9f0fd017ad966899ba76bbd4891fcfe62f6f160",
+          "ok": false,
+          "violations": [
+            "required_override_absent:WORKGROUP_SIZE"
+          ]
+        },
+        {
+          "id": "channel-gain-v1-selection-gain-rms_pair/gain-positive",
+          "promptSha256": "961841d9169a2e971b723752081dde0a37c36787cd39d195ed76d5f5cde6d1f0",
+          "outputSha256": "6354f1b6c3f025c7bf72173a6dc8e3ed16db5c1982815f08e2f88c4a249a4907",
+          "parserOutputSha256": "19c813c26e8d90011dca45dff5dc3190f53961e0e55fde8a7332311d9c50f89d",
+          "ok": false,
+          "violations": [
+            "required_override_absent:WORKGROUP_SIZE"
+          ]
+        },
+        {
+          "id": "channel-gain-v1-selection-gain-cubic/gain-negative",
+          "promptSha256": "4031793d453e621b0ded13e889b2fb358c48297109343e1ece4bbff25fbbfdb9",
+          "outputSha256": "39cbda688f98251611af31709b064e9b1dba17ed190f4277c5e5efe11d092fea",
+          "parserOutputSha256": "9900388add6f9ac182b9e3945ffb72363bd5f436119e6207716ea1908373de8e",
+          "ok": false,
+          "violations": [
+            "required_override_absent:WORKGROUP_SIZE"
+          ]
+        },
+        {
+          "id": "channel-gain-v1-selection-gain-softsign/gain-negative",
+          "promptSha256": "ef572475e0d036dfe93b77d2515194b3d5f2f81786c511a69e62a2ffa2195430",
+          "outputSha256": "31cdba8bc1b9fac470ed2fb214be97b149d1d7f7d3ddedf9325272019b8f3f00",
+          "parserOutputSha256": "94068de35dfea756fc098656b9ab4c0d42dbc6c8176d7f86845090f3d2c9c7ff",
+          "ok": false,
+          "violations": [
+            "required_override_absent:WORKGROUP_SIZE"
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "id": "ordinary_override",
+          "ok": true,
+          "violations": []
+        },
+        {
+          "id": "attributed_override",
+          "ok": true,
+          "violations": []
+        }
+      ],
+      "gpuInvocations": 0,
+      "confirmationOutputsInspected": false,
+      "confirmationOracleFilesRead": false
+    },
+    "executionPassed": true
+  },
+  "auditSha256": "0ee9b8f91b18e2ebc06c2658c1e631b544233e032c1d63ba1a640af8f9757982"
+}
