@@ -33,6 +33,25 @@ reconfiguration.
 1. **Primary, no new training:** an analytical rule maps prefill activations to `z`
    and applies it around the frozen weights. Candidate families, each tested
    separately:
+   - **first candidate: prompt-conditioned channel reweighting** (owner proposal,
+     2026-11-12). In selected late MLP layers with `y = W_down·a` and SwiGLU
+     `a = silu(W_gate x) ⊙ (W_up x)`, per-channel energy is the mean of `a²` over a
+     fixed token span.
+     - Score `sᵢ = (E_instr,i − E_ref,i) / (E_ref,i + ε)`, gain
+       `gᵢ = exp(β·clip(sᵢ, −c, c))`, normalized so the mean of `log g` is 0.
+     - Decode uses `y = W_down·(g⊙a)`, an effective `W_down·diag(g)`; the base weights
+       never change and reset discards `g`.
+     - `E_instr` is an exact instruction token span, excluding chat-template tokens.
+       `E_ref` is variant A, the same prompt without that span, or variant B, the
+       mean over a fixed set of unrelated unlabeled prompts.
+     - β (both signs), c, ε, the reference variant and the layer set are chosen on the
+       selection population only.
+     - Extra control: gains permuted across channels.
+     - The multiply fuses into the existing MLP activation kernel; the prefill
+       statistics are one per-channel reduction per chosen layer. Overhead is
+       measured, not assumed.
+     - This is activation scaling equivalent to one diagonal weight change, not a
+       universal weight transform. A failure rejects this rule only.
    - additive low-rank, `W + A(z)B(z)ᵀ`, with `A` and `B` taken from prefill
      activations (for example, top singular directions of a layer's prefill inputs);
    - multiplicative, `U(z) W V(z)ᵀ` with near-identity structured `U` and `V`, applied
@@ -48,8 +67,9 @@ reconfiguration.
 Base-prefill keys and values followed by transformed decode is a hybrid computation.
 Each track runs three arms:
 
-- transform only the MLP and output projections, so cached keys and values stay
-  consistent;
+- transform only the MLP layers. This is still a hybrid: a changed MLP output alters
+  every later layer's inputs, so later layers' keys and values for new tokens differ
+  from the cached base computation. Measure that divergence;
 - transform all projections and keep the base KV cache (the hybrid), with the
   divergence measured directly;
 - re-prefill with the transformed weights (exact, at roughly double the prefill
@@ -64,8 +84,9 @@ Each track runs three arms:
   (93.75%) on seed confirmation and 11/16 on checkpoint selection
   (`doppler/docs/status/wgsl-writer-v2-result-2026-07-14.md`). Those populations are
   exposed, so its ceiling on the fresh tasks is measured, not assumed;
-- the same rule fed shuffled or unrelated context, and a random `z` of the same size,
-  to show whether the prompt matters at all;
+- the same rule fed shuffled or unrelated context, a random `z` of the same size, and
+  (for gain rules) the same gains permuted across channels, to show whether the
+  prompt-specific assignment matters at all;
 - end-to-end timing in every arm: prefill, time to compute `z`, decode tokens per
   second and memory.
 
