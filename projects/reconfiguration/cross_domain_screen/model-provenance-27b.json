@@ -1,0 +1,708 @@
+{
+  "schema": "gamma.cross-domain-model-provenance/v1",
+  "createdAt": "2026-11-13T12:57:48.366295+00:00",
+  "evidenceKind": "CPU inventory and exact-byte integrity plus retained qualification lineage; no new model or GPU execution",
+  "inventoryObservedAt": "2026-11-13T12:56:24.061238+00:00",
+  "model27b": {
+    "directory": "/home/x/.local/share/reploid/promotion-35b-20261104/model-27b",
+    "manifestSha256": "e29626a8d3c41c0af8c0dd945d028464dcebfef2413ba85e4f5e8695d5910d06",
+    "modelId": "qwen3-8-27b-text-q4k-ehaf16",
+    "architecture": {
+      "numLayers": 64,
+      "hiddenSize": 5120,
+      "intermediateSize": 17408,
+      "numAttentionHeads": 24,
+      "numKeyValueHeads": 4,
+      "headDim": 256,
+      "vocabSize": 248320,
+      "maxSeqLen": 262144,
+      "linearNumKeyHeads": 16,
+      "linearNumValueHeads": 48,
+      "linearKeyHeadDim": 128,
+      "linearValueHeadDim": 128,
+      "linearConvKernelDim": 4,
+      "hiddenSizePerLayerInput": null,
+      "vocabSizePerLayerInput": null,
+      "globalHeadDim": null,
+      "numKvSharedLayers": null,
+      "linearNormMode": "shared"
+    },
+    "moeConfig": null,
+    "artifactIdentity": {
+      "artifactCompleteness": "complete",
+      "conversionConfigDigest": "sha256:6c8f0e935ce9da61a9bd7451381cee1d99dc1b154673b5c8391e5aa6207846f4",
+      "conversionConfigPath": "src/config/conversion/qwen3/qwen3.8-27b-text-q4k-ehaf16.json",
+      "manifestVariantId": "qwen3-8-27b-text-q4k-ehaf16-mv-b99eab5e47e5",
+      "materializationProfile": "auto",
+      "modalitySet": [
+        "text"
+      ],
+      "shardSetHash": "sha256:1a6bea1247956d50610700c102adc4f76d5a04a6a8babb47c730ece44a1a02d2",
+      "sourceCheckpointId": "Qwen/Qwen3.8-27B",
+      "sourceFormat": "safetensors",
+      "sourceRepo": "Qwen/Qwen3.8-27B",
+      "sourceRevision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+      "weightCapsuleHash": "sha256:f3e3ebe6a9c0db68364327e07144e4b55d98b890151d4446328d7b0dad13df50",
+      "weightCapsuleId": "qwen3-8-27b-text-q4k-ehaf16-wp-f3e3ebe6a9c0"
+    },
+    "quantization": "Q4_K_M",
+    "ffn": {
+      "activation": "silu",
+      "gatedActivation": true,
+      "branchMode": "auto",
+      "useDoubleWideMlp": false,
+      "swigluLimit": null
+    },
+    "layerPattern": {
+      "type": "custom",
+      "globalPattern": null,
+      "period": null,
+      "offset": null,
+      "layerTypes": [
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention"
+      ],
+      "residualBranchScale": 1
+    },
+    "session": {
+      "compute": {
+        "defaults": {
+          "activationDtype": "f32",
+          "mathDtype": "f32",
+          "accumDtype": "f32",
+          "outputDtype": "f32"
+        }
+      },
+      "kvcache": {
+        "kvDtype": "f16",
+        "layout": "contiguous",
+        "maxSeqLen": 8192,
+        "pageSize": 256,
+        "tiering": {
+          "mode": "off",
+          "hotWindow": 1024,
+          "coldPageSize": 256,
+          "coldDtype": "f16",
+          "compression": {
+            "mode": "none",
+            "blockSize": 1,
+            "bitWidth": 4,
+            "prodMode": false
+          },
+          "gating": {
+            "mode": "auto",
+            "minAluBwRatio": 0
+          }
+        },
+        "quantization": {
+          "mode": "none",
+          "bitWidth": 4,
+          "prodMode": false
+        }
+      },
+      "decodeLoop": {
+        "batchSize": 12,
+        "stopCheckMode": "batch",
+        "readbackInterval": 32,
+        "readbackMode": "sequential",
+        "submitLatencyThresholdMs": null,
+        "ringTokens": 1,
+        "ringStop": 1,
+        "ringStaging": 1,
+        "disableCommandBatching": false
+      },
+      "perLayerInputs": {
+        "materialization": "auto",
+        "rowCache": {
+          "mode": "lru",
+          "maxRows": 256,
+          "maxBytes": 134217728,
+          "decodedDtype": "f32"
+        },
+        "prefetch": {
+          "mode": "next_token",
+          "rowsAhead": 1
+        },
+        "gpuUpload": {
+          "mode": "per_step_slices",
+          "stagingRows": 2
+        },
+        "hotCache": {
+          "mode": "prepared_tokens",
+          "maxTokens": 1024,
+          "maxBytes": 134217728,
+          "outputDtype": "f32"
+        }
+      },
+      "speculation": {
+        "mode": "none",
+        "tokens": 1,
+        "verify": "greedy",
+        "threshold": null,
+        "rollbackOnReject": true
+      },
+      "prefillChunkSubmitMode": "async",
+      "useFlashPrefillAttention": false,
+      "useWideTileQ4KPrefill": false,
+      "retainQ4KMaterialization": false,
+      "useLinearAttentionABProjectionFusion": false,
+      "useLinearAttentionQKVZProjectionFusion": false,
+      "useLinearAttentionFusedDecodeCore": false
+    },
+    "shardCount": 254,
+    "declaredShardBytes": 16994352128,
+    "allShardSizesMatch": true,
+    "tokenizer": {
+      "filename": "tokenizer.json",
+      "sha256": "ae50d65939a34a089eaf1e541c15c8a7d866079a5fe9a1d35454e0aa88577753",
+      "bytes": 9089356
+    },
+    "denseMlpLayers": 64,
+    "gainMapping": {
+      "layerIndices": [
+        62,
+        63
+      ],
+      "channelsPerLayer": 17408,
+      "architectureMapping": "New model mapping of the same analytical rule to the final two dense gated-SiLU MLPs. This is not same-model 9B transfer evidence.",
+      "attentionTypes": [
+        "linear_attention",
+        "full_attention"
+      ],
+      "nativeGainPathStatus": "Structurally compatible; unchunked transformed-model execution is not established by retained qualification."
+    }
+  },
+  "model35b": {
+    "directory": "/run/media/x/models/deco-evidence/doppler-35b-native/rdrr-q4_0-e12da725",
+    "manifestSha256": "e985e3cdad60d0cb57d84b436161e66ab5b3f6589a168de6f00b4610e5f1fb59",
+    "modelId": "qwen-3-6-35b-a3b-text-source-q4_0-af32",
+    "architecture": {
+      "numLayers": 40,
+      "hiddenSize": 2048,
+      "intermediateSize": 512,
+      "numAttentionHeads": 16,
+      "numKeyValueHeads": 2,
+      "headDim": 256,
+      "vocabSize": 248320,
+      "maxSeqLen": 262144,
+      "ropeTheta": 10000000,
+      "linearAttentionSourceLayout": "gguf-v1",
+      "linearNumKeyHeads": 16,
+      "linearNumValueHeads": 32,
+      "linearKeyHeadDim": 128,
+      "linearValueHeadDim": 128,
+      "linearConvKernelDim": 4,
+      "hiddenSizePerLayerInput": null,
+      "vocabSizePerLayerInput": null,
+      "globalHeadDim": null,
+      "numKvSharedLayers": null,
+      "linearNormMode": "shared"
+    },
+    "moeConfig": {
+      "numExperts": 256,
+      "numExpertsPerToken": 8,
+      "expertFormat": "qwen3_5",
+      "sharedExpertIntermediateSize": 512,
+      "expertIntermediateSize": 512
+    },
+    "artifactIdentity": {
+      "artifactCompleteness": "complete",
+      "conversionConfigDigest": "sha256:40f8043a69194b3e05b4ef50b2a4da8e435eec295fc528054b653a2b2f96434d",
+      "conversionConfigPath": "src/config/conversion/qwen3/qwen-3-6-35b-a3b-q4_0-passthrough.json",
+      "manifestVariantId": "qwen-3-6-35b-a3b-text-source-q4_0-af32-mv-61ab5b75d9ae",
+      "materializationProfile": "auto",
+      "modalitySet": [
+        "text"
+      ],
+      "shardSetHash": "sha256:d1e4369bb64aea21bb6a893f271a1ade89a871f66934597d8fe8a7c32f5abe52",
+      "sourceCheckpointId": "file:///run/media/x/models/deco-evidence/qwen-economics-20261030/Qwen_Qwen3.6-35B-A3B-Q4_0.gguf",
+      "sourceFormat": "gguf",
+      "weightCapsuleHash": "sha256:663142c052c56a000e0f1d95adab42de0d6105f3cafbcabca70aa2273f879818",
+      "weightCapsuleId": "qwen-3-6-35b-a3b-text-source-q4_0-af32-wp-663142c052c5"
+    },
+    "quantization": "Q4_0",
+    "ffn": {
+      "activation": "silu",
+      "gatedActivation": true,
+      "branchMode": "auto",
+      "useDoubleWideMlp": false,
+      "swigluLimit": null
+    },
+    "layerPattern": {
+      "type": "custom",
+      "globalPattern": null,
+      "period": null,
+      "offset": null,
+      "layerTypes": [
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention",
+        "linear_attention",
+        "linear_attention",
+        "linear_attention",
+        "full_attention"
+      ],
+      "residualBranchScale": 1
+    },
+    "session": {
+      "compute": {
+        "defaults": {
+          "activationDtype": "f32",
+          "mathDtype": "f32",
+          "accumDtype": "f32",
+          "outputDtype": "f32"
+        }
+      },
+      "kvcache": {
+        "kvDtype": "f16",
+        "layout": "contiguous",
+        "maxSeqLen": 4096,
+        "pageSize": 256,
+        "tiering": {
+          "mode": "off",
+          "hotWindow": 1024,
+          "coldPageSize": 256,
+          "coldDtype": "f16",
+          "compression": {
+            "mode": "none",
+            "blockSize": 1,
+            "bitWidth": 4,
+            "prodMode": false
+          },
+          "gating": {
+            "mode": "auto",
+            "minAluBwRatio": 0
+          }
+        },
+        "quantization": {
+          "mode": "none",
+          "bitWidth": 4,
+          "prodMode": false
+        }
+      },
+      "decodeLoop": {
+        "batchSize": 1,
+        "stopCheckMode": "per-token",
+        "readbackInterval": 1,
+        "readbackMode": "sequential",
+        "submitLatencyThresholdMs": null,
+        "ringTokens": 1,
+        "ringStop": 1,
+        "ringStaging": 1,
+        "disableCommandBatching": false
+      },
+      "perLayerInputs": {
+        "materialization": "auto",
+        "rowCache": {
+          "mode": "lru",
+          "maxRows": 256,
+          "maxBytes": 134217728,
+          "decodedDtype": "f32"
+        },
+        "prefetch": {
+          "mode": "next_token",
+          "rowsAhead": 1
+        },
+        "gpuUpload": {
+          "mode": "per_step_slices",
+          "stagingRows": 2
+        },
+        "hotCache": {
+          "mode": "prepared_tokens",
+          "maxTokens": 1024,
+          "maxBytes": 134217728,
+          "outputDtype": "f32"
+        }
+      },
+      "speculation": {
+        "mode": "none",
+        "tokens": 1,
+        "verify": "greedy",
+        "threshold": null,
+        "rollbackOnReject": true
+      },
+      "prefillChunkSubmitMode": "async",
+      "useFlashPrefillAttention": false,
+      "useWideTileQ4KPrefill": false,
+      "retainQ4KMaterialization": false,
+      "useLinearAttentionABProjectionFusion": false,
+      "useLinearAttentionQKVZProjectionFusion": false,
+      "useLinearAttentionFusedDecodeCore": false
+    },
+    "shardCount": 297,
+    "declaredShardBytes": 19927296512,
+    "allShardSizesMatch": true,
+    "tokenizer": {
+      "filename": "tokenizer.json",
+      "sha256": "21106cf614c6ce4c1d8153f5dfac37917082b86b8e60c53519bc4a876fe58f38",
+      "bytes": 9095133
+    },
+    "denseGainPathCompatible": false
+  },
+  "lineage27b": {
+    "qualifiedDirectory": "/home/x/.local/share/reploid/models/qwen38-27b-q4k-19ecff3e",
+    "qualifiedManifestSha256": "19ecff3e4ab9e7c1191e271f4a6e94f10a8a102206dcda9413bed728c33c271d",
+    "activeManifestSha256": "e29626a8d3c41c0af8c0dd945d028464dcebfef2413ba85e4f5e8695d5910d06",
+    "topLevelChangedKeys": [
+      "artifactIdentity",
+      "inference",
+      "shards",
+      "hashAlgorithm",
+      "metadata"
+    ],
+    "inferenceDifferences": [
+      {
+        "path": "inference/execution/kernels/attn_decode/digest",
+        "qualified": "sha256:91808be35895e921c0fa43fc47bfe8cab69c437c388ab561f595d9dc983f66e1",
+        "active": "sha256:c6d9f8c614a2a088cb533958007896391efb3e348377dc8095c409944c562912"
+      },
+      {
+        "path": "inference/execution/kernels/attn_head256/digest",
+        "qualified": "sha256:4ecdc079e322a770350414244cb383d72ae7ffa47ed620c64ff425c93413e97a",
+        "active": "sha256:4e1eafa0a5e407c99714d04f0e75f3834e1156bcb25579892f248d95aae197da"
+      },
+      {
+        "path": "inference/execution/kernels/embed/digest",
+        "qualified": "sha256:8995b4a790a1f3b89fbb801f89d595985eee46c9bfca4133f74396259083eda9",
+        "active": "sha256:a2c318bc362d676769d8cb751d61a4d7777e1068be0456eff634e0821d783c10"
+      },
+      {
+        "path": "inference/execution/kernels/gated_delta_conv/digest",
+        "qualified": "sha256:2b7230e68f4fd54eb4991c998d7e54ca94b82a100cea3d9672816dd36b5bacd9",
+        "active": "sha256:001fb6cbb3529bf2210406a522405d1b80acd6e0ecc09a67114cdb770103c92a"
+      },
+      {
+        "path": "inference/execution/kernels/gated_delta_fused_decode/digest",
+        "qualified": "sha256:b9aec655be0dfc674ba7ffc22dcb41bfccd655f9f8c0844b5eab4349494bb6b3",
+        "active": "sha256:87dbb137e1495ebb0821ef5a8a90e7a6460883e1bd4eafb1c13ae9b1a1052cfb"
+      },
+      {
+        "path": "inference/execution/kernels/gated_delta_recurrent/digest",
+        "qualified": "sha256:8a6a6392caa11b5f14500b543268df7b87ee3d56deaa72827f9b39692ccb835d",
+        "active": "sha256:33e2f208b15ff6140d493609b6e4814c44f23fb2f3f1b66f2a62336a04dfd46e"
+      },
+      {
+        "path": "inference/execution/kernels/q4_widetile/digest",
+        "qualified": "sha256:5631ce6f19f805c7ac85722bac17365048bc7b9e2c422f3ef9477b63cb8dad62",
+        "active": "sha256:c434473d64a163eddbb6fc349aec944e4bef6b067170acdf4d55daf92f1932bf"
+      },
+      {
+        "path": "inference/execution/kernels/rmsnorm/digest",
+        "qualified": "sha256:284d3efb0ad0991fc57ece5f634cbc8a931fcab36f193b2b6832561d4cc79ef1",
+        "active": "sha256:4f4d144735bdff86b8567346ba7ea7b82fe68a2ac9656ba1577106158af9bc7c"
+      },
+      {
+        "path": "inference/execution/kernels/rope/digest",
+        "qualified": "sha256:b2da9d396668981dab9794c2973b668279f768994466b083d2105730555e1a5b",
+        "active": "sha256:923f9a96c941aee94119ecf04fa5b1508c77b7d927a7e6044ce6588b2d51a416"
+      },
+      {
+        "path": "inference/execution/kernels/sample/digest",
+        "qualified": "sha256:7ff3dd675b4737d920e0b3889e15c4fedde8410a353bbc6d4651db76ce69eb9b",
+        "active": "sha256:f2377b2a58c2eeb695a6f6f7ad877630bdba5e74d5dc1a8d919cd73b360d4870"
+      },
+      {
+        "path": "inference/execution/kernels/silu/digest",
+        "qualified": "sha256:d6b21e62031ac0d748617f7ebfb43834552a5b8f9590c18dc19cd0cd41a2fbca",
+        "active": "sha256:c6e28a7e6b2a7cfa805db03c9079fbc90fc2717c621e388bfa55b75ce1737ac0"
+      }
+    ],
+    "tensorsExactlyEqual": true,
+    "hardlinkedShardCount": 254,
+    "shardFilenameSizePairsExactlyEqual": true,
+    "qualifiedHashAlgorithm": "blake3",
+    "activeHashAlgorithm": "sha256"
+  },
+  "retainedQualification27b": {
+    "recordedAt": "2026-10-16T16:33:06.141019+00:00",
+    "outcome": "All three scoped gates passed for the smaller retained candidate on AMD native WebGPU with explicit 256-token prefill chunks. Not a universal quality, browser, hardware-capacity, performance-superiority or public-deployment qualification.",
+    "candidate": {
+      "manifestSha256": "2bc4c15504ec3b89c440d6c7009a9e320f8a7d927da5f37cc0e8c947f1075f59",
+      "tensorBytes": 16994352128,
+      "shardBytes": 16994352128,
+      "precision": {
+        "F16": 2595273728,
+        "Q4_K_M": 14399078400
+      }
+    },
+    "sourceRevision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+    "gates": {
+      "implementationParity": {
+        "result": "pass-scoped-holdout",
+        "receipt": "holdout-comparison.json",
+        "reference": "Independent gguf 0.19.0 Q4_K decoding of every retained tensor byte, Transformers 5.6.2 F32 equations, F16 KV storage; CPU sequential gated-delta reference. No independent requantization.",
+        "coverage": {
+          "knownBlocks": 9,
+          "valuesPerBlock": 256,
+          "originalSharedHistoryLogitPositions": [
+            4,
+            100,
+            101,
+            102,
+            103
+          ],
+          "holdoutPromptTokens": [
+            50,
+            751
+          ],
+          "holdoutLogitVectors": 2,
+          "holdoutStateSnapshots": 12,
+          "stateLayers": [
+            0,
+            30,
+            62
+          ]
+        },
+        "maximumHoldoutLogitError": 0.0014200210571289062,
+        "maximumHoldoutStateError": 0.002116389572620392,
+        "acceptance": {
+          "implementationMaxAbsoluteLogitError": 0.006682872772216797,
+          "implementationRmsLogitError": 0.001051568217757106,
+          "implementationMaxAbsoluteStateError": 0.009238719940185547,
+          "implementationRmsStateError": 0.00048107481417186096
+        },
+        "calibration": "Initial 0.001 diagnostic misses are preserved. Independent CPU chunked versus sequential control also exceeds 0.001. Holdout limits were frozen before either new prompt executed: four times the independent-control maximum max/RMS discrepancies. This is a bounded empirical tolerance, not a mathematical verification or universal acceptance rule.",
+        "tokenParity": "Free-running agreement with BF16/F16 is not an acceptance gate. Historical token-97 and token-81 mismatches remain historical transcript observations.",
+        "llamaCpp": "Inspected retained revision 59d5fad7c111d30a547d690b69235ed9e05c035d. Recurrent V-head permutations cross Q4_K block boundaries, so no unsupported byte-preserving GGUF repack or independent requantization was substituted. No llama.cpp Q4 GPU run claimed."
+      },
+      "deploymentViability": {
+        "result": "pass-scoped-native-provider",
+        "receipt": "deployment-summary.json",
+        "config": "chunked-provider-config.json",
+        "contextTokens": 4096,
+        "testedPromptTokens": 3784,
+        "maximumOutputTokens": 256,
+        "prefillChunkTokens": 256,
+        "peakManagedGpuBytes": 18187068416,
+        "retainedModelBytes": 17001746432,
+        "packedQuantizedMatrices": 401,
+        "packedQuantizedBytes": 14399078400,
+        "checks": [
+          "streaming",
+          "follow-up",
+          "two queued concurrent requests sharing resident weights",
+          "cancellation",
+          "reuse",
+          "close and reopen",
+          "settled cleanup"
+        ],
+        "remainingLimits": [
+          "Unchunked 3784-token prefill caused AMD device loss; explicit chunking is a tested workaround, not a repair of that driver/runtime boundary.",
+          "Native provider exercised directly; no public Q4 advertisement, WebRTC, browser conversation persistence or sustained multiuser campaign.",
+          "Warm cleanup leaves reusable pool buffers until GPU host destruction; active, retained model and deferred allocations settle to zero."
+        ],
+        "deviceLoss": "The unchunked long-prompt device loss is retained. Explicit prefill chunking is the tested workaround; the unchunked driver/runtime boundary is not fixed."
+      },
+      "qualityRetention": {
+        "result": "pass-frozen-tasks-only",
+        "receipt": "quality-comparison.json",
+        "q4Correct": 6,
+        "f16Correct": 6,
+        "total": 6,
+        "perplexity": {
+          "q4": {
+            "scoredTokens": 54,
+            "meanNll": 2.2870458058575056,
+            "perplexity": 9.84580824630591
+          },
+          "f16": {
+            "scoredTokens": 54,
+            "meanNll": 2.2599234282343645,
+            "perplexity": 9.582355400799873
+          },
+          "delta": 0.26345284550603765
+        },
+        "scope": "The 54 scored-token perplexity sample is descriptive, not a pass threshold. No human preference, general quality retention, or F16 quality-ceiling claim."
+      }
+    },
+    "qualificationSourceFiles": [
+      {
+        "repository": "clocksmith/doppler",
+        "sourcePath": "artifacts/qwen38-27b-q4-qualification-20261016/qualification.json",
+        "retainedPath": "qualification-27b/qualification.json",
+        "sha256": "8bd521f940d8d19c74a78fbbdf18c1f3cce8ad2cbe3ef52f1e33b80d4633a581",
+        "bytes": 10849
+      },
+      {
+        "repository": "clocksmith/doppler",
+        "sourcePath": "artifacts/qwen38-27b-q4-qualification-20261016/deployment-summary.json",
+        "retainedPath": "qualification-27b/deployment-summary.json",
+        "sha256": "ddffc0443f530b302f8715cb7b7a2ede66a41073a7267c43eb0cb3814709eb1a",
+        "bytes": 8603
+      },
+      {
+        "repository": "clocksmith/doppler",
+        "sourcePath": "artifacts/qwen38-27b-q4-qualification-20261016/quality-comparison.json",
+        "retainedPath": "qualification-27b/quality-comparison.json",
+        "sha256": "068d5f875f086b5d69c2e4eeae002a8c3ff95c828270f3a5936ef1dc11e3917b",
+        "bytes": 2339
+      },
+      {
+        "repository": "clocksmith/doppler",
+        "sourcePath": "artifacts/qwen38-27b-q4-qualification-20261016/holdout-comparison.json",
+        "retainedPath": "qualification-27b/holdout-comparison.json",
+        "sha256": "fef435fdcf3d70740a95f5bc3a1e38d68156d637b0ccbf527a41fcd7500c2a01",
+        "bytes": 6964
+      },
+      {
+        "repository": "clocksmith/doppler",
+        "sourcePath": "artifacts/qwen38-27b-q4-qualification-20261016/chunked-provider-config.json",
+        "retainedPath": "qualification-27b/chunked-provider-config.json",
+        "sha256": "528f784e1a5ef8fd83cc7e4a9c3cf04faf38f0c7c3ea87b84fc0325c04ff57f0",
+        "bytes": 3179
+      }
+    ],
+    "sanitizedManifestMapping": {
+      "sourcePath": "artifacts/private-detail-sanitization-20261030/model-manifest-reidentification-20261031.json",
+      "sourceSha256": "d9701b0b04148a85ad2bbf02a073622cc8aed59b4d0bb2ed7c9903f7b2c99720",
+      "entry": {
+        "path": "artifacts/qwen38-27b-q4-qualification-20261016/q4-head-manifest.json",
+        "kind": "manifest-reidentified",
+        "originalSha256": "19ecff3e4ab9e7c1191e271f4a6e94f10a8a102206dcda9413bed728c33c271d",
+        "updatedSha256": "2bc4c15504ec3b89c440d6c7009a9e320f8a7d927da5f37cc0e8c947f1075f59",
+        "originalBytes": 563307,
+        "updatedBytes": 563270
+      },
+      "meaning": "Published qualification manifest reidentifies the same weights after metadata.source sanitization."
+    },
+    "activeViewLimit": "Weight and tensor equivalence is established. Changed kernel digests and new unchunked gain runtime do not inherit full runtime qualification from the older chunked run."
+  },
+  "retainedQualification35b": {
+    "sourcePath": "/home/x/deco/doppler/reports/qwen36-35b-pooled-final-20261101/f8-native-moe-prefill2048-pooled.json",
+    "sha256": "f821503335b68f181d9f51d5034d62500f525abdaede39f2aaf040ea0ab9c53f",
+    "claimGrade": false,
+    "scope": "Fresh fixed-size alternating product-format comparison after native MoE and convolution repairs: ten measured pairs per short/long throughput prompt after one warmup; four frozen admission tasks x11 each. Same original p11 shared contract, Pooled source/options, native executed weights and F32/F16 KV distinction as f7. Doppler explicitly uses a 2048-token prefill tuning overlay; default candidate remains256. Not common-weight, independent numerical, best speculative, production tail, or complete long-answer qualification. Sources frozen by git archive with symlinks preserved; no outlier removal.",
+    "sourceCommit": "9850b75c2cef16ada0673b986e6b973e16bf3721",
+    "gate": {
+      "commonWeightQualified": false,
+      "commonQualityQualified": true,
+      "qualityScope": "Only the frozen admission tasks; not a general model-quality equivalence claim"
+    }
+  },
+  "integrity27b": {
+    "receiptPath": "model-integrity-27b.json",
+    "receiptSha256": "97bc274b6aba6923501f93a21c6851d0e92b4b66282f30f617d66c849ae9b454",
+    "passed": true,
+    "manifestSha256": "e29626a8d3c41c0af8c0dd945d028464dcebfef2413ba85e4f5e8695d5910d06",
+    "manifestStable": true,
+    "algorithm": "sha256",
+    "shards": 254,
+    "bytesRead": 16994352128,
+    "elapsedMs": 63707.759252,
+    "startedAt": "2026-11-13T12:56:00.932Z",
+    "completedAt": "2026-11-13T12:57:04.641Z",
+    "implementation": {
+      "module": "/home/x/deco/doppler/.work/channel-gain-20261112/src/storage/shards/integrity.js",
+      "moduleSha256": "841578f244b9cf645dd20f7ae92bc9cdeb981a7f457cff5274e3321d1e96c79d",
+      "sha256ImplementationSha256": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+      "node": "v22.22.1",
+      "platform": "linux"
+    },
+    "command": "node /tmp/verify-channel-gain-27b.mjs",
+    "reproduction": "Exact CPU-only script source is embedded in model-integrity-27b.json.source; it opens every shard read-only with 4MiB stream chunks and calls Doppler createStreamingHasher. It writes only its /tmp receipt.",
+    "initialAttempt": "Main checkout integrity import failed before reading model weights because unrelated existing registry.json conflict markers prevented JSON loading. Successful run used the existing isolated channel-gain runtime; no main-checkout or model edits."
+  },
+  "verificationLimits": [
+    "27B hashes prove consistency with the active manifest, not inference correctness.",
+    "35B shard existence and sizes were checked; no new35B full-shard rehash or model execution was performed.",
+    "35B is MoE (256 experts/top8), and the implemented channel-gain request hook supports dense MLPs; 35B cannot be substituted silently.",
+    "No confirmation outputs or hidden oracle checks were inspected for this inventory."
+  ],
+  "gpuExecuted": false,
+  "inferenceExecuted": false
+}

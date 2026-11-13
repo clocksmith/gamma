@@ -1,0 +1,112 @@
+{
+  "pathSanitized": true,
+  "pathSanitization": "artifacts/private-detail-sanitization-20261030/model-manifest-reidentification-20261031.json",
+  "installedPackage": "$HOME/deco/doppler/.tmp/qwen38-q4-qualification-20261016/patched-consumer/node_modules/doppler-gpu",
+  "inventoryPath": "$HOME/deco/doppler/.tmp/qwen38-q4-qualification-20261016/q4-head-inventory.json",
+  "modelDirectory": "$HOME/deco/doppler/.tmp/model-ir-v2/qwen3.8-27b/q4-head-artifact",
+  "referenceContract": "$HOME/deco/doppler/.tmp/qwen38-q4-qualification-20261016/q4-head-reference-input.json",
+  "runtimeConfig": {
+    "shared": {
+      "harness": {
+        "referenceTranscript": {
+          "enabled": false,
+          "captureLogits": true,
+          "captureKvBytes": true
+        }
+      },
+      "debug": {
+        "logLevel": {
+          "defaultLogLevel": "warn"
+        },
+        "trace": {
+          "enabled": false
+        },
+        "profiler": {
+          "enabled": false
+        }
+      },
+      "bufferPool": {
+        "budget": {
+          "maxTotalBytes": 25769803776,
+          "highWatermarkRatio": 0.94,
+          "emergencyTrimTargetRatio": 0.9,
+          "hardFailOnBudgetExceeded": true
+        }
+      }
+    },
+    "inference": {
+      "prompt": "The capital of France is",
+      "chatTemplate": {
+        "enabled": false,
+        "type": null,
+        "thinking": false
+      },
+      "generation": {
+        "maxTokens": 128,
+        "disableMultiTokenDecode": true
+      },
+      "batching": {
+        "maxTokens": 128,
+        "batchSize": 1,
+        "readbackInterval": 1,
+        "stopCheckMode": "per-token",
+        "readbackMode": "sequential",
+        "ringTokens": 1,
+        "ringStop": 1,
+        "ringStaging": 1
+      },
+      "sampling": {
+        "temperature": 0,
+        "topK": 1,
+        "topP": 1,
+        "repetitionPenalty": 1,
+        "repetitionPenaltyWindow": 1,
+        "greedyThreshold": 0,
+        "suppressSpecialTokens": false,
+        "suppressSpecialLikeTokens": false,
+        "suppressTokenIds": []
+      },
+      "session": {
+        "decodeLoop": {
+          "batchSize": 1,
+          "readbackInterval": 1,
+          "stopCheckMode": "per-token",
+          "readbackMode": "sequential",
+          "submitLatencyThresholdMs": null,
+          "maxBatchDecodeTokens": 1,
+          "ringTokens": 1,
+          "ringStop": 1,
+          "ringStaging": 1,
+          "disableCommandBatching": false
+        },
+        "kvcache": {
+          "maxSeqLen": 4096
+        },
+        "prefillTokenChunkSize": 256
+      },
+      "kernelPathPolicy": {
+        "mode": "capability-aware",
+        "sourceScope": [
+          "manifest"
+        ],
+        "allowSources": [
+          "manifest"
+        ],
+        "onIncompatible": "error"
+      },
+      "kvcache": {
+        "maxSeqLen": 4096
+      }
+    }
+  },
+  "generation": {
+    "useChatTemplate": false,
+    "temperature": 0,
+    "topK": 1,
+    "topP": 1,
+    "maxTokens": 128,
+    "repetitionPenalty": 1
+  },
+  "manifestSha256": "2bc4c15504ec3b89c440d6c7009a9e320f8a7d927da5f37cc0e8c947f1075f59",
+  "reploidDirectory": "$HOME/deco/doppler/.tmp/qwen38-q4-qualification-20261016/patched-consumer"
+}

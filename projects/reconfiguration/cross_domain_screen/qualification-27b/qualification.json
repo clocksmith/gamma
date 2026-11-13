@@ -1,0 +1,215 @@
+{
+  "pathSanitized": true,
+  "pathSanitization": "artifacts/private-detail-sanitization-20261030/model-manifest-reidentification-20261031.json",
+  "schema": "doppler.qwen27-retained-q4-scoped-qualification/v1",
+  "recordedAt": "2026-10-16T16:33:06.141019+00:00",
+  "outcome": "All three scoped gates passed for the smaller retained candidate on AMD native WebGPU with explicit 256-token prefill chunks. Not a universal quality, browser, hardware-capacity, performance-superiority or public-deployment qualification.",
+  "candidate": {
+    "manifestSha256": "2bc4c15504ec3b89c440d6c7009a9e320f8a7d927da5f37cc0e8c947f1075f59",
+    "tensorBytes": 16994352128,
+    "shardBytes": 16994352128,
+    "precision": {
+      "F16": 2595273728,
+      "Q4_K_M": 14399078400
+    }
+  },
+  "sourceRevision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+  "otherCandidate": {
+    "manifestSha256": "4e8a6d04a2bb253ac2b2abd2bf8b125b525e7ca558a20dd4128eac883e782c9b",
+    "tensorBytes": 26780679168,
+    "shardBytes": 26780679168,
+    "precision": {
+      "F16": 16211033088,
+      "Q4_K_M": 10569646080
+    },
+    "execution": "Not run in this campaign"
+  },
+  "components": {
+    "doppler.runtime-source.gpu.kernels": "intent preserved; two-dimensional gather and split_qg dispatch",
+    "doppler.runtime-source.inference.pipelines.text": "intent preserved; embedding failure enters existing recorder/buffer cleanup",
+    "doppler.repository-tooling": "intent preserved; independent retained-weight reference, observations and comparisons",
+    "doppler.tests": "intent preserved; dispatch, failure ownership and numerical comparison regressions"
+  },
+  "boundaryEffects": "No public API, artifact payload, quantization policy, provider catalog or deployment change. Generated kernel digests refreshed; private installed consumer overlay exercised.",
+  "commits": {
+    "runtimeFix": "17dc3b3a",
+    "tools": "9ae06149"
+  },
+  "gates": {
+    "implementationParity": {
+      "result": "pass-scoped-holdout",
+      "receipt": "holdout-comparison.json",
+      "reference": "Independent gguf 0.19.0 Q4_K decoding of every retained tensor byte, Transformers 5.6.2 F32 equations, F16 KV storage; CPU sequential gated-delta reference. No independent requantization.",
+      "coverage": {
+        "knownBlocks": 9,
+        "valuesPerBlock": 256,
+        "originalSharedHistoryLogitPositions": [
+          4,
+          100,
+          101,
+          102,
+          103
+        ],
+        "holdoutPromptTokens": [
+          50,
+          751
+        ],
+        "holdoutLogitVectors": 2,
+        "holdoutStateSnapshots": 12,
+        "stateLayers": [
+          0,
+          30,
+          62
+        ]
+      },
+      "maximumHoldoutLogitError": 0.0014200210571289062,
+      "maximumHoldoutStateError": 0.002116389572620392,
+      "acceptance": {
+        "implementationMaxAbsoluteLogitError": 0.006682872772216797,
+        "implementationRmsLogitError": 0.001051568217757106,
+        "implementationMaxAbsoluteStateError": 0.009238719940185547,
+        "implementationRmsStateError": 0.00048107481417186096
+      },
+      "calibration": "Initial 0.001 diagnostic misses are preserved. Independent CPU chunked versus sequential control also exceeds 0.001. Holdout limits were frozen before either new prompt executed: four times the independent-control maximum max/RMS discrepancies. This is a bounded empirical tolerance, not a mathematical verification or universal acceptance rule.",
+      "tokenParity": "Free-running agreement with BF16/F16 is not an acceptance gate. Historical token-97 and token-81 mismatches remain historical transcript observations.",
+      "llamaCpp": "Inspected retained revision 59d5fad7c111d30a547d690b69235ed9e05c035d. Recurrent V-head permutations cross Q4_K block boundaries, so no unsupported byte-preserving GGUF repack or independent requantization was substituted. No llama.cpp Q4 GPU run claimed."
+    },
+    "deploymentViability": {
+      "result": "pass-scoped-native-provider",
+      "receipt": "deployment-summary.json",
+      "config": "chunked-provider-config.json",
+      "contextTokens": 4096,
+      "testedPromptTokens": 3784,
+      "maximumOutputTokens": 256,
+      "prefillChunkTokens": 256,
+      "peakManagedGpuBytes": 18187068416,
+      "retainedModelBytes": 17001746432,
+      "packedQuantizedMatrices": 401,
+      "packedQuantizedBytes": 14399078400,
+      "checks": [
+        "streaming",
+        "follow-up",
+        "two queued concurrent requests sharing resident weights",
+        "cancellation",
+        "reuse",
+        "close and reopen",
+        "settled cleanup"
+      ],
+      "remainingLimits": [
+        "Unchunked 3784-token prefill caused AMD device loss; explicit chunking is a tested workaround, not a repair of that driver/runtime boundary.",
+        "Native provider exercised directly; no public Q4 advertisement, WebRTC, browser conversation persistence or sustained multiuser campaign.",
+        "Warm cleanup leaves reusable pool buffers until GPU host destruction; active, retained model and deferred allocations settle to zero."
+      ],
+      "deviceLoss": "The unchunked long-prompt device loss is retained. Explicit prefill chunking is the tested workaround; the unchunked driver/runtime boundary is not fixed."
+    },
+    "qualityRetention": {
+      "result": "pass-frozen-tasks-only",
+      "receipt": "quality-comparison.json",
+      "q4Correct": 6,
+      "f16Correct": 6,
+      "total": 6,
+      "perplexity": {
+        "q4": {
+          "scoredTokens": 54,
+          "meanNll": 2.2870458058575056,
+          "perplexity": 9.84580824630591
+        },
+        "f16": {
+          "scoredTokens": 54,
+          "meanNll": 2.2599234282343645,
+          "perplexity": 9.582355400799873
+        },
+        "delta": 0.26345284550603765
+      },
+      "scope": "The 54 scored-token perplexity sample is descriptive, not a pass threshold. No human preference, general quality retention, or F16 quality-ceiling claim."
+    }
+  },
+  "serviceRestoration": {
+    "checkedAt": "2026-10-16T16:31:41.262281+00:00",
+    "services": [
+      {
+        "Id": "reploid-qwen-08b.service",
+        "ActiveState": "active",
+        "SubState": "running",
+        "MainPID": "2963679",
+        "ExecMainStartTimestamp": "Fri 2026-10-16 10:35:23 EDT",
+        "latestModelState": {
+          "at": "2026-10-16T14:58:57.697Z",
+          "phase": "ready",
+          "error": null,
+          "offering": true,
+          "modelId": "qwen-3-5-0-8b-q4k-ehaf16"
+        }
+      },
+      {
+        "Id": "reploid-qwen-2b.service",
+        "ActiveState": "active",
+        "SubState": "running",
+        "MainPID": "2967869",
+        "ExecMainStartTimestamp": "Fri 2026-10-16 10:35:46 EDT",
+        "latestModelState": {
+          "at": "2026-10-16T14:59:09.261Z",
+          "phase": "ready",
+          "error": null,
+          "offering": true,
+          "modelId": "qwen-3-5-2b-q4k-ehaf16"
+        }
+      },
+      {
+        "Id": "reploid-qwen-27b.service",
+        "ActiveState": "active",
+        "SubState": "running",
+        "MainPID": "4633",
+        "ExecMainStartTimestamp": "Fri 2026-10-16 12:27:54 EDT",
+        "latestModelState": {
+          "at": "2026-10-16T16:28:18.249Z",
+          "phase": "ready",
+          "error": null,
+          "offering": true,
+          "modelId": "qwen3-8-27b-text-f16-af32"
+        }
+      }
+    ]
+  },
+  "operationalConditions": {
+    "smallContributors": "0.8B and 2B stayed running with unchanged PIDs. Background contribution activity prevents isolated benchmark claims.",
+    "physicalGpuMeasurements": "Sequential. CPU-only control overlapped holdout numerical capture; its timing is not performance evidence.",
+    "memory": "No driver allowance changes. 24 GiB Mac and larger 26.8 GB artifact were not loaded. Managed pool peaks are not physical-RAM requirements.",
+    "coldWarm": "New process/model preparation, warm requests and model reopening retained. OS/driver caches were not flushed; compilation not separately attributed."
+  },
+  "verification": [
+    "node tests/gpu/gather-dispatch.test.js",
+    "node tests/gpu/gather-contract.test.js",
+    "node tests/inference/prefill-chunk-cleanup.test.js",
+    "python3 tests/tooling/quantized-inventory.test.py",
+    "python3 tests/tooling/quantized-logits.test.py",
+    "node tests/tooling/qwen-q4k-independent-blocks.test.js",
+    "node tests/tooling/q4k-projection-reference.test.js",
+    "node tools/generate-wgsl.js --check",
+    "node tools/sync-kernel-ref-digests.js --check",
+    "node tools/sync-kernel-reachability.js --check",
+    "node tools/sync-conversion-kernel-digests.js --source-only --check",
+    "node tools/check-source-style.js",
+    "20 physical AMD dispatch cases in operations/gather-physical-v2.log"
+  ],
+  "preservedFailures": [
+    "q4-head-logit-comparison.json",
+    "varied-comparison.json",
+    "recurrent-comparison.json",
+    "q4-quality-abort-harness-failure.json",
+    "provider-dispatch-failure.json",
+    "provider-split-dispatch-failure.json",
+    "provider-unchunked-device-loss.json"
+  ],
+  "reproduction": {
+    "location": "Existing AMD host, $HOME/deco/doppler; preserve byte-identical original artifacts and frozen contract paths. Model weights are not committed.",
+    "independentReference": "OPENBLAS_NUM_THREADS=4 OMP_NUM_THREADS=4 python3 tools/qwen-quantized-transformers-reference.py --contract .tmp/qwen38-q4-qualification-20261016/holdout-input.json --model .tmp/model-ir-v2/qwen3.8-27b/q4-head-artifact --out <new-reference-directory> --linear-attention recurrent",
+    "gpuCapture": "operations/run-holdout-capture.sh records the bounded, guarded execution. Choose new output/unit paths to preserve receipts; restore the F16 service afterward.",
+    "comparison": "python3 tools/compare-quantized-logits.py --reference artifacts/qwen38-27b-q4-qualification-20261016/holdout-reference --candidate artifacts/qwen38-27b-q4-qualification-20261016/holdout-gpu --contract artifacts/qwen38-27b-q4-qualification-20261016/holdout-input.json --out <new-comparison.json>",
+    "runtime": "Private installed 0.6.30 consumer plus operations/doppler-q4-runtime-patch-v2.tar. Inventory: patched-runtime-v2-inventory.json. Committed runtime differs only in formatting and placement of a diagnostic timer; no numerical policy change.",
+    "failureRecovery": "One forced-stop attempt hit the provider start limit during lock/memory recovery; reset-failed and explicit restart restored it. Final service readiness is independently checked; restoration traps alone are not treated as proof.",
+    "historicalHarnessSourceGaps": [
+      "Exact pre-fix scripts for the initial expected-AbortError harness failure and initial cleanup harness failure were not retained; original failure receipts, source hashes and logs are preserved. Successful-run tool versions are retained."
+    ]
+  }
+}
