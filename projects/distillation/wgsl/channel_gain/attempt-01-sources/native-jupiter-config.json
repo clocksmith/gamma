@@ -1,0 +1,96 @@
+{
+  "dopplerRoot": "/home/x/deco/doppler/.work/channel-gain-20261112",
+  "dopplerCommit": "f43d740b",
+  "modelPath": "/home/x/deco/doppler/.work/channel-gain-model-20261112",
+  "modelManifestSha256": "82cbb9aaf6d47401e3d8b6ccc5263ecca24f51fa2612b8871e6b5bb6a79a3332",
+  "adapterManifestPath": "/home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/seed47-native-adapter.json",
+  "adapterManifestSha256": "8d800eb8898460f095ebb903690d618d28528cba2da8a0a2f7f74946daf2adce",
+  "adapterWeightsPath": "/home/x/deco/doppler/reports/training/wgsl-writer/doppler-wgsl-writer-v2/seed47/sft/checkpoints/gamma/adapter/adapter_model.safetensors",
+  "adapterWeightsSha256": "64cb65bfd2f409278d666d874c4dc2179058cab8e75609f5fe1fdc8644794667",
+  "runtimeConfig": {
+    "inference": {
+      "session": {
+        "useLargeBatchF16F32FusedGateUp": false,
+        "usePreparedDecodeWorkspace": false,
+        "prefillTokenChunkSize": null
+      },
+      "executionPatch": {
+        "addKernels": [
+          {
+            "key": "channel_gain_split_decode",
+            "kernel": {
+              "kernel": "matmul_gemv_subgroup.wgsl",
+              "entry": "main_vec4",
+              "digest": "sha256:2ea9aea659367210fbf61d922c0d4ee17cdac68ffb506b3bc5516e498071e011",
+              "precision": {
+                "inputDtype": "f32",
+                "outputDtype": "f32"
+              }
+            }
+          },
+          {
+            "key": "channel_gain_split_prefill",
+            "kernel": {
+              "kernel": "matmul_f16w_f32a.wgsl",
+              "entry": "main",
+              "digest": "sha256:027a8f1cd9713cbe0b0ada160bd175e0542bb90896ad85441b023522d9a1befc",
+              "precision": {
+                "inputDtype": "f32",
+                "outputDtype": "f32"
+              }
+            }
+          }
+        ],
+        "set": [
+          {
+            "section": "decode",
+            "op": "gate_proj",
+            "kernelKey": "channel_gain_split_decode"
+          },
+          {
+            "section": "decode",
+            "op": "up_proj",
+            "kernelKey": "channel_gain_split_decode"
+          },
+          {
+            "section": "decode",
+            "op": "down_proj",
+            "kernelKey": "channel_gain_split_decode"
+          },
+          {
+            "section": "prefill",
+            "op": "gate_proj",
+            "kernelKey": "channel_gain_split_prefill"
+          },
+          {
+            "section": "prefill",
+            "op": "up_proj",
+            "kernelKey": "channel_gain_split_prefill"
+          },
+          {
+            "section": "prefill",
+            "op": "down_proj",
+            "kernelKey": "channel_gain_split_prefill"
+          }
+        ]
+      }
+    }
+  },
+  "requiredVendor": "amd",
+  "serviceGuardPath": "/home/x/deco/doppler/.work/channel-gain-20261112/service-guard.json",
+  "serviceGuardMaxAgeMs": 15000,
+  "verifierOptions": {
+    "requiredVendor": "amd",
+    "requiredFeatures": [
+      "shader-f16",
+      "subgroups"
+    ]
+  },
+  "seed47AllocatedGpuHours": 0.9886111111111111,
+  "seed47AllocationReceiptSha256": "cecaa057da0d0480796405562351c747a2895f09ba193650cd684501dbf099eb",
+  "browserEnvironment": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/home/x/deco/doppler/.work/channel-gain-20261112/browsers",
+    "PLAYWRIGHT_HOST_PLATFORM_OVERRIDE": "ubuntu24.04-x64"
+  },
+  "browserEnvironmentNote": "Playwright installer does not recognize Ubuntu26.04; explicit Ubuntu24.04 browser distribution selected before first model request. Actual AMD GPU/browser execution must pass."
+}

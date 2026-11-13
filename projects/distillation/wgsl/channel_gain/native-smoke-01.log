@@ -1,0 +1,47 @@
+Warning: maxDynamicUniformBuffersPerPipelineLayout artificially reduced from 500000 to 16 to fit dynamic offset allocation limit.
+Warning: maxDynamicStorageBuffersPerPipelineLayout artificially reduced from 500000 to 16 to fit dynamic offset allocation limit.
+[GPU] amd rdna-3, f16/subgroups, 4.0GB, submit probe: 0.5ms
+[985.1ms][Pipeline] Execution v1 enabled (steps=35, kernelPathInline=yes, pipelineInline=no)
+[985.4ms][Config] Using manifest-first config (source of truth)
+[990.5ms][Pipeline] Resolved session applied (qwen-3-5-9b-f16-af32): batchSize=12, stopCheckMode=batch, readbackInterval=32, disableCommandBatching=true
+[992.0ms][Pipeline] KernelPath: qwen-3-5-9b-f16-af32-execution-inline (15 decode steps, 10 kernels, source=execution-v1)
+[992.9ms][Pipeline] 32L/4096H/16heads (256dim), kernelPath=qwen-3-5-9b-f16-af32-execution-inline
+[993.3ms][Tokenizer] Loading bundled tokenizer from tokenizer.json
+[1093.5ms][Tokenizer] HuggingFace model.type="BPE", using type="bpe"
+[1227.0ms][Tokenizer] Loaded HuggingFace 248070 tokens (bpe), 26 special patterns, 247587 merges
+[1227.5ms][Pipeline] Tokenizer vocabSize=248070 differs from model=248320, using model size
+[1238.4ms][Pipeline] KV cache allocated: kvDtype=f16, maxSeqLen=8192, layout=contiguous, modelMaxSeqLen=262144, requestedKvDtype=f16, requestedMaxSeqLen=8192
+[1240.1ms][Pipeline] Execution plan: active=primary, dtype=f32, kernelPath=qwen-3-5-9b-f16-af32-execution-inline
+[1336.0ms][ShardCache] Custom shard loader configured
+[1336.2ms][Loader] Initializing...
+[1356.6ms][HeapManager] Allocated segment 0: 1024MB
+[1356.7ms][HeapManager] Segmented heap: 1GB per segment
+[1356.7ms][HeapManager] Initialized with strategy: SEGMENTED
+[1356.8ms][Loader] Initialized (f16, subgroups)
+[1357.4ms][Loader] Loading: qwen-3-5-9b-f16-af32
+[1358.8ms][Loader] [0.0s] Memory (start): | RSS=341.93 MB (heap=160.14 MB/195.21 MB, external=1.00 GB, arrayBuffers=1.00 GB) | GPU=0 B (0 active, 0 pooled, peak=0 B) | ShardCache=0 B (0 shards) | Layers=0, GPUBuffers=0
+[1359.3ms][Loader] Dense model on discrete GPU - performance limited. Consider MoE model.
+[8136.1ms][Loader] Embeddings tensor loaded: name=model.language_model.embed_tokens.weight, hasShape=true, shape=[248320,4096], isWeightBuffer=true
+[8136.6ms][Loader] Layers: 0-31
+[31403.4ms][Loader] [30.0s] Memory (loading): | RSS=381.36 MB (heap=92.69 MB/130.14 MB, external=1.09 GB, arrayBuffers=1.03 GB) | GPU=7.95 GB (217 active, 0 pooled, peak=7.95 GB) | ShardCache=0 B (0 shards) | Layers=14, GPUBuffers=214
+[55068.7ms][Loader] Layers: 32 complete (46.93s)
+[61413.3ms][Loader] [60.1s] Memory (loading): | RSS=348.27 MB (heap=98.31 MB/131.14 MB, external=1.04 GB, arrayBuffers=1.02 GB) | GPU=16.68 GB (459 active, 0 pooled, peak=16.68 GB) | ShardCache=0 B (0 shards) | Layers=32, GPUBuffers=458
+[61647.2ms][Loader] Complete: 16.68 GB in 60.27s (283.36 MB/s)
+[61648.1ms][Loader] [60.3s] Memory (complete): | RSS=372.02 MB (heap=100.14 MB/133.39 MB, external=1.06 GB, arrayBuffers=1.06 GB) | GPU=16.68 GB (459 active, 0 pooled, peak=16.68 GB) | ShardCache=0 B (0 shards) | Layers=32, GPUBuffers=459
+[61693.3ms][Pipeline] Model loaded successfully (60714ms)
+[62523.2ms][KernelSelect] matmul variant=f16w_f32a reason=path_override
+[62528.6ms][KernelSelect] matmul variant=f16w_f32a_tiled reason=default
+[63355.4ms][KernelSelect] attention variant=prefill_head256_f16kv reason=path_override:tiled_small
+[76216.0ms][KernelSelect] matmul variant=gemv_subgroup_vec4 reason=path_override
+[76236.9ms][KernelSelect] matmul variant=gemv_subgroup reason=gemv
+[76249.0ms][KernelSelect] attention variant=decode_online_f16kv reason=path_override:subgroup
+[76344.1ms][KernelSelect] matmul variant=gemv_subgroup_multicol reason=path_override
+[155156.3ms][ExpertCache] Cache cleared
+[155159.1ms][Pipeline] Unloaded
+Error: Pipeline method beginChannelGainRequest requires an explicit operation contract.
+    at Object.get (file:///home/x/deco/doppler/.work/channel-gain-20261112/src/inference/pipelines/shader-scoped-pipeline.js:238:24)
+    at capture (file:///home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/native_runtime.mjs:34:106)
+    at async Object.prepare (file:///home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/native_runtime.mjs:42:15)
+    at async executeSmoke (file:///home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/native_smoke.mjs:40:11)
+    at async runNativeSmoke (file:///home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/native_smoke.mjs:59:17)
+    at async file:///home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/native_smoke.mjs:64:430

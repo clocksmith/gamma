@@ -1,0 +1,36 @@
+{
+  "schema": "gamma.channel-gain-runtime-repair/v1",
+  "createdAt": "2026-11-13T02:43:59.096228+00:00",
+  "attempt": "01",
+  "runtimeLockSha256": "7b6feede04fea38ea1d04c290e8ab7edea7de5c8d8dfd6e397c91df0db9ce5d6",
+  "completedModelRequests": 1,
+  "candidateSelectionCompleted": false,
+  "confirmationEvaluated": false,
+  "baseResult": {
+    "taskId": "channel-gain-v1-smoke-gain-sign_bit",
+    "tokens": 273,
+    "endToEndMs": 92660.32976500002,
+    "publicPass": false,
+    "violation": "required_override_absent:WORKGROUP_SIZE"
+  },
+  "failure": "beginChannelGainRequest missing explicit scoped-pipeline operation contract",
+  "repairs": [
+    "Doppler d8806094 adds guarded synchronous mutation registration",
+    "Doppler79ce17bc exposes immutable private-buffer allocation metadata",
+    "Gamma driver destroys owned device before releasing host and performs independent cleanup",
+    "Gamma driver records complete deviceGPUBuffer counters plus matched baseline and retained snapshot ownership"
+  ],
+  "attemptTermination": {
+    "signal": "SIGTERM",
+    "pid": 3140004,
+    "exitCode": 143,
+    "reason": "Own failed process remained alive after completed cleanup/error report because device teardown was missing",
+    "providerStopped": false
+  },
+  "protocolNumericCriteriaChanged": false,
+  "taskSplitsChanged": false,
+  "candidateSettingsChanged": false,
+  "implementationRepairNotCandidateSelection": true,
+  "preservedGammaSources": "attempt-01-sources/",
+  "journalSha256": "2a0ed15b933027a9d2424ed3a98d13c4eed03cd4c68df45054d75d6a406e7711"
+}

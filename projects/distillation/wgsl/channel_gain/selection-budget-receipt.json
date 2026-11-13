@@ -1,0 +1,77 @@
+{
+  "schema": "gamma.channel-gain-selection-budget/v1",
+  "observedAt": "2026-11-13T02:17:14.361221+00:00",
+  "experimentId": "wgsl-prefill-channel-gain-v1",
+  "seed47RunId": "lora-doppler-wgsl-writer-qwen35-9b-v2-seed47",
+  "evidenceClass": "derived_conservative_single_gpu_residency_lower_bound",
+  "directGpuActiveTimeCounterAvailable": false,
+  "recordedFilesystemEvidence": {
+    "host": "jupiter",
+    "path": "$HOME/deco/doppler/reports/training/wgsl-writer/doppler-wgsl-writer-v2/seed47/sft/checkpoints/gamma/metrics.jsonl",
+    "sha256": "3e12bdf2027b9979c47f24149ad93a860ca6c2f908def44a2d1194731facbc81",
+    "sizeBytes": 63669,
+    "filesystem": "ext4",
+    "mountSource": "/dev/mapper/ubuntu--vg-ubuntu--lv",
+    "inode": 115087750,
+    "device": 64513,
+    "birthTimeUtc": "2026-07-15T03:59:48.466422149Z",
+    "modifyTimeUtc": "2026-07-15T04:59:08.042908998Z",
+    "changeTimeUtc": "2026-07-15T04:59:08.042908998Z",
+    "birthTimeNanoseconds": "1784087988466422149",
+    "modifyTimeNanoseconds": "1784091548042908998",
+    "changeTimeNanoseconds": "1784091548042908998",
+    "rowCount": 720,
+    "stepsMonotonicExactlyOneTo720": true,
+    "metricKeys": [
+      "completionTokens",
+      "gradNorm",
+      "loss",
+      "step"
+    ],
+    "observationCommand": "stat -c \"%n | birth=%w | modify=%y | change=%z\" <metrics.jsonl>; Python pathlib.stat, sha256 and JSONL step-sequence validation; findmnt --target <metrics.jsonl>",
+    "originalInodeAssessment": "Birth, modification and change times are all in the original July training interval, not a later copied November inode; ctime equals mtime."
+  },
+  "sourceEvidence": {
+    "repository": "gamma",
+    "path": "projects/distillation/wgsl/training/train_wgsl.py",
+    "latestRelevantCommitBeforeRun": "4f2e7f898cf5545eba024ae220ba43abb5aaeef9",
+    "fileSha256AtCommit": "969331f5801d706af5b57169fcb10d909241fcee02234b027323f17f3fa47906",
+    "comparisonCommit": "6b9a61f170ef4f174890c786fe7c22f8834109f1",
+    "relevantFunctionAstsUnchangedBetweenCommits": true,
+    "functionAstSha256": {
+      "_load_base_model": "c909f3518e90fbf42933d4c0ce01ffac805d3ffd680a30d75628630f6bbf91ea",
+      "_write_metric": "c75281a0ab6ecc739483fcad01afc1c9d129d7534bb0747e2a1b9a88983150b6",
+      "_run_sft": "64b8376f980b74a20df6d5f9ee03123b962558af550b603d323b02e12ac79ff4"
+    },
+    "mechanism": [
+      "The base model is moved to one CUDA device before entering the SFT loop.",
+      "The loop retains the model throughout all steps without offload, unload or resume branches.",
+      "metrics.jsonl is created by append-open after the first completed step and written after each subsequent step.",
+      "loss.item() precedes each metric append; the final metric records completion of step 720."
+    ],
+    "limitation": "The historical run receipt does not pin the Python source commit. Residency is reconstructed from retained pre-run code, matched run/step identities, and original inode timestamps; it is not a hardware-utilization trace."
+  },
+  "artifactHashes": {
+    "sft/run_contract.json": "98eea0e16df08d127153d38629f2f4db45779fc37e8ec58862b813d847641f01",
+    "sft/logs/gamma-request.json": "89826237fcbcd3969c708af075e303cae02a5a5df5b46e3fbca901de464b91c7",
+    "sft/logs/gamma-response.json": "5221748347ee165e91b486b20c589f15c913f01e1b8b5c78245043ef7721aaca",
+    "sft/checkpoints/checkpoint-000720/checkpoint.complete.json": "16b3acc8966de12365c871235ad5090089fb59f75eeb5b821b0373a63bb5e1d3"
+  },
+  "derivation": {
+    "gpuCount": 1,
+    "residencyIntervalSeconds": "3559.576486849",
+    "rounding": "floor to whole seconds, excluding first-step/model-load/tail duration",
+    "conservativeSeed47AllocatedGpuSeconds": 3559,
+    "conservativeSeed47AllocatedGpuHours": 0.9886111111111111,
+    "selectionFraction": 0.01,
+    "selectionBudgetGpuSeconds": 35.59,
+    "selectionBudgetGpuMilliseconds": 35590,
+    "formula": "floor((metrics_mtime_ns - metrics_birthtime_ns) / 1e9) * 1 GPU * 0.01"
+  },
+  "interpretation": "The budget uses a conservative lower bound on one-GPU allocated residency. It does not claim measured GPU active time or the exact complete SFT duration. The 3576.012-second run-contract-to-checkpoint wall interval is not used as the denominator.",
+  "protocolAuthority": "The frozen 1% numerical criterion is unchanged. Smoke/control charging follows the separately hash-bound pre-model amendment, not this denominator receipt.",
+  "modelExperimentRun": false,
+  "selectionPerformed": false,
+  "confirmationEvaluated": false,
+  "receiptHash": "c4655717494301a76d122fb61f9481f07c0726afba41eddf64a15e3c609ca9db"
+}

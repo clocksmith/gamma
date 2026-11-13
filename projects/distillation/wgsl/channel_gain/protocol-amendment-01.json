@@ -1,0 +1,20 @@
+{
+  "schema": "gamma.channel-gain-protocol-amendment/v1",
+  "id": "01-smoke-budget-accounting",
+  "createdAt": "2026-11-13T02:15:34.324008+00:00",
+  "parentProtocolSha256": "34d40474a17c1a14c72555252ca2896b94a060dbd63fc8a81c0513808646b4a2",
+  "appliesBefore": "first model request",
+  "modelRequestsObserved": 0,
+  "reason": "Align accounting with scope criterion3: settings are chosen on the selection population under1%SFTGPUhours. Fixed smoke selects no settings. The original root-authored chargeSmokeAndControlsToBudget=true added a stricter requirement not present in owner scope. Corrected before any model timing or outcomes.",
+  "changes": {
+    "selection.chargeSmokeAndControlsToBudget": false
+  },
+  "selectionAccounting": "Charge every model call used to select settings, including its reference/gain work and any selection-population controls. Fixed smoke and single-use confirmation are reported separately and cannot inform candidate ranking.",
+  "smokeCandidate": "gain-positive",
+  "smokeCandidateReason": "First entry in frozen candidateOrder; deterministic mechanics/timing only, no tuning.",
+  "numericCriteriaChanged": false,
+  "taskSplitsChanged": false,
+  "candidateSettingsChanged": false,
+  "generationSettingsChanged": false,
+  "amendmentSha256": "f4cb5abd02d135ce0fc12cf65a8f8e443eb266c3dc6b0949bced8f035cb584b8"
+}
