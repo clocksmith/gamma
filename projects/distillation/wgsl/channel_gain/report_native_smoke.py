@@ -4,6 +4,7 @@
 Example (outputs are new files; --overwrite replaces only this reporter's outputs):
   python3 report_native_smoke.py --smoke native-smoke-03.jsonl \
     --attempt native-smoke-01.jsonl --attempt native-smoke-02.jsonl \
+    --integration-probe adapter-probe-03.json \
     --selection selection-receipt.json --json-output summary.json \
     --markdown-output report.md
 Missing optional selection receipts remain pending. Incomplete JSONL tails are
@@ -19,6 +20,7 @@ from pathlib import Path
 
 SCHEMA = "gamma.channel-gain-native-smoke-report/v1"
 MARKER = "<!-- gamma.channel-gain-native-smoke-report/v1 -->"
+EXTRA_TIMING_FIELDS = ("input_contract_ms", "setup_other_ms", "setup_cleanup_ms", "request_cleanup_ms")
 
 
 def digest(data):
@@ -91,6 +93,7 @@ def unpack(value):
             "requests": requests,
             "preparation": [e["record"] for e in events if e.get("kind") == "preparation"] or summary.get("preparation", []),
             "diagnostics": [e["record"] for e in events if e.get("kind") == "cache-diagnostic"] or summary.get("diagnostics", []),
+            "resetDiagnostics": [e["record"] for e in events if e.get("kind") == "reset-diagnostic"] or summary.get("resetDiagnostics", []),
             "coldLoads": [{k: e.get(k) for k in ("coldModelLoadMs", "coldAdapterLoadMs")} for e in events if e.get("kind") == "cold-load"]}
 
 
@@ -99,7 +102,7 @@ def compact_memory(memory):
     for key in ("baseSnapshot", "baseRequestSnapshot", "matchedBaselineSnapshot"):
         if key in memory:
             result[key] = memory[key]
-    for key in ("deviceAtRequestStart", "deviceAtRequestEnd", "deviceAtPreparationStart", "deviceAtPreparationEnd"):
+    for key in ("deviceAtRequestStart", "deviceAtRequestEnd", "deviceAfterRequestCleanup", "deviceAtPreparationStart", "deviceAtPreparationEnd"):
         if memory.get(key):
             result[key] = {k: v for k, v in memory[key].items() if not isinstance(v, (dict, list))}
     return result
@@ -121,7 +124,21 @@ def request_summary(request):
         "timing": request.get("timing", {}), "memory": compact_memory(request.get("memory", {}))}
 
 
-def build_report(smoke, provenance, attempts, selection, selection_provenance, label):
+def summarize_probe(value, source):
+    if value is None:
+        return {"input": source, "status": "pending"}
+    if not isinstance(value, dict) or value.get("schema") != "gamma.channel-gain-adapter-integration-probe/v1":
+        raise ValueError("Expected an adapter integration-probe receipt")
+    if any(value.get(k) is not False for k in ("candidateSelection", "shaderChecksEvaluated", "confirmationEvaluated")):
+        raise ValueError("Integration probes must explicitly exclude selection, shader scoring and confirmation")
+    request = value.get("request", {})
+    return {"input": source, "evidenceClass": "integration_diagnostic_only",
+            **{k: value.get(k) for k in ("status", "purpose", "taskId", "inputSha256", "generation", "overriddenForDiagnosticOnly", "candidateSelection", "shaderChecksEvaluated", "confirmationEvaluated", "coldModelLoadMs", "coldAdapterLoadMs", "totalWallMs", "error")},
+            "request": {"tokenCount": request.get("tokenCount"), "physicalRequestMs": request.get("physicalRequestMs"),
+                        "timing": request.get("timing", {}), "memory": compact_memory(request.get("memory", {}))}}
+
+
+def build_report(smoke, provenance, attempts, selection, selection_provenance, label, integration_probes=()):
     run = unpack(smoke)
     if provenance.get("warnings"):
         run["status"] = "smoke_incomplete"
@@ -174,17 +191,26 @@ def build_report(smoke, provenance, attempts, selection, selection_provenance, l
             raise ValueError("Selection/smoke runtime identities differ")
     summary = run["summary"]
     preparations = [{k: v for k, v in p.items() if k != "memory"} | {"memory": compact_memory(p.get("memory", {}))} for p in run["preparation"]]
+    probes, seen_probes = [], set()
+    for value, source in integration_probes:
+        identity = source["sha256"] or source["path"]
+        if identity not in seen_probes:
+            probes.append(summarize_probe(value, source))
+            seen_probes.add(identity)
     return {"schema": SCHEMA, "label": label, "evidenceClass": "descriptive_smoke_only",
             "inputs": {"smoke": provenance, "selection": selection_provenance},
             "smoke": {"status": run["status"], "completedRequests": len(requests), "observedTasks": len({r["taskId"] for r in requests}), "errors": run["errors"]},
             "attempts": {"suppliedUniqueAttempts": len(attempt_rows), "failedAttempts": sum(a["failed"] for a in attempt_rows), "records": attempt_rows},
             "groups": groups, "requests": requests, "sameGainPairs": pairs,
-            "cacheDiagnostics": run["diagnostics"], "preparation": preparations,
+            "cacheDiagnostics": run["diagnostics"], "resetDiagnostics": run["resetDiagnostics"], "preparation": preparations,
+            "integrationProbes": probes,
             "costs": {"coldLoads": run["coldLoads"], "physicalSmokeWallMs": summary.get("physicalSmokeWallMs"),
                       "actualPreparationMs": stats([p.get("actualPreparationMs") for p in preparations]),
                       "completedPhysicalRequestMs": stats([r["physicalRequestMs"] for r in requests]),
                       "completedVerifierMs": stats([r["timing"].get("verifier_ms") for r in requests]),
                       "cacheDiagnosticMs": stats([d.get("diagnosticMs") for d in run["diagnostics"]]),
+                      "resetDiagnosticMs": stats([d.get("resetDiagnosticMs") for d in run["resetDiagnostics"]]),
+                      "attributedTimingBreakdownMs": {key: stats([r["timing"].get(key) for r in requests]) for key in EXTRA_TIMING_FIELDS},
                       "selectionGpuMsCharged": summary.get("selectionGpuMsCharged"),
                       "bestOfK": {"status": "recorded" if "bestOfK" in summary else "pending", "k": summary.get("k"), "tasks": summary.get("bestOfK", [])},
                       "eta": summary.get("eta") if run["status"] == "smoke_complete" else None},
@@ -198,6 +224,10 @@ def build_report(smoke, provenance, attempts, selection, selection_provenance, l
                 "Gain logical bytes, allocated GPU bytes and baseline-subtracted retained snapshot tensor bytes are distinct. Owned snapshots include CPU cache/recurrent/logit backing buffers and GPU cache buffers, excluding JS metadata.",
                 "Device counters cover GPUBuffer allocations on the model device, including allocator-retained buffers. Process-lifetime peaks are not per-request incremental peaks, physical VRAM, RSS or total host memory; no peak subtraction is inferred.",
                 "Same gain hashes support identical stored gain state across cache arms; they do not establish equal cache states or outputs. Per-layer diagnostics compare the recorded teacher-forced prefix only.",
+                "Reset diagnostics compare original base-prefill logits with an unmodified prefill after transform discard for identical input tokens; they do not sample or score an additional shader. These observations do not establish general concurrent-request isolation.",
+                "Retained baseline logits used only for reset diagnostics have separately reported storage bytes; diagnostic storage is not silently counted as serving transform state. Device-after-cleanup observations are preserved when recorded.",
+                "Integration probes use their recorded diagnostic generation settings (including any four-token limit). Their requests, tokens and costs remain separate from scored smoke, failed smoke attempt counts, candidate selection and confirmation; they establish no shader quality result.",
+                "New input-contract/setup/cleanup timing fields are reported when present. Earlier attempts lacking these fields remain explicitly missing; attributed breakdown totals are components of E2E latency and must not be added to it again.",
                 "Admission estimates extrapolate observed smoke timings; they are not mathematical lower bounds or proof that all implementations cannot fit the frozen budget."]}
 
 
@@ -225,7 +255,7 @@ def markdown(report):
         change = f"{100 * overhead:+.2f}%" if number(overhead) else "not recorded"
         lines.append(f"| {cell(g['condition'])} / {cell(g['arm'])} | {g['requests']} | {o['passed']} / {o['failed']} / {o['unmeasured']} | {fmt(g['tokens']['mean'])} | {fmt(g['attributedEndToEndMs']['mean'])} | {fmt(g['physicalRequestMs']['mean'])} | {change} |")
     lines += ["", "## Costs and completeness", "", f"Physical smoke wall: {fmt(report['costs']['physicalSmokeWallMs'])} ms.", ""]
-    for key in ("actualPreparationMs", "completedPhysicalRequestMs", "completedVerifierMs", "cacheDiagnosticMs"):
+    for key in ("actualPreparationMs", "completedPhysicalRequestMs", "completedVerifierMs", "cacheDiagnosticMs", "resetDiagnosticMs"):
         s = report["costs"][key]
         lines.append(f"- {key}: {fmt(s['sum'])} ms ({s['observed']} recorded, {s['missing']} missing).")
     for load in report["costs"]["coldLoads"]:
@@ -233,6 +263,19 @@ def markdown(report):
     lines += [f"- Best-of-k: {report['costs']['bestOfK']['status']}; k={report['costs']['bestOfK']['k']}."]
     for task in report["costs"]["bestOfK"]["tasks"]:
         lines.append(f"- {cell(task['taskId'])}: base samples {fmt(task.get('actualComputeMs'))} ms; transform {fmt(task.get('transformComputeMs'))} ms.")
+    lines += ["", "Per-request attributed timing components (already included in E2E, not additional costs):", "",
+              "| Request | Input contract ms | Other setup ms | Setup cleanup ms | Request cleanup ms |",
+              "| --- | ---: | ---: | ---: | ---: |"]
+    for request in report["requests"]:
+        lines.append("| " + cell(request["id"]) + " | " + " | ".join(fmt(request["timing"].get(k)) for k in EXTRA_TIMING_FIELDS) + " |")
+    lines += ["", "## Integration probes (separate diagnostic cost)", ""]
+    if not report["integrationProbes"]:
+        lines.append("No integration-probe receipt supplied.")
+    for probe in report["integrationProbes"]:
+        request = probe.get("request", {})
+        lines.append(f"- `{probe['input']['path']}`: {probe['status']}; tokens={request.get('tokenCount')}; diagnostic token limit={probe.get('generation', {}).get('maxNewTokens') if probe.get('generation') else None}.")
+        lines.append(f"  - Total wall {fmt(probe.get('totalWallMs'))} ms; cold model {fmt(probe.get('coldModelLoadMs'))} ms; cold adapter {fmt(probe.get('coldAdapterLoadMs'))} ms; physical request {fmt(request.get('physicalRequestMs'))} ms; attributed E2E {fmt(request.get('timing', {}).get('end_to_end_ms'))} ms.")
+    lines += ["", "These probes are excluded from smoke request/outcome totals, selection and confirmation; no shader quality claim follows."]
     lines += ["", "## Gain pairs", ""]
     for pair in report["sameGainPairs"]:
         lines.append(f"- {cell(pair['taskId'])} / {cell(pair['condition'])}: {pair['status']}; " + "; ".join(f"{arm} `{value}`" for arm, value in pair["armHashes"].items()))
@@ -252,7 +295,18 @@ def markdown(report):
                         lines.append(f"| {kind} / {layer} | {component} | {v.get('measured')} | {delta(v.get('relativeL2'))} | {delta(v.get('maxAbsolute'))} | {v.get('top1Changed')} | {state.get('sequenceLengthMatches')} |")
         v = d.get("logits", {})
         lines += [f"| logits | output | {v.get('measured')} | {delta(v.get('relativeL2'))} | {delta(v.get('maxAbsolute'))} | {v.get('top1Changed')} | n/a |", ""]
-    lines += ["## Memory observations", "", "| Request | Logical gain bytes | Allocated gain bytes | Incremental retained tensor bytes | Model-device process peak bytes |", "| --- | ---: | ---: | ---: | ---: |"]
+    lines += ["## Reset diagnostics", ""]
+    if not report["resetDiagnostics"]:
+        lines.append("No completed reset diagnostics recorded.")
+    else:
+        lines += ["| Task | Measured | Same input tokens | Transform discarded | Clean prefill state | Exact logits equal | Logit relative L2 | Logit max delta | Sampling performed | Cost ms |",
+                  "| --- | --- | --- | --- | --- | --- | ---: | ---: | --- | ---: |"]
+        for reset in report["resetDiagnostics"]:
+            before = reset.get("before", {})
+            clean = before.get("gainAbsent") is True and before.get("adapterAbsent") is True and before.get("seqLen") == 0 if before else "not recorded"
+            logits = reset.get("logits", {})
+            lines.append(f"| {cell(reset.get('taskId'))} | {reset.get('measured')} | {reset.get('identicalInputTokens')} | {reset.get('transformDiscarded')} | {clean} | {reset.get('exactLogitsEqual')} | {delta(logits.get('relativeL2'))} | {delta(logits.get('maxAbsolute'))} | {reset.get('samplingPerformed')} | {fmt(reset.get('resetDiagnosticMs'))} |")
+    lines += ["", "## Memory observations", "", "| Request | Logical gain bytes | Allocated gain bytes | Incremental retained tensor bytes | Model-device process peak bytes |", "| --- | ---: | ---: | ---: | ---: |"]
     for r in report["requests"]:
         m = r["memory"]
         lines.append(f"| {cell(r['id'])} | {fmt(m.get('selectedGainLogicalBytes'))} | {fmt(m.get('selectedGainAllocatedBytes'))} | {fmt(m.get('incrementalRetainedTensorBytes'))} | {fmt(m.get('deviceAtRequestEnd', {}).get('peakBytes'))} |")
@@ -270,6 +324,8 @@ def markdown(report):
             lines.extend(f"  - {warning}" for warning in source.get("warnings", []))
     for attempt in report["attempts"]["records"]:
         lines.append(f"- Attempt `{attempt['input']['path']}`; SHA256 `{attempt['input']['sha256']}`.")
+    for probe in report["integrationProbes"]:
+        lines.append(f"- Integration probe `{probe['input']['path']}`; {probe['input']['status']}; SHA256 `{probe['input']['sha256']}`.")
     lines.append(f"- Reporter SHA256 `{report.get('reporterSha256')}`. Exact per-request timing/memory observations are retained in the JSON summary.")
     return "\n".join(lines) + "\n"
 
@@ -279,12 +335,13 @@ def main():
     parser.add_argument("--smoke", required=True)
     parser.add_argument("--attempt", action="append", default=[])
     parser.add_argument("--selection")
+    parser.add_argument("--integration-probe", action="append", default=[], help="Optional diagnostic receipt; repeat for separate probes")
     parser.add_argument("--json-output", required=True)
     parser.add_argument("--markdown-output", required=True)
     parser.add_argument("--label", default="Native smoke report")
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args()
-    inputs = {Path(p).resolve() for p in [args.smoke, *args.attempt, *([args.selection] if args.selection else [])]}
+    inputs = {Path(p).resolve() for p in [args.smoke, *args.attempt, *args.integration_probe, *([args.selection] if args.selection else [])]}
     outputs = [Path(args.json_output).resolve(), Path(args.markdown_output).resolve()]
     if len(set(outputs)) != 2 or any(p in inputs for p in outputs):
         parser.error("Output paths must be distinct from each other and all inputs")
@@ -296,7 +353,8 @@ def main():
     smoke, source = load(args.smoke)
     attempts = [load(p) for p in args.attempt]
     selection, selection_source = load(args.selection, optional=True) if args.selection else (None, None)
-    report = build_report(smoke, source, attempts, selection, selection_source, args.label)
+    probes = [load(p, optional=True) for p in args.integration_probe]
+    report = build_report(smoke, source, attempts, selection, selection_source, args.label, probes)
     report["reporterSha256"] = digest(Path(__file__).read_bytes())
     for path, content in zip(outputs, (json.dumps(report, indent=2, allow_nan=False) + "\n", markdown(report))):
         path.parent.mkdir(parents=True, exist_ok=True)
