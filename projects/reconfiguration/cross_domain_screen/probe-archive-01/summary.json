@@ -1,0 +1,1036 @@
+{
+  "schema": "gamma.cross-domain-mechanics-probe/v1",
+  "lockSha256": "54a5dd0487e40624d587149ce5ffaa4812345e88d1cf9156689ce1509c3b37a0",
+  "coldModelLoadMs": 75779.91130800001,
+  "deviceInfo": {
+    "vendor": "amd",
+    "architecture": "rdna-3",
+    "device": "radeon-8060s-graphics-radv-strix-halo-",
+    "description": "radv: Mesa 26.0.3-1ubuntu1",
+    "subgroupMinSize": 32,
+    "subgroupMaxSize": 64
+  },
+  "providerReceipt": {
+    "schema": "doe.webgpu-provider-receipt/v1",
+    "contract": "doe.webgpu-provider/v1",
+    "implementation": "doppler",
+    "providers": [
+      {
+        "id": "pre-installed",
+        "kind": "global"
+      },
+      {
+        "id": "webgpu",
+        "kind": "module",
+        "module": "webgpu",
+        "gpu": {
+          "kind": "factory",
+          "path": "create",
+          "args": [
+            [
+              "enable-dawn-features=allow_unsafe_apis"
+            ]
+          ]
+        },
+        "globals": {
+          "GPUBufferUsage": "globals.GPUBufferUsage",
+          "GPUShaderStage": "globals.GPUShaderStage",
+          "GPUMapMode": "globals.GPUMapMode",
+          "GPUTextureUsage": "globals.GPUTextureUsage"
+        }
+      }
+    ],
+    "providerOrder": [
+      "pre-installed",
+      "webgpu"
+    ],
+    "adapterOptions": null,
+    "globals": {
+      "mode": "replace",
+      "installed": [
+        "GPUBufferUsage",
+        "GPUShaderStage",
+        "GPUMapMode",
+        "GPUTextureUsage",
+        "navigator.gpu"
+      ],
+      "restored": true
+    },
+    "attempts": [
+      {
+        "providerId": "pre-installed",
+        "kind": "global",
+        "module": null,
+        "ok": false,
+        "stage": "gpu.validate",
+        "code": "DOPPLER_PROVIDER_UNAVAILABLE",
+        "detail": "Selected provider does not expose GPU.requestAdapter()."
+      },
+      {
+        "providerId": "webgpu",
+        "kind": "module",
+        "module": "webgpu",
+        "ok": true,
+        "stage": "complete",
+        "code": null,
+        "detail": null
+      }
+    ],
+    "selectedProviderId": "webgpu",
+    "ok": true
+  },
+  "status": "mechanics_probe_complete",
+  "requestCount": 4,
+  "resetDiagnostics": [
+    {
+      "taskId": "channel-gain-v1-smoke-gain-sign_bit",
+      "measured": true,
+      "identicalInputTokens": true,
+      "tokenIdsSha256": "7aa1a6d55686cc6679fabc393546ad3d69cee279654e15a5c7a1a65069afdb88",
+      "transformDiscarded": true,
+      "before": {
+        "gainAbsent": true,
+        "adapterAbsent": true,
+        "seqLen": 0
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0,
+        "maxAbsolute": 0,
+        "top1Changed": false
+      },
+      "exactLogitsEqual": true,
+      "baselineLogitsSha256": "b15dac67cf7afee202370ec5000fcd4550de6de63c4572c8a359cb452875d9ba",
+      "resetLogitsSha256": "b15dac67cf7afee202370ec5000fcd4550de6de63c4572c8a359cb452875d9ba",
+      "samplingPerformed": false,
+      "resetDiagnosticMs": 10209.83839400002
+    },
+    {
+      "taskId": "channel-gain-v1-smoke-gain-tent",
+      "measured": true,
+      "identicalInputTokens": true,
+      "tokenIdsSha256": "d8a79dde336caf8ab661ad947e5ae45454748100c6540857a0b3b564ebe1fb65",
+      "transformDiscarded": true,
+      "before": {
+        "gainAbsent": true,
+        "adapterAbsent": true,
+        "seqLen": 0
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0,
+        "maxAbsolute": 0,
+        "top1Changed": false
+      },
+      "exactLogitsEqual": true,
+      "baselineLogitsSha256": "9146a5130f63331bc439b0d4828afc5c61b038c0953fb179d3001f8be540fa65",
+      "resetLogitsSha256": "9146a5130f63331bc439b0d4828afc5c61b038c0953fb179d3001f8be540fa65",
+      "samplingPerformed": false,
+      "resetDiagnosticMs": 10371.16297200002
+    }
+  ],
+  "publicScores": [
+    {
+      "id": "channel-gain-v1-smoke-gain-sign_bit/base",
+      "schema": "gamma.channel-gain-shader-verification/v1",
+      "scope": "public",
+      "referenceQualification": false,
+      "confirmationEvaluated": false,
+      "deviceInfo": {
+        "vendor": "amd",
+        "architecture": "rdna-3",
+        "device": null,
+        "description": null,
+        "availableFeatures": [
+          "bgra8unorm-storage",
+          "chromium-experimental-multi-draw-indirect",
+          "chromium-experimental-subgroup-matrix",
+          "chromium-experimental-timestamp-query-inside-passes",
+          "clip-distances",
+          "core-features-and-limits",
+          "depth-clip-control",
+          "depth32float-stencil8",
+          "dual-source-blending",
+          "float32-blendable",
+          "float32-filterable",
+          "indirect-first-instance",
+          "primitive-index",
+          "rg11b10ufloat-renderable",
+          "shader-f16",
+          "subgroups",
+          "texture-component-swizzle",
+          "texture-compression-bc",
+          "texture-compression-bc-sliced-3d",
+          "texture-formats-tier1",
+          "texture-formats-tier2",
+          "timestamp-query"
+        ],
+        "requiredFeatures": [
+          "shader-f16",
+          "subgroups"
+        ]
+      },
+      "provenance": {
+        "sourceHashes": {
+          "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+          "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+          "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+          "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+          "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+          "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+          "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+          "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+        },
+        "compatibilityAliases": {
+          "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+        },
+        "sharedNamespaceTouched": false,
+        "layoutRepair": {
+          "schema": "gamma.channel-gain-contract-layout-repair/v1",
+          "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+          "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+          "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+          "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+          "historicalSourceModified": false
+        },
+        "lockSha256": "54a5dd0487e40624d587149ce5ffaa4812345e88d1cf9156689ce1509c3b37a0"
+      },
+      "inputHashes": {
+        "rows": "55f686808a09a4f80a7d6253917defc23e16fce35a141600b80535e46bfb8577",
+        "checks": "e1ccea6459fac9d5b63d6e72c4ce82bf8cba561bca2a05aea4e0ceee403eb629",
+        "sources": "aaaeb9c22c2f95babe5d38e52e17e01a411075bc90f17d5e1cd5aa0f43181a61"
+      },
+      "tasks": [
+        {
+          "taskId": "channel-gain-v1-smoke-gain-sign_bit",
+          "sourceSha256": "0acc850f65902d8f5314cb06ee85ba49d6b96eaffe05a52bc1b10961e07e5c05",
+          "dispatchedSourceSha256": "0acc850f65902d8f5314cb06ee85ba49d6b96eaffe05a52bc1b10961e07e5c05",
+          "promptSha256": "ec920809e4bd6850e608f3912fbc1793da8a8da45cc996371b481ca617f0968d",
+          "contractPassed": false,
+          "checks": [
+            {
+              "id": "gain-sign_bit-public-4-32-base",
+              "visibility": "public",
+              "passed": false,
+              "contractViolations": [
+                "required_override_absent:WORKGROUP_SIZE"
+              ]
+            }
+          ],
+          "passed": false,
+          "verifierMs": 0.06498299998929724
+        }
+      ],
+      "passed": false,
+      "verifierMs": 0.4616029999451712
+    },
+    {
+      "id": "channel-gain-v1-smoke-gain-sign_bit/channel_gain",
+      "schema": "gamma.channel-gain-shader-verification/v1",
+      "scope": "public",
+      "referenceQualification": false,
+      "confirmationEvaluated": false,
+      "deviceInfo": {
+        "vendor": "amd",
+        "architecture": "rdna-3",
+        "device": null,
+        "description": null,
+        "availableFeatures": [
+          "bgra8unorm-storage",
+          "chromium-experimental-multi-draw-indirect",
+          "chromium-experimental-subgroup-matrix",
+          "chromium-experimental-timestamp-query-inside-passes",
+          "clip-distances",
+          "core-features-and-limits",
+          "depth-clip-control",
+          "depth32float-stencil8",
+          "dual-source-blending",
+          "float32-blendable",
+          "float32-filterable",
+          "indirect-first-instance",
+          "primitive-index",
+          "rg11b10ufloat-renderable",
+          "shader-f16",
+          "subgroups",
+          "texture-component-swizzle",
+          "texture-compression-bc",
+          "texture-compression-bc-sliced-3d",
+          "texture-formats-tier1",
+          "texture-formats-tier2",
+          "timestamp-query"
+        ],
+        "requiredFeatures": [
+          "shader-f16",
+          "subgroups"
+        ]
+      },
+      "provenance": {
+        "sourceHashes": {
+          "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+          "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+          "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+          "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+          "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+          "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+          "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+          "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+        },
+        "compatibilityAliases": {
+          "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+        },
+        "sharedNamespaceTouched": false,
+        "layoutRepair": {
+          "schema": "gamma.channel-gain-contract-layout-repair/v1",
+          "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+          "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+          "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+          "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+          "historicalSourceModified": false
+        },
+        "lockSha256": "54a5dd0487e40624d587149ce5ffaa4812345e88d1cf9156689ce1509c3b37a0"
+      },
+      "inputHashes": {
+        "rows": "55f686808a09a4f80a7d6253917defc23e16fce35a141600b80535e46bfb8577",
+        "checks": "e1ccea6459fac9d5b63d6e72c4ce82bf8cba561bca2a05aea4e0ceee403eb629",
+        "sources": "5a669b26855f4c959a5064dba35ea222c15688cc1310b8c75ec0efe6b20fe08e"
+      },
+      "tasks": [
+        {
+          "taskId": "channel-gain-v1-smoke-gain-sign_bit",
+          "sourceSha256": "102329a8b3a3807df86253e0acbd07d64e6eebc8eb66b29c8639ebd9c5b33212",
+          "dispatchedSourceSha256": "102329a8b3a3807df86253e0acbd07d64e6eebc8eb66b29c8639ebd9c5b33212",
+          "promptSha256": "ec920809e4bd6850e608f3912fbc1793da8a8da45cc996371b481ca617f0968d",
+          "contractPassed": false,
+          "checks": [
+            {
+              "id": "gain-sign_bit-public-4-32-base",
+              "visibility": "public",
+              "passed": false,
+              "contractViolations": [
+                "required_override_absent:WORKGROUP_SIZE"
+              ]
+            }
+          ],
+          "passed": false,
+          "verifierMs": 0.018003999954089522
+        }
+      ],
+      "passed": false,
+      "verifierMs": 0.12254199996823445
+    },
+    {
+      "id": "channel-gain-v1-smoke-gain-tent/base",
+      "schema": "gamma.channel-gain-shader-verification/v1",
+      "scope": "public",
+      "referenceQualification": false,
+      "confirmationEvaluated": false,
+      "deviceInfo": {
+        "vendor": "amd",
+        "architecture": "rdna-3",
+        "device": null,
+        "description": null,
+        "availableFeatures": [
+          "bgra8unorm-storage",
+          "chromium-experimental-multi-draw-indirect",
+          "chromium-experimental-subgroup-matrix",
+          "chromium-experimental-timestamp-query-inside-passes",
+          "clip-distances",
+          "core-features-and-limits",
+          "depth-clip-control",
+          "depth32float-stencil8",
+          "dual-source-blending",
+          "float32-blendable",
+          "float32-filterable",
+          "indirect-first-instance",
+          "primitive-index",
+          "rg11b10ufloat-renderable",
+          "shader-f16",
+          "subgroups",
+          "texture-component-swizzle",
+          "texture-compression-bc",
+          "texture-compression-bc-sliced-3d",
+          "texture-formats-tier1",
+          "texture-formats-tier2",
+          "timestamp-query"
+        ],
+        "requiredFeatures": [
+          "shader-f16",
+          "subgroups"
+        ]
+      },
+      "provenance": {
+        "sourceHashes": {
+          "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+          "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+          "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+          "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+          "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+          "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+          "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+          "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+        },
+        "compatibilityAliases": {
+          "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+        },
+        "sharedNamespaceTouched": false,
+        "layoutRepair": {
+          "schema": "gamma.channel-gain-contract-layout-repair/v1",
+          "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+          "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+          "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+          "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+          "historicalSourceModified": false
+        },
+        "lockSha256": "54a5dd0487e40624d587149ce5ffaa4812345e88d1cf9156689ce1509c3b37a0"
+      },
+      "inputHashes": {
+        "rows": "ba84f73931f14c7c97012f19b3c7043153e47d253b8a0d23c3885a8211a0e8f2",
+        "checks": "46e40d847cf4f1f12d037f3dbe0e50144f9269f4070fefc011856b1e1ebffced",
+        "sources": "001228deffccc260e5d14356491ba7eb6054d577504ec9ecfe8ed75ae02a220c"
+      },
+      "tasks": [
+        {
+          "taskId": "channel-gain-v1-smoke-gain-tent",
+          "sourceSha256": "5f49b71f4d4182fadee689111fa0dc5c649f5942acc0b1bcf477d8e7dcf1f105",
+          "dispatchedSourceSha256": "5f49b71f4d4182fadee689111fa0dc5c649f5942acc0b1bcf477d8e7dcf1f105",
+          "promptSha256": "e5b7852fc936e0bf7ccbcd737d740f78c2b2632c0ac1e952feb241519b8e6884",
+          "contractPassed": false,
+          "checks": [
+            {
+              "id": "gain-tent-public-4-32-base",
+              "visibility": "public",
+              "passed": false,
+              "contractViolations": [
+                "markdown_fence"
+              ]
+            }
+          ],
+          "passed": false,
+          "verifierMs": 0.008826999983284622
+        }
+      ],
+      "passed": false,
+      "verifierMs": 0.052087999996729195
+    },
+    {
+      "id": "channel-gain-v1-smoke-gain-tent/channel_gain",
+      "schema": "gamma.channel-gain-shader-verification/v1",
+      "scope": "public",
+      "referenceQualification": false,
+      "confirmationEvaluated": false,
+      "deviceInfo": {
+        "vendor": "amd",
+        "architecture": "rdna-3",
+        "device": null,
+        "description": null,
+        "availableFeatures": [
+          "bgra8unorm-storage",
+          "chromium-experimental-multi-draw-indirect",
+          "chromium-experimental-subgroup-matrix",
+          "chromium-experimental-timestamp-query-inside-passes",
+          "clip-distances",
+          "core-features-and-limits",
+          "depth-clip-control",
+          "depth32float-stencil8",
+          "dual-source-blending",
+          "float32-blendable",
+          "float32-filterable",
+          "indirect-first-instance",
+          "primitive-index",
+          "rg11b10ufloat-renderable",
+          "shader-f16",
+          "subgroups",
+          "texture-component-swizzle",
+          "texture-compression-bc",
+          "texture-compression-bc-sliced-3d",
+          "texture-formats-tier1",
+          "texture-formats-tier2",
+          "timestamp-query"
+        ],
+        "requiredFeatures": [
+          "shader-f16",
+          "subgroups"
+        ]
+      },
+      "provenance": {
+        "sourceHashes": {
+          "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+          "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+          "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+          "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+          "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+          "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+          "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+          "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+        },
+        "compatibilityAliases": {
+          "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+        },
+        "sharedNamespaceTouched": false,
+        "layoutRepair": {
+          "schema": "gamma.channel-gain-contract-layout-repair/v1",
+          "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+          "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+          "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+          "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+          "historicalSourceModified": false
+        },
+        "lockSha256": "54a5dd0487e40624d587149ce5ffaa4812345e88d1cf9156689ce1509c3b37a0"
+      },
+      "inputHashes": {
+        "rows": "ba84f73931f14c7c97012f19b3c7043153e47d253b8a0d23c3885a8211a0e8f2",
+        "checks": "46e40d847cf4f1f12d037f3dbe0e50144f9269f4070fefc011856b1e1ebffced",
+        "sources": "001228deffccc260e5d14356491ba7eb6054d577504ec9ecfe8ed75ae02a220c"
+      },
+      "tasks": [
+        {
+          "taskId": "channel-gain-v1-smoke-gain-tent",
+          "sourceSha256": "5f49b71f4d4182fadee689111fa0dc5c649f5942acc0b1bcf477d8e7dcf1f105",
+          "dispatchedSourceSha256": "5f49b71f4d4182fadee689111fa0dc5c649f5942acc0b1bcf477d8e7dcf1f105",
+          "promptSha256": "e5b7852fc936e0bf7ccbcd737d740f78c2b2632c0ac1e952feb241519b8e6884",
+          "contractPassed": false,
+          "checks": [
+            {
+              "id": "gain-tent-public-4-32-base",
+              "visibility": "public",
+              "passed": false,
+              "contractViolations": [
+                "markdown_fence"
+              ]
+            }
+          ],
+          "passed": false,
+          "verifierMs": 0.0065929999691434205
+        }
+      ],
+      "passed": false,
+      "verifierMs": 0.04093800002010539
+    }
+  ],
+  "outputsSha256": "7b3c5e385255a5ba51b9d1721ad4996d41477deb66615b90a7a9ba42dfeff316",
+  "physicalStageMs": 377052.87968400004,
+  "confirmationEvaluated": false,
+  "qualityUsedForTuning": false,
+  "cleanupMs": 46.01414400001522,
+  "timingContext": "scheduled after 9B completion; isolation unqualified pending live observation",
+  "globalIsolationQualified": false,
+  "priorExposure": {
+    "completed27BCrossDomainRequests": 24,
+    "ownProbeOutputs": 0,
+    "candidateRetuned": false,
+    "originalRestrictedScores": {
+      "base": 4,
+      "channel_gain": 4,
+      "shuffled_context": 4,
+      "permuted_gain": 3,
+      "tasksPerCondition": 6
+    },
+    "correctedSealedOutputReplayScores": {
+      "base": 4,
+      "channel_gain": 4,
+      "shuffled_context": 4,
+      "permuted_gain": 4,
+      "tasksPerCondition": 6
+    },
+    "knownOutcome": "Neutral observed quality: corrected paired outcomes are 0 wins / 0 losses / 6 ties for each transform versus base; no gain advantage observed. Original restricted permuted rejection preserved separately.",
+    "evidence": {
+      "RAW-RESULTS-01.md": "685a37b8c50e7d6f911f2b201a13b8a69b9a1c26292bbb1a5c959973a727dce3",
+      "REPLAY-RESULTS-01.md": "7f77c0076f0c0589d592833b3fdfc62ad5b859762aaf5d90c953f36404285a99",
+      "screen-run-01/oracle-replay-v2.json": "8695cb67872e8b5e3f171dec94c4d3c230243ccb65a18395e307e0270dc8c83f"
+    }
+  },
+  "deferredAdmission": {
+    "completion": {
+      "ready": true,
+      "receiptSha256": "6e6f2d91396dd9aca37b0578a547796dc0f4eb27e39ed1ba1c555af128c30574",
+      "receiptFileSha256": "4e56bc8f4cd63078d3d5b4fd0302496d8d13ca27df412632bdfc1c4e9b5f0fc0",
+      "requestCount": 176,
+      "runtimeLockSha256": "6be766a21347c52762c504d2fa348383bfe388f5a61fefcbaeb82e6a178ba2db",
+      "stageLockSha256": "31d1b972ecc1466116c4af3da43eba0e24b5ba13899ed7f3fdd4050b719e7e6a"
+    },
+    "timingLock": {
+      "mode": "exclusive",
+      "path": "/run/media/x/models/doe-gpu-timing.lock",
+      "fd": 4,
+      "device": 2066,
+      "inode": 993,
+      "checkedAt": "2026-11-13T16:21:11.481Z",
+      "globalIsolationQualified": false
+    }
+  },
+  "receiptSha256": "3b80f25885ce6670242992ce4b21e84a55231e98fae76eaef66d959b175c4b5c",
+  "results": [
+    {
+      "id": "channel-gain-v1-smoke-gain-sign_bit/base",
+      "taskId": "channel-gain-v1-smoke-gain-sign_bit",
+      "condition": "base",
+      "source": "override const WORKGROUP_SIZE: u32 = 64u;\n\nstruct Params {\n    length: u32,\n    output_offset: u32,\n    first: f32,\n    second: f32\n}\n\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n\n@compute @workgroup_size(WORKGROUP_SIZE)\nfn main(@builtin(global_invocation_id) global_id: vec3<u32>) {\n    let i = global_id.x;\n    if (i >= params.length) {\n        return;\n    }\n    let x = left_values[i];\n    let sign = select(1.0, -1.0, x < 0.0);\n    output_values[params.output_offset + i] = sign;\n}",
+      "tokenCount": 255,
+      "gainHash": null,
+      "reachedOutputCap": false,
+      "physicalRequestMs": 84203.825905,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 10474.741777000003,
+        "gain_ms": 0,
+        "setup_other_ms": 0,
+        "setup_cleanup_ms": 0,
+        "base_restore_ms": 0,
+        "reprefill_ms": 0,
+        "decode_ms": 73722.404524,
+        "decode_tokens": 255,
+        "verifier_ms": 0,
+        "end_to_end_ms": 84212.71067300001,
+        "peak_allocated_bytes": 19031038920,
+        "buffer_pool_peak_bytes": 18331133184,
+        "transform_state_bytes": 0,
+        "request_cleanup_ms": 1.0250879999948665,
+        "input_contract_ms": 8.884768000003533,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      }
+    },
+    {
+      "id": "channel-gain-v1-smoke-gain-sign_bit/channel_gain",
+      "taskId": "channel-gain-v1-smoke-gain-sign_bit",
+      "condition": "channel_gain",
+      "source": "override const WORKGROUP_SIZE : u32 = 64u;\n\nstruct Params {\n    length : u32,\n    output_offset : u32,\n    first : f32,\n    second : f32\n};\n\n@group(0) @binding(0) var<storage, read> left_values : array<f32>;\n@group(0) @binding(1) var<storage, read> right_values : array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values : array<f32>;\n@group(0) @binding(3) var<uniform> params : Params;\n\n@compute @workgroup_size(WORKGROUP_SIZE)\nfn main(\n    @builtin(global_invocation_id) global_id : vec3<u32>,\n) {\n    let i = global_id.x;\n    if (i >= params.length) {\n        return;\n    }\n    let x = left_values[i];\n    let sign = select(1.0, -1.0, x < 0.0);\n    output_values[params.output_offset + i] = sign;\n}",
+      "tokenCount": 260,
+      "gainHash": "00246a6663b45bc2d940840be2fead8bf10a0047f209e6bdb91f711c902ab209",
+      "reachedOutputCap": false,
+      "physicalRequestMs": 74694.06537600001,
+      "timing": {
+        "reference_prefill_ms": 10197.16471099999,
+        "base_prefill_ms": 10151.991729000001,
+        "gain_ms": 22.513692999986233,
+        "setup_other_ms": 3.1041300000215415,
+        "setup_cleanup_ms": 0.4785250000131782,
+        "base_restore_ms": 68.87164400002803,
+        "reprefill_ms": 0,
+        "decode_ms": 74620.90799900002,
+        "decode_tokens": 260,
+        "verifier_ms": 0,
+        "end_to_end_ms": 95078.20293200003,
+        "peak_allocated_bytes": 20495405368,
+        "buffer_pool_peak_bytes": 18981315840,
+        "transform_state_bytes": 262144,
+        "request_cleanup_ms": 0.7443070000153966,
+        "input_contract_ms": 8.884768000003533,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "selectedGainLogicalBytes": 139264
+    },
+    {
+      "id": "channel-gain-v1-smoke-gain-tent/base",
+      "taskId": "channel-gain-v1-smoke-gain-tent",
+      "condition": "base",
+      "source": "```wgsl\noverride WORKGROUP_SIZE : u32;\n\nstruct Params {\n    length : u32,\n    output_offset : u32,\n    first : f32,\n    second : f32,\n}\n\n@group(0) @binding(0) var<storage, read> left_values : array<f32>;\n@group(0) @binding(1) var<storage, read> right_values : array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values : array<f32>;\n@group(0) @binding(3) var<uniform> params : Params;\n\n@compute @workgroup_size(WORKGROUP_SIZE)\nfn main(@builtin(global_invocation_id) global_id : vec3<u32>) {\n    let i = global_id.x;\n    if (i >= params.length) {\n        return;\n    }\n    let x = left_values[i];\n    let result = max(0.0, 1.0 - abs(x));\n    output_values[params.output_offset + i] = result;\n}\n```",
+      "tokenCount": 252,
+      "gainHash": null,
+      "reachedOutputCap": false,
+      "physicalRequestMs": 83339.73457600002,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 10838.404138999991,
+        "gain_ms": 0,
+        "setup_other_ms": 0,
+        "setup_cleanup_ms": 0,
+        "base_restore_ms": 0,
+        "reprefill_ms": 0,
+        "decode_ms": 72491.675507,
+        "decode_tokens": 252,
+        "verifier_ms": 0,
+        "end_to_end_ms": 83345.295208,
+        "peak_allocated_bytes": 20701843576,
+        "buffer_pool_peak_bytes": 19155576064,
+        "transform_state_bytes": 0,
+        "request_cleanup_ms": 5.330625000002328,
+        "input_contract_ms": 5.560631999978796,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      }
+    },
+    {
+      "id": "channel-gain-v1-smoke-gain-tent/channel_gain",
+      "taskId": "channel-gain-v1-smoke-gain-tent",
+      "condition": "channel_gain",
+      "source": "```wgsl\noverride WORKGROUP_SIZE : u32;\n\nstruct Params {\n    length : u32,\n    output_offset : u32,\n    first : f32,\n    second : f32,\n}\n\n@group(0) @binding(0) var<storage, read> left_values : array<f32>;\n@group(0) @binding(1) var<storage, read> right_values : array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values : array<f32>;\n@group(0) @binding(3) var<uniform> params : Params;\n\n@compute @workgroup_size(WORKGROUP_SIZE)\nfn main(@builtin(global_invocation_id) global_id : vec3<u32>) {\n    let i = global_id.x;\n    if (i >= params.length) {\n        return;\n    }\n    let x = left_values[i];\n    let result = max(0.0, 1.0 - abs(x));\n    output_values[params.output_offset + i] = result;\n}\n```",
+      "tokenCount": 252,
+      "gainHash": "790ca05e5655b575b6c5c93de2a40e4bd4592e13c3c268ec305be0ffaa6b8ea0",
+      "reachedOutputCap": false,
+      "physicalRequestMs": 73442.30875799997,
+      "timing": {
+        "reference_prefill_ms": 10217.248985999962,
+        "base_prefill_ms": 10073.513849999988,
+        "gain_ms": 11.115287000022363,
+        "setup_other_ms": 3.3769210000755265,
+        "setup_cleanup_ms": 0.7026180000393651,
+        "base_restore_ms": 48.46227700001327,
+        "reprefill_ms": 0,
+        "decode_ms": 73389.76626,
+        "decode_tokens": 252,
+        "verifier_ms": 0,
+        "end_to_end_ms": 93753.82705200004,
+        "peak_allocated_bytes": 20763086984,
+        "buffer_pool_peak_bytes": 19216819456,
+        "transform_state_bytes": 262144,
+        "request_cleanup_ms": 0.7011649999767542,
+        "input_contract_ms": 5.560631999978796,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "selectedGainLogicalBytes": 139264
+    }
+  ],
+  "preparations": [
+    {
+      "taskId": "channel-gain-v1-smoke-gain-sign_bit",
+      "actualPreparationMs": 20375.50955299998
+    },
+    {
+      "taskId": "channel-gain-v1-smoke-gain-tent",
+      "actualPreparationMs": 20306.266455000034
+    }
+  ],
+  "phaseEvents": [
+    {
+      "at": "2026-11-13T16:21:11.482Z",
+      "kind": "deferred-admission",
+      "completion": {
+        "ready": true,
+        "receiptSha256": "6e6f2d91396dd9aca37b0578a547796dc0f4eb27e39ed1ba1c555af128c30574",
+        "receiptFileSha256": "4e56bc8f4cd63078d3d5b4fd0302496d8d13ca27df412632bdfc1c4e9b5f0fc0",
+        "requestCount": 176,
+        "runtimeLockSha256": "6be766a21347c52762c504d2fa348383bfe388f5a61fefcbaeb82e6a178ba2db",
+        "stageLockSha256": "31d1b972ecc1466116c4af3da43eba0e24b5ba13899ed7f3fdd4050b719e7e6a"
+      },
+      "timingLock": {
+        "mode": "exclusive",
+        "path": "/run/media/x/models/doe-gpu-timing.lock",
+        "fd": 4,
+        "device": 2066,
+        "inode": 993,
+        "checkedAt": "2026-11-13T16:21:11.481Z",
+        "globalIsolationQualified": false
+      }
+    },
+    {
+      "at": "2026-11-13T16:21:11.925Z",
+      "kind": "model-load-start"
+    },
+    {
+      "at": "2026-11-13T16:22:27.992Z",
+      "kind": "model-load-end",
+      "coldModelLoadMs": 75779.91130800001,
+      "deviceInfo": {
+        "vendor": "amd",
+        "architecture": "rdna-3",
+        "device": "radeon-8060s-graphics-radv-strix-halo-",
+        "description": "radv: Mesa 26.0.3-1ubuntu1",
+        "subgroupMinSize": 32,
+        "subgroupMaxSize": 64
+      },
+      "providerReceipt": {
+        "schema": "doe.webgpu-provider-receipt/v1",
+        "contract": "doe.webgpu-provider/v1",
+        "implementation": "doppler",
+        "providers": [
+          {
+            "id": "pre-installed",
+            "kind": "global"
+          },
+          {
+            "id": "webgpu",
+            "kind": "module",
+            "module": "webgpu",
+            "gpu": {
+              "kind": "factory",
+              "path": "create",
+              "args": [
+                [
+                  "enable-dawn-features=allow_unsafe_apis"
+                ]
+              ]
+            },
+            "globals": {
+              "GPUBufferUsage": "globals.GPUBufferUsage",
+              "GPUShaderStage": "globals.GPUShaderStage",
+              "GPUMapMode": "globals.GPUMapMode",
+              "GPUTextureUsage": "globals.GPUTextureUsage"
+            }
+          }
+        ],
+        "providerOrder": [
+          "pre-installed",
+          "webgpu"
+        ],
+        "adapterOptions": null,
+        "globals": {
+          "mode": "replace",
+          "installed": [
+            "GPUBufferUsage",
+            "GPUShaderStage",
+            "GPUMapMode",
+            "GPUTextureUsage",
+            "navigator.gpu"
+          ],
+          "restored": false
+        },
+        "attempts": [
+          {
+            "providerId": "pre-installed",
+            "kind": "global",
+            "module": null,
+            "ok": false,
+            "stage": "gpu.validate",
+            "code": "DOPPLER_PROVIDER_UNAVAILABLE",
+            "detail": "Selected provider does not expose GPU.requestAdapter()."
+          },
+          {
+            "providerId": "webgpu",
+            "kind": "module",
+            "module": "webgpu",
+            "ok": true,
+            "stage": "complete",
+            "code": null,
+            "detail": null
+          }
+        ],
+        "selectedProviderId": "webgpu",
+        "ok": true
+      }
+    },
+    {
+      "at": "2026-11-13T16:22:28.002Z",
+      "kind": "request-start",
+      "id": "channel-gain-v1-smoke-gain-sign_bit/base",
+      "condition": "base"
+    },
+    {
+      "at": "2026-11-13T16:23:52.208Z",
+      "kind": "preparation-start",
+      "taskId": "channel-gain-v1-smoke-gain-sign_bit"
+    },
+    {
+      "at": "2026-11-13T16:24:12.588Z",
+      "kind": "request-start",
+      "id": "channel-gain-v1-smoke-gain-sign_bit/channel_gain",
+      "condition": "channel_gain"
+    },
+    {
+      "at": "2026-11-13T16:25:27.290Z",
+      "kind": "reset-start",
+      "taskId": "channel-gain-v1-smoke-gain-sign_bit"
+    },
+    {
+      "at": "2026-11-13T16:25:37.500Z",
+      "kind": "reset-end",
+      "record": {
+        "taskId": "channel-gain-v1-smoke-gain-sign_bit",
+        "measured": true,
+        "identicalInputTokens": true,
+        "tokenIdsSha256": "7aa1a6d55686cc6679fabc393546ad3d69cee279654e15a5c7a1a65069afdb88",
+        "transformDiscarded": true,
+        "before": {
+          "gainAbsent": true,
+          "adapterAbsent": true,
+          "seqLen": 0
+        },
+        "logits": {
+          "measured": true,
+          "elements": 248320,
+          "relativeL2": 0,
+          "maxAbsolute": 0,
+          "top1Changed": false
+        },
+        "exactLogitsEqual": true,
+        "baselineLogitsSha256": "b15dac67cf7afee202370ec5000fcd4550de6de63c4572c8a359cb452875d9ba",
+        "resetLogitsSha256": "b15dac67cf7afee202370ec5000fcd4550de6de63c4572c8a359cb452875d9ba",
+        "samplingPerformed": false,
+        "resetDiagnosticMs": 10209.83839400002
+      }
+    },
+    {
+      "at": "2026-11-13T16:25:37.509Z",
+      "kind": "request-start",
+      "id": "channel-gain-v1-smoke-gain-tent/base",
+      "condition": "base"
+    },
+    {
+      "at": "2026-11-13T16:27:00.853Z",
+      "kind": "preparation-start",
+      "taskId": "channel-gain-v1-smoke-gain-tent"
+    },
+    {
+      "at": "2026-11-13T16:27:21.163Z",
+      "kind": "request-start",
+      "id": "channel-gain-v1-smoke-gain-tent/channel_gain",
+      "condition": "channel_gain"
+    },
+    {
+      "at": "2026-11-13T16:28:34.623Z",
+      "kind": "reset-start",
+      "taskId": "channel-gain-v1-smoke-gain-tent"
+    },
+    {
+      "at": "2026-11-13T16:28:44.994Z",
+      "kind": "reset-end",
+      "record": {
+        "taskId": "channel-gain-v1-smoke-gain-tent",
+        "measured": true,
+        "identicalInputTokens": true,
+        "tokenIdsSha256": "d8a79dde336caf8ab661ad947e5ae45454748100c6540857a0b3b564ebe1fb65",
+        "transformDiscarded": true,
+        "before": {
+          "gainAbsent": true,
+          "adapterAbsent": true,
+          "seqLen": 0
+        },
+        "logits": {
+          "measured": true,
+          "elements": 248320,
+          "relativeL2": 0,
+          "maxAbsolute": 0,
+          "top1Changed": false
+        },
+        "exactLogitsEqual": true,
+        "baselineLogitsSha256": "9146a5130f63331bc439b0d4828afc5c61b038c0953fb179d3001f8be540fa65",
+        "resetLogitsSha256": "9146a5130f63331bc439b0d4828afc5c61b038c0953fb179d3001f8be540fa65",
+        "samplingPerformed": false,
+        "resetDiagnosticMs": 10371.16297200002
+      }
+    },
+    {
+      "at": "2026-11-13T16:28:45.044Z",
+      "kind": "outputs-sealed",
+      "outputsSha256": "7b3c5e385255a5ba51b9d1721ad4996d41477deb66615b90a7a9ba42dfeff316"
+    },
+    {
+      "at": "2026-11-13T16:28:45.046Z",
+      "kind": "cleanup-start"
+    },
+    {
+      "at": "2026-11-13T16:28:45.092Z",
+      "kind": "cleanup-end"
+    }
+  ],
+  "schedulerEvents": [
+    {
+      "at": "2026-11-13T13:43:57.652982+00:00",
+      "globalIsolationQualified": false,
+      "kind": "scheduler-start",
+      "probeLockSha256": "54a5dd0487e40624d587149ce5ffaa4812345e88d1cf9156689ce1509c3b37a0",
+      "scheduleSha256": "a6e3eeadffcb47681d63c14f5a7fdc16b30172e11766873508e8490127c63226",
+      "timingContext": "scheduled after 9B completion; isolation unqualified pending live observation"
+    },
+    {
+      "at": "2026-11-13T13:43:57.722308+00:00",
+      "evidence": {
+        "ready": false,
+        "reason": "receipt_missing"
+      },
+      "kind": "waiting-for-confirmation"
+    },
+    {
+      "at": "2026-11-13T16:21:11.105995+00:00",
+      "confirmation": {
+        "ready": true,
+        "receiptFileSha256": "4e56bc8f4cd63078d3d5b4fd0302496d8d13ca27df412632bdfc1c4e9b5f0fc0",
+        "receiptSha256": "6e6f2d91396dd9aca37b0578a547796dc0f4eb27e39ed1ba1c555af128c30574",
+        "requestCount": 176,
+        "runtimeLockSha256": "6be766a21347c52762c504d2fa348383bfe388f5a61fefcbaeb82e6a178ba2db",
+        "stageLockSha256": "31d1b972ecc1466116c4af3da43eba0e24b5ba13899ed7f3fdd4050b719e7e6a"
+      },
+      "kind": "waiting-for-exclusive-timing-lock",
+      "path": "/run/media/x/models/doe-gpu-timing.lock"
+    },
+    {
+      "at": "2026-11-13T16:21:11.106139+00:00",
+      "globalIsolationQualified": false,
+      "kind": "exclusive-timing-lock-acquired",
+      "path": "/run/media/x/models/doe-gpu-timing.lock"
+    },
+    {
+      "at": "2026-11-13T16:21:11.249010+00:00",
+      "command": [
+        "node",
+        "/home/x/deco/gamma/.work/channel-gain-20261112/projects/reconfiguration/cross_domain_screen/probe.mjs",
+        "--action",
+        "run",
+        "--gpu-authorized",
+        "--protocol",
+        "/home/x/deco/gamma/.work/channel-gain-20261112/projects/reconfiguration/cross_domain_screen/probe-protocol.json",
+        "--config",
+        "/home/x/deco/gamma/.work/channel-gain-20261112/projects/reconfiguration/cross_domain_screen/native-jupiter-27b-probe-config.json",
+        "--tokenizer-preflight",
+        "/home/x/deco/gamma/.work/channel-gain-20261112/projects/reconfiguration/cross_domain_screen/tokenizer-preflight-27b-probe-01.json",
+        "--corpus",
+        "/home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/corpus-v1",
+        "--runtime-lock",
+        "/home/x/deco/gamma/.work/channel-gain-20261112/projects/reconfiguration/cross_domain_screen/probe-runtime-lock-02.json",
+        "--output",
+        "/home/x/deco/gamma/.work/channel-gain-20261112/projects/reconfiguration/cross_domain_screen/probe-attempt-01/probe-output",
+        "--timing-lock-fd",
+        "4"
+      ],
+      "confirmation": {
+        "ready": true,
+        "receiptFileSha256": "4e56bc8f4cd63078d3d5b4fd0302496d8d13ca27df412632bdfc1c4e9b5f0fc0",
+        "receiptSha256": "6e6f2d91396dd9aca37b0578a547796dc0f4eb27e39ed1ba1c555af128c30574",
+        "requestCount": 176,
+        "runtimeLockSha256": "6be766a21347c52762c504d2fa348383bfe388f5a61fefcbaeb82e6a178ba2db",
+        "stageLockSha256": "31d1b972ecc1466116c4af3da43eba0e24b5ba13899ed7f3fdd4050b719e7e6a"
+      },
+      "globalIsolationQualified": false,
+      "guard": {
+        "ageSeconds": 3.542693,
+        "guard": {
+          "allowed": true,
+          "availableMemoryBytes": 127366123520,
+          "baselineStageAdmitted": 0,
+          "checkedAt": "2026-11-13T16:21:07.706224+00:00",
+          "knownProviderMainPID": 1800927,
+          "lastKnownIdleMeasurement": {
+            "at": "2026-11-13T12:47:22.180Z",
+            "stageAdmitted": 0
+          },
+          "minimumAvailableMemoryBytes": 34359738368,
+          "ownerRetirementAuthorization": "Owner explicitly retires Jupiter 27B Reploid provider, 2026-11-13",
+          "pollIntervalSeconds": 5,
+          "providerMainPID": 0,
+          "providerModificationBasis": "owner-authorized retirement; guard itself is read-only",
+          "providerModified": true,
+          "providerNRestarts": 0,
+          "providerState": "inactive",
+          "providerSubState": "dead",
+          "reasons": [],
+          "retirementObserved": true,
+          "schema": "gamma.channel-gain-service-guard-retirement/v1",
+          "sourceAgeSeconds": null,
+          "sourceFreshnessRequired": false,
+          "sourceObservedAt": null,
+          "stageAdmitted": 0,
+          "stageAdmittedBasis": "fresh_systemd_inactive_dead_MainPID0_no_provider_process_can_admit",
+          "systemdObservationAgeSeconds": 0.00018814500072039664,
+          "unit": "reploid-qwen27b-0633-20261104.service"
+        },
+        "ready": true
+      },
+      "kind": "probe-launch"
+    },
+    {
+      "at": "2026-11-13T16:21:11.249676+00:00",
+      "kind": "probe-process-started",
+      "pid": 3710490
+    },
+    {
+      "at": "2026-11-13T16:28:45.433906+00:00",
+      "exitCode": 0,
+      "kind": "probe-process-ended",
+      "pid": 3710490
+    },
+    {
+      "at": "2026-11-13T16:28:45.434008+00:00",
+      "kind": "exclusive-timing-lock-released"
+    }
+  ]
+}
