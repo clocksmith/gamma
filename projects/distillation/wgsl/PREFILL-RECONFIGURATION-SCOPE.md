@@ -58,7 +58,12 @@ Each track runs three arms:
 ## Controls and comparisons (matched budgets)
 
 - the base model, given the transform's extra compute as more samples (best-of-k);
-- the trained WGSL v2 adapter (seed 47) as the reference ceiling;
+- the trained WGSL v2 adapter as the reference ceiling: seed 47, the selected seed of
+  three (11, 29, 47), PEFT tree SHA-256
+  `aa8ad92a5e57c04d359fa2a7095f40eda6f85728f4e1ef90f4a9e8e5633d200d`; reported 15/16
+  (93.75%) on seed confirmation and 11/16 on checkpoint selection
+  (`doppler/docs/status/wgsl-writer-v2-result-2026-07-14.md`). Those populations are
+  exposed, so its ceiling on the fresh tasks is measured, not assumed;
 - the same rule fed shuffled or unrelated context, and a random `z` of the same size,
   to show whether the prompt matters at all;
 - end-to-end timing in every arm: prefill, time to compute `z`, decode tokens per
@@ -72,9 +77,28 @@ permutations, one submission per task. Compiler acceptance alone counts for noth
 No synthetic training data is needed for the primary track; independent tests are
 still required.
 
-**Interesting result:** a no-training rule that beats its shuffled-context and
-random-`z` controls, and closes a stated fraction of the gap from base to adapter at
-a small fraction of the adapter's setup cost.
+## Success criteria (proposed by A1; the owner freezes them before any run)
+
+No run starts until these numbers are frozen in this file. Measured once on the
+confirmation population after the rule and its settings are fixed on the selection
+population. A no-training rule is an interesting result only if all of these hold:
+
+1. **Prompt dependence:** it beats both the shuffled-context and random-`z` controls on
+   the same tasks; exact paired sign test on discordant tasks, p < 0.05.
+2. **Gap closure:** it closes at least 50% of the semantic-pass gap from the base model
+   (with matched best-of-k) to the seed-47 adapter, measured on the same tasks. If that
+   gap is under 4 tasks, the comparison is uninformative and the result is reported as
+   such, not as a pass.
+3. **Setup cost:** zero offline training. Rule settings are chosen on the selection
+   population only, using at most 1% of the GPU-hours recorded for one seed-47 SFT run.
+4. **Serving cost:** computing `z` plus any added decode work adds at most 10% to the
+   base model's end-to-end request latency, and at most the memory of one rank-32
+   adapter per request.
+5. **No new wrong acceptances:** no more shaders that pass visible checks but fail
+   confirmation than the base model.
+
+The trained controller (track 2) is reported against the same criteria 1, 2, 4 and 5,
+with its training compute stated against one seed-47 SFT run.
 
 ## Dependencies and blockers
 
