@@ -1,34 +1,104 @@
 # First prefill channel-gain experiment
 
-**Continuation 02 is active, 2026-11-13.** The owner rejected the budget-only stop
-because it left the shader question unanswered. The [continuation policy](protocol-continuation-02.json)
-keeps the original 1% setup-efficiency target as a scored criterion, but allows the
-fixed eight selection and 176 confirmation requests to finish. Candidates, tasks,
-controls, k=2 and hidden-test separation are unchanged. [Stage lock 04](native-stage-lock-04.json)
-pins this policy and runner before selection. The earlier closed run below remains
-preserved; it is not the current execution status. See [execution-status.json](execution-status.json).
+**Completed and evaluated, 2026-11-13: no shader-improvement confirmation.**
+The full eight-request selection and 176-request confirmation workload ran.
+The selected `gain-negative` rule scored **0/16** confirmation tasks in both
+MLP/base-cache and MLP/re-prefill arms. Same-prompt base, public-selected best-of-2
+base, shuffled context, random state and permuted gains also scored **0/16**.
+The trained seed-47 adapter scored **11/16**. These are completed confirmation
+results, not smoke scores or a budget-only stop.
 
-**Selection completed; confirmation generation is active.** Both candidates scored
-0/4 on selection families. The frozen timing tie-break selected `gain-negative`
-(410.902 seconds versus 411.100 seconds). The [complete selection receipt](native-selection-04/selection-receipt.json)
-records 822.030 seconds of allocated selection time, above the unchanged
-35.59-second efficiency target. This is not a quality win; the full confirmation
-workload continues.
+The failure boundary matters: **all 160 non-adapter outputs failed the required
+source contract before compilation**, all missing `WORKGROUP_SIZE` (one also
+missing the compute annotation). All 16 adapter outputs compiled and dispatched.
+This measures failure to produce compliant shaders; the untrained arms did not
+reach an executed numeric-accuracy comparison. Their shared zero floor limits
+what these tasks can reveal about changes in numeric shader behavior. The
+[independent confirmation audit](CONFIRMATION-AUDIT-04.md) records that boundary.
 
+The [final report](CONFIRMATION-RESULTS-04.md), [machine-readable results](confirmation-results-04.json),
+[authenticated evidence](confirmation-evidence-04.json) and
+[byte-preserving archive](archive-04/archive-manifest.json) are the current evidence.
+[execution-status.json](execution-status.json) records the completed state.
+The [continuation policy](protocol-continuation-02.json) and
+[stage lock 04](native-stage-lock-04.json) preserved the original candidates, tasks,
+controls, k=2 and hidden-test separation; the 1% setup target was scored rather
+than used to stop execution.
 
-**Run closed at selection admission, 2026-11-13. No shader-improvement confirmation.**
+## Confirmation outcome and limits
+
+All 16 task families were evaluated under seven conditions and both cache arms.
+Base and adapter samples were shared between arm comparisons; the total is
+176 unique generations, not 224 separate generations. Semantic success requires
+both public checks and all 12 confirmation checks. The adapter's hidden-only
+score was 12/16, but its semantic score is 11/16. Wrong acceptances were zero in
+every condition; zero wrong acceptances does not make an incorrect shader correct.
+
+Gain versus each control had zero wins, zero losses and zero discordant tasks.
+Prompt-dependence tests therefore remain **underpowered**, not proof of equality.
+The adapter-minus-matched-base gap was 11 tasks; gains closed **0%**, failing the
+frozen gap-closure criterion. Both cache arms' joint decisions are
+**not_confirmed**. This result applies to the first selected rule and measured
+implementation, not all transform families or the reconfiguration architecture.
+
+Sixteen same-prefix diagnostics reused identical frozen gain hashes between cache
+arms. Every task showed a KV difference at layer 31 only; earlier KV layers and
+all 24 recurrent layers matched. Logit relative L2 ranged from 0.000818 to
+0.001880, with no top-1 changes. All-projections remains **not applicable**.
+The two exact base-logit reset checks described below belong to smoke 03; they
+are not 16 new confirmation reset tests.
+
+## Measured costs and environment
+
+- Selection used **822.030 seconds** of single-device residency against the
+  unchanged **35.59-second** target: **23.0972%** of the conservative 3,559-second
+  historical SFT denominator, versus the required 1%. No offline training ran.
+- Added attributed E2E latency, computed as gain total / same-prompt base total
+  minus one, was **11.69%** for base cache and **25.34%** for re-prefill. Both
+  exceed the 10% target. These are the frozen ratios of totals, not averages of
+  per-task percentages or isolated speed measurements.
+- Full best-of-2 base sample cost was **1.844x** the base-cache gain cost and
+  **1.643x** the re-prefill gain cost. Both samples are charged; integer rounding
+  is not exact compute matching.
+- Selection physical stage time was **884.248 seconds**; confirmation physical
+  stage time was **16,729.217 seconds (4.647 hours)**. Together they took
+  **17,613.465 seconds (4.893 hours)** before final receipt serialization.
+  Confirmation included 176 requests, 587.799 seconds of preparation and
+  232.854 seconds of cache diagnostics. Cold loads are already inside stage
+  times; do not add these components again. Prior failed attempts and smoke
+  costs remain below and in the historical reports.
+- Base-cache retained increment was **131,072 bytes**, but its isolated incremental
+  peak is **unproven**. Re-prefill retained **326,201,344 bytes**, exceeding the
+  **232,821,904-byte** cap even without claiming a peak measurement.
+
+The [environment ledger](environment-04.jsonl) records the owner-authorized
+retirement of the idle Reploid provider and the parallel 27B screen from
+**13:01:51.789 to 13:12:31.783 UTC**, a **639.994-second** overlap. Timing is
+**contended**. Main-request UTC boundaries were not recorded, so no exact
+per-request phase allocation or causal speed comparison is inferred. Quality
+outputs and denominators were retained unchanged. Historical SFT residency is a
+conservative lower bound rather than an active GPU counter; historical data and
+engineering preparation costs are not fully metered.
+
+## Historical attempt 03: smoke and admission stop
+
+The remainder records the earlier smoke-only outcome. Its claims about untested
+candidates, unevaluated confirmation and service preservation apply to attempt 03,
+not the completed continuation above. Original reports and receipts remain intact.
+
+**Historical attempt 03 closed at selection admission, 2026-11-13. No shader-improvement confirmation.**
 The complete two-task smoke and corrected public replay ran. The eight-request
 selection workload was not admitted under the unchanged 35.59 GPU-second cap;
-both candidates remain **untested**, with no winner and no confirmation requests.
+at that point both candidates were **untested**, with no winner and no confirmation requests.
 This outcome applies to this implementation and budget, not every gain rule or
 reconfiguration architecture.
 
-The current state is [execution-status.json](execution-status.json). Detailed
+The historical attempt-03 state is retained in [RESULTS-03.md](RESULTS-03.md). Detailed
 request, cost, cache, reset and memory tables are in [RESULTS-03.md](RESULTS-03.md)
 and [results-03.json](results-03.json). The [selection receipt](native-selection-03/selection-receipt.json)
-is the decision source of truth.
+is the historical admission decision source of truth.
 
-## What ran and what it showed
+### What ran and what it showed
 
 Qwen3.5-9B used the provisioned revision and an explicit native split-F32 MLP path
 on Jupiter's AMD GPU. The rule was fixed at beta +0.05 for smoke, layers 30/31,
@@ -56,8 +126,7 @@ The base and gain outputs failed the required workgroup-override source contract
 The repaired verifier accepted the adapter's sign-bit shader. Its tent shader
 compiled/dispatched but failed the public numeric oracle (one of four elements).
 These are two smoke families, not a held-out quality estimate. Prompt-dependence,
-trained-adapter gap closure and wrong-acceptance criteria remain unevaluated on
-confirmation. The full best-of-2 base samples consumed 1.77x and 2.04x the primary gain
+trained-adapter gap closure and wrong-acceptance criteria were unevaluated on confirmation at that smoke-only stage. The full best-of-2 base samples consumed 1.77x and 2.04x the primary gain
 request's attributed compute; base-favoring integer rounding is reported, not exact
 compute equality.
 
@@ -68,7 +137,7 @@ includes token preparation, reference/base prefill, gain derivation, snapshot
 restoration or re-prefill, decode, request cleanup and public verification. Shared
 setup is charged back to each arm; physical batch wall time is reported separately.
 
-## Cache, reset and memory
+### Cache, reset and memory
 
 Both same-prefix cache diagnostics measured nonzero differences at layer 31 only;
 earlier KV layers and all 24 recurrent states matched. Output-logit relative L2
@@ -88,7 +157,7 @@ The complete model-device process peak was 23,476,542,680 bytes. It is a process
 GPUBuffer high-water mark, not per-request physical VRAM. Preparation scratch,
 baseline subtraction and diagnostic-only storage remain explicit in the receipts.
 
-## Timing and stopping decision
+### Timing and stopping decision
 
 - Complete smoke wall: **2,050.177 s (34.17 min)**; cold model load 60.668 s and
   adapter preparation 0.289 s separately. Preparation across both tasks took
@@ -117,7 +186,7 @@ plus separate cold loads. The four-token unscored adapter integration probe took
 The report lists all recorded intervals; it is not a complete meter of engineering,
 conversion CPU work, historical data preparation or idle residency during repairs.
 
-## Verifier repair and evidence provenance
+### Verifier repair and evidence provenance
 
 Attempt 03 initially used the frozen historical browser verifier. Its automatic
 pipeline layout omitted unused binding 1, but the harness still supplied all four
@@ -143,7 +212,7 @@ binds the original generation, replay, repaired verifier and admission code. The
 thresholds and generation settings. The amendment separates fixed smoke cost from
 candidate-selection cost; all settings-selection work remains charged.
 
-## Runtime safety and reproducibility
+### Runtime safety and reproducibility
 
 The [service-window receipt](service-window-summary.json) records 1,021 allowed
 observations, no admitted provider work and at least 78.95 GiB available RAM. The

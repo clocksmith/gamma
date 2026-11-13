@@ -1,0 +1,4679 @@
+{
+  "schema": "gamma.wgsl-channel-gain-confirmation-failure-audit/v1",
+  "observedAt": "2026-11-13T16:24:39.664564+00:00",
+  "scope": "CPU-only analysis of sealed receipts; no oracle changes, GPU dispatches or model calls",
+  "provenance": {
+    "confirmationReceipt": {
+      "path": ".work/channel-gain-restored-04/confirmation/confirmation-receipt.json",
+      "rawSha256": "4e56bc8f4cd63078d3d5b4fd0302496d8d13ca27df412632bdfc1c4e9b5f0fc0",
+      "internalReceiptSha256": "6e6f2d91396dd9aca37b0578a547796dc0f4eb27e39ed1ba1c555af128c30574"
+    },
+    "evidenceReceipt": {
+      "path": "projects/distillation/wgsl/channel_gain/confirmation-evidence-04.json",
+      "rawSha256": "cb617ef0f401fdb87fa1caca1288ade2ffad0b5d2d31c1c0da3a561f626d0046",
+      "internalEvidenceSha256": "7611d4cfa6e6ab4e157cb3523407eb71b9e9e8866c15f06f6d2d1e4c1796df1f"
+    },
+    "submissionLockSha256": "069f43b500fb9938873196112f1c7e52703532241a79feb277dcaaf893c19655",
+    "runtimeLockSha256": "6be766a21347c52762c504d2fa348383bfe388f5a61fefcbaeb82e6a178ba2db",
+    "stageLockSha256": "31d1b972ecc1466116c4af3da43eba0e24b5ba13899ed7f3fdd4050b719e7e6a",
+    "auditScriptSha256": "9396d8a2ffa0699f4db3e587b700444a8acfe135553d233204dd8d36e4e313a3"
+  },
+  "counting": "176 physical generated responses. Public checks cover every response. 224 submitted arm/condition/task aliases reuse base, best-of-k and adapter outputs; duplicated arm scores are not extra independent generated responses. Each confirmation alias has12 hidden checks. Combined success requires public and hidden checks.",
+  "generatedPublicStages": {
+    "source_contract_rejected_before_compile": 160,
+    "passed": 11,
+    "executed_numeric_failed": 5
+  },
+  "contractViolationCounts": {
+    "required_override_absent:WORKGROUP_SIZE": 160,
+    "compute_stage_absent": 1
+  },
+  "byCondition": [
+    {
+      "condition": "base",
+      "generatedRequests": 16,
+      "stages": {
+        "source_contract_rejected_before_compile": 16
+      }
+    },
+    {
+      "condition": "base_matched_best_of_k",
+      "generatedRequests": 16,
+      "stages": {
+        "source_contract_rejected_before_compile": 16
+      }
+    },
+    {
+      "condition": "channel_gain",
+      "generatedRequests": 32,
+      "stages": {
+        "source_contract_rejected_before_compile": 32
+      }
+    },
+    {
+      "condition": "shuffled_context",
+      "generatedRequests": 32,
+      "stages": {
+        "source_contract_rejected_before_compile": 32
+      }
+    },
+    {
+      "condition": "random_z",
+      "generatedRequests": 32,
+      "stages": {
+        "source_contract_rejected_before_compile": 32
+      }
+    },
+    {
+      "condition": "permuted_gain",
+      "generatedRequests": 32,
+      "stages": {
+        "source_contract_rejected_before_compile": 32
+      }
+    },
+    {
+      "condition": "trained_seed47_adapter",
+      "generatedRequests": 16,
+      "stages": {
+        "passed": 11,
+        "executed_numeric_failed": 5
+      }
+    }
+  ],
+  "requests": [
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-discriminant/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "c6dde37ebfb558ad6af8d82d649087cdab963911be1a3337dad15ef1d87d57aa",
+      "tokenCount": 266,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-discriminant/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "ddae598b08c299e96fb6c559d06d497484c3f878587b31339015fb652ad47a66",
+      "tokenCount": 282,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-discriminant/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "e2908cb05cb5cd447953ea4c4aabfa641eaef443660c74af7c1810528ea04bcc",
+      "tokenCount": 256,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-discriminant/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "e2908cb05cb5cd447953ea4c4aabfa641eaef443660c74af7c1810528ea04bcc",
+      "tokenCount": 256,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-discriminant/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "4e85a984f1db0b9ca1ea75095b6e9d7dc393513dc2a4d91305d39fcd25f2b8ec",
+      "tokenCount": 265,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-discriminant/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "4e85a984f1db0b9ca1ea75095b6e9d7dc393513dc2a4d91305d39fcd25f2b8ec",
+      "tokenCount": 265,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-discriminant/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "4e85a984f1db0b9ca1ea75095b6e9d7dc393513dc2a4d91305d39fcd25f2b8ec",
+      "tokenCount": 265,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-discriminant/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "4e85a984f1db0b9ca1ea75095b6e9d7dc393513dc2a4d91305d39fcd25f2b8ec",
+      "tokenCount": 265,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-discriminant/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "ca916de9ac4d76cffffac4ffabdc8177b504feaeda193dd1c23d7afe6f13ba7e",
+      "tokenCount": 259,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-discriminant/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "ca916de9ac4d76cffffac4ffabdc8177b504feaeda193dd1c23d7afe6f13ba7e",
+      "tokenCount": 259,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-discriminant/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "98a4f8d70b3ef49dd55c4999d235a8fbcc6e98be04b58744e36b0e3cbb61a831",
+      "tokenCount": 252,
+      "publicStage": "passed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_root/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "8a0bfc28dcc3c9c89ac670c5c2d8fc3ed7435b91a13ed619ebe2fea1c51bbbbc",
+      "tokenCount": 297,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_root/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "864a24a264ecf2970a9368e115c1694e77951845826f8fa5048fcc8a8c75c6dd",
+      "tokenCount": 310,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_root/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "2893c452509ed65c22e78343bc2b2f0538e8eb932513b4f73074e6d9f237ee72",
+      "tokenCount": 308,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_root/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "2893c452509ed65c22e78343bc2b2f0538e8eb932513b4f73074e6d9f237ee72",
+      "tokenCount": 308,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_root/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "8a0bfc28dcc3c9c89ac670c5c2d8fc3ed7435b91a13ed619ebe2fea1c51bbbbc",
+      "tokenCount": 297,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_root/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "8a0bfc28dcc3c9c89ac670c5c2d8fc3ed7435b91a13ed619ebe2fea1c51bbbbc",
+      "tokenCount": 297,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_root/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "8a0bfc28dcc3c9c89ac670c5c2d8fc3ed7435b91a13ed619ebe2fea1c51bbbbc",
+      "tokenCount": 297,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_root/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "8a0bfc28dcc3c9c89ac670c5c2d8fc3ed7435b91a13ed619ebe2fea1c51bbbbc",
+      "tokenCount": 297,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_root/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "8a0bfc28dcc3c9c89ac670c5c2d8fc3ed7435b91a13ed619ebe2fea1c51bbbbc",
+      "tokenCount": 297,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_root/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "8a0bfc28dcc3c9c89ac670c5c2d8fc3ed7435b91a13ed619ebe2fea1c51bbbbc",
+      "tokenCount": 297,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_root/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "2a2d8c72cbc50b2acc5f755c4cbf7e6c8cadcc800ba9b819cbf84763358b4647",
+      "tokenCount": 245,
+      "publicStage": "passed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-inverse_magnitude/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "8f5b18a660767588194e0ef6c67a4ed182d88b19a5893335f8e6d3235c381953",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-inverse_magnitude/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "3a608e69239b948014915dda4609f3828c0a92b4b6ba6bad3241c525b3d35e96",
+      "tokenCount": 306,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-inverse_magnitude/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "8f5b18a660767588194e0ef6c67a4ed182d88b19a5893335f8e6d3235c381953",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-inverse_magnitude/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "8f5b18a660767588194e0ef6c67a4ed182d88b19a5893335f8e6d3235c381953",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-inverse_magnitude/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "8f5b18a660767588194e0ef6c67a4ed182d88b19a5893335f8e6d3235c381953",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-inverse_magnitude/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "8f5b18a660767588194e0ef6c67a4ed182d88b19a5893335f8e6d3235c381953",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-inverse_magnitude/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "a2ca54ac76b417c04768ee26a584bd2e0ec84438faf325e29565077e13ea0d68",
+      "tokenCount": 288,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-inverse_magnitude/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "a2ca54ac76b417c04768ee26a584bd2e0ec84438faf325e29565077e13ea0d68",
+      "tokenCount": 288,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-inverse_magnitude/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "8f5b18a660767588194e0ef6c67a4ed182d88b19a5893335f8e6d3235c381953",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-inverse_magnitude/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "8f5b18a660767588194e0ef6c67a4ed182d88b19a5893335f8e6d3235c381953",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-inverse_magnitude/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "8e91488e88104e62b782c63a87b695e381ca651a3b265489a48e7e418660b4ab",
+      "tokenCount": 247,
+      "publicStage": "passed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-smoothstep_unit/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "eab6d83149a5b9463a7f98a165371adf398e248300b71b38b8be8ace680bd697",
+      "tokenCount": 296,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-smoothstep_unit/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "f4fcfda13cd9c9dd6c1681cb17b800aa7d2679f5be24d2511b44603156d227a1",
+      "tokenCount": 309,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-smoothstep_unit/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "eab6d83149a5b9463a7f98a165371adf398e248300b71b38b8be8ace680bd697",
+      "tokenCount": 296,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-smoothstep_unit/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "eab6d83149a5b9463a7f98a165371adf398e248300b71b38b8be8ace680bd697",
+      "tokenCount": 296,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-smoothstep_unit/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "eab6d83149a5b9463a7f98a165371adf398e248300b71b38b8be8ace680bd697",
+      "tokenCount": 296,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-smoothstep_unit/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "eab6d83149a5b9463a7f98a165371adf398e248300b71b38b8be8ace680bd697",
+      "tokenCount": 296,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-smoothstep_unit/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "bb4ea8bdf1547e24162801412170c2c467a1d7557483781f63da0a140961a1b9",
+      "tokenCount": 281,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-smoothstep_unit/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "bb4ea8bdf1547e24162801412170c2c467a1d7557483781f63da0a140961a1b9",
+      "tokenCount": 281,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-smoothstep_unit/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "65db99758977b8b18fb956b9118f75dfbbf669279c4bf42d777f22eb5a2c1826",
+      "tokenCount": 282,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-smoothstep_unit/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "65db99758977b8b18fb956b9118f75dfbbf669279c4bf42d777f22eb5a2c1826",
+      "tokenCount": 282,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-smoothstep_unit/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "8865569886ee31a57ba3b64bafaf9fc8c7b52dd8a4d08c7c73566dbe8a31832e",
+      "tokenCount": 258,
+      "publicStage": "executed_numeric_failed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-positive_modulus/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "08ee211cdf2659bc4ced06f1665175137d61cfdf6bd3a0024b4a04bcc518fe9f",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-positive_modulus/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "e028000b4268b7631ec66925cef0abb44def41f6b5cf43c77b8718f797196edf",
+      "tokenCount": 305,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-positive_modulus/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "08ee211cdf2659bc4ced06f1665175137d61cfdf6bd3a0024b4a04bcc518fe9f",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-positive_modulus/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "08ee211cdf2659bc4ced06f1665175137d61cfdf6bd3a0024b4a04bcc518fe9f",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-positive_modulus/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "08ee211cdf2659bc4ced06f1665175137d61cfdf6bd3a0024b4a04bcc518fe9f",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-positive_modulus/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "08ee211cdf2659bc4ced06f1665175137d61cfdf6bd3a0024b4a04bcc518fe9f",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-positive_modulus/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "08ee211cdf2659bc4ced06f1665175137d61cfdf6bd3a0024b4a04bcc518fe9f",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-positive_modulus/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "08ee211cdf2659bc4ced06f1665175137d61cfdf6bd3a0024b4a04bcc518fe9f",
+      "tokenCount": 273,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-positive_modulus/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "aad459e3cf4b51dc3f306effe6f8c29bd47c7bc303f7261a5c364770617c6ccd",
+      "tokenCount": 272,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-positive_modulus/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "aad459e3cf4b51dc3f306effe6f8c29bd47c7bc303f7261a5c364770617c6ccd",
+      "tokenCount": 272,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-positive_modulus/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "28f7b6f40fc1ded2607cd9c2e0d2f2060370020456fa69d8e2a10c7a5fb67b51",
+      "tokenCount": 251,
+      "publicStage": "executed_numeric_failed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-round_to_grid/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "d2d37fdc07709cfb8eb719c0f6e5fe959e4deead68e260bf8fd5728e27d22122",
+      "tokenCount": 305,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-round_to_grid/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "7655d4df61d5bf473357d33bb201503a6eefc943242af72a390ecc7a371fba21",
+      "tokenCount": 316,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-round_to_grid/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "d2d37fdc07709cfb8eb719c0f6e5fe959e4deead68e260bf8fd5728e27d22122",
+      "tokenCount": 305,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-round_to_grid/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "d2d37fdc07709cfb8eb719c0f6e5fe959e4deead68e260bf8fd5728e27d22122",
+      "tokenCount": 305,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-round_to_grid/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "d2d37fdc07709cfb8eb719c0f6e5fe959e4deead68e260bf8fd5728e27d22122",
+      "tokenCount": 305,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-round_to_grid/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "d2d37fdc07709cfb8eb719c0f6e5fe959e4deead68e260bf8fd5728e27d22122",
+      "tokenCount": 305,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-round_to_grid/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "d2d37fdc07709cfb8eb719c0f6e5fe959e4deead68e260bf8fd5728e27d22122",
+      "tokenCount": 305,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-round_to_grid/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "d2d37fdc07709cfb8eb719c0f6e5fe959e4deead68e260bf8fd5728e27d22122",
+      "tokenCount": 305,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-round_to_grid/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "d2d37fdc07709cfb8eb719c0f6e5fe959e4deead68e260bf8fd5728e27d22122",
+      "tokenCount": 305,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-round_to_grid/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "d2d37fdc07709cfb8eb719c0f6e5fe959e4deead68e260bf8fd5728e27d22122",
+      "tokenCount": 305,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-round_to_grid/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "89fada143106384b9fd0266a4cfd1815194e2162d77fe502e4bd00cafa56e242",
+      "tokenCount": 253,
+      "publicStage": "passed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-minimum_magnitude/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "391b4fab550c4f8055625d517241ef19c4a477b4b1472d4272a891e915c99121",
+      "tokenCount": 300,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-minimum_magnitude/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "234f2798cd47812358b11731514e8c5e5273ebbf94cdd26b8e1716dd289efea5",
+      "tokenCount": 304,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-minimum_magnitude/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "a8d65bb64f5a279d6a2e8e191f8c7c5bafc07d5b47e8c5c340e8791ec9bf702c",
+      "tokenCount": 276,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-minimum_magnitude/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "a8d65bb64f5a279d6a2e8e191f8c7c5bafc07d5b47e8c5c340e8791ec9bf702c",
+      "tokenCount": 276,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-minimum_magnitude/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "a8d65bb64f5a279d6a2e8e191f8c7c5bafc07d5b47e8c5c340e8791ec9bf702c",
+      "tokenCount": 276,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-minimum_magnitude/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "a8d65bb64f5a279d6a2e8e191f8c7c5bafc07d5b47e8c5c340e8791ec9bf702c",
+      "tokenCount": 276,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-minimum_magnitude/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "391b4fab550c4f8055625d517241ef19c4a477b4b1472d4272a891e915c99121",
+      "tokenCount": 300,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-minimum_magnitude/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "391b4fab550c4f8055625d517241ef19c4a477b4b1472d4272a891e915c99121",
+      "tokenCount": 300,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-minimum_magnitude/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "a8d65bb64f5a279d6a2e8e191f8c7c5bafc07d5b47e8c5c340e8791ec9bf702c",
+      "tokenCount": 276,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-minimum_magnitude/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "a8d65bb64f5a279d6a2e8e191f8c7c5bafc07d5b47e8c5c340e8791ec9bf702c",
+      "tokenCount": 276,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-minimum_magnitude/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "96a8fe7b2e9a35d4078767dc654ff407d26241191130168f85b25129afb271f5",
+      "tokenCount": 244,
+      "publicStage": "passed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-log_magnitude/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "1e2356de1b9f95100786c4359bc19c3f57d50e646a0c1a192771d4a5d4d66692",
+      "tokenCount": 270,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-log_magnitude/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "673b04478155d4fd8b0cb647e06b0eb7d6e5021ce4307e80f3a48f3bdb3d9898",
+      "tokenCount": 300,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-log_magnitude/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "1e2356de1b9f95100786c4359bc19c3f57d50e646a0c1a192771d4a5d4d66692",
+      "tokenCount": 270,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-log_magnitude/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "1e2356de1b9f95100786c4359bc19c3f57d50e646a0c1a192771d4a5d4d66692",
+      "tokenCount": 270,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-log_magnitude/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "1e2356de1b9f95100786c4359bc19c3f57d50e646a0c1a192771d4a5d4d66692",
+      "tokenCount": 270,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-log_magnitude/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "1e2356de1b9f95100786c4359bc19c3f57d50e646a0c1a192771d4a5d4d66692",
+      "tokenCount": 270,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-log_magnitude/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "1e2356de1b9f95100786c4359bc19c3f57d50e646a0c1a192771d4a5d4d66692",
+      "tokenCount": 270,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-log_magnitude/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "b9a20bc63da56aa2e481600bf018dc99efb153fc687a2cfbf059e9be3e165a68",
+      "tokenCount": 283,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-log_magnitude/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "d7678eac7ad5385b4c52f10436af145800449cc60389b06bb5e83f0f49128674",
+      "tokenCount": 266,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-log_magnitude/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "d7678eac7ad5385b4c52f10436af145800449cc60389b06bb5e83f0f49128674",
+      "tokenCount": 266,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-log_magnitude/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "da74dd92bb9d0d8991ac924c3af476dffcbac7cc5a214c679479036240148196",
+      "tokenCount": 256,
+      "publicStage": "executed_numeric_failed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-exponential_decay/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "009c482856efd3ffe0da5c97fe9af61707fb861963ccd641cba31624a973ac17",
+      "tokenCount": 260,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-exponential_decay/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "d9270a2030f47361273d01ff9d25e51b4af0d2c6edf4b73b862405c4d06fc261",
+      "tokenCount": 276,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-exponential_decay/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "b59a054f358b34fb524f4d7e361895af46ccf9e762fca50b4d3a3827ea6f884a",
+      "tokenCount": 269,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-exponential_decay/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "b59a054f358b34fb524f4d7e361895af46ccf9e762fca50b4d3a3827ea6f884a",
+      "tokenCount": 269,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-exponential_decay/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "ab6f044e062470a450e5b0e68ef1ba17ffdec61cb2c97fb3fb24c19e98f39e56",
+      "tokenCount": 259,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-exponential_decay/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "ab6f044e062470a450e5b0e68ef1ba17ffdec61cb2c97fb3fb24c19e98f39e56",
+      "tokenCount": 259,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-exponential_decay/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "009c482856efd3ffe0da5c97fe9af61707fb861963ccd641cba31624a973ac17",
+      "tokenCount": 260,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-exponential_decay/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "009c482856efd3ffe0da5c97fe9af61707fb861963ccd641cba31624a973ac17",
+      "tokenCount": 260,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-exponential_decay/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "c88cc56196c1427a0050bfc9c6a47efa6e7c24443e962600153a885a5bde9968",
+      "tokenCount": 265,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-exponential_decay/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "c88cc56196c1427a0050bfc9c6a47efa6e7c24443e962600153a885a5bde9968",
+      "tokenCount": 265,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-exponential_decay/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "2565778865053ce0177e3f4d7d3602abd7fd7fc66ae3389d193197e63b64fd7c",
+      "tokenCount": 242,
+      "publicStage": "passed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-bounded_product/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "99a48f0d6d1a91df7bd61f8a52af206d7251e0ea25c6c3b51c86f241daf1a20f",
+      "tokenCount": 290,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-bounded_product/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "0eeab384731e77232a7255be52e340f76aa0b8c0091217f614ca641591647102",
+      "tokenCount": 339,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-bounded_product/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "99a48f0d6d1a91df7bd61f8a52af206d7251e0ea25c6c3b51c86f241daf1a20f",
+      "tokenCount": 290,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-bounded_product/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "99a48f0d6d1a91df7bd61f8a52af206d7251e0ea25c6c3b51c86f241daf1a20f",
+      "tokenCount": 290,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-bounded_product/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "658c4dd17e756cc7ab0bb4293498834b2cb8e30c3a204be27f14741a28dab832",
+      "tokenCount": 294,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-bounded_product/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "0cce5ef9783ca4d8d1f0c7a8472de835a8fd04f3b7f0f2c251c9f20ecaba7172",
+      "tokenCount": 306,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-bounded_product/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "6bb076f2f26f3451dea69a8fc860fe75a28e959f38ff2cb11f65c23c938d583b",
+      "tokenCount": 296,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-bounded_product/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "6bb076f2f26f3451dea69a8fc860fe75a28e959f38ff2cb11f65c23c938d583b",
+      "tokenCount": 296,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-bounded_product/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "3b8bc6d43682198fc7f2d71eda7bbb3a56b0f0eaad125aa68aa89f79d037ab2b",
+      "tokenCount": 302,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-bounded_product/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "3b8bc6d43682198fc7f2d71eda7bbb3a56b0f0eaad125aa68aa89f79d037ab2b",
+      "tokenCount": 302,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-bounded_product/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "abff4ea36cb291f088b00d1ad928c60f2c7baf8ddad32ccb850bfb1b88d13721",
+      "tokenCount": 264,
+      "publicStage": "passed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_angle/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "8fe86690078f694cb7ccb573ea504cc060445fa39a395f213539728b27f98b07",
+      "tokenCount": 251,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_angle/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "7d8e0adc3f73f628f1e30e81bf9ac1950b45bf36203b2117ca13033d7267df30",
+      "tokenCount": 277,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_angle/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "8fe86690078f694cb7ccb573ea504cc060445fa39a395f213539728b27f98b07",
+      "tokenCount": 251,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_angle/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "8fe86690078f694cb7ccb573ea504cc060445fa39a395f213539728b27f98b07",
+      "tokenCount": 251,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_angle/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "8fe86690078f694cb7ccb573ea504cc060445fa39a395f213539728b27f98b07",
+      "tokenCount": 251,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_angle/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "8fe86690078f694cb7ccb573ea504cc060445fa39a395f213539728b27f98b07",
+      "tokenCount": 251,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_angle/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "5d71ba574fc7820890c9be26e5b3cf6bf8161fa67ed884c4abccb1a50f272e01",
+      "tokenCount": 263,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_angle/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "5d71ba574fc7820890c9be26e5b3cf6bf8161fa67ed884c4abccb1a50f272e01",
+      "tokenCount": 263,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_angle/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "8fe86690078f694cb7ccb573ea504cc060445fa39a395f213539728b27f98b07",
+      "tokenCount": 251,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_angle/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "8fe86690078f694cb7ccb573ea504cc060445fa39a395f213539728b27f98b07",
+      "tokenCount": 251,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-signed_angle/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "e498df19389afa7a4dcc5345d9e0d357c14f70adfae46eec9756670781cbee83",
+      "tokenCount": 243,
+      "publicStage": "passed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-transfer_sign/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "9bcb5b68c87d2a45fd07adeef529de4ecd372fd99234733d708c174d20272ec3",
+      "tokenCount": 287,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-transfer_sign/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "5781acbaeec9ac2a7bf9e95bbe16a1b686746a3094e6705700453d8e760a4136",
+      "tokenCount": 319,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-transfer_sign/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "7b3d503bf0874dfe40698a59f9898f87e2917c3d568ac69161e45eb8040ea3e3",
+      "tokenCount": 285,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-transfer_sign/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "9bcb5b68c87d2a45fd07adeef529de4ecd372fd99234733d708c174d20272ec3",
+      "tokenCount": 287,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-transfer_sign/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "9bcb5b68c87d2a45fd07adeef529de4ecd372fd99234733d708c174d20272ec3",
+      "tokenCount": 287,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-transfer_sign/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "9bcb5b68c87d2a45fd07adeef529de4ecd372fd99234733d708c174d20272ec3",
+      "tokenCount": 287,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-transfer_sign/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "586121b6731ce205496b8b5da1c2be07df0315ff3a8655b8de2a2075fc62f105",
+      "tokenCount": 283,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-transfer_sign/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "586121b6731ce205496b8b5da1c2be07df0315ff3a8655b8de2a2075fc62f105",
+      "tokenCount": 283,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-transfer_sign/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "9bcb5b68c87d2a45fd07adeef529de4ecd372fd99234733d708c174d20272ec3",
+      "tokenCount": 287,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-transfer_sign/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "9bcb5b68c87d2a45fd07adeef529de4ecd372fd99234733d708c174d20272ec3",
+      "tokenCount": 287,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-transfer_sign/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "b57c59853bc612f6a430e17236a904f8a5aff97fb7bff9a4d9b0a2099c5536b5",
+      "tokenCount": 255,
+      "publicStage": "passed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-periodic_triangle/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "9ff0d4e6bb776e6b5b51e4479e581565ccb3d3fb63e592ad2fda4f149c60fa31",
+      "tokenCount": 280,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-periodic_triangle/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "19cd061bce607d2559ea5c2dbd02b027ee71d2fdd24a66bdb51e6471937a645a",
+      "tokenCount": 265,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-periodic_triangle/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "9ff0d4e6bb776e6b5b51e4479e581565ccb3d3fb63e592ad2fda4f149c60fa31",
+      "tokenCount": 280,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-periodic_triangle/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "9ff0d4e6bb776e6b5b51e4479e581565ccb3d3fb63e592ad2fda4f149c60fa31",
+      "tokenCount": 280,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-periodic_triangle/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "9ff0d4e6bb776e6b5b51e4479e581565ccb3d3fb63e592ad2fda4f149c60fa31",
+      "tokenCount": 280,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-periodic_triangle/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "9ff0d4e6bb776e6b5b51e4479e581565ccb3d3fb63e592ad2fda4f149c60fa31",
+      "tokenCount": 280,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-periodic_triangle/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "9ff0d4e6bb776e6b5b51e4479e581565ccb3d3fb63e592ad2fda4f149c60fa31",
+      "tokenCount": 280,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-periodic_triangle/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "9ff0d4e6bb776e6b5b51e4479e581565ccb3d3fb63e592ad2fda4f149c60fa31",
+      "tokenCount": 280,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-periodic_triangle/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "6ec4ebd9c9755a4c71df8bb704638e0ae4dcf1f7bec99f7eed62768de49e1e7c",
+      "tokenCount": 294,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-periodic_triangle/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "6ec4ebd9c9755a4c71df8bb704638e0ae4dcf1f7bec99f7eed62768de49e1e7c",
+      "tokenCount": 294,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-periodic_triangle/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "151850ce74956aebd7629ac5f865681d5c8116d2a52d6bc7fc51195450213f78",
+      "tokenCount": 259,
+      "publicStage": "executed_numeric_failed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-huber_loss/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "d1a10332f34baa037a5cbb2222918281687765c14d960e240b42383e7dc72f22",
+      "tokenCount": 338,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-huber_loss/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "f102545db4fd64d4dac8bc73f01144f6b4939413de682ee538f38b5e6815031c",
+      "tokenCount": 342,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "compute_stage_absent",
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-huber_loss/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "d1a10332f34baa037a5cbb2222918281687765c14d960e240b42383e7dc72f22",
+      "tokenCount": 338,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-huber_loss/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "d1a10332f34baa037a5cbb2222918281687765c14d960e240b42383e7dc72f22",
+      "tokenCount": 338,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-huber_loss/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "d1a10332f34baa037a5cbb2222918281687765c14d960e240b42383e7dc72f22",
+      "tokenCount": 338,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-huber_loss/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "d1a10332f34baa037a5cbb2222918281687765c14d960e240b42383e7dc72f22",
+      "tokenCount": 338,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-huber_loss/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "cdda3ba86bcfe08b353e544ff03927964e359efb8b23363aa3aa14a63e61c77c",
+      "tokenCount": 325,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-huber_loss/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "cdda3ba86bcfe08b353e544ff03927964e359efb8b23363aa3aa14a63e61c77c",
+      "tokenCount": 325,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-huber_loss/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "0071b9a52880d57ee53c72aa506e3a65c1f4fec1ad75dda631ef5eed9b7063a8",
+      "tokenCount": 333,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-huber_loss/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "0071b9a52880d57ee53c72aa506e3a65c1f4fec1ad75dda631ef5eed9b7063a8",
+      "tokenCount": 333,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-huber_loss/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "ccaa23aac83920a1ed688497a0082590de7ea0a76d67c20c12dbe85f1128d273",
+      "tokenCount": 303,
+      "publicStage": "executed_numeric_failed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-quadratic_blend/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "96d7c083249827bfcf7518e7ab19c4968d938b68bdaa02ff020c6174b8b46180",
+      "tokenCount": 255,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-quadratic_blend/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "d8bb121c544b425bf629a25313f1e7afacb13831913f93a3accb4ff7708fa238",
+      "tokenCount": 282,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-quadratic_blend/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "96d7c083249827bfcf7518e7ab19c4968d938b68bdaa02ff020c6174b8b46180",
+      "tokenCount": 255,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-quadratic_blend/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "96d7c083249827bfcf7518e7ab19c4968d938b68bdaa02ff020c6174b8b46180",
+      "tokenCount": 255,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-quadratic_blend/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "96d7c083249827bfcf7518e7ab19c4968d938b68bdaa02ff020c6174b8b46180",
+      "tokenCount": 255,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-quadratic_blend/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "96d7c083249827bfcf7518e7ab19c4968d938b68bdaa02ff020c6174b8b46180",
+      "tokenCount": 255,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-quadratic_blend/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "96d7c083249827bfcf7518e7ab19c4968d938b68bdaa02ff020c6174b8b46180",
+      "tokenCount": 255,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-quadratic_blend/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "96d7c083249827bfcf7518e7ab19c4968d938b68bdaa02ff020c6174b8b46180",
+      "tokenCount": 255,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-quadratic_blend/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "954e053af13ba7603fc17f178fcae47de43e1778cb526a4a6670f98d722ae57f",
+      "tokenCount": 271,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-quadratic_blend/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "954e053af13ba7603fc17f178fcae47de43e1778cb526a4a6670f98d722ae57f",
+      "tokenCount": 271,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-quadratic_blend/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "efb790eb73b1e69354c9a7a94bfd7abcf5f55bf8b502ca04aac4fa2038b643ea",
+      "tokenCount": 254,
+      "publicStage": "passed",
+      "contractViolations": []
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-window_select/base/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "base",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "379c98e0dd122b3ea181a766e74226f462721f626108ef8dbc5ab12a81611193",
+      "tokenCount": 277,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-window_select/base_matched_best_of_k/shared/1",
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "base_matched_best_of_k",
+      "arm": "shared",
+      "sampleIndex": 1,
+      "sourceSha256": "023d1b7553e9a9fbf28ce88904d542ce3e65946d20bd2f8261cdd3be03a80601",
+      "tokenCount": 306,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-window_select/channel_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "channel_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "379c98e0dd122b3ea181a766e74226f462721f626108ef8dbc5ab12a81611193",
+      "tokenCount": 277,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-window_select/channel_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "channel_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "379c98e0dd122b3ea181a766e74226f462721f626108ef8dbc5ab12a81611193",
+      "tokenCount": 277,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-window_select/shuffled_context/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "shuffled_context",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "9af09622b06f3926a03883666009f2327e62f9615e6ae3582a82c18c9ed576ae",
+      "tokenCount": 281,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-window_select/shuffled_context/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "shuffled_context",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "9af09622b06f3926a03883666009f2327e62f9615e6ae3582a82c18c9ed576ae",
+      "tokenCount": 281,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-window_select/random_z/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "random_z",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "a7445bf546b6a9493244274f36d5cfcf4d0781a79e391b56501afcd96900cc37",
+      "tokenCount": 262,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-window_select/random_z/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "random_z",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "a7445bf546b6a9493244274f36d5cfcf4d0781a79e391b56501afcd96900cc37",
+      "tokenCount": 262,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-window_select/permuted_gain/mlp_base_cache/0",
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "permuted_gain",
+      "arm": "mlp_base_cache",
+      "sampleIndex": 0,
+      "sourceSha256": "379c98e0dd122b3ea181a766e74226f462721f626108ef8dbc5ab12a81611193",
+      "tokenCount": 277,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-window_select/permuted_gain/mlp_frozen_gain_reprefill/0",
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "permuted_gain",
+      "arm": "mlp_frozen_gain_reprefill",
+      "sampleIndex": 0,
+      "sourceSha256": "379c98e0dd122b3ea181a766e74226f462721f626108ef8dbc5ab12a81611193",
+      "tokenCount": 277,
+      "publicStage": "source_contract_rejected_before_compile",
+      "contractViolations": [
+        "required_override_absent:WORKGROUP_SIZE"
+      ]
+    },
+    {
+      "requestId": "channel-gain-v1-confirmation-gain-window_select/trained_seed47_adapter/shared/0",
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "trained_seed47_adapter",
+      "arm": "shared",
+      "sampleIndex": 0,
+      "sourceSha256": "1a57c2de323c1bc69b0c99819244eacff59ee2f532073416b15505e5f40be679",
+      "tokenCount": 260,
+      "publicStage": "passed",
+      "contractViolations": []
+    }
+  ],
+  "submittedByArmCondition": [
+    {
+      "arm": "mlp_base_cache",
+      "condition": "base",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "source_contract_rejected_before_compile": 16
+      },
+      "combinedPublicAndHiddenPasses": 0,
+      "checkStages": {
+        "source_contract_rejected_before_compile": 192
+      }
+    },
+    {
+      "arm": "mlp_base_cache",
+      "condition": "base_matched_best_of_k",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "source_contract_rejected_before_compile": 16
+      },
+      "combinedPublicAndHiddenPasses": 0,
+      "checkStages": {
+        "source_contract_rejected_before_compile": 192
+      }
+    },
+    {
+      "arm": "mlp_base_cache",
+      "condition": "trained_seed47_adapter",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "passed": 12,
+        "executed_numeric_failed": 4
+      },
+      "combinedPublicAndHiddenPasses": 11,
+      "checkStages": {
+        "passed": 147,
+        "executed_numeric_failed": 45
+      }
+    },
+    {
+      "arm": "mlp_base_cache",
+      "condition": "channel_gain",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "source_contract_rejected_before_compile": 16
+      },
+      "combinedPublicAndHiddenPasses": 0,
+      "checkStages": {
+        "source_contract_rejected_before_compile": 192
+      }
+    },
+    {
+      "arm": "mlp_base_cache",
+      "condition": "shuffled_context",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "source_contract_rejected_before_compile": 16
+      },
+      "combinedPublicAndHiddenPasses": 0,
+      "checkStages": {
+        "source_contract_rejected_before_compile": 192
+      }
+    },
+    {
+      "arm": "mlp_base_cache",
+      "condition": "random_z",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "source_contract_rejected_before_compile": 16
+      },
+      "combinedPublicAndHiddenPasses": 0,
+      "checkStages": {
+        "source_contract_rejected_before_compile": 192
+      }
+    },
+    {
+      "arm": "mlp_base_cache",
+      "condition": "permuted_gain",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "source_contract_rejected_before_compile": 16
+      },
+      "combinedPublicAndHiddenPasses": 0,
+      "checkStages": {
+        "source_contract_rejected_before_compile": 192
+      }
+    },
+    {
+      "arm": "mlp_frozen_gain_reprefill",
+      "condition": "base",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "source_contract_rejected_before_compile": 16
+      },
+      "combinedPublicAndHiddenPasses": 0,
+      "checkStages": {
+        "source_contract_rejected_before_compile": 192
+      }
+    },
+    {
+      "arm": "mlp_frozen_gain_reprefill",
+      "condition": "base_matched_best_of_k",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "source_contract_rejected_before_compile": 16
+      },
+      "combinedPublicAndHiddenPasses": 0,
+      "checkStages": {
+        "source_contract_rejected_before_compile": 192
+      }
+    },
+    {
+      "arm": "mlp_frozen_gain_reprefill",
+      "condition": "trained_seed47_adapter",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "passed": 12,
+        "executed_numeric_failed": 4
+      },
+      "combinedPublicAndHiddenPasses": 11,
+      "checkStages": {
+        "passed": 147,
+        "executed_numeric_failed": 45
+      }
+    },
+    {
+      "arm": "mlp_frozen_gain_reprefill",
+      "condition": "channel_gain",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "source_contract_rejected_before_compile": 16
+      },
+      "combinedPublicAndHiddenPasses": 0,
+      "checkStages": {
+        "source_contract_rejected_before_compile": 192
+      }
+    },
+    {
+      "arm": "mlp_frozen_gain_reprefill",
+      "condition": "shuffled_context",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "source_contract_rejected_before_compile": 16
+      },
+      "combinedPublicAndHiddenPasses": 0,
+      "checkStages": {
+        "source_contract_rejected_before_compile": 192
+      }
+    },
+    {
+      "arm": "mlp_frozen_gain_reprefill",
+      "condition": "random_z",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "source_contract_rejected_before_compile": 16
+      },
+      "combinedPublicAndHiddenPasses": 0,
+      "checkStages": {
+        "source_contract_rejected_before_compile": 192
+      }
+    },
+    {
+      "arm": "mlp_frozen_gain_reprefill",
+      "condition": "permuted_gain",
+      "submittedTasks": 16,
+      "hiddenOnlyStages": {
+        "source_contract_rejected_before_compile": 16
+      },
+      "combinedPublicAndHiddenPasses": 0,
+      "checkStages": {
+        "source_contract_rejected_before_compile": 192
+      }
+    }
+  ],
+  "adapterTasks": [
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "sourceSha256": "98a4f8d70b3ef49dd55c4999d235a8fbcc6e98be04b58744e36b0e3cbb61a831",
+      "publicStage": "passed",
+      "hiddenStage": "passed",
+      "publicNumericMismatchCount": 0,
+      "hiddenChecksPassed": 12,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 0,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "sourceSha256": "2a2d8c72cbc50b2acc5f755c4cbf7e6c8cadcc800ba9b819cbf84763358b4647",
+      "publicStage": "passed",
+      "hiddenStage": "passed",
+      "publicNumericMismatchCount": 0,
+      "hiddenChecksPassed": 12,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 0,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "sourceSha256": "8e91488e88104e62b782c63a87b695e381ca651a3b265489a48e7e418660b4ab",
+      "publicStage": "passed",
+      "hiddenStage": "passed",
+      "publicNumericMismatchCount": 0,
+      "hiddenChecksPassed": 12,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 0,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "sourceSha256": "8865569886ee31a57ba3b64bafaf9fc8c7b52dd8a4d08c7c73566dbe8a31832e",
+      "publicStage": "executed_numeric_failed",
+      "hiddenStage": "executed_numeric_failed",
+      "publicNumericMismatchCount": 2,
+      "hiddenChecksPassed": 3,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 9,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "sourceSha256": "28f7b6f40fc1ded2607cd9c2e0d2f2060370020456fa69d8e2a10c7a5fb67b51",
+      "publicStage": "executed_numeric_failed",
+      "hiddenStage": "passed",
+      "publicNumericMismatchCount": 1,
+      "hiddenChecksPassed": 12,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 0,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "sourceSha256": "89fada143106384b9fd0266a4cfd1815194e2162d77fe502e4bd00cafa56e242",
+      "publicStage": "passed",
+      "hiddenStage": "passed",
+      "publicNumericMismatchCount": 0,
+      "hiddenChecksPassed": 12,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 0,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "sourceSha256": "96a8fe7b2e9a35d4078767dc654ff407d26241191130168f85b25129afb271f5",
+      "publicStage": "passed",
+      "hiddenStage": "passed",
+      "publicNumericMismatchCount": 0,
+      "hiddenChecksPassed": 12,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 0,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "sourceSha256": "da74dd92bb9d0d8991ac924c3af476dffcbac7cc5a214c679479036240148196",
+      "publicStage": "executed_numeric_failed",
+      "hiddenStage": "executed_numeric_failed",
+      "publicNumericMismatchCount": 4,
+      "hiddenChecksPassed": 0,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 12,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "sourceSha256": "2565778865053ce0177e3f4d7d3602abd7fd7fc66ae3389d193197e63b64fd7c",
+      "publicStage": "passed",
+      "hiddenStage": "passed",
+      "publicNumericMismatchCount": 0,
+      "hiddenChecksPassed": 12,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 0,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "sourceSha256": "abff4ea36cb291f088b00d1ad928c60f2c7baf8ddad32ccb850bfb1b88d13721",
+      "publicStage": "passed",
+      "hiddenStage": "passed",
+      "publicNumericMismatchCount": 0,
+      "hiddenChecksPassed": 12,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 0,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "sourceSha256": "e498df19389afa7a4dcc5345d9e0d357c14f70adfae46eec9756670781cbee83",
+      "publicStage": "passed",
+      "hiddenStage": "passed",
+      "publicNumericMismatchCount": 0,
+      "hiddenChecksPassed": 12,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 0,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "sourceSha256": "b57c59853bc612f6a430e17236a904f8a5aff97fb7bff9a4d9b0a2099c5536b5",
+      "publicStage": "passed",
+      "hiddenStage": "passed",
+      "publicNumericMismatchCount": 0,
+      "hiddenChecksPassed": 12,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 0,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "sourceSha256": "151850ce74956aebd7629ac5f865681d5c8116d2a52d6bc7fc51195450213f78",
+      "publicStage": "executed_numeric_failed",
+      "hiddenStage": "executed_numeric_failed",
+      "publicNumericMismatchCount": 4,
+      "hiddenChecksPassed": 0,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 12,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "sourceSha256": "ccaa23aac83920a1ed688497a0082590de7ea0a76d67c20c12dbe85f1128d273",
+      "publicStage": "executed_numeric_failed",
+      "hiddenStage": "executed_numeric_failed",
+      "publicNumericMismatchCount": 4,
+      "hiddenChecksPassed": 0,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 12,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "sourceSha256": "efb790eb73b1e69354c9a7a94bfd7abcf5f55bf8b502ca04aac4fa2038b643ea",
+      "publicStage": "passed",
+      "hiddenStage": "passed",
+      "publicNumericMismatchCount": 0,
+      "hiddenChecksPassed": 12,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 0,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "sourceSha256": "1a57c2de323c1bc69b0c99819244eacff59ee2f532073416b15505e5f40be679",
+      "publicStage": "passed",
+      "hiddenStage": "passed",
+      "publicNumericMismatchCount": 0,
+      "hiddenChecksPassed": 12,
+      "hiddenChecksTotal": 12,
+      "hiddenNumericFailedChecks": 0,
+      "allCompilationPassed": true,
+      "allDispatchPassed": true,
+      "allBoundsPassed": true,
+      "anyRuntimeError": false
+    }
+  ],
+  "gainPairs": [
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "channel_gain",
+      "gainHash": "3958ada380fb6f05596e1b256424eab87bfd78c34d8fa197a156ce84772e0224",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "channel_gain",
+      "gainHash": "2ec39a816d8fe580ff252bbefa0765414b216feba9a7ffb40a2d4fae3bd6fe04",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "channel_gain",
+      "gainHash": "50fc4a75e928ab8ac290b5d31d76946f37f6ef1bf69997617492ff38ce79e228",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "channel_gain",
+      "gainHash": "fab18369a27e6abb4a62459d1f138229d2b7ba71909e26b9f72d6524184ddbd7",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "channel_gain",
+      "gainHash": "97583f54d675d54cf8f61c64c121fb99ef0c6ae0e0a578467155e3ee56ee60b4",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "channel_gain",
+      "gainHash": "f6a2dcd5e0fc1b20c0274dff24daeaad0548df016a8dfdc5dd2511f2ad19c854",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "channel_gain",
+      "gainHash": "9427f0dd6fbb48543b01d42e7ecfde6c9890c8157d9a6c1f3e064e71c85e9ba1",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "channel_gain",
+      "gainHash": "2f78e2dbd1c6553717e2e99b91cb7d4c58fd8415a0779a1347e0bd78cc40fdde",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "channel_gain",
+      "gainHash": "52891c5d8c3e8fd6c325c0b6d393458b1e4bf7885bbff4ad8657951c51d2c06e",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "channel_gain",
+      "gainHash": "be99a648bacacf94d78ee16912db8decf450ad79f5aa204c41377cfa9e4aaf58",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "channel_gain",
+      "gainHash": "75a05e3b0c25a3a2d7e80728f0199e1c3ca3dcafc1201cb55a67a807b86c1833",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "channel_gain",
+      "gainHash": "f8e249a4941a937747856f8b4fede631f5acc7671ff26c946cc9b16c382fbe09",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "channel_gain",
+      "gainHash": "1183e203572363b9b9af9e846e37b36415865ccef188e99c96f612960b4c8ebe",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "channel_gain",
+      "gainHash": "f5330a4a73c10cfcd57b8063e875f5b3502f27d9196f2141a287d39207e9dc33",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "channel_gain",
+      "gainHash": "62bae2eaf488116e72dfc128dfd8ae3264630448cc76eda2af75c00cf9f3559d",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "channel_gain",
+      "gainHash": "c76a327f7d2fb37af96d007f73de8036885f4ad189380106d3f3292ea730fc90",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "shuffled_context",
+      "gainHash": "ebe43a29821248b6e2383fe8abb1bb42e16f8088f5fec1cdcde4fdfe7ef8eccc",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "shuffled_context",
+      "gainHash": "e02303a1320d6ab3c242f1d028914cd4590d5170672c36d1673f6fce7039280f",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "shuffled_context",
+      "gainHash": "a671c8e51b2b180c1920c7bf895cbf4e85b547fc1972c8910a4e1cbf285e7e6c",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "shuffled_context",
+      "gainHash": "385a40cdb2216b378ca76c99549ee2122f1fb56edb2f55a75e9e741323247ca2",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "shuffled_context",
+      "gainHash": "c1e123154616fc23cda30913c7b3d86c32a3cb63febb321ab8aa104eb49f2311",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "shuffled_context",
+      "gainHash": "d5a0b6c63a97289bf95d19b96a48b7a3cb42ca46815eeaad13bda18a20927717",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "shuffled_context",
+      "gainHash": "1da52e926f61d97a8b2b807cf8db02227edc06be0e862280d7586fcb639fdaf6",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "shuffled_context",
+      "gainHash": "49ee766609ea82d8325d1f3d5953adfdb11e096192d5075eb1d87d8306f11f4f",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "shuffled_context",
+      "gainHash": "f5cc245540c30724d19482c1779bcb6eb621e77d1d17f77ce066a91c090c7320",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "shuffled_context",
+      "gainHash": "8ed135dd45f39ad09b99e07b8c9dfc02f1592c06ef10c31b0df8ba7d51cd1c61",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "shuffled_context",
+      "gainHash": "e19b22420b324f690ca2f52e3993ba3f52369f75b584710bb3c0fa2b3d7e365b",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "shuffled_context",
+      "gainHash": "03b7b8874cd1f5177bcbd97eed6a744c741d997684c0e24a99ef2fe864e81f14",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "shuffled_context",
+      "gainHash": "b2d0c2f2aee23627acb6c4d5982bef9e978192a37150e1900c73fc77034fd714",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "shuffled_context",
+      "gainHash": "ec6656c4ce14c79e1c306afddcc33a7bd31d3e66705d307b3695f149793ea4d8",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "shuffled_context",
+      "gainHash": "7ab5d43debb599a91593bb6b26d12e7212d8f5c2d03ae5ac7047b95e864e8301",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "shuffled_context",
+      "gainHash": "030921a9c47f1ff195541a72d630c612d0c77f6bad2687ab8322ac4b91f15408",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "random_z",
+      "gainHash": "8566688cd79fc38b776275009ba49439f8a405c9e9a428945e52a8a79e6ebdf3",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "random_z",
+      "gainHash": "20b5f3b898091920fedb84393144b6b3f4b8a24b95a145c80e34d90eade377f6",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "random_z",
+      "gainHash": "98a09ee2a206a23a227150088388c2e3ff38c12b6977d6239aa8885fb65ecbf1",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "random_z",
+      "gainHash": "bc7f26edca7f5f1bc86ff84cc98ffb4a80d30400446c48dd809596cf46e425ae",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "random_z",
+      "gainHash": "16d8ec5694c1620ee77542c01cd01f4f5c5f6e207a54eb75c6a5f9065dac540e",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "random_z",
+      "gainHash": "362576c0e3839c72edbe4a126111cb68d0ad2a052ba888f81843ebafb8b3763b",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "random_z",
+      "gainHash": "c8b1d3bfd783f6d78cfb3e0013c6334d62b51991df8f8b37e01b6c5baf85161f",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "random_z",
+      "gainHash": "756d533bf05fefe47ee8ad205071edd3c1e599fe09828daf8b8d3c0a785fae8a",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "random_z",
+      "gainHash": "33879877d895bc45e64f26813f6c83f644e6c797e322cf93825f9744161389ab",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "random_z",
+      "gainHash": "d6599e0d85e2f15a15fffd5a3154076795e9bb2bdf208088412d80d25e804fb2",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "random_z",
+      "gainHash": "4a26d580434186fa16406dca4deb4594baf5eeab18dfd8b56a7d498fdad85c29",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "random_z",
+      "gainHash": "45f5471afa86f27fc858de437505e75130bbe9043f30f9b4809b97f969318b64",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "random_z",
+      "gainHash": "5c93db9bfff18f06347788a112ae183182c7894ed37ea390cbc5936c687ae8df",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "random_z",
+      "gainHash": "0121396e31c47310e5aac102368dd9b5e6311177477905400b4601ed35180f8c",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "random_z",
+      "gainHash": "bba4c3d9937ef8d416957f1c071a7d08e1ed16cb68bda4f6f986e1efc70009c8",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "random_z",
+      "gainHash": "647abb46e5fd66c6f1cc461755f12ff8fa4b7b68707e302767cead6c9623c3c4",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "condition": "permuted_gain",
+      "gainHash": "86e2e0726d5d8ef0d58b3ffcfc781ebc013268dec77f9829fcd7d7a9c4fafa5d",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "condition": "permuted_gain",
+      "gainHash": "ba1077132192ab6d7678ca5c666d063666ed8965eba2a87461a2c0c6ae04e357",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "condition": "permuted_gain",
+      "gainHash": "6a01e42e40616b4d5dee8a7d7560ba8c23bd36b18c0869a67dc4fda0a293349e",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "condition": "permuted_gain",
+      "gainHash": "bced47ac41e98f996ca6c52bf67d03475d5bd4153ef3f2124b377af6931e5953",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "condition": "permuted_gain",
+      "gainHash": "dc49ef9931b06c2a6d542eff5c3e06c10e1f42d49a1ae78ba3157d0694ac9a88",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "condition": "permuted_gain",
+      "gainHash": "432a70f893e0edf092374ae1dc37377bf171fdce12cf76fd1694c8af21fc5c02",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "condition": "permuted_gain",
+      "gainHash": "547857185651d8fb7155bbe9d832f67de677402f5ebe620af953cfab6342b9bf",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "condition": "permuted_gain",
+      "gainHash": "60af0999fe780f860084fb4c002dfce9b5c78220851c74852619d82d02ad364c",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "condition": "permuted_gain",
+      "gainHash": "c5599350e14753179be90cc12cf6f086a7483b22a408a72dcd6f0d082d1d6c10",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "condition": "permuted_gain",
+      "gainHash": "49ea07305fc54d56096f142271dd5d3e2498b515dfe59ccf8e0ad413210dcca9",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "condition": "permuted_gain",
+      "gainHash": "1878349810cca4e95aaeae133a9b3000b75960b23908442f51ee45ee545fb247",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "condition": "permuted_gain",
+      "gainHash": "dab09f9118ca2799079c10ddc3df1efa0f4a963ea9157a2e7586415bb025b2b8",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "condition": "permuted_gain",
+      "gainHash": "b2090d0c6cb209aa920c9e43b7637f30a241d84cb591905bf8ec83f962484512",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "condition": "permuted_gain",
+      "gainHash": "dbd5546bb60e3135617c8d13f005483cf4d7b51393c6039b2ac2a20144ac58c4",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "condition": "permuted_gain",
+      "gainHash": "1ce0871ede2f2cffc26808f46a9b94edbbe0446b564dc9a55f899b13f14ce49a",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "condition": "permuted_gain",
+      "gainHash": "bd200a07d9ace57be4117b3fab35bfc7bf62e8d554c835ce0bf90c1e935d7929",
+      "arms": [
+        "mlp_base_cache",
+        "mlp_frozen_gain_reprefill"
+      ],
+      "identicalAcrossArms": true
+    }
+  ],
+  "cacheSummary": {
+    "diagnosticPairs": 16,
+    "identicalGainPairsAcrossAllTransformConditions": 64,
+    "sameFourTokenTeacherForcedPrefixPairs": 16,
+    "changedKvLayersForEveryPair": [
+      31
+    ],
+    "allOtherKvExactlyEqual": true,
+    "all24RecurrentLayersExactlyEqual": true,
+    "logitsChangedPairs": 16,
+    "logitTop1ChangedPairs": 0,
+    "logitRelativeL2": {
+      "min": 0.0008175628755058219,
+      "max": 0.001879793849698596
+    },
+    "logitMaxAbsolute": {
+      "min": 0.013710737228393555,
+      "max": 0.02539348602294922
+    },
+    "layer31KeysRelativeL2": {
+      "min": 0.006470107461105657,
+      "max": 0.007245371728170753
+    },
+    "layer31ValuesRelativeL2": {
+      "min": 0.0056634646096839,
+      "max": 0.0061100104672789845
+    },
+    "layer31KeysMaxAbsolute": {
+      "min": 0.109375,
+      "max": 0.17730712890625
+    },
+    "layer31ValuesMaxAbsolute": {
+      "min": 0.75,
+      "max": 2.84375
+    },
+    "diagnosticMs": 232853.56751999573
+  },
+  "cacheDiagnostics": [
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-discriminant",
+      "gainHash": "3958ada380fb6f05596e1b256424eab87bfd78c34d8fa197a156ce84772e0224",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 608256,
+          "relativeL2": 0.006470107461105657,
+          "maxAbsolute": 0.13433837890625,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 608256,
+          "relativeL2": 0.0056634646096839,
+          "maxAbsolute": 0.9375,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.0017802041908941105,
+        "maxAbsolute": 0.02170085906982422,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14054.729401999968
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-signed_root",
+      "gainHash": "2ec39a816d8fe580ff252bbefa0765414b216feba9a7ffb40a2d4fae3bd6fe04",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 615424,
+          "relativeL2": 0.006773268083128431,
+          "maxAbsolute": 0.12896728515625,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 615424,
+          "relativeL2": 0.006055687731725968,
+          "maxAbsolute": 0.875,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.001449547198004049,
+        "maxAbsolute": 0.01748824119567871,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14703.492926999927
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-inverse_magnitude",
+      "gainHash": "50fc4a75e928ab8ac290b5d31d76946f37f6ef1bf69997617492ff38ce79e228",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 615424,
+          "relativeL2": 0.0066948391779357895,
+          "maxAbsolute": 0.1171875,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 615424,
+          "relativeL2": 0.005852296351636022,
+          "maxAbsolute": 2.5,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.0018347330964386451,
+        "maxAbsolute": 0.02539348602294922,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14278.911377000157
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-smoothstep_unit",
+      "gainHash": "fab18369a27e6abb4a62459d1f138229d2b7ba71909e26b9f72d6524184ddbd7",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 620544,
+          "relativeL2": 0.006921958876778984,
+          "maxAbsolute": 0.17730712890625,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 620544,
+          "relativeL2": 0.0058438454541505916,
+          "maxAbsolute": 0.875,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.001303314683355988,
+        "maxAbsolute": 0.016882896423339844,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14468.881156000309
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-positive_modulus",
+      "gainHash": "97583f54d675d54cf8f61c64c121fb99ef0c6ae0e0a578467155e3ee56ee60b4",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 617472,
+          "relativeL2": 0.006878859974962033,
+          "maxAbsolute": 0.13671875,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 617472,
+          "relativeL2": 0.006041595402530103,
+          "maxAbsolute": 2.59375,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.0018237497744435277,
+        "maxAbsolute": 0.023081064224243164,
+        "top1Changed": false
+      },
+      "diagnosticMs": 17303.016142000444
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-round_to_grid",
+      "gainHash": "f6a2dcd5e0fc1b20c0274dff24daeaad0548df016a8dfdc5dd2511f2ad19c854",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 622592,
+          "relativeL2": 0.007245371728170753,
+          "maxAbsolute": 0.126953125,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 622592,
+          "relativeL2": 0.0061100104672789845,
+          "maxAbsolute": 0.875,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.001866549007943973,
+        "maxAbsolute": 0.02274942398071289,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14347.585695999674
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-minimum_magnitude",
+      "gainHash": "9427f0dd6fbb48543b01d42e7ecfde6c9890c8157d9a6c1f3e064e71c85e9ba1",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 612352,
+          "relativeL2": 0.006614180644300438,
+          "maxAbsolute": 0.1171875,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 612352,
+          "relativeL2": 0.005978461496861414,
+          "maxAbsolute": 2.84375,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.001524587934462766,
+        "maxAbsolute": 0.018102169036865234,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14425.337801000103
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-log_magnitude",
+      "gainHash": "2f78e2dbd1c6553717e2e99b91cb7d4c58fd8415a0779a1347e0bd78cc40fdde",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 612352,
+          "relativeL2": 0.00696962245438475,
+          "maxAbsolute": 0.109375,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 612352,
+          "relativeL2": 0.0060257991754515475,
+          "maxAbsolute": 2.5,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.0014491355478072631,
+        "maxAbsolute": 0.019550055265426636,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14391.730499999598
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-exponential_decay",
+      "gainHash": "52891c5d8c3e8fd6c325c0b6d393458b1e4bf7885bbff4ad8657951c51d2c06e",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 606208,
+          "relativeL2": 0.006993892256943477,
+          "maxAbsolute": 0.119140625,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 606208,
+          "relativeL2": 0.006092689345236616,
+          "maxAbsolute": 2.6875,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.001879793849698596,
+        "maxAbsolute": 0.02413487434387207,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14074.129086999223
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-bounded_product",
+      "gainHash": "be99a648bacacf94d78ee16912db8decf450ad79f5aa204c41377cfa9e4aaf58",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 619520,
+          "relativeL2": 0.006738366620848854,
+          "maxAbsolute": 0.138824462890625,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 619520,
+          "relativeL2": 0.0057248518245739555,
+          "maxAbsolute": 0.75,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.0013867823489133032,
+        "maxAbsolute": 0.01868140697479248,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14431.385547999293
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-signed_angle",
+      "gainHash": "75a05e3b0c25a3a2d7e80728f0199e1c3ca3dcafc1201cb55a67a807b86c1833",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 616448,
+          "relativeL2": 0.0067642285389617985,
+          "maxAbsolute": 0.134765625,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 616448,
+          "relativeL2": 0.0060418724958295105,
+          "maxAbsolute": 2.5625,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.001223865579492237,
+        "maxAbsolute": 0.013710737228393555,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14438.393411999568
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-transfer_sign",
+      "gainHash": "f8e249a4941a937747856f8b4fede631f5acc7671ff26c946cc9b16c382fbe09",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 614400,
+          "relativeL2": 0.006548770508552319,
+          "maxAbsolute": 0.12603759765625,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 614400,
+          "relativeL2": 0.005782832451690542,
+          "maxAbsolute": 0.875,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.0013407224378129824,
+        "maxAbsolute": 0.016626596450805664,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14374.782443000004
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-periodic_triangle",
+      "gainHash": "1183e203572363b9b9af9e846e37b36415865ccef188e99c96f612960b4c8ebe",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 626688,
+          "relativeL2": 0.007036712940492152,
+          "maxAbsolute": 0.14068603515625,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 626688,
+          "relativeL2": 0.006025098499314712,
+          "maxAbsolute": 0.875,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.0012823216612863175,
+        "maxAbsolute": 0.018178224563598633,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14351.93751799874
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-huber_loss",
+      "gainHash": "f5330a4a73c10cfcd57b8063e875f5b3502f27d9196f2141a287d39207e9dc33",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        31,
+        3938,
+        7,
+        15
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 634880,
+          "relativeL2": 0.006939543110353269,
+          "maxAbsolute": 0.1501922607421875,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 634880,
+          "relativeL2": 0.006092331091551142,
+          "maxAbsolute": 1.125,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.0008175628755058219,
+        "maxAbsolute": 0.015040159225463867,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14763.901685999706
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-quadratic_blend",
+      "gainHash": "62bae2eaf488116e72dfc128dfd8ae3264630448cc76eda2af75c00cf9f3559d",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 607232,
+          "relativeL2": 0.006804701263365599,
+          "maxAbsolute": 0.123046875,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 607232,
+          "relativeL2": 0.005922057227058718,
+          "maxAbsolute": 2.8125,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.0018573263395284334,
+        "maxAbsolute": 0.024549365043640137,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14041.911409998313
+    },
+    {
+      "taskId": "channel-gain-v1-confirmation-gain-window_select",
+      "gainHash": "c76a327f7d2fb37af96d007f73de8036885f4ad189380106d3f3292ea730fc90",
+      "sameGainBothArms": true,
+      "sameTeacherForcedPrefix": true,
+      "teacherForcedPrefix": [
+        1193,
+        33211,
+        313,
+        198
+      ],
+      "measuredKvLayers": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31
+      ],
+      "changedKvLayers": [
+        31
+      ],
+      "measuredRecurrentLayers": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        28,
+        29,
+        30
+      ],
+      "changedRecurrentLayers": [],
+      "allSequenceLengthsMatch": true,
+      "layer31Kv": {
+        "keys": {
+          "measured": true,
+          "elements": 617472,
+          "relativeL2": 0.00669754237313541,
+          "maxAbsolute": 0.1243896484375,
+          "top1Changed": false
+        },
+        "values": {
+          "measured": true,
+          "elements": 617472,
+          "relativeL2": 0.0057584911730538535,
+          "maxAbsolute": 0.875,
+          "top1Changed": false
+        },
+        "sequenceLengthMatches": true
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0.0017188483654505674,
+        "maxAbsolute": 0.021311521530151367,
+        "top1Changed": false
+      },
+      "diagnosticMs": 14403.441415000707
+    }
+  ],
+  "interpretation": [
+    "All160 non-adapter responses are stopped by source contract before compilation/dispatch. Their zero score demonstrates failure to emit the required executable interface, not discrimination among numerically executed algorithms.",
+    "All16 adapter responses compile and dispatch with intact bounds/canaries; five public and four hidden task failures are numeric. Positive modulus fails public but passes all12 hidden checks, yielding11/16 combined success.",
+    "No observed compile failures does not mean rejected sources would compile: they were never submitted to compilation.",
+    "Same-gain cache arms differ in layer31 KV and logits after the same four forced tokens. This is observable cache-path non-equivalence, not a quality improvement or full-model concurrency result.",
+    "Gains apply at MLP layers30/31. Unchanged recurrent states are consistent with the final recurrent layer30 computing its attention state before its MLP; modified layer30 output can affect downstream full-attention layer31."
+  ],
+  "cpuAssertionsPassed": true
+}

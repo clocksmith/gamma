@@ -51,9 +51,15 @@ or success on exposed training examples.
 testbed. It would not establish general coding improvement, cheap specialization or
 recursive self-improvement. The original attempt stopped at budget admission.
 The owner-directed [continuation](channel_gain/protocol-continuation-02.json)
-now runs the fixed selection and confirmation workload, scoring the original
-efficiency target separately. See the [experiment registry](EXPERIMENTS.md)
-for dated evidence; an active run is not a confirmed improvement.
+completed all eight selection and 176 confirmation generations. The
+[confirmation report](channel_gain/CONFIRMATION-RESULTS-04.md) records 0/16 for base,
+best-of-2 and every gain/control arm, versus 11/16 for the trained adapter. Gain
+closure of the adapter gap was zero; gain/control comparisons have zero discordant
+tasks and remain underpowered. All non-adapter outputs failed the source contract
+before compilation; the result tests failure to produce compliant shaders, not
+a comparison of their executed numeric accuracy. This first rule did not establish
+shader improvement.
+The [experiment registry](EXPERIMENTS.md) retains all attempts and costs.
 
 ## 3. Efficient specialization
 
@@ -64,7 +70,10 @@ more cheaply than strong alternatives at equal total compute.
 adapter, including preparation/training where relevant, selection, inference,
 verification and amortization. Freeze the quality/cost tradeoff before testing and
 show it survives fresh tasks and replication. Existing adapter-comparator evidence
-alone does not exhaust these alternatives.
+alone does not exhaust these alternatives. The completed first study consumed
+822.030 seconds in selection, missed its 1% efficiency target, and measured added
+latency of 11.69% / 25.34% for base-cache / re-prefill, with contended timing. It
+produced no gain quality advantage and does not establish this rung.
 
 **Non-claim:** an advantage could be a practical breakthrough; a shader pass-rate
 increase with uncounted setup or weaker baselines does not establish it. No study

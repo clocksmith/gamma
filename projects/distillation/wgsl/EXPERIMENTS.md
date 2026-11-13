@@ -20,7 +20,7 @@ retroactively rewritten by that standard.
 | Arms | MLP/base-cache and MLP/frozen-gain re-prefill, sharing identical gains |
 | All-projections | Not applicable to this rule; neither passed nor failed |
 | Populations | 2 smoke / 4 selection / 16 confirmation semantic families |
-| Status snapshot | Selection complete, gain-negative frozen; 59/176 confirmation generations observed at 13:19:17 UTC, 2026-11-13; no terminal receipt or confirmation quality result |
+| Status snapshot | Completed 8/8 selection requests, 176/176 confirmation generations and 16 cache diagnostics; terminal receipt observed 16:21:07 UTC, 2026-11-13. Base, best-of-2 and every gain/control arm 0/16; trained adapter 11/16. Original joint decision: not confirmed. |
 | Authority | Owner's first-rule request and MLP-only clarification, 2026-11-12 |
 
 The comparison protocol is SAME-R, not a model arm. The trained seed-47 adapter is a
@@ -155,6 +155,31 @@ against base has 0 wins, 0 losses and 6 ties; there is no observed gain benefit.
 Original scores remain preserved. Replay took 5.185 seconds with no new samples,
 model calls, GPU calls or selection. This is exploratory repaired evaluation,
 not confirmation or broad cross-domain transfer evidence.
+
+**2026-11-13, completed confirmation 04:** all 176 unique generations were sealed
+before reserved scoring, producing 224 submission references across both cache
+arms and 16 cache diagnostics. The [authenticated report](channel_gain/CONFIRMATION-RESULTS-04.md)
+and [exact-byte archive](channel_gain/archive-04/archive-manifest.json) retain the full run.
+Base, public-selected best-of-2, actual gains, shuffled-context, random and permuted
+gains all scored 0/16 semantic passes in both cache arms; the trained adapter scored
+11/16. The adapter gap was 11 tasks and gain closure was zero. Paired gain/control
+comparisons had no discordant tasks and remain underpowered, not evidence of
+statistical equivalence. No condition produced a wrong acceptance. The
+[CPU failure/cache audit](channel_gain/CONFIRMATION-AUDIT-04.md) distinguishes the
+failure boundary: all 160 non-adapter outputs failed the required source contract
+before compilation, chiefly missing `WORKGROUP_SIZE`; all 16 adapter outputs
+compiled and dispatched. The zero scores therefore do not compare executed
+numeric correctness of base versus gains.
+
+Selection consumed 822.030 seconds against the unchanged 35.59-second target.
+Confirmation physical stage time was 16,729.217 seconds (4 h 38 min 49 s), including
+cold loading and ending before final receipt serialization/teardown. Added attributed
+latency was 11.69% with base cache and 25.34% with re-prefill. Base-cache incremental
+peak memory remains unqualified; re-prefill retained increment exceeded the adapter
+threshold. The environment ledger records provider retirement and a 639.994-second
+27B screen overlap; timings are contended, not isolated performance. This completed
+study does not establish shader improvement or efficient specialization. It tests
+this rule and implementation, not every reconfiguration architecture.
 
 Append subsequent attempts, deviations, costs and decisions here with their own
 receipts. Preserve these observations if a rerun succeeds. Smoke timing can support

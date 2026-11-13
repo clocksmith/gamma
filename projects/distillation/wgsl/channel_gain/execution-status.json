@@ -1,13 +1,13 @@
 {
   "schema": "gamma.channel-gain-execution-status/v1",
-  "updatedAt": "2026-11-13T11:44:43.157195+00:00",
-  "status": "continuation_02_confirmation_generation_active",
+  "updatedAt": "2026-11-13T16:24:35.008624+00:00",
+  "status": "complete_not_confirmed",
   "protocolFreezeSha256": "f23dc4e50eb480c53ebc759c3aafb3ad457cd50fae4bab0e06595fb419561f3b",
-  "modelRequests": 41,
+  "modelRequests": 217,
   "modelSmokeRequests": 32,
   "selectionTasksEvaluated": 4,
   "selectedCandidate": "gain-negative",
-  "confirmationModelTasksEvaluated": 0,
+  "confirmationModelTasksEvaluated": 16,
   "offlineTrainingSteps": 0,
   "modelSmokeTimingMs": [
     92044.75263499998,
@@ -49,31 +49,31 @@
     "nodeTestReportedMs": 100.814125
   },
   "cacheArms": {
-    "mlp_base_cache": "smoke_measured_not_confirmed",
-    "mlp_frozen_gain_reprefill": "smoke_measured_not_confirmed",
+    "mlp_base_cache": "confirmation_measured_not_confirmed",
+    "mlp_frozen_gain_reprefill": "confirmation_measured_not_confirmed",
     "all_projections": "not_applicable"
   },
   "comparators": {
-    "base": "smoke_public_replay_only_not_confirmation",
-    "base_matched_best_of_k": "smoke_public_replay_only_not_confirmation",
-    "shuffled_context": "smoke_public_replay_only_not_confirmation",
-    "random_z": "smoke_public_replay_only_not_confirmation",
-    "permuted_gain": "smoke_public_replay_only_not_confirmation",
-    "trained_seed47_adapter": "smoke_public_replay_only_not_confirmation"
+    "base": "confirmation_evaluated_16_tasks",
+    "base_matched_best_of_k": "confirmation_evaluated_16_tasks",
+    "shuffled_context": "confirmation_evaluated_16_tasks",
+    "random_z": "confirmation_evaluated_16_tasks",
+    "permuted_gain": "confirmation_evaluated_16_tasks",
+    "trained_seed47_adapter": "confirmation_evaluated_16_tasks"
   },
   "criteria": {
-    "promptDependence": "not_evaluated_on_confirmation",
-    "gapClosure": "not_evaluated_on_confirmation",
-    "setupBudget": "measured_target_exceeded_confirmation_continues",
-    "servingOverhead": "smoke_descriptive_only",
-    "wrongAcceptances": "not_evaluated_on_confirmation"
+    "promptDependence": "underpowered_zero_discordant_tasks_criterion_not_met",
+    "gapClosure": "fail_zero_of_11_adapter_task_gap_closed",
+    "setupBudget": "fail_scored_efficiency_target_23.0972_percent_vs_1_percent",
+    "servingOverhead": "measured_ratios_exceed_10_percent_in_both_arms_contended_timing",
+    "wrongAcceptances": "pass_zero_observed_additional_wrong_acceptances",
+    "memory": {
+      "mlp_base_cache": "unproven_incremental_peak",
+      "mlp_frozen_gain_reprefill": "fail_retained_increment_exceeds_threshold"
+    }
   },
   "blockers": [],
-  "nextWork": [
-    "Complete fixed176 confirmation generations with selected gain-negative",
-    "Seal all submitted sources before hidden verification",
-    "Assemble archived evidence and report quality, efficiency and limits separately"
-  ],
+  "nextWork": [],
   "currentRuntimeLockSha256": "6be766a21347c52762c504d2fa348383bfe388f5a61fefcbaeb82e6a178ba2db",
   "priorAttempt": {
     "receipt": "runtime-repair-02.json",
@@ -85,22 +85,26 @@
   "runtimePreparation": {
     "modelArtifactPreflight": "native-artifact-preflight.json",
     "selectionBudget": "selection-budget-receipt.json",
-    "safeWindow": "Fresh read-only monitor active; provider active with unchanged PID1800927, stageAdmitted0. Private model loading verified from live log.",
+    "safeWindow": "Owner-authorized provider retirement and 639.994-second parallel 27B screen overlap are preserved in environment-04.jsonl. Final timing is qualified as contended, not isolated.",
     "nativeRuntime": "Doppler 64834f4b with explicit F32 split execution overlay",
     "pythonFallbackUsed": false
   },
   "modelDiagnosticRequests": 1,
   "incompleteModelRequests": 1,
   "completedCurrentSmokeRequests": 22,
-  "measuredModelEtaStatus": "Prior smoke forecast for active continuation; not a cutoff",
+  "measuredModelEtaStatus": "Historical smoke forecast retained; fixed selection and confirmation workload now completed",
   "finalReceipts": {
-    "rawSmoke": "native-smoke-03.json",
-    "repairedPublicReplay": "public-replay-03.json",
-    "publicReplaySeal": "public-replay-03-seal.json",
-    "stageLock": "native-stage-lock-03.json",
-    "selection": "native-selection-03/selection-receipt.json",
-    "report": "RESULTS-03.md",
-    "serviceWindow": "service-window-summary.json"
+    "report": "CONFIRMATION-RESULTS-04.md",
+    "reportJson": "confirmation-results-04.json",
+    "authenticatedEvidence": "confirmation-evidence-04.json",
+    "archive": "archive-04/archive-manifest.json",
+    "archiveDigest": "archive-04/archive-manifest.sha256",
+    "stageLock": "native-stage-lock-04.json",
+    "selection": "native-selection-04/selection-receipt.json",
+    "environment": "environment-04.jsonl",
+    "serviceRetirement": "service-retirement-04/service-retirement-04.json",
+    "independentAudit": "CONFIRMATION-AUDIT-04.md",
+    "independentAuditJson": "confirmation-audit-04.json"
   },
   "selectionAdmission": {
     "admitted": false,
@@ -143,17 +147,22 @@
     "exactBaseLogitsRestored": 2,
     "logitsPerTask": 248320,
     "concurrentIsolationTested": false,
-    "fullModelWeightBytesHashed": false
+    "fullModelWeightBytesHashed": false,
+    "scope": "historical smoke03 only; not the16 confirmation cache diagnostics"
   },
   "limitations": [
-    "Public smoke and candidate selection are not confirmation. Both candidates scored zero of four; the frozen timing tie-break selected gain-negative.",
-    "Replay uses original generation/runtime timing and separately sealed repaired public verification on the same device; original receipts and costs retained.",
-    "Admission envelope is empirical and implementation-specific, not a mathematical lower bound.",
-    "Per-request memory and process lifetime GPUBuffer peak have distinct accounting boundaries."
+    "Completed confirmation is a negative result for this selected rule and implementation, not a rejection of every transform or reconfiguration architecture.",
+    "All 160 non-adapter outputs failed source checks before compilation (missing WORKGROUP_SIZE; one also missing compute). Numeric shader accuracy was therefore not compared among these outputs. All 16 adapter outputs compiled and dispatched.",
+    "Prompt-dependence comparisons have zero discordant tasks and remain underpowered; zero observed differences do not prove equivalence.",
+    "Adapter semantic score is11/16 because success requires public and all confirmation checks; hidden-only12/16 is not the semantic score.",
+    "Per-request incremental peak memory is unmeasured. Base-cache peak qualification is unproven; re-prefill retained bytes alone exceed the frozen cap.",
+    "Timing includes owner-authorized provider retirement and a639.994-second parallel27B screen overlap; no isolated performance qualification or exact main-request phase partition is claimed.",
+    "The3,559-second SFT denominator is a conservative recorded residency lower bound, not an active-time hardware counter; the1% criterion remains scored and unmet.",
+    "Historical smoke and admission03 evidence remain preserved separately; they are not confirmation."
   ],
-  "requestCountDefinition": "Snapshot after completed selection: 32 smoke responses, one probe, eight candidate-task responses. Confirmation generation is active; these counts exclude in-flight confirmation until its next recorded snapshot. One earlier adapter attempt failed during prefill.",
-  "completedGenerationRequests": 41,
-  "initiatedGenerationRequests": 42,
+  "requestCountDefinition": "Main 9B study only. Initiated generation means entry into runtime.generate(), not every prefill or preparation operation. Completed: 32 smoke responses + one unscored adapter probe + eight candidate-task responses + 176 confirmation generations = 217. Attempt 02 entered adapter generation and failed during prefill, giving 218 initiated. Attempt 01 completed its base generation, then failed in runtime.prepare() -> capture() -> beginChannelGainRequest before the transformed runtime.generate() call; that preparation failure is not another initiated generation. Evidence: native-smoke-01.jsonl execution-error and attempt-01-sources/native_smoke.mjs lines 39-41. Cache/reset diagnostics and preparation captures are separate; separate 27B studies are excluded.",
+  "completedGenerationRequests": 217,
+  "initiatedGenerationRequests": 218,
   "continuation": {
     "policy": "protocol-continuation-02.json",
     "continuationSha256": "7633a15c9e322fdeb4b44a60f7ecadbdf263adebdd1ad593fb80c5127e8137a6",
@@ -163,7 +172,8 @@
     "execution": "Complete fixed workload; measure setup efficiency without using threshold as execution veto",
     "fixedSelectionRequests": 8,
     "fixedConfirmationRequests": 176,
-    "previousOutcomePreserved": "native-selection-03/selection-receipt.json"
+    "previousOutcomePreserved": "native-selection-03/selection-receipt.json",
+    "status": "completed_and_evaluated_not_confirmed"
   },
   "selectionCandidateTaskEvaluations": 8,
   "selectionResult": {
@@ -182,6 +192,83 @@
       "coldAdapterLoadMs": 290.6733350000068,
       "modelResidentMs": 822123.820952,
       "physicalStageBeforeReceiptMs": 884247.71204
+    }
+  },
+  "originalJointDecision": "not_confirmed",
+  "confirmationGenerationRequests": 176,
+  "confirmationSubmittedTaskArmConditions": 224,
+  "confirmationChecksPerTask": 12,
+  "historicalAttempt03Receipts": {
+    "rawSmoke": "native-smoke-03.json",
+    "repairedPublicReplay": "public-replay-03.json",
+    "publicReplaySeal": "public-replay-03-seal.json",
+    "stageLock": "native-stage-lock-03.json",
+    "selection": "native-selection-03/selection-receipt.json",
+    "report": "RESULTS-03.md",
+    "serviceWindow": "service-window-summary.json"
+  },
+  "confirmationResult": {
+    "confirmationEvaluated": true,
+    "taskCount": 16,
+    "conditionCount": 7,
+    "cacheArmCount": 2,
+    "selectedCandidate": "gain-negative",
+    "receiptSha256": "6e6f2d91396dd9aca37b0578a547796dc0f4eb27e39ed1ba1c555af128c30574",
+    "receiptFileSha256": "4e56bc8f4cd63078d3d5b4fd0302496d8d13ca27df412632bdfc1c4e9b5f0fc0",
+    "evidenceSha256": "7611d4cfa6e6ab4e157cb3523407eb71b9e9e8866c15f06f6d2d1e4c1796df1f",
+    "reportFileSha256": "73544346d725193c598ffc94f58543f6539e624881ba1fc853dbb125b4289f71",
+    "semanticPassCountsByArm": {
+      "mlp_base_cache": {
+        "base": 0,
+        "base_matched_best_of_k": 0,
+        "trained_seed47_adapter": 11,
+        "channel_gain": 0,
+        "shuffled_context": 0,
+        "random_z": 0,
+        "permuted_gain": 0
+      },
+      "mlp_frozen_gain_reprefill": {
+        "base": 0,
+        "base_matched_best_of_k": 0,
+        "trained_seed47_adapter": 11,
+        "channel_gain": 0,
+        "shuffled_context": 0,
+        "random_z": 0,
+        "permuted_gain": 0
+      }
+    },
+    "adapterSemanticPasses": 11,
+    "adapterHiddenPasses": 12,
+    "semanticSuccessRequiresPublicAndAllConfirmationChecks": true,
+    "qualityCriteriaAllMet": false,
+    "timingIsolationQualification": "contended",
+    "selectionEfficiencyRatio": 0.23097230104327057,
+    "addedLatencyRatioOfTotalsByArm": {
+      "mlp_base_cache": 0.11685191891034896,
+      "mlp_frozen_gain_reprefill": 0.25340217153562583
+    },
+    "confirmationPhysicalStageBeforeReceiptSeconds": 16729.217444612,
+    "selectionPhysicalStageBeforeReceiptSeconds": 884.24771204,
+    "confirmationCacheDiagnostics": {
+      "tasksMeasured": 16,
+      "nonzeroKVLayer31Tasks": 16,
+      "earlierKVLayersEqual": true,
+      "all24RecurrentLayersEqual": true,
+      "logitRelativeL2Range": [
+        0.0008175628755058219,
+        0.001879793849698596
+      ],
+      "top1Changes": 0,
+      "sameFrozenGainHashesAcrossCacheArmsValidated": true
+    },
+    "sourceContractFloor": {
+      "nonAdapterOutputs": 160,
+      "failedBeforeCompilation": 160,
+      "missingWorkgroupSizeOverride": 160,
+      "alsoMissingComputeAnnotation": 1,
+      "adapterOutputsCompiledAndDispatched": 16,
+      "interpretation": "All untrained arms failed to produce source-contract-compliant shaders; this is not a comparison of their executed numeric accuracy. Shared zero floor limits mechanism discrimination.",
+      "audit": "confirmation-audit-04.json"
     }
   }
 }
