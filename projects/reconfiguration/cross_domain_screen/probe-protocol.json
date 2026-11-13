@@ -59,6 +59,42 @@
   "prepareControls": false,
   "qualityStop": "none; retain all4 outputs and public failures; abort only runtime/guard failures",
   "scoring": "Seal all4 raw outputs before original public checks; no selection or confirmation checks",
-  "timing": "shared GPU with9Bstudy; record UTC phase boundaries and costs, not isolated speedup",
-  "modelRequestsObserved": 0
+  "timing": "scheduled after 9B completion; isolation unqualified pending live observation",
+  "modelRequestsObserved": 24,
+  "ownProbeModelRequestsObserved": 0,
+  "priorExposure": {
+    "completed27BCrossDomainRequests": 24,
+    "ownProbeOutputs": 0,
+    "candidateRetuned": false,
+    "originalRestrictedScores": {
+      "base": 4,
+      "channel_gain": 4,
+      "shuffled_context": 4,
+      "permuted_gain": 3,
+      "tasksPerCondition": 6
+    },
+    "correctedSealedOutputReplayScores": {
+      "base": 4,
+      "channel_gain": 4,
+      "shuffled_context": 4,
+      "permuted_gain": 4,
+      "tasksPerCondition": 6
+    },
+    "knownOutcome": "Neutral observed quality: corrected paired outcomes are 0 wins / 0 losses / 6 ties for each transform versus base; no gain advantage observed. Original restricted permuted rejection preserved separately.",
+    "evidence": {
+      "RAW-RESULTS-01.md": "685a37b8c50e7d6f911f2b201a13b8a69b9a1c26292bbb1a5c959973a727dce3",
+      "REPLAY-RESULTS-01.md": "7f77c0076f0c0589d592833b3fdfc62ad5b859762aaf5d90c953f36404285a99",
+      "screen-run-01/oracle-replay-v2.json": "8695cb67872e8b5e3f171dec94c4d3c230243ccb65a18395e307e0270dc8c83f"
+    }
+  },
+  "executionPrerequisite": {
+    "confirmationStatus": "confirmation_executed",
+    "confirmationEvaluated": true,
+    "confirmationRequests": 176,
+    "runtimeLockSha256": "6be766a21347c52762c504d2fa348383bfe388f5a61fefcbaeb82e6a178ba2db",
+    "stageLockSha256": "31d1b972ecc1466116c4af3da43eba0e24b5ba13899ed7f3fdd4050b719e7e6a",
+    "receiptSelfHashRequired": true,
+    "timingLockMode": "exclusive throughout probe; wait for the 9B shared lock to release",
+    "globalIsolationClaim": false
+  }
 }
