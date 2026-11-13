@@ -1,0 +1,42 @@
+Warning: maxDynamicUniformBuffersPerPipelineLayout artificially reduced from 500000 to 16 to fit dynamic offset allocation limit.
+Warning: maxDynamicStorageBuffersPerPipelineLayout artificially reduced from 500000 to 16 to fit dynamic offset allocation limit.
+[GPU] amd rdna-3, f16/subgroups, 4.0GB, submit probe: 130.2ms
+[664.0ms][Pipeline] Execution v1 enabled (steps=35, kernelPathInline=yes, pipelineInline=no)
+[664.2ms][Config] Using manifest-first config (source of truth)
+[670.3ms][Pipeline] Resolved session applied (qwen3-8-27b-text-q4k-ehaf16): batchSize=12, stopCheckMode=batch, readbackInterval=32, disableCommandBatching=false
+[671.6ms][Pipeline] KernelPath: qwen3-8-27b-text-q4k-ehaf16-execution-inline (15 decode steps, 11 kernels, source=execution-v1)
+[672.2ms][Pipeline] 64L/5120H/24heads (256dim), kernelPath=qwen3-8-27b-text-q4k-ehaf16-execution-inline
+[672.9ms][Tokenizer] Loading bundled tokenizer from tokenizer.json
+[813.5ms][Tokenizer] HuggingFace model.type="BPE", using type="bpe"
+[925.0ms][Tokenizer] Loaded HuggingFace 248077 tokens (bpe), 33 special patterns, 247587 merges
+[925.5ms][Pipeline] Tokenizer vocabSize=248077 differs from model=248320, using model size
+[946.9ms][Pipeline] KV cache allocated: kvDtype=f16, maxSeqLen=8192, layout=contiguous, modelMaxSeqLen=262144, requestedKvDtype=f16, requestedMaxSeqLen=8192
+[949.0ms][Pipeline] Execution plan: active=primary, dtype=f32, kernelPath=qwen3-8-27b-text-q4k-ehaf16-execution-inline
+[1059.5ms][ShardCache] Custom shard loader configured
+[1059.8ms][Loader] Initializing...
+[1094.5ms][HeapManager] Allocated segment 0: 1024MB
+[1094.7ms][HeapManager] Segmented heap: 1GB per segment
+[1094.7ms][HeapManager] Initialized with strategy: SEGMENTED
+[1094.8ms][Loader] Initialized (f16, subgroups)
+[1095.3ms][Loader] Loading: qwen3-8-27b-text-q4k-ehaf16
+[1096.2ms][Loader] [0.0s] Memory (start): | RSS=296.67 MB (heap=66.50 MB/117.48 MB, external=1.00 GB, arrayBuffers=1.00 GB) | GPU=0 B (0 active, 0 pooled, peak=0 B) | ShardCache=0 B (0 shards) | Layers=0, GPUBuffers=0
+[1096.8ms][Loader] Dense model on discrete GPU - performance limited. Consider MoE model.
+[13611.6ms][Loader] Embeddings tensor loaded: name=model.language_model.embed_tokens.weight, hasShape=true, shape=[248320,5120], isWeightBuffer=true
+[13612.0ms][Loader] Layers: 0-63
+[31102.2ms][Loader] [30.0s] Memory (loading): | RSS=349.83 MB (heap=67.08 MB/79.23 MB, external=1.05 GB, arrayBuffers=1.05 GB) | GPU=5.97 GB (259 active, 0 pooled, peak=5.97 GB) | ShardCache=0 B (0 shards) | Layers=17, GPUBuffers=256
+[61119.4ms][Loader] [60.0s] Memory (loading): | RSS=380.40 MB (heap=67.69 MB/75.73 MB, external=1.04 GB, arrayBuffers=1.04 GB) | GPU=12.03 GB (694 active, 0 pooled, peak=12.03 GB) | ShardCache=0 B (0 shards) | Layers=48, GPUBuffers=691
+[76421.6ms][Loader] Layers: 64 complete (62.81s)
+[79879.6ms][Loader] Complete: 15.83 GB in 78.77s (205.77 MB/s)
+[79882.0ms][Loader] [78.8s] Memory (complete): | RSS=340.63 MB (heap=68.73 MB/80.48 MB, external=1.03 GB, arrayBuffers=1.03 GB) | GPU=15.83 GB (915 active, 0 pooled, peak=15.83 GB) | ShardCache=0 B (0 shards) | Layers=64, GPUBuffers=915
+[79905.8ms][Pipeline] Model loaded successfully (79248ms)
+[79960.7ms][KernelSelect] matmul variant=q4_fused_widetile reason=path_override
+[79976.3ms][KernelSelect] matmul variant=f16w_f32a_tiled reason=default
+[80060.6ms][KernelSelect] attention variant=prefill_head256_f16kv reason=path_override:tiled_small
+[82899.7ms][KernelSelect] matmul variant=q4_fused_batched_multicol_shared reason=path_override
+[83533.9ms][KernelSelect] matmul variant=q4_fused_gemv reason=path_override
+[83543.7ms][KernelSelect] matmul variant=gemv_subgroup reason=gemv
+[83552.9ms][KernelSelect] attention variant=decode_online_f16kv reason=path_override:subgroup
+[87851.5ms][KernelSelect] matmul variant=f16w_f32a reason=default
+[640135.2ms][ExpertCache] Cache cleared
+[640149.5ms][Pipeline] Unloaded
+{"status":"exploratory_screen_complete","lockSha256":"bbff5fe97c1070ec3fb9f60bb9014a5362da11593ac981fd3e617e6c14196b33","requestCount":24}
