@@ -1,0 +1,64 @@
+{
+  "schema": "gamma.cross-domain-mechanics-probe/v1",
+  "status": "draft_until_runtime_lock",
+  "classification": "bounded exposed-task mechanics/baseline-quality probe; not confirmation",
+  "sourceCandidate": {
+    "beta": -0.05,
+    "clip": 1,
+    "epsilon": 1e-06,
+    "id": "gain-negative",
+    "layers": [
+      30,
+      31
+    ],
+    "reference": "A"
+  },
+  "sourceCandidateSha256": "2d5669c82fad67e54a1683e9d3d77cc25795e28d24dcdce8c7d52e4a912551e1",
+  "candidate": {
+    "beta": -0.05,
+    "clip": 1,
+    "epsilon": 1e-06,
+    "id": "gain-negative",
+    "layers": [
+      62,
+      63
+    ],
+    "reference": "A"
+  },
+  "candidateSha256": "e4421e6487baa438e21f1da64a6353d9a086e55beec19a349559f6cf2b5ebab0",
+  "architectureMapping": {
+    "modelId": "qwen3-8-27b-text-q4k-ehaf16",
+    "sourceModel": "Qwen/Qwen3.8-27B",
+    "sourceRevision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+    "manifestSha256": "e29626a8d3c41c0af8c0dd945d028464dcebfef2413ba85e4f5e8695d5910d06",
+    "numLayers": 64,
+    "intermediateSize": 17408,
+    "targetLayers": [
+      62,
+      63
+    ],
+    "rule": "Map the source rule to the last two dense SiLU MLP layers of this distinct model; preserve beta, clip, epsilon and reference A. This is not the literal selected 9B candidate or a same-model transfer confirmation."
+  },
+  "generation": {
+    "maxNewTokens": 768,
+    "temperature": 0.6,
+    "topP": 0.95,
+    "seed": 20261112
+  },
+  "controlSeed": 20261112,
+  "conditions": [
+    "base",
+    "channel_gain"
+  ],
+  "cacheArm": "base-cache",
+  "population": "existing exposed WGSL smoke tasks only",
+  "taskCount": 2,
+  "generationRequests": 4,
+  "resetPrefillRequests": 2,
+  "referencePolicy": "A: exact instruction token deletion retaining non-template content; unchanged tokenizer contract",
+  "prepareControls": false,
+  "qualityStop": "none; retain all4 outputs and public failures; abort only runtime/guard failures",
+  "scoring": "Seal all4 raw outputs before original public checks; no selection or confirmation checks",
+  "timing": "shared GPU with9Bstudy; record UTC phase boundaries and costs, not isolated speedup",
+  "modelRequestsObserved": 0
+}

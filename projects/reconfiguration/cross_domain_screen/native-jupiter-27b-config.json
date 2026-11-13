@@ -1,0 +1,92 @@
+{
+  "dopplerRoot": "/home/x/deco/doppler/.work/channel-gain-20261112",
+  "dopplerCommit": "64834f4b",
+  "requiredVendor": "amd",
+  "serviceGuardPath": "/home/x/deco/doppler/.work/channel-gain-20261112/service-guard.json",
+  "serviceGuardMaxAgeMs": 15000,
+  "verifierOptions": {
+    "requiredVendor": "amd",
+    "requiredFeatures": [
+      "shader-f16",
+      "subgroups"
+    ]
+  },
+  "browserEnvironment": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/home/x/deco/doppler/.work/channel-gain-20261112/browsers",
+    "PLAYWRIGHT_HOST_PLATFORM_OVERRIDE": "ubuntu24.04-x64"
+  },
+  "browserEnvironmentNote": "Playwright installer does not recognize Ubuntu26.04; explicit Ubuntu24.04 browser distribution selected before first model request. Actual AMD GPU/browser execution must pass.",
+  "modelPath": "/home/x/.local/share/reploid/promotion-35b-20261104/model-27b",
+  "modelManifestSha256": "e29626a8d3c41c0af8c0dd945d028464dcebfef2413ba85e4f5e8695d5910d06",
+  "adapterMode": "none",
+  "runtimeConfig": {
+    "inference": {
+      "session": {
+        "useLargeBatchF16F32FusedGateUp": false,
+        "usePreparedDecodeWorkspace": false,
+        "prefillTokenChunkSize": null
+      },
+      "executionPatch": {
+        "addKernels": [
+          {
+            "key": "screen_split_decode",
+            "kernel": {
+              "kernel": "fused_matmul_q4.wgsl",
+              "entry": "main_gemv",
+              "digest": "sha256:02029c2254c8ddb4c2051c4322e6b11ddbcf555e27d233e7fe73277edfa0f3f7",
+              "precision": {
+                "inputDtype": "f32",
+                "outputDtype": "f32"
+              }
+            }
+          },
+          {
+            "key": "screen_split_prefill",
+            "kernel": {
+              "kernel": "fused_matmul_q4_widetile.wgsl",
+              "entry": "main",
+              "digest": "sha256:c434473d64a163eddbb6fc349aec944e4bef6b067170acdf4d55daf92f1932bf",
+              "precision": {
+                "inputDtype": "f32",
+                "outputDtype": "f32"
+              }
+            }
+          }
+        ],
+        "set": [
+          {
+            "section": "decode",
+            "op": "gate_proj",
+            "kernelKey": "screen_split_decode"
+          },
+          {
+            "section": "decode",
+            "op": "up_proj",
+            "kernelKey": "screen_split_decode"
+          },
+          {
+            "section": "decode",
+            "op": "down_proj",
+            "kernelKey": "screen_split_decode"
+          },
+          {
+            "section": "prefill",
+            "op": "gate_proj",
+            "kernelKey": "screen_split_prefill"
+          },
+          {
+            "section": "prefill",
+            "op": "up_proj",
+            "kernelKey": "screen_split_prefill"
+          },
+          {
+            "section": "prefill",
+            "op": "down_proj",
+            "kernelKey": "screen_split_prefill"
+          }
+        ]
+      }
+    }
+  },
+  "executionContext": "Owner-authorized parallel27Bprobe/screen with ongoing9Bstudy; shared GPU timings descriptive, not isolated performance qualification"
+}

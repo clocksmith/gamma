@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "gamma.reconfiguration-screen-tasks/v1",
+  "status": "draft-unfrozen",
+  "tasks": [
+    {
+      "id": "arithmetic-fractions",
+      "domain": "arithmetic",
+      "family": "exact-rational-expressions",
+      "prompt": "Complete this task. Return only the requested answer.\n\nCompute these three expressions exactly, in order: (137/12 - 49/18)*36; (7/8 + 11/12)*48; (23/15 - 2/9)*45. Return a JSON array of three integers.\n",
+      "promptSha256": "445f13e8a1cb9b2b8b5f19879bcb39108b3212605adbe64ee7567237fc5cc157",
+      "instructionSpan": {
+        "start": 55,
+        "end": 202,
+        "textSha256": "05c49eb6fe1580bf99704a5eb59ede0157df994f4d1be56a8793f460b33eeaaf"
+      },
+      "publicExamples": []
+    },
+    {
+      "id": "arithmetic-congruences",
+      "domain": "arithmetic",
+      "family": "simultaneous-congruences",
+      "prompt": "Complete this task. Return only the requested answer.\n\nFind the smallest nonnegative integer x separately for each pair: x mod 17 = 5 and x mod 23 = 8; x mod 11 = 7 and x mod 13 = 4; x mod 7 = 3 and x mod 19 = 11. Return the three answers in order as a JSON array of integers.\n",
+      "promptSha256": "445b10475ac3cebe25962cd136043ff370116004b978e521efbeaeceace93157",
+      "instructionSpan": {
+        "start": 55,
+        "end": 277,
+        "textSha256": "4e01f724c5ee42bbe1e0a17f360f923b7b36c6fc482da5d8c91cd4c1b8b9fd24"
+      },
+      "publicExamples": []
+    },
+    {
+      "id": "python-runs",
+      "domain": "python",
+      "family": "adjacent-run-lengths",
+      "prompt": "Complete this task. Return only the requested answer.\n\nReturn only one Python function, without Markdown, imports, annotations, decorators, helper functions or input mutation. Use integer/list expressions, assignments, if/for/while, list comprehensions and list.append. Allowed builtins: len, range, enumerate, zip, min, max, sorted, list, tuple, abs, sum, reversed. Implement compress_runs(items): for a list of integers, return a list of [value,count] pairs for consecutive equal runs, in original order. Example: compress_runs([4,4,9]) returns [[4,2],[9,1]].\n",
+      "promptSha256": "0baedeb227b6f6ff5bd49b487a3223c1f2cfc82c21a4c18ecac20d59f4f4e5c1",
+      "instructionSpan": {
+        "start": 55,
+        "end": 562,
+        "textSha256": "e31c95d7bb1ef34dda7e7a9f53ebd5c5943d11e4db8976ff1f8dd2a23bce4241"
+      },
+      "publicExamples": [
+        {
+          "arguments": [
+            [
+              4,
+              4,
+              9
+            ]
+          ],
+          "expected": [
+            [
+              4,
+              2
+            ],
+            [
+              9,
+              1
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "python-intervals",
+      "domain": "python",
+      "family": "closed-interval-intersection",
+      "prompt": "Complete this task. Return only the requested answer.\n\nReturn only one Python function, without Markdown, imports, annotations, decorators, helper functions or input mutation. Use integer/list expressions, assignments, if/for/while, list comprehensions and list.append. Allowed builtins: len, range, enumerate, zip, min, max, sorted, list, tuple, abs, sum, reversed. Implement intersect_intervals(left,right): each input is a list of sorted, disjoint closed integer intervals [start,end]. Return all nonempty pairwise intersections, sorted by start then end, as lists [start,end]. A shared endpoint is a nonempty interval. Example: intersect_intervals([[1,4]],[[3,7]]) returns [[3,4]].\n",
+      "promptSha256": "fd7b2a025492c6512de6a60afe2f21de62036800e6e15826f8459e66e6775b86",
+      "instructionSpan": {
+        "start": 55,
+        "end": 686,
+        "textSha256": "dbb9652a852796b026f351513d3a4e87839154cdb0a7fdcd8e1d63a9f2f1fdcc"
+      },
+      "publicExamples": [
+        {
+          "arguments": [
+            [
+              [
+                1,
+                4
+              ]
+            ],
+            [
+              [
+                3,
+                7
+              ]
+            ]
+          ],
+          "expected": [
+            [
+              3,
+              4
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "text-records",
+      "domain": "structured-text",
+      "family": "filter-order-project",
+      "prompt": "Complete this task. Return only the requested answer.\n\nEach line below is id|status|priority|city. Keep exactly rows whose status is keep. Sort by numeric priority ascending, then id lexicographically ascending. Return a JSON array of objects with exactly keys id and city; uppercase the id, preserve city exactly.\nb7|keep|9|Lima\na2|drop|1|Oslo\nc4|keep|2|Kyoto\na1|keep|9|Accra\ne8|keep|2|Bern\n",
+      "promptSha256": "073d323d8434fd3ba840522b3a514d02cdf68dfe1799c095ff228c66ac64f29b",
+      "instructionSpan": {
+        "start": 55,
+        "end": 392,
+        "textSha256": "cf3dc10f827c3a0657190943ddcad7baab8ef4666d416b45fb62e717e7b72ef4"
+      },
+      "publicExamples": []
+    },
+    {
+      "id": "text-escape",
+      "domain": "structured-text",
+      "family": "escaped-delimiter-decoding",
+      "prompt": "Complete this task. Return only the requested answer.\n\nSplit the following text at unescaped | characters. A backslash quotes exactly the next character and is removed; thus \\| is a literal pipe and \\\\ is one literal backslash. Preserve empty fields. Return only a JSON array of decoded strings. Text:\nal\\|pha|be\\\\ta||ga\\|mma\\\\\n",
+      "promptSha256": "4aecda27af5268350d9a0026ab3beeaddc972355e2c4c2caf122e5c2fbc13d9d",
+      "instructionSpan": {
+        "start": 55,
+        "end": 328,
+        "textSha256": "05b2565ee135c868e92a3147d17befbe956db0662cbb94edd7ed32258177fb15"
+      },
+      "publicExamples": []
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "gamma.reconfiguration-screen-protocol/v1",
+  "status": "frozen-before-generation",
+  "studyId": "cross-domain-screen-01",
+  "classification": "exploratory; not confirmation",
+  "hypothesis": "The selected negative channel-gain formula, prospectively mapped from the 9B model to the last two dense MLP layers of the specified 27B model, may alter correctness on these six fresh task families.",
+  "standard": {
+    "version": 2,
+    "path": "../../distillation/wgsl/EXPERIMENT-PROTOCOL.md",
+    "sha256": "6cf38f00d47382d0c6739459589cb3a299ec50993829977466ced9a4ab94886f"
+  },
+  "candidate": {
+    "beta": -0.05,
+    "clip": 1,
+    "epsilon": 1e-06,
+    "id": "gain-negative",
+    "layers": [
+      62,
+      63
+    ],
+    "reference": "A"
+  },
+  "sourceSelection": {
+    "receiptSha256": "8369939c10435b98081256bbb9c9377ae060f100652b1d31d2167155a699ccc1",
+    "protocolFileSha256": "34d40474a17c1a14c72555252ca2896b94a060dbd63fc8a81c0513808646b4a2",
+    "path": "../../distillation/wgsl/channel_gain/native-selection-04/selection-receipt.json"
+  },
+  "conditions": [
+    "base",
+    "channel_gain",
+    "shuffled_context",
+    "permuted_gain"
+  ],
+  "cacheArm": "base-cache",
+  "allProjections": "not_applicable: first rule only defines MLP activation gains",
+  "generation": {
+    "maxNewTokens": 256,
+    "temperature": 0.6,
+    "topP": 0.95,
+    "seed": 20261112
+  },
+  "population": {
+    "tasks": 6,
+    "domains": 3,
+    "independentFamiliesPerDomain": 2,
+    "samplesPerTaskCondition": 1,
+    "totalGeneratedRequests": 24,
+    "taskOrder": [
+      "arithmetic-fractions",
+      "arithmetic-congruences",
+      "python-runs",
+      "python-intervals",
+      "text-records",
+      "text-escape"
+    ],
+    "selectionPopulation": "none; candidate selected in WGSL before this screen",
+    "developmentPopulation": "oracle reference and deliberately incorrect fixtures only; no model sampling"
+  },
+  "evaluation": {
+    "oracle": "oracles.py",
+    "formatPolicy": "strict raw JSON or Python function; no Markdown extraction or output repair",
+    "public": "declared JSON schema or public Python example and language subset",
+    "heldout": "exact JSON answers or reserved Python behavioral cases; these are within-family checks, not independent tasks",
+    "semanticPass": "publicPassed AND heldoutPassed",
+    "wrongAcceptance": "publicPassed AND NOT heldoutPassed",
+    "sealing": "Seal exact bytes of all 24 outputs before any public or heldout scoring; no early stopping or reranking by outcomes",
+    "selection": "none; retain every request including truncations and errors",
+    "decision": "Descriptive paired task outcomes and exact pass counts only; no significance or broad cross-domain confirmation threshold",
+    "truncation": "Record termination reason and output tokens separately; cap hits remain in denominator"
+  },
+  "transform": {
+    "scope": "MLP activation channels only, 27B layers 62 and 63; original selected 9B layers 30 and 31 retained as sourceCandidate",
+    "derivation": "same frozen negative rule derived independently from each task prompt; never reuse shader gain arrays",
+    "firstToken": "Base-cache first token uses unchanged base prefill logits; later decode applies gains",
+    "reference": "A removes exact instruction token span and retains stable nonempty framing; CPU exact-tokenizer qualification required before freeze",
+    "controls": "Same prompt and seed in all four conditions. Preserve magnitude and size for permuted gains; shuffled context statistics do not alter generation prompt."
+  },
+  "diagnostics": {
+    "resetPrefillRequests": 3,
+    "policy": "One prefill-only reset check on first task of each domain; separate from 24 generated responses and quality denominator"
+  },
+  "costs": {
+    "scoredEfficiencyThreshold": null,
+    "executionLimit": "24 generations, 3 prefill-only reset diagnostics, declared token cap; hardware resource guards and allocation pinned in runtime lock before execution",
+    "accounting": "Report cold load, preparation/statistics, per-request attributed E2E, physical stage, diagnostics, scoring, token counts, errors and truncations separately; do not call wall allocation active GPU time",
+    "memory": "Report measured allocations and limits; unknown isolated peaks remain unknown"
+  },
+  "omissions": {
+    "adapter": "not included in this small exploratory screen; shader-trained adapter is not a cross-domain specialization comparator",
+    "computeMatchedSampling": "not included; no efficiency superiority claim",
+    "rePrefill": "not included; this screen does not compare cache arms",
+    "randomZ": "not included; retained controls are base, shuffled context, permuted gain"
+  },
+  "freezeRequirements": [
+    "Root review of runtime/settings and exact task bytes",
+    "Existing model/tokenizer/template/runtime/device/precision identity pinned in source lock; no model substitution",
+    "CPU exact tokenizer boundary qualification for all six prompts",
+    "Focused CPU reference/wrong-answer oracle tests pass",
+    "Protocol, task, oracle, runner and source-selection hashes sealed before any generation"
+  ],
+  "claimLimits": [
+    "Six task families cannot establish broad arithmetic, coding, writing or general capability.",
+    "Screen tasks were authored after WGSL selection, not used to tune the candidate. Prior model-training exposure is unknown.",
+    "Oracle authors necessarily know expected answers; generator receives task prompts/public examples only.",
+    "No result changes the original shader protocol, confirmation population or joint decision.",
+    "This screen changes both model and task domains relative to WGSL selection. It evaluates a mapped rule on 27B; it cannot isolate cross-domain transfer on the original 9B model."
+  ],
+  "methodology": {
+    "source": "../../enwiki9/ADAPTIVE_WORKFLOW.md",
+    "borrowed": "Bounded matched quick test, immutable candidate/source identity, sealed outputs, explicit full cost, preserve failures, separate evidence from next hypothesis.",
+    "notBorrowed": "No enwiki9 execution, corpus, compression thresholds, queue or reopening."
+  },
+  "sourceCandidate": {
+    "beta": -0.05,
+    "clip": 1,
+    "epsilon": 1e-06,
+    "id": "gain-negative",
+    "layers": [
+      30,
+      31
+    ],
+    "reference": "A"
+  },
+  "sourceCandidateCanonicalJson": "{\"beta\":-0.05,\"clip\":1,\"epsilon\":0.000001,\"id\":\"gain-negative\",\"layers\":[30,31],\"reference\":\"A\"}",
+  "sourceCandidateSha256": "2d5669c82fad67e54a1683e9d3d77cc25795e28d24dcdce8c7d52e4a912551e1",
+  "candidateCanonicalJson": "{\"beta\":-0.05,\"clip\":1,\"epsilon\":0.000001,\"id\":\"gain-negative\",\"layers\":[62,63],\"reference\":\"A\"}",
+  "candidateSha256": "e4421e6487baa438e21f1da64a6353d9a086e55beec19a349559f6cf2b5ebab0",
+  "architectureMapping": {
+    "modelId": "qwen3-8-27b-text-q4k-ehaf16",
+    "sourceModel": "Qwen/Qwen3.8-27B",
+    "sourceRevision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+    "manifestSha256": "e29626a8d3c41c0af8c0dd945d028464dcebfef2413ba85e4f5e8695d5910d06",
+    "numLayers": 64,
+    "intermediateSize": 17408,
+    "targetLayers": [
+      62,
+      63
+    ],
+    "rule": "Map the source rule to the last two dense SiLU MLP layers of this distinct model; preserve beta, clip, epsilon and reference A. This is not the literal selected 9B candidate or a same-model transfer confirmation."
+  },
+  "frozenAt": "2026-11-13T13:00:44.081586+00:00",
+  "freezeNote": "Filename retains draft history; this version is frozen before any27B generation. Runtime lock must bind these exact bytes before execution.",
+  "executionContext": "Owner-authorized parallel execution on Jupiter with existing9Bconfirmation; overlapping timing is contended and descriptive. All prompts fit within previouslyqualified256-token prefill window; this specific split/gain path is being measured, not assumed qualified.",
+  "timingBatch": "First complete task/four conditions is measured for remaining-work ETA only; no public/heldout scores opened before all24 outputs are sealed."
+}

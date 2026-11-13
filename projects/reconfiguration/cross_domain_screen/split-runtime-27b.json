@@ -1,0 +1,69 @@
+{
+  "inference": {
+    "session": {
+      "useLargeBatchF16F32FusedGateUp": false,
+      "usePreparedDecodeWorkspace": false,
+      "prefillTokenChunkSize": null
+    },
+    "executionPatch": {
+      "addKernels": [
+        {
+          "key": "screen_split_decode",
+          "kernel": {
+            "kernel": "fused_matmul_q4.wgsl",
+            "entry": "main_gemv",
+            "digest": "sha256:02029c2254c8ddb4c2051c4322e6b11ddbcf555e27d233e7fe73277edfa0f3f7",
+            "precision": {
+              "inputDtype": "f32",
+              "outputDtype": "f32"
+            }
+          }
+        },
+        {
+          "key": "screen_split_prefill",
+          "kernel": {
+            "kernel": "fused_matmul_q4_widetile.wgsl",
+            "entry": "main",
+            "digest": "sha256:c434473d64a163eddbb6fc349aec944e4bef6b067170acdf4d55daf92f1932bf",
+            "precision": {
+              "inputDtype": "f32",
+              "outputDtype": "f32"
+            }
+          }
+        }
+      ],
+      "set": [
+        {
+          "section": "decode",
+          "op": "gate_proj",
+          "kernelKey": "screen_split_decode"
+        },
+        {
+          "section": "decode",
+          "op": "up_proj",
+          "kernelKey": "screen_split_decode"
+        },
+        {
+          "section": "decode",
+          "op": "down_proj",
+          "kernelKey": "screen_split_decode"
+        },
+        {
+          "section": "prefill",
+          "op": "gate_proj",
+          "kernelKey": "screen_split_prefill"
+        },
+        {
+          "section": "prefill",
+          "op": "up_proj",
+          "kernelKey": "screen_split_prefill"
+        },
+        {
+          "section": "prefill",
+          "op": "down_proj",
+          "kernelKey": "screen_split_prefill"
+        }
+      ]
+    }
+  }
+}

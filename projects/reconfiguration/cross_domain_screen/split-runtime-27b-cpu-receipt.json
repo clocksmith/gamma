@@ -1,0 +1,176 @@
+{
+  "schema": "gamma.cross-domain-split-contract/v1",
+  "passed": true,
+  "checkedLayerPhases": 128,
+  "modelManifestSha256": "e29626a8d3c41c0af8c0dd945d028464dcebfef2413ba85e4f5e8695d5910d06",
+  "runtimePatchSha256": "3f571fec8452cd6e7d3c679c3ea6da43ed49e9655f433e7bf1e1fd757500c3ec",
+  "candidateLayers": [
+    62,
+    63
+  ],
+  "capabilitiesAssumedForCompilation": {
+    "hasF16": true,
+    "hasSubgroups": true,
+    "hasSubgroupsF16": false,
+    "maxBufferSize": 2147483648,
+    "maxWorkgroupSize": 256
+  },
+  "laneIntegrity": {
+    "declared": {
+      "activationDtype": "f32",
+      "mathDtype": "f32",
+      "accumDtype": "f32",
+      "kvDtype": "f16"
+    },
+    "executed": {
+      "activationDtype": "f32",
+      "mathDtype": "f32",
+      "accumDtype": "f32",
+      "kvDtype": "f16"
+    },
+    "status": "matches",
+    "transforms": [],
+    "policy": {
+      "kind": "default-noop",
+      "dtypeEffect": "none",
+      "reason": "GPU supports all required features.",
+      "evidence": []
+    }
+  },
+  "appliedTransforms": [],
+  "resolvedDenseSteps": [
+    {
+      "id": "layer_decode_11_gate_proj",
+      "phase": "decode",
+      "section": "layer",
+      "op": "gate_proj",
+      "src": "state",
+      "dst": "state",
+      "kernel": "fused_matmul_q4.wgsl",
+      "entry": "main_gemv",
+      "weights": "layer.{L}.mlp.gate_proj",
+      "precision": {
+        "inputDtype": "f32",
+        "outputDtype": "f32"
+      },
+      "layers": "all",
+      "kernelRef": {
+        "id": "fused_matmul_q4.main_gemv",
+        "version": "1.0.0",
+        "digest": "sha256:02029c2254c8ddb4c2051c4322e6b11ddbcf555e27d233e7fe73277edfa0f3f7"
+      },
+      "canonicalOpId": "exec.gate_proj"
+    },
+    {
+      "id": "layer_decode_12_up_proj",
+      "phase": "decode",
+      "section": "layer",
+      "op": "up_proj",
+      "src": "state",
+      "dst": "state",
+      "kernel": "fused_matmul_q4.wgsl",
+      "entry": "main_gemv",
+      "weights": "layer.{L}.mlp.up_proj",
+      "precision": {
+        "inputDtype": "f32",
+        "outputDtype": "f32"
+      },
+      "layers": "all",
+      "kernelRef": {
+        "id": "fused_matmul_q4.main_gemv",
+        "version": "1.0.0",
+        "digest": "sha256:02029c2254c8ddb4c2051c4322e6b11ddbcf555e27d233e7fe73277edfa0f3f7"
+      },
+      "canonicalOpId": "exec.up_proj"
+    },
+    {
+      "id": "layer_decode_14_down_proj",
+      "phase": "decode",
+      "section": "layer",
+      "op": "down_proj",
+      "src": "state",
+      "dst": "state",
+      "kernel": "fused_matmul_q4.wgsl",
+      "entry": "main_gemv",
+      "weights": "layer.{L}.mlp.down_proj",
+      "precision": {
+        "inputDtype": "f32",
+        "outputDtype": "f32"
+      },
+      "layers": "all",
+      "kernelRef": {
+        "id": "fused_matmul_q4.main_gemv",
+        "version": "1.0.0",
+        "digest": "sha256:02029c2254c8ddb4c2051c4322e6b11ddbcf555e27d233e7fe73277edfa0f3f7"
+      },
+      "canonicalOpId": "exec.down_proj"
+    },
+    {
+      "id": "layer_prefill_26_gate_proj",
+      "phase": "prefill",
+      "section": "layer",
+      "op": "gate_proj",
+      "src": "state",
+      "dst": "state",
+      "kernel": "fused_matmul_q4_widetile.wgsl",
+      "entry": "main",
+      "weights": "layer.{L}.mlp.gate_proj",
+      "precision": {
+        "inputDtype": "f32",
+        "outputDtype": "f32"
+      },
+      "layers": "all",
+      "kernelRef": {
+        "id": "fused_matmul_q4_widetile.main",
+        "version": "1.0.0",
+        "digest": "sha256:c434473d64a163eddbb6fc349aec944e4bef6b067170acdf4d55daf92f1932bf"
+      },
+      "canonicalOpId": "exec.gate_proj"
+    },
+    {
+      "id": "layer_prefill_27_up_proj",
+      "phase": "prefill",
+      "section": "layer",
+      "op": "up_proj",
+      "src": "state",
+      "dst": "state",
+      "kernel": "fused_matmul_q4_widetile.wgsl",
+      "entry": "main",
+      "weights": "layer.{L}.mlp.up_proj",
+      "precision": {
+        "inputDtype": "f32",
+        "outputDtype": "f32"
+      },
+      "layers": "all",
+      "kernelRef": {
+        "id": "fused_matmul_q4_widetile.main",
+        "version": "1.0.0",
+        "digest": "sha256:c434473d64a163eddbb6fc349aec944e4bef6b067170acdf4d55daf92f1932bf"
+      },
+      "canonicalOpId": "exec.up_proj"
+    },
+    {
+      "id": "layer_prefill_29_down_proj",
+      "phase": "prefill",
+      "section": "layer",
+      "op": "down_proj",
+      "src": "state",
+      "dst": "state",
+      "kernel": "fused_matmul_q4_widetile.wgsl",
+      "entry": "main",
+      "weights": "layer.{L}.mlp.down_proj",
+      "precision": {
+        "inputDtype": "f32",
+        "outputDtype": "f32"
+      },
+      "layers": "all",
+      "kernelRef": {
+        "id": "fused_matmul_q4_widetile.main",
+        "version": "1.0.0",
+        "digest": "sha256:c434473d64a163eddbb6fc349aec944e4bef6b067170acdf4d55daf92f1932bf"
+      },
+      "canonicalOpId": "exec.down_proj"
+    }
+  ],
+  "evidence": "CPU execution-plan compilation conditional on declared f16/subgroup capabilities; no GPU dispatch or model validation"
+}
