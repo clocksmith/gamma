@@ -71,7 +71,7 @@ jobs:
           python -m pip install ruff
       # The archived enwiki9 lane has its own manual test groups above.
       - name: Ruff syntax and undefined names
-        run: ruff check --select E9,F63,F7,F82 --extend-exclude projects/enwiki9 --extend-exclude '*.ipynb' .
+        run: ruff check .
 
   # Hosted CI is a smoke test. The full pytest suite (./run_tests.sh) and the
   # CATSCAN drift check (python tools/catscan.py --check) run on demand.

@@ -1,12 +1,19 @@
 ---
-description: Run the test suite
+description: Run focused tests, or the full suite explicitly
 allowed-tools: Bash
-argument-hint: [scope: all|meld|blending|latency|bridges|FILE]
+argument-hint: [scope: smoke|all|meld|blending|latency|bridges|FILE]
 ---
 
 Run tests based on scope:
 
-If `$ARGUMENTS` is empty or "all":
+If `$ARGUMENTS` is empty or "smoke", run the existing CI smoke group:
+```bash
+python3 -m pytest -q tests/test_engine_interface.py tests/test_engine_factory.py tests/test_game.py tests/test_ui_components.py
+```
+
+For a known changed area, prefer its matching scope or test file below.
+
+If `$ARGUMENTS` is "all" (explicit full-suite request):
 ```bash
 python3 -m pytest tests/ -v
 ```

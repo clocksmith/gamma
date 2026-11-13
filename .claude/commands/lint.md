@@ -1,19 +1,21 @@
 ---
-description: Run code quality checks
+description: Run the same lint rules as CI
 allowed-tools: Bash
 argument-hint: [path]
 ---
 
-Run code quality checks.
+Use the active Python environment with Ruff installed. Run the same syntax and
+undefined-name rules as CI; `ruff.toml` owns the rules and archive exclusions.
 
-Check imports work:
+If `$ARGUMENTS` is empty:
 ```bash
-python3 -c "from src.mind_meld.core.meld_engine import MeldEngine; print('MeldEngine: OK')"
-python3 -c "from src.mind_meld.core.blending import LogitBlender; print('LogitBlender: OK')"
-python3 -c "from src.mind_meld.bridges.kv_cache_handler import KVCacheTranslator; print('KVCacheTranslator: OK')"
+python3 -m ruff check .
 ```
 
-Run quick smoke tests:
+Otherwise lint the requested paths:
 ```bash
-python3 -m pytest tests/test_blending.py tests/test_bridges.py -v --tb=short -q
+python3 -m ruff check $ARGUMENTS
 ```
+
+Run matching behavioral tests only when the changed behavior needs them, using
+`/test` with the relevant scope or file.
