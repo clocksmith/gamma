@@ -1,10 +1,10 @@
 {
   "schema": "gamma.channel-gain-execution-status/v1",
-  "updatedAt": "2026-11-13T02:46:08.070379+00:00",
-  "status": "native_smoke_02_running",
+  "updatedAt": "2026-11-13T03:09:43.023244+00:00",
+  "status": "native_smoke_03_running",
   "protocolFreezeSha256": "f23dc4e50eb480c53ebc759c3aafb3ad457cd50fae4bab0e06595fb419561f3b",
-  "modelRequests": 1,
-  "modelSmokeRequests": 1,
+  "modelRequests": 11,
+  "modelSmokeRequests": 10,
   "selectionTasksEvaluated": 0,
   "selectedCandidate": null,
   "confirmationModelTasksEvaluated": 0,
@@ -28,17 +28,17 @@
     "nodeTestReportedMs": 100.814125
   },
   "cacheArms": {
-    "mlp_base_cache": "unmeasured",
-    "mlp_frozen_gain_reprefill": "unmeasured",
+    "mlp_base_cache": "observed_on_one_smoke_task_not_confirmed",
+    "mlp_frozen_gain_reprefill": "observed_on_one_smoke_task_not_confirmed",
     "all_projections": "not_applicable"
   },
   "comparators": {
-    "base": "not_run",
+    "base": "observed_on_one_smoke_task_not_confirmed",
     "base_matched_best_of_k": "not_run",
-    "shuffled_context": "not_run",
-    "random_z": "not_run",
-    "permuted_gain": "not_run",
-    "trained_seed47_adapter": "not_run"
+    "shuffled_context": "observed_on_one_smoke_task_not_confirmed",
+    "random_z": "observed_on_one_smoke_task_not_confirmed",
+    "permuted_gain": "observed_on_one_smoke_task_not_confirmed",
+    "trained_seed47_adapter": "integration_probe_completed_full_comparison_pending"
   },
   "criteria": {
     "promptDependence": "unmeasured",
@@ -49,21 +49,25 @@
   },
   "blockers": [],
   "nextWork": [
-    "Complete repaired two-task model smoke and all controls/cache arms",
-    "Report measured ETA and apply conservative35.59GPU-second selection admission",
+    "Complete full two-task smoke03 under repaired adapter/runtime timing lock",
+    "Report measured ETA and apply conservative 35.59 GPU-second selection admission",
     "Only if complete selection fits, freeze winner/submissions then run confirmation once"
   ],
-  "currentRuntimeLockSha256": "088d800a4cdf146c845e545405803beaa30a6c26a3ad5acd6a59a5eaaa9513d0",
+  "currentRuntimeLockSha256": "6be766a21347c52762c504d2fa348383bfe388f5a61fefcbaeb82e6a178ba2db",
   "priorAttempt": {
-    "receipt": "runtime-repair-01.json",
-    "status": "failed_before_transform_capture",
-    "basePublicPass": false
+    "receipt": "runtime-repair-02.json",
+    "status": "failed_at_trained_adapter_comparator",
+    "completedRequests": 9,
+    "publicPasses": 0,
+    "cacheDiagnosticMeasured": true
   },
   "runtimePreparation": {
     "modelArtifactPreflight": "native-artifact-preflight.json",
     "selectionBudget": "selection-budget-receipt.json",
-    "safeWindow": "live provider remains active; stageAdmitted0, memory floor32GiB; monitorrevokes onchange",
-    "nativeRuntime": "Doppler79ce17bc with explicit f32 split execution overlay",
+    "safeWindow": "Live provider remains active; stageAdmitted 0, memory floor 32 GiB; read-only guard revokes on change",
+    "nativeRuntime": "Doppler 64834f4b with explicit F32 split execution overlay",
     "pythonFallbackUsed": false
-  }
+  },
+  "modelDiagnosticRequests": 1,
+  "incompleteModelRequests": 1
 }

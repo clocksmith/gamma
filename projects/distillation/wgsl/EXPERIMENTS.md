@@ -65,6 +65,16 @@ result, completed smoke batch or confirmation. At this registry snapshot no gain
 candidate has completed selection, no cache/overhead comparison is established and
 no confirmation checks have been used to select a candidate.
 
+**2026-11-13, smoke attempt 02 and repair:** [nine model requests](channel_gain/native-smoke-02.jsonl)
+completed before the trained adapter hit a query/gate shape mismatch. All nine
+failed the visible contract. A same-prefix diagnostic measured layer-31 KV and
+logit differences between same-gain cache arms; this is mechanics evidence only.
+[Repair 02](channel_gain/runtime-repair-02.json) records the failure and narrow
+Doppler fix. A [four-token adapter probe](channel_gain/adapter-probe-03.json)
+subsequently completed without shader scoring. [Runtime lock 03](channel_gain/native-runtime-lock-03.json)
+starts a full rerun with complete request lifecycle timing and base-reset logits.
+No candidate or numerical criterion changed, and no confirmation ran.
+
 Append subsequent attempts, deviations, costs and decisions here with their own
 receipts. Preserve these observations if a rerun succeeds. Smoke timing can support
 a scoped ETA only when the measured arm mix represents the remaining work; this

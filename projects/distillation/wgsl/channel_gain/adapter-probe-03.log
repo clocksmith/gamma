@@ -1,0 +1,43 @@
+Warning: maxDynamicUniformBuffersPerPipelineLayout artificially reduced from 500000 to 16 to fit dynamic offset allocation limit.
+Warning: maxDynamicStorageBuffersPerPipelineLayout artificially reduced from 500000 to 16 to fit dynamic offset allocation limit.
+[GPU] amd rdna-3, f16/subgroups, 4.0GB, submit probe: 0.5ms
+[426.2ms][Pipeline] Execution v1 enabled (steps=35, kernelPathInline=yes, pipelineInline=no)
+[426.4ms][Config] Using manifest-first config (source of truth)
+[430.1ms][Pipeline] Resolved session applied (qwen-3-5-9b-f16-af32): batchSize=12, stopCheckMode=batch, readbackInterval=32, disableCommandBatching=true
+[430.9ms][Pipeline] KernelPath: qwen-3-5-9b-f16-af32-execution-inline (15 decode steps, 10 kernels, source=execution-v1)
+[431.2ms][Pipeline] 32L/4096H/16heads (256dim), kernelPath=qwen-3-5-9b-f16-af32-execution-inline
+[431.7ms][Tokenizer] Loading bundled tokenizer from tokenizer.json
+[565.3ms][Tokenizer] HuggingFace model.type="BPE", using type="bpe"
+[692.4ms][Tokenizer] Loaded HuggingFace 248070 tokens (bpe), 26 special patterns, 247587 merges
+[692.9ms][Pipeline] Tokenizer vocabSize=248070 differs from model=248320, using model size
+[703.8ms][Pipeline] KV cache allocated: kvDtype=f16, maxSeqLen=8192, layout=contiguous, modelMaxSeqLen=262144, requestedKvDtype=f16, requestedMaxSeqLen=8192
+[705.6ms][Pipeline] Execution plan: active=primary, dtype=f32, kernelPath=qwen-3-5-9b-f16-af32-execution-inline
+[792.5ms][ShardCache] Custom shard loader configured
+[792.8ms][Loader] Initializing...
+[829.0ms][HeapManager] Allocated segment 0: 1024MB
+[829.1ms][HeapManager] Segmented heap: 1GB per segment
+[829.1ms][HeapManager] Initialized with strategy: SEGMENTED
+[829.2ms][Loader] Initialized (f16, subgroups)
+[829.9ms][Loader] Loading: qwen-3-5-9b-f16-af32
+[831.0ms][Loader] [0.0s] Memory (start): | RSS=261.81 MB (heap=65.19 MB/112.96 MB, external=1.00 GB, arrayBuffers=1.00 GB) | GPU=0 B (0 active, 0 pooled, peak=0 B) | ShardCache=0 B (0 shards) | Layers=0, GPUBuffers=0
+[831.9ms][Loader] Dense model on discrete GPU - performance limited. Consider MoE model.
+[7585.6ms][Loader] Embeddings tensor loaded: name=model.language_model.embed_tokens.weight, hasShape=true, shape=[248320,4096], isWeightBuffer=true
+[7586.1ms][Loader] Layers: 0-31
+[30837.6ms][Loader] [30.0s] Memory (loading): | RSS=351.67 MB (heap=66.68 MB/102.96 MB, external=1.09 GB, arrayBuffers=1.03 GB) | GPU=7.95 GB (217 active, 0 pooled, peak=7.95 GB) | ShardCache=0 B (0 shards) | Layers=14, GPUBuffers=214
+[54499.0ms][Loader] Layers: 32 complete (46.91s)
+[60848.7ms][Loader] [60.0s] Memory (loading): | RSS=315.67 MB (heap=81.31 MB/103.96 MB, external=1.03 GB, arrayBuffers=1.02 GB) | GPU=16.68 GB (459 active, 0 pooled, peak=16.68 GB) | ShardCache=0 B (0 shards) | Layers=32, GPUBuffers=458
+[60977.5ms][Loader] Complete: 16.68 GB in 60.13s (284.00 MB/s)
+[60978.5ms][Loader] [60.1s] Memory (complete): | RSS=319.67 MB (heap=69.95 MB/103.96 MB, external=1.05 GB, arrayBuffers=1.04 GB) | GPU=16.68 GB (459 active, 0 pooled, peak=16.68 GB) | ShardCache=0 B (0 shards) | Layers=32, GPUBuffers=459
+[61020.9ms][Pipeline] Model loaded successfully (60598ms)
+[61635.6ms][KernelSelect] matmul variant=f16w_f32a reason=path_override
+[61640.0ms][KernelSelect] matmul variant=f16w_f32a_tiled reason=default
+[61671.9ms][KernelSelect] matmul variant=f32 reason=default
+[62477.7ms][KernelSelect] attention variant=prefill_head256_f16kv reason=path_override:tiled_small
+[74689.7ms][KernelSelect] matmul variant=gemv_subgroup_vec4 reason=path_override
+[74695.6ms][KernelSelect] matmul variant=gemv_subgroup reason=gemv
+[74713.9ms][KernelSelect] attention variant=decode_online_f16kv reason=path_override:subgroup
+[74839.6ms][KernelSelect] matmul variant=gemv_subgroup_multicol reason=path_override
+[75728.4ms][doppler] LoRA adapter unloaded
+[75732.6ms][ExpertCache] Cache cleared
+[75735.3ms][Pipeline] Unloaded
+{"status":"integration_probe_completed","tokenCount":4,"totalWallMs":75693.50802000001}

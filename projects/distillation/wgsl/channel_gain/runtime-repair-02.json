@@ -1,0 +1,35 @@
+{
+  "schema": "gamma.channel-gain-runtime-repair/v1",
+  "createdAt": "2026-11-13T03:05:12.796308+00:00",
+  "attempt": 2,
+  "status": "failed_at_trained_adapter_comparator",
+  "runtimeLockSha256": "088d800a4cdf146c845e545405803beaa30a6c26a3ad5acd6a59a5eaaa9513d0",
+  "journal": "native-smoke-02.jsonl",
+  "journalSha256": "bc7fe0f98dc870d5eafe2f9acd33f3651f8f8f083bd12dbd684f6eacd9f1b54a",
+  "log": "native-smoke-02.log",
+  "sourceSnapshot": "attempt-02-sources/",
+  "completedModelRequests": 9,
+  "startedButIncompleteModelRequests": 1,
+  "publicPasses": 0,
+  "coldModelLoadMs": 61365.862631,
+  "coldAdapterLoadMs": 289.1519619999963,
+  "physicalSmokeWallMs": 831936.1692,
+  "cacheDiagnosticsCompleted": 1,
+  "failure": "LoRA B element count mismatch: expected 131072, got 262144.",
+  "firstBrokenBoundary": "Original q_proj [8192,4096] includes query and gate outputs. A synthesized qGateProj caused projectQueryWithOptionalGate to treat original q_proj as query-only, passing width4096 to exported LoRA B [8192,32].",
+  "repair": {
+    "dopplerCommit": "64834f4b",
+    "behavior": "Original declared combined Q/gate shape selects full projection plus LoRA then headwise split, even when loader synthesized a gate weight. Adapter bytes unchanged.",
+    "focusedChecks": "Regression fails on original branch and passes with fix; three focused CPU tests, source/style/architecture/declaration checks passed."
+  },
+  "cleanup": {
+    "experimentExitCode": 2,
+    "ownedRuntimeUnloaded": true,
+    "providerObservedActiveAfterExit": true,
+    "providerStoppedOrReset": false
+  },
+  "retryPolicy": "Full smoke rerun under new runtime lock; attempt02 observations preserved and not merged into the completed smoke. Timing accounting and reset diagnostics will be strengthened before retry. Numerical criteria, candidates, populations and generation settings unchanged.",
+  "selectionRequests": 0,
+  "confirmationRequests": 0,
+  "isConfirmation": false
+}

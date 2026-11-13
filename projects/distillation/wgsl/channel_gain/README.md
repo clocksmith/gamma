@@ -1,6 +1,6 @@
 # First prefill channel-gain experiment
 
-Status at 2026-11-13 02:48 UTC: **repaired native model smoke running; no confirmation**.
+Status at 2026-11-13 03:09 UTC: **native smoke attempt 03 running; no confirmation**.
 The current machine-readable state is [execution-status.json](execution-status.json).
 The scope remains the first analytical MLP rule: no training, attention gains,
 other transform families, or trained controller.
@@ -50,6 +50,20 @@ or generic WGSL independence. This remains an elementwise-shader study.
 - [Runtime lock 02](native-runtime-lock-02.json) binds the repaired driver, native
   sources, model and adapter before retry. It records the one previously observed
   model request. No candidate has been selected and no confirmation has run.
+
+- [Attempt 02](native-smoke-02.jsonl): nine requests completed on the first smoke
+  task, all failing the public contract. Same-gain cache arms were measured; the
+  layer-31 KV and logits differed under the same forced prefix. The trained adapter
+  then failed at a combined query/gate projection shape mismatch. The owned runtime
+  unloaded cleanly; the provider stayed active. [Repair 02](runtime-repair-02.json)
+  preserves the failure, source snapshot, timing and Doppler `64834f4b` fix.
+- [Adapter integration probe](adapter-probe-03.json): four unscored tokens completed
+  through the repaired prefill/decode path in 75.694 seconds including model load.
+  This is a geometry diagnostic, not a shader comparison or confirmation.
+- [Runtime lock 03](native-runtime-lock-03.json) starts a complete smoke rerun, with
+  request cleanup and the entire verifier call included in timing. A separately
+  timed reset diagnostic compares original base-prefill logits after all gains are
+  discarded. Criteria, candidates, splits and sampling settings are unchanged.
 
 Focused validation: 17 original Python tests, 14 original Node tests, and 13 native
 orchestration/memory/selection tests passed; see [driver validation](runtime-02-cpu-receipt.json).
