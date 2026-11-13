@@ -12,7 +12,7 @@ attempts. This template adds no approval stage or automatic execution authority.
 | Study ID, version, date, owner instruction | Undecided |
 | Status and linked registry entry | Draft |
 | Roadmap rung and narrow claim | Undecided |
-| Standard version and SHA-256 | v1; compute when adopted |
+| Standard version and SHA-256 | v2; compute when adopted |
 | Scope/protocol path, hash, parent/amendments | Undecided |
 | Owner purpose, hypothesis, falsifying observation | Undecided |
 | Component owners and boundaries | Gamma experiment/evidence; name runtime/tool owners |
@@ -57,7 +57,9 @@ confirmation. Identify any external or temporal holdout and its limits.
 | Candidate space/order, trainable parameters and steps | Undecided |
 | Sampling, seeds, length limits and retries | Undecided |
 | Ranking and tie breaks; allowed public sample checks | Undecided |
-| Selection compute/time budget and denominator provenance | Undecided |
+| Fixed selection workload and any execution limit, with reason | Undecided |
+| Scored efficiency target and denominator provenance | Undecided |
+| Quality measurement after a missed efficiency target | Complete the authorized frozen workload; state any actual execution limit |
 | Stop/deadline behavior; incomplete-candidate disposition | Undecided |
 | Base and compute-matched baseline | Undecided |
 | Context/random/permuted-state controls | Undecided or inapplicable with reason |

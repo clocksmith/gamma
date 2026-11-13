@@ -45,8 +45,11 @@ or success on exposed training examples.
 
 **Non-claim:** a positive result would be promising research in the scoped shader
 testbed. It would not establish general coding improvement, cheap specialization or
-recursive self-improvement. The first study closed at budget admission: its smoke ran, both selection
-candidates remain untested, and no confirmation exists.
+recursive self-improvement. The original attempt stopped at budget admission.
+The owner-directed [continuation](channel_gain/protocol-continuation-02.json)
+now runs the fixed selection and confirmation workload, scoring the original
+efficiency target separately. See the [experiment registry](EXPERIMENTS.md)
+for dated evidence; an active run is not a confirmed improvement.
 
 ## 3. Efficient specialization
 

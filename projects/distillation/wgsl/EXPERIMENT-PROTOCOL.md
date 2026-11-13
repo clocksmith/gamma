@@ -1,4 +1,4 @@
-# Reconfiguration experiment standard, v1
+# Reconfiguration experiment standard, v2
 
 This standard is for prospective reconfiguration studies. Each study pins the
 content hash and version it uses. It does not rewrite an existing study's frozen
@@ -93,6 +93,19 @@ A reused trained adapter has historical training cost and current preparation co
 neither is zero merely because it existed before the run. Report unavailable costs
 as unavailable. Identify derived bounds, filesystem timing and hardware counters
 by their actual evidence class. Do not label a wall interval as GPU active time.
+
+Declare the role of every resource number. An execution limit protects an actual
+service, memory constraint, authorized compute allocation or fixed search workload;
+give its reason and stopping behavior. An efficiency target scores whether the
+method is economical. Missing an efficiency target does not by itself stop an
+otherwise authorized quality measurement. Complete the frozen workload and report
+quality and cost separately, including an unsuccessful joint criterion where
+applicable. Do not extend candidate search or tune settings after seeing reserved
+outcomes. If a real execution limit prevents completion, report incomplete evidence
+and the concrete resource needed, without interpreting it as a quality result.
+
+This distinction is prospective. Existing frozen studies retain their original
+rules and explicit continuation records; v2 does not retroactively change them.
 
 ## Execution, deviations and decisions
 
