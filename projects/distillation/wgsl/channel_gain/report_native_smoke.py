@@ -5,6 +5,7 @@ Example (outputs are new files; --overwrite replaces only this reporter's output
   python3 report_native_smoke.py --smoke native-smoke-03.jsonl \
     --attempt native-smoke-01.jsonl --attempt native-smoke-02.jsonl \
     --integration-probe adapter-probe-03.json \
+    --public-replay public-verifier-replay-03.json \
     --selection selection-receipt.json --json-output summary.json \
     --markdown-output report.md
 Missing optional selection receipts remain pending. Incomplete JSONL tails are
@@ -94,7 +95,9 @@ def unpack(value):
             "preparation": [e["record"] for e in events if e.get("kind") == "preparation"] or summary.get("preparation", []),
             "diagnostics": [e["record"] for e in events if e.get("kind") == "cache-diagnostic"] or summary.get("diagnostics", []),
             "resetDiagnostics": [e["record"] for e in events if e.get("kind") == "reset-diagnostic"] or summary.get("resetDiagnostics", []),
-            "coldLoads": [{k: e.get(k) for k in ("coldModelLoadMs", "coldAdapterLoadMs")} for e in events if e.get("kind") == "cold-load"]}
+            "coldLoads": ([{k: e.get(k) for k in ("coldModelLoadMs", "coldAdapterLoadMs")} for e in events if e.get("kind") == "cold-load"]
+                          or ([{k: summary.get(k) for k in ("coldModelLoadMs", "coldAdapterLoadMs")}]
+                              if any(k in summary for k in ("coldModelLoadMs", "coldAdapterLoadMs")) else []))}
 
 
 def compact_memory(memory):
@@ -138,11 +141,103 @@ def summarize_probe(value, source):
                         "timing": request.get("timing", {}), "memory": compact_memory(request.get("memory", {}))}}
 
 
-def build_report(smoke, provenance, attempts, selection, selection_provenance, label, integration_probes=()):
+def validate_reporting_replay(original, original_input, replay):
+    """Check report bindings; the execution-stage validator also checks the seal/code.
+
+    This reader never substitutes for validatePublicReplay in native_experiment.
+    It consumes already executed receipts and reads no oracle or runtime modules.
+    """
+    if not isinstance(original, dict) or original.get("schema") != "gamma.channel-gain-native-smoke/v1" or original.get("status") != "smoke_complete":
+        raise ValueError("Public replay requires the original complete native smoke JSON receipt, not a journal")
+    if not isinstance(replay, dict) or replay.get("schema") != "gamma.channel-gain-public-verifier-replay/v1" or replay.get("status") != "smoke_public_replay_complete":
+        raise ValueError("Expected a completed public-verifier replay receipt")
+    generation = replay.get("generation", {})
+    if (generation.get("originalSmokeFileSha256") != original_input["sha256"]
+            or not original.get("runtimeLockSha256") or generation.get("runtimeLockSha256") != original["runtimeLockSha256"]
+            or not original.get("receiptSha256") or generation.get("originalSmokeReceiptSha256") != original["receiptSha256"]
+            or generation.get("allSourcesAndTokenSequencesPreserved") is not True):
+        raise ValueError("Replay does not bind the supplied original smoke file/runtime/receipt")
+    corrected = replay.get("corrected", {})
+    k = original.get("k")
+    if not isinstance(k, int) or isinstance(k, bool) or k < 1 or corrected.get("k") != k or corrected.get("derivedK") != k:
+        raise ValueError("Replay changed the frozen smoke k")
+    if corrected.get("modelRequestsAdded") != 0 or corrected.get("confirmationEvaluated") is not False:
+        raise ValueError("Public replay must add no model requests or confirmation")
+    old_results, results = original.get("results", []), corrected.get("results", [])
+    if not old_results or len(results) != len(old_results) or original.get("requestCount") != len(old_results):
+        raise ValueError("Replay request set changed")
+    for old, new in zip(old_results, results):
+        receipt, timing = new.get("publicReceipt", {}), new.get("timing", {})
+        before = old.get("timing", {})
+        for value in (before.get("verifier_ms"), before.get("end_to_end_ms"), timing.get("verifier_ms"), receipt.get("verifierMs")):
+            if not number(value) or value < 0:
+                raise ValueError("Invalid original/replayed verifier timing")
+        if before["end_to_end_ms"] < before["verifier_ms"]:
+            raise ValueError("Original E2E excludes verifier timing")
+        expected_replay = {"originalPublicReceipt": old["publicReceipt"], "originalOuterVerifierMs": before["verifier_ms"],
+                           "originalEndToEndMs": before["end_to_end_ms"], "replayOuterVerifierMs": timing["verifier_ms"]}
+        if "verifier_dispatch_ms" in before:
+            expected_replay["originalDispatchVerifierMs"] = before["verifier_dispatch_ms"]
+        expected = {**old, "publicReceipt": receipt, "timing": {**before, "verifier_ms": timing["verifier_ms"],
+                    "verifier_dispatch_ms": receipt["verifierMs"],
+                    "end_to_end_ms": before["end_to_end_ms"] - before["verifier_ms"] + timing["verifier_ms"]},
+                    "verifierReplay": expected_replay}
+        if new != expected:
+            raise ValueError("Replay changed generation or non-verifier timing/state")
+        tasks = receipt.get("tasks", [])
+        old_receipt = old["publicReceipt"]
+        if (receipt.get("scope") != "public" or receipt.get("confirmationEvaluated") is not False or len(tasks) != 1
+                or tasks[0].get("taskId") != old["taskId"] or tasks[0].get("sourceSha256") != digest(old["source"].encode())
+                or receipt.get("inputHashes") != old_receipt.get("inputHashes")
+                or receipt.get("deviceInfo") != old_receipt.get("deviceInfo")
+                or receipt.get("deviceInfo") != replay.get("verifier", {}).get("device")
+                or [c.get("id") for c in tasks[0].get("checks", [])] != [c.get("id") for c in old_receipt["tasks"][0].get("checks", [])]
+                or any(c.get("visibility") != "public" for c in tasks[0].get("checks", []))):
+            raise ValueError("Replay changed public check/source/device identities")
+        rp = receipt.get("provenance", {})
+        if (rp.get("replaySealSha256") != replay.get("sealSha256") or rp.get("generationRuntimeLockSha256") != original["runtimeLockSha256"]
+                or rp.get("layoutRepair") != replay.get("verifier", {}).get("repair")):
+            raise ValueError("Replay request verifier provenance mismatch")
+    for key in ("preparation", "diagnostics", "resetDiagnostics"):
+        if corrected.get(key) != original.get(key):
+            raise ValueError(f"Replay changed original {key}")
+    if corrected.get("originalPhysicalSmokeWallMs") != original.get("physicalSmokeWallMs") or corrected.get("originalBestOfK") != original.get("bestOfK"):
+        raise ValueError("Replay lost original wall cost or best-of-k evidence")
+    base = [r for r in results if r["condition"] == "base"]
+    gained = [r for r in results if r["condition"] == "channel_gain" and r["arm"] == "mlp_base_cache"]
+    if not base or len(base) != len(gained) or sum(r["timing"]["end_to_end_ms"] for r in base) <= 0:
+        raise ValueError("Replay lacks matched base/gain timing")
+    derived = max(1, math.ceil(sum(r["timing"]["end_to_end_ms"] for r in gained) / sum(r["timing"]["end_to_end_ms"] for r in base)))
+    if derived != k:
+        raise ValueError("Replayed timings change k")
+    best = []
+    for baseline in base:
+        samples = sorted([r for r in results if r["taskId"] == baseline["taskId"] and r["condition"] in ("base", "base_matched_best_of_k")], key=lambda r: r["sampleIndex"])
+        if [r["sampleIndex"] for r in samples] != list(range(k)):
+            raise ValueError("Replay changed existing best-of-k samples")
+        winner = max(samples, key=lambda r: sum(c.get("passed") is True for t in r["publicReceipt"]["tasks"] for c in t["checks"]))
+        best.append({"taskId": baseline["taskId"], "k": k, "selectedId": winner["id"], "selectedSourceSha256": digest(winner["source"].encode()),
+                     "actualComputeMs": sum(r["timing"]["end_to_end_ms"] for r in samples),
+                     "transformComputeMs": next(r for r in gained if r["taskId"] == baseline["taskId"])["timing"]["end_to_end_ms"]})
+    if corrected.get("bestOfK") != best:
+        raise ValueError("Replayed best-of-k ranking/cost is not reproducible from existing public samples")
+    return corrected
+
+
+def build_report(smoke, provenance, attempts, selection, selection_provenance, label, integration_probes=(), public_replay=None, replay_provenance=None):
     run = unpack(smoke)
     if provenance.get("warnings"):
         run["status"] = "smoke_incomplete"
+    raw_requests = run["requests"]
+    corrected = validate_reporting_replay(smoke, provenance, public_replay) if public_replay is not None else None
+    if corrected is not None:
+        run = {**run, "requests": corrected["results"]}
     requests = [request_summary(r) for r in run["requests"]]
+    if corrected is not None:
+        for request, original in zip(requests, raw_requests):
+            request["originalPublicOutcome"] = request_summary(original)["publicOutcome"]
+            request["originalVerifierMs"] = original["timing"]["verifier_ms"]
+            request["originalAttributedEndToEndMs"] = original["timing"]["end_to_end_ms"]
     bases = {r["taskId"]: r for r in requests if r["condition"] == "base"}
     for r in requests:
         base = bases.get(r["taskId"])
@@ -190,6 +285,7 @@ def build_report(smoke, provenance, attempts, selection, selection_provenance, l
         if lock and lock != selection.get("runtimeLockSha256"):
             raise ValueError("Selection/smoke runtime identities differ")
     summary = run["summary"]
+    best_of_k = corrected if corrected is not None else summary
     preparations = [{k: v for k, v in p.items() if k != "memory"} | {"memory": compact_memory(p.get("memory", {}))} for p in run["preparation"]]
     probes, seen_probes = [], set()
     for value, source in integration_probes:
@@ -198,7 +294,12 @@ def build_report(smoke, provenance, attempts, selection, selection_provenance, l
             probes.append(summarize_probe(value, source))
             seen_probes.add(identity)
     return {"schema": SCHEMA, "label": label, "evidenceClass": "descriptive_smoke_only",
-            "inputs": {"smoke": provenance, "selection": selection_provenance},
+            "inputs": {"smoke": provenance, "selection": selection_provenance, "publicReplay": replay_provenance},
+            "publicReplay": ({"status": public_replay["status"], "generation": public_replay["generation"], "verifier": public_replay["verifier"],
+                              "sealSha256": public_replay["sealSha256"], "receiptSha256": public_replay.get("receiptSha256"),
+                              "replayPhysicalWallMs": public_replay.get("replayPhysicalWallMs"), "provenanceStatement": public_replay.get("provenanceStatement"),
+                              "reportValidation": "Original raw file/runtime/receipt binding, preserved generation/non-verifier timing and diagnostics, public identities, unchanged k and existing-sample reranking; full seal/code validation belongs to the execution-stage validator."}
+                             if corrected is not None else None),
             "smoke": {"status": run["status"], "completedRequests": len(requests), "observedTasks": len({r["taskId"] for r in requests}), "errors": run["errors"]},
             "attempts": {"suppliedUniqueAttempts": len(attempt_rows), "failedAttempts": sum(a["failed"] for a in attempt_rows), "records": attempt_rows},
             "groups": groups, "requests": requests, "sameGainPairs": pairs,
@@ -207,16 +308,19 @@ def build_report(smoke, provenance, attempts, selection, selection_provenance, l
             "costs": {"coldLoads": run["coldLoads"], "physicalSmokeWallMs": summary.get("physicalSmokeWallMs"),
                       "actualPreparationMs": stats([p.get("actualPreparationMs") for p in preparations]),
                       "completedPhysicalRequestMs": stats([r["physicalRequestMs"] for r in requests]),
-                      "completedVerifierMs": stats([r["timing"].get("verifier_ms") for r in requests]),
+                      "completedVerifierMs": stats([r["timing"].get("verifier_ms") for r in raw_requests]),
+                      "replayedVerifierMs": stats([r["timing"].get("verifier_ms") for r in requests]) if corrected is not None else None,
                       "cacheDiagnosticMs": stats([d.get("diagnosticMs") for d in run["diagnostics"]]),
                       "resetDiagnosticMs": stats([d.get("resetDiagnosticMs") for d in run["resetDiagnostics"]]),
                       "attributedTimingBreakdownMs": {key: stats([r["timing"].get(key) for r in requests]) for key in EXTRA_TIMING_FIELDS},
                       "selectionGpuMsCharged": summary.get("selectionGpuMsCharged"),
-                      "bestOfK": {"status": "recorded" if "bestOfK" in summary else "pending", "k": summary.get("k"), "tasks": summary.get("bestOfK", [])},
+                      "bestOfK": {"status": "recorded" if "bestOfK" in best_of_k else "pending", "k": best_of_k.get("k"), "tasks": best_of_k.get("bestOfK", [])},
+                      "originalBestOfK": summary.get("bestOfK") if corrected is not None else None,
                       "eta": summary.get("eta") if run["status"] == "smoke_complete" else None},
             "selection": selected, "confirmation": {"status": "not_evaluated" if selected.get("status") == "selection_not_admitted" else "not_established_by_these_inputs", "statisticalConfirmationClaim": False},
             "limitations": [
                 "Public smoke checks are descriptive observations, not held-out semantic confirmation, selection evidence, or a test of the frozen success criteria.",
+                "When public replay is supplied, request scores, attributed verifier/E2E timings and best-of-k reflect the repaired verifier over unchanged samples. Original physical smoke wall, cold load and original verifier costs remain original observations; replay wall/browser startup are separate incurred costs, not replacements for historical compute. The retained ETA is the original smoke forecast, not recomputed from replay.",
                 "Incomplete smoke does not establish all-control throughput or a full-batch ETA. Missing requests, comparator results and diagnostics remain missing.",
                 "Failure counts cover only unique supplied attempt files. An incomplete file without a recorded error is not called a failed process.",
                 "Attributed end-to-end latency includes each request's reference/instruction prefill and gain work plus verification. Shared preparation is attributed to multiple arms; summing attributed latencies is not physical batch cost.",
@@ -249,6 +353,9 @@ def markdown(report):
              f"Selection: **{report['selection']['status']}**. Confirmation: **{report['confirmation']['status']}**.", "",
              "| Condition / cache arm | Requests | Public pass / fail / unmeasured | Mean tokens | Mean attributed E2E ms | Mean physical request ms | Mean E2E change vs same-task base |",
              "| --- | ---: | --- | ---: | ---: | ---: | ---: |"]
+    if report["publicReplay"]:
+        lines[5:5] = ["Displayed public scores, attributed verifier/E2E timings and best-of-k use the separately recorded repaired-verifier replay over unchanged original samples.",
+                      f"Mixed provenance: {report['publicReplay'].get('provenanceStatement')}", ""]
     for g in report["groups"]:
         o = g["publicOutcomes"]
         overhead = g["descriptiveMatchedBaseOverheadFraction"]["mean"]
@@ -260,6 +367,10 @@ def markdown(report):
         lines.append(f"- {key}: {fmt(s['sum'])} ms ({s['observed']} recorded, {s['missing']} missing).")
     for load in report["costs"]["coldLoads"]:
         lines.append(f"- Cold model load: {fmt(load['coldModelLoadMs'])} ms; cold adapter load: {fmt(load['coldAdapterLoadMs'])} ms.")
+    if report["publicReplay"]:
+        replay = report["publicReplay"]
+        lines += [f"- Original completed verifier cost remains {fmt(report['costs']['completedVerifierMs']['sum'])} ms.",
+                  f"- Separate replay wall: {fmt(replay['replayPhysicalWallMs'])} ms; browser startup: {fmt(replay['verifier'].get('browserStartupMs'))} ms; replayed request-verifier intervals: {fmt(report['costs']['replayedVerifierMs']['sum'])} ms."]
     lines += [f"- Best-of-k: {report['costs']['bestOfK']['status']}; k={report['costs']['bestOfK']['k']}."]
     for task in report["costs"]["bestOfK"]["tasks"]:
         lines.append(f"- {cell(task['taskId'])}: base samples {fmt(task.get('actualComputeMs'))} ms; transform {fmt(task.get('transformComputeMs'))} ms.")
@@ -318,7 +429,7 @@ def markdown(report):
         lines += ["", "Admission observation: `" + json.dumps(report["selection"]["admission"], sort_keys=True) + "`."]
     lines += ["", "## Evidence limits", ""] + [f"- {text}" for text in report["limitations"]]
     lines += ["", "## Input provenance", ""]
-    for role, source in [("smoke", report["inputs"]["smoke"]), ("selection", report["inputs"]["selection"])]:
+    for role, source in report["inputs"].items():
         if source:
             lines.append(f"- {role}: `{source['path']}`; {source['status']}; SHA256 `{source['sha256']}`.")
             lines.extend(f"  - {warning}" for warning in source.get("warnings", []))
@@ -335,13 +446,14 @@ def main():
     parser.add_argument("--smoke", required=True)
     parser.add_argument("--attempt", action="append", default=[])
     parser.add_argument("--selection")
+    parser.add_argument("--public-replay", help="Completed sealed public replay; requires --smoke to be the original complete JSON receipt")
     parser.add_argument("--integration-probe", action="append", default=[], help="Optional diagnostic receipt; repeat for separate probes")
     parser.add_argument("--json-output", required=True)
     parser.add_argument("--markdown-output", required=True)
     parser.add_argument("--label", default="Native smoke report")
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args()
-    inputs = {Path(p).resolve() for p in [args.smoke, *args.attempt, *args.integration_probe, *([args.selection] if args.selection else [])]}
+    inputs = {Path(p).resolve() for p in [args.smoke, *args.attempt, *args.integration_probe, *([args.selection] if args.selection else []), *([args.public_replay] if args.public_replay else [])]}
     outputs = [Path(args.json_output).resolve(), Path(args.markdown_output).resolve()]
     if len(set(outputs)) != 2 or any(p in inputs for p in outputs):
         parser.error("Output paths must be distinct from each other and all inputs")
@@ -354,7 +466,8 @@ def main():
     attempts = [load(p) for p in args.attempt]
     selection, selection_source = load(args.selection, optional=True) if args.selection else (None, None)
     probes = [load(p, optional=True) for p in args.integration_probe]
-    report = build_report(smoke, source, attempts, selection, selection_source, args.label, probes)
+    replay, replay_source = load(args.public_replay) if args.public_replay else (None, None)
+    report = build_report(smoke, source, attempts, selection, selection_source, args.label, probes, replay, replay_source)
     report["reporterSha256"] = digest(Path(__file__).read_bytes())
     for path, content in zip(outputs, (json.dumps(report, indent=2, allow_nan=False) + "\n", markdown(report))):
         path.parent.mkdir(parents=True, exist_ok=True)
