@@ -63,18 +63,7 @@ class ConcreteEngine(LLMEngine):
             # Parent couldn't handle it (no tokenizer or not implemented), provide our own implementation
             pass
 
-        # Mock implementation for non-cached, non-special tokens
-        token_map = {
-            100: "hello",
-            101: "world",
-            102: " ",
-            103: ".",
-            104: "123",
-            105: cfg.TOKEN_BOS,
-            106: cfg.TOKEN_EOS,
-            107: cfg.TOKEN_NL,
-        }
-        text = token_map.get(token_id, f"token_{token_id}")
+        text = self._decode_token_raw(token_id)
         self._token_cache[token_id] = text
         return text
 
@@ -139,16 +128,6 @@ class ConcreteEngine(LLMEngine):
     def import_kv_cache_state(self, state: Dict[str, Any]) -> bool:
         """Import KV cache state from another engine."""
         return False
-
-    def append_to_input(self, input_ids: Any, new_token_id: int) -> Any:
-        """Append a new token to input_ids tensor."""
-        if isinstance(input_ids, list):
-            return input_ids + [new_token_id]
-        return np.append(input_ids, new_token_id)
-
-    def get_device(self) -> str:
-        """Get device type (cpu, cuda, mps, etc)."""
-        return "cpu"
 
     def append_to_input(self, input_ids: Any, new_token_id: int) -> Any:
         """Append to input."""

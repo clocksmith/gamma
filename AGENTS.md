@@ -50,7 +50,12 @@ internal algorithms. Handoffs state the component, whether intent was preserved
 or deliberately changed, acceptance evidence, and boundary effects.
 
 ### Before Starting
-- Read `README.md`, `EMOJI.md`, `src/engines/README.md`, and `src/game/README.md`
+- Read `README.md` and `EMOJI.md` for repository intent and style.
+- Use `docs/COMPONENT_INDEX.md` to find the affected owner and follow the
+  target-ancestor CATSCAN chain above.
+- Read `src/engines/README.md` when changing engines or their interfaces, and
+  `src/game/README.md` when changing the game or its interfaces. Unrelated
+  project work does not require either owner README.
 
 ### Distillation Process Rules (critical)
 Before any distillation run or checkpoint sweep:

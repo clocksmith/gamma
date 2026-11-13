@@ -73,7 +73,8 @@ def fake_python(path, label, *, has_pytest=True):
 
 
 @pytest.mark.parametrize("selection", ["explicit", "local", "missing-pytest"])
-def test_runner_keeps_the_selected_environment(tmp_path, selection):
+@pytest.mark.parametrize("targets", [[], ["tests/a test.py::test_one"]])
+def test_runner_keeps_the_selected_environment(tmp_path, selection, targets):
     shutil.copyfile(ROOT / "run_tests.sh", tmp_path / "run_tests.sh")
     fake_python(tmp_path / ".venv/bin/python", "local", has_pytest=selection != "missing-pytest")
     fake_python(tmp_path / "bin/python3", "fallback")
@@ -84,7 +85,7 @@ def test_runner_keeps_the_selected_environment(tmp_path, selection):
         fake_python(custom, "explicit")
         env["PYTHON_BIN"] = str(custom)
     result = subprocess.run(
-        ["bash", "run_tests.sh", "tests/a test.py::test_one"],
+        ["bash", "run_tests.sh", *targets],
         cwd=tmp_path, env=env, capture_output=True, text=True, timeout=10,
     )
     if selection == "missing-pytest":
@@ -94,4 +95,7 @@ def test_runner_keeps_the_selected_environment(tmp_path, selection):
     else:
         assert result.returncode == 0, result.stdout + result.stderr
         assert f"\n{selection}\n" in result.stdout
-        assert "<tests/a test.py::test_one>" in result.stdout
+        if targets:
+            assert "<tests/a test.py::test_one>" in result.stdout
+        else:
+            assert "<tests/test_engine_interface.py><tests/test_engine_factory.py><tests/test_game.py><tests/test_ui_components.py>" in result.stdout

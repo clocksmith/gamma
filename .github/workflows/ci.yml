@@ -73,7 +73,7 @@ jobs:
       - name: Ruff syntax and undefined names
         run: ruff check .
 
-  # Hosted CI is a smoke test. The full pytest suite (./run_tests.sh) and the
+  # Hosted CI is a smoke test. The full pytest suite (./run_tests.sh tests) and the
   # CATSCAN drift check (python tools/catscan.py --check) run on demand.
   smoke:
     runs-on: ubuntu-latest
@@ -84,10 +84,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements/smoke.txt
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt pytest
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r requirements/smoke.txt
       - name: CLI help smoke
         run: |
           python gamma.py help

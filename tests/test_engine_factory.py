@@ -77,11 +77,6 @@ class TestGetEngine(unittest.TestCase):
         expected_config = {"temperature": 0.8, "mode": "interactive"}
         mock_ollama.assert_called_once_with("test-model", expected_config)
 
-    def test_ollama_import_error(self):
-        """Should raise RuntimeError on import failure."""
-        # No need to patch - just test with missing module case
-        # The factory will handle ImportError naturally
-        pass  # Skip for now as it requires actual missing module
 
     def test_pytorch_engine(self):
         """Should return PyTorch engine."""
@@ -95,19 +90,6 @@ class TestGetEngine(unittest.TestCase):
         self.assertEqual(result, mock_instance)
         mock_pytorch.assert_called_once()
 
-    def test_pytorch_import_error(self):
-        """Should raise RuntimeError on PyTorch import failure."""
-        pass  # Skip - requires actual missing module
-
-    def test_pytorch_cuda_engine_with_cuda(self):
-        """Should handle PyTorch CUDA engine."""
-        # Complex torch imports - skip for basic testing
-        pass
-
-    def test_pytorch_cuda_fallback_no_cuda(self):
-        """Should fallback to PyTorch when CUDA not available."""
-        # Complex torch imports - skip for basic testing
-        pass
 
     def test_tensorflow_engine(self):
         """Should return TensorFlow engine."""
@@ -120,9 +102,6 @@ class TestGetEngine(unittest.TestCase):
 
         self.assertEqual(result, mock_instance)
 
-    def test_tensorflow_import_error(self):
-        """Should raise RuntimeError on TensorFlow import failure."""
-        pass  # Skip - requires actual missing module
 
     def test_jax_engine(self):
         """Should return JAX engine."""
@@ -135,9 +114,6 @@ class TestGetEngine(unittest.TestCase):
 
         self.assertEqual(result, mock_instance)
 
-    def test_jax_import_error(self):
-        """Should raise RuntimeError on JAX import failure."""
-        pass  # Skip - requires actual missing module
 
     def test_llamacpp_engine(self):
         """Should return Llama.cpp engine."""
@@ -150,51 +126,6 @@ class TestGetEngine(unittest.TestCase):
 
         self.assertEqual(result, mock_instance)
 
-    def test_llamacpp_import_error(self):
-        """Should raise RuntimeError on Llama.cpp import failure."""
-        pass  # Skip - requires actual missing module
-
-    def test_onnx_engine_with_tokenizer(self):
-        """Should return ONNX engine with tokenizer."""
-        # Complex ONNX imports - skip for basic testing
-        pass
-
-    def test_onnx_engine_without_tokenizer(self):
-        """Should raise error if ONNX tokenizer not specified."""
-        # Complex ONNX imports - skip for basic testing
-        pass
-
-    def test_onnx_import_error(self):
-        """Should raise RuntimeError on ONNX import failure."""
-        pass  # Skip - requires actual missing module
-
-    def test_mlx_engine_on_apple_silicon(self):
-        """Should return MLX engine on Apple Silicon."""
-        # Complex MLX imports - skip for basic testing
-        pass
-
-    def test_mlx_engine_warning_non_apple(self):
-        """Should warn when using MLX on non-Apple platform."""
-        # Complex MLX imports - skip for basic testing
-        pass
-
-    def test_mlx_import_error(self):
-        """Should raise RuntimeError on MLX import failure."""
-        pass  # Skip - requires actual missing module
-
-    def test_mlx_gpu_engine_on_apple_silicon(self):
-        """Should return MLX GPU engine on Apple Silicon."""
-        # Complex MLX imports - skip for basic testing
-        pass
-
-    def test_mlx_gpu_engine_warning_non_apple(self):
-        """Should warn when using MLX GPU on non-Apple platform."""
-        # Complex MLX imports - skip for basic testing
-        pass
-
-    def test_mlx_gpu_import_error(self):
-        """Should raise RuntimeError on MLX GPU import failure."""
-        pass  # Skip - requires actual missing module
 
     @patch('src.engines.wrappers.ollama_wrapper.OllamaEngine')
     def test_engine_name_case_insensitive(self, mock_ollama):

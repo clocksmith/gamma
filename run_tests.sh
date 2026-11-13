@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # GAMMA test runner.
 # Thin wrapper over pytest with full failure output.
+# No arguments: core smoke tests. Full suite: ./run_tests.sh tests
 
 set -euo pipefail
 
@@ -22,7 +23,12 @@ fi
 if [[ "$#" -gt 0 ]]; then
   TARGETS=("$@")
 else
-  TARGETS=("tests")
+  TARGETS=(
+    "tests/test_engine_interface.py"
+    "tests/test_engine_factory.py"
+    "tests/test_game.py"
+    "tests/test_ui_components.py"
+  )
 fi
 
 PYTEST_ARGS=("-x" "-ra")

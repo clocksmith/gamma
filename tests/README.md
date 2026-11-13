@@ -46,8 +46,8 @@ Test Results: 9 passed, 0 failed
 ### All Tests
 
 ```bash
-# Run the pytest wrapper (fail-fast, full errors)
-./run_tests.sh
+# Run the full suite explicitly (fail-fast, full errors)
+./run_tests.sh tests
 
 # Or run pytest directly
 python3 -m pytest tests
@@ -61,6 +61,8 @@ Ordinary collection skips the archived enwiki9 modules before importing them.
 Name an archived file/node, use `-m enwiki9` (or another explicit marker
 expression), or set `GAMMA_ALL_TESTS=1` to collect them. The archive tests remain
 available without imposing their dependencies on ordinary runs.
+
+With no arguments, `./run_tests.sh` runs the four core smoke files used by CI.
 
 ### Individual Tests
 
@@ -181,13 +183,13 @@ pushes to `main`:
 
 - `lint`: `ruff check --select E9,F63,F7,F82` over everything except the
   archived `projects/enwiki9` lane and notebooks.
-- `smoke`: installs `requirements.txt` and pytest, runs `python gamma.py help`
+- `smoke`: installs CPU torch and `requirements/smoke.txt`, runs `python gamma.py help`
   and `python gamma.py help <command>` for `game`, `comparison`, `mind-meld`,
   `benchmark`, and `codegen`, then the engine, game, and UI tests
   (`tests/test_engine_interface.py`, `tests/test_engine_factory.py`,
   `tests/test_game.py`, `tests/test_ui_components.py`).
 
-The full pytest suite (`./run_tests.sh`) and the CATSCAN drift check
+The full pytest suite (`./run_tests.sh tests`) and the CATSCAN drift check
 (`python tools/catscan.py --check`) are not CI gates; run them when a change
 edits what they cover.
 
