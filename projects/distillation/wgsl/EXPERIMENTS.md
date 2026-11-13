@@ -18,7 +18,7 @@ retroactively rewritten by that standard.
 | Arms | MLP/base-cache and MLP/frozen-gain re-prefill, sharing identical gains |
 | All-projections | Not applicable to this rule; neither passed nor failed |
 | Populations | 2 smoke / 4 selection / 16 confirmation semantic families |
-| Status snapshot | Closed at budget admission; candidates untested; no confirmation result |
+| Status snapshot | Continuation 02 active: selection then confirmation; no confirmation result yet |
 | Authority | Owner's first-rule request and MLP-only clarification, 2026-11-12 |
 
 The comparison protocol is SAME-R, not a model arm. The trained seed-47 adapter is a
@@ -93,6 +93,14 @@ candidate was chosen and no confirmation-population checks were read. The estima
 is empirical and implementation-specific. The [final report](channel_gain/README.md)
 retains failures, costs, cache/memory boundaries and the explicit mixed provenance.
 The provider stayed active with zero restarts; owned experiment resources exited.
+
+**2026-11-13, owner correction and continuation 02:** the owner rejected stopping
+at the efficiency target before answering the shader question. The [explicit continuation](channel_gain/protocol-continuation-02.json)
+retains that target in the scorecard and authorizes completion of the unchanged
+fixed selection/confirmation workload. [Stage lock 04](channel_gain/native-stage-lock-04.json)
+binds the runner and policy before any selection request. Prior smoke, failed
+attempts and budget-stop receipts remain unchanged. Quality and efficiency will be
+reported separately; hidden checks still cannot select candidates or samples.
 
 Append subsequent attempts, deviations, costs and decisions here with their own
 receipts. Preserve these observations if a rerun succeeds. Smoke timing can support

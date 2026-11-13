@@ -1,5 +1,14 @@
 # First prefill channel-gain experiment
 
+**Continuation 02 is active, 2026-11-13.** The owner rejected the budget-only stop
+because it left the shader question unanswered. The [continuation policy](protocol-continuation-02.json)
+keeps the original 1% setup-efficiency target as a scored criterion, but allows the
+fixed eight selection and 176 confirmation requests to finish. Candidates, tasks,
+controls, k=2 and hidden-test separation are unchanged. [Stage lock 04](native-stage-lock-04.json)
+pins this policy and runner before selection. The earlier closed run below remains
+preserved; it is not the current execution status. See [execution-status.json](execution-status.json).
+
+
 **Run closed at selection admission, 2026-11-13. No shader-improvement confirmation.**
 The complete two-task smoke and corrected public replay ran. The eight-request
 selection workload was not admitted under the unchanged 35.59 GPU-second cap;

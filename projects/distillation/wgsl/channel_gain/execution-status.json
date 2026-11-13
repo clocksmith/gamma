@@ -1,7 +1,7 @@
 {
   "schema": "gamma.channel-gain-execution-status/v1",
-  "updatedAt": "2026-11-13T03:50:24.260038+00:00",
-  "status": "closed_at_selection_budget_admission_no_confirmation",
+  "updatedAt": "2026-11-13T11:28:30.761887+00:00",
+  "status": "continuation_02_selection_model_loading",
   "protocolFreezeSha256": "f23dc4e50eb480c53ebc759c3aafb3ad457cd50fae4bab0e06595fb419561f3b",
   "modelRequests": 33,
   "modelSmokeRequests": 32,
@@ -68,10 +68,12 @@
     "servingOverhead": "smoke_descriptive_only",
     "wrongAcceptances": "not_evaluated_on_confirmation"
   },
-  "blockers": [
-    "Frozen 35.59 GPU-second selection cap does not admit the complete eight-request workload under its measured timing envelope. No winner or confirmation is authorized by this run."
+  "blockers": [],
+  "nextWork": [
+    "Complete both candidates on all four selection families",
+    "Freeze selected candidate and all confirmation submissions before hidden verification",
+    "Report shader quality and efficiency separately from full confirmation receipts"
   ],
-  "nextWork": [],
   "currentRuntimeLockSha256": "6be766a21347c52762c504d2fa348383bfe388f5a61fefcbaeb82e6a178ba2db",
   "priorAttempt": {
     "receipt": "runtime-repair-02.json",
@@ -83,14 +85,14 @@
   "runtimePreparation": {
     "modelArtifactPreflight": "native-artifact-preflight.json",
     "selectionBudget": "selection-budget-receipt.json",
-    "safeWindow": "Finished. Owned model/browser exited; monitor stopped. Provider active, main PID1800927, zero restarts. 1,021 allowed guard observations.",
+    "safeWindow": "Fresh read-only monitor active; provider active with unchanged PID1800927, stageAdmitted0. Private model loading verified from live log.",
     "nativeRuntime": "Doppler 64834f4b with explicit F32 split execution overlay",
     "pythonFallbackUsed": false
   },
   "modelDiagnosticRequests": 1,
   "incompleteModelRequests": 1,
   "completedCurrentSmokeRequests": 22,
-  "measuredModelEtaStatus": "counterfactual_remaining_plan_not_admitted",
+  "measuredModelEtaStatus": "Prior smoke forecast for active continuation; not a cutoff",
   "finalReceipts": {
     "rawSmoke": "native-smoke-03.json",
     "repairedPublicReplay": "public-replay-03.json",
@@ -148,5 +150,16 @@
   ],
   "requestCountDefinition": "Completed generated responses: 32 across three smoke attempts plus one four-token integration probe. Capture/reference/reset diagnostic prefills are reported separately in preparation/diagnostic costs. One additional adapter generation started but failed during prefill.",
   "completedGenerationRequests": 33,
-  "initiatedGenerationRequests": 34
+  "initiatedGenerationRequests": 34,
+  "continuation": {
+    "policy": "protocol-continuation-02.json",
+    "continuationSha256": "7633a15c9e322fdeb4b44a60f7ecadbdf263adebdd1ad593fb80c5127e8137a6",
+    "stageLock": "native-stage-lock-04.json",
+    "selectionOutput": "native-selection-04",
+    "confirmationOutput": "native-confirmation-04",
+    "execution": "Complete fixed workload; measure setup efficiency without using threshold as execution veto",
+    "fixedSelectionRequests": 8,
+    "fixedConfirmationRequests": 176,
+    "previousOutcomePreserved": "native-selection-03/selection-receipt.json"
+  }
 }
