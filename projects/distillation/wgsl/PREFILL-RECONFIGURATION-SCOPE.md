@@ -1,7 +1,8 @@
-# Prefill-derived decode reconfiguration (scope, not authorized)
+# Prefill-derived decode reconfiguration (first MLP rule authorized)
 
-Scope drafted 2026-11-12 by A1 from the owner's hypothesis and review. It authorizes
-no runtime change, training, evaluation or materialization run. SAME-R
+Scope drafted 2026-11-12 by A1 from the owner's hypothesis and review. The owner
+authorized implementation and execution of the first channel-gain experiment on
+2026-11-12. Later transform families and new training remain outside this run. SAME-R
 (`projects/samer`) is the comparison protocol, not an arm.
 
 ## Hypothesis (owner)
@@ -107,9 +108,11 @@ permutations, one submission per task. Compiler acceptance alone counts for noth
 No synthetic training data is needed for the primary track; independent tests are
 still required.
 
-## Success criteria (proposed by A1; the owner freezes them before any run)
+## Success criteria (frozen for the first MLP rule, 2026-11-12)
 
-No run starts until these numbers are frozen in this file. They are this experiment's
+The numbers below are retained unchanged and frozen by the owner-authorized
+implementation request before any experiment run. Concrete candidate settings and
+task counts are frozen in [channel_gain/protocol.json](channel_gain/protocol.json). They are this experiment's
 decision rule, not a verdict on the idea. Measured once on the confirmation population
 after the rule and its settings are fixed on the selection population. A no-training
 rule is an interesting result only if all of these hold:
@@ -143,3 +146,17 @@ with its training compute stated against one seed-47 SFT run.
   adapter guard. This is coordinated with A2, who owns the runtime and shader work.
 - GPUs: Jupiter's driver needs a reset; the Mac and bee are busy (2026-11-12).
 - Owner decisions: authorize the runtime path, task materialization and compute.
+
+## First-rule cache clarification (owner, 2026-11-12)
+
+Run only MLP/base-cache and MLP/re-prefill. Compute each task/control gain once
+from base prefill and use the identical immutable gain state in both arms. The
+all-projections arm is **not applicable**, neither passed nor failed. Attention
+projection gains would be a separately defined and frozen intervention. No other
+transform family or trained controller is authorized by this first experiment.
+
+The implementation status and blockers are recorded in
+[channel_gain/README.md](channel_gain/README.md). A protocol freeze is not a
+confirmation result; execution still requires artifact/runtime checks, the numeric
+selection-budget receipt, an available GPU window. The owner waived A2 coordination for this lane on
+2026-11-12; existing live GPU services remain protected.

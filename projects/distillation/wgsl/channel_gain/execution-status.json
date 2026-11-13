@@ -1,0 +1,62 @@
+{
+  "schema": "gamma.channel-gain-execution-status/v1",
+  "updatedAt": "2026-11-13T02:08:26.141758+00:00",
+  "status": "incomplete_execution_blocked",
+  "protocolFreezeSha256": "f23dc4e50eb480c53ebc759c3aafb3ad457cd50fae4bab0e06595fb419561f3b",
+  "modelRequests": 0,
+  "modelSmokeRequests": 0,
+  "selectionTasksEvaluated": 0,
+  "selectedCandidate": null,
+  "confirmationModelTasksEvaluated": 0,
+  "offlineTrainingSteps": 0,
+  "modelSmokeTimingMs": null,
+  "measuredModelEtaSeconds": null,
+  "referenceQualification": {
+    "tasksPassed": 22,
+    "tasksTotal": 22,
+    "checksPassed": 286,
+    "checksTotal": 286,
+    "receipt": "reference-qualification-summary.json",
+    "isModelConfirmation": false
+  },
+  "cpuValidation": {
+    "pythonTestsPassed": 17,
+    "pythonTestReportedSeconds": 0.058,
+    "nodeTestsPassed": 14,
+    "nodeTestReportedMs": 100.814125
+  },
+  "cacheArms": {
+    "mlp_base_cache": "unmeasured",
+    "mlp_frozen_gain_reprefill": "unmeasured",
+    "all_projections": "not_applicable"
+  },
+  "comparators": {
+    "base": "not_run",
+    "base_matched_best_of_k": "not_run",
+    "shuffled_context": "not_run",
+    "random_z": "not_run",
+    "permuted_gain": "not_run",
+    "trained_seed47_adapter": "not_run"
+  },
+  "criteria": {
+    "promptDependence": "unmeasured",
+    "gapClosure": "unmeasured",
+    "setupBudget": "unmeasured",
+    "servingOverhead": "unmeasured",
+    "wrongAcceptances": "unmeasured"
+  },
+  "blockers": [
+    "Jupiter exclusive GPU lock held by live 27B provider; preserve service",
+    "Pinned native 9B model missing from checked stores; exact HF source provisioned",
+    "Historical Python environment missing; current Gamma Python cannot import torch",
+    "No explicit seed47 recorded GPU-hours counter located",
+    "End-to-end model driver, control wiring, cache diagnostics and measured smoke remain incomplete"
+  ],
+  "nextWork": [
+    "Resolve model/runtime artifact preparation without model substitution",
+    "Complete native model-driver/control/cache instrumentation",
+    "Obtain recorded SFT GPU-time denominator and safe GPU allocation",
+    "Run frozen smoke, report measured ETA, enforce selection budget",
+    "Freeze selected candidate and submissions, execute confirmation once"
+  ]
+}

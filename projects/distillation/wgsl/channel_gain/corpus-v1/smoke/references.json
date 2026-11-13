@@ -1,0 +1,10 @@
+{
+  "channel-gain-v1-smoke-gain-sign_bit": {
+    "source": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  output_values[params.output_offset + i] = select(-1.0, 1.0, x >= 0.0);\n}\n",
+    "sha256": "7a611ebe49a9f8fbe1855e887de36e68c3fb61457f7f9a127162611b20c67502"
+  },
+  "channel-gain-v1-smoke-gain-tent": {
+    "source": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  output_values[params.output_offset + i] = max(0.0, 1.0 - abs(x));\n}\n",
+    "sha256": "a6ca01332137b8694d9d39e5076bb907eb7d9d51d1501e23c8ecacf900776662"
+  }
+}

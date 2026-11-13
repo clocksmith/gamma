@@ -1,0 +1,10 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {tokenContract} from './token_contract.mjs';
+const sha=x=>createHash('sha256').update(x).digest('hex');
+const row={prompt:'a INSTR b',promptSha256:sha('a INSTR b'),instructionSpan:{start:2,end:7,textSha256:sha('INSTR')}};
+const render=x=>`<user>${x}</user><assistant>`;
+const encode=x=>[...x].map(c=>c.charCodeAt(0));
+test('exact instruction and non-template reference content',()=>{const c=tokenContract({row,render,encode});assert.equal(c.span.stop-c.span.start,5);assert.equal(String.fromCharCode(...c.referenceIds),render('a  b'));assert.equal(String.fromCharCode(...c.inputIds.slice(c.span.start,c.span.stop)),'INSTR');assert.equal(c.referenceSpan.stop-c.referenceSpan.start,4);assert(Object.isFrozen(c.inputIds));});
+test('cross-boundary merges and modified prompt are refused',()=>{assert.throws(()=>tokenContract({row,render,encode:x=>[x.length]}),/merges/);assert.throws(()=>tokenContract({row:{...row,prompt:'changed'},render,encode}),/mismatch/);});

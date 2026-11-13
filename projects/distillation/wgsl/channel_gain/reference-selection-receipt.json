@@ -1,0 +1,1570 @@
+{
+  "schema": "gamma.channel-gain-shader-verification/v1",
+  "scope": "reference",
+  "referenceQualification": true,
+  "confirmationEvaluated": false,
+  "deviceInfo": {
+    "vendor": "apple",
+    "architecture": "metal-3",
+    "device": null,
+    "description": null,
+    "availableFeatures": [
+      "bgra8unorm-storage",
+      "chromium-experimental-subgroup-matrix",
+      "clip-distances",
+      "core-features-and-limits",
+      "depth-clip-control",
+      "depth32float-stencil8",
+      "dual-source-blending",
+      "float32-blendable",
+      "float32-filterable",
+      "indirect-first-instance",
+      "primitive-index",
+      "rg11b10ufloat-renderable",
+      "shader-f16",
+      "subgroups",
+      "texture-component-swizzle",
+      "texture-compression-astc",
+      "texture-compression-astc-sliced-3d",
+      "texture-compression-bc",
+      "texture-compression-bc-sliced-3d",
+      "texture-compression-etc2",
+      "texture-formats-tier1",
+      "texture-formats-tier2",
+      "timestamp-query"
+    ],
+    "requiredFeatures": []
+  },
+  "provenance": {
+    "sourceHashes": {
+      "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+      "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+      "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+      "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+      "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+      "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+      "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+      "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+    },
+    "compatibilityAliases": {
+      "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+    },
+    "sharedNamespaceTouched": false,
+    "protocolHash": "34d40474a17c1a14c72555252ca2896b94a060dbd63fc8a81c0513808646b4a2",
+    "corpusManifestSha256": "200cc878c0c9f9ee10b33313d4447338cd0bd8202b494bf502189f3d9935d4e8",
+    "arm": "reference",
+    "split": "selection",
+    "submissionFileSha256": null,
+    "lockHash": null
+  },
+  "inputHashes": {
+    "rows": "569d367c6787e24992290201f8a82d2bcf8e6bfd55db261d3a8fed57a27d3fb9",
+    "checks": "bca7ab34936c88ed96e31a3d5b60085699bc0ba7e57a0440975b470cbd7e5109",
+    "sources": "0f889acf1cebaca010a14ba60bad4f899e5f79f441c8b60876ab5b91e72d0c4b"
+  },
+  "tasks": [
+    {
+      "taskId": "channel-gain-v1-selection-gain-cubic",
+      "sourceSha256": "d5f0c7f59c9ed827ac706f8492cf17115d63c113289209368e379130b8171ab0",
+      "dispatchedSourceSha256": "824b7178f60324f66eeca28434dfb9a67494ee4d1354134d52912de2bed1c505",
+      "promptSha256": "4031793d453e621b0ded13e889b2fb358c48297109343e1ece4bbff25fbbfdb9",
+      "contractPassed": true,
+      "checks": [
+        {
+          "id": "gain-cubic-public-4-32-base",
+          "visibility": "public",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 4,
+            "actualElements": 4,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "67b84e2d99ec35c13ca22efd40374132c6cddf85d7f5a6bed7d64bf24792463d"
+        },
+        {
+          "id": "gain-cubic-hidden-1-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "824599b48529f0d5bd601bc476f61b2540b46f8089835268eea58166ad324733"
+        },
+        {
+          "id": "gain-cubic-hidden-1-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "2b384ed4c55b8da077d43c0cf42fd37b19a54c5eef4a0f13a6a540998712969d"
+        },
+        {
+          "id": "gain-cubic-hidden-1-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "f8f55b4c5dcd9d0955400dd8ffd9ecbc34e72526dbc746d3d0e747fc5a80d242"
+        },
+        {
+          "id": "gain-cubic-hidden-7-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "92f3c95359413735b52d46b18ba0cdc2be8f616c2759f021e3e73ac3e2799298"
+        },
+        {
+          "id": "gain-cubic-hidden-7-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "61dc18ab4c9a5dd556954233d385d43040ab0795eeb0989ecce9aa856918f7f5"
+        },
+        {
+          "id": "gain-cubic-hidden-7-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "33decfca3b736493c751431d1e8c603551c1200dbd3e388141e4a83fc34d8d0a"
+        },
+        {
+          "id": "gain-cubic-hidden-33-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "c67229ff3b58e68f3e0f52535bb63fafed7d4726fdfea7266db48fdbbbd08d1d"
+        },
+        {
+          "id": "gain-cubic-hidden-33-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "aed44430638dfb13919091f96c7f9e659d66c6101740f659b59d7b9a2c8b0f75"
+        },
+        {
+          "id": "gain-cubic-hidden-33-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "b239feb895797d724044128444ffa96e766ee9e2a4ddae1a4fecbbbdd3be07fd"
+        },
+        {
+          "id": "gain-cubic-hidden-65-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "753782f737468b0f8b3c14803b226302f3204d1b107d8edae03b6daab6c8e4ab"
+        },
+        {
+          "id": "gain-cubic-hidden-65-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "8039dca600afe7ae41f19da8f8dff7dd7bfdd2ee9c65ea43e3884b313184b685"
+        },
+        {
+          "id": "gain-cubic-hidden-65-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "35a7dd6e43990742c61b4008abee2c54a737ca1d5eb3189da79852d587824cac"
+        }
+      ],
+      "passed": true,
+      "verifierMs": 112.87220799999994
+    },
+    {
+      "taskId": "channel-gain-v1-selection-gain-softsign",
+      "sourceSha256": "892dbb575287e76f9872de67b31bf0a94af68b15b174151d8581239c2076778a",
+      "dispatchedSourceSha256": "139e933f6638f7d75a9604c33ced971660221bbd980ea893777e4e5cfdfd4d0f",
+      "promptSha256": "ef572475e0d036dfe93b77d2515194b3d5f2f81786c511a69e62a2ffa2195430",
+      "contractPassed": true,
+      "checks": [
+        {
+          "id": "gain-softsign-public-4-32-base",
+          "visibility": "public",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 4,
+            "actualElements": 4,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "c82f241010a9afa7ac8be7518a9431a0f7d161e40dd7a4636ac4a7bee4a21a97"
+        },
+        {
+          "id": "gain-softsign-hidden-1-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "4d245d619cdb563f3ec2d8643a08fa491a02337a99352eee9902a09d81e8fb66"
+        },
+        {
+          "id": "gain-softsign-hidden-1-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "50501e31bce27c5e00e135722e1c83fd41396bd4c3844a8c835f6767ba97d6fd"
+        },
+        {
+          "id": "gain-softsign-hidden-1-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "843a7e588baec17bdec873745bc82a0d482e62f7bd69868ffc8d60cacce45df8"
+        },
+        {
+          "id": "gain-softsign-hidden-7-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "efa765dd4e0235f2afbd609e08f87ebd3e4816dd6d35099151943e70a3f32523"
+        },
+        {
+          "id": "gain-softsign-hidden-7-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "8f430e2029bbf6290a752537ede5ccd8977acd7f8e93b38094c6efbce32024fc"
+        },
+        {
+          "id": "gain-softsign-hidden-7-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "61673f5c18e37ec681e22f02c2e2844577cdd3d3dd35548c6e7e44a1ca4ec873"
+        },
+        {
+          "id": "gain-softsign-hidden-33-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 5.960464477539063e-8,
+            "maxRelError": 8.056451880585336e-8,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "789300a1344108a7bf48b166239f7e63541e3f45a7c301a6c9fb6c0b0a7bdba2"
+        },
+        {
+          "id": "gain-softsign-hidden-33-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 5.960464477539063e-8,
+            "maxRelError": 8.056451880585336e-8,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "71a432aace0d6210de560a0a44ca5c667819a663914d4820dda6f2f911fffa86"
+        },
+        {
+          "id": "gain-softsign-hidden-33-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 5.960464477539063e-8,
+            "maxRelError": 8.056451880585336e-8,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "a2d61ddcd4d4bac26700d8fb5985022a704b0cbfb68788620c2767db8eea1942"
+        },
+        {
+          "id": "gain-softsign-hidden-65-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 5.960464477539063e-8,
+            "maxRelError": 7.743033495975751e-8,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "63935561aab8980ca2c30e2bfd734dd096bf8aba2f7a7169b630a8dee17b585a"
+        },
+        {
+          "id": "gain-softsign-hidden-65-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 5.960464477539063e-8,
+            "maxRelError": 7.743033495975751e-8,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "35dbf3616e7b9fecbbd26185fd9a1771b2567f407c1683fc4cb969493f75c5ed"
+        },
+        {
+          "id": "gain-softsign-hidden-65-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 5.960464477539063e-8,
+            "maxRelError": 7.743033495975751e-8,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "a8d228d5a8df3260a7ed7c432609ac4566ea5ce7331009170126237034b1b0d0"
+        }
+      ],
+      "passed": true,
+      "verifierMs": 62.399584000000004
+    },
+    {
+      "taskId": "channel-gain-v1-selection-gain-gated_difference",
+      "sourceSha256": "677db9f979700e7fbd37e6e57bac68de28e67484e26d90ff12b7c431dafa8144",
+      "dispatchedSourceSha256": "6578e16540dcc8fd11045606229c512ccf2f53a1d76325c9e10ee31974c0c95c",
+      "promptSha256": "aad070c2313f9ec4d917d16ecdcc3a95dac3da83f64e4fe85160c17605e178dd",
+      "contractPassed": true,
+      "checks": [
+        {
+          "id": "gain-gated_difference-public-4-32-base",
+          "visibility": "public",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 4,
+            "actualElements": 4,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "774ae5641bfb4ced4a0a64ef471b4ae748454cbdfddbd4480f7b22f20ab149bd"
+        },
+        {
+          "id": "gain-gated_difference-hidden-1-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "e4c752778a182ccd511c163c1352aba349b36a32dc46784e4e6cea0e04a9b61c"
+        },
+        {
+          "id": "gain-gated_difference-hidden-1-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "a755d61802adcaf1b9bd088700c65cc9f885701083fcd74d43b80b8737cf8720"
+        },
+        {
+          "id": "gain-gated_difference-hidden-1-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "714e962fbae3b5fb1c061b649382e7cd10e4740f7640202dd344340c9e0060d1"
+        },
+        {
+          "id": "gain-gated_difference-hidden-7-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "d3b56ef05e2904b4bb96e94d2c00d408074e9916a9a3cb3ec93c4dd66998b08c"
+        },
+        {
+          "id": "gain-gated_difference-hidden-7-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "e9fe3bb344643b4cb05c9c752261725b82b2fb31dcc68975efca1bd8d360ee87"
+        },
+        {
+          "id": "gain-gated_difference-hidden-7-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "89c9df44358c2586a69b21a51f86f0ecd691167a6f26c5cd93aca0136910f7c2"
+        },
+        {
+          "id": "gain-gated_difference-hidden-33-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "1c0f459fe48cc8e2b3451806ca793e23e895f92f94afcf87daba03ccdaffa8fd"
+        },
+        {
+          "id": "gain-gated_difference-hidden-33-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "555f765e492a4443b40c78482137d52af7c812156e7b3580d42f84df9b1a9213"
+        },
+        {
+          "id": "gain-gated_difference-hidden-33-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "74ac301bbd7d202eda6da24ec0cee8c80971f52e6b85f8f02f852d910e3b1917"
+        },
+        {
+          "id": "gain-gated_difference-hidden-65-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "c8197adf83d03d592b1d4e50d6e9737ace719ed4673dc4a1749f6a5ee046a7dd"
+        },
+        {
+          "id": "gain-gated_difference-hidden-65-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "3fc85355cd6f0a4b9e4437d8d5b9f50d943065bcca6ca4654af7f844799b64f9"
+        },
+        {
+          "id": "gain-gated_difference-hidden-65-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "2a05f2f0d1285461f8052b6402d9763d2336e032c64e6e023eddd52c55326dc9"
+        }
+      ],
+      "passed": true,
+      "verifierMs": 59.077458999999976
+    },
+    {
+      "taskId": "channel-gain-v1-selection-gain-rms_pair",
+      "sourceSha256": "96403deb351c4535756617a7133794d9dc103794eeacc2d2e17f8c8892d67369",
+      "dispatchedSourceSha256": "235ca206181143cd9183a72c981613b1c069cc3db43fa48928164345328f8535",
+      "promptSha256": "961841d9169a2e971b723752081dde0a37c36787cd39d195ed76d5f5cde6d1f0",
+      "contractPassed": true,
+      "checks": [
+        {
+          "id": "gain-rms_pair-public-4-32-base",
+          "visibility": "public",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 4,
+            "actualElements": 4,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "ab8253d9381513cef1f2523d8aca93d42249aa76c400bff3dc0adbb95654c463"
+        },
+        {
+          "id": "gain-rms_pair-hidden-1-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "ad9c730e1b097ba3e6694cdc6bb6debc4bab0631fa3a36245551e6704207901e"
+        },
+        {
+          "id": "gain-rms_pair-hidden-1-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "f4fefd2e8ee3a4c51ff93d384cfa8257b350b38dcd28971b396444b5c4d82978"
+        },
+        {
+          "id": "gain-rms_pair-hidden-1-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "b7efb28372b1e9a5d8b3ea0f18d8319ff15460121d4c5b0048aab0663808b399"
+        },
+        {
+          "id": "gain-rms_pair-hidden-7-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 2.384185791015625e-7,
+            "maxRelError": 6.02474495296572e-8,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "74d69641b2d8fa5131d081536dca4f0a93ead108ffe9f11f203877fc8d1035f5"
+        },
+        {
+          "id": "gain-rms_pair-hidden-7-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 2.384185791015625e-7,
+            "maxRelError": 6.02474495296572e-8,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "4f66f1acda2bb80d6cba1caa6bcff64bf02cf968d3cd75875c9391cc6eaaa511"
+        },
+        {
+          "id": "gain-rms_pair-hidden-7-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 2.384185791015625e-7,
+            "maxRelError": 6.02474495296572e-8,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "7ef626281d78fb99dbaf368378d485c0b5a574499517ca66e5dcf92793e4e08b"
+        },
+        {
+          "id": "gain-rms_pair-hidden-33-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 4.76837158203125e-7,
+            "maxRelError": 1.0261060884928256e-7,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "6e0113aae5c76b4db66a4666b536466fd3b30d4622a393c4558939759fcff8fb"
+        },
+        {
+          "id": "gain-rms_pair-hidden-33-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 4.76837158203125e-7,
+            "maxRelError": 1.0261060884928256e-7,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "03f4fe3e10e1f1e1caee37243a544a578a7c5bd2ddcd02991db82ad2dc2f8fbf"
+        },
+        {
+          "id": "gain-rms_pair-hidden-33-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 4.76837158203125e-7,
+            "maxRelError": 1.0261060884928256e-7,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "0b115c7d4961f77ce5be4526b6c0b4ada67958f4cc6d0f652c7d23e70a169c90"
+        },
+        {
+          "id": "gain-rms_pair-hidden-65-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 4.76837158203125e-7,
+            "maxRelError": 1.1167993424285471e-7,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "7d18cfe1dbc943237874b49ab425d3c49197973a5a5e8f5a4834e14f43446a64"
+        },
+        {
+          "id": "gain-rms_pair-hidden-65-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 4.76837158203125e-7,
+            "maxRelError": 1.1167993424285471e-7,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "65d53d16b78b6f8ebe93e00125bd2c64333e16aa7d4700e160d1eb2e70ba3201"
+        },
+        {
+          "id": "gain-rms_pair-hidden-65-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 4.76837158203125e-7,
+            "maxRelError": 1.1167993424285471e-7,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "6f7a3d1867ceebab054abebbf6e571516e1caf9a024f78fd66d94fabde4a2058"
+        }
+      ],
+      "passed": true,
+      "verifierMs": 59.76441699999998
+    }
+  ],
+  "passed": true,
+  "verifierMs": 294.880917,
+  "receiptSha256": "ad132b2fee6b14bd66790ea6ed9fb10981d96ded2ff13da1039bb33391c319cd"
+}

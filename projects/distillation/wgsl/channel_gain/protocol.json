@@ -1,0 +1,182 @@
+{
+  "schema": "gamma.wgsl-channel-gain-protocol/v1",
+  "experimentId": "wgsl-prefill-channel-gain-v1",
+  "scopeCommit": "a88f847a5",
+  "status": "pre_run_protocol_frozen_execution_blocked",
+  "authorizedBy": "owner request 2026-11-12 and MLP-only cache-arm clarification",
+  "intervention": "MLP down-projection input scaling only; shared base weights unchanged",
+  "model": {
+    "id": "Qwen/Qwen3.5-9B",
+    "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+    "adapterSeed": 47,
+    "adapterPeftTreeSha256": "aa8ad92a5e57c04d359fa2a7095f40eda6f85728f4e1ef90f4a9e8e5633d200d",
+    "adapterWeightsSha256": "64cb65bfd2f409278d666d874c4dc2179058cab8e75609f5fe1fdc8644794667",
+    "adapterBytes": 232821904
+  },
+  "criteria": {
+    "promptDependence": {
+      "test": "exact_one_sided_paired_sign",
+      "pLessThan": 0.05,
+      "minimumDiscordantTasks": 5,
+      "requiredControls": [
+        "shuffled_context",
+        "random_z"
+      ],
+      "fewerDiscordances": "underpowered"
+    },
+    "gapClosure": {
+      "minimumFraction": 0.5,
+      "minimumAdapterMinusMatchedBaseTasks": 4,
+      "smallerOrNegativeGap": "uninformative"
+    },
+    "offlineTrainingSteps": 0,
+    "selectionGpuHoursFractionOfSeed47Sft": 0.01,
+    "maximumAddedEndToEndLatencyFraction": 0.1,
+    "maximumPerRequestTransformBytes": 232821904,
+    "maximumAdditionalWrongAcceptancesVsBase": 0,
+    "permutedGainComparison": "report_paired_wins_losses_and_exact_sign_p_no_added_success_threshold"
+  },
+  "populations": {
+    "smokeFamilies": 2,
+    "selectionFamilies": 4,
+    "confirmationFamilies": 16,
+    "tasksPerFamily": 1,
+    "newTrainingTasks": 0,
+    "variantsAreIndependentTasks": false,
+    "confirmationMaySelectCandidates": false,
+    "materializationRequiresFrozenFamilyManifest": true,
+    "taskSpecSha256": "cec06a5cb78086f30af78c6d211beeb2804ae98bdb9db30c55924b2f16227279",
+    "hiddenChecksPerTask": 12,
+    "numericTolerance": {
+      "abs": 1e-05,
+      "rel": 0.0001
+    }
+  },
+  "candidates": [
+    {
+      "id": "gain-positive",
+      "beta": 0.05,
+      "clip": 1.0,
+      "epsilon": 1e-06,
+      "reference": "A",
+      "layers": [
+        30,
+        31
+      ]
+    },
+    {
+      "id": "gain-negative",
+      "beta": -0.05,
+      "clip": 1.0,
+      "epsilon": 1e-06,
+      "reference": "A",
+      "layers": [
+        30,
+        31
+      ]
+    }
+  ],
+  "rule": {
+    "score": "(E_instr-E_ref)/(E_ref+epsilon)",
+    "logGain": "beta*clip(score,-clip,clip) minus its channel mean",
+    "energy": "mean squared SwiGLU activation over exact supplied content-token span",
+    "templateTokens": "excluded; invalid/cross-boundary spans fail closed",
+    "referenceA": "same rendered prompt with instruction span removed; reference energy over remaining non-template content tokens",
+    "recomputeOnRefill": false
+  },
+  "cacheArms": [
+    "mlp_base_cache",
+    "mlp_frozen_gain_reprefill"
+  ],
+  "allProjectionsArm": {
+    "status": "not_applicable",
+    "reason": "Owner excludes attention/projection extension from the first MLP rule; neither passed nor failed"
+  },
+  "controls": [
+    "base",
+    "base_matched_best_of_k",
+    "shuffled_context",
+    "random_z",
+    "permuted_gain",
+    "trained_seed47_adapter"
+  ],
+  "controlSeed": 20261112,
+  "gainSharing": "For each task and control, compute/freeze gain once from base prefill; reuse identical bytes in both cache arms",
+  "selection": {
+    "candidateOrder": [
+      "gain-positive",
+      "gain-negative"
+    ],
+    "evaluateCompletePopulation": true,
+    "primaryCacheArm": "mlp_base_cache",
+    "rank": [
+      "semantic_pass_count_descending",
+      "end_to_end_latency_ascending",
+      "candidate_order_ascending"
+    ],
+    "budgetExhaustion": "incomplete_candidates_untested_no_confirmation_without_complete_selection",
+    "chargeSmokeAndControlsToBudget": true
+  },
+  "generation": {
+    "maxNewTokens": 768,
+    "temperature": 0.6,
+    "topP": 0.95,
+    "seed": 20261112,
+    "oneSubmittedShaderPerTaskArm": true
+  },
+  "bestOfK": {
+    "k": "ceil(transform_mean_request_latency/base_mean_request_latency) from smoke only, minimum 1",
+    "rounding": "base_favoring; report_actual_compute_mismatch",
+    "rank": "count_passed_public_checks_descending_then_earliest_sample",
+    "allowedChecks": [
+      "compile",
+      "dispatch_visible_inputs",
+      "public_cpu_oracle_agreement"
+    ],
+    "confirmationAccess": "forbidden_until_submissions_frozen"
+  },
+  "timing": {
+    "clock": "monotonic; synchronize accelerator at boundaries",
+    "fields": [
+      "reference_prefill_ms",
+      "base_prefill_ms",
+      "gain_ms",
+      "reprefill_ms",
+      "decode_ms",
+      "decode_tokens",
+      "verifier_ms",
+      "end_to_end_ms",
+      "peak_allocated_bytes",
+      "transform_state_bytes"
+    ],
+    "coldModelLoad": "report_separately",
+    "servingLatency": "all_request_work_including_reference_and_gain; base uses identical verifier policy",
+    "smokeBatch": "two_smoke_tasks_all_arms_no_tuning",
+    "eta": "remaining_frozen_requests_times_measured_smoke_mean_with_min_max_range; no_estimate_before_model_smoke"
+  },
+  "cacheDiagnostics": {
+    "sameTeacherForcedPrefix": true,
+    "measure": [
+      "per_layer_KV_relative_L2_and_max_absolute_difference",
+      "recurrent_state_difference_when_present",
+      "logit_relative_L2_and_top1_changes"
+    ],
+    "comparison": "base-cache versus frozen-gain re-prefill under same request/gain/prefix",
+    "missingInstrumentation": "blocked_not_zero"
+  },
+  "confirmation": {
+    "singleUse": true,
+    "requiresSelectionLock": true,
+    "requiresFrozenTaskAndOracleHashes": true,
+    "requiresVerifiedRuntimeAndArtifactHashes": true,
+    "requiresSafeGpuWindow": true,
+    "jointSuccess": "all_numeric_criteria_for_primary_cache_arm; secondary_cache_arm_reported_separately",
+    "unknownOrUnderpoweredCriterion": "not_confirmed"
+  },
+  "controlConstruction": {
+    "shuffled_context": "SHA256 hash order of instruction positions only, template/outside tokens unchanged",
+    "permuted_gain": "SHA256 hash order of gain channels, exact gain multiset retained",
+    "random_z": "SHA256-derived uniform[-1,1) values, centered and scaled to actual log-gain RMS, then exponentiated",
+    "rng": "no global RNG; seed 20261112 and domain-separated SHA256"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "channel-gain-v1-selection-gain-cubic": {
+    "source": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  output_values[params.output_offset + i] = (x * x) * x;\n}\n",
+    "sha256": "d5f0c7f59c9ed827ac706f8492cf17115d63c113289209368e379130b8171ab0"
+  },
+  "channel-gain-v1-selection-gain-softsign": {
+    "source": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  output_values[params.output_offset + i] = x / (1.0 + abs(x));\n}\n",
+    "sha256": "892dbb575287e76f9872de67b31bf0a94af68b15b174151d8581239c2076778a"
+  },
+  "channel-gain-v1-selection-gain-gated_difference": {
+    "source": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  output_values[params.output_offset + i] = select(y - x, x - y, x >= params.first);\n}\n",
+    "sha256": "677db9f979700e7fbd37e6e57bac68de28e67484e26d90ff12b7c431dafa8144"
+  },
+  "channel-gain-v1-selection-gain-rms_pair": {
+    "source": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  output_values[params.output_offset + i] = sqrt((x * x + y * y) * 0.5);\n}\n",
+    "sha256": "96403deb351c4535756617a7133794d9dc103794eeacc2d2e17f8c8892d67369"
+  }
+}

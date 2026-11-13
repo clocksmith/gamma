@@ -1,0 +1,820 @@
+{
+  "schema": "gamma.channel-gain-shader-verification/v1",
+  "scope": "reference",
+  "referenceQualification": true,
+  "confirmationEvaluated": false,
+  "deviceInfo": {
+    "vendor": "apple",
+    "architecture": "metal-3",
+    "device": null,
+    "description": null,
+    "availableFeatures": [
+      "bgra8unorm-storage",
+      "chromium-experimental-subgroup-matrix",
+      "clip-distances",
+      "core-features-and-limits",
+      "depth-clip-control",
+      "depth32float-stencil8",
+      "dual-source-blending",
+      "float32-blendable",
+      "float32-filterable",
+      "indirect-first-instance",
+      "primitive-index",
+      "rg11b10ufloat-renderable",
+      "shader-f16",
+      "subgroups",
+      "texture-component-swizzle",
+      "texture-compression-astc",
+      "texture-compression-astc-sliced-3d",
+      "texture-compression-bc",
+      "texture-compression-bc-sliced-3d",
+      "texture-compression-etc2",
+      "texture-formats-tier1",
+      "texture-formats-tier2",
+      "timestamp-query"
+    ],
+    "requiredFeatures": []
+  },
+  "provenance": {
+    "sourceHashes": {
+      "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+      "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+      "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+      "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+      "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+      "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+      "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+      "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+    },
+    "compatibilityAliases": {
+      "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+    },
+    "sharedNamespaceTouched": false,
+    "protocolHash": "34d40474a17c1a14c72555252ca2896b94a060dbd63fc8a81c0513808646b4a2",
+    "corpusManifestSha256": "200cc878c0c9f9ee10b33313d4447338cd0bd8202b494bf502189f3d9935d4e8",
+    "arm": "reference",
+    "split": "smoke",
+    "submissionFileSha256": null,
+    "lockHash": null
+  },
+  "inputHashes": {
+    "rows": "fb2bc1d396ef4511c0ec7eb24428cccb87c81f3f8b6a32e3a020d1b1e03aaf8b",
+    "checks": "66e0a656490f3bfa210ae282cfef72422081b46d965c9c9f81cee4739bc8a68b",
+    "sources": "da48beac3fc0efd292941e0f737fc69885fab704e63b253443bce2593a8f50e2"
+  },
+  "tasks": [
+    {
+      "taskId": "channel-gain-v1-smoke-gain-sign_bit",
+      "sourceSha256": "7a611ebe49a9f8fbe1855e887de36e68c3fb61457f7f9a127162611b20c67502",
+      "dispatchedSourceSha256": "65a64065dd132a6f1322db9082150fc9bc0cd845eb8366d23da1b250011bcb3b",
+      "promptSha256": "ec920809e4bd6850e608f3912fbc1793da8a8da45cc996371b481ca617f0968d",
+      "contractPassed": true,
+      "checks": [
+        {
+          "id": "gain-sign_bit-public-4-32-base",
+          "visibility": "public",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 4,
+            "actualElements": 4,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "3130c3b1427cd28ec217d12bd9829ffec59744fd7b4cd74d1a7d8024a4dec452"
+        },
+        {
+          "id": "gain-sign_bit-hidden-1-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "5fce7b8ebc170c0c1e3ac1bd5c6c79a3fabec07035d4a58dd66c4bc88b78575e"
+        },
+        {
+          "id": "gain-sign_bit-hidden-1-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "bea6eff1ae0dd002b812c8c7c8216e046499717f5b45823b0282d004fbbd5767"
+        },
+        {
+          "id": "gain-sign_bit-hidden-1-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "ef05ec40abafa3e5e44935717aa3e8bb5ce13cef908f16437aa2fe6eca018c41"
+        },
+        {
+          "id": "gain-sign_bit-hidden-7-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "186dd2cc6780c69b20bb90be1d6faab4b0598cc26b4ecb20d8c2c9d2a0dde09a"
+        },
+        {
+          "id": "gain-sign_bit-hidden-7-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "eb5c9c16c80d07661dd3d9fccde01db289ca76eed31a45c98066868d704a0abc"
+        },
+        {
+          "id": "gain-sign_bit-hidden-7-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "6dfaf1afa840ae5422a946534c7ec411945802b9dd7c20c4da1d858fbfcf8fc7"
+        },
+        {
+          "id": "gain-sign_bit-hidden-33-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "313ee14b08c582ad3f63374478e2f529721a685703b68329230324a7043e7ede"
+        },
+        {
+          "id": "gain-sign_bit-hidden-33-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "27f3a4b880896df13551635b76a744f75ea77dd883c3458fe924608b670c51a7"
+        },
+        {
+          "id": "gain-sign_bit-hidden-33-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "210dd15e15b0604d55de1a915f2881bc26a6c5762c3fc402dedef061a88c89c5"
+        },
+        {
+          "id": "gain-sign_bit-hidden-65-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "b882347c1d6e3cd4c83610d0f1389973995a2272a83eb327cd170c5278c04fb1"
+        },
+        {
+          "id": "gain-sign_bit-hidden-65-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "cfeaa54c08048f4ad6f85a5a03ba2e1e5ad4ac08a66ecee3a1ea413f5c58943d"
+        },
+        {
+          "id": "gain-sign_bit-hidden-65-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "de5ccf4aea7e903f965179a8c540f90ee62d59f66d23cfecf995ab15cca9c40c"
+        }
+      ],
+      "passed": true,
+      "verifierMs": 221.13487500000008
+    },
+    {
+      "taskId": "channel-gain-v1-smoke-gain-tent",
+      "sourceSha256": "a6ca01332137b8694d9d39e5076bb907eb7d9d51d1501e23c8ecacf900776662",
+      "dispatchedSourceSha256": "b409cf702982df83c4c0a60724f50a9705fb71d6638f1fef7de9b1f1d5d0facf",
+      "promptSha256": "e5b7852fc936e0bf7ccbcd737d740f78c2b2632c0ac1e952feb241519b8e6884",
+      "contractPassed": true,
+      "checks": [
+        {
+          "id": "gain-tent-public-4-32-base",
+          "visibility": "public",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 4,
+            "actualElements": 4,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "916e2642e570a326062dcf56738fc319a78d72fcdd5d5930ca81c4f54324442c"
+        },
+        {
+          "id": "gain-tent-hidden-1-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "59c0c58431787e0837128bdc5daca253229b3a30189f0c368428560f0606b222"
+        },
+        {
+          "id": "gain-tent-hidden-1-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "78660f10069e6224e955b3c32f8df9a1c3cc740504075c65cba74e7973b71e10"
+        },
+        {
+          "id": "gain-tent-hidden-1-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 1,
+            "actualElements": 1,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "91e9173726aa89e232a86740d53c91ee4197c082a0af7d40e8df4aba1077cb93"
+        },
+        {
+          "id": "gain-tent-hidden-7-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "a04ba9337c6ab095780c9afa09ff48dd01a77c34c25e6020f660ea01018c3aba"
+        },
+        {
+          "id": "gain-tent-hidden-7-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "266a25b22807fe967a94ab9b758b470a97352dbb5f795a39b1193ab11c5df389"
+        },
+        {
+          "id": "gain-tent-hidden-7-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 7,
+            "actualElements": 7,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "c81bf6f20f68b02529a6de2ea039c61b33e895349e7008852c4c13d0ebe66eb2"
+        },
+        {
+          "id": "gain-tent-hidden-33-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "01af9c70dae1993195939c09684af80c1a66ec3bd153bd69185d3ff3bd280f18"
+        },
+        {
+          "id": "gain-tent-hidden-33-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "5fafd137d84b410c6f55e951510344bb1d13af936eee741425df50b48be76b69"
+        },
+        {
+          "id": "gain-tent-hidden-33-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 33,
+            "actualElements": 33,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "3ac971cf22ac24ad9b7ab27dc0708aeff1e1e7324c97af10cbc88037de91eaed"
+        },
+        {
+          "id": "gain-tent-hidden-65-32-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "3df6db3c264ffaf559d24141671e9c53b8b70c22fb05db139dd3977a1e5d8757"
+        },
+        {
+          "id": "gain-tent-hidden-65-32-reverse",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "001a3f8fecab0dfcb142800f08be45f12bb60317f0e45d254d05cf8667d7a996"
+        },
+        {
+          "id": "gain-tent-hidden-65-64-base",
+          "visibility": "confirmation",
+          "passed": true,
+          "dispatchPassed": true,
+          "numeric": {
+            "pass": true,
+            "expectedElements": 65,
+            "actualElements": 65,
+            "mismatchCount": 0,
+            "maxAbsError": 0,
+            "maxRelError": 0,
+            "mismatches": []
+          },
+          "bounds": {
+            "outputLengthExact": true,
+            "prefixCanaryIntact": true,
+            "tailCanariesIntact": true,
+            "readOnlyBuffersUnchanged": true
+          },
+          "compilation": {
+            "passed": true,
+            "messages": [],
+            "errorCount": 0
+          },
+          "runtimeErrors": [],
+          "dispatchEvidenceSha256": "db90a1b0bb68a31597cd087398b513dcd8f05f63400a8c57ba84f4b0814fc423"
+        }
+      ],
+      "passed": true,
+      "verifierMs": 63.41112499999997
+    }
+  ],
+  "passed": true,
+  "verifierMs": 285.03999999999996,
+  "receiptSha256": "0b5375bd52ee62e22d68b7070da3ae07af4468033ba13e800f143bda08b825a4"
+}
