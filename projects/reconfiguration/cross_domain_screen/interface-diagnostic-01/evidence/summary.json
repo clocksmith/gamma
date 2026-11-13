@@ -1,0 +1,212 @@
+{
+  "schema": "gamma.interface-diagnostic-summary/v1",
+  "receiptSha256": "ab6049975c4deefda02c98f55eb3ca6eafe8889a93de835e9f0a93896a6ccfaf",
+  "outputsSha256": "7a373495832e0be185af73bf545dee6e6a8d432f09f3f1071194ce242134cb02",
+  "lockSha256": "4e19873c17c879a934702bffe34d1ce7c10ec60b632bb32493900dd2dd8ae3eb",
+  "results": [
+    {
+      "id": "channel-gain-v1-smoke-gain-sign_bit/base",
+      "condition": "base",
+      "source": "struct Params { length: u32, output_offset: u32, first: f32, second: f32, }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\noverride WORKGROUP_SIZE: u32 = 32u;\n@compute @workgroup_size(WORKGROUP_SIZE)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  output_values[params.output_offset + i] = select(1.0, -1.0, x < 0.0);\n}",
+      "sourceSha256": "dfe54e5a0c8cf34a876dfe6eec70a2c6447fd578a5ac5355e41df0177c127338",
+      "tokenCount": 242,
+      "physicalRequestMs": 75742.545751,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 6488.3306900000025,
+        "gain_ms": 0,
+        "setup_other_ms": 0,
+        "setup_cleanup_ms": 0,
+        "base_restore_ms": 0,
+        "reprefill_ms": 0,
+        "decode_ms": 69247.425565,
+        "decode_tokens": 242,
+        "verifier_ms": 0,
+        "end_to_end_ms": 75749.20587599999,
+        "peak_allocated_bytes": 18752447432,
+        "buffer_pool_peak_bytes": 17888632064,
+        "transform_state_bytes": 0,
+        "request_cleanup_ms": 0.9801380000135396,
+        "input_contract_ms": 6.660124999994878,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "passed": true,
+      "contractPassed": true,
+      "dispatchPassed": true,
+      "numericPassed": true,
+      "boundsPassed": true
+    },
+    {
+      "id": "channel-gain-v1-smoke-gain-sign_bit/channel_gain",
+      "condition": "channel_gain",
+      "source": "struct Params { length: u32, output_offset: u32, first: f32, second: f32, }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\noverride WORKGROUP_SIZE: u32 = 32u;\n@compute @workgroup_size(WORKGROUP_SIZE)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  output_values[params.output_offset + i] = select(1.0, -1.0, x < 0.0);\n}",
+      "sourceSha256": "dfe54e5a0c8cf34a876dfe6eec70a2c6447fd578a5ac5355e41df0177c127338",
+      "tokenCount": 242,
+      "physicalRequestMs": 70417.16237200002,
+      "timing": {
+        "reference_prefill_ms": 5759.2285580000025,
+        "base_prefill_ms": 6092.317219999997,
+        "gain_ms": 14.50687700000708,
+        "setup_other_ms": 2.775514999986626,
+        "setup_cleanup_ms": 0.5824790000042412,
+        "base_restore_ms": 59.627989000000525,
+        "reprefill_ms": 0,
+        "decode_ms": 70353.304906,
+        "decode_tokens": 242,
+        "verifier_ms": 0,
+        "end_to_end_ms": 82293.23314600001,
+        "peak_allocated_bytes": 19372443960,
+        "buffer_pool_peak_bytes": 18260811520,
+        "transform_state_bytes": 262144,
+        "request_cleanup_ms": 0.754622999986168,
+        "input_contract_ms": 6.660124999994878,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "passed": true,
+      "contractPassed": true,
+      "dispatchPassed": true,
+      "numericPassed": true,
+      "boundsPassed": true
+    },
+    {
+      "id": "channel-gain-v1-smoke-gain-tent/base",
+      "condition": "base",
+      "source": "struct Params { length: u32, output_offset: u32, first: f32, second: f32, }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\noverride WORKGROUP_SIZE: u32 = 32u;\n@compute @workgroup_size(WORKGROUP_SIZE)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  output_values[params.output_offset + i] = max(0.0, 1.0 - abs(x));\n}",
+      "sourceSha256": "bcba14521b3409f83bbbae573dd2d51d9318da1f57af40174179661a94d2eeb4",
+      "tokenCount": 238,
+      "physicalRequestMs": 75328.42219499999,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 6176.947508000012,
+        "gain_ms": 0,
+        "setup_other_ms": 0,
+        "setup_cleanup_ms": 0,
+        "base_restore_ms": 0,
+        "reprefill_ms": 0,
+        "decode_ms": 69146.72792400004,
+        "decode_tokens": 238,
+        "verifier_ms": 0,
+        "end_to_end_ms": 75333.25996799997,
+        "peak_allocated_bytes": 19372443960,
+        "buffer_pool_peak_bytes": 18260811520,
+        "transform_state_bytes": 0,
+        "request_cleanup_ms": 0.719457000028342,
+        "input_contract_ms": 4.83777299997746,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "passed": true,
+      "contractPassed": true,
+      "dispatchPassed": true,
+      "numericPassed": true,
+      "boundsPassed": true
+    },
+    {
+      "id": "channel-gain-v1-smoke-gain-tent/channel_gain",
+      "condition": "channel_gain",
+      "source": "struct Params { length: u32, output_offset: u32, first: f32, second: f32, }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\noverride WORKGROUP_SIZE: u32 = 32u;\n@compute @workgroup_size(WORKGROUP_SIZE)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  output_values[params.output_offset + i] = max(0.0, 1.0 - abs(x));\n}",
+      "sourceSha256": "bcba14521b3409f83bbbae573dd2d51d9318da1f57af40174179661a94d2eeb4",
+      "tokenCount": 238,
+      "physicalRequestMs": 68367.58496199996,
+      "timing": {
+        "reference_prefill_ms": 5478.671004000003,
+        "base_prefill_ms": 6255.0972580000525,
+        "gain_ms": 11.83818700001575,
+        "setup_other_ms": 3.2139709999319166,
+        "setup_cleanup_ms": 1.006718999997247,
+        "base_restore_ms": 45.125858999963384,
+        "reprefill_ms": 0,
+        "decode_ms": 68318.406419,
+        "decode_tokens": 238,
+        "verifier_ms": 0,
+        "end_to_end_ms": 80122.24987399994,
+        "peak_allocated_bytes": 19372443960,
+        "buffer_pool_peak_bytes": 18264743168,
+        "transform_state_bytes": 262144,
+        "request_cleanup_ms": 0.6951410000328906,
+        "input_contract_ms": 4.83777299997746,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "passed": true,
+      "contractPassed": true,
+      "dispatchPassed": true,
+      "numericPassed": true,
+      "boundsPassed": true
+    }
+  ],
+  "equality": [
+    {
+      "taskId": "channel-gain-v1-smoke-gain-sign_bit",
+      "sourceEqual": true,
+      "tokensEqual": true
+    },
+    {
+      "taskId": "channel-gain-v1-smoke-gain-tent",
+      "sourceEqual": true,
+      "tokensEqual": true
+    }
+  ],
+  "resetDiagnostics": [
+    {
+      "taskId": "channel-gain-v1-smoke-gain-sign_bit",
+      "measured": true,
+      "identicalInputTokens": true,
+      "tokenIdsSha256": "e52ae198011c7868871d26f489e9b76623526975ac5df1373c0a3f9cb5b0442e",
+      "transformDiscarded": true,
+      "before": {
+        "gainAbsent": true,
+        "adapterAbsent": true,
+        "seqLen": 0
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0,
+        "maxAbsolute": 0,
+        "top1Changed": false
+      },
+      "exactLogitsEqual": true,
+      "baselineLogitsSha256": "e88b40dc907a87ecee3fef512f8b19d1682983de678d9bfd7e595184129da3a3",
+      "resetLogitsSha256": "e88b40dc907a87ecee3fef512f8b19d1682983de678d9bfd7e595184129da3a3",
+      "samplingPerformed": false,
+      "resetDiagnosticMs": 6500.570307000016
+    },
+    {
+      "taskId": "channel-gain-v1-smoke-gain-tent",
+      "measured": true,
+      "identicalInputTokens": true,
+      "tokenIdsSha256": "8e1baa054e27e92ed9c8e5f2c1eae4d198ef7bfbbfd04e7c22ec0784f68f2f7a",
+      "transformDiscarded": true,
+      "before": {
+        "gainAbsent": true,
+        "adapterAbsent": true,
+        "seqLen": 0
+      },
+      "logits": {
+        "measured": true,
+        "elements": 248320,
+        "relativeL2": 0,
+        "maxAbsolute": 0,
+        "top1Changed": false
+      },
+      "exactLogitsEqual": true,
+      "baselineLogitsSha256": "c44f27e7fc8dcc831a7068ca5bf164b0f208c05eb9a31a0817f7218b75cbbf95",
+      "resetLogitsSha256": "c44f27e7fc8dcc831a7068ca5bf164b0f208c05eb9a31a0817f7218b75cbbf95",
+      "samplingPerformed": false,
+      "resetDiagnosticMs": 6665.842828999972
+    }
+  ],
+  "coldModelLoadMs": 75757.55545300001,
+  "physicalStageMs": 326770.124141,
+  "cleanupMs": 42.5447250000434,
+  "loadThroughCleanupMs": 402920,
+  "startAt": "2026-11-13T17:28:10.788Z",
+  "endAt": "2026-11-13T17:34:53.708Z",
+  "validation": {
+    "archiveByteHashes": true,
+    "canonicalHashes": true,
+    "fourResponses": true,
+    "scoringAfterSeal": true,
+    "scoredSourceHashes": true
+  },
+  "classification": "Exposed-task scaffold diagnostic; not fresh confirmation or evidence of general gain improvement"
+}

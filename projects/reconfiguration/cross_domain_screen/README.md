@@ -48,6 +48,15 @@ instruction spans. The [runtime lock](screen-runtime-lock-01.json) bound final
 settings and exact bytes before execution. No prompts, models or samples were
 replaced after observing quality.
 
+## Follow-up interface diagnostic
+
+The [explicit-scaffold diagnostic](interface-diagnostic-01/RESULTS.md) repaired
+the exposed shader task interface for the 27B model: base and unchanged gains each
+passed 2/2 after compilation, GPU dispatch and numeric checks, versus 0/2 in the
+previous raw-interface probe. Base/gain sources and token IDs were identical.
+This is a prompt/interface improvement and a usable baseline, not evidence that
+gains improve quality. Original study scores and checks are unchanged.
+
 ## Scoring boundary
 
 All 24 exact outputs are journaled and sealed before **any** public or heldout
