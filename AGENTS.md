@@ -90,9 +90,9 @@ shape, and must be rerunnable and safe against partial or still-running jobs.
 
 After each sweep or major eval batch, ensure `manifest.jsonl`, `scoreboard.md`,
 `scoreboard_eval_rows.csv`, and `scoreboard_checkpoints.csv` exist and are
-linked, then refresh the run index and translation results bundle:
+linked, then refresh the translation results bundle, which rebuilds the run
+index internally (do not run the index builder separately first):
 ```bash
-python3 projects/distillation/translation/pipeline/build_run_index.py
 python3 projects/distillation/translation/pipeline/rebuild_translation_results_bundle.py
 ```
 Rerun the bundle rebuild whenever new eval rows land; it is the canonical way

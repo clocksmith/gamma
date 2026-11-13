@@ -16,7 +16,7 @@ if REPO_ROOT_STR not in sys.path:
 TESTS_DIR = Path(__file__).resolve().parent
 
 # Test files here that exercise the archived projects/enwiki9 lane. They get
-# the `enwiki9` marker and a bare run deselects them; they still run with
+# the `enwiki9` marker and a bare run skips their import; they still run with
 # `-m enwiki9`, with GAMMA_ALL_TESTS=1, or when the file is named explicitly.
 ENWIKI9_ARCHIVED_TEST_FILES = frozenset(
     {
@@ -80,20 +80,22 @@ def _explicit_test_files(config):
     return files
 
 
+def pytest_ignore_collect(collection_path, config):
+    """Keep archived dependencies out of ordinary collection entirely."""
+    path = Path(collection_path)
+    if path.parent != TESTS_DIR or path.name not in ENWIKI9_ARCHIVED_TEST_FILES:
+        return None
+    if config.getoption("markexpr") or os.environ.get("GAMMA_ALL_TESTS") == "1":
+        return None
+    if path.resolve() in _explicit_test_files(config):
+        return None
+    return True
+
+
 @pytest.hookimpl(tryfirst=True)
 def pytest_collection_modifyitems(config, items):
-    """Mark archived enwiki9 tests and drop them from bare runs."""
-    archived = []
+    """Keep marker selection available for explicitly requested archive tests."""
     for item in items:
         path = Path(str(item.path))
         if path.parent == TESTS_DIR and path.name in ENWIKI9_ARCHIVED_TEST_FILES:
             item.add_marker(pytest.mark.enwiki9)
-            archived.append(item)
-    if not archived or config.getoption("markexpr") or os.environ.get("GAMMA_ALL_TESTS") == "1":
-        return
-    explicit = _explicit_test_files(config)
-    drop = [item for item in archived if Path(str(item.path)).resolve() not in explicit]
-    if drop:
-        dropped = set(map(id, drop))
-        config.hook.pytest_deselected(items=drop)
-        items[:] = [item for item in items if id(item) not in dropped]

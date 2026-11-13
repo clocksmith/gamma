@@ -4,20 +4,19 @@
 
 set -euo pipefail
 
-PYTHON_BIN="${PYTHON_BIN:-python3}"
-if [[ -x ".venv/bin/python" ]]; then
-  PYTHON_BIN=".venv/bin/python"
+# An explicit interpreter is authoritative; never silently cross environments.
+if [[ -z "${PYTHON_BIN:-}" ]]; then
+  if [[ -x ".venv/bin/python" ]]; then
+    PYTHON_BIN=".venv/bin/python"
+  else
+    PYTHON_BIN="python3"
+  fi
 fi
 
 if ! "${PYTHON_BIN}" -m pytest --version >/dev/null 2>&1; then
-  if [[ "${PYTHON_BIN}" != "python3" ]] && python3 -m pytest --version >/dev/null 2>&1; then
-    echo "[run_tests] pytest not available in ${PYTHON_BIN}; falling back to python3"
-    PYTHON_BIN="python3"
-  else
-    echo "[run_tests] pytest is not installed for ${PYTHON_BIN}."
-    echo "[run_tests] install it with: ${PYTHON_BIN} -m pip install pytest"
-    exit 1
-  fi
+  echo "[run_tests] pytest is not available for ${PYTHON_BIN}."
+  echo "[run_tests] install it with: ${PYTHON_BIN} -m pip install pytest"
+  exit 1
 fi
 
 if [[ "$#" -gt 0 ]]; then

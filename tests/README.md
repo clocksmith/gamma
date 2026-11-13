@@ -53,6 +53,15 @@ Test Results: 9 passed, 0 failed
 python3 -m pytest tests
 ```
 
+The wrapper honors an explicit `PYTHON_BIN`; otherwise it prefers
+`.venv/bin/python`, then `python3`. If pytest is missing from that environment,
+it stops with an install command instead of switching interpreters.
+
+Ordinary collection skips the archived enwiki9 modules before importing them.
+Name an archived file/node, use `-m enwiki9` (or another explicit marker
+expression), or set `GAMMA_ALL_TESTS=1` to collect them. The archive tests remain
+available without imposing their dependencies on ordinary runs.
+
 ### Individual Tests
 
 ```bash
