@@ -43,7 +43,9 @@ reconfiguration.
        never change and reset discards `g`.
      - `E_instr` is an exact instruction token span, excluding chat-template tokens.
        `E_ref` is variant A, the same prompt without that span, or variant B, the
-       mean over a fixed set of unrelated unlabeled prompts.
+       mean over a fixed set of unrelated unlabeled prompts. Variant B controls general
+       activation patterns, but controls position only when the reference prompts use
+       the same template and the span sits at matched token positions.
      - β (both signs), c, ε, the reference variant and the layer set are chosen on the
        selection population only.
      - Extra control: gains permuted across channels.
@@ -112,6 +114,8 @@ population. A no-training rule is an interesting result only if all of these hol
    such, not as a pass.
 3. **Setup cost:** zero offline training. Rule settings are chosen on the selection
    population only, using at most 1% of the GPU-hours recorded for one seed-47 SFT run.
+   A configuration that this budget leaves unexplored is untested, not evidence that
+   the rule or the hypothesis fails.
 4. **Serving cost:** computing `z` plus any added decode work adds at most 10% to the
    base model's end-to-end request latency, and at most the memory of one rank-32
    adapter per request.
