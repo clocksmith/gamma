@@ -1,0 +1,80 @@
+{
+  "schema": "gamma.channel-gain-owner-service-retirement/v1",
+  "ownerInstruction": "seee if you can free some memeory on upiter, we dont need to host the 27b model for example for reploid anymroe",
+  "handoverStartedAt": "2026-11-13T12:46:56.687040+00:00",
+  "originalMonitorPID": 478361,
+  "originalGuard": {
+    "schema": "gamma.channel-gain-service-guard/v1",
+    "checkedAt": "2026-11-13T12:46:55.129027+00:00",
+    "allowed": true,
+    "reasons": [],
+    "unit": "reploid-qwen27b-0633-20261104.service",
+    "stageAdmitted": 0,
+    "baselineStageAdmitted": 0,
+    "sourceObservedAt": "2026-11-13T12:46:55.118Z",
+    "sourceAgeSeconds": 0.011027,
+    "availableMemoryBytes": 87840813056,
+    "minimumAvailableMemoryBytes": 34359738368,
+    "providerModified": false
+  },
+  "newGuard": {
+    "schema": "gamma.channel-gain-service-guard-retirement/v1",
+    "checkedAt": "2026-11-13T12:46:52.440538+00:00",
+    "allowed": true,
+    "reasons": [],
+    "unit": "reploid-qwen27b-0633-20261104.service",
+    "stageAdmitted": 0,
+    "baselineStageAdmitted": 0,
+    "stageAdmittedBasis": "fresh_owner_measurement_while_known_provider_active",
+    "sourceObservedAt": "2026-11-13T12:46:51.117Z",
+    "sourceAgeSeconds": 1.323538,
+    "sourceFreshnessRequired": true,
+    "systemdObservationAgeSeconds": 0.005931478001002688,
+    "providerState": "active",
+    "providerSubState": "running",
+    "providerMainPID": 1800927,
+    "knownProviderMainPID": 1800927,
+    "providerNRestarts": 0,
+    "retirementObserved": false,
+    "lastKnownIdleMeasurement": {
+      "stageAdmitted": 0,
+      "at": "2026-11-13T12:46:51.117Z"
+    },
+    "availableMemoryBytes": 87800553472,
+    "minimumAvailableMemoryBytes": 34359738368,
+    "providerModified": true,
+    "providerModificationBasis": "owner-authorized retirement; guard itself is read-only",
+    "ownerRetirementAuthorization": "Owner explicitly retires Jupiter 27B Reploid provider, 2026-11-13",
+    "pollIntervalSeconds": 5
+  },
+  "newGuardSourceSha256": "f225b980edc0ea93c5121af0c148b0f541903e6a485540b2ac777dc6ae35dedd",
+  "completedConfirmationRequestsBeforeHandover": 39,
+  "lastCompletedRequest": {
+    "id": "channel-gain-v1-confirmation-gain-smoothstep_unit/shuffled_context/mlp_frozen_gain_reprefill/0",
+    "at": null
+  },
+  "protocolEffect": "Owner changes service-preservation requirement; candidate, tasks, model, generation and scoring are unchanged. Record environment change in timing interpretation.",
+  "guardPath": "/home/x/deco/doppler/.work/channel-gain-20261112/service-guard.json",
+  "replacementGuardPath": "/home/x/deco/gamma/.work/channel-gain-20261112/projects/distillation/wgsl/channel_gain/service-guard-retired-04.json",
+  "handoverMethod": "Validate new independent monitor, suspend old owned monitor, atomically link guard path to new live receipt, terminate suspended old monitor without its deliberate stop-refusal overwrite.",
+  "handoverCompletedAt": "2026-11-13T12:46:56.856949+00:00",
+  "providerStopped": true,
+  "memoryAvailableBeforeStopBytes": 87795650560,
+  "stopRequestedAt": "2026-11-13T12:47:23.558361+00:00",
+  "stopCommandExitCode": 0,
+  "stopCommandSeconds": 0.5215453019991401,
+  "stopCompletedAt": "2026-11-13T12:47:24.080094+00:00",
+  "serviceAfterStop": {
+    "LoadState": "not-found",
+    "ActiveState": "inactive",
+    "SubState": "dead",
+    "MainPID": "0",
+    "NRestarts": "0"
+  },
+  "oldProviderPidsPresent": {
+    "1800927": false,
+    "1800929": false
+  },
+  "memoryAvailableAfterStopBytes": 106064191488,
+  "memoryAvailableDeltaBytes": 18268540928
+}

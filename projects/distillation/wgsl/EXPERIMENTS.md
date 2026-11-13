@@ -111,6 +111,15 @@ started with that fixed candidate. No confirmation quality result exists yet.
 A [CPU contract audit](channel_gain/selection-contract-audit-04.json) traced the
 first six observed failures to malformed model WGSL, not a rejected valid override.
 
+**2026-11-13, owner-authorized service retirement during confirmation:** after
+39 completed confirmation generations, the owner explicitly retired the unused
+27B Reploid provider. The [retirement receipt](channel_gain/service-retirement-04/service-retirement-04.json)
+records the guard handover, stopped service, absent process IDs and an observed
+18,268,540,928-byte increase in available host memory. The new read-only monitor
+checks the stopped service and retains the memory floor. The original runtime,
+inputs and quality criteria are unchanged; serving-environment timing changes are
+recorded rather than presented as an unchanged isolated measurement window.
+
 Append subsequent attempts, deviations, costs and decisions here with their own
 receipts. Preserve these observations if a rerun succeeds. Smoke timing can support
 a scoped ETA only when the measured arm mix represents the remaining work; this
