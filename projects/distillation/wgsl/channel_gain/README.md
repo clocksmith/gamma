@@ -8,6 +8,13 @@ controls, k=2 and hidden-test separation are unchanged. [Stage lock 04](native-s
 pins this policy and runner before selection. The earlier closed run below remains
 preserved; it is not the current execution status. See [execution-status.json](execution-status.json).
 
+**Selection completed; confirmation generation is active.** Both candidates scored
+0/4 on selection families. The frozen timing tie-break selected `gain-negative`
+(410.902 seconds versus 411.100 seconds). The [complete selection receipt](native-selection-04/selection-receipt.json)
+records 822.030 seconds of allocated selection time, above the unchanged
+35.59-second efficiency target. This is not a quality win; the full confirmation
+workload continues.
+
 
 **Run closed at selection admission, 2026-11-13. No shader-improvement confirmation.**
 The complete two-task smoke and corrected public replay ran. The eight-request

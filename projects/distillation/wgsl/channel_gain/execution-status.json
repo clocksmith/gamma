@@ -1,12 +1,12 @@
 {
   "schema": "gamma.channel-gain-execution-status/v1",
-  "updatedAt": "2026-11-13T11:28:30.761887+00:00",
-  "status": "continuation_02_selection_model_loading",
+  "updatedAt": "2026-11-13T11:44:43.157195+00:00",
+  "status": "continuation_02_confirmation_generation_active",
   "protocolFreezeSha256": "f23dc4e50eb480c53ebc759c3aafb3ad457cd50fae4bab0e06595fb419561f3b",
-  "modelRequests": 33,
+  "modelRequests": 41,
   "modelSmokeRequests": 32,
-  "selectionTasksEvaluated": 0,
-  "selectedCandidate": null,
+  "selectionTasksEvaluated": 4,
+  "selectedCandidate": "gain-negative",
   "confirmationModelTasksEvaluated": 0,
   "offlineTrainingSteps": 0,
   "modelSmokeTimingMs": [
@@ -64,15 +64,15 @@
   "criteria": {
     "promptDependence": "not_evaluated_on_confirmation",
     "gapClosure": "not_evaluated_on_confirmation",
-    "setupBudget": "selection_not_admitted_candidates_untested",
+    "setupBudget": "measured_target_exceeded_confirmation_continues",
     "servingOverhead": "smoke_descriptive_only",
     "wrongAcceptances": "not_evaluated_on_confirmation"
   },
   "blockers": [],
   "nextWork": [
-    "Complete both candidates on all four selection families",
-    "Freeze selected candidate and all confirmation submissions before hidden verification",
-    "Report shader quality and efficiency separately from full confirmation receipts"
+    "Complete fixed176 confirmation generations with selected gain-negative",
+    "Seal all submitted sources before hidden verification",
+    "Assemble archived evidence and report quality, efficiency and limits separately"
   ],
   "currentRuntimeLockSha256": "6be766a21347c52762c504d2fa348383bfe388f5a61fefcbaeb82e6a178ba2db",
   "priorAttempt": {
@@ -110,18 +110,21 @@
     "minimumObservedPlannedMs": 782517.3118399999,
     "maximumObservedPlannedMs": 843332.0966719997,
     "reason": "complete_selection_does_not_fit_observed_request_envelope",
-    "basis": "pre-selection timing admission only; no smoke semantic scores or confirmation checks used; bounds are empirical, not mathematical worst-case guarantees"
+    "basis": "pre-selection timing admission only; no smoke semantic scores or confirmation checks used; bounds are empirical, not mathematical worst-case guarantees",
+    "historicalAttempt": "03"
   },
   "candidateStatus": [
     {
       "candidate": "gain-positive",
-      "status": "untested",
-      "reason": "complete_selection_does_not_fit_observed_request_envelope"
+      "status": "tested",
+      "semanticPasses": 0,
+      "endToEndMs": 411100.4110920001
     },
     {
       "candidate": "gain-negative",
-      "status": "untested",
-      "reason": "complete_selection_does_not_fit_observed_request_envelope"
+      "status": "tested",
+      "semanticPasses": 0,
+      "endToEndMs": 410901.5982840001
     }
   ],
   "publicSmokePasses": {
@@ -143,14 +146,14 @@
     "fullModelWeightBytesHashed": false
   },
   "limitations": [
-    "Public smoke is not confirmation. No gain candidate was ranked.",
+    "Public smoke and candidate selection are not confirmation. Both candidates scored zero of four; the frozen timing tie-break selected gain-negative.",
     "Replay uses original generation/runtime timing and separately sealed repaired public verification on the same device; original receipts and costs retained.",
     "Admission envelope is empirical and implementation-specific, not a mathematical lower bound.",
     "Per-request memory and process lifetime GPUBuffer peak have distinct accounting boundaries."
   ],
-  "requestCountDefinition": "Completed generated responses: 32 across three smoke attempts plus one four-token integration probe. Capture/reference/reset diagnostic prefills are reported separately in preparation/diagnostic costs. One additional adapter generation started but failed during prefill.",
-  "completedGenerationRequests": 33,
-  "initiatedGenerationRequests": 34,
+  "requestCountDefinition": "Snapshot after completed selection: 32 smoke responses, one probe, eight candidate-task responses. Confirmation generation is active; these counts exclude in-flight confirmation until its next recorded snapshot. One earlier adapter attempt failed during prefill.",
+  "completedGenerationRequests": 41,
+  "initiatedGenerationRequests": 42,
   "continuation": {
     "policy": "protocol-continuation-02.json",
     "continuationSha256": "7633a15c9e322fdeb4b44a60f7ecadbdf263adebdd1ad593fb80c5127e8137a6",
@@ -161,5 +164,24 @@
     "fixedSelectionRequests": 8,
     "fixedConfirmationRequests": 176,
     "previousOutcomePreserved": "native-selection-03/selection-receipt.json"
+  },
+  "selectionCandidateTaskEvaluations": 8,
+  "selectionResult": {
+    "receipt": "native-selection-04/selection-receipt.json",
+    "receiptSha256": "f60d02feffe7c043d6ce6e0d1cf2782b8f559b22fe7e1cb41c302000660577aa",
+    "budget": {
+      "enforcement": "measurement_only",
+      "budgetGpuMs": 35590,
+      "elapsedGpuMs": 822030.419413,
+      "remainingGpuMs": 0,
+      "withinBudget": false,
+      "basis": "continuous single-device resident selection wall interval; cold load and fixed smoke excluded"
+    },
+    "timing": {
+      "coldModelLoadMs": 60945.337187000005,
+      "coldAdapterLoadMs": 290.6733350000068,
+      "modelResidentMs": 822123.820952,
+      "physicalStageBeforeReceiptMs": 884247.71204
+    }
   }
 }

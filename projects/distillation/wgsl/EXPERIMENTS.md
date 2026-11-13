@@ -3,7 +3,7 @@
 This registry separates experiments from the [research roadmap](RECONFIGURATION-ROADMAP.md).
 Only the first channel-gain study below has a frozen concrete protocol. Later rungs
 are draft, unscheduled research directions, not nine completed or frozen studies.
-Prospective studies use [standard v1](EXPERIMENT-PROTOCOL.md), pin its content hash
+Prospective studies use [standard v2](EXPERIMENT-PROTOCOL.md), pin its content hash
 and begin from the [template](EXPERIMENT-TEMPLATE.md). Existing freezes are not
 retroactively rewritten by that standard.
 
@@ -18,7 +18,7 @@ retroactively rewritten by that standard.
 | Arms | MLP/base-cache and MLP/frozen-gain re-prefill, sharing identical gains |
 | All-projections | Not applicable to this rule; neither passed nor failed |
 | Populations | 2 smoke / 4 selection / 16 confirmation semantic families |
-| Status snapshot | Continuation 02 active: selection then confirmation; no confirmation result yet |
+| Status snapshot | Selection complete, gain-negative frozen; confirmation generation active; no confirmation result yet |
 | Authority | Owner's first-rule request and MLP-only clarification, 2026-11-12 |
 
 The comparison protocol is SAME-R, not a model arm. The trained seed-47 adapter is a
@@ -101,6 +101,15 @@ fixed selection/confirmation workload. [Stage lock 04](channel_gain/native-stage
 binds the runner and policy before any selection request. Prior smoke, failed
 attempts and budget-stop receipts remain unchanged. Quality and efficiency will be
 reported separately; hidden checks still cannot select candidates or samples.
+
+**2026-11-13, completed selection 04:** all eight candidate-task requests ran.
+Both candidates scored 0/4. The frozen timing tie-break selected `gain-negative`
+(410.902 versus 411.100 seconds total attributed request time). The [selection receipt](channel_gain/native-selection-04/selection-receipt.json)
+records 822.030 seconds of continuous allocated selection time, excluding cold
+load; the 35.59-second efficiency target was missed. Confirmation generation has
+started with that fixed candidate. No confirmation quality result exists yet.
+A [CPU contract audit](channel_gain/selection-contract-audit-04.json) traced the
+first six observed failures to malformed model WGSL, not a rejected valid override.
 
 Append subsequent attempts, deviations, costs and decisions here with their own
 receipts. Preserve these observations if a rerun succeeds. Smoke timing can support
