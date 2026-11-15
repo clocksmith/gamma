@@ -4,10 +4,11 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
-const [dopplerRoot,modelPath,receiptPrefix]=process.argv.slice(2);
-if(!dopplerRoot||!modelPath||!receiptPrefix)throw Error('Usage: node development_screen.mjs DOPPLER_ROOT LOCAL_MODEL LOCAL_RECEIPT_PREFIX');
+import { validateTasks } from './task_contract.mjs';
+const [dopplerRoot,modelPath,receiptPrefix,taskPath]=process.argv.slice(2);
+if(!dopplerRoot||!modelPath||!receiptPrefix)throw Error('Usage: node development_screen.mjs DOPPLER_ROOT LOCAL_MODEL LOCAL_RECEIPT_PREFIX [TASK_JSON]');
 const sha=x=>createHash('sha256').update(x).digest('hex');
-const tasks=[
+const defaultTasks=[
  ['congruences','What is the smallest nonnegative integer n with n mod 5 = 3 and n mod 7 = 4?',['18','23','32','39'],0],
  ['conditional-probability','A box has 3 red and 2 blue balls. Draw two without replacement. Given that at least one is blue, what is the probability both are blue?',['1/5','1/7','1/4','2/5'],1],
  ['python-alias','In Python: a = [[0]] * 3; a[0].append(1). What is sum(len(x) for x in a)?',['3','4','6','9'],2],
@@ -21,6 +22,7 @@ const tasks=[
  ['inclusion-exclusion','Among 30 people, 18 like tea and 16 like coffee. Exactly 7 like neither. How many like both?',['4','7','11','12'],2],
  ['recurrence','Let a(0)=2 and a(n+1)=3*a(n)-1. What is a(3)?',['39','40','42','41'],3],
 ];
+const tasks=validateTasks(taskPath?JSON.parse(await readFile(taskPath,'utf8')):defaultTasks);
 const protocol={schema:'gamma.rotation-development-screen/v1',classification:'prespecified development only; constrained next-token choice ranking; no free generation or confirmation',tasks,
  angles:[0,0.05,-0.05],layer:'last dense layer',epsilon:1e-6,arms:['base','zero','positive','negative','cyclic-other-task-positive','fixed-random-plane-positive'],cacheArm:'re-prefill',
  randomSeed:20261115,randomGuessExpectedAccuracy:0.25,baseGate:'strictly between 0 and all correct; otherwise stop without alternative task selection',

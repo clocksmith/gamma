@@ -118,3 +118,32 @@ both signs at three prompt lengths against full re-prefill: first logits, one
 teacher-forced decode, complete contiguous KV and linear recurrent states, reset,
 and invalid/stale replay rejection. Diagnostic times separate capture/freezing,
 replay and whole re-prefill; runs are not a counterbalanced speed benchmark.
+
+### Fresh development fixtures
+
+The screen accepts an optional fourth argument, a JSON array of
+`[id, question, fourChoices, correctIndex]`. Validation happens before GPU loading
+and before the protocol is frozen. Duplicate IDs, duplicate/empty choices,
+invalid answer indices, empty questions, and populations too small for the
+other-task control are rejected. Existing three-argument behavior is unchanged.
+
+`fresh_code_tasks.mjs` emits twelve distinct executable integer-program questions
+with balanced answer positions. These are **development code-reasoning tasks**,
+not WGSL compilation, semantic shader execution, or sealed confirmation. Oracle
+answers are computed by the corresponding JavaScript functions and checked
+against a separately fixed expected vector in `test_task_contract.mjs`.
+
+```sh
+node projects/reconfiguration/rotation_v1/test_task_contract.mjs
+node projects/reconfiguration/rotation_v1/fresh_code_tasks.mjs > LOCAL_TASKS_JSON
+node projects/reconfiguration/rotation_v1/development_screen.mjs \
+  DOPPLER_ROOT LOCAL_MODEL LOCAL_RECEIPT_PREFIX LOCAL_TASKS_JSON
+```
+
+The task population, answers, angles, control arms and runtime configuration are
+written with exclusive creation before model generation. A floor/ceiling base
+stops the screen; do not substitute easier tasks in the same experiment. Once
+inspected, a population is development evidence, not untouched confirmation.
+Scores remain constrained first-token rankings. Capture costs are charged per
+request, including the other-task control's source capture. Raw receipts and
+runtime dirty-diff provenance stay local unless publication is authorized.
