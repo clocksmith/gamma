@@ -10,10 +10,11 @@ export function selectionSchedule(taskIds, candidates, cacheArm) {
   if (candidates.length !== 3 || new Set(candidates.map(c=>c.id)).size !== 3 ||
       !candidates.some(c=>c.beta===0) || !candidates.some(c=>c.beta>0) ||
       !candidates.some(c=>c.beta<0)) throw Error('Exactly zero, positive and negative candidates required');
-  if (candidates.some(c=>c.reference!=='A' || !Number.isFinite(c.beta) ||
+  if (candidates.some(c=>!['A','same-pass-content-complement/v1'].includes(c.reference) || !Number.isFinite(c.beta) ||
       !Number.isFinite(c.clip) || !Number.isFinite(c.epsilon) || !(c.clip>0) || !(c.epsilon>0) || !c.layers?.length)) {
-    throw Error('This adapter executes explicit reference A only; other rules need their own adapter');
+    throw Error('Explicit supported reference rule required');
   }
+  if (new Set(candidates.map(c=>c.reference)).size!==1) throw Error('Separate runs required for different reference hypotheses');
   if (candidates.some(c=>JSON.stringify(c.layers)!==JSON.stringify(candidates[0].layers))) {
     throw Error('The existing runtime fixes layers at creation; use separate runs for layer ablations');
   }
@@ -40,6 +41,7 @@ export async function executeSelection({rows, protocol, runtime, admit, seal, ve
     throw Error('Selection-only executor: confirmation population is forbidden');
   }
   const schedule=selectionSchedule(rows.map(r=>r.taskId),protocol.candidates,protocol.cacheArm);
+  if(protocol.candidates.some(c=>c.reference!=='A'&&!runtime.supportedReferences?.includes(c.reference)))throw Error('Runtime does not declare the requested reference rule');
   if(hash(schedule)!==protocol.scheduleSha256 || schedule.length!==protocol.requestCount ||
       hash(rows)!==protocol.rowsSha256 || !Number.isSafeInteger(protocol.seed)) {
     throw Error('Frozen schedule, prompt identity or sampling seed mismatch');

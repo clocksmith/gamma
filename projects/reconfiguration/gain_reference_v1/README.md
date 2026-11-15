@@ -1,7 +1,7 @@
 # Prospective channel-gain reference
 
-Status: CPU reference qualification only. No model run, fresh quality result,
-GPU integration, latency improvement or RSI is established by this directory.
+Status: CPU reference and prospective runtime integration. No model run, fresh
+quality result, physical GPU qualification, latency improvement or RSI is established.
 Historical protocols, runtimes, exposed tasks and result records are unchanged.
 Parent contract: [request-specific reconfiguration](../CATSCAN.md).
 
@@ -41,10 +41,10 @@ columns of the down-projection matrix. It neither learns nor persists successors
 
 ## Next experiment integration
 
-The CPU tests qualify math and streaming capture only. A Doppler owner must
-implement a GPU reduction of both spans from the same activation tensor, compare
-it against this reference, and expose it through the existing channel-gain
-request lifecycle. Do not read full activation rows back into the serving loop.
+The CPU tests qualify math and streaming capture only. Doppler commit `1b76eee0` implements a GPU reduction of both spans from the same
+activation tensor through the existing request lifecycle. Its physical test
+exists but has not run in this session; compare it against this reference before
+model execution. Do not read full activation rows back into the serving loop.
 Keep historical GPU capture and frozen study source locks unchanged.
 
 Create new tasks from previously unexposed families, with the SAME explicit
@@ -88,9 +88,10 @@ retained; do not mistake a selected arm's attributed cost for total experimental
 cost. Memory baseline subtraction may be unavailable when a transformed arm
 precedes base; absolute memory remains reported, with no inferred subtraction.
 
-The executor admits reference A only. It rejects mixed layer sets because the
-existing runtime fixes layer geometry at creation. Run separate locked runtime
-instances for layer ablations and separate adapters for alternate references.
+The executor admits reference A and the separately named same-pass complement
+rule. Each run must use one reference hypothesis and an explicitly capable
+runtime. It rejects mixed layer sets because runtime geometry is fixed at
+creation. Run separate locked instances for layer ablations.
 It requires resource/source admission, exact prompt/schedule hashes, explicit
 sampling seed, memory/timing receipts and durable output sealing before scoring.
 It rejects confirmation populations. There is deliberately no self-authorizing
@@ -110,7 +111,24 @@ Run all local checks:
 
     node --test projects/reconfiguration/gain_reference_v1/test_*.mjs
 
-At this revision, fourteen CPU/mocked-executor tests pass. They are not fourteen
-model requests. Next: qualify reference shaders on an admitted GPU, pin model,
+At this revision, seventeen CPU/mocked-executor tests pass. They are not model
+requests. Next: qualify reference shaders on an admitted GPU, pin model,
 Doppler/runtime and verifier hashes, run exact tokenizer preflight, freeze the
 selection inputs, then invoke the executor through the existing owned runner.
+
+## Prospective native runtime
+
+`../cross_domain_screen/native_runtime_v3.mjs` preserves the frozen v2 source
+unchanged and records its source hash. V3 adds explicit reference capability
+admission and paired capture. For same-pass runs, there is one original full
+prefill, no deleted-instruction reference prefill, and GPU-derived per-layer gains
+feed the existing decode/re-prefill paths. Shuffled controls recompute BOTH
+instruction and complement energies from the shuffled full-prompt pass. Setup,
+control and retained-cache costs remain in receipts. Reference A remains available
+as its own named comparison.
+
+Source locks for a new run must include v3, `capture_plan.mjs`, the new Doppler
+paired kernel/wrapper/request, and their registry/generator identities. Existing
+v2 source locks are not valid for v3. Exact-tokenizer qualification and service
+guards are still required. The added runtime is syntax-checked; its model path
+is unexecuted until hardware ownership and admission are resolved.

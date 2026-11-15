@@ -47,3 +47,12 @@ test('same-pass hypotheses, mixed layers and confirmation require distinct execu
   const f=fixture();f.protocol.stage='confirmation';await assert.rejects(executeSelection(f),/Selection-only/);
   assert.throws(()=>selectionSchedule(['x'],candidates.map((c,i)=>({...c,layers:[i]})),'base-cache'));
 });
+
+test('same-pass run requires runtime declaration and retains a separately frozen schedule',async()=>{
+  const f=fixture();
+  f.protocol.candidates=f.protocol.candidates.map(c=>({...c,reference:'same-pass-content-complement/v1'}));
+  f.protocol.scheduleSha256=hash(selectionSchedule(f.rows.map(r=>r.taskId),f.protocol.candidates,f.protocol.cacheArm));
+  await assert.rejects(executeSelection(f),/does not declare/);
+  f.runtime.supportedReferences=['A','same-pass-content-complement/v1'];
+  assert.equal((await executeSelection(f)).results.length,20);
+});
