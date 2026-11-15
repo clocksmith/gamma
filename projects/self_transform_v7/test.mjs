@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import { signProbability, summarize } from './analyze.mjs';
+assert.equal(signProbability(8,3),232/2048);
+assert.equal(signProbability(11,1),13/4096);
+assert.equal(signProbability(0,0),1);
+const s=summarize([0,0.02,0.03,-0.01],1e-6);
+assert.equal(s.wins,2); assert.equal(s.losses,1); assert.equal(s.ties,1);
+assert.equal(s.median,0.01); assert.equal(s.oneSidedSignP,0.5);
+assert.throws(()=>summarize([],1e-6));
+assert.throws(()=>summarize([NaN],1e-6));
+console.log('Attribution sign test, ties, median and invalid input checks passed');
