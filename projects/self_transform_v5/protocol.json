@@ -1,0 +1,42 @@
+{
+  "schema": "gamma.positive-step-self-target/v5",
+  "classification": "prespecified toy development screen",
+  "replicateSeeds": [
+    91000,
+    101000,
+    111000
+  ],
+  "trainingCandidates": 33,
+  "mutationScale": 0.2,
+  "trainingGenerations": 3,
+  "trainSupportCount": 16,
+  "trainQueryCount": 16,
+  "metaCount": 32,
+  "holdoutCount": 128,
+  "steps": 6,
+  "generations": 3,
+  "initializers": [
+    "task_only",
+    "self_target"
+  ],
+  "arms": [
+    "hereditary",
+    "fixed_proposer",
+    "serialization_only",
+    "spsa"
+  ],
+  "seedOffsets": {
+    "candidate": 1,
+    "trainSupport": 10,
+    "trainQuery": 20,
+    "trainProbe": 30,
+    "meta": 100,
+    "holdout": 200,
+    "probe": 300
+  },
+  "training": "Same initial random vector and mutation draws; 32 greedy bounded uniform mutations per initializer. Every candidate evaluated through three self-generated descendants on fixed training-support/query populations. task_only minimizes parent query loss averaged across three query sets; self_target minimizes mean descendant query loss. Both pay full identical compute; chosen initial artifact is candidate parent.",
+  "budget": "33 candidates per initializer, each charged three full self-target proposal/evaluation unrolls plus parent query evaluation. Fresh evaluation arms each receive eight scalar meta-objective probes per generation, unconditional child adoption.",
+  "evaluation": "Clean-process proposals and scoring; no holdout score affects training or descendants; fixed external scalar oracle and interpreter.",
+  "limits": "An external evolutionary search trains initial parameters. The experiment tests useful heredity, not independence from external optimization or AGI. No retuning or stopping based on results.",
+  "mechanism": "Replace unconstrained tanh displacement with positive learned rate in [0,0.25], multiplied by internal scalar-probe gradient estimate. Zero gradient gives zero update. Probe geometry unchanged; no guaranteed true-gradient descent under noisy directions."
+}
