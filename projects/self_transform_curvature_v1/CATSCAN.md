@@ -9,7 +9,7 @@ artifact reconstruction, with identical scalar observations and charged costs.
 
 ## Authority
 
-Owns prospective CPU-only protocol and observation admission checks. Does not
+Owns CPU-only curvature/state factorial implementation and observation checks. Does not
 modify the completed self-transform experiments or production runtimes.
 
 ## Invariants
@@ -20,8 +20,9 @@ or capability claims from a protocol. Objective identity governs secant validity
 ## Acceptance
 
 Focused observation checks establish query limits, state isolation and fresh resets.
-A measured result additionally requires implemented comparators and candidate,
-exact reconstruction and the frozen factorial evaluation. Those are not yet done.
+Implemented rank-two candidate, Adam and L-BFGS share the scalar interface.
+Frozen factorial evaluation retains losses, state artifacts and charged costs;
+passing engineering checks is not a claim of useful hereditary improvement.
 
 ## Non-goals
 
