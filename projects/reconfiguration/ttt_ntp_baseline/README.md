@@ -2,7 +2,8 @@
 
 Inspected 2026-11-15. No upstream code executed, packages installed, continual pretraining launched,
 or inference comparison claimed. The owner authorized the pinned checkpoint
-download; acquisition is underway, not yet integrity-qualified.
+download; all 1,517,981,192 weight bytes are acquired and the pinned SHA-256
+and seven projection contracts pass local verification.
 
 ## Scientific distinction
 
@@ -32,7 +33,8 @@ configuration. The repository has no README/model card or detailed training
 receipt; matching configuration is not independently verified training provenance.
 The weight file is 1,517,981,192 bytes; advertised LFS SHA-256 is
 `bbd600491d2c5dff5fc73d429fb5b4f62e5bde9777f72ed31c09eae01798bc4e`.
-Only metadata/configuration/header bytes were read, not the model tensors.
+Initial inspection read metadata/configuration/header bytes only. Subsequent
+owner-authorized acquisition verified the full weight file locally.
 
 The related [Llama 8B NHS card](https://huggingface.co/YoungXuan/Llama-3.1-8B-NHS)
 reports a `specnorm`/small-initialization variant with single-seed caveats and
