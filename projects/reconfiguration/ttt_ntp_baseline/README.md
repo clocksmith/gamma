@@ -141,3 +141,21 @@ contracts and retrieval budget/source/oracle integrity. Ruff checks pass.
 The existing environment has PyTorch 2.9.1 with MPS and Transformers 4.57.3.
 No GPU execution may begin until live ownership is verified clear. No result is
 claimed from downloading weights or preparing this harness.
+
+Tokenizer qualification: the installed Transformers 4.57.3 applies its Mistral
+warning heuristic to local non-Mistral configs saved at 4.57.3 (the type-based
+skip is limited to <=4.57.2). We did not apply that suggested regex rewrite to
+Qwen. Direct `tokenizers.Tokenizer.from_file` produces identical IDs for all
+sixteen frozen prompts. This verifies consistency with the pinned tokenizer
+JSON, not undocumented training provenance. Actual input lengths are
+4065–4096 and 8156–8191 tokens. Fixture SHA-256:
+`3790ba8a1ea3c16c281976f22a4e604ec20118191a89ba1be7de9cc55ca5f20c`.
+
+`baseline_screen.py` is the **no-write feasibility gate only**, not a completed
+TTT comparison. It uses installed official Transformers with local files only,
+remote code disabled, explicit BF16/SDPA, greedy generation and the frozen input
+IDs. It requires exactly the seven unused projection keys when loading the
+ordinary backbone; any other missing or unexpected weights abort. Capturing
+first-token and remaining decode separately avoids treating end-to-end latency
+as an internal prefill measurement. It checkpoints each generated result locally.
+Syntax and oracle checks pass; model execution is still pending resource clearance.
