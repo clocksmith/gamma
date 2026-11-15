@@ -86,3 +86,51 @@ shader execution, multi-token persistence, a full decoding benchmark, retained
 learning, or RSI. A useful initial result would still require fresh executable
 tasks and a complete decoded-output evaluation. No result authorizes production
 promotion. No Doppler runtime, privacy policy, or public provider is changed.
+
+## Position-balanced follow-up (v2)
+
+An optional fourth argument accepts the fixture emitted by
+`position_balanced_tasks.mjs`. It replaces the code-question preamble and task
+population, without changing alpha, the target layer, the norm bound, or control
+arms. Eight fresh non-code cases (lookup, ordering, word editing, constraints,
+and codebook mapping) each appear in four cyclic option permutations. Each
+semantic answer occupies A, B, C, and D exactly once.
+
+Before any reference/capture prefill or adapter work, run all 32 base requests.
+The frozen gate requires 16–30 correct, at least four cases correct on at least
+three of their four permutations, and no answer letter selected more than 16
+times. A constant-letter strategy scores 8/32 and must fail. A perfect baseline
+also stops because there is no accuracy headroom. This is an engineering gate,
+not a statistical claim of general capability.
+
+If the gate fails, preserve every base row and stop: zero captures, zero adapter
+controls, no replacement cases and no outcome-based prompt rewrite. The result
+marks `baseScreenComplete`, while `complete` remains false for the unrun transform
+comparison. If the gate passes, proceed with the already-frozen controls.
+Costs and interpretation remain separate for the base gate and full comparison.
+
+```sh
+node projects/reconfiguration/contrastive_rank_one_v1/test_discrimination.mjs
+node projects/reconfiguration/contrastive_rank_one_v1/position_balanced_tasks.mjs > LOCAL_TASKS_JSON
+node projects/reconfiguration/contrastive_rank_one_v1/run.mjs \
+  DOPPLER_ROOT LOCAL_MODEL LOCAL_RECEIPT_PREFIX LOCAL_TASKS_JSON
+```
+
+The gate reports correct answers, each label's count, correctly stable cases,
+and cases whose selected semantic option is invariant across permutations.
+Correctness alone can hide letter bias; invariance alone can hide consistent
+wrong answers. Neither replaces the other.
+
+The semantic other-task donor is the next **distinct question body**, skipping
+all option permutations of the current question. Its factors are magnitude
+matched and both donor and recipient setup costs are charged. The base rows and
+gate verdict are checkpointed to `LOCAL_RECEIPT_PREFIX.base.json` before controls.
+
+The first position-balanced physical development run used the inherited
+cyclic-next donor, which usually selected another permutation of the same case.
+Its preserved `other-task` rows therefore do **not** qualify as a semantic
+other-task control; interpret them only as an option-permutation donor diagnostic.
+That mistake does not turn its base/zero/positive/negative observations into
+confirmation. The corrected distinct-body donor has a dedicated regression test;
+physical execution of that correction must be reported separately, not inferred
+from the earlier run.

@@ -4,13 +4,19 @@ import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
 import { derive, correction } from './operator.mjs';
-import { tasks } from './tasks.mjs';
-const [root, model, prefix] = process.argv.slice(2);
+import { tasks as defaultTasks } from './tasks.mjs';
+import { validateTasks } from '../rotation_v1/task_contract.mjs';
+import { assessDiscrimination, selectDonorIndex } from './discrimination.mjs';
+const [root, model, prefix, fixturePath] = process.argv.slice(2);
 assert.ok(root && model && prefix, 'DOPPLER_ROOT LOCAL_MODEL LOCAL_RECEIPT_PREFIX required');
+const fixture = fixturePath ? JSON.parse(await readFile(fixturePath,'utf8')) : null;
+if (fixture) assert.equal(fixture.schema,'gamma.position-balanced-development/v1');
+const tasks=validateTasks(fixture?.tasks??defaultTasks);
+const questionPrefix=fixture?.questionPrefix??'What integer does this JavaScript function body return? Choose only A, B, C, or D.';
 const hash = x => createHash('sha256').update(x).digest('hex');
-const protocol = { schema:'gamma.contrastive-rank-one/v1', classification:'fresh development constrained first-token ranking; not free generation or confirmation', tasks, alpha:0.25, epsilon:1e-9, arms:['base','zero','positive','negative','other-task'], layer:'final dense full-attention FFN down projection', reference:'same template and answer choices, replace question code with [question omitted]', geometryTolerance:0.005, baseGate:'stop at floor or ceiling without replacement', order:'base and capture all tasks, then task-rotated adapter arms', runtimeConfig:{inference:{session:{prefillTokenChunkSize:null,useLargeBatchF16F32FusedGateUp:false,usePreparedDecodeWorkspace:false,kvcache:{maxSeqLen:512}}}}};
+const protocol = { schema:'gamma.contrastive-rank-one/v2', classification:'fresh development constrained first-token ranking; not free generation or confirmation', tasks, questionPrefix, alpha:0.25, epsilon:1e-9, arms:['base','zero','positive','negative','other-task'], layer:'final dense full-attention FFN down projection', reference:'same template and answer choices, replace question code with [question omitted]', geometryTolerance:0.005, baseGate:fixture?.baseGate??'stop at floor or ceiling without replacement', order:'score all base requests, check discrimination, then capture and task-rotated adapter arms', donorRule:'next distinct question body, never another option permutation of the same question', runtimeConfig:{inference:{session:{prefillTokenChunkSize:null,useLargeBatchF16F32FusedGateUp:false,usePreparedDecodeWorkspace:false,kvcache:{maxSeqLen:512}}}}};
 const sourceHashes = {};
-for (const file of ['run.mjs','operator.mjs','tasks.mjs']) sourceHashes[file]=hash(await readFile(new URL(file,import.meta.url)));
+for (const file of ['run.mjs','operator.mjs','tasks.mjs','discrimination.mjs']) sourceHashes[file]=hash(await readFile(new URL(file,import.meta.url)));
 await writeFile(prefix+'.protocol.json',JSON.stringify({protocol,sourceHashes}),{flag:'wx'});
 const mod = p => import(pathToFileURL(join(resolve(root),p)));
 const [gpu,fetcher,loader,deviceAPI,pool,fp16,adapters,chat] = await Promise.all([
@@ -26,7 +32,7 @@ try {
  const layer=pipeline.modelConfig.numLayers-1;
  const labels=['A','B','C','D'].map(s=>Array.from(pipeline.tokenizer.encode(s)));assert.ok(labels.every(x=>x.length===1));const labelIds=labels.map(x=>x[0]);
  const prompts=tasks.map(([id,body,choices])=>{
-  const text=q=>'What integer does this JavaScript function body return? Choose only A, B, C, or D.\n'+q+'\n'+choices.map((v,i)=>'ABCD'[i]+'. '+v).join('\n')+'\nAnswer:';
+  const text=q=>questionPrefix+'\n'+q+'\n'+choices.map((v,i)=>'ABCD'[i]+'. '+v).join('\n')+'\nAnswer:';
   const encode=q=>Array.from(pipeline.tokenizer.encode(chat.applyChatTemplate(text(q),pipeline.modelConfig.chatTemplateType,{thinking:false})));
   return {id,ids:encode(body),referenceIds:encode('[question omitted]')};
  });
@@ -42,20 +48,26 @@ try {
  const captures=[];
  for(const [i,p] of prompts.entries()){
   await reset();const start=performance.now();const logits=await prefill(p.ids);result.rows.push({task:p.id,arm:'base',...score(logits,tasks[i][3]),totalMs:performance.now()-start});
+ }
+ const correct=result.rows.filter(x=>x.correct).length;result.baseCorrect=correct;
+ if(fixture)result.discrimination=assessDiscrimination(tasks,result.rows,fixture.baseGate);
+ await writeFile(prefix+'.base.json',JSON.stringify({baseRows:result.rows,discrimination:result.discrimination,baseCorrect:correct}),{flag:'wx'});
+ console.log(JSON.stringify({baseCorrect:correct,discrimination:result.discrimination}));
+ if(correct===0||correct===tasks.length||result.discrimination?.pass===false){result.stopReason='base failed frozen discrimination/floor/ceiling gate; no captures or controls run';result.baseScreenComplete=true;}
+ else {
+  for(const [i,p] of prompts.entries()){
+   const logits=result.rows[i].logits;
   const setupStart=performance.now();const full=await capture(p.ids),reference=await capture(p.referenceIds);const op=derive(full.a,full.h,reference.h,protocol.alpha,protocol.epsilon);
   const setupMs=performance.now()-setupStart;captures.push({full,reference,op,setupMs,baseLogits:logits});
   result.capture.push({task:p.id,setupMs,activationSquaredNorm:op.activationSquaredNorm,hiddenNorm:op.hiddenNorm,differenceNorm:op.differenceNorm,bound:op.bound,logicalFactorBytes:op.a.byteLength+op.b.byteLength});
- }
- const correct=result.rows.filter(x=>x.correct).length;result.baseCorrect=correct;
- if(correct===0||correct===tasks.length){result.stopReason='floor/ceiling';}
- else {
+  }
   const arms=protocol.arms.slice(1);
   for(const [i,p] of prompts.entries())for(let j=0;j<arms.length;j++){
-   const arm=arms[(i+j)%arms.length],c=captures[i];await reset();const start=performance.now();
+   const arm=arms[(i+j)%arms.length],c=captures[i],donorIndex=selectDonorIndex(tasks,i);await reset();const start=performance.now();
    const a=Float32Array.from(c.op.a);let b=Float32Array.from(c.op.b);
    if(arm==='zero')b.fill(0);if(arm==='negative')b=Float32Array.from(b,x=>-x);
    if(arm==='other-task'){
-    const other=captures[(i+1)%captures.length].op.b,ratio=Math.hypot(...b)/(Math.hypot(...other)+protocol.epsilon);
+    const other=captures[donorIndex].op.b,ratio=Math.hypot(...b)/(Math.hypot(...other)+protocol.epsilon);
     b=Float32Array.from(other,x=>x*ratio);
    }
    const adapter=await adapters.finalizeLoRAAdapter({id:`gamma-contrastive-${i}-${arm}`,name:'request-local analytic rank-one',version:'1',baseModel:handle.manifest.modelId??'local-model',rank:1,alpha:1,targetModules:['down_proj'],layers:new Map([[layer,{down_proj:{a,b,rank:1,alpha:1,scale:1,weightsLayout:'peft',aShape:[1,a.length],bShape:[b.length,1]}}]])});
@@ -67,7 +79,7 @@ try {
    const geometryDifference=Math.max(...labelIds.map((token,k)=>Math.abs(projected.logits[token]-logits[k])));
    assert.ok(geometryDifference<=protocol.geometryTolerance,`rank-one geometry ${arm}: ${geometryDifference}`);
    if(arm==='zero')assert.ok(Math.max(...logits.map((x,k)=>Math.abs(x-c.baseLogits[k])))<=protocol.geometryTolerance);
-   result.rows.push({task:p.id,arm,...score(logits,tasks[i][3]),executionMs,setupMs:c.setupMs,controlDonorSetupMs:arm==='other-task'?captures[(i+1)%captures.length].setupMs:0,totalMs:executionMs+c.setupMs+(arm==='other-task'?captures[(i+1)%captures.length].setupMs:0),geometryDifference,adapterHash:adapter.identity.digest});
+   result.rows.push({task:p.id,arm,...score(logits,tasks[i][3]),executionMs,setupMs:c.setupMs,controlDonorSetupMs:arm==='other-task'?captures[donorIndex].setupMs:0,totalMs:executionMs+c.setupMs+(arm==='other-task'?captures[donorIndex].setupMs:0),geometryDifference,adapterHash:adapter.identity.digest});
   }
   result.complete=true;
  }
