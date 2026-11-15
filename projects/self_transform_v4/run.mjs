@@ -72,6 +72,6 @@ fs.writeFileSync(output, JSON.stringify(receipt, null, 2), { flag: 'wx' });
 console.log(JSON.stringify({ elapsedMs: receipt.elapsedMs,
   initializations: initializations.map(({seed,initial,budgets,trainingMs}) => ({seed,
     selected: Object.fromEntries(Object.entries(initial).map(([k,v]) => [k,
-      { candidate:v.candidate,parentLoss:v.parentLoss,childLoss:v.childLoss }])), budget,trainingMs})),
+      { candidate:v.candidate,parentLoss:v.parentLoss,childLoss:v.childLoss }])), budgets,trainingMs})),
   results: records.map(({seed,initializer,generation,arm,parentMean,childMean}) =>
     ({seed,initializer,generation,arm,parentMean,childMean})) },null,2));
