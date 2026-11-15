@@ -70,3 +70,20 @@ matched random-plane and shuffled-task controls. Include setup/readback,
 re-prefill, decode, verifier and memory costs, plus matched-compute base sampling.
 Confirmation outputs must be sealed before reserved semantic evaluation.
 No optimum, specialization benefit, novelty, cross-domain gain or AGI is claimed.
+
+`development_screen.mjs DOPPLER_ROOT LOCAL_MODEL LOCAL_RECEIPT_PREFIX` is a
+prespecified 12-item cross-domain development screen. It freezes its protocol
+before loading a model, gates on non-floor/non-ceiling base accuracy, and compares
+zero, both fixed signs, cyclic other-task planes and a seeded model-independent
+plane. It scores only the supplied A/B/C/D token logits, not free-generated
+answers. Inputs are explicitly concatenated token segments. Expected random
+choice accuracy is 25%; one fixed random-plane control is not a distribution of
+random controls. No task or angle is replaced after results.
+
+Per-request times charge capture, freezing, re-prefill, scoring and reset. Cold
+model load is separate; fixed random fixture construction and tokenization are
+shared setup and not included in those per-request totals. These are diagnostic
+wall times from one sample each, not a counterbalanced speed benchmark. Reused
+capture costs are charged again to each hypothetical independent request; summing
+arm totals is therefore not the physical duration of the shared run. Keep raw
+protocol/results local unless separately authorized to publish them.
