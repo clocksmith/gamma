@@ -39,10 +39,32 @@ synchronization and do not estimate model adaptation overhead.
 Run `node projects/reconfiguration/rotation_v1/test_operator.mjs` for exact
 replay and corruption checks. This directory contains no model result.
 
-Before a model run: wire signed-mean capture and frozen operator ownership into
-the experimental dense FFN request lifecycle, explicitly distinguish base-cache
-first logits from re-prefill, and test reset/cancellation/isolation. Choose a
-capable model using development tasks, freeze layer/angle candidates, task
+Doppler now exposes `beginChannelRotationRequest(spec)` on the loaded pipeline.
+It shares the gain request's guarded operation, reset and cancellation lifecycle,
+not a second competing session state. Capture uses `rotationEpsilon` and
+`captureContentSpan`; `takeRotations()` transfers basis/status ownership after
+prefill settles. `freezeChannelRotations([{layerIdx, channels, theta, rotation}])`
+privately copies and validates those buffers. Apply uses the handle through the
+historical `frozenGains`/`gainHash` fields; the opaque handle also binds its kind.
+Angles and copied planes cannot change through the public seed tensors.
+
+The request selects explicit split gate/up on selected layers so post-SwiGLU
+activation exists before down projection. Include the resulting loss of fusion
+in costs. The zero-angle arm uses that same split path; also retain ordinary
+no-request base as a separate performance comparator. Unsupported fused stored
+weights, MoE, batching, chunked prefill, LoRA and non-f32 activation reject.
+Base-cache attaches after unmodified prefill: its first-token logits are base.
+Re-prefill applies the frozen plane to the new full prefill. Neither promises
+cache equivalence. Request close/reset releases its borrow; the handle cannot
+close while another request uses it. Recorded work must settle or abort first.
+
+Run `node model_smoke.mjs DOPPLER_ROOT LOCAL_MODEL` from this directory for a
+bounded full-model integration probe: synthetic exact token halves, one selected
+last layer, zero/positive/negative angle, both cache arms, a single decode step,
+and reset comparison. It is not a quality workload, benchmark or held-out test;
+local generated receipts are not implicitly authorized for publication.
+
+Next choose a capable model using development tasks, freeze layer/angle candidates, task
 population and total budget, and compare zero, both angle signs, diagonal gain,
 matched random-plane and shuffled-task controls. Include setup/readback,
 re-prefill, decode, verifier and memory costs, plus matched-compute base sampling.
