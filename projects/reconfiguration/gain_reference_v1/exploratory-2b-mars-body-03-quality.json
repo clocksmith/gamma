@@ -1,0 +1,2859 @@
+{
+  "schema": "gamma.exploratory-2b-quality/v1",
+  "createdAt": "2026-11-15T13:25:38.185Z",
+  "sealedOutputsSha256": "7bea516758b8ac05b52884bd6be7a00e085697964860b487859b0be665cb90c6",
+  "classification": "Already exposed public task, fixed-order body-only-v2 exploratory pilot. Not independent confirmation, 27B evidence or a speed benchmark. All physical preparation costs retained in source receipt; attributed per-arm timing is not total experiment cost.",
+  "zeroTokensEqualBase": true,
+  "results": [
+    {
+      "id": "base",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  let value: f32 = 0.0;\nfor i in 0..params.length {\n    value += left_values[i];\n}\nvalue\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "09510acf009810123c45ed750603acee8f90152bf536767d34403ac11d185d7a"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "60776cab53bf7c58c3f36058339a6afc3b1a014c2376e0309fbc09d73a878b80",
+            "dispatchedSourceSha256": "062f52b87c3e9f023b024b7efbadb0f8c85d82222e787cbf8735c11d19f1c569",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "72699aa8c7c7de0fb850471039c157dead2422dd776327a347fa145fb5548432"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "3c1b3014ecc1f4959e4b2a8ca77f612319c0030e6b3e3174b164b35d51270418"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "4df1fa08e596bbaddbef33affec19a72e9329e234751d31c4cf8108d0e8704cd"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "cce54ad31d572ad54c55a598b5845ae2500dd1441cd9ca048b1af2a26c864927"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 14.634250000000065
+          }
+        ],
+        "passed": false,
+        "verifierMs": 14.80354100000011
+      },
+      "tokenCount": 35,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1094.9817080000003,
+        "gain_ms": 0,
+        "setup_other_ms": 0,
+        "setup_cleanup_ms": 0,
+        "base_restore_ms": 0,
+        "reprefill_ms": 0,
+        "decode_ms": 2071.710333,
+        "decode_tokens": 35,
+        "verifier_ms": 0,
+        "end_to_end_ms": 3176.3558339999995,
+        "peak_allocated_bytes": 2213462392,
+        "buffer_pool_peak_bytes": 2200829696,
+        "transform_state_bytes": 0,
+        "request_cleanup_ms": 0.3914999999997235,
+        "input_contract_ms": 2.9881249999998545,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 3173.3677089999996,
+      "gainHash": null
+    },
+    {
+      "id": "zero",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  let value: f32 = 0.0;\nfor i in 0..params.length {\n    value += left_values[i];\n}\nvalue\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "09510acf009810123c45ed750603acee8f90152bf536767d34403ac11d185d7a"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "60776cab53bf7c58c3f36058339a6afc3b1a014c2376e0309fbc09d73a878b80",
+            "dispatchedSourceSha256": "062f52b87c3e9f023b024b7efbadb0f8c85d82222e787cbf8735c11d19f1c569",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "72699aa8c7c7de0fb850471039c157dead2422dd776327a347fa145fb5548432"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "3c1b3014ecc1f4959e4b2a8ca77f612319c0030e6b3e3174b164b35d51270418"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "4df1fa08e596bbaddbef33affec19a72e9329e234751d31c4cf8108d0e8704cd"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "cce54ad31d572ad54c55a598b5845ae2500dd1441cd9ca048b1af2a26c864927"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 6.9017089999999826
+          }
+        ],
+        "passed": false,
+        "verifierMs": 7.024374999999964
+      },
+      "tokenCount": 35,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 979.1297909999994,
+        "gain_ms": 4.113583999999719,
+        "setup_other_ms": 0.5776250000008076,
+        "setup_cleanup_ms": 0.1373329999996713,
+        "base_restore_ms": 2.239334000000781,
+        "reprefill_ms": 0,
+        "decode_ms": 2007.508499999999,
+        "decode_tokens": 35,
+        "verifier_ms": 0,
+        "end_to_end_ms": 2998.3662079999986,
+        "peak_allocated_bytes": 2275859064,
+        "buffer_pool_peak_bytes": 2202404096,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.18445799999972223,
+        "input_contract_ms": 2.9881249999998545,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 2011.419749999999,
+      "gainHash": "3af66bc138c36062a242454806d8313278ae779602b84a6b4e9cf4db74414a64"
+    },
+    {
+      "id": "positive/channel_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  let value: f32 = 0.0;\nfor i in 0..params.length {\n    value += left_values[i];\n}\nvalue\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "09510acf009810123c45ed750603acee8f90152bf536767d34403ac11d185d7a"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "60776cab53bf7c58c3f36058339a6afc3b1a014c2376e0309fbc09d73a878b80",
+            "dispatchedSourceSha256": "062f52b87c3e9f023b024b7efbadb0f8c85d82222e787cbf8735c11d19f1c569",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "72699aa8c7c7de0fb850471039c157dead2422dd776327a347fa145fb5548432"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "3c1b3014ecc1f4959e4b2a8ca77f612319c0030e6b3e3174b164b35d51270418"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "4df1fa08e596bbaddbef33affec19a72e9329e234751d31c4cf8108d0e8704cd"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "cce54ad31d572ad54c55a598b5845ae2500dd1441cd9ca048b1af2a26c864927"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 6.136957999999936
+          }
+        ],
+        "passed": false,
+        "verifierMs": 6.1922499999999445
+      },
+      "tokenCount": 35,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 993.6251670000001,
+        "gain_ms": 1.6232920000002196,
+        "setup_other_ms": 0.599581999998918,
+        "setup_cleanup_ms": 0.14458300000114832,
+        "base_restore_ms": 2.321917000001122,
+        "reprefill_ms": 0,
+        "decode_ms": 1970.5218750000004,
+        "decode_tokens": 35,
+        "verifier_ms": 0,
+        "end_to_end_ms": 2973.3012900000012,
+        "peak_allocated_bytes": 2288735960,
+        "buffer_pool_peak_bytes": 2202697984,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.127916000001278,
+        "input_contract_ms": 2.9881249999998545,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 1974.320541000001,
+      "gainHash": "a15a2ec9f44f2c707ae7b847817edccd5de9f6a809a9b49a667a6860c3033d7e"
+    },
+    {
+      "id": "positive/permuted_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  let value: f32 = 0.0;\nfor i in 0..params.length {\n    value += left_values[i];\n}\nvalue\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "09510acf009810123c45ed750603acee8f90152bf536767d34403ac11d185d7a"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "60776cab53bf7c58c3f36058339a6afc3b1a014c2376e0309fbc09d73a878b80",
+            "dispatchedSourceSha256": "062f52b87c3e9f023b024b7efbadb0f8c85d82222e787cbf8735c11d19f1c569",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "72699aa8c7c7de0fb850471039c157dead2422dd776327a347fa145fb5548432"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "3c1b3014ecc1f4959e4b2a8ca77f612319c0030e6b3e3174b164b35d51270418"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "4df1fa08e596bbaddbef33affec19a72e9329e234751d31c4cf8108d0e8704cd"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "cce54ad31d572ad54c55a598b5845ae2500dd1441cd9ca048b1af2a26c864927"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 5.30012499999998
+          }
+        ],
+        "passed": false,
+        "verifierMs": 5.353915999999913
+      },
+      "tokenCount": 35,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 993.6251670000001,
+        "gain_ms": 34.28645900000083,
+        "setup_other_ms": 0.599581999998918,
+        "setup_cleanup_ms": 0.14458300000114832,
+        "base_restore_ms": 2.861750000000029,
+        "reprefill_ms": 0,
+        "decode_ms": 1990.2704159999994,
+        "decode_tokens": 35,
+        "verifier_ms": 0,
+        "end_to_end_ms": 3026.3480820000004,
+        "peak_allocated_bytes": 2288735960,
+        "buffer_pool_peak_bytes": 2202697984,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.9331249999995634,
+        "input_contract_ms": 2.9881249999998545,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 1994.7041659999995,
+      "gainHash": "f7cb297a20232e96447464e6d58af47391d4b9df3cd90d47f81c211e63d4514e"
+    },
+    {
+      "id": "positive/random_z",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  let value: f32 = 0.0;\nfor i in 0..params.length {\n    value += left_values[i];\n}\nvalue\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "09510acf009810123c45ed750603acee8f90152bf536767d34403ac11d185d7a"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "60776cab53bf7c58c3f36058339a6afc3b1a014c2376e0309fbc09d73a878b80",
+            "dispatchedSourceSha256": "062f52b87c3e9f023b024b7efbadb0f8c85d82222e787cbf8735c11d19f1c569",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "72699aa8c7c7de0fb850471039c157dead2422dd776327a347fa145fb5548432"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "3c1b3014ecc1f4959e4b2a8ca77f612319c0030e6b3e3174b164b35d51270418"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "4df1fa08e596bbaddbef33affec19a72e9329e234751d31c4cf8108d0e8704cd"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "cce54ad31d572ad54c55a598b5845ae2500dd1441cd9ca048b1af2a26c864927"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 6.818667000000005
+          }
+        ],
+        "passed": false,
+        "verifierMs": 6.873624999999947
+      },
+      "tokenCount": 35,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 993.6251670000001,
+        "gain_ms": 17.443250000000262,
+        "setup_other_ms": 0.599581999998918,
+        "setup_cleanup_ms": 0.14458300000114832,
+        "base_restore_ms": 1.819499999999607,
+        "reprefill_ms": 0,
+        "decode_ms": 1962.8427499999998,
+        "decode_tokens": 35,
+        "verifier_ms": 0,
+        "end_to_end_ms": 2980.2619989999985,
+        "peak_allocated_bytes": 2288735960,
+        "buffer_pool_peak_bytes": 2202697984,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.10833300000012969,
+        "input_contract_ms": 2.9881249999998545,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 1965.4612919999981,
+      "gainHash": "4a72bcb0193279a5712c86365c2b73e8989eb8c7eb41fc1db73f385f70f35140"
+    },
+    {
+      "id": "positive/shuffled_context",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  let value: f32 = 0.0;\nfor i in 0..params.length {\n    value += left_values[i];\n}\nvalue\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "09510acf009810123c45ed750603acee8f90152bf536767d34403ac11d185d7a"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "60776cab53bf7c58c3f36058339a6afc3b1a014c2376e0309fbc09d73a878b80",
+            "dispatchedSourceSha256": "062f52b87c3e9f023b024b7efbadb0f8c85d82222e787cbf8735c11d19f1c569",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "72699aa8c7c7de0fb850471039c157dead2422dd776327a347fa145fb5548432"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "3c1b3014ecc1f4959e4b2a8ca77f612319c0030e6b3e3174b164b35d51270418"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "4df1fa08e596bbaddbef33affec19a72e9329e234751d31c4cf8108d0e8704cd"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "cce54ad31d572ad54c55a598b5845ae2500dd1441cd9ca048b1af2a26c864927"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 5.564457999999945
+          }
+        ],
+        "passed": false,
+        "verifierMs": 5.616084000000001
+      },
+      "tokenCount": 35,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1954.975292000001,
+        "gain_ms": 2.0020839999997406,
+        "setup_other_ms": 0.599581999998918,
+        "setup_cleanup_ms": 0.14458300000114832,
+        "base_restore_ms": 1.9504579999993439,
+        "reprefill_ms": 0,
+        "decode_ms": 1953.6155829999989,
+        "decode_tokens": 35,
+        "verifier_ms": 0,
+        "end_to_end_ms": 3917.093833000001,
+        "peak_allocated_bytes": 2288735960,
+        "buffer_pool_peak_bytes": 2202697984,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.12004200000228593,
+        "input_contract_ms": 2.9881249999998545,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 1956.3841670000002,
+      "gainHash": "f825082f305c355a7e4b0e2f592f47ddee07d349b41b25139108664f3488e23c"
+    },
+    {
+      "id": "negative/channel_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  let value: f32 = 0.0;\nfor i in 0..params.length {\n    value += left_values[i];\n}\nvalue\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "09510acf009810123c45ed750603acee8f90152bf536767d34403ac11d185d7a"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "60776cab53bf7c58c3f36058339a6afc3b1a014c2376e0309fbc09d73a878b80",
+            "dispatchedSourceSha256": "062f52b87c3e9f023b024b7efbadb0f8c85d82222e787cbf8735c11d19f1c569",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "72699aa8c7c7de0fb850471039c157dead2422dd776327a347fa145fb5548432"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "3c1b3014ecc1f4959e4b2a8ca77f612319c0030e6b3e3174b164b35d51270418"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "4df1fa08e596bbaddbef33affec19a72e9329e234751d31c4cf8108d0e8704cd"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "cce54ad31d572ad54c55a598b5845ae2500dd1441cd9ca048b1af2a26c864927"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 5.3142500000000155
+          }
+        ],
+        "passed": false,
+        "verifierMs": 5.40366599999993
+      },
+      "tokenCount": 35,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1010.390666000003,
+        "gain_ms": 1.8791249999994761,
+        "setup_other_ms": 0.4745009999969625,
+        "setup_cleanup_ms": 0.11941600000136532,
+        "base_restore_ms": 2.13116699999955,
+        "reprefill_ms": 0,
+        "decode_ms": 2016.1159579999985,
+        "decode_tokens": 35,
+        "verifier_ms": 0,
+        "end_to_end_ms": 3035.789458000003,
+        "peak_allocated_bytes": 2288735976,
+        "buffer_pool_peak_bytes": 2202697984,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.12141700000211131,
+        "input_contract_ms": 2.9881249999998545,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 2019.9376250000023,
+      "gainHash": "234d8967b4dda0249862ca5958cf074135312af6c8b2ebbcf3d7999986a51f0c"
+    },
+    {
+      "id": "negative/permuted_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  let value: f32 = 0.0;\nfor i in 0..params.length {\n    value += left_values[i];\n}\nvalue\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "09510acf009810123c45ed750603acee8f90152bf536767d34403ac11d185d7a"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "60776cab53bf7c58c3f36058339a6afc3b1a014c2376e0309fbc09d73a878b80",
+            "dispatchedSourceSha256": "062f52b87c3e9f023b024b7efbadb0f8c85d82222e787cbf8735c11d19f1c569",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "72699aa8c7c7de0fb850471039c157dead2422dd776327a347fa145fb5548432"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "3c1b3014ecc1f4959e4b2a8ca77f612319c0030e6b3e3174b164b35d51270418"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "4df1fa08e596bbaddbef33affec19a72e9329e234751d31c4cf8108d0e8704cd"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "cce54ad31d572ad54c55a598b5845ae2500dd1441cd9ca048b1af2a26c864927"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 5.227999999999952
+          }
+        ],
+        "passed": false,
+        "verifierMs": 5.2783339999999725
+      },
+      "tokenCount": 35,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1010.390666000003,
+        "gain_ms": 40.13600000000224,
+        "setup_other_ms": 0.4745009999969625,
+        "setup_cleanup_ms": 0.11941600000136532,
+        "base_restore_ms": 2.547500000000582,
+        "reprefill_ms": 0,
+        "decode_ms": 1954.0841250000012,
+        "decode_tokens": 35,
+        "verifier_ms": 0,
+        "end_to_end_ms": 3011.6789160000044,
+        "peak_allocated_bytes": 2288735976,
+        "buffer_pool_peak_bytes": 2202697984,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.10833399999683024,
+        "input_contract_ms": 2.9881249999998545,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 1957.570208000001,
+      "gainHash": "cbe9a08fb17111ab3c5c7faccc4b60622edb720170cd64c3732a4ccf0a9bdb16"
+    },
+    {
+      "id": "negative/random_z",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  let value: f32 = 0.0;\nfor i in 0..params.length {\n    value += left_values[i];\n}\nvalue\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "09510acf009810123c45ed750603acee8f90152bf536767d34403ac11d185d7a"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "60776cab53bf7c58c3f36058339a6afc3b1a014c2376e0309fbc09d73a878b80",
+            "dispatchedSourceSha256": "062f52b87c3e9f023b024b7efbadb0f8c85d82222e787cbf8735c11d19f1c569",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "72699aa8c7c7de0fb850471039c157dead2422dd776327a347fa145fb5548432"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "3c1b3014ecc1f4959e4b2a8ca77f612319c0030e6b3e3174b164b35d51270418"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "4df1fa08e596bbaddbef33affec19a72e9329e234751d31c4cf8108d0e8704cd"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "cce54ad31d572ad54c55a598b5845ae2500dd1441cd9ca048b1af2a26c864927"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 5.015917000000059
+          }
+        ],
+        "passed": false,
+        "verifierMs": 5.062041000000022
+      },
+      "tokenCount": 35,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1010.390666000003,
+        "gain_ms": 11.062540999999328,
+        "setup_other_ms": 0.4745009999969625,
+        "setup_cleanup_ms": 0.11941600000136532,
+        "base_restore_ms": 2.4608340000013413,
+        "reprefill_ms": 0,
+        "decode_ms": 1970.9118329999983,
+        "decode_tokens": 35,
+        "verifier_ms": 0,
+        "end_to_end_ms": 2999.3454569999994,
+        "peak_allocated_bytes": 2288735976,
+        "buffer_pool_peak_bytes": 2202697984,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.11674999999740976,
+        "input_contract_ms": 2.9881249999998545,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 1974.310207999999,
+      "gainHash": "5a0259cf62d375125d175c885fffe5ee6925bbe0ae982e960cf60a48dc0513da"
+    },
+    {
+      "id": "negative/shuffled_context",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  let value: f32 = 0.0;\nfor i in 0..params.length {\n  value += left_values[i];\n}\nvalue\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "c331f3173e5a01f6a3e9d08d60e0e2cd6cf70cce8e2c9eaf527fdef62d567851"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "9fa845a45cb91d18164914307ef9c320c5589b125fba4ee403b02266b46574d3",
+            "dispatchedSourceSha256": "1a58f7855e122bc300bcaba562a81a23c86461a2eb2ac8b963cbea9277b9fd3d",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "6a7ab3c01fc318e72432b370d22928198ea09818fa33bac3986dbc352f6a4c1d"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "307f5d5c55372e39d644afcd0758b65676216799a5f768c90d9c4e9951df95e6"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "439897b5f470033e1c864556f9a2e746113ea191269f5c84b963834b76899f6e"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected '(' for for loop",
+                      "lineNum": 14,
+                      "linePos": 5,
+                      "offset": 609,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :14:5 error: expected '(' for for loop\nfor i in 0..params.length {\n    ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-prefix-sum/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "3987e878b0e60394804ea2090b08fd3c03dfa66655df5b0f57ce40ead8186862"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 5.966875000000073
+          }
+        ],
+        "passed": false,
+        "verifierMs": 6.01233400000001
+      },
+      "tokenCount": 35,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1967.335541000004,
+        "gain_ms": 1.2296669999996084,
+        "setup_other_ms": 0.4745009999969625,
+        "setup_cleanup_ms": 0.11941600000136532,
+        "base_restore_ms": 2.3795420000024023,
+        "reprefill_ms": 0,
+        "decode_ms": 1981.939457999997,
+        "decode_tokens": 35,
+        "verifier_ms": 0,
+        "end_to_end_ms": 3957.422875,
+        "peak_allocated_bytes": 2288735976,
+        "buffer_pool_peak_bytes": 2202697984,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.18933300000207964,
+        "input_contract_ms": 2.9881249999998545,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 1985.2756249999984,
+      "gainHash": "36dd402394dd59288fdc76d7e5cae91c48a4a7ea7d7708eb8c9f0d13410d05c6"
+    }
+  ]
+}

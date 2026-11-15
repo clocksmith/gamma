@@ -1,0 +1,4499 @@
+{
+  "schema": "gamma.exploratory-2b-quality/v1",
+  "createdAt": "2026-11-15T13:32:03.836Z",
+  "sealedOutputsSha256": "c036c96fe1e30f8d60f541ce2f5fdef7fe8d71766d335e46bb3a56ed6443c3bd",
+  "classification": "Already exposed public task, fixed-order body-only-v3 exploratory pilot. Not independent confirmation, 27B evidence or a speed benchmark. All physical preparation costs retained in source receipt; attributed per-arm timing is not total experiment cost.",
+  "zeroTokensEqualBase": true,
+  "results": [
+    {
+      "id": "base",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var next = left_values[(i + 1u) % params.length];\n  var prev = left_values[(i - 2u + params.length) % params.length];\n  value = prev - 2.0 * next;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "3d397a24ef2cf54f8c62a4c7933a7911461ee9feda5f5fb25e915db953e5ca43",
+          "checks": "81e266bc8665c05ebdae60afc420edfb80292fe981251e38539289e0bfd5116c",
+          "sources": "ac1742b74b15607734620de794c10d5c145e91c6704996d9ac9f27a117cbb811"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-periodic-second-difference",
+            "sourceSha256": "3e20bd0da38e39696e51205299495063ca1447f533d54c252711b34c6aedb043",
+            "dispatchedSourceSha256": "38047ece5198508150390c9de5ca6d8b933e7efac8b09c1c3a1c2def52a73321",
+            "promptSha256": "c4815f4ecbe7c4ab32b1459d616cb380948787b9f45fc14d99be427fd093a476",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 1,
+                  "maxAbsError": 2,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 0,
+                      "actual": 2,
+                      "absError": 2,
+                      "relError": null
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f885ce85a930421cc862ef522a3b12eb798516bff5e5c136559e76f93f728c08"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 4,
+                  "maxAbsError": 11,
+                  "maxRelError": 5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 7,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 0.42857142857142855
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 4,
+                      "absError": 5,
+                      "relError": 5
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 3
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7,
+                      "actual": 4,
+                      "absError": 11,
+                      "relError": 1.5714285714285714
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "27c725c8d9c62b89913feaafee67147bf6fd2ac8ddd51d0fe57cc3dde371d672"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 7,
+                  "maxAbsError": 23.6640625,
+                  "maxRelError": 10.285714285714286,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.1015625,
+                      "actual": 8.125,
+                      "absError": 2.9765625,
+                      "relError": 0.2681210415200563
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 8.125,
+                      "absError": 9.125,
+                      "relError": 9.125
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 8.125,
+                      "absError": 7.125,
+                      "relError": 7.125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.875,
+                      "actual": 8.125,
+                      "absError": 9,
+                      "relError": 10.285714285714286
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.5859375,
+                      "actual": 8.125,
+                      "absError": 12.7109375,
+                      "relError": 2.7717206132879046
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 9.8984375,
+                      "actual": 8.125,
+                      "absError": 1.7734375,
+                      "relError": 0.17916337805840568
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.5390625,
+                      "actual": 8.125,
+                      "absError": 23.6640625,
+                      "relError": 1.522875816993464
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "912492caa1aa7a8f5c1b9c1a8173de51def7643985364e3d9d75f1e85f1daad0"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 33,
+                  "maxAbsError": 29.1953125,
+                  "maxRelError": 14.446153846153846,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.015625,
+                      "actual": 7.84375,
+                      "absError": 3.171875,
+                      "relError": 0.28794326241134754
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 7.84375,
+                      "absError": 8.84375,
+                      "relError": 8.84375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 7.84375,
+                      "absError": 6.84375,
+                      "relError": 6.84375
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.65625,
+                      "actual": 7.84375,
+                      "absError": 15.5,
+                      "relError": 2.024489795918367
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.859375,
+                      "actual": 7.84375,
+                      "absError": 2.984375,
+                      "relError": 0.6141479099678456
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.703125,
+                      "actual": 7.84375,
+                      "absError": 6.140625,
+                      "relError": 3.6055045871559632
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": 2.203125,
+                      "actual": 7.84375,
+                      "absError": 5.640625,
+                      "relError": 2.5602836879432624
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.1875,
+                      "actual": 7.84375,
+                      "absError": 3.65625,
+                      "relError": 0.8731343283582089
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.78125,
+                      "actual": 7.84375,
+                      "absError": 22.625,
+                      "relError": 1.5306553911205074
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": 7.1796875,
+                      "actual": 7.84375,
+                      "absError": 0.6640625,
+                      "relError": 0.09249183895538629
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": 0.5078125,
+                      "actual": 7.84375,
+                      "absError": 7.3359375,
+                      "relError": 14.446153846153846
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.078125,
+                      "actual": 7.84375,
+                      "absError": 13.921875,
+                      "relError": 2.290488431876607
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": 16.84375,
+                      "actual": 7.84375,
+                      "absError": 9,
+                      "relError": 0.5343228200371057
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.4375,
+                      "actual": 7.84375,
+                      "absError": 22.28125,
+                      "relError": 1.5432900432900434
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.1015625,
+                      "actual": 7.84375,
+                      "absError": 6.7421875,
+                      "relError": 6.120567375886525
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4921875,
+                      "actual": 7.84375,
+                      "absError": 11.3359375,
+                      "relError": 3.2460850111856825
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "254317c9ab86ec2a0f1ce4af7dd4df6cae31a61ee0a33b8791d46a4bac97db49"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 84.32737500000007
+          }
+        ],
+        "passed": false,
+        "verifierMs": 84.48220900000001
+      },
+      "tokenCount": 89,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 2175.7847920000004,
+        "gain_ms": 0,
+        "setup_other_ms": 0,
+        "setup_cleanup_ms": 0,
+        "base_restore_ms": 0,
+        "reprefill_ms": 0,
+        "decode_ms": 5548.432,
+        "decode_tokens": 89,
+        "verifier_ms": 0,
+        "end_to_end_ms": 7736.229667,
+        "peak_allocated_bytes": 2275050872,
+        "buffer_pool_peak_bytes": 2262418176,
+        "transform_state_bytes": 0,
+        "request_cleanup_ms": 0.9245409999984986,
+        "input_contract_ms": 3.582749999999578,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 7732.646917,
+      "gainHash": null
+    },
+    {
+      "id": "zero",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var next = left_values[(i + 1u) % params.length];\n  var prev = left_values[(i - 2u + params.length) % params.length];\n  value = prev - 2.0 * next;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "3d397a24ef2cf54f8c62a4c7933a7911461ee9feda5f5fb25e915db953e5ca43",
+          "checks": "81e266bc8665c05ebdae60afc420edfb80292fe981251e38539289e0bfd5116c",
+          "sources": "ac1742b74b15607734620de794c10d5c145e91c6704996d9ac9f27a117cbb811"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-periodic-second-difference",
+            "sourceSha256": "3e20bd0da38e39696e51205299495063ca1447f533d54c252711b34c6aedb043",
+            "dispatchedSourceSha256": "38047ece5198508150390c9de5ca6d8b933e7efac8b09c1c3a1c2def52a73321",
+            "promptSha256": "c4815f4ecbe7c4ab32b1459d616cb380948787b9f45fc14d99be427fd093a476",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 1,
+                  "maxAbsError": 2,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 0,
+                      "actual": 2,
+                      "absError": 2,
+                      "relError": null
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f885ce85a930421cc862ef522a3b12eb798516bff5e5c136559e76f93f728c08"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 4,
+                  "maxAbsError": 11,
+                  "maxRelError": 5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 7,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 0.42857142857142855
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 4,
+                      "absError": 5,
+                      "relError": 5
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 3
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7,
+                      "actual": 4,
+                      "absError": 11,
+                      "relError": 1.5714285714285714
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "27c725c8d9c62b89913feaafee67147bf6fd2ac8ddd51d0fe57cc3dde371d672"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 7,
+                  "maxAbsError": 23.6640625,
+                  "maxRelError": 10.285714285714286,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.1015625,
+                      "actual": 8.125,
+                      "absError": 2.9765625,
+                      "relError": 0.2681210415200563
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 8.125,
+                      "absError": 9.125,
+                      "relError": 9.125
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 8.125,
+                      "absError": 7.125,
+                      "relError": 7.125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.875,
+                      "actual": 8.125,
+                      "absError": 9,
+                      "relError": 10.285714285714286
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.5859375,
+                      "actual": 8.125,
+                      "absError": 12.7109375,
+                      "relError": 2.7717206132879046
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 9.8984375,
+                      "actual": 8.125,
+                      "absError": 1.7734375,
+                      "relError": 0.17916337805840568
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.5390625,
+                      "actual": 8.125,
+                      "absError": 23.6640625,
+                      "relError": 1.522875816993464
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "912492caa1aa7a8f5c1b9c1a8173de51def7643985364e3d9d75f1e85f1daad0"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 33,
+                  "maxAbsError": 29.1953125,
+                  "maxRelError": 14.446153846153846,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.015625,
+                      "actual": 7.84375,
+                      "absError": 3.171875,
+                      "relError": 0.28794326241134754
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 7.84375,
+                      "absError": 8.84375,
+                      "relError": 8.84375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 7.84375,
+                      "absError": 6.84375,
+                      "relError": 6.84375
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.65625,
+                      "actual": 7.84375,
+                      "absError": 15.5,
+                      "relError": 2.024489795918367
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.859375,
+                      "actual": 7.84375,
+                      "absError": 2.984375,
+                      "relError": 0.6141479099678456
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.703125,
+                      "actual": 7.84375,
+                      "absError": 6.140625,
+                      "relError": 3.6055045871559632
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": 2.203125,
+                      "actual": 7.84375,
+                      "absError": 5.640625,
+                      "relError": 2.5602836879432624
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.1875,
+                      "actual": 7.84375,
+                      "absError": 3.65625,
+                      "relError": 0.8731343283582089
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.78125,
+                      "actual": 7.84375,
+                      "absError": 22.625,
+                      "relError": 1.5306553911205074
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": 7.1796875,
+                      "actual": 7.84375,
+                      "absError": 0.6640625,
+                      "relError": 0.09249183895538629
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": 0.5078125,
+                      "actual": 7.84375,
+                      "absError": 7.3359375,
+                      "relError": 14.446153846153846
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.078125,
+                      "actual": 7.84375,
+                      "absError": 13.921875,
+                      "relError": 2.290488431876607
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": 16.84375,
+                      "actual": 7.84375,
+                      "absError": 9,
+                      "relError": 0.5343228200371057
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.4375,
+                      "actual": 7.84375,
+                      "absError": 22.28125,
+                      "relError": 1.5432900432900434
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.1015625,
+                      "actual": 7.84375,
+                      "absError": 6.7421875,
+                      "relError": 6.120567375886525
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4921875,
+                      "actual": 7.84375,
+                      "absError": 11.3359375,
+                      "relError": 3.2460850111856825
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "254317c9ab86ec2a0f1ce4af7dd4df6cae31a61ee0a33b8791d46a4bac97db49"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 12.797458000000006
+          }
+        ],
+        "passed": false,
+        "verifierMs": 12.914582999999993
+      },
+      "tokenCount": 89,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1816.8876249999994,
+        "gain_ms": 20.158790999999837,
+        "setup_other_ms": 0.9636669999999867,
+        "setup_cleanup_ms": 0.1968749999996362,
+        "base_restore_ms": 2.6402909999997064,
+        "reprefill_ms": 0,
+        "decode_ms": 5465.180666999999,
+        "decode_tokens": 89,
+        "verifier_ms": 0,
+        "end_to_end_ms": 7312.285374999998,
+        "peak_allocated_bytes": 2378428744,
+        "buffer_pool_peak_bytes": 2266040064,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.3693329999987327,
+        "input_contract_ms": 3.582749999999578,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 5470.495666999999,
+      "gainHash": "3af66bc138c36062a242454806d8313278ae779602b84a6b4e9cf4db74414a64"
+    },
+    {
+      "id": "positive/channel_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var next = left_values[(i + 1u) % params.length];\n  var prev = left_values[(i - 2u + params.length) % params.length];\n  value = prev - 2.0 * next;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "3d397a24ef2cf54f8c62a4c7933a7911461ee9feda5f5fb25e915db953e5ca43",
+          "checks": "81e266bc8665c05ebdae60afc420edfb80292fe981251e38539289e0bfd5116c",
+          "sources": "ac1742b74b15607734620de794c10d5c145e91c6704996d9ac9f27a117cbb811"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-periodic-second-difference",
+            "sourceSha256": "3e20bd0da38e39696e51205299495063ca1447f533d54c252711b34c6aedb043",
+            "dispatchedSourceSha256": "38047ece5198508150390c9de5ca6d8b933e7efac8b09c1c3a1c2def52a73321",
+            "promptSha256": "c4815f4ecbe7c4ab32b1459d616cb380948787b9f45fc14d99be427fd093a476",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 1,
+                  "maxAbsError": 2,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 0,
+                      "actual": 2,
+                      "absError": 2,
+                      "relError": null
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f885ce85a930421cc862ef522a3b12eb798516bff5e5c136559e76f93f728c08"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 4,
+                  "maxAbsError": 11,
+                  "maxRelError": 5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 7,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 0.42857142857142855
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 4,
+                      "absError": 5,
+                      "relError": 5
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 3
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7,
+                      "actual": 4,
+                      "absError": 11,
+                      "relError": 1.5714285714285714
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "27c725c8d9c62b89913feaafee67147bf6fd2ac8ddd51d0fe57cc3dde371d672"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 7,
+                  "maxAbsError": 23.6640625,
+                  "maxRelError": 10.285714285714286,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.1015625,
+                      "actual": 8.125,
+                      "absError": 2.9765625,
+                      "relError": 0.2681210415200563
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 8.125,
+                      "absError": 9.125,
+                      "relError": 9.125
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 8.125,
+                      "absError": 7.125,
+                      "relError": 7.125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.875,
+                      "actual": 8.125,
+                      "absError": 9,
+                      "relError": 10.285714285714286
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.5859375,
+                      "actual": 8.125,
+                      "absError": 12.7109375,
+                      "relError": 2.7717206132879046
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 9.8984375,
+                      "actual": 8.125,
+                      "absError": 1.7734375,
+                      "relError": 0.17916337805840568
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.5390625,
+                      "actual": 8.125,
+                      "absError": 23.6640625,
+                      "relError": 1.522875816993464
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "912492caa1aa7a8f5c1b9c1a8173de51def7643985364e3d9d75f1e85f1daad0"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 33,
+                  "maxAbsError": 29.1953125,
+                  "maxRelError": 14.446153846153846,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.015625,
+                      "actual": 7.84375,
+                      "absError": 3.171875,
+                      "relError": 0.28794326241134754
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 7.84375,
+                      "absError": 8.84375,
+                      "relError": 8.84375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 7.84375,
+                      "absError": 6.84375,
+                      "relError": 6.84375
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.65625,
+                      "actual": 7.84375,
+                      "absError": 15.5,
+                      "relError": 2.024489795918367
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.859375,
+                      "actual": 7.84375,
+                      "absError": 2.984375,
+                      "relError": 0.6141479099678456
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.703125,
+                      "actual": 7.84375,
+                      "absError": 6.140625,
+                      "relError": 3.6055045871559632
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": 2.203125,
+                      "actual": 7.84375,
+                      "absError": 5.640625,
+                      "relError": 2.5602836879432624
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.1875,
+                      "actual": 7.84375,
+                      "absError": 3.65625,
+                      "relError": 0.8731343283582089
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.78125,
+                      "actual": 7.84375,
+                      "absError": 22.625,
+                      "relError": 1.5306553911205074
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": 7.1796875,
+                      "actual": 7.84375,
+                      "absError": 0.6640625,
+                      "relError": 0.09249183895538629
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": 0.5078125,
+                      "actual": 7.84375,
+                      "absError": 7.3359375,
+                      "relError": 14.446153846153846
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.078125,
+                      "actual": 7.84375,
+                      "absError": 13.921875,
+                      "relError": 2.290488431876607
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": 16.84375,
+                      "actual": 7.84375,
+                      "absError": 9,
+                      "relError": 0.5343228200371057
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.4375,
+                      "actual": 7.84375,
+                      "absError": 22.28125,
+                      "relError": 1.5432900432900434
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.1015625,
+                      "actual": 7.84375,
+                      "absError": 6.7421875,
+                      "relError": 6.120567375886525
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4921875,
+                      "actual": 7.84375,
+                      "absError": 11.3359375,
+                      "relError": 3.2460850111856825
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "254317c9ab86ec2a0f1ce4af7dd4df6cae31a61ee0a33b8791d46a4bac97db49"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 11.127958000000035
+          }
+        ],
+        "passed": false,
+        "verifierMs": 11.190334000000007
+      },
+      "tokenCount": 89,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1884.292166000003,
+        "gain_ms": 1.7164579999989655,
+        "setup_other_ms": 0.6959590000005846,
+        "setup_cleanup_ms": 0.5039160000014817,
+        "base_restore_ms": 2.266750000002503,
+        "reprefill_ms": 0,
+        "decode_ms": 5670.8528750000005,
+        "decode_tokens": 89,
+        "verifier_ms": 0,
+        "end_to_end_ms": 7565.916832000004,
+        "peak_allocated_bytes": 2390388024,
+        "buffer_pool_peak_bytes": 2266333952,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.284124999998312,
+        "input_contract_ms": 3.582749999999578,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 5675.125583000001,
+      "gainHash": "29538ee8bbc41f46413ee96c9ee6127096712619f81b50653534ed6abe2b4772"
+    },
+    {
+      "id": "positive/permuted_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var next = left_values[(i + 1u) % params.length];\n  var current = left_values[i];\n  value = value + (next - 2.0 * current);\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "3d397a24ef2cf54f8c62a4c7933a7911461ee9feda5f5fb25e915db953e5ca43",
+          "checks": "81e266bc8665c05ebdae60afc420edfb80292fe981251e38539289e0bfd5116c",
+          "sources": "c174faa9cd8eceab2cc74865a9e3bcc0a36f53aebff7b6a8dc4c62c6ae39c3f7"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-periodic-second-difference",
+            "sourceSha256": "bbe5de6c2ec0484c670de0aa838e192fa50ff74509a728a2def3ab837eb73b2b",
+            "dispatchedSourceSha256": "b825cb6bb2250ee829534a91625d9a54ad9472c8c7a18f193b80b727828895ee",
+            "promptSha256": "c4815f4ecbe7c4ab32b1459d616cb380948787b9f45fc14d99be427fd093a476",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 1,
+                  "maxAbsError": 2,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 0,
+                      "actual": 2,
+                      "absError": 2,
+                      "relError": null
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "72745e6dace8f046a39077380f01f7121b6794c326004b61885fb15b32554003"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 4,
+                  "maxAbsError": 9,
+                  "maxRelError": 3,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 7,
+                      "actual": -2,
+                      "absError": 9,
+                      "relError": 1.2857142857142858
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -2,
+                      "absError": 1,
+                      "relError": 1
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": -2,
+                      "absError": 3,
+                      "relError": 3
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7,
+                      "actual": -2,
+                      "absError": 5,
+                      "relError": 0.7142857142857143
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "259fa5e89ccab36a9a7fe2f6f1a3107cc78332286401fe0092091a2267611633"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 7,
+                  "maxAbsError": 24.9921875,
+                  "maxRelError": 14.890625,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.1015625,
+                      "actual": -13.890625,
+                      "absError": 24.9921875,
+                      "relError": 2.251231527093596
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -13.890625,
+                      "absError": 12.890625,
+                      "relError": 12.890625
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": -13.890625,
+                      "absError": 14.890625,
+                      "relError": 14.890625
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.875,
+                      "actual": -13.890625,
+                      "absError": 13.015625,
+                      "relError": 14.875
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.5859375,
+                      "actual": -13.890625,
+                      "absError": 9.3046875,
+                      "relError": 2.028960817717206
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 9.8984375,
+                      "actual": -13.890625,
+                      "absError": 23.7890625,
+                      "relError": 2.403314917127072
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.5390625,
+                      "actual": -13.890625,
+                      "absError": 1.6484375,
+                      "relError": 0.10608345902463549
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "955f0fc6c15680b49452f485015655d67a663047ab7412b7bcb838b83911cfe6"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 33,
+                  "maxAbsError": 25.28125,
+                  "maxRelError": 9.661538461538461,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.015625,
+                      "actual": -4.3984375,
+                      "absError": 15.4140625,
+                      "relError": 1.399290780141844
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -4.3984375,
+                      "absError": 3.3984375,
+                      "relError": 3.3984375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": -4.3984375,
+                      "absError": 5.3984375,
+                      "relError": 5.3984375
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.65625,
+                      "actual": -4.3984375,
+                      "absError": 3.2578125,
+                      "relError": 0.42551020408163265
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.859375,
+                      "actual": -4.3984375,
+                      "absError": 9.2578125,
+                      "relError": 1.905144694533762
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.703125,
+                      "actual": -4.3984375,
+                      "absError": 6.1015625,
+                      "relError": 3.5825688073394497
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": 2.203125,
+                      "actual": -4.3984375,
+                      "absError": 6.6015625,
+                      "relError": 2.99645390070922
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.1875,
+                      "actual": -4.3984375,
+                      "absError": 8.5859375,
+                      "relError": 2.050373134328358
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.78125,
+                      "actual": -4.3984375,
+                      "absError": 10.3828125,
+                      "relError": 0.702431289640592
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": 7.1796875,
+                      "actual": -4.3984375,
+                      "absError": 11.578125,
+                      "relError": 1.6126224156692057
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": 0.5078125,
+                      "actual": -4.3984375,
+                      "absError": 4.90625,
+                      "relError": 9.661538461538461
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.078125,
+                      "actual": -4.3984375,
+                      "absError": 1.6796875,
+                      "relError": 0.2763496143958869
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": 16.84375,
+                      "actual": -4.3984375,
+                      "absError": 21.2421875,
+                      "relError": 1.2611317254174397
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.4375,
+                      "actual": -4.3984375,
+                      "absError": 10.0390625,
+                      "relError": 0.6953463203463204
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.1015625,
+                      "actual": -4.3984375,
+                      "absError": 5.5,
+                      "relError": 4.99290780141844
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4921875,
+                      "actual": -4.3984375,
+                      "absError": 0.90625,
+                      "relError": 0.2595078299776286
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "bb52ebefce0cebe47a5cbf3baee2db34f9070e7f1c5390b3c821344c6395f2bf"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 23.368582999999944
+          }
+        ],
+        "passed": false,
+        "verifierMs": 23.432541000000015
+      },
+      "tokenCount": 80,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1884.292166000003,
+        "gain_ms": 27.707416999997804,
+        "setup_other_ms": 0.6959590000005846,
+        "setup_cleanup_ms": 0.5039160000014817,
+        "base_restore_ms": 2.3567909999983385,
+        "reprefill_ms": 0,
+        "decode_ms": 5174.885415999997,
+        "decode_tokens": 80,
+        "verifier_ms": 0,
+        "end_to_end_ms": 7095.489666000003,
+        "peak_allocated_bytes": 2390388024,
+        "buffer_pool_peak_bytes": 2266333952,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.39741700000013225,
+        "input_contract_ms": 3.582749999999578,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 5178.707458000001,
+      "gainHash": "162877fcdec8df01820ea091d102d3dc805be9341a2bf7b4cd8c6115731fd539"
+    },
+    {
+      "id": "positive/random_z",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var next = left_values[(i + 1u) % params.length];\n  var prev = left_values[(i - 2u + params.length) % params.length];\n  value = prev - 2.0 * next;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "3d397a24ef2cf54f8c62a4c7933a7911461ee9feda5f5fb25e915db953e5ca43",
+          "checks": "81e266bc8665c05ebdae60afc420edfb80292fe981251e38539289e0bfd5116c",
+          "sources": "ac1742b74b15607734620de794c10d5c145e91c6704996d9ac9f27a117cbb811"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-periodic-second-difference",
+            "sourceSha256": "3e20bd0da38e39696e51205299495063ca1447f533d54c252711b34c6aedb043",
+            "dispatchedSourceSha256": "38047ece5198508150390c9de5ca6d8b933e7efac8b09c1c3a1c2def52a73321",
+            "promptSha256": "c4815f4ecbe7c4ab32b1459d616cb380948787b9f45fc14d99be427fd093a476",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 1,
+                  "maxAbsError": 2,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 0,
+                      "actual": 2,
+                      "absError": 2,
+                      "relError": null
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f885ce85a930421cc862ef522a3b12eb798516bff5e5c136559e76f93f728c08"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 4,
+                  "maxAbsError": 11,
+                  "maxRelError": 5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 7,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 0.42857142857142855
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 4,
+                      "absError": 5,
+                      "relError": 5
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 3
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7,
+                      "actual": 4,
+                      "absError": 11,
+                      "relError": 1.5714285714285714
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "27c725c8d9c62b89913feaafee67147bf6fd2ac8ddd51d0fe57cc3dde371d672"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 7,
+                  "maxAbsError": 23.6640625,
+                  "maxRelError": 10.285714285714286,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.1015625,
+                      "actual": 8.125,
+                      "absError": 2.9765625,
+                      "relError": 0.2681210415200563
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 8.125,
+                      "absError": 9.125,
+                      "relError": 9.125
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 8.125,
+                      "absError": 7.125,
+                      "relError": 7.125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.875,
+                      "actual": 8.125,
+                      "absError": 9,
+                      "relError": 10.285714285714286
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.5859375,
+                      "actual": 8.125,
+                      "absError": 12.7109375,
+                      "relError": 2.7717206132879046
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 9.8984375,
+                      "actual": 8.125,
+                      "absError": 1.7734375,
+                      "relError": 0.17916337805840568
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.5390625,
+                      "actual": 8.125,
+                      "absError": 23.6640625,
+                      "relError": 1.522875816993464
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "912492caa1aa7a8f5c1b9c1a8173de51def7643985364e3d9d75f1e85f1daad0"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 33,
+                  "maxAbsError": 29.1953125,
+                  "maxRelError": 14.446153846153846,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.015625,
+                      "actual": 7.84375,
+                      "absError": 3.171875,
+                      "relError": 0.28794326241134754
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 7.84375,
+                      "absError": 8.84375,
+                      "relError": 8.84375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 7.84375,
+                      "absError": 6.84375,
+                      "relError": 6.84375
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.65625,
+                      "actual": 7.84375,
+                      "absError": 15.5,
+                      "relError": 2.024489795918367
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.859375,
+                      "actual": 7.84375,
+                      "absError": 2.984375,
+                      "relError": 0.6141479099678456
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.703125,
+                      "actual": 7.84375,
+                      "absError": 6.140625,
+                      "relError": 3.6055045871559632
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": 2.203125,
+                      "actual": 7.84375,
+                      "absError": 5.640625,
+                      "relError": 2.5602836879432624
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.1875,
+                      "actual": 7.84375,
+                      "absError": 3.65625,
+                      "relError": 0.8731343283582089
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.78125,
+                      "actual": 7.84375,
+                      "absError": 22.625,
+                      "relError": 1.5306553911205074
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": 7.1796875,
+                      "actual": 7.84375,
+                      "absError": 0.6640625,
+                      "relError": 0.09249183895538629
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": 0.5078125,
+                      "actual": 7.84375,
+                      "absError": 7.3359375,
+                      "relError": 14.446153846153846
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.078125,
+                      "actual": 7.84375,
+                      "absError": 13.921875,
+                      "relError": 2.290488431876607
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": 16.84375,
+                      "actual": 7.84375,
+                      "absError": 9,
+                      "relError": 0.5343228200371057
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.4375,
+                      "actual": 7.84375,
+                      "absError": 22.28125,
+                      "relError": 1.5432900432900434
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.1015625,
+                      "actual": 7.84375,
+                      "absError": 6.7421875,
+                      "relError": 6.120567375886525
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4921875,
+                      "actual": 7.84375,
+                      "absError": 11.3359375,
+                      "relError": 3.2460850111856825
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "254317c9ab86ec2a0f1ce4af7dd4df6cae31a61ee0a33b8791d46a4bac97db49"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 10.188291999999933
+          }
+        ],
+        "passed": false,
+        "verifierMs": 10.252208999999993
+      },
+      "tokenCount": 89,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1884.292166000003,
+        "gain_ms": 17.197291000000405,
+        "setup_other_ms": 0.6959590000005846,
+        "setup_cleanup_ms": 0.5039160000014817,
+        "base_restore_ms": 2.369957999995677,
+        "reprefill_ms": 0,
+        "decode_ms": 6003.504957999998,
+        "decode_tokens": 89,
+        "verifier_ms": 0,
+        "end_to_end_ms": 7913.868790000002,
+        "peak_allocated_bytes": 2390388024,
+        "buffer_pool_peak_bytes": 2266333952,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.3758339999985765,
+        "input_contract_ms": 3.582749999999578,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 6007.596707999997,
+      "gainHash": "05c2b251338c7e1fa13767601cad2bbd9e7d69aa5266fe6f18e5f6d825f5d3bf"
+    },
+    {
+      "id": "positive/shuffled_context",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var next = left_values[(i + 1u) % params.length];\n  var prev = left_values[(i - 2u + params.length) % params.length];\n  value = prev - 2.0 * next;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "3d397a24ef2cf54f8c62a4c7933a7911461ee9feda5f5fb25e915db953e5ca43",
+          "checks": "81e266bc8665c05ebdae60afc420edfb80292fe981251e38539289e0bfd5116c",
+          "sources": "ac1742b74b15607734620de794c10d5c145e91c6704996d9ac9f27a117cbb811"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-periodic-second-difference",
+            "sourceSha256": "3e20bd0da38e39696e51205299495063ca1447f533d54c252711b34c6aedb043",
+            "dispatchedSourceSha256": "38047ece5198508150390c9de5ca6d8b933e7efac8b09c1c3a1c2def52a73321",
+            "promptSha256": "c4815f4ecbe7c4ab32b1459d616cb380948787b9f45fc14d99be427fd093a476",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 1,
+                  "maxAbsError": 2,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 0,
+                      "actual": 2,
+                      "absError": 2,
+                      "relError": null
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f885ce85a930421cc862ef522a3b12eb798516bff5e5c136559e76f93f728c08"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 4,
+                  "maxAbsError": 11,
+                  "maxRelError": 5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 7,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 0.42857142857142855
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 4,
+                      "absError": 5,
+                      "relError": 5
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 3
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7,
+                      "actual": 4,
+                      "absError": 11,
+                      "relError": 1.5714285714285714
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "27c725c8d9c62b89913feaafee67147bf6fd2ac8ddd51d0fe57cc3dde371d672"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 7,
+                  "maxAbsError": 23.6640625,
+                  "maxRelError": 10.285714285714286,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.1015625,
+                      "actual": 8.125,
+                      "absError": 2.9765625,
+                      "relError": 0.2681210415200563
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 8.125,
+                      "absError": 9.125,
+                      "relError": 9.125
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 8.125,
+                      "absError": 7.125,
+                      "relError": 7.125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.875,
+                      "actual": 8.125,
+                      "absError": 9,
+                      "relError": 10.285714285714286
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.5859375,
+                      "actual": 8.125,
+                      "absError": 12.7109375,
+                      "relError": 2.7717206132879046
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 9.8984375,
+                      "actual": 8.125,
+                      "absError": 1.7734375,
+                      "relError": 0.17916337805840568
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.5390625,
+                      "actual": 8.125,
+                      "absError": 23.6640625,
+                      "relError": 1.522875816993464
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "912492caa1aa7a8f5c1b9c1a8173de51def7643985364e3d9d75f1e85f1daad0"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 33,
+                  "maxAbsError": 29.1953125,
+                  "maxRelError": 14.446153846153846,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.015625,
+                      "actual": 7.84375,
+                      "absError": 3.171875,
+                      "relError": 0.28794326241134754
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 7.84375,
+                      "absError": 8.84375,
+                      "relError": 8.84375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 7.84375,
+                      "absError": 6.84375,
+                      "relError": 6.84375
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.65625,
+                      "actual": 7.84375,
+                      "absError": 15.5,
+                      "relError": 2.024489795918367
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.859375,
+                      "actual": 7.84375,
+                      "absError": 2.984375,
+                      "relError": 0.6141479099678456
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.703125,
+                      "actual": 7.84375,
+                      "absError": 6.140625,
+                      "relError": 3.6055045871559632
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": 2.203125,
+                      "actual": 7.84375,
+                      "absError": 5.640625,
+                      "relError": 2.5602836879432624
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.1875,
+                      "actual": 7.84375,
+                      "absError": 3.65625,
+                      "relError": 0.8731343283582089
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.78125,
+                      "actual": 7.84375,
+                      "absError": 22.625,
+                      "relError": 1.5306553911205074
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": 7.1796875,
+                      "actual": 7.84375,
+                      "absError": 0.6640625,
+                      "relError": 0.09249183895538629
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": 0.5078125,
+                      "actual": 7.84375,
+                      "absError": 7.3359375,
+                      "relError": 14.446153846153846
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.078125,
+                      "actual": 7.84375,
+                      "absError": 13.921875,
+                      "relError": 2.290488431876607
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": 16.84375,
+                      "actual": 7.84375,
+                      "absError": 9,
+                      "relError": 0.5343228200371057
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.4375,
+                      "actual": 7.84375,
+                      "absError": 22.28125,
+                      "relError": 1.5432900432900434
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.1015625,
+                      "actual": 7.84375,
+                      "absError": 6.7421875,
+                      "relError": 6.120567375886525
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4921875,
+                      "actual": 7.84375,
+                      "absError": 11.3359375,
+                      "relError": 3.2460850111856825
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "254317c9ab86ec2a0f1ce4af7dd4df6cae31a61ee0a33b8791d46a4bac97db49"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 10.472499999999968
+          }
+        ],
+        "passed": false,
+        "verifierMs": 10.531207999999992
+      },
+      "tokenCount": 89,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 3623.5159570000033,
+        "gain_ms": 1.8690419999984442,
+        "setup_other_ms": 0.6959590000005846,
+        "setup_cleanup_ms": 0.5039160000014817,
+        "base_restore_ms": 2.4758330000040587,
+        "reprefill_ms": 0,
+        "decode_ms": 7179.562959000003,
+        "decode_tokens": 89,
+        "verifier_ms": 0,
+        "end_to_end_ms": 10813.447083000001,
+        "peak_allocated_bytes": 2390388024,
+        "buffer_pool_peak_bytes": 2266333952,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.2269159999996191,
+        "input_contract_ms": 3.582749999999578,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 7183.279458999998,
+      "gainHash": "7a74a4cad423405174b35945273932e718f8d9eb865a010b6353dfc54bb1e73e"
+    },
+    {
+      "id": "negative/channel_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var next = left_values[(i + 1u) % params.length];\n  var current = left_values[i];\n  value = value + (next - 2.0 * current);\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "3d397a24ef2cf54f8c62a4c7933a7911461ee9feda5f5fb25e915db953e5ca43",
+          "checks": "81e266bc8665c05ebdae60afc420edfb80292fe981251e38539289e0bfd5116c",
+          "sources": "c174faa9cd8eceab2cc74865a9e3bcc0a36f53aebff7b6a8dc4c62c6ae39c3f7"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-periodic-second-difference",
+            "sourceSha256": "bbe5de6c2ec0484c670de0aa838e192fa50ff74509a728a2def3ab837eb73b2b",
+            "dispatchedSourceSha256": "b825cb6bb2250ee829534a91625d9a54ad9472c8c7a18f193b80b727828895ee",
+            "promptSha256": "c4815f4ecbe7c4ab32b1459d616cb380948787b9f45fc14d99be427fd093a476",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 1,
+                  "maxAbsError": 2,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 0,
+                      "actual": 2,
+                      "absError": 2,
+                      "relError": null
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "72745e6dace8f046a39077380f01f7121b6794c326004b61885fb15b32554003"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 4,
+                  "maxAbsError": 9,
+                  "maxRelError": 3,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 7,
+                      "actual": -2,
+                      "absError": 9,
+                      "relError": 1.2857142857142858
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -2,
+                      "absError": 1,
+                      "relError": 1
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": -2,
+                      "absError": 3,
+                      "relError": 3
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7,
+                      "actual": -2,
+                      "absError": 5,
+                      "relError": 0.7142857142857143
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "259fa5e89ccab36a9a7fe2f6f1a3107cc78332286401fe0092091a2267611633"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 7,
+                  "maxAbsError": 24.9921875,
+                  "maxRelError": 14.890625,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.1015625,
+                      "actual": -13.890625,
+                      "absError": 24.9921875,
+                      "relError": 2.251231527093596
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -13.890625,
+                      "absError": 12.890625,
+                      "relError": 12.890625
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": -13.890625,
+                      "absError": 14.890625,
+                      "relError": 14.890625
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.875,
+                      "actual": -13.890625,
+                      "absError": 13.015625,
+                      "relError": 14.875
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.5859375,
+                      "actual": -13.890625,
+                      "absError": 9.3046875,
+                      "relError": 2.028960817717206
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 9.8984375,
+                      "actual": -13.890625,
+                      "absError": 23.7890625,
+                      "relError": 2.403314917127072
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.5390625,
+                      "actual": -13.890625,
+                      "absError": 1.6484375,
+                      "relError": 0.10608345902463549
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "955f0fc6c15680b49452f485015655d67a663047ab7412b7bcb838b83911cfe6"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 33,
+                  "maxAbsError": 25.28125,
+                  "maxRelError": 9.661538461538461,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.015625,
+                      "actual": -4.3984375,
+                      "absError": 15.4140625,
+                      "relError": 1.399290780141844
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -4.3984375,
+                      "absError": 3.3984375,
+                      "relError": 3.3984375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": -4.3984375,
+                      "absError": 5.3984375,
+                      "relError": 5.3984375
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.65625,
+                      "actual": -4.3984375,
+                      "absError": 3.2578125,
+                      "relError": 0.42551020408163265
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.859375,
+                      "actual": -4.3984375,
+                      "absError": 9.2578125,
+                      "relError": 1.905144694533762
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.703125,
+                      "actual": -4.3984375,
+                      "absError": 6.1015625,
+                      "relError": 3.5825688073394497
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": 2.203125,
+                      "actual": -4.3984375,
+                      "absError": 6.6015625,
+                      "relError": 2.99645390070922
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.1875,
+                      "actual": -4.3984375,
+                      "absError": 8.5859375,
+                      "relError": 2.050373134328358
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.78125,
+                      "actual": -4.3984375,
+                      "absError": 10.3828125,
+                      "relError": 0.702431289640592
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": 7.1796875,
+                      "actual": -4.3984375,
+                      "absError": 11.578125,
+                      "relError": 1.6126224156692057
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": 0.5078125,
+                      "actual": -4.3984375,
+                      "absError": 4.90625,
+                      "relError": 9.661538461538461
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.078125,
+                      "actual": -4.3984375,
+                      "absError": 1.6796875,
+                      "relError": 0.2763496143958869
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": 16.84375,
+                      "actual": -4.3984375,
+                      "absError": 21.2421875,
+                      "relError": 1.2611317254174397
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.4375,
+                      "actual": -4.3984375,
+                      "absError": 10.0390625,
+                      "relError": 0.6953463203463204
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.1015625,
+                      "actual": -4.3984375,
+                      "absError": 5.5,
+                      "relError": 4.99290780141844
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4921875,
+                      "actual": -4.3984375,
+                      "absError": 0.90625,
+                      "relError": 0.2595078299776286
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "bb52ebefce0cebe47a5cbf3baee2db34f9070e7f1c5390b3c821344c6395f2bf"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 10.190875000000005
+          }
+        ],
+        "passed": false,
+        "verifierMs": 10.294708000000014
+      },
+      "tokenCount": 80,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 2167.4736669999984,
+        "gain_ms": 3.9850829999995767,
+        "setup_other_ms": 1.2151250000024447,
+        "setup_cleanup_ms": 0.46212499999819556,
+        "base_restore_ms": 4.837916000004043,
+        "reprefill_ms": 0,
+        "decode_ms": 6091.475458000001,
+        "decode_tokens": 80,
+        "verifier_ms": 0,
+        "end_to_end_ms": 8276.882415999999,
+        "peak_allocated_bytes": 2390388040,
+        "buffer_pool_peak_bytes": 2266333952,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 1.1776250000039,
+        "input_contract_ms": 3.582749999999578,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 6100.163666,
+      "gainHash": "8782868930d25b9619d31668ca8b36b7bdaeb3577b4bebdba1bff5f5b48502cc"
+    },
+    {
+      "id": "negative/permuted_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var next = left_values[(i + 1u) % params.length];\n  var prev = left_values[(i - 2u + params.length) % params.length];\n  value = prev - 2.0 * next;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "3d397a24ef2cf54f8c62a4c7933a7911461ee9feda5f5fb25e915db953e5ca43",
+          "checks": "81e266bc8665c05ebdae60afc420edfb80292fe981251e38539289e0bfd5116c",
+          "sources": "ac1742b74b15607734620de794c10d5c145e91c6704996d9ac9f27a117cbb811"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-periodic-second-difference",
+            "sourceSha256": "3e20bd0da38e39696e51205299495063ca1447f533d54c252711b34c6aedb043",
+            "dispatchedSourceSha256": "38047ece5198508150390c9de5ca6d8b933e7efac8b09c1c3a1c2def52a73321",
+            "promptSha256": "c4815f4ecbe7c4ab32b1459d616cb380948787b9f45fc14d99be427fd093a476",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 1,
+                  "maxAbsError": 2,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 0,
+                      "actual": 2,
+                      "absError": 2,
+                      "relError": null
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f885ce85a930421cc862ef522a3b12eb798516bff5e5c136559e76f93f728c08"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 4,
+                  "maxAbsError": 11,
+                  "maxRelError": 5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 7,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 0.42857142857142855
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 4,
+                      "absError": 5,
+                      "relError": 5
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 3
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7,
+                      "actual": 4,
+                      "absError": 11,
+                      "relError": 1.5714285714285714
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "27c725c8d9c62b89913feaafee67147bf6fd2ac8ddd51d0fe57cc3dde371d672"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 7,
+                  "maxAbsError": 23.6640625,
+                  "maxRelError": 10.285714285714286,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.1015625,
+                      "actual": 8.125,
+                      "absError": 2.9765625,
+                      "relError": 0.2681210415200563
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 8.125,
+                      "absError": 9.125,
+                      "relError": 9.125
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 8.125,
+                      "absError": 7.125,
+                      "relError": 7.125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.875,
+                      "actual": 8.125,
+                      "absError": 9,
+                      "relError": 10.285714285714286
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.5859375,
+                      "actual": 8.125,
+                      "absError": 12.7109375,
+                      "relError": 2.7717206132879046
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 9.8984375,
+                      "actual": 8.125,
+                      "absError": 1.7734375,
+                      "relError": 0.17916337805840568
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.5390625,
+                      "actual": 8.125,
+                      "absError": 23.6640625,
+                      "relError": 1.522875816993464
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "912492caa1aa7a8f5c1b9c1a8173de51def7643985364e3d9d75f1e85f1daad0"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 33,
+                  "maxAbsError": 29.1953125,
+                  "maxRelError": 14.446153846153846,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.015625,
+                      "actual": 7.84375,
+                      "absError": 3.171875,
+                      "relError": 0.28794326241134754
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 7.84375,
+                      "absError": 8.84375,
+                      "relError": 8.84375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 7.84375,
+                      "absError": 6.84375,
+                      "relError": 6.84375
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.65625,
+                      "actual": 7.84375,
+                      "absError": 15.5,
+                      "relError": 2.024489795918367
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.859375,
+                      "actual": 7.84375,
+                      "absError": 2.984375,
+                      "relError": 0.6141479099678456
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.703125,
+                      "actual": 7.84375,
+                      "absError": 6.140625,
+                      "relError": 3.6055045871559632
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": 2.203125,
+                      "actual": 7.84375,
+                      "absError": 5.640625,
+                      "relError": 2.5602836879432624
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.1875,
+                      "actual": 7.84375,
+                      "absError": 3.65625,
+                      "relError": 0.8731343283582089
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.78125,
+                      "actual": 7.84375,
+                      "absError": 22.625,
+                      "relError": 1.5306553911205074
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": 7.1796875,
+                      "actual": 7.84375,
+                      "absError": 0.6640625,
+                      "relError": 0.09249183895538629
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": 0.5078125,
+                      "actual": 7.84375,
+                      "absError": 7.3359375,
+                      "relError": 14.446153846153846
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.078125,
+                      "actual": 7.84375,
+                      "absError": 13.921875,
+                      "relError": 2.290488431876607
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": 16.84375,
+                      "actual": 7.84375,
+                      "absError": 9,
+                      "relError": 0.5343228200371057
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.4375,
+                      "actual": 7.84375,
+                      "absError": 22.28125,
+                      "relError": 1.5432900432900434
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.1015625,
+                      "actual": 7.84375,
+                      "absError": 6.7421875,
+                      "relError": 6.120567375886525
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4921875,
+                      "actual": 7.84375,
+                      "absError": 11.3359375,
+                      "relError": 3.2460850111856825
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "254317c9ab86ec2a0f1ce4af7dd4df6cae31a61ee0a33b8791d46a4bac97db49"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 9.839583000000061
+          }
+        ],
+        "passed": false,
+        "verifierMs": 9.890582999999992
+      },
+      "tokenCount": 89,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 2167.4736669999984,
+        "gain_ms": 67.33220799999981,
+        "setup_other_ms": 1.2151250000024447,
+        "setup_cleanup_ms": 0.46212499999819556,
+        "base_restore_ms": 3.011167000004207,
+        "reprefill_ms": 0,
+        "decode_ms": 7400.753583000005,
+        "decode_tokens": 89,
+        "verifier_ms": 0,
+        "end_to_end_ms": 9645.875041999998,
+        "peak_allocated_bytes": 2390388040,
+        "buffer_pool_peak_bytes": 2266333952,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.42483399999764515,
+        "input_contract_ms": 3.582749999999578,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 7405.809166999999,
+      "gainHash": "282a583b13d1785f6848bdb6fe74ba65563a209fa1e489426bffb36df7a270bd"
+    },
+    {
+      "id": "negative/random_z",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var next = left_values[(i + 1u) % params.length];\n  var prev = left_values[(i - 2u + params.length) % params.length];\n  value = prev - 2.0 * next;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "3d397a24ef2cf54f8c62a4c7933a7911461ee9feda5f5fb25e915db953e5ca43",
+          "checks": "81e266bc8665c05ebdae60afc420edfb80292fe981251e38539289e0bfd5116c",
+          "sources": "ac1742b74b15607734620de794c10d5c145e91c6704996d9ac9f27a117cbb811"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-periodic-second-difference",
+            "sourceSha256": "3e20bd0da38e39696e51205299495063ca1447f533d54c252711b34c6aedb043",
+            "dispatchedSourceSha256": "38047ece5198508150390c9de5ca6d8b933e7efac8b09c1c3a1c2def52a73321",
+            "promptSha256": "c4815f4ecbe7c4ab32b1459d616cb380948787b9f45fc14d99be427fd093a476",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 1,
+                  "maxAbsError": 2,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 0,
+                      "actual": 2,
+                      "absError": 2,
+                      "relError": null
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f885ce85a930421cc862ef522a3b12eb798516bff5e5c136559e76f93f728c08"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 4,
+                  "maxAbsError": 11,
+                  "maxRelError": 5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 7,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 0.42857142857142855
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 4,
+                      "absError": 5,
+                      "relError": 5
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 4,
+                      "absError": 3,
+                      "relError": 3
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7,
+                      "actual": 4,
+                      "absError": 11,
+                      "relError": 1.5714285714285714
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "27c725c8d9c62b89913feaafee67147bf6fd2ac8ddd51d0fe57cc3dde371d672"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 7,
+                  "maxAbsError": 23.6640625,
+                  "maxRelError": 10.285714285714286,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.1015625,
+                      "actual": 8.125,
+                      "absError": 2.9765625,
+                      "relError": 0.2681210415200563
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 8.125,
+                      "absError": 9.125,
+                      "relError": 9.125
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 8.125,
+                      "absError": 7.125,
+                      "relError": 7.125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.875,
+                      "actual": 8.125,
+                      "absError": 9,
+                      "relError": 10.285714285714286
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.5859375,
+                      "actual": 8.125,
+                      "absError": 12.7109375,
+                      "relError": 2.7717206132879046
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 9.8984375,
+                      "actual": 8.125,
+                      "absError": 1.7734375,
+                      "relError": 0.17916337805840568
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.5390625,
+                      "actual": 8.125,
+                      "absError": 23.6640625,
+                      "relError": 1.522875816993464
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "912492caa1aa7a8f5c1b9c1a8173de51def7643985364e3d9d75f1e85f1daad0"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 33,
+                  "maxAbsError": 29.1953125,
+                  "maxRelError": 14.446153846153846,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.015625,
+                      "actual": 7.84375,
+                      "absError": 3.171875,
+                      "relError": 0.28794326241134754
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 7.84375,
+                      "absError": 8.84375,
+                      "relError": 8.84375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": 7.84375,
+                      "absError": 6.84375,
+                      "relError": 6.84375
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.65625,
+                      "actual": 7.84375,
+                      "absError": 15.5,
+                      "relError": 2.024489795918367
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.859375,
+                      "actual": 7.84375,
+                      "absError": 2.984375,
+                      "relError": 0.6141479099678456
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.703125,
+                      "actual": 7.84375,
+                      "absError": 6.140625,
+                      "relError": 3.6055045871559632
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": 2.203125,
+                      "actual": 7.84375,
+                      "absError": 5.640625,
+                      "relError": 2.5602836879432624
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.1875,
+                      "actual": 7.84375,
+                      "absError": 3.65625,
+                      "relError": 0.8731343283582089
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.78125,
+                      "actual": 7.84375,
+                      "absError": 22.625,
+                      "relError": 1.5306553911205074
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": 7.1796875,
+                      "actual": 7.84375,
+                      "absError": 0.6640625,
+                      "relError": 0.09249183895538629
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": 0.5078125,
+                      "actual": 7.84375,
+                      "absError": 7.3359375,
+                      "relError": 14.446153846153846
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.078125,
+                      "actual": 7.84375,
+                      "absError": 13.921875,
+                      "relError": 2.290488431876607
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": 16.84375,
+                      "actual": 7.84375,
+                      "absError": 9,
+                      "relError": 0.5343228200371057
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.4375,
+                      "actual": 7.84375,
+                      "absError": 22.28125,
+                      "relError": 1.5432900432900434
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.1015625,
+                      "actual": 7.84375,
+                      "absError": 6.7421875,
+                      "relError": 6.120567375886525
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4921875,
+                      "actual": 7.84375,
+                      "absError": 11.3359375,
+                      "relError": 3.2460850111856825
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "254317c9ab86ec2a0f1ce4af7dd4df6cae31a61ee0a33b8791d46a4bac97db49"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 9.967999999999961
+          }
+        ],
+        "passed": false,
+        "verifierMs": 10.014166000000046
+      },
+      "tokenCount": 89,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 2167.4736669999984,
+        "gain_ms": 23.960373999994772,
+        "setup_other_ms": 1.2151250000024447,
+        "setup_cleanup_ms": 0.46212499999819556,
+        "base_restore_ms": 17.028666999998677,
+        "reprefill_ms": 0,
+        "decode_ms": 7740.240292000002,
+        "decode_tokens": 89,
+        "verifier_ms": 0,
+        "end_to_end_ms": 9955.655290999994,
+        "peak_allocated_bytes": 2390388040,
+        "buffer_pool_peak_bytes": 2266333952,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.28870800000731833,
+        "input_contract_ms": 3.582749999999578,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 7758.96125,
+      "gainHash": "05c2b251338c7e1fa13767601cad2bbd9e7d69aa5266fe6f18e5f6d825f5d3bf"
+    },
+    {
+      "id": "negative/shuffled_context",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var next = left_values[(i + 1u) % params.length];\n  var current = left_values[i];\n  value = value + (next - 2.0 * current);\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "3d397a24ef2cf54f8c62a4c7933a7911461ee9feda5f5fb25e915db953e5ca43",
+          "checks": "81e266bc8665c05ebdae60afc420edfb80292fe981251e38539289e0bfd5116c",
+          "sources": "c174faa9cd8eceab2cc74865a9e3bcc0a36f53aebff7b6a8dc4c62c6ae39c3f7"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-periodic-second-difference",
+            "sourceSha256": "bbe5de6c2ec0484c670de0aa838e192fa50ff74509a728a2def3ab837eb73b2b",
+            "dispatchedSourceSha256": "b825cb6bb2250ee829534a91625d9a54ad9472c8c7a18f193b80b727828895ee",
+            "promptSha256": "c4815f4ecbe7c4ab32b1459d616cb380948787b9f45fc14d99be427fd093a476",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 1,
+                  "maxAbsError": 2,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 0,
+                      "actual": 2,
+                      "absError": 2,
+                      "relError": null
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "72745e6dace8f046a39077380f01f7121b6794c326004b61885fb15b32554003"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 4,
+                  "maxAbsError": 9,
+                  "maxRelError": 3,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 7,
+                      "actual": -2,
+                      "absError": 9,
+                      "relError": 1.2857142857142858
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -2,
+                      "absError": 1,
+                      "relError": 1
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": -2,
+                      "absError": 3,
+                      "relError": 3
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7,
+                      "actual": -2,
+                      "absError": 5,
+                      "relError": 0.7142857142857143
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "259fa5e89ccab36a9a7fe2f6f1a3107cc78332286401fe0092091a2267611633"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 7,
+                  "maxAbsError": 24.9921875,
+                  "maxRelError": 14.890625,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.1015625,
+                      "actual": -13.890625,
+                      "absError": 24.9921875,
+                      "relError": 2.251231527093596
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -13.890625,
+                      "absError": 12.890625,
+                      "relError": 12.890625
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": -13.890625,
+                      "absError": 14.890625,
+                      "relError": 14.890625
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.875,
+                      "actual": -13.890625,
+                      "absError": 13.015625,
+                      "relError": 14.875
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.5859375,
+                      "actual": -13.890625,
+                      "absError": 9.3046875,
+                      "relError": 2.028960817717206
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 9.8984375,
+                      "actual": -13.890625,
+                      "absError": 23.7890625,
+                      "relError": 2.403314917127072
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.5390625,
+                      "actual": -13.890625,
+                      "absError": 1.6484375,
+                      "relError": 0.10608345902463549
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "955f0fc6c15680b49452f485015655d67a663047ab7412b7bcb838b83911cfe6"
+              },
+              {
+                "id": "prospective-selection-sequence-periodic-second-difference/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 33,
+                  "maxAbsError": 25.28125,
+                  "maxRelError": 9.661538461538461,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": 11.015625,
+                      "actual": -4.3984375,
+                      "absError": 15.4140625,
+                      "relError": 1.399290780141844
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -4.3984375,
+                      "absError": 3.3984375,
+                      "relError": 3.3984375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": 1,
+                      "actual": -4.3984375,
+                      "absError": 5.3984375,
+                      "relError": 5.3984375
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.65625,
+                      "actual": -4.3984375,
+                      "absError": 3.2578125,
+                      "relError": 0.42551020408163265
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.859375,
+                      "actual": -4.3984375,
+                      "absError": 9.2578125,
+                      "relError": 1.905144694533762
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.703125,
+                      "actual": -4.3984375,
+                      "absError": 6.1015625,
+                      "relError": 3.5825688073394497
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": 2.203125,
+                      "actual": -4.3984375,
+                      "absError": 6.6015625,
+                      "relError": 2.99645390070922
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": 4.1875,
+                      "actual": -4.3984375,
+                      "absError": 8.5859375,
+                      "relError": 2.050373134328358
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.78125,
+                      "actual": -4.3984375,
+                      "absError": 10.3828125,
+                      "relError": 0.702431289640592
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": 7.1796875,
+                      "actual": -4.3984375,
+                      "absError": 11.578125,
+                      "relError": 1.6126224156692057
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": 0.5078125,
+                      "actual": -4.3984375,
+                      "absError": 4.90625,
+                      "relError": 9.661538461538461
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.078125,
+                      "actual": -4.3984375,
+                      "absError": 1.6796875,
+                      "relError": 0.2763496143958869
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": 16.84375,
+                      "actual": -4.3984375,
+                      "absError": 21.2421875,
+                      "relError": 1.2611317254174397
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -14.4375,
+                      "actual": -4.3984375,
+                      "absError": 10.0390625,
+                      "relError": 0.6953463203463204
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": 1.1015625,
+                      "actual": -4.3984375,
+                      "absError": 5.5,
+                      "relError": 4.99290780141844
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4921875,
+                      "actual": -4.3984375,
+                      "absError": 0.90625,
+                      "relError": 0.2595078299776286
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "bb52ebefce0cebe47a5cbf3baee2db34f9070e7f1c5390b3c821344c6395f2bf"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 11.097333999999933
+          }
+        ],
+        "passed": false,
+        "verifierMs": 11.146333000000027
+      },
+      "tokenCount": 80,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 4392.291333999994,
+        "gain_ms": 3.129791999999725,
+        "setup_other_ms": 1.2151250000024447,
+        "setup_cleanup_ms": 0.46212499999819556,
+        "base_restore_ms": 15.399875000002794,
+        "reprefill_ms": 0,
+        "decode_ms": 10160.342957999994,
+        "decode_tokens": 80,
+        "verifier_ms": 0,
+        "end_to_end_ms": 14578.452416999991,
+        "peak_allocated_bytes": 2390388040,
+        "buffer_pool_peak_bytes": 2266333952,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.2801659999968251,
+        "input_contract_ms": 3.582749999999578,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 10177.771290999997,
+      "gainHash": "aa579a2ca17ca41e3d2951c5821df422a5cb4581e2372f5a69bcc2c4da839334"
+    }
+  ]
+}

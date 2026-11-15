@@ -1,0 +1,304 @@
+diff --git a/src/gpu/kernels/kernel-execution.js b/src/gpu/kernels/kernel-execution.js
+index 249f8a10..2ce29ba6 100644
+--- a/src/gpu/kernels/kernel-execution.js
++++ b/src/gpu/kernels/kernel-execution.js
+@@ -2,7 +2,8 @@ import { getKernelRegistry } from './kernel-configs.js';
+ import { getCachedPipeline, getPipelineFast, getPipelineBindGroupLayout } from './pipeline-cache.js';
+ import { getDevice } from '../device.js';
+ import { dispatchKernel, dispatchIndirect, recordDispatchIndirect } from './dispatch.js';
+-import { createKernelUniformBuffer } from './uniform-utils.js';
++import { getCompletedUniformCache, releaseUniformBuffer } from '../uniform-cache.js';
++import { createKernelUniformBuffer, getUniformByteLength, writeUniformsFromObject } from './uniform-utils.js';
+ import { acquireBuffer, releaseBuffer } from '../../memory/buffer-pool.js';
+ 
+ const dataBindingsByConfig = new WeakMap();
+@@ -98,9 +99,15 @@ export async function unifiedKernelWrapper(
+   }
+ 
+   let uniformBuffer = null;
++  let dispatchAttempted = false;
+   try {
+     if (config.uniforms !== null) {
+-      uniformBuffer = createKernelUniformBuffer(`${opName}_uniforms`, config, uniforms, recorder, device);
++      if (recorder) uniformBuffer = createKernelUniformBuffer(`${opName}_uniforms`, config, uniforms, recorder, device);
++      else {
++        const data = new ArrayBuffer(getUniformByteLength(config));
++        writeUniformsFromObject(new DataView(data), config, uniforms);
++        uniformBuffer = getCompletedUniformCache(device).getOrCreate(data, `${opName}_uniforms`);
++      }
+       const uniformBinding = config.bindings.find(binding => binding.type === 'uniform');
+       if (!uniformBinding) throw new Error(`Kernel ${opName}/${variant} declares uniforms without a binding.`);
+       bindGroupEntries.unshift({ binding: uniformBinding.index, resource: { buffer: uniformBuffer } });
+@@ -122,6 +129,7 @@ export async function unifiedKernelWrapper(
+     const label = typeof dispatchLabel === 'string' && dispatchLabel.length > 0
+       ? dispatchLabel
+       : opName;
++    dispatchAttempted = true;
+     if (workgroups && typeof workgroups === 'object' && workgroups.indirectBuffer) {
+       const indirectOffset = workgroups.indirectOffset ?? 0;
+       if (recorder) {
+@@ -133,8 +141,11 @@ export async function unifiedKernelWrapper(
+       dispatchKernel(recorder ?? device, pipeline, bindGroup, workgroups, label);
+     }
+   } catch (error) {
+-    if (!recorder) {
+-      uniformBuffer?.destroy();
++    if (!recorder && uniformBuffer) {
++      const leased = uniformBuffer;
++      if (dispatchAttempted) device.queue.onSubmittedWorkDone().then(
++        () => releaseUniformBuffer(leased), () => releaseUniformBuffer(leased));
++      else releaseUniformBuffer(leased);
+     }
+     throw error;
+   }
+@@ -145,16 +156,16 @@ export async function unifiedKernelWrapper(
+     try {
+       await device.queue.onSubmittedWorkDone();
+     } finally {
+-      uniformBuffer?.destroy();
++      if (uniformBuffer) releaseUniformBuffer(uniformBuffer);
+     }
+     signal?.throwIfAborted();
+   } else if (!recorder && uniformBuffer) {
+     device.queue.onSubmittedWorkDone()
+       .then(() => {
+-        uniformBuffer.destroy();
++        releaseUniformBuffer(uniformBuffer);
+       })
+       .catch(() => {
+-        uniformBuffer.destroy();
++        releaseUniformBuffer(uniformBuffer);
+       });
+   }
+ 
+diff --git a/src/gpu/uniform-cache.d.ts b/src/gpu/uniform-cache.d.ts
+index e03cce5b..b00c9484 100644
+--- a/src/gpu/uniform-cache.d.ts
++++ b/src/gpu/uniform-cache.d.ts
+@@ -18,7 +18,15 @@ export interface UniformCacheStats {
+   misses: number;
+   evictions: number;
+   currentSize: number;
++  transientFallbacks: number;
++  /** Completed-lease namespace only; includes transient fallback leases. */
++  outstandingLeases?: number;
++  /** Retired admitted entries still held by at least one outstanding lease. */
++  retiredActiveEntries?: number;
++  /** Uncached fallback buffers waiting for their completion release. */
++  transientOutstandingLeases?: number;
+   hitRate?: string;
++  /** Legacy deferred-destruction queue only; excludes retired active completed leases. */
+   pendingDestruction?: number;
+ }
+ 
+@@ -40,7 +48,7 @@ export declare class UniformBufferCache {
+   private readonly maxEntries: number;
+   private readonly maxAgeMs: number;
+ 
+-  constructor(maxEntries?: number, maxAgeMs?: number, device?: GPUDevice | null);
++  constructor(maxEntries?: number, maxAgeMs?: number, device?: GPUDevice | null, completedLeases?: boolean);
+ 
+   /**
+    * Get or create a uniform buffer with the given contents.
+@@ -109,3 +117,9 @@ export function getUniformCacheStats(device?: GPUDevice | null): (UniformCacheSt
+  * Reset the global uniform cache (useful for testing or device loss)
+  */
+ export function resetUniformCache(device?: GPUDevice | null): void;
++
++/** Device-isolated cache for callers releasing leases only after queue completion. */
++export function getCompletedUniformCache(device: GPUDevice): UniformBufferCache;
++
++/** Snapshot only. currentSize counts admitted entries, not all outstanding leases. */
++export function getCompletedUniformCacheStats(device: GPUDevice): UniformCacheStats | null;
+diff --git a/src/gpu/uniform-cache.js b/src/gpu/uniform-cache.js
+index 0da62de5..94e722b0 100644
+--- a/src/gpu/uniform-cache.js
++++ b/src/gpu/uniform-cache.js
+@@ -60,6 +60,7 @@ export class UniformBufferCache {
+     misses: 0,
+     evictions: 0,
+     currentSize: 0,
++    transientFallbacks: 0,
+   };
+ 
+   
+@@ -71,16 +72,24 @@ export class UniformBufferCache {
+   
+   #maxAgeMs;
+   #device;
++  #completedLeases;
++  #leaseEntries = new WeakMap();
++  #transientLeases = new WeakSet();
++  #outstandingLeases = 0;
++  #retiredActiveEntries = 0;
++  #transientOutstandingLeases = 0;
+ 
+   
+   constructor(
+     maxEntries = getRuntimeConfig().shared.gpuCache.uniformCacheMaxEntries,
+     maxAgeMs = getRuntimeConfig().shared.gpuCache.uniformCacheMaxAgeMs,
+-    device = getDevice()
++    device = getDevice(),
++    completedLeases = false
+   ) {
+     this.#maxEntries = maxEntries;
+     this.#maxAgeMs = maxAgeMs;
+     this.#device = device;
++    this.#completedLeases = completedLeases;
+     observeDeviceLoss(device);
+     device?.lost?.then(() => this.clear(), () => this.clear());
+   }
+@@ -99,6 +108,7 @@ export class UniformBufferCache {
+         existing.lastUsed = performance.now();
+         existing.refCount++;
+         this.#stats.hits++;
++        if (this.#completedLeases) this.#outstandingLeases++;
+         return existing.buffer;
+       }
+       suffix += 1;
+@@ -106,6 +116,7 @@ export class UniformBufferCache {
+       existing = this.#cache.get(key);
+     }
+ 
++    const admitted = !this.#completedLeases || this.#cache.size < this.#maxEntries || this.#evictLRU();
+     const dataBytes = copyUniformBytes(dataView);
+ 
+     // Cache miss - create new buffer
+@@ -128,20 +139,36 @@ export class UniformBufferCache {
+       buffer.destroy();
+       throw error;
+     }
++    // If every cached lease is still in flight, preserve the bound and return
++    // an uncached buffer. Owner-aware release destroys it after completion.
++    if (!admitted) {
++      this.#stats.transientFallbacks++;
++      this.#outstandingLeases++;
++      this.#transientOutstandingLeases++;
++      this.#transientLeases.add(buffer);
++      uniformOwners.set(buffer, this);
++      return buffer;
++    }
+     uniformOwners.set(buffer, this);
+     uniformContents.set(buffer, dataBytes);
+ 
+     // Evict if at capacity
+-    if (this.#cache.size >= this.#maxEntries) {
++    if (!this.#completedLeases && this.#cache.size >= this.#maxEntries) {
+       this.#evictLRU();
+     }
+ 
+-    this.#cache.set(key, {
++    const entry = {
+       buffer,
+       bytes: dataBytes,
+       lastUsed: performance.now(),
+       refCount: 1,
+-    });
++      retired: false,
++    };
++    this.#cache.set(key, entry);
++    if (this.#completedLeases) {
++      this.#leaseEntries.set(buffer, entry);
++      this.#outstandingLeases++;
++    }
+     this.#stats.currentSize = this.#cache.size;
+ 
+     return buffer;
+@@ -149,6 +176,23 @@ export class UniformBufferCache {
+ 
+   
+   release(buffer) {
++    if (this.#completedLeases) {
++      if (this.#transientLeases.delete(buffer)) {
++        this.#outstandingLeases--;
++        this.#transientOutstandingLeases--;
++        buffer.destroy();
++        return;
++      }
++      const entry = this.#leaseEntries.get(buffer);
++      if (!entry || entry.refCount === 0) return;
++      entry.refCount--;
++      this.#outstandingLeases--;
++      if (entry.retired && entry.refCount === 0) {
++        this.#retiredActiveEntries--;
++        buffer.destroy();
++      }
++      return;
++    }
+     // Find entry by buffer reference
+     for (const [hash, entry] of this.#cache) {
+       if (entry.buffer === buffer) {
+@@ -174,6 +218,8 @@ export class UniformBufferCache {
+       }
+     }
+ 
++    if (oldestHash === null && this.#completedLeases) return false;
++
+     // If all entries are in use, evict oldest anyway
+     if (oldestHash === null) {
+       for (const [hash, entry] of this.#cache) {
+@@ -188,12 +234,15 @@ export class UniformBufferCache {
+       const entry = this.#cache.get(oldestHash);
+       if (entry) {
+         // DON'T destroy immediately - defer until GPU work completes
+-        this.#pendingDestruction.push(entry.buffer);
++        if (this.#completedLeases) { entry.retired = true; entry.buffer.destroy(); }
++        else this.#pendingDestruction.push(entry.buffer);
+         this.#cache.delete(oldestHash);
+         this.#stats.evictions++;
+         this.#stats.currentSize = this.#cache.size;
++        return true;
+       }
+     }
++    return false;
+   }
+ 
+ 
+@@ -203,7 +252,11 @@ export class UniformBufferCache {
+ 
+     // Destroy all cached buffers
+     for (const entry of this.#cache.values()) {
+-      entry.buffer.destroy();
++      if (this.#completedLeases) {
++        entry.retired = true;
++        if (entry.refCount > 0) this.#retiredActiveEntries++;
++      }
++      if (!this.#completedLeases || entry.refCount === 0) entry.buffer.destroy();
+     }
+     this.#cache.clear();
+     this.#stats.currentSize = 0;
+@@ -234,7 +287,12 @@ export class UniformBufferCache {
+   getStats() {
+     const total = this.#stats.hits + this.#stats.misses;
+     const hitRate = total > 0 ? ((this.#stats.hits / total) * 100).toFixed(1) + '%' : '0%';
+-    return { ...this.#stats, hitRate, pendingDestruction: this.#pendingDestruction.length };
++    const leaseStats = this.#completedLeases ? {
++      outstandingLeases: this.#outstandingLeases,
++      retiredActiveEntries: this.#retiredActiveEntries,
++      transientOutstandingLeases: this.#transientOutstandingLeases,
++    } : {};
++    return { ...this.#stats, ...leaseStats, hitRate, pendingDestruction: this.#pendingDestruction.length };
+   }
+ }
+ 
+@@ -272,3 +330,20 @@ export function resetUniformCache(device = getDevice()) {
+   deviceUniformCaches.get(device)?.clear();
+   if (device) deviceUniformCaches.delete(device);
+ }
++
++// Separate ownership domain: only wrappers releasing after queue completion use
++// this cache. Legacy recorded callers and their flush lifecycle remain separate.
++const completedUniformCaches = new WeakMap();
++export function getCompletedUniformCache(device) {
++  if (!device || isDeviceLost(device)) throw new Error('Completed uniform cache requires a live device.');
++  let cache = completedUniformCaches.get(device);
++  if (!cache) {
++    cache = new UniformBufferCache(undefined, undefined, device, true);
++    completedUniformCaches.set(device, cache);
++  }
++  return cache;
++}
++
++export function getCompletedUniformCacheStats(device) {
++  return completedUniformCaches.get(device)?.getStats() ?? null;
++}

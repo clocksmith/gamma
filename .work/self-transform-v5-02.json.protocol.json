@@ -1,0 +1,53 @@
+{
+  "protocol": {
+    "schema": "gamma.positive-step-self-target/v5",
+    "classification": "prespecified toy development screen",
+    "replicateSeeds": [
+      91000,
+      101000,
+      111000
+    ],
+    "trainingCandidates": 33,
+    "mutationScale": 0.2,
+    "trainingGenerations": 3,
+    "trainSupportCount": 16,
+    "trainQueryCount": 16,
+    "metaCount": 32,
+    "holdoutCount": 128,
+    "steps": 6,
+    "generations": 3,
+    "initializers": [
+      "task_only",
+      "self_target"
+    ],
+    "arms": [
+      "hereditary",
+      "fixed_proposer",
+      "serialization_only",
+      "spsa"
+    ],
+    "seedOffsets": {
+      "candidate": 1,
+      "trainSupport": 10,
+      "trainQuery": 20,
+      "trainProbe": 30,
+      "meta": 100,
+      "holdout": 200,
+      "probe": 300
+    },
+    "training": "Same initial random vector and mutation draws; 32 greedy bounded uniform mutations per initializer. Every candidate evaluated through three self-generated descendants on fixed training-support/query populations. task_only minimizes parent query loss averaged across three query sets; self_target minimizes mean descendant query loss. Both pay full identical compute; chosen initial artifact is candidate parent.",
+    "budget": "33 candidates per initializer, each charged three full self-target proposal/evaluation unrolls plus parent query evaluation. Fresh evaluation arms each receive eight scalar meta-objective probes per generation, unconditional child adoption.",
+    "evaluation": "Clean-process proposals and scoring; no holdout score affects training or descendants; fixed external scalar oracle and interpreter.",
+    "limits": "An external evolutionary search trains initial parameters. The experiment tests useful heredity, not independence from external optimization or AGI. No retuning or stopping based on results.",
+    "mechanism": "Replace unconstrained tanh displacement with positive learned rate in [0,0.25], multiplied by internal scalar-probe gradient estimate. Zero gradient gives zero update. Probe geometry unchanged; no guaranteed true-gradient descent under noisy directions."
+  },
+  "sourceHashes": {
+    "initialization.mjs": "58b830c7a9c8226c35d6bd0a272ff701aeb1de70865ecaf754b12bfa381cc0a3",
+    "run.mjs": "61a9ecec5c58bf3f4587cbd278e018a27b981523fee23a807a08332ffad94943",
+    "./operator.mjs": "71884c360528fde165b75502fac9dd5d31690383bed9669fbebac0cff9b59936",
+    "./experiment.mjs": "8afb8b1d25ccd25b1daa9f26d39b78c974c9e8326cbe72e009886a057e3b1691",
+    "./worker.mjs": "4abbb4df651129623dee641eee35abcee1ad2a962c13afd4abda425d0b03a1a5",
+    "../self_transform_v1/evaluator.mjs": "b0bbe0237519a98ce4d31de5679a65e7d4f95367501ed97a92aa9e6a926fde8e",
+    "../self_transform_v1/operator.mjs": "8f2136f55620373097768c73406c14d1c26d8b6b9c094a71e0fe5dec5aafcb7d"
+  }
+}

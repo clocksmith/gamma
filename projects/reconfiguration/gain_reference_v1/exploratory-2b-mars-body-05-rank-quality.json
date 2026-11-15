@@ -1,0 +1,2859 @@
+{
+  "schema": "gamma.exploratory-2b-quality/v1",
+  "createdAt": "2026-11-15T13:30:15.941Z",
+  "sealedOutputsSha256": "8361c56bc0ef5d17d92cdf23825e0bbd61bc6a626a96241819081cc53bc1ff0f",
+  "classification": "Already exposed public task, fixed-order body-only-v3 exploratory pilot. Not independent confirmation, 27B evidence or a speed benchmark. All physical preparation costs retained in source receipt; attributed per-arm timing is not total experiment cost.",
+  "zeroTokensEqualBase": true,
+  "results": [
+    {
+      "id": "base",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "09d7aa1e56c52806c86f9314d8fc9cf19ddb9a4cef99a7a8cd50dbe610c5baba",
+          "checks": "069888f1ac1349eff5d94454e39f9aff269d0e30217270d2946413766070b0c3",
+          "sources": "233dc6ce79ad6a56ea3babcf0439b199eab2556d6d6ffd3e7e37e86921859d5e"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-stable-rank",
+            "sourceSha256": "5db3131f9d7032fbe3d78227f94aa454e1c7f5be809e0c163692ff079e215bbc",
+            "dispatchedSourceSha256": "d8882099df3341ac0022a0e4da5112dda7338eef3da438a6c0dadfe678603da6",
+            "promptSha256": "cb91d9c184218be30646fec61d24f78580d4c454e6b7e53b634f4d9d9db6c267",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "e36a82b5040d48f47cd026a71c19289d18a1557406cb21beb5fd070405266904"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "fb9ed6273e16fa00663bd453fae85d4d33116722b2d881c361d58ed51ac8af64"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "c71ba0e2bb2072b8ef165aa9cf315a57c187422720bfa23f36aede8fe7447896"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "5ef04be9573e4710c8eb4ba5ab78a26f796e65af6a7d8e7dc48048867656a11a"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 14.564624999999978
+          }
+        ],
+        "passed": false,
+        "verifierMs": 14.71758299999999
+      },
+      "tokenCount": 74,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1651.7536669999995,
+        "gain_ms": 0,
+        "setup_other_ms": 0,
+        "setup_cleanup_ms": 0,
+        "base_restore_ms": 0,
+        "reprefill_ms": 0,
+        "decode_ms": 4333.932709,
+        "decode_tokens": 74,
+        "verifier_ms": 0,
+        "end_to_end_ms": 5990.960542,
+        "peak_allocated_bytes": 2273805688,
+        "buffer_pool_peak_bytes": 2261172992,
+        "transform_state_bytes": 0,
+        "request_cleanup_ms": 0.49666699999943376,
+        "input_contract_ms": 3.156167000000096,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 5987.804375,
+      "gainHash": null
+    },
+    {
+      "id": "zero",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "09d7aa1e56c52806c86f9314d8fc9cf19ddb9a4cef99a7a8cd50dbe610c5baba",
+          "checks": "069888f1ac1349eff5d94454e39f9aff269d0e30217270d2946413766070b0c3",
+          "sources": "233dc6ce79ad6a56ea3babcf0439b199eab2556d6d6ffd3e7e37e86921859d5e"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-stable-rank",
+            "sourceSha256": "5db3131f9d7032fbe3d78227f94aa454e1c7f5be809e0c163692ff079e215bbc",
+            "dispatchedSourceSha256": "d8882099df3341ac0022a0e4da5112dda7338eef3da438a6c0dadfe678603da6",
+            "promptSha256": "cb91d9c184218be30646fec61d24f78580d4c454e6b7e53b634f4d9d9db6c267",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "e36a82b5040d48f47cd026a71c19289d18a1557406cb21beb5fd070405266904"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "fb9ed6273e16fa00663bd453fae85d4d33116722b2d881c361d58ed51ac8af64"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "c71ba0e2bb2072b8ef165aa9cf315a57c187422720bfa23f36aede8fe7447896"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "5ef04be9573e4710c8eb4ba5ab78a26f796e65af6a7d8e7dc48048867656a11a"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 6.889583000000016
+          }
+        ],
+        "passed": false,
+        "verifierMs": 7.008625000000052
+      },
+      "tokenCount": 74,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1510.3813329999994,
+        "gain_ms": 3.77362500000163,
+        "setup_other_ms": 0.5967919999984588,
+        "setup_cleanup_ms": 0.14187500000116415,
+        "base_restore_ms": 2.9610830000001442,
+        "reprefill_ms": 0,
+        "decode_ms": 4250.093499999999,
+        "decode_tokens": 74,
+        "verifier_ms": 0,
+        "end_to_end_ms": 5772.8011670000005,
+        "peak_allocated_bytes": 2376527864,
+        "buffer_pool_peak_bytes": 2264794880,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.12441600000056496,
+        "input_contract_ms": 3.156167000000096,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 4254.751375,
+      "gainHash": "3af66bc138c36062a242454806d8313278ae779602b84a6b4e9cf4db74414a64"
+    },
+    {
+      "id": "positive/channel_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var left: f32 = left_values[i];\n  var right: f32 = right_values[i];\n  var count: u32 = 0u;\n  for (var j = 0u; j < params.length; j += 1u) {\n    if (j < i) {\n      if (left_values[j] < left) {\n        count += 1u;\n      } else if (left_values[j] == left) {\n        count += 1u;\n      }\n    }\n  }\n  value = count;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "09d7aa1e56c52806c86f9314d8fc9cf19ddb9a4cef99a7a8cd50dbe610c5baba",
+          "checks": "069888f1ac1349eff5d94454e39f9aff269d0e30217270d2946413766070b0c3",
+          "sources": "44b1b63dc15828396e8f49109313b07bf1a577cd856db87b0aba1361ca9e91f0"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-stable-rank",
+            "sourceSha256": "4d647a7ce0e1bea36d0ccd0608bf35861117c6b2d52cb8eeee4423ae7552556f",
+            "dispatchedSourceSha256": "bcb5024b97c6c17b702c90094611ed960e1c89e14bc7af87877f54673d955200",
+            "promptSha256": "cb91d9c184218be30646fec61d24f78580d4c454e6b7e53b634f4d9d9db6c267",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "7550a9fe40b1870649b5dcc94f44eb1b4e55798a2a3707dd3c010e984a38e531"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "5a0a82a12158e97d63f5e06703dfcf782364bd34a3ca55bf9e323e3b19af5907"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "75ec90bd0ffdfac57c5e51c9dded08ed3c455e580b6dca04a20dfb6b805fec18"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "641d6bbc4e8f6f29887fdd89324f7087778255ed1840fa5a2e42cc5d6dbd9422"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 7.379625000000033
+          }
+        ],
+        "passed": false,
+        "verifierMs": 7.432374999999979
+      },
+      "tokenCount": 165,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1529.7553750000006,
+        "gain_ms": 2.1630419999964943,
+        "setup_other_ms": 0.6042910000032862,
+        "setup_cleanup_ms": 0.16354199999841512,
+        "base_restore_ms": 2.1322910000017146,
+        "reprefill_ms": 0,
+        "decode_ms": 9514.178,
+        "decode_tokens": 165,
+        "verifier_ms": 0,
+        "end_to_end_ms": 11065.393084,
+        "peak_allocated_bytes": 2388487256,
+        "buffer_pool_peak_bytes": 2265088768,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.18462499999805004,
+        "input_contract_ms": 3.156167000000096,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 9529.550667,
+      "gainHash": "3804a68f35d1a6d7bae1799f4e57ea8e887cb075078699a5013d51217cba5c95"
+    },
+    {
+      "id": "positive/permuted_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "09d7aa1e56c52806c86f9314d8fc9cf19ddb9a4cef99a7a8cd50dbe610c5baba",
+          "checks": "069888f1ac1349eff5d94454e39f9aff269d0e30217270d2946413766070b0c3",
+          "sources": "233dc6ce79ad6a56ea3babcf0439b199eab2556d6d6ffd3e7e37e86921859d5e"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-stable-rank",
+            "sourceSha256": "5db3131f9d7032fbe3d78227f94aa454e1c7f5be809e0c163692ff079e215bbc",
+            "dispatchedSourceSha256": "d8882099df3341ac0022a0e4da5112dda7338eef3da438a6c0dadfe678603da6",
+            "promptSha256": "cb91d9c184218be30646fec61d24f78580d4c454e6b7e53b634f4d9d9db6c267",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "e36a82b5040d48f47cd026a71c19289d18a1557406cb21beb5fd070405266904"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "fb9ed6273e16fa00663bd453fae85d4d33116722b2d881c361d58ed51ac8af64"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "c71ba0e2bb2072b8ef165aa9cf315a57c187422720bfa23f36aede8fe7447896"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "5ef04be9573e4710c8eb4ba5ab78a26f796e65af6a7d8e7dc48048867656a11a"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 5.284125000000017
+          }
+        ],
+        "passed": false,
+        "verifierMs": 5.335290999999984
+      },
+      "tokenCount": 74,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1529.7553750000006,
+        "gain_ms": 31.786583999997674,
+        "setup_other_ms": 0.6042910000032862,
+        "setup_cleanup_ms": 0.16354199999841512,
+        "base_restore_ms": 2.4026670000021113,
+        "reprefill_ms": 0,
+        "decode_ms": 4246.9179159999985,
+        "decode_tokens": 74,
+        "verifier_ms": 0,
+        "end_to_end_ms": 5815.587751000002,
+        "peak_allocated_bytes": 2388487256,
+        "buffer_pool_peak_bytes": 2265088768,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.12708399999974063,
+        "input_contract_ms": 3.156167000000096,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 4250.121792000002,
+      "gainHash": "435c006196e0d70c42fbb5e7ec216d376c53bbea5fb114616b595f2963661be9"
+    },
+    {
+      "id": "positive/random_z",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var left: f32 = left_values[i];\n  var right: f32 = right_values[i];\n  var count: u32 = 0u;\n  for (var j = 0u; j < params.length; j += 1u) {\n    if (j < i) {\n      if (left_values[j] < left) {\n        count += 1u;\n      } else if (left_values[j] == left) {\n        count += 1u;\n      }\n    }\n  }\n  value = count;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "09d7aa1e56c52806c86f9314d8fc9cf19ddb9a4cef99a7a8cd50dbe610c5baba",
+          "checks": "069888f1ac1349eff5d94454e39f9aff269d0e30217270d2946413766070b0c3",
+          "sources": "44b1b63dc15828396e8f49109313b07bf1a577cd856db87b0aba1361ca9e91f0"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-stable-rank",
+            "sourceSha256": "4d647a7ce0e1bea36d0ccd0608bf35861117c6b2d52cb8eeee4423ae7552556f",
+            "dispatchedSourceSha256": "bcb5024b97c6c17b702c90094611ed960e1c89e14bc7af87877f54673d955200",
+            "promptSha256": "cb91d9c184218be30646fec61d24f78580d4c454e6b7e53b634f4d9d9db6c267",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "7550a9fe40b1870649b5dcc94f44eb1b4e55798a2a3707dd3c010e984a38e531"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "5a0a82a12158e97d63f5e06703dfcf782364bd34a3ca55bf9e323e3b19af5907"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "75ec90bd0ffdfac57c5e51c9dded08ed3c455e580b6dca04a20dfb6b805fec18"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "641d6bbc4e8f6f29887fdd89324f7087778255ed1840fa5a2e42cc5d6dbd9422"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 5.814583000000084
+          }
+        ],
+        "passed": false,
+        "verifierMs": 5.870457999999985
+      },
+      "tokenCount": 165,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1529.7553750000006,
+        "gain_ms": 15.046833999997034,
+        "setup_other_ms": 0.6042910000032862,
+        "setup_cleanup_ms": 0.16354199999841512,
+        "base_restore_ms": 2.037000000000262,
+        "reprefill_ms": 0,
+        "decode_ms": 11388.463207999997,
+        "decode_tokens": 165,
+        "verifier_ms": 0,
+        "end_to_end_ms": 12940.422001000003,
+        "peak_allocated_bytes": 2388487256,
+        "buffer_pool_peak_bytes": 2265088768,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.1604589999988093,
+        "input_contract_ms": 3.156167000000096,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 11391.695792000002,
+      "gainHash": "f0040f4e009125a39c8896d631aadd6179bab1f98f8e79221d34812ce8e36ff3"
+    },
+    {
+      "id": "positive/shuffled_context",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var left: f32 = left_values[i];\n  var right: f32 = right_values[i];\n  var count: u32 = 0u;\n  for (var j = 0u; j < params.length; j += 1u) {\n    if (j < i) {\n      if (left_values[j] < left) {\n        count += 1u;\n      } else if (left_values[j] == left) {\n        count += 1u;\n      }\n    }\n  }\n  value = count;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "09d7aa1e56c52806c86f9314d8fc9cf19ddb9a4cef99a7a8cd50dbe610c5baba",
+          "checks": "069888f1ac1349eff5d94454e39f9aff269d0e30217270d2946413766070b0c3",
+          "sources": "44b1b63dc15828396e8f49109313b07bf1a577cd856db87b0aba1361ca9e91f0"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-stable-rank",
+            "sourceSha256": "4d647a7ce0e1bea36d0ccd0608bf35861117c6b2d52cb8eeee4423ae7552556f",
+            "dispatchedSourceSha256": "bcb5024b97c6c17b702c90094611ed960e1c89e14bc7af87877f54673d955200",
+            "promptSha256": "cb91d9c184218be30646fec61d24f78580d4c454e6b7e53b634f4d9d9db6c267",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "7550a9fe40b1870649b5dcc94f44eb1b4e55798a2a3707dd3c010e984a38e531"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "5a0a82a12158e97d63f5e06703dfcf782364bd34a3ca55bf9e323e3b19af5907"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "75ec90bd0ffdfac57c5e51c9dded08ed3c455e580b6dca04a20dfb6b805fec18"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "641d6bbc4e8f6f29887fdd89324f7087778255ed1840fa5a2e42cc5d6dbd9422"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 5.762709000000086
+          }
+        ],
+        "passed": false,
+        "verifierMs": 5.814458000000059
+      },
+      "tokenCount": 165,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 3039.4069170000002,
+        "gain_ms": 2.150000000001455,
+        "setup_other_ms": 0.6042910000032862,
+        "setup_cleanup_ms": 0.16354199999841512,
+        "base_restore_ms": 2.7160839999996824,
+        "reprefill_ms": 0,
+        "decode_ms": 16920.440540999996,
+        "decode_tokens": 165,
+        "verifier_ms": 0,
+        "end_to_end_ms": 19971.561334,
+        "peak_allocated_bytes": 2388487256,
+        "buffer_pool_peak_bytes": 2265088768,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.18637500000477303,
+        "input_contract_ms": 3.156167000000096,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 16926.080416999997,
+      "gainHash": "e6fd44179b85a8e6e7d1151ded7e7aeded3d0f2d841b73c6154a29e3f67d5782"
+    },
+    {
+      "id": "negative/channel_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "09d7aa1e56c52806c86f9314d8fc9cf19ddb9a4cef99a7a8cd50dbe610c5baba",
+          "checks": "069888f1ac1349eff5d94454e39f9aff269d0e30217270d2946413766070b0c3",
+          "sources": "233dc6ce79ad6a56ea3babcf0439b199eab2556d6d6ffd3e7e37e86921859d5e"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-stable-rank",
+            "sourceSha256": "5db3131f9d7032fbe3d78227f94aa454e1c7f5be809e0c163692ff079e215bbc",
+            "dispatchedSourceSha256": "d8882099df3341ac0022a0e4da5112dda7338eef3da438a6c0dadfe678603da6",
+            "promptSha256": "cb91d9c184218be30646fec61d24f78580d4c454e6b7e53b634f4d9d9db6c267",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "e36a82b5040d48f47cd026a71c19289d18a1557406cb21beb5fd070405266904"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "fb9ed6273e16fa00663bd453fae85d4d33116722b2d881c361d58ed51ac8af64"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "c71ba0e2bb2072b8ef165aa9cf315a57c187422720bfa23f36aede8fe7447896"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) < y: f32 = right_values[i] ? 1.0 : 0.0;\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "5ef04be9573e4710c8eb4ba5ab78a26f796e65af6a7d8e7dc48048867656a11a"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 5.3058750000000146
+          }
+        ],
+        "passed": false,
+        "verifierMs": 5.394541000000004
+      },
+      "tokenCount": 74,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1879.8238750000019,
+        "gain_ms": 16.970291999998153,
+        "setup_other_ms": 0.660875000001397,
+        "setup_cleanup_ms": 0.12358400000084657,
+        "base_restore_ms": 2.2768749999959255,
+        "reprefill_ms": 0,
+        "decode_ms": 4223.62137500001,
+        "decode_tokens": 74,
+        "verifier_ms": 0,
+        "end_to_end_ms": 6128.36862700001,
+        "peak_allocated_bytes": 2388487496,
+        "buffer_pool_peak_bytes": 2265088768,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.1340409999975236,
+        "input_contract_ms": 3.156167000000096,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 4227.6338340000075,
+      "gainHash": "156904bdf40083f71c3861a2868dfe4d12300fe2d0e4a479f40fc463a5514505"
+    },
+    {
+      "id": "negative/permuted_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += (x: f32 = left_values[i]) + (y: f32 = right_values[i]);\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "09d7aa1e56c52806c86f9314d8fc9cf19ddb9a4cef99a7a8cd50dbe610c5baba",
+          "checks": "069888f1ac1349eff5d94454e39f9aff269d0e30217270d2946413766070b0c3",
+          "sources": "86994eae6782b9d4c658490b6f2ffb904ce194b8e3a482874970dccc7c99ea34"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-stable-rank",
+            "sourceSha256": "91ba4df3b9b32daf837be3a50b0d79ef13ba127c8dba124c6b1e728539df8036",
+            "dispatchedSourceSha256": "c06bb7a21dfd188bb8cadbfcb65e8de074a548fa22f5c0599d6770ddd2e88545",
+            "promptSha256": "cb91d9c184218be30646fec61d24f78580d4c454e6b7e53b634f4d9d9db6c267",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) + (y: f32 = right_values[i]);\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "b9b18970cee0cc7dc7821f190704cbd528e2f8c15f01adb4be9fe4ac82b10aff"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) + (y: f32 = right_values[i]);\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "ead2b8e8fc2d2ccff306e24e09816b046d3bb95cf683e45953fe490f72a2411d"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) + (y: f32 = right_values[i]);\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "7b3b2fb237594f130bd897ef5e06b22f456efbfa7f70835cc0eb347fd0f176ba"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) + (y: f32 = right_values[i]);\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "856e8e728c6657afae7ccd51df46581dbde61747f7bfb7e420a93666dadbb8ac"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 5.489416000000006
+          }
+        ],
+        "passed": false,
+        "verifierMs": 5.5402500000000146
+      },
+      "tokenCount": 64,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1879.8238750000019,
+        "gain_ms": 30.723582999999053,
+        "setup_other_ms": 0.660875000001397,
+        "setup_cleanup_ms": 0.12358400000084657,
+        "base_restore_ms": 2.2395830000023125,
+        "reprefill_ms": 0,
+        "decode_ms": 3658.0399159999943,
+        "decode_tokens": 64,
+        "verifier_ms": 0,
+        "end_to_end_ms": 5575.675666999995,
+        "peak_allocated_bytes": 2388487496,
+        "buffer_pool_peak_bytes": 2265088768,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.10520799999358132,
+        "input_contract_ms": 3.156167000000096,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 3661.1875829999917,
+      "gainHash": "be6a2897744979d6b06f897f56047313343ffc977488800d763950854924d149"
+    },
+    {
+      "id": "negative/random_z",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  var left: f32 = left_values[i];\n  var right: f32 = right_values[i];\n  var count: u32 = 0u;\n  for (var j = 0u; j < params.length; j += 1u) {\n    if (j < i) {\n      if (left_values[j] < left) {\n        count += 1u;\n      } else if (left_values[j] == left) {\n        count += 1u;\n      }\n    }\n  }\n  value = count;\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "09d7aa1e56c52806c86f9314d8fc9cf19ddb9a4cef99a7a8cd50dbe610c5baba",
+          "checks": "069888f1ac1349eff5d94454e39f9aff269d0e30217270d2946413766070b0c3",
+          "sources": "44b1b63dc15828396e8f49109313b07bf1a577cd856db87b0aba1361ca9e91f0"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-stable-rank",
+            "sourceSha256": "4d647a7ce0e1bea36d0ccd0608bf35861117c6b2d52cb8eeee4423ae7552556f",
+            "dispatchedSourceSha256": "bcb5024b97c6c17b702c90094611ed960e1c89e14bc7af87877f54673d955200",
+            "promptSha256": "cb91d9c184218be30646fec61d24f78580d4c454e6b7e53b634f4d9d9db6c267",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "7550a9fe40b1870649b5dcc94f44eb1b4e55798a2a3707dd3c010e984a38e531"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "5a0a82a12158e97d63f5e06703dfcf782364bd34a3ca55bf9e323e3b19af5907"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "75ec90bd0ffdfac57c5e51c9dded08ed3c455e580b6dca04a20dfb6b805fec18"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "cannot assign 'u32' to 'f32'",
+                      "lineNum": 27,
+                      "linePos": 9,
+                      "offset": 957,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :27:9 error: cannot assign 'u32' to 'f32'\n  value = count;\n        ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "641d6bbc4e8f6f29887fdd89324f7087778255ed1840fa5a2e42cc5d6dbd9422"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 5.050499999999943
+          }
+        ],
+        "passed": false,
+        "verifierMs": 5.09475000000009
+      },
+      "tokenCount": 165,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1879.8238750000019,
+        "gain_ms": 28.20962600000348,
+        "setup_other_ms": 0.660875000001397,
+        "setup_cleanup_ms": 0.12358400000084657,
+        "base_restore_ms": 2.217917000001762,
+        "reprefill_ms": 0,
+        "decode_ms": 9439.742167000004,
+        "decode_tokens": 165,
+        "verifier_ms": 0,
+        "end_to_end_ms": 11355.184752000016,
+        "peak_allocated_bytes": 2388487496,
+        "buffer_pool_peak_bytes": 2265088768,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.16041700000641868,
+        "input_contract_ms": 3.156167000000096,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 9443.210625000007,
+      "gainHash": "7686dd4fc29137081840cd3e46b53098e1c4daf82ac206f2b97a59c76243632e"
+    },
+    {
+      "id": "negative/shuffled_context",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += (x: f32 = left_values[i]) + (y: f32 = right_values[i]);\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "09d7aa1e56c52806c86f9314d8fc9cf19ddb9a4cef99a7a8cd50dbe610c5baba",
+          "checks": "069888f1ac1349eff5d94454e39f9aff269d0e30217270d2946413766070b0c3",
+          "sources": "86994eae6782b9d4c658490b6f2ffb904ce194b8e3a482874970dccc7c99ea34"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-stable-rank",
+            "sourceSha256": "91ba4df3b9b32daf837be3a50b0d79ef13ba127c8dba124c6b1e728539df8036",
+            "dispatchedSourceSha256": "c06bb7a21dfd188bb8cadbfcb65e8de074a548fa22f5c0599d6770ddd2e88545",
+            "promptSha256": "cb91d9c184218be30646fec61d24f78580d4c454e6b7e53b634f4d9d9db6c267",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-1",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 1,
+                  "actualElements": 0,
+                  "mismatchCount": 1,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) + (y: f32 = right_values[i]);\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-1\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "b9b18970cee0cc7dc7821f190704cbd528e2f8c15f01adb4be9fe4ac82b10aff"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 0,
+                  "mismatchCount": 4,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) + (y: f32 = right_values[i]);\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-4\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "ead2b8e8fc2d2ccff306e24e09816b046d3bb95cf683e45953fe490f72a2411d"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 0,
+                  "mismatchCount": 7,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) + (y: f32 = right_values[i]);\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-7\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "7b3b2fb237594f130bd897ef5e06b22f456efbfa7f70835cc0eb347fd0f176ba"
+              },
+              {
+                "id": "prospective-selection-sequence-stable-rank/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": false,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 0,
+                  "mismatchCount": 33,
+                  "maxAbsError": null,
+                  "maxRelError": null,
+                  "mismatches": [
+                    {
+                      "index": -1,
+                      "reason": "length_mismatch"
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": false,
+                  "prefixCanaryIntact": false,
+                  "tailCanariesIntact": false,
+                  "readOnlyBuffersUnchanged": false
+                },
+                "compilation": {
+                  "passed": false,
+                  "messages": [
+                    {
+                      "type": "error",
+                      "message": "expected ')'",
+                      "lineNum": 15,
+                      "linePos": 14,
+                      "offset": 665,
+                      "length": 1
+                    }
+                  ],
+                  "errorCount": 1
+                },
+                "runtimeErrors": [
+                  "Error while parsing WGSL: :15:14 error: expected ')'\n  value += (x: f32 = left_values[i]) + (y: f32 = right_values[i]);\n             ^\n\n\n - While calling [Device].CreateShaderModule([ShaderModuleDescriptor \"\"prospective-selection-sequence-stable-rank/shape-33\"\"]).\n"
+                ],
+                "dispatchEvidenceSha256": "856e8e728c6657afae7ccd51df46581dbde61747f7bfb7e420a93666dadbb8ac"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 5.944875000000025
+          }
+        ],
+        "passed": false,
+        "verifierMs": 5.987415999999939
+      },
+      "tokenCount": 64,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 3383.8380830000024,
+        "gain_ms": 1.449584000001778,
+        "setup_other_ms": 0.660875000001397,
+        "setup_cleanup_ms": 0.12358400000084657,
+        "base_restore_ms": 2.3697080000129063,
+        "reprefill_ms": 0,
+        "decode_ms": 4123.016915999993,
+        "decode_tokens": 64,
+        "verifier_ms": 0,
+        "end_to_end_ms": 7515.747793000001,
+        "peak_allocated_bytes": 2388487496,
+        "buffer_pool_peak_bytes": 2265088768,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.21533300000010058,
+        "input_contract_ms": 3.156167000000096,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 4126.519499999995,
+      "gainHash": "b6ef17cab84f72376a73b15672a7891463aca42c2fba3f9eaa7a48ebced9fcdf"
+    }
+  ]
+}

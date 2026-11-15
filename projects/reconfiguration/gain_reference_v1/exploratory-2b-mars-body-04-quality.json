@@ -1,0 +1,4249 @@
+{
+  "schema": "gamma.exploratory-2b-quality/v1",
+  "createdAt": "2026-11-15T13:27:55.364Z",
+  "sealedOutputsSha256": "909f684ecc0305f89d010b664a912d322744041947870c787e39a0ed6c621972",
+  "classification": "Already exposed public task, fixed-order body-only-v3 exploratory pilot. Not independent confirmation, 27B evidence or a speed benchmark. All physical preparation costs retained in source receipt; attributed per-arm timing is not total experiment cost.",
+  "zeroTokensEqualBase": true,
+  "results": [
+    {
+      "id": "base",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += left_values[i];\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "4b46631c368cdb34d131f77ad598965bb32d2d8ec047cc777a7f61c218fe12a3"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "82970dfe5245452b5bc688ec7265ec6934938ec92f217bd21fbc2bcdbcea9297",
+            "dispatchedSourceSha256": "16f9aef53c95f9e128b754038a61ac48660592601aae85922b5815fe666f3a43",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": true,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": true,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 0,
+                  "maxAbsError": 0,
+                  "maxRelError": 0,
+                  "mismatches": []
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4c58d423e15ce5db4a0b88887da2dde224accbc4fd1e6b358317d72c63f18ae7"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 3,
+                  "maxAbsError": 4,
+                  "maxRelError": 3,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 2,
+                      "absError": 3,
+                      "relError": 3
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4302e82501e146814bcb0014a559e4186afd1db432d57748b9cb6fd1bf3af838"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 6,
+                  "maxAbsError": 8.8046875,
+                  "maxRelError": 32.5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -6.8046875,
+                      "absError": 5.8046875,
+                      "relError": 5.8046875
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -6.8046875,
+                      "absError": 8.8046875,
+                      "relError": 4.40234375
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.203125,
+                      "actual": -6.8046875,
+                      "absError": 6.6015625,
+                      "relError": 32.5
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.9765625,
+                      "actual": -6.8046875,
+                      "absError": 0.171875,
+                      "relError": 0.02463605823068309
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "e86eafd50107e2e829e7cf23a041fbaa4b50caf58483fd816ca8acbc0ec33d1c"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 32,
+                  "maxAbsError": 29.3203125,
+                  "maxRelError": 183.05263157894737,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -27.3203125,
+                      "absError": 26.3203125,
+                      "relError": 26.3203125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -27.3203125,
+                      "absError": 29.3203125,
+                      "relError": 14.66015625
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.1796875,
+                      "actual": -27.3203125,
+                      "absError": 23.140625,
+                      "relError": 5.536448598130841
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.1484375,
+                      "actual": -27.3203125,
+                      "absError": 27.171875,
+                      "relError": 183.05263157894737
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.6015625,
+                      "actual": -27.3203125,
+                      "absError": 19.71875,
+                      "relError": 2.5940390544707093
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.9375,
+                      "actual": -27.3203125,
+                      "absError": 26.3828125,
+                      "relError": 28.141666666666666
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -1.71875,
+                      "actual": -27.3203125,
+                      "absError": 25.6015625,
+                      "relError": 14.895454545454545
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4765625,
+                      "actual": -27.3203125,
+                      "absError": 23.84375,
+                      "relError": 6.858426966292135
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": -8,
+                      "actual": -27.3203125,
+                      "absError": 19.3203125,
+                      "relError": 2.4150390625
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.3984375,
+                      "actual": -27.3203125,
+                      "absError": 19.921875,
+                      "relError": 2.692713833157339
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.0546875,
+                      "actual": -27.3203125,
+                      "absError": 18.265625,
+                      "relError": 2.0172562553925797
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.4921875,
+                      "actual": -27.3203125,
+                      "absError": 11.828125,
+                      "relError": 0.7634896621280888
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.859375,
+                      "actual": -27.3203125,
+                      "absError": 19.4609375,
+                      "relError": 2.4761431411530817
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.59375,
+                      "actual": -27.3203125,
+                      "absError": 17.7265625,
+                      "relError": 1.8477198697068404
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f3a484e15dda312e8cafb9de460a80a7a0327ace8e2e427e1e010661cd0a2122"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 90.78983400000004
+          }
+        ],
+        "passed": false,
+        "verifierMs": 90.94537500000001
+      },
+      "tokenCount": 45,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1600.5419999999995,
+        "gain_ms": 0,
+        "setup_other_ms": 0,
+        "setup_cleanup_ms": 0,
+        "base_restore_ms": 0,
+        "reprefill_ms": 0,
+        "decode_ms": 2677.0448750000005,
+        "decode_tokens": 45,
+        "verifier_ms": 0,
+        "end_to_end_ms": 4282.915875,
+        "peak_allocated_bytes": 2268956024,
+        "buffer_pool_peak_bytes": 2256323328,
+        "transform_state_bytes": 0,
+        "request_cleanup_ms": 0.49779099999977916,
+        "input_contract_ms": 3.1448749999999563,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 4279.771,
+      "gainHash": null
+    },
+    {
+      "id": "zero",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += left_values[i];\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "4b46631c368cdb34d131f77ad598965bb32d2d8ec047cc777a7f61c218fe12a3"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "82970dfe5245452b5bc688ec7265ec6934938ec92f217bd21fbc2bcdbcea9297",
+            "dispatchedSourceSha256": "16f9aef53c95f9e128b754038a61ac48660592601aae85922b5815fe666f3a43",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": true,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": true,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 0,
+                  "maxAbsError": 0,
+                  "maxRelError": 0,
+                  "mismatches": []
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4c58d423e15ce5db4a0b88887da2dde224accbc4fd1e6b358317d72c63f18ae7"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 3,
+                  "maxAbsError": 4,
+                  "maxRelError": 3,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 2,
+                      "absError": 3,
+                      "relError": 3
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4302e82501e146814bcb0014a559e4186afd1db432d57748b9cb6fd1bf3af838"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 6,
+                  "maxAbsError": 8.8046875,
+                  "maxRelError": 32.5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -6.8046875,
+                      "absError": 5.8046875,
+                      "relError": 5.8046875
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -6.8046875,
+                      "absError": 8.8046875,
+                      "relError": 4.40234375
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.203125,
+                      "actual": -6.8046875,
+                      "absError": 6.6015625,
+                      "relError": 32.5
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.9765625,
+                      "actual": -6.8046875,
+                      "absError": 0.171875,
+                      "relError": 0.02463605823068309
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "e86eafd50107e2e829e7cf23a041fbaa4b50caf58483fd816ca8acbc0ec33d1c"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 32,
+                  "maxAbsError": 29.3203125,
+                  "maxRelError": 183.05263157894737,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -27.3203125,
+                      "absError": 26.3203125,
+                      "relError": 26.3203125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -27.3203125,
+                      "absError": 29.3203125,
+                      "relError": 14.66015625
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.1796875,
+                      "actual": -27.3203125,
+                      "absError": 23.140625,
+                      "relError": 5.536448598130841
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.1484375,
+                      "actual": -27.3203125,
+                      "absError": 27.171875,
+                      "relError": 183.05263157894737
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.6015625,
+                      "actual": -27.3203125,
+                      "absError": 19.71875,
+                      "relError": 2.5940390544707093
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.9375,
+                      "actual": -27.3203125,
+                      "absError": 26.3828125,
+                      "relError": 28.141666666666666
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -1.71875,
+                      "actual": -27.3203125,
+                      "absError": 25.6015625,
+                      "relError": 14.895454545454545
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4765625,
+                      "actual": -27.3203125,
+                      "absError": 23.84375,
+                      "relError": 6.858426966292135
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": -8,
+                      "actual": -27.3203125,
+                      "absError": 19.3203125,
+                      "relError": 2.4150390625
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.3984375,
+                      "actual": -27.3203125,
+                      "absError": 19.921875,
+                      "relError": 2.692713833157339
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.0546875,
+                      "actual": -27.3203125,
+                      "absError": 18.265625,
+                      "relError": 2.0172562553925797
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.4921875,
+                      "actual": -27.3203125,
+                      "absError": 11.828125,
+                      "relError": 0.7634896621280888
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.859375,
+                      "actual": -27.3203125,
+                      "absError": 19.4609375,
+                      "relError": 2.4761431411530817
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.59375,
+                      "actual": -27.3203125,
+                      "absError": 17.7265625,
+                      "relError": 1.8477198697068404
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f3a484e15dda312e8cafb9de460a80a7a0327ace8e2e427e1e010661cd0a2122"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 12.791999999999916
+          }
+        ],
+        "passed": false,
+        "verifierMs": 12.910542000000078
+      },
+      "tokenCount": 45,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1457.8106669999997,
+        "gain_ms": 4.513750000000073,
+        "setup_other_ms": 0.7537080000001879,
+        "setup_cleanup_ms": 17.444374999999127,
+        "base_restore_ms": 2.5228339999994205,
+        "reprefill_ms": 0,
+        "decode_ms": 2562.0064999999995,
+        "decode_tokens": 45,
+        "verifier_ms": 0,
+        "end_to_end_ms": 4050.0577919999996,
+        "peak_allocated_bytes": 2368528760,
+        "buffer_pool_peak_bytes": 2259945216,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.13624999999956344,
+        "input_contract_ms": 3.1448749999999563,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 2566.3904170000005,
+      "gainHash": "3af66bc138c36062a242454806d8313278ae779602b84a6b4e9cf4db74414a64"
+    },
+    {
+      "id": "positive/channel_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += left_values[i];\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "4b46631c368cdb34d131f77ad598965bb32d2d8ec047cc777a7f61c218fe12a3"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "82970dfe5245452b5bc688ec7265ec6934938ec92f217bd21fbc2bcdbcea9297",
+            "dispatchedSourceSha256": "16f9aef53c95f9e128b754038a61ac48660592601aae85922b5815fe666f3a43",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": true,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": true,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 0,
+                  "maxAbsError": 0,
+                  "maxRelError": 0,
+                  "mismatches": []
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4c58d423e15ce5db4a0b88887da2dde224accbc4fd1e6b358317d72c63f18ae7"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 3,
+                  "maxAbsError": 4,
+                  "maxRelError": 3,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 2,
+                      "absError": 3,
+                      "relError": 3
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4302e82501e146814bcb0014a559e4186afd1db432d57748b9cb6fd1bf3af838"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 6,
+                  "maxAbsError": 8.8046875,
+                  "maxRelError": 32.5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -6.8046875,
+                      "absError": 5.8046875,
+                      "relError": 5.8046875
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -6.8046875,
+                      "absError": 8.8046875,
+                      "relError": 4.40234375
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.203125,
+                      "actual": -6.8046875,
+                      "absError": 6.6015625,
+                      "relError": 32.5
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.9765625,
+                      "actual": -6.8046875,
+                      "absError": 0.171875,
+                      "relError": 0.02463605823068309
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "e86eafd50107e2e829e7cf23a041fbaa4b50caf58483fd816ca8acbc0ec33d1c"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 32,
+                  "maxAbsError": 29.3203125,
+                  "maxRelError": 183.05263157894737,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -27.3203125,
+                      "absError": 26.3203125,
+                      "relError": 26.3203125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -27.3203125,
+                      "absError": 29.3203125,
+                      "relError": 14.66015625
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.1796875,
+                      "actual": -27.3203125,
+                      "absError": 23.140625,
+                      "relError": 5.536448598130841
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.1484375,
+                      "actual": -27.3203125,
+                      "absError": 27.171875,
+                      "relError": 183.05263157894737
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.6015625,
+                      "actual": -27.3203125,
+                      "absError": 19.71875,
+                      "relError": 2.5940390544707093
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.9375,
+                      "actual": -27.3203125,
+                      "absError": 26.3828125,
+                      "relError": 28.141666666666666
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -1.71875,
+                      "actual": -27.3203125,
+                      "absError": 25.6015625,
+                      "relError": 14.895454545454545
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4765625,
+                      "actual": -27.3203125,
+                      "absError": 23.84375,
+                      "relError": 6.858426966292135
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": -8,
+                      "actual": -27.3203125,
+                      "absError": 19.3203125,
+                      "relError": 2.4150390625
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.3984375,
+                      "actual": -27.3203125,
+                      "absError": 19.921875,
+                      "relError": 2.692713833157339
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.0546875,
+                      "actual": -27.3203125,
+                      "absError": 18.265625,
+                      "relError": 2.0172562553925797
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.4921875,
+                      "actual": -27.3203125,
+                      "absError": 11.828125,
+                      "relError": 0.7634896621280888
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.859375,
+                      "actual": -27.3203125,
+                      "absError": 19.4609375,
+                      "relError": 2.4761431411530817
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.59375,
+                      "actual": -27.3203125,
+                      "absError": 17.7265625,
+                      "relError": 1.8477198697068404
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f3a484e15dda312e8cafb9de460a80a7a0327ace8e2e427e1e010661cd0a2122"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 11.05749999999989
+          }
+        ],
+        "passed": false,
+        "verifierMs": 11.118458000000146
+      },
+      "tokenCount": 45,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1512.8007500000003,
+        "gain_ms": 1.698500000000422,
+        "setup_other_ms": 0.6349999999983993,
+        "setup_cleanup_ms": 0.133084000000963,
+        "base_restore_ms": 2.3707500000000437,
+        "reprefill_ms": 0,
+        "decode_ms": 2580.8046669999985,
+        "decode_tokens": 45,
+        "verifier_ms": 0,
+        "end_to_end_ms": 4103.183709000001,
+        "peak_allocated_bytes": 2380488152,
+        "buffer_pool_peak_bytes": 2260239104,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.12670799999978044,
+        "input_contract_ms": 3.1448749999999563,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 2584.7715000000007,
+      "gainHash": "c8342df12656ed7056a6a65335cfd936eb4acb751b6994fbd47c03d06a513509"
+    },
+    {
+      "id": "positive/permuted_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += left_values[i];\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "4b46631c368cdb34d131f77ad598965bb32d2d8ec047cc777a7f61c218fe12a3"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "82970dfe5245452b5bc688ec7265ec6934938ec92f217bd21fbc2bcdbcea9297",
+            "dispatchedSourceSha256": "16f9aef53c95f9e128b754038a61ac48660592601aae85922b5815fe666f3a43",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": true,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": true,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 0,
+                  "maxAbsError": 0,
+                  "maxRelError": 0,
+                  "mismatches": []
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4c58d423e15ce5db4a0b88887da2dde224accbc4fd1e6b358317d72c63f18ae7"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 3,
+                  "maxAbsError": 4,
+                  "maxRelError": 3,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 2,
+                      "absError": 3,
+                      "relError": 3
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4302e82501e146814bcb0014a559e4186afd1db432d57748b9cb6fd1bf3af838"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 6,
+                  "maxAbsError": 8.8046875,
+                  "maxRelError": 32.5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -6.8046875,
+                      "absError": 5.8046875,
+                      "relError": 5.8046875
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -6.8046875,
+                      "absError": 8.8046875,
+                      "relError": 4.40234375
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.203125,
+                      "actual": -6.8046875,
+                      "absError": 6.6015625,
+                      "relError": 32.5
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.9765625,
+                      "actual": -6.8046875,
+                      "absError": 0.171875,
+                      "relError": 0.02463605823068309
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "e86eafd50107e2e829e7cf23a041fbaa4b50caf58483fd816ca8acbc0ec33d1c"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 32,
+                  "maxAbsError": 29.3203125,
+                  "maxRelError": 183.05263157894737,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -27.3203125,
+                      "absError": 26.3203125,
+                      "relError": 26.3203125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -27.3203125,
+                      "absError": 29.3203125,
+                      "relError": 14.66015625
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.1796875,
+                      "actual": -27.3203125,
+                      "absError": 23.140625,
+                      "relError": 5.536448598130841
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.1484375,
+                      "actual": -27.3203125,
+                      "absError": 27.171875,
+                      "relError": 183.05263157894737
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.6015625,
+                      "actual": -27.3203125,
+                      "absError": 19.71875,
+                      "relError": 2.5940390544707093
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.9375,
+                      "actual": -27.3203125,
+                      "absError": 26.3828125,
+                      "relError": 28.141666666666666
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -1.71875,
+                      "actual": -27.3203125,
+                      "absError": 25.6015625,
+                      "relError": 14.895454545454545
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4765625,
+                      "actual": -27.3203125,
+                      "absError": 23.84375,
+                      "relError": 6.858426966292135
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": -8,
+                      "actual": -27.3203125,
+                      "absError": 19.3203125,
+                      "relError": 2.4150390625
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.3984375,
+                      "actual": -27.3203125,
+                      "absError": 19.921875,
+                      "relError": 2.692713833157339
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.0546875,
+                      "actual": -27.3203125,
+                      "absError": 18.265625,
+                      "relError": 2.0172562553925797
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.4921875,
+                      "actual": -27.3203125,
+                      "absError": 11.828125,
+                      "relError": 0.7634896621280888
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.859375,
+                      "actual": -27.3203125,
+                      "absError": 19.4609375,
+                      "relError": 2.4761431411530817
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.59375,
+                      "actual": -27.3203125,
+                      "absError": 17.7265625,
+                      "relError": 1.8477198697068404
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f3a484e15dda312e8cafb9de460a80a7a0327ace8e2e427e1e010661cd0a2122"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 10.613833000000113
+          }
+        ],
+        "passed": false,
+        "verifierMs": 10.672374999999874
+      },
+      "tokenCount": 45,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1512.8007500000003,
+        "gain_ms": 39.33720800000083,
+        "setup_other_ms": 0.6349999999983993,
+        "setup_cleanup_ms": 0.133084000000963,
+        "base_restore_ms": 2.0505000000011933,
+        "reprefill_ms": 0,
+        "decode_ms": 2546.0074160000004,
+        "decode_tokens": 45,
+        "verifier_ms": 0,
+        "end_to_end_ms": 4104.848792000001,
+        "peak_allocated_bytes": 2380488152,
+        "buffer_pool_peak_bytes": 2260239104,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.12470799999937299,
+        "input_contract_ms": 3.1448749999999563,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 2548.797875,
+      "gainHash": "19bdcf4d417ffbbe0d6b5a5fb426b01d09f771645b329086aa1a2c4d5f8f8e50"
+    },
+    {
+      "id": "positive/random_z",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += left_values[i];\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "4b46631c368cdb34d131f77ad598965bb32d2d8ec047cc777a7f61c218fe12a3"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "82970dfe5245452b5bc688ec7265ec6934938ec92f217bd21fbc2bcdbcea9297",
+            "dispatchedSourceSha256": "16f9aef53c95f9e128b754038a61ac48660592601aae85922b5815fe666f3a43",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": true,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": true,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 0,
+                  "maxAbsError": 0,
+                  "maxRelError": 0,
+                  "mismatches": []
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4c58d423e15ce5db4a0b88887da2dde224accbc4fd1e6b358317d72c63f18ae7"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 3,
+                  "maxAbsError": 4,
+                  "maxRelError": 3,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 2,
+                      "absError": 3,
+                      "relError": 3
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4302e82501e146814bcb0014a559e4186afd1db432d57748b9cb6fd1bf3af838"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 6,
+                  "maxAbsError": 8.8046875,
+                  "maxRelError": 32.5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -6.8046875,
+                      "absError": 5.8046875,
+                      "relError": 5.8046875
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -6.8046875,
+                      "absError": 8.8046875,
+                      "relError": 4.40234375
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.203125,
+                      "actual": -6.8046875,
+                      "absError": 6.6015625,
+                      "relError": 32.5
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.9765625,
+                      "actual": -6.8046875,
+                      "absError": 0.171875,
+                      "relError": 0.02463605823068309
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "e86eafd50107e2e829e7cf23a041fbaa4b50caf58483fd816ca8acbc0ec33d1c"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 32,
+                  "maxAbsError": 29.3203125,
+                  "maxRelError": 183.05263157894737,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -27.3203125,
+                      "absError": 26.3203125,
+                      "relError": 26.3203125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -27.3203125,
+                      "absError": 29.3203125,
+                      "relError": 14.66015625
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.1796875,
+                      "actual": -27.3203125,
+                      "absError": 23.140625,
+                      "relError": 5.536448598130841
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.1484375,
+                      "actual": -27.3203125,
+                      "absError": 27.171875,
+                      "relError": 183.05263157894737
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.6015625,
+                      "actual": -27.3203125,
+                      "absError": 19.71875,
+                      "relError": 2.5940390544707093
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.9375,
+                      "actual": -27.3203125,
+                      "absError": 26.3828125,
+                      "relError": 28.141666666666666
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -1.71875,
+                      "actual": -27.3203125,
+                      "absError": 25.6015625,
+                      "relError": 14.895454545454545
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4765625,
+                      "actual": -27.3203125,
+                      "absError": 23.84375,
+                      "relError": 6.858426966292135
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": -8,
+                      "actual": -27.3203125,
+                      "absError": 19.3203125,
+                      "relError": 2.4150390625
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.3984375,
+                      "actual": -27.3203125,
+                      "absError": 19.921875,
+                      "relError": 2.692713833157339
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.0546875,
+                      "actual": -27.3203125,
+                      "absError": 18.265625,
+                      "relError": 2.0172562553925797
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.4921875,
+                      "actual": -27.3203125,
+                      "absError": 11.828125,
+                      "relError": 0.7634896621280888
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.859375,
+                      "actual": -27.3203125,
+                      "absError": 19.4609375,
+                      "relError": 2.4761431411530817
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.59375,
+                      "actual": -27.3203125,
+                      "absError": 17.7265625,
+                      "relError": 1.8477198697068404
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f3a484e15dda312e8cafb9de460a80a7a0327ace8e2e427e1e010661cd0a2122"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 10.382082999999966
+          }
+        ],
+        "passed": false,
+        "verifierMs": 10.439041999999972
+      },
+      "tokenCount": 45,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1512.8007500000003,
+        "gain_ms": 14.837790999999925,
+        "setup_other_ms": 0.6349999999983993,
+        "setup_cleanup_ms": 0.133084000000963,
+        "base_restore_ms": 1.8303329999980633,
+        "reprefill_ms": 0,
+        "decode_ms": 2557.147499999999,
+        "decode_tokens": 45,
+        "verifier_ms": 0,
+        "end_to_end_ms": 4091.2596670000003,
+        "peak_allocated_bytes": 2380488152,
+        "buffer_pool_peak_bytes": 2260239104,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.1220419999990554,
+        "input_contract_ms": 3.1448749999999563,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 2559.7081670000007,
+      "gainHash": "9b96224f0ec220fa73db11d2737f2b97c9ee18286bdc9fd7168f2a2aa5d74e77"
+    },
+    {
+      "id": "positive/shuffled_context",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += left_values[i];\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "4b46631c368cdb34d131f77ad598965bb32d2d8ec047cc777a7f61c218fe12a3"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "82970dfe5245452b5bc688ec7265ec6934938ec92f217bd21fbc2bcdbcea9297",
+            "dispatchedSourceSha256": "16f9aef53c95f9e128b754038a61ac48660592601aae85922b5815fe666f3a43",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": true,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": true,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 0,
+                  "maxAbsError": 0,
+                  "maxRelError": 0,
+                  "mismatches": []
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4c58d423e15ce5db4a0b88887da2dde224accbc4fd1e6b358317d72c63f18ae7"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 3,
+                  "maxAbsError": 4,
+                  "maxRelError": 3,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 2,
+                      "absError": 3,
+                      "relError": 3
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4302e82501e146814bcb0014a559e4186afd1db432d57748b9cb6fd1bf3af838"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 6,
+                  "maxAbsError": 8.8046875,
+                  "maxRelError": 32.5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -6.8046875,
+                      "absError": 5.8046875,
+                      "relError": 5.8046875
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -6.8046875,
+                      "absError": 8.8046875,
+                      "relError": 4.40234375
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.203125,
+                      "actual": -6.8046875,
+                      "absError": 6.6015625,
+                      "relError": 32.5
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.9765625,
+                      "actual": -6.8046875,
+                      "absError": 0.171875,
+                      "relError": 0.02463605823068309
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "e86eafd50107e2e829e7cf23a041fbaa4b50caf58483fd816ca8acbc0ec33d1c"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 32,
+                  "maxAbsError": 29.3203125,
+                  "maxRelError": 183.05263157894737,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -27.3203125,
+                      "absError": 26.3203125,
+                      "relError": 26.3203125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -27.3203125,
+                      "absError": 29.3203125,
+                      "relError": 14.66015625
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.1796875,
+                      "actual": -27.3203125,
+                      "absError": 23.140625,
+                      "relError": 5.536448598130841
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.1484375,
+                      "actual": -27.3203125,
+                      "absError": 27.171875,
+                      "relError": 183.05263157894737
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.6015625,
+                      "actual": -27.3203125,
+                      "absError": 19.71875,
+                      "relError": 2.5940390544707093
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.9375,
+                      "actual": -27.3203125,
+                      "absError": 26.3828125,
+                      "relError": 28.141666666666666
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -1.71875,
+                      "actual": -27.3203125,
+                      "absError": 25.6015625,
+                      "relError": 14.895454545454545
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4765625,
+                      "actual": -27.3203125,
+                      "absError": 23.84375,
+                      "relError": 6.858426966292135
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": -8,
+                      "actual": -27.3203125,
+                      "absError": 19.3203125,
+                      "relError": 2.4150390625
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.3984375,
+                      "actual": -27.3203125,
+                      "absError": 19.921875,
+                      "relError": 2.692713833157339
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.0546875,
+                      "actual": -27.3203125,
+                      "absError": 18.265625,
+                      "relError": 2.0172562553925797
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.4921875,
+                      "actual": -27.3203125,
+                      "absError": 11.828125,
+                      "relError": 0.7634896621280888
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.859375,
+                      "actual": -27.3203125,
+                      "absError": 19.4609375,
+                      "relError": 2.4761431411530817
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.59375,
+                      "actual": -27.3203125,
+                      "absError": 17.7265625,
+                      "relError": 1.8477198697068404
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f3a484e15dda312e8cafb9de460a80a7a0327ace8e2e427e1e010661cd0a2122"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 10.059292000000141
+          }
+        ],
+        "passed": false,
+        "verifierMs": 10.110500000000002
+      },
+      "tokenCount": 45,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 2979.379499999999,
+        "gain_ms": 1.6609580000003916,
+        "setup_other_ms": 0.6349999999983993,
+        "setup_cleanup_ms": 0.133084000000963,
+        "base_restore_ms": 1.7921660000029078,
+        "reprefill_ms": 0,
+        "decode_ms": 2522.728082999998,
+        "decode_tokens": 45,
+        "verifier_ms": 0,
+        "end_to_end_ms": 5510.322666999999,
+        "peak_allocated_bytes": 2380488152,
+        "buffer_pool_peak_bytes": 2260239104,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.11254199999893899,
+        "input_contract_ms": 3.1448749999999563,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 2525.3692499999997,
+      "gainHash": "f5d823a40f8cd280556344e5e9cb23b19aa6e5d1d2f959565e853ac4949739b0"
+    },
+    {
+      "id": "negative/channel_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += left_values[i];\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "4b46631c368cdb34d131f77ad598965bb32d2d8ec047cc777a7f61c218fe12a3"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "82970dfe5245452b5bc688ec7265ec6934938ec92f217bd21fbc2bcdbcea9297",
+            "dispatchedSourceSha256": "16f9aef53c95f9e128b754038a61ac48660592601aae85922b5815fe666f3a43",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": true,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": true,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 0,
+                  "maxAbsError": 0,
+                  "maxRelError": 0,
+                  "mismatches": []
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4c58d423e15ce5db4a0b88887da2dde224accbc4fd1e6b358317d72c63f18ae7"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 3,
+                  "maxAbsError": 4,
+                  "maxRelError": 3,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 2,
+                      "absError": 3,
+                      "relError": 3
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4302e82501e146814bcb0014a559e4186afd1db432d57748b9cb6fd1bf3af838"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 6,
+                  "maxAbsError": 8.8046875,
+                  "maxRelError": 32.5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -6.8046875,
+                      "absError": 5.8046875,
+                      "relError": 5.8046875
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -6.8046875,
+                      "absError": 8.8046875,
+                      "relError": 4.40234375
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.203125,
+                      "actual": -6.8046875,
+                      "absError": 6.6015625,
+                      "relError": 32.5
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.9765625,
+                      "actual": -6.8046875,
+                      "absError": 0.171875,
+                      "relError": 0.02463605823068309
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "e86eafd50107e2e829e7cf23a041fbaa4b50caf58483fd816ca8acbc0ec33d1c"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 32,
+                  "maxAbsError": 29.3203125,
+                  "maxRelError": 183.05263157894737,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -27.3203125,
+                      "absError": 26.3203125,
+                      "relError": 26.3203125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -27.3203125,
+                      "absError": 29.3203125,
+                      "relError": 14.66015625
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.1796875,
+                      "actual": -27.3203125,
+                      "absError": 23.140625,
+                      "relError": 5.536448598130841
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.1484375,
+                      "actual": -27.3203125,
+                      "absError": 27.171875,
+                      "relError": 183.05263157894737
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.6015625,
+                      "actual": -27.3203125,
+                      "absError": 19.71875,
+                      "relError": 2.5940390544707093
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.9375,
+                      "actual": -27.3203125,
+                      "absError": 26.3828125,
+                      "relError": 28.141666666666666
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -1.71875,
+                      "actual": -27.3203125,
+                      "absError": 25.6015625,
+                      "relError": 14.895454545454545
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4765625,
+                      "actual": -27.3203125,
+                      "absError": 23.84375,
+                      "relError": 6.858426966292135
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": -8,
+                      "actual": -27.3203125,
+                      "absError": 19.3203125,
+                      "relError": 2.4150390625
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.3984375,
+                      "actual": -27.3203125,
+                      "absError": 19.921875,
+                      "relError": 2.692713833157339
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.0546875,
+                      "actual": -27.3203125,
+                      "absError": 18.265625,
+                      "relError": 2.0172562553925797
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.4921875,
+                      "actual": -27.3203125,
+                      "absError": 11.828125,
+                      "relError": 0.7634896621280888
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.859375,
+                      "actual": -27.3203125,
+                      "absError": 19.4609375,
+                      "relError": 2.4761431411530817
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.59375,
+                      "actual": -27.3203125,
+                      "absError": 17.7265625,
+                      "relError": 1.8477198697068404
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f3a484e15dda312e8cafb9de460a80a7a0327ace8e2e427e1e010661cd0a2122"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 10.193708000000015
+          }
+        ],
+        "passed": false,
+        "verifierMs": 10.245750000000044
+      },
+      "tokenCount": 45,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1494.1417079999992,
+        "gain_ms": 1.4612080000006245,
+        "setup_other_ms": 0.4553760000017064,
+        "setup_cleanup_ms": 0.11600000000180444,
+        "base_restore_ms": 2.1173329999983252,
+        "reprefill_ms": 0,
+        "decode_ms": 2564.694000000003,
+        "decode_tokens": 45,
+        "verifier_ms": 0,
+        "end_to_end_ms": 4067.669084000003,
+        "peak_allocated_bytes": 2380488168,
+        "buffer_pool_peak_bytes": 2260239104,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.112833999999566,
+        "input_contract_ms": 3.1448749999999563,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 2568.3499169999996,
+      "gainHash": "8b17348a12ed271b0073bc265d951d27b727f394c0856a767296950f8cb7d740"
+    },
+    {
+      "id": "negative/permuted_gain",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += left_values[i];\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "4b46631c368cdb34d131f77ad598965bb32d2d8ec047cc777a7f61c218fe12a3"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "82970dfe5245452b5bc688ec7265ec6934938ec92f217bd21fbc2bcdbcea9297",
+            "dispatchedSourceSha256": "16f9aef53c95f9e128b754038a61ac48660592601aae85922b5815fe666f3a43",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": true,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": true,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 0,
+                  "maxAbsError": 0,
+                  "maxRelError": 0,
+                  "mismatches": []
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4c58d423e15ce5db4a0b88887da2dde224accbc4fd1e6b358317d72c63f18ae7"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 3,
+                  "maxAbsError": 4,
+                  "maxRelError": 3,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 2,
+                      "absError": 3,
+                      "relError": 3
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4302e82501e146814bcb0014a559e4186afd1db432d57748b9cb6fd1bf3af838"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 6,
+                  "maxAbsError": 8.8046875,
+                  "maxRelError": 32.5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -6.8046875,
+                      "absError": 5.8046875,
+                      "relError": 5.8046875
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -6.8046875,
+                      "absError": 8.8046875,
+                      "relError": 4.40234375
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.203125,
+                      "actual": -6.8046875,
+                      "absError": 6.6015625,
+                      "relError": 32.5
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.9765625,
+                      "actual": -6.8046875,
+                      "absError": 0.171875,
+                      "relError": 0.02463605823068309
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "e86eafd50107e2e829e7cf23a041fbaa4b50caf58483fd816ca8acbc0ec33d1c"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 32,
+                  "maxAbsError": 29.3203125,
+                  "maxRelError": 183.05263157894737,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -27.3203125,
+                      "absError": 26.3203125,
+                      "relError": 26.3203125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -27.3203125,
+                      "absError": 29.3203125,
+                      "relError": 14.66015625
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.1796875,
+                      "actual": -27.3203125,
+                      "absError": 23.140625,
+                      "relError": 5.536448598130841
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.1484375,
+                      "actual": -27.3203125,
+                      "absError": 27.171875,
+                      "relError": 183.05263157894737
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.6015625,
+                      "actual": -27.3203125,
+                      "absError": 19.71875,
+                      "relError": 2.5940390544707093
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.9375,
+                      "actual": -27.3203125,
+                      "absError": 26.3828125,
+                      "relError": 28.141666666666666
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -1.71875,
+                      "actual": -27.3203125,
+                      "absError": 25.6015625,
+                      "relError": 14.895454545454545
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4765625,
+                      "actual": -27.3203125,
+                      "absError": 23.84375,
+                      "relError": 6.858426966292135
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": -8,
+                      "actual": -27.3203125,
+                      "absError": 19.3203125,
+                      "relError": 2.4150390625
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.3984375,
+                      "actual": -27.3203125,
+                      "absError": 19.921875,
+                      "relError": 2.692713833157339
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.0546875,
+                      "actual": -27.3203125,
+                      "absError": 18.265625,
+                      "relError": 2.0172562553925797
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.4921875,
+                      "actual": -27.3203125,
+                      "absError": 11.828125,
+                      "relError": 0.7634896621280888
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.859375,
+                      "actual": -27.3203125,
+                      "absError": 19.4609375,
+                      "relError": 2.4761431411530817
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.59375,
+                      "actual": -27.3203125,
+                      "absError": 17.7265625,
+                      "relError": 1.8477198697068404
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f3a484e15dda312e8cafb9de460a80a7a0327ace8e2e427e1e010661cd0a2122"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 10.924250000000029
+          }
+        ],
+        "passed": false,
+        "verifierMs": 10.980041999999912
+      },
+      "tokenCount": 45,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1494.1417079999992,
+        "gain_ms": 14.382458000000042,
+        "setup_other_ms": 0.4553760000017064,
+        "setup_cleanup_ms": 0.11600000000180444,
+        "base_restore_ms": 1.9231669999971928,
+        "reprefill_ms": 0,
+        "decode_ms": 2578.385999999995,
+        "decode_tokens": 45,
+        "verifier_ms": 0,
+        "end_to_end_ms": 4093.4025420000016,
+        "peak_allocated_bytes": 2380488168,
+        "buffer_pool_peak_bytes": 2260239104,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.1105840000018361,
+        "input_contract_ms": 3.1448749999999563,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 2581.162124999999,
+      "gainHash": "1e03eb4aabfb0506e9bd33bc03dcf3e335ec471a92881c5bb3db250541035413"
+    },
+    {
+      "id": "negative/random_z",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += left_values[i];\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "4b46631c368cdb34d131f77ad598965bb32d2d8ec047cc777a7f61c218fe12a3"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "82970dfe5245452b5bc688ec7265ec6934938ec92f217bd21fbc2bcdbcea9297",
+            "dispatchedSourceSha256": "16f9aef53c95f9e128b754038a61ac48660592601aae85922b5815fe666f3a43",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": true,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": true,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 0,
+                  "maxAbsError": 0,
+                  "maxRelError": 0,
+                  "mismatches": []
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4c58d423e15ce5db4a0b88887da2dde224accbc4fd1e6b358317d72c63f18ae7"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 3,
+                  "maxAbsError": 4,
+                  "maxRelError": 3,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 2,
+                      "absError": 3,
+                      "relError": 3
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4302e82501e146814bcb0014a559e4186afd1db432d57748b9cb6fd1bf3af838"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 6,
+                  "maxAbsError": 8.8046875,
+                  "maxRelError": 32.5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -6.8046875,
+                      "absError": 5.8046875,
+                      "relError": 5.8046875
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -6.8046875,
+                      "absError": 8.8046875,
+                      "relError": 4.40234375
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.203125,
+                      "actual": -6.8046875,
+                      "absError": 6.6015625,
+                      "relError": 32.5
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.9765625,
+                      "actual": -6.8046875,
+                      "absError": 0.171875,
+                      "relError": 0.02463605823068309
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "e86eafd50107e2e829e7cf23a041fbaa4b50caf58483fd816ca8acbc0ec33d1c"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 32,
+                  "maxAbsError": 29.3203125,
+                  "maxRelError": 183.05263157894737,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -27.3203125,
+                      "absError": 26.3203125,
+                      "relError": 26.3203125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -27.3203125,
+                      "absError": 29.3203125,
+                      "relError": 14.66015625
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.1796875,
+                      "actual": -27.3203125,
+                      "absError": 23.140625,
+                      "relError": 5.536448598130841
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.1484375,
+                      "actual": -27.3203125,
+                      "absError": 27.171875,
+                      "relError": 183.05263157894737
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.6015625,
+                      "actual": -27.3203125,
+                      "absError": 19.71875,
+                      "relError": 2.5940390544707093
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.9375,
+                      "actual": -27.3203125,
+                      "absError": 26.3828125,
+                      "relError": 28.141666666666666
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -1.71875,
+                      "actual": -27.3203125,
+                      "absError": 25.6015625,
+                      "relError": 14.895454545454545
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4765625,
+                      "actual": -27.3203125,
+                      "absError": 23.84375,
+                      "relError": 6.858426966292135
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": -8,
+                      "actual": -27.3203125,
+                      "absError": 19.3203125,
+                      "relError": 2.4150390625
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.3984375,
+                      "actual": -27.3203125,
+                      "absError": 19.921875,
+                      "relError": 2.692713833157339
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.0546875,
+                      "actual": -27.3203125,
+                      "absError": 18.265625,
+                      "relError": 2.0172562553925797
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.4921875,
+                      "actual": -27.3203125,
+                      "absError": 11.828125,
+                      "relError": 0.7634896621280888
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.859375,
+                      "actual": -27.3203125,
+                      "absError": 19.4609375,
+                      "relError": 2.4761431411530817
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.59375,
+                      "actual": -27.3203125,
+                      "absError": 17.7265625,
+                      "relError": 1.8477198697068404
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f3a484e15dda312e8cafb9de460a80a7a0327ace8e2e427e1e010661cd0a2122"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 9.894375000000082
+          }
+        ],
+        "passed": false,
+        "verifierMs": 9.94354199999998
+      },
+      "tokenCount": 45,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 1494.1417079999992,
+        "gain_ms": 12.938208000003215,
+        "setup_other_ms": 0.4553760000017064,
+        "setup_cleanup_ms": 0.11600000000180444,
+        "base_restore_ms": 2.449791000006371,
+        "reprefill_ms": 0,
+        "decode_ms": 2553.903416999994,
+        "decode_tokens": 45,
+        "verifier_ms": 0,
+        "end_to_end_ms": 4068.0138760000027,
+        "peak_allocated_bytes": 2380488168,
+        "buffer_pool_peak_bytes": 2260239104,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.11716700000397395,
+        "input_contract_ms": 3.1448749999999563,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 2557.217708999997,
+      "gainHash": "60fde6864c8e6c3abf92d02493328ea4fb6c6ff9b6a4b8354b011ecfd3b3697f"
+    },
+    {
+      "id": "negative/shuffled_context",
+      "compositionAccepted": true,
+      "composedSource": "override WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  var value: f32 = 0.0;\nfor (var i = 0u; i < params.length; i += 1u) {\n  value += left_values[i];\n}\n  output_values[params.output_offset + i] = value;\n}\n",
+      "verification": {
+        "schema": "gamma.channel-gain-shader-verification/v1",
+        "scope": "public",
+        "referenceQualification": false,
+        "confirmationEvaluated": false,
+        "deviceInfo": {
+          "vendor": "apple",
+          "architecture": "metal-3",
+          "device": null,
+          "description": null,
+          "availableFeatures": [
+            "bgra8unorm-storage",
+            "chromium-experimental-subgroup-matrix",
+            "clip-distances",
+            "core-features-and-limits",
+            "depth-clip-control",
+            "depth32float-stencil8",
+            "dual-source-blending",
+            "float32-blendable",
+            "float32-filterable",
+            "indirect-first-instance",
+            "primitive-index",
+            "rg11b10ufloat-renderable",
+            "shader-f16",
+            "subgroups",
+            "texture-component-swizzle",
+            "texture-compression-astc",
+            "texture-compression-astc-sliced-3d",
+            "texture-compression-bc",
+            "texture-compression-bc-sliced-3d",
+            "texture-compression-etc2",
+            "texture-formats-tier1",
+            "texture-formats-tier2",
+            "timestamp-query"
+          ],
+          "requiredFeatures": []
+        },
+        "provenance": {
+          "sourceHashes": {
+            "campaign/tools/lib/wgsl-writer-semantic-harness.js": "ee2dccc74890c1caa0bc0c05c3d25cc9a05839ff71cca6ffc3e400f8df88b110",
+            "campaign/tools/lib/wgsl-semantic-harness.js": "99f0022f23fa189271c8d5ebcbd28c5eaa51c711e5a6d7f8a04e02bec3fc28ef",
+            "campaign/tools/lib/wgsl-browser-verifier.js": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "campaign/src/tooling/wgsl-repair-semantic-gate.js": "811aa6b0248105c32137e2e4fbef0e3e7e5e9693287aae40e6fd8c9e24f83e92",
+            "doppler/src/formats/sha256.js": "affb628ccb76ccef69fec0602779a2f19509030b60197750ead7ef7f6475eabe",
+            "doppler/src/formats/plain-object.js": "2d966f313816b1dfed810fd83bdabf3b38360ead2e926763ceadb6c3df81caf8",
+            "doppler/src/formats/stable-sort-object.js": "2318fb1b8fd8930544459f330827ac71e14c06b14bc47c16dce7a7f9c14fd8d9",
+            "doppler/src/experimental/training/wgsl-repair.js": "0c1ebc3b0bcc609575ee726b4a4d6e0cc9da271f6ea37a0a6563c359a49d90d8"
+          },
+          "compatibilityAliases": {
+            "src/utils/sha256.js": "doppler/src/formats/sha256.js"
+          },
+          "sharedNamespaceTouched": false,
+          "layoutRepair": {
+            "schema": "gamma.channel-gain-contract-layout-repair/v1",
+            "originalSourceSha256": "18a6107812f373fd5551defffce9fa52da5193693c0676d786f463a7ab61dadd",
+            "patchModuleSha256": "74436c5f1c2e7e459fac5c47bc0494ec1d708dd470348281069f57eaff32725b",
+            "effectiveSourceSha256": "395c0219933e99c8789e353e4397582ab91d04c4c9f564dc53392c883ce84668",
+            "change": "Explicit group0 compute-stage buffer layout from frozen request binding/kind contract; compile/oracle/tolerance/dispatch/canary logic unchanged",
+            "historicalSourceModified": false
+          }
+        },
+        "inputHashes": {
+          "rows": "8c8c350b35e99e04f6ab752cc6e6b0528bb7ca9c066e5b06278b820117afdd5a",
+          "checks": "a5cd4e47bbd5fae60cbfcd745c0c45548d1e44242365a21640606d108055ba53",
+          "sources": "4b46631c368cdb34d131f77ad598965bb32d2d8ec047cc777a7f61c218fe12a3"
+        },
+        "tasks": [
+          {
+            "taskId": "prospective-selection-sequence-prefix-sum",
+            "sourceSha256": "82970dfe5245452b5bc688ec7265ec6934938ec92f217bd21fbc2bcdbcea9297",
+            "dispatchedSourceSha256": "16f9aef53c95f9e128b754038a61ac48660592601aae85922b5815fe666f3a43",
+            "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+            "contractPassed": true,
+            "checks": [
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-1",
+                "visibility": "public",
+                "passed": true,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": true,
+                  "expectedElements": 1,
+                  "actualElements": 1,
+                  "mismatchCount": 0,
+                  "maxAbsError": 0,
+                  "maxRelError": 0,
+                  "mismatches": []
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4c58d423e15ce5db4a0b88887da2dde224accbc4fd1e6b358317d72c63f18ae7"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-4",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 4,
+                  "actualElements": 4,
+                  "mismatchCount": 3,
+                  "maxAbsError": 4,
+                  "maxRelError": 3,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": 2,
+                      "absError": 4,
+                      "relError": 2
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": 2,
+                      "absError": 3,
+                      "relError": 3
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "4302e82501e146814bcb0014a559e4186afd1db432d57748b9cb6fd1bf3af838"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-7",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 7,
+                  "actualElements": 7,
+                  "mismatchCount": 6,
+                  "maxAbsError": 8.8046875,
+                  "maxRelError": 32.5,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -6.8046875,
+                      "absError": 4.8046875,
+                      "relError": 2.40234375
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -6.8046875,
+                      "absError": 5.8046875,
+                      "relError": 5.8046875
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -6.8046875,
+                      "absError": 8.8046875,
+                      "relError": 4.40234375
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.203125,
+                      "actual": -6.8046875,
+                      "absError": 6.6015625,
+                      "relError": 32.5
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -6.9765625,
+                      "actual": -6.8046875,
+                      "absError": 0.171875,
+                      "relError": 0.02463605823068309
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "e86eafd50107e2e829e7cf23a041fbaa4b50caf58483fd816ca8acbc0ec33d1c"
+              },
+              {
+                "id": "prospective-selection-sequence-prefix-sum/shape-33",
+                "visibility": "public",
+                "passed": false,
+                "dispatchPassed": true,
+                "numeric": {
+                  "pass": false,
+                  "expectedElements": 33,
+                  "actualElements": 33,
+                  "mismatchCount": 32,
+                  "maxAbsError": 29.3203125,
+                  "maxRelError": 183.05263157894737,
+                  "mismatches": [
+                    {
+                      "index": 0,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 1,
+                      "reason": "numeric_mismatch",
+                      "expected": -2,
+                      "actual": -27.3203125,
+                      "absError": 25.3203125,
+                      "relError": 12.66015625
+                    },
+                    {
+                      "index": 2,
+                      "reason": "numeric_mismatch",
+                      "expected": -1,
+                      "actual": -27.3203125,
+                      "absError": 26.3203125,
+                      "relError": 26.3203125
+                    },
+                    {
+                      "index": 3,
+                      "reason": "numeric_mismatch",
+                      "expected": 2,
+                      "actual": -27.3203125,
+                      "absError": 29.3203125,
+                      "relError": 14.66015625
+                    },
+                    {
+                      "index": 4,
+                      "reason": "numeric_mismatch",
+                      "expected": -4.1796875,
+                      "actual": -27.3203125,
+                      "absError": 23.140625,
+                      "relError": 5.536448598130841
+                    },
+                    {
+                      "index": 5,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.1484375,
+                      "actual": -27.3203125,
+                      "absError": 27.171875,
+                      "relError": 183.05263157894737
+                    },
+                    {
+                      "index": 6,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.6015625,
+                      "actual": -27.3203125,
+                      "absError": 19.71875,
+                      "relError": 2.5940390544707093
+                    },
+                    {
+                      "index": 7,
+                      "reason": "numeric_mismatch",
+                      "expected": -0.9375,
+                      "actual": -27.3203125,
+                      "absError": 26.3828125,
+                      "relError": 28.141666666666666
+                    },
+                    {
+                      "index": 8,
+                      "reason": "numeric_mismatch",
+                      "expected": -1.71875,
+                      "actual": -27.3203125,
+                      "absError": 25.6015625,
+                      "relError": 14.895454545454545
+                    },
+                    {
+                      "index": 9,
+                      "reason": "numeric_mismatch",
+                      "expected": -3.4765625,
+                      "actual": -27.3203125,
+                      "absError": 23.84375,
+                      "relError": 6.858426966292135
+                    },
+                    {
+                      "index": 10,
+                      "reason": "numeric_mismatch",
+                      "expected": -8,
+                      "actual": -27.3203125,
+                      "absError": 19.3203125,
+                      "relError": 2.4150390625
+                    },
+                    {
+                      "index": 11,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.3984375,
+                      "actual": -27.3203125,
+                      "absError": 19.921875,
+                      "relError": 2.692713833157339
+                    },
+                    {
+                      "index": 12,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.0546875,
+                      "actual": -27.3203125,
+                      "absError": 18.265625,
+                      "relError": 2.0172562553925797
+                    },
+                    {
+                      "index": 13,
+                      "reason": "numeric_mismatch",
+                      "expected": -15.4921875,
+                      "actual": -27.3203125,
+                      "absError": 11.828125,
+                      "relError": 0.7634896621280888
+                    },
+                    {
+                      "index": 14,
+                      "reason": "numeric_mismatch",
+                      "expected": -7.859375,
+                      "actual": -27.3203125,
+                      "absError": 19.4609375,
+                      "relError": 2.4761431411530817
+                    },
+                    {
+                      "index": 15,
+                      "reason": "numeric_mismatch",
+                      "expected": -9.59375,
+                      "actual": -27.3203125,
+                      "absError": 17.7265625,
+                      "relError": 1.8477198697068404
+                    }
+                  ]
+                },
+                "bounds": {
+                  "outputLengthExact": true,
+                  "prefixCanaryIntact": true,
+                  "tailCanariesIntact": true,
+                  "readOnlyBuffersUnchanged": true
+                },
+                "compilation": {
+                  "passed": true,
+                  "messages": [],
+                  "errorCount": 0
+                },
+                "runtimeErrors": [],
+                "dispatchEvidenceSha256": "f3a484e15dda312e8cafb9de460a80a7a0327ace8e2e427e1e010661cd0a2122"
+              }
+            ],
+            "passed": false,
+            "verifierMs": 10.650667000000112
+          }
+        ],
+        "passed": false,
+        "verifierMs": 10.699749999999995
+      },
+      "tokenCount": 45,
+      "timing": {
+        "reference_prefill_ms": 0,
+        "base_prefill_ms": 2977.1274169999997,
+        "gain_ms": 1.4634590000023309,
+        "setup_other_ms": 0.4553760000017064,
+        "setup_cleanup_ms": 0.11600000000180444,
+        "base_restore_ms": 2.849291999998968,
+        "reprefill_ms": 0,
+        "decode_ms": 2517.624791000002,
+        "decode_tokens": 45,
+        "verifier_ms": 0,
+        "end_to_end_ms": 5503.679543000004,
+        "peak_allocated_bytes": 2380488168,
+        "buffer_pool_peak_bytes": 2260239104,
+        "transform_state_bytes": 65536,
+        "request_cleanup_ms": 0.12141700000211131,
+        "input_contract_ms": 3.1448749999999563,
+        "accounting": "complete native request through owned snapshot disposal/reset plus measured token contract and charged per-condition setup; public verification added by caller; diagnostic/audit persistence excluded"
+      },
+      "physicalRequestMs": 2521.3724159999983,
+      "gainHash": "b570973b11997f20334030153e81142c456c8aca7d8c9466a8b8af82dce34a26"
+    }
+  ]
+}

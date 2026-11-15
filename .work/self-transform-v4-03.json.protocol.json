@@ -1,0 +1,52 @@
+{
+  "protocol": {
+    "schema": "gamma.multigeneration-self-target-training/v4",
+    "classification": "prespecified toy development screen",
+    "replicateSeeds": [
+      61000,
+      71000,
+      81000
+    ],
+    "trainingCandidates": 33,
+    "mutationScale": 0.2,
+    "trainingGenerations": 3,
+    "trainSupportCount": 16,
+    "trainQueryCount": 16,
+    "metaCount": 32,
+    "holdoutCount": 128,
+    "steps": 6,
+    "generations": 3,
+    "initializers": [
+      "task_only",
+      "self_target"
+    ],
+    "arms": [
+      "hereditary",
+      "fixed_proposer",
+      "serialization_only",
+      "spsa"
+    ],
+    "seedOffsets": {
+      "candidate": 1,
+      "trainSupport": 10,
+      "trainQuery": 20,
+      "trainProbe": 30,
+      "meta": 100,
+      "holdout": 200,
+      "probe": 300
+    },
+    "training": "Same initial random vector and mutation draws; 32 greedy bounded uniform mutations per initializer. Every candidate evaluated through three self-generated descendants on fixed training-support/query populations. task_only minimizes parent query loss averaged across three query sets; self_target minimizes mean descendant query loss. Both pay full identical compute; chosen initial artifact is candidate parent.",
+    "budget": "33 candidates per initializer, each charged three full self-target proposal/evaluation unrolls plus parent query evaluation. Fresh evaluation arms each receive eight scalar meta-objective probes per generation, unconditional child adoption.",
+    "evaluation": "Clean-process proposals and scoring; no holdout score affects training or descendants; fixed external scalar oracle and interpreter.",
+    "limits": "An external evolutionary search trains initial parameters. The experiment tests useful heredity, not independence from external optimization or AGI. No retuning or stopping based on results."
+  },
+  "sourceHashes": {
+    "initialization.mjs": "8daf0719c44e4395009996e595dd17f00f5fc24f743d55ea73a292cd628ebdcc",
+    "run.mjs": "280f5e7f808971dac5ed5e8dc551f42f7599186cc9717802cc15b979a9f203f2",
+    "../self_transform_v2/operator.mjs": "7ebb053065b329b4f5c0be891a2af80d3fbbcc0885c5ed20c13ae97584cd81d7",
+    "../self_transform_v2/experiment.mjs": "8afb8b1d25ccd25b1daa9f26d39b78c974c9e8326cbe72e009886a057e3b1691",
+    "../self_transform_v2/run.mjs": "ea51927c8ec6aad71982e3b7ee86373292abc7d1d40e139fb8c9747f910bacc0",
+    "../self_transform_v1/evaluator.mjs": "b0bbe0237519a98ce4d31de5679a65e7d4f95367501ed97a92aa9e6a926fde8e",
+    "../self_transform_v1/operator.mjs": "8f2136f55620373097768c73406c14d1c26d8b6b9c094a71e0fe5dec5aafcb7d"
+  }
+}

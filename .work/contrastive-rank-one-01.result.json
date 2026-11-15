@@ -1,0 +1,56 @@
+{
+  "protocolHash": "7ad3c4bb393bfd064b0cc26b3001b3b1801955a03219822a80a637c96573cd8a",
+  "sourceHashes": {
+    "run.mjs": "3194007e33f82963f308bf5e47866a4ffd18dc5058557ddf068adf5fa251e1d4",
+    "operator.mjs": "b6862638d6c76258bd325bab177cf03ade27dd9952f11c287ca747325a1f87bf",
+    "tasks.mjs": "53e5663ef861657b9588a2da97db45283c06abbbc8c494d97e6641fd97815fef"
+  },
+  "complete": false,
+  "rows": [],
+  "capture": [],
+  "loadMs": 1976.2022499999998,
+  "manifestHash": "a0dc69e917133a82780823d17fc771c0f6b882d7c86c571deeaef45be2ff108b",
+  "inputs": [
+    {
+      "id": "reverse-nest",
+      "tokenHash": "cf87dee0db890c8898c5a6390647dee7d1b426db2e4a6208320ff6871bef284e",
+      "referenceHash": "3eb8c9c14aa6d951090d9e5dbbf4ed8c4d49d81ddba4899ce8b4a222623ffa6e"
+    },
+    {
+      "id": "xor-range",
+      "tokenHash": "b4afb692a4239aa95bbda700e09883887dbba1e25d95d8c2bf0a07bf1ccd4b0e",
+      "referenceHash": "0dc7a44a17acf048e8ef3f43064662b66246fce6b7ab871ed71cf3c44c120054"
+    },
+    {
+      "id": "weighted-sum",
+      "tokenHash": "a4e672bcae7078cd1c073fdb8d62f2099a5b6fa6480d466a260cef3f624fb271",
+      "referenceHash": "ae0c10d8f22e2aaa99ae5b8ff2b2cb512411f0f33c04754b018f0cccad659613"
+    },
+    {
+      "id": "integer-loop",
+      "tokenHash": "b870e7e20af70c1f8fa0f3adb12c24c91eee6c5c2257538896ffe5a907d61d34",
+      "referenceHash": "fa3c8178485a8d8f211ee8a6608193d1f5c2a9204a3089b71879c289d3c49e71"
+    },
+    {
+      "id": "mod-power",
+      "tokenHash": "115f772e3d81aca6626a517a350cca7b75f6cbb91cf4ce44e0c25c5dcce45d68",
+      "referenceHash": "62ab390130365799769b2b147714d4909f5d0bb67d7b6adc2b4b7f5371d77863"
+    },
+    {
+      "id": "carry-state",
+      "tokenHash": "9de7a308c8b13c509698bb7888864ec5a1c1e107e3ae059687e501ba458b5949",
+      "referenceHash": "e08e1470002b412238f953a8a65abea596091655bc66b483baedeb60da2e37a8"
+    },
+    {
+      "id": "array-slice",
+      "tokenHash": "2686e77a6f383332e5dab6640140bdd311195b4518d824c10e61beacfaa60239",
+      "referenceHash": "9a1f21dff6c7024ac7eec8222fd1f66c4495707f98e0c76acb7a92c4080e385e"
+    },
+    {
+      "id": "branch-count",
+      "tokenHash": "b9d62da43bb92fb6b9426aaee58161622b5f1d75999f1a9426445406b52a085c",
+      "referenceHash": "4cca6267bc870e9405e9e5f58c8deaee3a8e2b1ed9d007485b0cf5bf19ebc0c4"
+    }
+  ],
+  "error": "Error: [LmHeadSelect] selected-token LM head requires f16 weights, got \"q4k\".\n    at resolveLmHeadWeight (file:///Users/xyz/deco/doppler/src/gpu/kernels/lm-head-select-logits.js:72:11)\n    at runLmHeadSelectLogitsF16 (file:///Users/xyz/deco/doppler/src/gpu/kernels/lm-head-select-logits.js:147:18)\n    at computeLogits (file:///Users/xyz/deco/doppler/src/inference/pipelines/text/logits/index.js:595:30)\n    at async PipelineGenerator._prefill (file:///Users/xyz/deco/doppler/src/inference/pipelines/text/generator/prefill-runtime.js:822:24)\n    at async PipelineGenerator._prefillPromptToLogits (file:///Users/xyz/deco/doppler/src/inference/pipelines/text/generator/prefill-runtime.js:104:16)\n    at async PipelineGenerator.prefillWithTokenLogits (file:///Users/xyz/deco/doppler/src/inference/pipelines/text/generator/training.js:505:57)\n    at async invoke (file:///Users/xyz/deco/doppler/src/inference/pipelines/shader-scoped-pipeline.js:201:16)\n    at async runWithShaderSourceScope (file:///Users/xyz/deco/doppler/src/gpu/kernels/shader-source-scope.js:93:16)\n    at async runOperation (file:///Users/xyz/deco/doppler/src/inference/pipelines/shader-scoped-pipeline.js:90:12)\n    at async prefill (file:///Users/xyz/deco/gamma/projects/reconfiguration/contrastive_rank_one_v1/run.mjs:40:36)"
+}

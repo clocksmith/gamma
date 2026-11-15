@@ -1,0 +1,50 @@
+{
+  "protocol": {
+    "schema": "gamma.self-target-training/v3",
+    "classification": "prespecified toy development screen",
+    "replicateSeeds": [
+      31000,
+      41000,
+      51000
+    ],
+    "initialCandidates": 32,
+    "trainSupportCount": 32,
+    "trainQueryCount": 32,
+    "metaCount": 32,
+    "holdoutCount": 128,
+    "steps": 6,
+    "generations": 3,
+    "initializers": [
+      "task_only",
+      "self_target"
+    ],
+    "arms": [
+      "hereditary",
+      "fixed_proposer",
+      "serialization_only",
+      "spsa"
+    ],
+    "training": "Identical random candidate pool and full computation for both initializers. task_only minimizes parent training-query loss. self_target minimizes self-produced child's training-query loss. Child proposals see training-support only. Chosen initial artifact is the parent, not child.",
+    "seedOffsets": {
+      "candidate": 1,
+      "trainSupport": 2,
+      "trainQuery": 3,
+      "trainProbe": 4,
+      "meta": 100,
+      "holdout": 200,
+      "probe": 300
+    },
+    "budget": "Same v2 four symmetric probes per update, eight meta-objective calls, unconditional adoption. Every initializer charged the complete shared training candidate evaluation budget; no extra search per arm.",
+    "evaluation": "Clean-process proposals and scoring; all children frozen before holdout scoring; independent fresh holdout per generation shared across initializers and arms.",
+    "limits": "Training objective ablation only, unchanged four-parameter v2 operator. External scalar oracle; no novelty, AGI or autonomous RSI claim. No outcome-based retuning or stopping."
+  },
+  "sourceHashes": {
+    "initialization.mjs": "86c1dd08b01bd1db02e9fd539aced6e9b85ef332c8c190cf5b2f6cc6c58416b3",
+    "run.mjs": "9cdaa1f2394ff172f08c4e913b4a7ffba296b90042918f5252db21885e1e50eb",
+    "../self_transform_v2/operator.mjs": "7ebb053065b329b4f5c0be891a2af80d3fbbcc0885c5ed20c13ae97584cd81d7",
+    "../self_transform_v2/experiment.mjs": "8afb8b1d25ccd25b1daa9f26d39b78c974c9e8326cbe72e009886a057e3b1691",
+    "../self_transform_v2/run.mjs": "ea51927c8ec6aad71982e3b7ee86373292abc7d1d40e139fb8c9747f910bacc0",
+    "../self_transform_v1/evaluator.mjs": "b0bbe0237519a98ce4d31de5679a65e7d4f95367501ed97a92aa9e6a926fde8e",
+    "../self_transform_v1/operator.mjs": "8f2136f55620373097768c73406c14d1c26d8b6b9c094a71e0fe5dec5aafcb7d"
+  }
+}

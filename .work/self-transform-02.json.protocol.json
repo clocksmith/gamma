@@ -1,0 +1,38 @@
+{
+  "protocol": {
+    "schema": "gamma.self-transform-protocol/v1",
+    "classification": "prespecified toy development experiment, not confirmation",
+    "seeds": {
+      "initialization": 1701,
+      "train": 1702,
+      "meta": 1703,
+      "holdout": 1704,
+      "randomControl": 1705
+    },
+    "initialCandidates": 32,
+    "taskCounts": {
+      "train": 32,
+      "meta": 32,
+      "holdout": 128
+    },
+    "taskSteps": 12,
+    "generations": 3,
+    "finiteDifferenceEpsilon": 0.0001,
+    "gradientControlRate": 0.1,
+    "arms": [
+      "unchanged",
+      "self",
+      "gradient",
+      "random"
+    ],
+    "selection": "initialization minimum mean training loss; no later selection or rejection",
+    "freshness": "distinct deterministic seeds per phase and generation, exposed after execution",
+    "budget": "every arm receives the same eight meta-objective evaluations per generation; unused evaluations are explicitly charged waste; random displacement norm matches self displacement from that arm's own parent",
+    "claim": "separate exact reconstruction, self-application, and fresh-target utility; do not infer RSI or AGI"
+  },
+  "sourceHashes": {
+    "operator.mjs": "8f2136f55620373097768c73406c14d1c26d8b6b9c094a71e0fe5dec5aafcb7d",
+    "evaluator.mjs": "b0bbe0237519a98ce4d31de5679a65e7d4f95367501ed97a92aa9e6a926fde8e",
+    "run.mjs": "2915f7775b591baa8cb1e75eeebb3876c28955617992c4b277abf2d0f01dd63c"
+  }
+}

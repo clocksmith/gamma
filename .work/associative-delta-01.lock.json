@@ -1,0 +1,39 @@
+{
+  "protocol": {
+    "schema": "gamma.associative-delta-development/v1",
+    "classification": "CPU synthetic reference qualification, not LLM or shader evidence",
+    "seed": 2026111507,
+    "tasksPerFamily": 32,
+    "families": [
+      "linear-rank-two-shift",
+      "nonlinear-tanh-shift"
+    ],
+    "inputDimension": 8,
+    "outputDimension": 4,
+    "demonstrations": 32,
+    "queries": 64,
+    "demonstrationNoise": 0.05,
+    "rate": 0.5,
+    "epsilon": 1e-09,
+    "ridgeLambda": 0.01,
+    "arms": [
+      "base",
+      "delta",
+      "shuffled-labels",
+      "wrong-task",
+      "norm-matched-random",
+      "ridge"
+    ],
+    "order": "rotate arm order by task index",
+    "cost": "derive and query times separately, logical persistent array bytes; no process or NumPy import time",
+    "confirmation": "none; all generated tasks are development only",
+    "constraint": "No query targets enter update generation. No tuning after results. Base immutable."
+  },
+  "sourceHashes": {
+    "run.py": "2883da64203cf0b2f8010ac69b3e05f22a3a7332ff7b50671b2d21ab47fdec29",
+    "delta.py": "8094d034328ed42f9c7aaef37e03e128e92d1090ee540f5a9e6cce0f40f1e594",
+    "protocol.json": "646b21813f0c319fd01de9447d57b0d4b52dbd719e67440e663a915d9e2734fa"
+  },
+  "python": "3.13.2",
+  "numpy": "2.2.3"
+}

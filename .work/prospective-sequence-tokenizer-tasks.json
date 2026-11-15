@@ -1,0 +1,232 @@
+{
+  "tasks": [
+    {
+      "taskId": "prospective-selection-sequence-prefix-sum",
+      "semanticFamilyId": "sequence-prefix-sum",
+      "populationRole": "selection",
+      "specification": "At index i, return the sum of left_values[0] through left_values[i], inclusive, accumulated in increasing index order.",
+      "interfaceContract": {
+        "entryPoint": "main",
+        "requiredOverrides": [
+          {
+            "name": "WORKGROUP_SIZE",
+            "type": "u32"
+          }
+        ],
+        "bindings": [
+          {
+            "group": 0,
+            "binding": 0,
+            "name": "left_values",
+            "kind": "read_only_storage",
+            "wgslType": "array<f32>"
+          },
+          {
+            "group": 0,
+            "binding": 1,
+            "name": "right_values",
+            "kind": "read_only_storage",
+            "wgslType": "array<f32>"
+          },
+          {
+            "group": 0,
+            "binding": 2,
+            "name": "output_values",
+            "kind": "read_write_storage",
+            "wgslType": "array<f32>"
+          },
+          {
+            "group": 0,
+            "binding": 3,
+            "name": "params",
+            "kind": "uniform",
+            "wgslType": "Params",
+            "fields": [
+              {
+                "name": "length",
+                "type": "u32",
+                "byteOffset": 0
+              },
+              {
+                "name": "output_offset",
+                "type": "u32",
+                "byteOffset": 4
+              },
+              {
+                "name": "first",
+                "type": "f32",
+                "byteOffset": 8
+              },
+              {
+                "name": "second",
+                "type": "f32",
+                "byteOffset": 12
+              }
+            ]
+          }
+        ],
+        "dispatch": "One logical element per global_invocation_id.x. Guard i>=params.length. Store only output_values[params.output_offset+i]. Preserve all input buffers and output padding."
+      },
+      "prompt": "Complete this WGSL shader by replacing REPLACE_BODY with statements defining value. Preserve the interface, bounds guard and output index. Return complete source only, without Markdown.\n<specification>\nAt index i, return the sum of left_values[0] through left_values[i], inclusive, accumulated in increasing index order.\n</specification>\noverride WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  // REPLACE_BODY: define value here\n  output_values[params.output_offset + i] = value;\n}\n",
+      "promptSha256": "acd688c04428bfc5fc9618d0c262220310e7c40330a3522fa794a9e30260ad1a",
+      "instructionSpan": {
+        "start": 202,
+        "end": 320,
+        "textSha256": "34183c7659e48c02ebd690f1628265cc1d49a152629b8cc4f3e1c49f4fe42355"
+      },
+      "exposureStatus": "new development definitions; full historical semantic exposure audit still required"
+    },
+    {
+      "taskId": "prospective-selection-sequence-stable-rank",
+      "semanticFamilyId": "sequence-stable-rank",
+      "populationRole": "selection",
+      "specification": "At index i, return as f32 the number of elements strictly smaller than left_values[i], plus the number of equal elements at indices smaller than i.",
+      "interfaceContract": {
+        "entryPoint": "main",
+        "requiredOverrides": [
+          {
+            "name": "WORKGROUP_SIZE",
+            "type": "u32"
+          }
+        ],
+        "bindings": [
+          {
+            "group": 0,
+            "binding": 0,
+            "name": "left_values",
+            "kind": "read_only_storage",
+            "wgslType": "array<f32>"
+          },
+          {
+            "group": 0,
+            "binding": 1,
+            "name": "right_values",
+            "kind": "read_only_storage",
+            "wgslType": "array<f32>"
+          },
+          {
+            "group": 0,
+            "binding": 2,
+            "name": "output_values",
+            "kind": "read_write_storage",
+            "wgslType": "array<f32>"
+          },
+          {
+            "group": 0,
+            "binding": 3,
+            "name": "params",
+            "kind": "uniform",
+            "wgslType": "Params",
+            "fields": [
+              {
+                "name": "length",
+                "type": "u32",
+                "byteOffset": 0
+              },
+              {
+                "name": "output_offset",
+                "type": "u32",
+                "byteOffset": 4
+              },
+              {
+                "name": "first",
+                "type": "f32",
+                "byteOffset": 8
+              },
+              {
+                "name": "second",
+                "type": "f32",
+                "byteOffset": 12
+              }
+            ]
+          }
+        ],
+        "dispatch": "One logical element per global_invocation_id.x. Guard i>=params.length. Store only output_values[params.output_offset+i]. Preserve all input buffers and output padding."
+      },
+      "prompt": "Complete this WGSL shader by replacing REPLACE_BODY with statements defining value. Preserve the interface, bounds guard and output index. Return complete source only, without Markdown.\n<specification>\nAt index i, return as f32 the number of elements strictly smaller than left_values[i], plus the number of equal elements at indices smaller than i.\n</specification>\noverride WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  // REPLACE_BODY: define value here\n  output_values[params.output_offset + i] = value;\n}\n",
+      "promptSha256": "cb91d9c184218be30646fec61d24f78580d4c454e6b7e53b634f4d9d9db6c267",
+      "instructionSpan": {
+        "start": 202,
+        "end": 349,
+        "textSha256": "a4fdba46d969e619948cc56eda4c0e21d660485289b74fcf636fd092b0c461a2"
+      },
+      "exposureStatus": "new development definitions; full historical semantic exposure audit still required"
+    },
+    {
+      "taskId": "prospective-selection-sequence-periodic-second-difference",
+      "semanticFamilyId": "sequence-periodic-second-difference",
+      "populationRole": "selection",
+      "specification": "At index i, return previous - 2*current + next from left_values, with indices wrapping around the logical length. Evaluate the subtraction first, then the addition.",
+      "interfaceContract": {
+        "entryPoint": "main",
+        "requiredOverrides": [
+          {
+            "name": "WORKGROUP_SIZE",
+            "type": "u32"
+          }
+        ],
+        "bindings": [
+          {
+            "group": 0,
+            "binding": 0,
+            "name": "left_values",
+            "kind": "read_only_storage",
+            "wgslType": "array<f32>"
+          },
+          {
+            "group": 0,
+            "binding": 1,
+            "name": "right_values",
+            "kind": "read_only_storage",
+            "wgslType": "array<f32>"
+          },
+          {
+            "group": 0,
+            "binding": 2,
+            "name": "output_values",
+            "kind": "read_write_storage",
+            "wgslType": "array<f32>"
+          },
+          {
+            "group": 0,
+            "binding": 3,
+            "name": "params",
+            "kind": "uniform",
+            "wgslType": "Params",
+            "fields": [
+              {
+                "name": "length",
+                "type": "u32",
+                "byteOffset": 0
+              },
+              {
+                "name": "output_offset",
+                "type": "u32",
+                "byteOffset": 4
+              },
+              {
+                "name": "first",
+                "type": "f32",
+                "byteOffset": 8
+              },
+              {
+                "name": "second",
+                "type": "f32",
+                "byteOffset": 12
+              }
+            ]
+          }
+        ],
+        "dispatch": "One logical element per global_invocation_id.x. Guard i>=params.length. Store only output_values[params.output_offset+i]. Preserve all input buffers and output padding."
+      },
+      "prompt": "Complete this WGSL shader by replacing REPLACE_BODY with statements defining value. Preserve the interface, bounds guard and output index. Return complete source only, without Markdown.\n<specification>\nAt index i, return previous - 2*current + next from left_values, with indices wrapping around the logical length. Evaluate the subtraction first, then the addition.\n</specification>\noverride WORKGROUP_SIZE: u32 = 32u;\nstruct Params { length: u32, output_offset: u32, first: f32, second: f32 }\n@group(0) @binding(0) var<storage, read> left_values: array<f32>;\n@group(0) @binding(1) var<storage, read> right_values: array<f32>;\n@group(0) @binding(2) var<storage, read_write> output_values: array<f32>;\n@group(0) @binding(3) var<uniform> params: Params;\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n  let i = gid.x;\n  if (i >= params.length) { return; }\n  let x = left_values[i];\n  let y = right_values[i];\n  // REPLACE_BODY: define value here\n  output_values[params.output_offset + i] = value;\n}\n",
+      "promptSha256": "c4815f4ecbe7c4ab32b1459d616cb380948787b9f45fc14d99be427fd093a476",
+      "instructionSpan": {
+        "start": 202,
+        "end": 366,
+        "textSha256": "f179ea64c565e6cff2a4c7ea27c2c6968e13a1bf54ddc00183c14876d8c4aca1"
+      },
+      "exposureStatus": "new development definitions; full historical semantic exposure audit still required"
+    }
+  ]
+}

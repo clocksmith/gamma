@@ -1,0 +1,211 @@
+{
+  "schema": "gamma.same-pass-2b-integration/v1",
+  "classification": "Exploratory body-only-v2 on already exposed prefix-sum task; fixed order, no fresh/held-out or 27B claim; 512-token cap",
+  "createdAt": "2026-11-15T13:24:07.562Z",
+  "manifestSha256": "a0dc69e917133a82780823d17fc771c0f6b882d7c86c571deeaef45be2ff108b",
+  "shardsVerified": 32,
+  "runnerSha256": "8b45e02cacae4973104d5dcc57dbf85e36db973f6884cbec1db2900f842d774a",
+  "config": {
+    "dopplerRoot": "/Users/xyz/deco/doppler",
+    "modelPath": "/Users/xyz/.local/share/reploid/fleet-20261110/qwen2b",
+    "requiredVendor": "apple",
+    "adapterMode": "none",
+    "runtimeConfig": {
+      "inference": {
+        "session": {
+          "prefillTokenChunkSize": null,
+          "useLargeBatchF16F32FusedGateUp": false,
+          "usePreparedDecodeWorkspace": false,
+          "kvcache": {
+            "maxSeqLen": 1024
+          }
+        },
+        "executionPatch": {
+          "addKernels": [
+            {
+              "key": "screen_split_decode",
+              "kernel": {
+                "kernel": "fused_matmul_q4.wgsl",
+                "entry": "main_gemv",
+                "digest": "sha256:9c4d919d5ad5eadd225f34938c47b9c604e8a1fa05ec73c5eccfb882395bd935",
+                "precision": {
+                  "inputDtype": "f32",
+                  "outputDtype": "f32"
+                }
+              }
+            },
+            {
+              "key": "screen_split_prefill",
+              "kernel": {
+                "kernel": "fused_matmul_q4_widetile.wgsl",
+                "entry": "main",
+                "digest": "sha256:d38300e9c30877e2aec62c5064ac8688cedd454146204d6cc1652a083ba0811c",
+                "precision": {
+                  "inputDtype": "f32",
+                  "outputDtype": "f32"
+                }
+              }
+            }
+          ],
+          "set": [
+            {
+              "section": "decode",
+              "op": "gate_proj",
+              "kernelKey": "screen_split_decode"
+            },
+            {
+              "section": "decode",
+              "op": "up_proj",
+              "kernelKey": "screen_split_decode"
+            },
+            {
+              "section": "decode",
+              "op": "down_proj",
+              "kernelKey": "screen_split_decode"
+            },
+            {
+              "section": "prefill",
+              "op": "gate_proj",
+              "kernelKey": "screen_split_prefill"
+            },
+            {
+              "section": "prefill",
+              "op": "up_proj",
+              "kernelKey": "screen_split_prefill"
+            },
+            {
+              "section": "prefill",
+              "op": "down_proj",
+              "kernelKey": "screen_split_prefill"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "protocol": {
+    "candidates": [
+      {
+        "id": "zero",
+        "reference": "same-pass-content-complement/v1",
+        "layers": [
+          22,
+          23
+        ],
+        "beta": 0,
+        "clip": 1,
+        "epsilon": 0.000001
+      },
+      {
+        "id": "positive",
+        "reference": "same-pass-content-complement/v1",
+        "layers": [
+          22,
+          23
+        ],
+        "beta": 0.05,
+        "clip": 1,
+        "epsilon": 0.000001
+      },
+      {
+        "id": "negative",
+        "reference": "same-pass-content-complement/v1",
+        "layers": [
+          22,
+          23
+        ],
+        "beta": -0.05,
+        "clip": 1,
+        "epsilon": 0.000001
+      }
+    ],
+    "generation": {
+      "seed": 47,
+      "maxNewTokens": 512,
+      "temperature": 0,
+      "topP": 1
+    },
+    "controlSeed": 47
+  },
+  "taskId": "prospective-selection-sequence-prefix-sum",
+  "row": {
+    "taskId": "prospective-selection-sequence-prefix-sum",
+    "semanticFamilyId": "sequence-prefix-sum",
+    "populationRole": "selection",
+    "specification": "At index i, return the sum of left_values[0] through left_values[i], inclusive, accumulated in increasing index order.",
+    "interfaceContract": {
+      "entryPoint": "main",
+      "requiredOverrides": [
+        {
+          "name": "WORKGROUP_SIZE",
+          "type": "u32"
+        }
+      ],
+      "bindings": [
+        {
+          "group": 0,
+          "binding": 0,
+          "name": "left_values",
+          "kind": "read_only_storage",
+          "wgslType": "array<f32>"
+        },
+        {
+          "group": 0,
+          "binding": 1,
+          "name": "right_values",
+          "kind": "read_only_storage",
+          "wgslType": "array<f32>"
+        },
+        {
+          "group": 0,
+          "binding": 2,
+          "name": "output_values",
+          "kind": "read_write_storage",
+          "wgslType": "array<f32>"
+        },
+        {
+          "group": 0,
+          "binding": 3,
+          "name": "params",
+          "kind": "uniform",
+          "wgslType": "Params",
+          "fields": [
+            {
+              "name": "length",
+              "type": "u32",
+              "byteOffset": 0
+            },
+            {
+              "name": "output_offset",
+              "type": "u32",
+              "byteOffset": 4
+            },
+            {
+              "name": "first",
+              "type": "f32",
+              "byteOffset": 8
+            },
+            {
+              "name": "second",
+              "type": "f32",
+              "byteOffset": 12
+            }
+          ]
+        }
+      ],
+      "dispatch": "One logical element per global_invocation_id.x. Guard i>=params.length. Store only output_values[params.output_offset+i]. Preserve all input buffers and output padding."
+    },
+    "prompt": "Return only WGSL statements defining a local f32 variable named value. No Markdown, declarations of bindings, entrypoint, or function. Available: i:u32, params.length:u32, x:f32 (left_values[i]), y:f32 (right_values[i]), and left_values:array<f32>. Use loops when needed. Task: At index i, return the sum of left_values[0] through left_values[i], inclusive, accumulated in increasing index order.",
+    "promptSha256": "415073f1acacfb91ce10b5e4f5f2990aeb1a591f732305f889a909f7f63d788e",
+    "instructionSpan": {
+      "start": 278,
+      "end": 396,
+      "textSha256": "34183c7659e48c02ebd690f1628265cc1d49a152629b8cc4f3e1c49f4fe42355"
+    },
+    "exposureStatus": "new development definitions; full historical semantic exposure audit still required"
+  },
+  "composition": "body-only-v2: reject Markdown, @, fn and missing let/var value; substitute exact body into immutable scaffold equally for every arm",
+  "events": [],
+  "coldModelLoadMs": 2173.4956249999996,
+  "error": "Error: Token merges cross a declared span boundary; exact offsets required\n    at tokenContract (file:///Users/xyz/deco/gamma/projects/distillation/wgsl/channel_gain/token_contract.mjs:15:37)\n    at Object.contract (file:///Users/xyz/deco/gamma/projects/reconfiguration/cross_domain_screen/native_runtime_v3.mjs:44:63)\n    at file:///Users/xyz/deco/gamma/.work/same-pass-2b-body-02.mjs:15:196"
+}

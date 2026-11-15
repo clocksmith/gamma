@@ -1,0 +1,1 @@
+{"RUNS": "def compress_runs(items):\n    out = []\n    for value in items:\n        if out and out[-1][0] == value:\n            out[-1][1] += 1\n        else:\n            out.append([value, 1])\n    return out\n", "INTERVALS": "def intersect_intervals(left, right):\n    return sorted([[max(a,c),min(b,d)] for a,b in left for c,d in right if max(a,c)<=min(b,d)])\n"}
