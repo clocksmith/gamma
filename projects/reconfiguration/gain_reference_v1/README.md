@@ -101,9 +101,10 @@ GPU launch or default admission callback.
 scaffolds: inclusive prefix sum, stable rank and periodic second difference.
 The host-side expected values have independent hand-calculated examples, and
 public checks distinguish zero/identity mutations. References have NOT yet been
-compiled/dispatched on a GPU. These newly authored definitions still require a
-full historical semantic exposure audit and actual-tokenizer preflight before
-being called fresh model tasks. No held-out confirmation tasks were created.
+compiled/dispatched on a GPU. The source-hashed `exposure-audit.json` distinguishes their cross-index
+dependencies from all 46 indexed historical elementwise maps. That is not an
+external novelty or unknown-exposure claim. Actual-tokenizer preflight and GPU
+reference qualification remain required before fresh model execution. No held-out confirmation tasks were created.
 The task builder requires the full shared interface contract from the verifier;
 the minimal test fixture is not sufficient for a real model experiment.
 
@@ -111,7 +112,7 @@ Run all local checks:
 
     node --test projects/reconfiguration/gain_reference_v1/test_*.mjs
 
-At this revision, seventeen CPU/mocked-executor tests pass. They are not model
+At this revision, eighteen CPU/mocked-executor tests pass. They are not model
 requests. Next: qualify reference shaders on an admitted GPU, pin model,
 Doppler/runtime and verifier hashes, run exact tokenizer preflight, freeze the
 selection inputs, then invoke the executor through the existing owned runner.
