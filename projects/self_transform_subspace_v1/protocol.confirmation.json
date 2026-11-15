@@ -1,0 +1,102 @@
+{
+  "schema": "gamma.self-transform-subspace.confirmation/v1",
+  "stage": "confirmation",
+  "status": "sealed after Stage 1 selection; single-shot execution on unseen confirmation seeds",
+  "selectedRule": "kronecker_subspace_2mode",
+  "selectionReceiptPath": ".work/subspace-selection-01.json",
+  "selectionReceiptSha256": "70ee54f5df411c5dccf36e1cc21abb2f9575e5983afd738a108dac318d4c4be6",
+  "seeds": [
+    801000,
+    802000,
+    803000,
+    804000,
+    805000,
+    806000,
+    807000,
+    808000,
+    809000,
+    810000,
+    811000,
+    812000
+  ],
+  "families": [
+    "subspace_logistic",
+    "gated_bilinear"
+  ],
+  "blockWidth": 16,
+  "ruleBlocks": 3,
+  "parameterCount": 48,
+  "scalarQueriesPerUpdate": 8,
+  "generations": 3,
+  "metaStepsPerGeneration": 9,
+  "innerSteps": 8,
+  "metaSupportTasks": 6,
+  "holdoutTasksPerGeneration": 64,
+  "preprocessing": {
+    "trainingCandidates": 9,
+    "trainingEnvironments": 2,
+    "trainSupportCount": 4,
+    "trainQueryCount": 4,
+    "trainInnerSteps": 8,
+    "trainMetaSteps": 9,
+    "spsaRates": [
+      0.005,
+      0.015,
+      0.05,
+      0.15,
+      0.4,
+      1.0,
+      2.0,
+      4.0,
+      6.0
+    ],
+    "adamGrid": [
+      [0.02, 0.0],
+      [0.02, 0.5],
+      [0.02, 0.9],
+      [0.15, 0.0],
+      [0.15, 0.5],
+      [0.15, 0.9],
+      [1.0, 0.0],
+      [1.0, 0.5],
+      [1.0, 0.9]
+    ],
+    "bfgsRates": [
+      0.005,
+      0.015,
+      0.05,
+      0.15,
+      0.4,
+      1.0,
+      2.0,
+      4.0,
+      6.0
+    ]
+  },
+  "arms": [
+    "hereditary_reset",
+    "fixed_reset",
+    "hereditary_retain",
+    "fixed_retain",
+    "serialization_only",
+    "tuned_spsa_reset",
+    "tuned_adam_reset",
+    "tuned_adam_retain",
+    "tuned_bfgs_reset",
+    "tuned_bfgs_retain"
+  ],
+  "signTestAlpha": 0.025,
+  "tieTolerance": 1e-6,
+  "thresholds": {
+    "retainedAdaptationMedianRelative": 0.05,
+    "proposerMedianRelative": 0.01,
+    "conventionalMedianRelative": 0.01
+  },
+  "gates": {
+    "reproduction": "100% exact float64+SHA256 subprocess roundtrips, 100% direct-vs-worker parity audits, and zero serialization_only drift.",
+    "retainedAdaptation": "Final-generation (g=2) hereditary_reset vs serialization_only median relative loss reduction >= 5% and one-sided exact sign-test p < 0.025.",
+    "proposerImprovement": "Evaluated both on 3-generation chain (hereditary_reset vs fixed_reset with empty cross-generation memory) and same-parent paired proposer split (paired_self vs paired_fixed on identical evolved parent Phi_G): median relative loss reduction >= 1% and one-sided exact sign-test p < 0.025.",
+    "memoryVsRuleSeparation": "2x2 factorial (hereditary vs fixed rule x reset vs retained outer episode state) plus same-parent paired proposer split.",
+    "conventionalAdvantage": "Final-generation (g=2) hereditary_reset vs each training-calibrated zero-order optimizer (tuned_spsa_reset, tuned_adam_reset, tuned_bfgs_reset, tuned_adam_retain, tuned_bfgs_retain): median relative loss reduction >= 1% and one-sided exact sign-test p < 0.025."
+  }
+}

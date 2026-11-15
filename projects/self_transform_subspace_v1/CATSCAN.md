@@ -29,7 +29,7 @@ Test whether a scale-homogeneous, block-decoupled active-subspace weight transfo
 
 ## Acceptance
 
-- `node projects/self_transform_subspace_v1/test.mjs` passes oracle limits, scale homogeneity, artifact integrity, worker isolation, budget parity, and statistical checks.
+- [Unit and isolation tests](test.mjs) verify oracle limits, scale homogeneity, artifact integrity, worker isolation, budget parity, and statistical checks.
 
 ## Non-goals
 

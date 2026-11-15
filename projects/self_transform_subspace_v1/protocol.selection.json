@@ -1,0 +1,84 @@
+{
+  "schema": "gamma.self-transform-subspace.selection/v1",
+  "stage": "selection",
+  "status": "frozen before selection execution; disjoint from confirmation seeds",
+  "selectionSeeds": [
+    510000,
+    520000,
+    530000,
+    540000,
+    550000,
+    560000
+  ],
+  "candidates": [
+    "block_subspace_2mode",
+    "block_subspace_1mode",
+    "kronecker_subspace_2mode",
+    "isotropic_homog_ablation"
+  ],
+  "families": [
+    "subspace_logistic",
+    "gated_bilinear"
+  ],
+  "blockWidth": 16,
+  "ruleBlocks": 3,
+  "parameterCount": 48,
+  "scalarQueriesPerUpdate": 8,
+  "generations": 3,
+  "metaStepsPerGeneration": 9,
+  "innerSteps": 8,
+  "metaSupportTasks": 6,
+  "holdoutTasksPerGeneration": 32,
+  "preprocessing": {
+    "trainingCandidates": 9,
+    "trainingEnvironments": 2,
+    "trainSupportCount": 4,
+    "trainQueryCount": 4,
+    "trainInnerSteps": 8,
+    "trainMetaSteps": 9,
+    "spsaRates": [
+      0.005,
+      0.015,
+      0.05,
+      0.15,
+      0.4,
+      1.0,
+      2.0,
+      4.0,
+      6.0
+    ],
+    "adamGrid": [
+      [0.02, 0.0],
+      [0.02, 0.5],
+      [0.02, 0.9],
+      [0.15, 0.0],
+      [0.15, 0.5],
+      [0.15, 0.9],
+      [1.0, 0.0],
+      [1.0, 0.5],
+      [1.0, 0.9]
+    ],
+    "bfgsRates": [
+      0.005,
+      0.015,
+      0.05,
+      0.15,
+      0.4,
+      1.0,
+      2.0,
+      4.0,
+      6.0
+    ]
+  },
+  "arms": [
+    "hereditary_reset",
+    "fixed_reset",
+    "serialization_only",
+    "tuned_spsa_reset",
+    "tuned_adam_reset",
+    "tuned_bfgs_reset"
+  ],
+  "selectionCriterion": "Compute per-family median relative loss reduction at final generation (g=2) of hereditary_reset vs fixed_reset (proposerImprovement) and vs each tuned conventional baseline (spsa, adam, bfgs). Rank candidates by compositeScore = 0.5 * min_family(medianProposerRelative) + 0.5 * min_{family,conv}(medianConvRelative). Deterministic tie-break: higher min_family(medianProposerRelative), then candidate declaration order.",
+  "tieTolerance": 1e-6,
+  "isolation": "Selection evaluates exposed selectionSeeds only; confirmationSeeds (801000..812000) do not exist in selection code or inputs."
+}

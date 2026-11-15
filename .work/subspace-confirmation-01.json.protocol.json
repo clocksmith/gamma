@@ -1,0 +1,140 @@
+{
+  "protocol": {
+    "schema": "gamma.self-transform-subspace.confirmation/v1",
+    "stage": "confirmation",
+    "status": "sealed after Stage 1 selection; single-shot execution on unseen confirmation seeds",
+    "selectedRule": "kronecker_subspace_2mode",
+    "selectionReceiptPath": ".work/subspace-selection-01.json",
+    "selectionReceiptSha256": "70ee54f5df411c5dccf36e1cc21abb2f9575e5983afd738a108dac318d4c4be6",
+    "seeds": [
+      801000,
+      802000,
+      803000,
+      804000,
+      805000,
+      806000,
+      807000,
+      808000,
+      809000,
+      810000,
+      811000,
+      812000
+    ],
+    "families": [
+      "subspace_logistic",
+      "gated_bilinear"
+    ],
+    "blockWidth": 16,
+    "ruleBlocks": 3,
+    "parameterCount": 48,
+    "scalarQueriesPerUpdate": 8,
+    "generations": 3,
+    "metaStepsPerGeneration": 9,
+    "innerSteps": 8,
+    "metaSupportTasks": 6,
+    "holdoutTasksPerGeneration": 64,
+    "preprocessing": {
+      "trainingCandidates": 9,
+      "trainingEnvironments": 2,
+      "trainSupportCount": 4,
+      "trainQueryCount": 4,
+      "trainInnerSteps": 8,
+      "trainMetaSteps": 9,
+      "spsaRates": [
+        0.005,
+        0.015,
+        0.05,
+        0.15,
+        0.4,
+        1,
+        2,
+        4,
+        6
+      ],
+      "adamGrid": [
+        [
+          0.02,
+          0
+        ],
+        [
+          0.02,
+          0.5
+        ],
+        [
+          0.02,
+          0.9
+        ],
+        [
+          0.15,
+          0
+        ],
+        [
+          0.15,
+          0.5
+        ],
+        [
+          0.15,
+          0.9
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          0.5
+        ],
+        [
+          1,
+          0.9
+        ]
+      ],
+      "bfgsRates": [
+        0.005,
+        0.015,
+        0.05,
+        0.15,
+        0.4,
+        1,
+        2,
+        4,
+        6
+      ]
+    },
+    "arms": [
+      "hereditary_reset",
+      "fixed_reset",
+      "hereditary_retain",
+      "fixed_retain",
+      "serialization_only",
+      "tuned_spsa_reset",
+      "tuned_adam_reset",
+      "tuned_adam_retain",
+      "tuned_bfgs_reset",
+      "tuned_bfgs_retain"
+    ],
+    "signTestAlpha": 0.025,
+    "tieTolerance": 0.000001,
+    "thresholds": {
+      "retainedAdaptationMedianRelative": 0.05,
+      "proposerMedianRelative": 0.01,
+      "conventionalMedianRelative": 0.01
+    },
+    "gates": {
+      "reproduction": "100% exact float64+SHA256 subprocess roundtrips, 100% direct-vs-worker parity audits, and zero serialization_only drift.",
+      "retainedAdaptation": "Final-generation (g=2) hereditary_reset vs serialization_only median relative loss reduction >= 5% and one-sided exact sign-test p < 0.025.",
+      "proposerImprovement": "Evaluated both on 3-generation chain (hereditary_reset vs fixed_reset with empty cross-generation memory) and same-parent paired proposer split (paired_self vs paired_fixed on identical evolved parent Phi_G): median relative loss reduction >= 1% and one-sided exact sign-test p < 0.025.",
+      "memoryVsRuleSeparation": "2x2 factorial (hereditary vs fixed rule x reset vs retained outer episode state) plus same-parent paired proposer split.",
+      "conventionalAdvantage": "Final-generation (g=2) hereditary_reset vs each training-calibrated zero-order optimizer (tuned_spsa_reset, tuned_adam_reset, tuned_bfgs_reset, tuned_adam_retain, tuned_bfgs_retain): median relative loss reduction >= 1% and one-sided exact sign-test p < 0.025."
+    }
+  },
+  "protocolHash": "3baeb592bc3f70cb9e8d5c050a51d9a4519de1c1af85c4e7a5ad5bd3702878d3",
+  "sourceHashes": {
+    "observation.mjs": "b4df63f3262a5cd3ba42db45dcf8010a4458574dd8bbe646801e4856c3e45127",
+    "operator.mjs": "a7554f366ca6898a4cbfb30db6824e3db16a75a598620586517083af5de60d67",
+    "tasks.mjs": "27dc96954c1e9c22b4569aa3839a1bcf0319baa377dea616db622a890e47e1a1",
+    "worker.mjs": "4cc7170a8e4020d8862e565a25ff9e657409f67c954fd335f8933bbb8ee9dcd2",
+    "stats.mjs": "696070ba6eb545aac07153c1906b5739e064bd5a58b91f66fc4971f55f117733",
+    "confirm.mjs": "7455c5480914af4f3a1774c606b96f985d219392c6c9915274185f0c531ef447"
+  }
+}
