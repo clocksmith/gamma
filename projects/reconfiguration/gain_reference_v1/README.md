@@ -133,3 +133,12 @@ paired kernel/wrapper/request, and their registry/generator identities. Existing
 v2 source locks are not valid for v3. Exact-tokenizer qualification and service
 guards are still required. The added runtime is syntax-checked; its model path
 is unexecuted until hardware ownership and admission are resolved.
+
+## Archived 27B tokenizer qualification
+
+`tokenizer-preflight-27b.json` passes all three explicit scaffolds with 322, 328
+and 330 input tokens, respectively. Original instruction spans and same-pass
+content complements are valid against the archived provisioned 27B tokenizer
+and current local formatter. Source and artifact hashes are recorded. This is
+CPU-only: it does not qualify the target GPU, model load, reference dispatch or
+current Jupiter checkout. Final execution locks remain pending those checks.
