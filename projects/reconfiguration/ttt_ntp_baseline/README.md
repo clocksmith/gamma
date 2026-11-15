@@ -20,8 +20,24 @@ RSI. Its prompt labels are already observed next tokens, not unseen answers.
 Pinned repository: [`c11da918d9a5aebf3f3cb0f45a79c2e66d9ad79a`](https://github.com/yancyou/TTT-NTP/tree/c11da918d9a5aebf3f3cb0f45a79c2e66d9ad79a).
 The public release list was empty when checked. The inspected README supplies a
 train/export/evaluate recipe, not a downloadable trained-checkpoint link.
-Therefore a faithful local comparator is **blocked on a trained artifact with
-provenance**, not on writing another angle variant.
+A broader model-index search subsequently located public candidate checkpoints,
+so absence from that README is **not** evidence that weights are unavailable.
+
+Verified candidate: [YoungXuan/Qwen3-0.6B-NHS](https://huggingface.co/YoungXuan/Qwen3-0.6B-NHS)
+at revision `786708b3d940e139edf60a62995f5b2c5a8059a4`. Public metadata and a bounded
+safetensors-header read confirm all seven BF16 `[1024,1024]` projection matrices,
+with the expected `sgd`, `diag_shared`, eta 2.6, chunk 1024 and adapted-layer
+configuration. The repository has no README/model card or detailed training
+receipt; matching configuration is not independently verified training provenance.
+The weight file is 1,517,981,192 bytes; advertised LFS SHA-256 is
+`bbd600491d2c5dff5fc73d429fb5b4f62e5bde9777f72ed31c09eae01798bc4e`.
+Only metadata/configuration/header bytes were read, not the model tensors.
+
+The related [Llama 8B NHS card](https://huggingface.co/YoungXuan/Llama-3.1-8B-NHS)
+reports a `specnorm`/small-initialization variant with single-seed caveats and
+some task regressions. It is not interchangeable with the paper's `sgd` recipe.
+Its larger reported aggregate gain must not be attributed to the exact paper
+baseline without verifying the variant and evaluation settings.
 
 The [0.6B configuration](https://github.com/yancyou/TTT-NTP/blob/c11da918d9a5aebf3f3cb0f45a79c2e66d9ad79a/configs/pretrain/qwen3_0p6b.yaml)
 uses 100 steps × 64 sequences × 32768 tokens = 209,715,200 nominal training tokens,
@@ -94,9 +110,18 @@ only after a development signal and a separately frozen candidate.
 
 ## Next concrete action
 
-Locate or obtain an author-trained 0.6B checkpoint with all seven `ttt_proj`
-matrices, tokenizer/config and training provenance; inspect its license and
-hashes. Validate untouched-checkpoint restoration and cache first-token behavior
+Review provenance and license for the pinned public 0.6B candidate above, then
+obtain explicit model-acquisition approval before fetching its tensors. Verify
+the SHA-256 and retain all seven projections plus tokenizer/config. Validate untouched-checkpoint restoration and cache first-token behavior
 on one sample before the sixteen-case study. If only raw base weights are
 available, label any identity-projection experiment as an **untrained ablation**.
 Do not silently start 210M-token pretraining or claim an unperformed benchmark.
+
+
+## Handoff status
+
+Research stopped at the owner's request before acquisition or execution. The
+candidate is located, but has not been loaded, converted, qualified, or compared
+locally. No claim of reproducing TTT-NTP is made. The sixteen-case protocol above
+is prospective and has not generated model outputs. Continue only in the owner's
+separate Gamma research track.
