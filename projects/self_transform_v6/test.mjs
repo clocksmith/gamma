@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { calibrate } from './initialization.mjs';
+import { counter, propose, tasks } from './experiment.mjs';
+const protocol=JSON.parse(fs.readFileSync(new URL('protocol.json',import.meta.url)));
+const p={...protocol,rateCandidates:[0,0.1,0.5],trainingGenerations:2,
+ trainSupportCount:2,trainQueryCount:3,steps:2};
+const phi=[0.4,0.3,-0.2,0.1];
+const a=calibrate(p,25,phi);
+assert.deepEqual(a,calibrate(p,25,phi));
+assert.equal(a.selected.fitness,Math.min(...a.candidates.map(x=>x.fitness)));
+assert.equal(a.budget.scalarLossCalls,3*2*(8*2*17+2*3*17));
+assert.equal(a.budget.metaObjectiveCalls,3*2*8);
+assert.deepEqual(propose(phi,phi,'spsa',tasks(3,2),2,4,counter(),0),phi);
+assert.throws(()=>propose(phi,phi,'spsa',tasks(3,2),2,4,counter(),NaN));
+const b=counter(),c=counter();
+propose(phi,phi,'hereditary',tasks(3,2),2,4,b);
+propose(phi,phi,'spsa',tasks(3,2),2,4,c,0.3);
+assert.deepEqual(b,c);
+console.log('Training-only rate selection, deterministic calibration and equal adaptation budgets passed');
