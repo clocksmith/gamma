@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import { initialize } from './initialization.mjs';
+const protocol = JSON.parse(fs.readFileSync(new URL('protocol.json', import.meta.url)));
+const tiny = { ...protocol, initialCandidates: 4, trainSupportCount: 3, trainQueryCount: 5, steps: 2 };
+const result = initialize(tiny, 510);
+assert.deepEqual(result, initialize(tiny, 510));
+assert.equal(result.candidates.length,4);
+assert.equal(result.initial.task_only.parentLoss,Math.min(...result.candidates.map(x=>x.parentLoss)));
+assert.equal(result.initial.self_target.childLoss,Math.min(...result.candidates.map(x=>x.childLoss)));
+assert.equal(result.budget.metaObjectiveCalls,32);
+assert.equal(result.budget.scalarLossCalls,4*(8*3*(2*8+1)+2*5*(2*8+1)));
+assert.equal(result.budget.transforms,4*(8*3*2+1+2*5*2));
+assert.ok(result.candidates.every(x=>x.phi!==x.child));
+assert.ok(protocol.replicateSeeds.every(seed=>seed>26000));
+console.log('Self-target selection, deterministic training and equal charged budget checks passed');

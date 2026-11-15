@@ -1,0 +1,19 @@
+{
+  "schema": "gamma.self-target-training/v3",
+  "classification": "prespecified toy development screen",
+  "replicateSeeds": [31000, 41000, 51000],
+  "initialCandidates": 32,
+  "trainSupportCount": 32,
+  "trainQueryCount": 32,
+  "metaCount": 32,
+  "holdoutCount": 128,
+  "steps": 6,
+  "generations": 3,
+  "initializers": ["task_only", "self_target"],
+  "arms": ["hereditary", "fixed_proposer", "serialization_only", "spsa"],
+  "training": "Identical random candidate pool and full computation for both initializers. task_only minimizes parent training-query loss. self_target minimizes self-produced child's training-query loss. Child proposals see training-support only. Chosen initial artifact is the parent, not child.",
+  "seedOffsets": {"candidate": 1, "trainSupport": 2, "trainQuery": 3, "trainProbe": 4, "meta": 100, "holdout": 200, "probe": 300},
+  "budget": "Same v2 four symmetric probes per update, eight meta-objective calls, unconditional adoption. Every initializer charged the complete shared training candidate evaluation budget; no extra search per arm.",
+  "evaluation": "Clean-process proposals and scoring; all children frozen before holdout scoring; independent fresh holdout per generation shared across initializers and arms.",
+  "limits": "Training objective ablation only, unchanged four-parameter v2 operator. External scalar oracle; no novelty, AGI or autonomous RSI claim. No outcome-based retuning or stopping."
+}
