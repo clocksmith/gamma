@@ -44,8 +44,8 @@ columns of the down-projection matrix. It neither learns nor persists successors
 
 The CPU tests qualify math and streaming capture only. Doppler commit `1b76eee0` implements a GPU reduction of both spans from the same
 activation tensor through the existing request lifecycle. Its physical test
-exists but has not run in this session; compare it against this reference before
-model execution. Do not read full activation rows back into the serving loop.
+passed on Mars in both immediate and recorded modes; see the source-identified
+operator receipt below. Model execution remains unqualified. Do not read full activation rows back into the serving loop.
 Keep historical GPU capture and frozen study source locks unchanged.
 
 Create new tasks from previously unexposed families, with the SAME explicit
@@ -101,11 +101,10 @@ GPU launch or default admission callback.
 `development_tasks.mjs` constructs three public selection families with explicit
 scaffolds: inclusive prefix sum, stable rank and periodic second difference.
 The host-side expected values have independent hand-calculated examples, and
-public checks distinguish zero/identity mutations. References have NOT yet been
-compiled/dispatched on a GPU. The source-hashed `exposure-audit.json` distinguishes their cross-index
+public checks distinguish zero/identity mutations. References passed twelve actual GPU dispatch checks on Mars. The source-hashed `exposure-audit.json` distinguishes their cross-index
 dependencies from all 46 indexed historical elementwise maps. That is not an
-external novelty or unknown-exposure claim. Actual-tokenizer preflight and GPU
-reference qualification remain required before fresh model execution. No held-out confirmation tasks were created.
+external novelty or unknown-exposure claim. Archived exact-tokenizer and local reference qualification passed; target model
+readiness and final execution locks remain required. No held-out confirmation tasks were created.
 The task builder requires the full shared interface contract from the verifier;
 the minimal test fixture is not sufficient for a real model experiment.
 
@@ -114,9 +113,9 @@ Run all local checks:
     node --test projects/reconfiguration/gain_reference_v1/test_*.mjs
 
 At this revision, eighteen CPU/mocked-executor tests pass. They are not model
-requests. Next: qualify reference shaders on an admitted GPU, pin model,
-Doppler/runtime and verifier hashes, run exact tokenizer preflight, freeze the
-selection inputs, then invoke the executor through the existing owned runner.
+requests. Next: verify the complete target model and current service guard, pin
+Doppler/runtime and verifier hashes, freeze the selection inputs, then invoke
+the executor through the existing owned runner.
 
 ## Prospective native runtime
 
