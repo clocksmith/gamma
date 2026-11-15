@@ -1,7 +1,8 @@
 # TTT-NTP baseline assessment
 
-Inspected 2026-11-15. No upstream code executed, packages installed, weights
-downloaded, continual pretraining launched, or inference comparison claimed.
+Inspected 2026-11-15. No upstream code executed, packages installed, continual pretraining launched,
+or inference comparison claimed. The owner authorized the pinned checkpoint
+download; acquisition is underway, not yet integrity-qualified.
 
 ## Scientific distinction
 
@@ -118,10 +119,25 @@ available, label any identity-projection experiment as an **untrained ablation**
 Do not silently start 210M-token pretraining or claim an unperformed benchmark.
 
 
-## Handoff status
+## Track A resumed and local qualification
 
-Research stopped at the owner's request before acquisition or execution. The
-candidate is located, but has not been loaded, converted, qualified, or compared
-locally. No claim of reproducing TTT-NTP is made. The sixteen-case protocol above
-is prospective and has not generated model outputs. Continue only in the owner's
-separate Gamma research track.
+The owner retained this prompt-conditioned transformation track while taking the
+separate hereditary research track. Acquisition of the pinned 1.52 GB checkpoint
+was explicitly approved. Do not conflate the two research tracks.
+
+`artifact_contract.py` verifies exact file size and SHA-256, configuration, all
+seven BF16 projection shapes and spans. A missing single projection fails rather
+than silently becoming an identity ablation. This proves artifact identity, not
+who trained it or whether its undocumented training history matches the paper.
+
+`retrieval_tasks.py` builds the sixteen-case development population with the
+actual supplied tokenizer, exclusive fixture creation and exact normalized
+free-answer scoring. The unit test uses character IDs only to test budget
+handling; those counts are not model-token measurements. Model-tokenized fixtures
+and model outputs remain local under `.work/`. No confirmation population is used.
+
+Six focused tests cover complete/missing/malformed/overlapping projection
+contracts and retrieval budget/source/oracle integrity. Ruff checks pass.
+The existing environment has PyTorch 2.9.1 with MPS and Transformers 4.57.3.
+No GPU execution may begin until live ownership is verified clear. No result is
+claimed from downloading weights or preparing this harness.
