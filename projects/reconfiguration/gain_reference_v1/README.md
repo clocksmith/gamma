@@ -1,7 +1,8 @@
 # Prospective channel-gain reference
 
 Status: CPU reference and prospective runtime integration. No model run, fresh
-quality result, physical GPU qualification, latency improvement or RSI is established.
+quality result, latency improvement or RSI is established. Local physical operator
+and reference-shader qualification passed; see the receipts below.
 Historical protocols, runtimes, exposed tasks and result records are unchanged.
 Parent contract: [request-specific reconfiguration](../CATSCAN.md).
 
@@ -142,3 +143,19 @@ content complements are valid against the archived provisioned 27B tokenizer
 and current local formatter. Source and artifact hashes are recorded. This is
 CPU-only: it does not qualify the target GPU, model load, reference dispatch or
 current Jupiter checkout. Final execution locks remain pending those checks.
+
+## Mars physical qualification, November 15
+
+`operator-gpu-mars-01.json`: actual Apple Metal immediate and recorded energy
+capture passed, including exact expected means, zero-beta identity and positive/
+negative reciprocal gains within 1e-6. The receipt identifies existing dirty
+uniform-cache execution dependencies rather than claiming a clean-tree run.
+
+`reference-gpu-mars-01.json`: all three public sequence reference shaders passed
+all four shapes each (12 dispatch checks), including numeric outputs, read-only
+inputs and output canaries. No model requests or confirmation tasks ran.
+
+The matching 27B manifest exists locally, but only 43 of its 254 shards are
+present: 211 are absent. It cannot support a local full-model comparison. The
+complete provisioned Jupiter artifact and approved service guard are still
+needed before final execution locks and model execution.
