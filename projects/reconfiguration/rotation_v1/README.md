@@ -87,3 +87,34 @@ wall times from one sample each, not a counterbalanced speed benchmark. Reused
 capture costs are charged again to each hypothetical independent request; summing
 arm totals is therefore not the physical duration of the shared run. Keep raw
 protocol/results local unless separately authorized to publish them.
+
+
+## Last-layer replay optimization (experimental)
+
+A capture request may set `retainFinalLayerReplay: true` for exactly the final
+dense layer. It retains GPU copies of post-attention input and residual before
+normalization. `pipeline.replayChannelRotation(capture, applySpec)` uses the
+existing standard FFN and final normalization/output head, with a recorded GPU
+resource scope. It replays the full final-layer token batch to preserve the same
+prefill arithmetic, not just the last token. No attention is re-executed and no
+KV/recurrent state is written. This avoids the second whole-model prefill; it
+still pays the first capture prefill, private state, validation and output head.
+
+The capture must remain attached to its original loaded pipeline. Repeated replay
+can reuse that capture while live; reset/detach/close makes it invalid for replay.
+After obtaining new first logits, close/detach capture and attach the frozen
+rotation as base-cache for subsequent decoding. This equivalence is specific to
+intervening only after the final cache-producing attention operation, not a claim
+that arbitrary MLP changes leave caches consistent.
+
+The first implementation rejects sandwich norms, per-layer input blocks, layer
+or residual scaling, MoE, hyperconnections and non-f32 state. Retained full-batch
+inputs cost up to two token-count × hidden-width f32 buffers, in addition to the
+plane. Future last-token-only replay is a separate optimization because changing
+GEMM to GEMV can change numerical behavior.
+
+`final_replay_smoke.mjs DOPPLER_ROOT LOCAL_MODEL LOCAL_RECEIPT` checks zero and
+both signs at three prompt lengths against full re-prefill: first logits, one
+teacher-forced decode, complete contiguous KV and linear recurrent states, reset,
+and invalid/stale replay rejection. Diagnostic times separate capture/freezing,
+replay and whole re-prefill; runs are not a counterbalanced speed benchmark.
