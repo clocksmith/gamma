@@ -75,3 +75,42 @@ owner-approved executor with accessible hardware and pinned source/artifact lock
 ## Focused check
 
     node --test projects/reconfiguration/gain_reference_v1/test_rule.mjs
+
+## Executable selection harness
+
+`selection.mjs` now provides `selectionSchedule` and `executeSelection` for the
+existing native runtime API. Per task it executes ten arms: real base, exact
+zero-beta gain, positive/negative gains, and permuted/random/shuffled controls
+for each nonzero candidate. Arm order rotates across tasks; this is partial
+counterbalancing, not complete order balance unless enough tasks are supplied.
+Each arm pays for its own preparation. All physical preparation receipts are
+retained; do not mistake a selected arm's attributed cost for total experimental
+cost. Memory baseline subtraction may be unavailable when a transformed arm
+precedes base; absolute memory remains reported, with no inferred subtraction.
+
+The executor admits reference A only. It rejects mixed layer sets because the
+existing runtime fixes layer geometry at creation. Run separate locked runtime
+instances for layer ablations and separate adapters for alternate references.
+It requires resource/source admission, exact prompt/schedule hashes, explicit
+sampling seed, memory/timing receipts and durable output sealing before scoring.
+It rejects confirmation populations. There is deliberately no self-authorizing
+GPU launch or default admission callback.
+
+`development_tasks.mjs` constructs three public selection families with explicit
+scaffolds: inclusive prefix sum, stable rank and periodic second difference.
+The host-side expected values have independent hand-calculated examples, and
+public checks distinguish zero/identity mutations. References have NOT yet been
+compiled/dispatched on a GPU. These newly authored definitions still require a
+full historical semantic exposure audit and actual-tokenizer preflight before
+being called fresh model tasks. No held-out confirmation tasks were created.
+The task builder requires the full shared interface contract from the verifier;
+the minimal test fixture is not sufficient for a real model experiment.
+
+Run all local checks:
+
+    node --test projects/reconfiguration/gain_reference_v1/test_*.mjs
+
+At this revision, fourteen CPU/mocked-executor tests pass. They are not fourteen
+model requests. Next: qualify reference shaders on an admitted GPU, pin model,
+Doppler/runtime and verifier hashes, run exact tokenizer preflight, freeze the
+selection inputs, then invoke the executor through the existing owned runner.
