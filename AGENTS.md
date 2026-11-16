@@ -6,21 +6,30 @@ evidence contracts.
 
 ## Build boldly
 
-- Build the ambitious version. Implement the bold idea end to end, run it, then
-  fix what breaks. A working rough cut beats a careful plan.
-- Act without asking on reversible work in your lane: new features, rewrites,
-  large refactors, deleting dead code, wild experiments. Ask only before
-  irreversible or outward-facing steps: force-push, deleting data, spending
-  money, publishing, or touching another session's uncommitted work.
-- Reading is lookup, not a gate. Read the code you change; consult GOALS,
-  CATSCAN, charters and contracts when a question needs them, never as a
-  checklist before editing.
-- Qualification, receipts and frozen comparisons govern what we claim, not
-  whether code may be written, merged or tried. Measure once something is in use.
-- Breaking an experiment is fine. Fix breakage you cause before you stop, and
-  leave `main` runnable.
-- Report what you built and what it did. Never claim faster, better or qualified
-  without a measurement.
+Understand → inspect → build → run → diagnose → improve → deliver.
+
+- Start from the requested outcome and the existing implementation. Read the
+  relevant code, and compare with working alternatives, before guessing.
+- Make the most direct substantive change. Large refactors, replacement
+  implementations, aggressive prototypes and speculative ideas are allowed when
+  they serve the goal.
+- Run the changed system early. Fix the failures you cause; don't stop at a
+  plan, scaffold or failing test.
+- If the result misses the goal, find the reason in the code and behavior,
+  change it and repeat. Sweep parameters only to answer a real question. When a
+  strategy is clearly failing, try a materially different one.
+- Make routine design and implementation choices yourself. Ask only for a
+  consequential product choice, access you lack, or a blocker you can't
+  resolve safely.
+- Commit coherent, tested progress often, and keep going while the requested
+  outcome is unfinished.
+- Done means the requested behavior works and was exercised against a
+  real-world or competitive baseline. A passing unit test, receipt, report,
+  scaffold or milestone is not completion.
+- GOALS, INTENT, CATSCAN and charters are references to look up, not reading
+  required before editing.
+- Report results: what changed, the evidence, what remains, and blockers only
+  when they need the owner or unavailable access. No completion percentages.
 
 ## Git workflow: direct to main
 
@@ -57,20 +66,16 @@ evidence contracts.
 
 ## Component Intent
 
-Before modifying a file, read [`GOALS.md`](GOALS.md), then the `CATSCAN.md`
-chain from the repository root to the target directory, parent first (the union
-of chains for multi-directory changes). Target, Authority, Invariants,
-Acceptance, and Non-goals are implementation constraints; a child CATSCAN may
-narrow but not contradict its parent. If work changes a component boundary,
-name the conflict and update the affected CATSCAN with the implementation
-instead of working around it. CATSCAN constrains outcomes and authority, not
-internal algorithms. Handoffs state the component, whether intent was preserved
-or deliberately changed, acceptance evidence, and boundary effects.
+CATSCAN.md files record a component's owner, contracts and invariants. Look up
+the one for the component you change when you need its contract; you don't
+have to read the chain before editing. When code and a charter disagree, decide
+which is right: fix the code if it broke the contract, or move the boundary and
+update the charter in the same commit. Never rewrite a charter to excuse a
+failure.
 
 ### Before Starting
 - Read `README.md` and `EMOJI.md` for repository intent and style.
-- Use `docs/COMPONENT_INDEX.md` to find the affected owner and follow the
-  target-ancestor CATSCAN chain above.
+- Use `docs/COMPONENT_INDEX.md` to find the affected owner when you need it.
 - Read `src/engines/README.md` when changing engines or their interfaces, and
   `src/game/README.md` when changing the game or its interfaces. Unrelated
   project work does not require either owner README.
