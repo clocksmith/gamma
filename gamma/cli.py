@@ -4,12 +4,12 @@
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 import warnings
 
 from gamma.core.cli_help import print_command_help, print_main_help
 from gamma.core.cli_router import TOP_LEVEL_COMMANDS, route_command
+from gamma.core.models.model_paths import get_project_root
 
 
 warnings.filterwarnings(
@@ -29,7 +29,7 @@ warnings.filterwarnings(
     module=r"keras\.src\.export\.tf2onnx_lib",
 )
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = str(get_project_root())
 
 
 def main() -> None:

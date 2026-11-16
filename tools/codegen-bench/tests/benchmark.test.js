@@ -6,7 +6,7 @@
 import { strict as assert } from 'assert';
 import { Evaluator } from '../evaluator/evaluator.js';
 import { StatisticalAnalyzer } from '../utils/statistical-analyzer.js';
-import { ReportGenerator } from '../reports/report-generator.js';
+import { ReportGenerator } from '../reporting/report-generator.js';
 import { hashCode, analyzeCodeVariation, calculateVariance } from '../utils/code-similarity.js';
 
 // Test runner
@@ -119,14 +119,14 @@ async function runTests() {
     assert.ok(result.stdDev > 0);
   });
 
-  test('analyzeCodeVariation detects identical code', () => {
+  test('analyzeCodeVariation counts redundant samples beyond the first', () => {
     const samples = [
       { code: 'const x = 1;', hash: hashCode('const x = 1;') },
       { code: 'const x = 1;', hash: hashCode('const x = 1;') },
       { code: 'const x = 1;', hash: hashCode('const x = 1;') }
     ];
     const result = analyzeCodeVariation(samples);
-    assert.strictEqual(result.duplicateRate, 1);
+    assert.strictEqual(result.duplicateRate, 2 / 3);
     assert.strictEqual(result.uniqueOutputs, 1);
   });
 

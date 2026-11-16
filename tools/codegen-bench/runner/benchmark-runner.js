@@ -11,12 +11,11 @@ import { BenchmarkConfig } from '../config.js';
 import { LLMClient } from './llm-client.js';
 import { MockLLMClient } from './mock-llm-client.js';
 import { Evaluator } from '../evaluator/evaluator.js';
-import { ReportGenerator } from '../reports/report-generator.js';
+import { ReportGenerator } from '../reporting/report-generator.js';
 import { hashCode, analyzeCodeVariation, calculateVariance } from '../utils/code-similarity.js';
 
 // Playwright is optional - only needed for UI component testing
 // Don't import if playwright is not installed to avoid module parsing errors
-import { PlaywrightEvaluator } from '../evaluator/playwright-evaluator.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -167,11 +166,11 @@ export class BenchmarkRunner {
       return true;
     }
 
-    if (!this.playwrightEvaluator) {
-      this.playwrightEvaluator = new PlaywrightEvaluator();
-    }
-
     try {
+      if (!this.playwrightEvaluator) {
+        const { PlaywrightEvaluator } = await import('../evaluator/playwright-evaluator.js');
+        this.playwrightEvaluator = new PlaywrightEvaluator();
+      }
       await this.playwrightEvaluator.initialize();
       this.playwrightReady = true;
       this.evaluator.playwrightEvaluator = this.playwrightEvaluator;

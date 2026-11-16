@@ -20,7 +20,10 @@ and generated reports belong to the working directory, not site-packages;
 The Python CLI implementations now live in `gamma/commands/`. Their original
 `tools/*.py` scripts remain launchers. Node code-generation benchmarks remain a
 separate checkout tool at `tools/codegen-bench/`, with their own dependencies;
-they are not part of the Python wheel.
+they are not part of the Python wheel. Installed commands can select that
+checkout with `GAMMA_WORKSPACE`. Its maintained report generator lives in
+`tools/codegen-bench/reporting/`, separate from ignored generated `reports/`;
+the relocation map records the original recovered source revision.
 
 `projects/` contains independent research projects. Their local front doors
 describe tests, resources and reproduction requirements. Package metadata does

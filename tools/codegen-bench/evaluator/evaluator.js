@@ -486,7 +486,7 @@ export class Evaluator {
         passed = /\bclass\s+\w+/.test(code);
         method = 'ast-pattern';
       } else if (req === 'export') {
-        passed = /\bexport\s+(?:default\s+)?(?:function|class|const|let|var|\{)/.test(code);
+        passed = /\bexport\s+(?:default\s+)?(?:async\s+)?(?:function|class|const|let|var|\{)/.test(code);
         method = 'ast-pattern';
       } else if (req === 'async') {
         passed = /\basync\s+function|\basync\s*\(/.test(code);

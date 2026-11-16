@@ -5,7 +5,7 @@ description: Run a controlled Gamma code-generation matrix when its tasks, langu
 
 # GAMMA Codegen Ladder
 
-Use for `src/benchmarks/codegen/` experiments where dimensions must stay comparable.
+Use for `tools/codegen-bench/` experiments where dimensions must stay comparable.
 
 ## Prerequisites
 
@@ -38,15 +38,15 @@ run count, comparison metric, and authorization for any paid or remote provider.
 ## Commands
 
 ```bash
-node src/benchmarks/codegen/index.js --help
-node src/benchmarks/codegen/index.js --list-presets
-node src/benchmarks/codegen/index.js --list-providers
-node src/benchmarks/codegen/index.js --list-categories
-node src/benchmarks/codegen/index.js --list-tasks
+node tools/codegen-bench/index.js --help
+node tools/codegen-bench/index.js --list-presets
+node tools/codegen-bench/index.js --list-providers
+node tools/codegen-bench/index.js --list-categories
+node tools/codegen-bench/index.js --list-tasks
 ```
 
 ```bash
-node src/benchmarks/codegen/index.js \
+node tools/codegen-bench/index.js \
   --task fibonacci \
   --language js,ts \
   --prompt-level novice,expert \
@@ -54,7 +54,7 @@ node src/benchmarks/codegen/index.js \
 ```
 
 ```bash
-node src/benchmarks/codegen/index.js \
+node tools/codegen-bench/index.js \
   --category foundations \
   --language js,ts \
   --prompt-level advanced,expert \
@@ -64,7 +64,7 @@ node src/benchmarks/codegen/index.js \
 ```
 
 ```bash
-node src/benchmarks/codegen/index.js \
+node tools/codegen-bench/index.js \
   --task expression-evaluator \
   --language js,ts \
   --prompt-level expert \
@@ -79,7 +79,7 @@ node src/benchmarks/codegen/index.js \
 - Separate deterministic rows from temperature sweeps.
 - Confirm provider availability before live runs.
 - Use `query_cli.js` only after artifacts exist:
-  `node src/benchmarks/codegen/query_cli.js "Which model is strongest for TypeScript?"`
+  `node tools/codegen-bench/query_cli.js "Which model is strongest for TypeScript?"`
 
 ## Validation
 

@@ -31,7 +31,7 @@ description: Run a reproducible Gamma Mind Meld experiment when models, prompt, 
 Example benchmark surface:
 
 ```bash
-PYTHONPATH=. "$PY" src/benchmarks/mind_meld_benchmark.py \
+PYTHONPATH=. "$PY" gamma/benchmarks/mind_meld_benchmark.py \
   --strategies confidence perplexity fixed_interval \
   --prompt "Once upon a time" --models gpt2 gpt2-medium
 ```
