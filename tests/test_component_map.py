@@ -2,6 +2,7 @@
 import importlib.util
 from pathlib import Path
 import sys
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -13,6 +14,17 @@ SPEC.loader.exec_module(maps)
 
 
 class ComponentMapTests(unittest.TestCase):
+    def test_published_index_excludes_another_sessions_untracked_study(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(maps, "ROOT", Path(directory).resolve()):
+            root = Path(directory).resolve()
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            charter = root / "CATSCAN.md"
+            charter.write_text("# CATSCAN: Family\n\nParent: none\n\n## Target\nOwn tracked source.\n")
+            subprocess.run(["git", "-C", str(root), "add", "CATSCAN.md"], check=True)
+            (root / "untracked-study").mkdir()
+            (root / "untracked-study/CATSCAN.md").write_text("Unfinished private notes")
+            self.assertEqual(maps.find_charter_paths(), [charter])
+
     def test_project_specific_format_and_long_invariants_are_preserved(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(maps, "ROOT", Path(directory).resolve()):
             root = Path(directory).resolve()

@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import os
 import re
+import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -48,6 +49,22 @@ def relative(path: Path) -> str:
 
 
 def find_charter_paths() -> list[Path]:
+    # A live checkout can contain another agent's uncommitted studies. The
+    # published component index describes tracked source, not that private work.
+    if (ROOT / ".git").exists():
+        tracked = subprocess.check_output(
+            ["git", "-C", str(ROOT), "ls-files", "-z", "--", "CATSCAN.md", "**/CATSCAN.md"],
+            env={**os.environ, "GIT_NO_LAZY_FETCH": "1"},
+        )
+        paths = []
+        for entry in tracked.split(b"\0"):
+            if not entry:
+                continue
+            path = Path(os.fsdecode(entry))
+            if any(part.startswith(".") or part in SKIP_DIRECTORIES for part in path.parts[:-1]):
+                continue
+            paths.append(ROOT / path)
+        return sorted(paths, key=lambda path: (len(path.relative_to(ROOT).parts), relative(path)))
     paths: list[Path] = []
     for directory, names, files in os.walk(ROOT):
         names[:] = sorted(
