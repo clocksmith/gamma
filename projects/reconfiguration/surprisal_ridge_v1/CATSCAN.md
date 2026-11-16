@@ -10,7 +10,7 @@ Test genuinely distinct training-free prompt-conditioned low-rank transforms (`u
 
 - Owns task generators, transform operators, MPS/Doppler runners, unit tests, and reports under `projects/reconfiguration/surprisal_ridge_v1/`.
 - The opt-in `--context-only` runners consume Gamma's reusable
-  [state context compiler](../../../src/core/state_context.py) as a separate
+  [state context compiler](../../../gamma/core/state_context.py) as a separate
   symbolic preprocessing comparison; they do not modify or qualify B1/B2 operators.
 - Does not modify frozen `channel_gain`, `rotation_v1`, `contrastive_rank_one_v1`, `associative_delta_v1`, or Doppler runtime files.
 
