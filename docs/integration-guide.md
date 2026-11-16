@@ -92,7 +92,7 @@ Endpoints:
 
 ## MCP Integration
 
-GAMMA also ships an MCP server. See [../mcp-server/README.md](../mcp-server/README.md).
+GAMMA also ships an MCP server. See [../apps/mcp-server/README.md](../apps/mcp-server/README.md).
 
 ## Notes
 

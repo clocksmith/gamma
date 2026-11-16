@@ -60,10 +60,6 @@ def find_charter_paths() -> list[Path]:
     return sorted(paths, key=lambda path: (len(path.relative_to(ROOT).parts), relative(path)))
 
 
-def component_identifier(name: str) -> str:
-    return "-".join(re.findall(r"[a-z0-9]+", name.casefold()))
-
-
 def section_text(text: str, name: str) -> str | None:
     marker = f"## {name}\n"
     start = text.find(marker)

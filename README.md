@@ -54,7 +54,7 @@ python gamma.py [command] [options]
 | Comparison | `python gamma.py comparison` | Compare model outputs and decoding behavior. |
 | Benchmarking | `python gamma.py benchmark` | Measure throughput, latency, output quality, or code generation. |
 | Mind Meld | `python gamma.py mind-meld` | Coordinate and route across active model engines. |
-| State-log context | `python -m src.core.state_context events.txt --query 'READ REG_03 =>'` | Keep the requested state's source dependencies while discarding irrelevant events. |
+| State-log context | `python -m gamma.core.state_context events.txt --query 'READ REG_03 =>'` | Keep the requested state's source dependencies while discarding irrelevant events. |
 | SAME-R | [`projects/samer/`](projects/samer/) | Run matched capability-transfer trials. |
 | Interview inventory | [`question bank`](projects/question_bank/README.md) | Browse categorized Hack2Hire entries and review LeetCode overlap. |
 | Domain research | [`projects/`](projects/) | Inspect translation, embedding, WGSL, and compression experiments. |
@@ -114,6 +114,7 @@ See [code, apps, project and evidence boundaries](docs/REPOSITORY_LAYOUT.md) for
 installation and the relocation/restore contracts.
 
 - [`gamma/`](gamma/) — runtime, engines, game logic, comparison, and benchmarks
+- [`apps/`](apps/) — independently run game, web, MCP and Flux applications
 - [`projects/`](projects/) — distillation, SAME-R, embedding, translation, WGSL, and compression work
 - [`tools/`](tools/) — developer and model-analysis utilities
 - [`requirements/`](requirements/) — dependency manifests by hardware and engine

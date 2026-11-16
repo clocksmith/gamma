@@ -307,4 +307,4 @@ monitor.print_report()
 
 - [Engine Architecture](ENGINE_ARCHITECTURE.md)
 - [Benchmarking Guide](BENCHMARKING.md)
-- [Utils Documentation](../src/utils/README.md)
+- [Utils Documentation](../gamma/utils/README.md)

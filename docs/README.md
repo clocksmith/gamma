@@ -26,7 +26,7 @@ This directory is the canonical documentation index for GAMMA.
 - Project overview: [../README.md](../README.md)
 - Engine setup and support matrix: [../gamma/engines/README.md](../gamma/engines/README.md)
 - Tooling commands: [../tools/README.md](../tools/README.md)
-- Flux docs: [../flux/README.md](../flux/README.md)
+- Flux docs: [../apps/flux/README.md](../apps/flux/README.md)
 - Translation distillation results bundle: [../projects/distillation/translation/README.md](../projects/distillation/translation/README.md)
 
 ## Documentation Conventions

@@ -45,7 +45,7 @@ def _run_gamma(*args: str) -> subprocess.CompletedProcess[str]:
 
 @pytest.mark.docs
 def test_web_dist_directory_not_checked_in() -> None:
-    assert not (REPO_ROOT / "web" / "dist").exists()
+    assert not (REPO_ROOT / "apps" / "web" / "dist").exists()
 
 
 @pytest.mark.docs

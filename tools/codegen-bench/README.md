@@ -366,7 +366,7 @@ codegen/
 │   └── mock-llm-client.js    # Mock for testing
 ├── evaluator/
 │   └── evaluator.js          # Code evaluation
-├── reports/
+├── reporting/
 │   └── report-generator.js   # Report generation
 ├── tasks/                    # Benchmark tasks
 │   ├── simple/
