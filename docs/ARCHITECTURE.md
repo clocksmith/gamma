@@ -16,11 +16,11 @@ Canonical high-level map of runtime surfaces, tooling boundaries, and ownership.
 
 ### Web Runtime (No Build Contract)
 
-- Source of truth: `web/`
-- Entrypoint: `web/index.html` + static ES modules
-- Styling: `web/styles/`
-- Deploy target: Firebase Hosting from `web/`
-- Contract: do not check in generated web bundles (no `web/dist/`)
+- Source of truth: `apps/web/`
+- Entrypoint: `apps/web/index.html` + static ES modules
+- Styling: `apps/web/styles/`
+- Deploy target: Firebase Hosting from `apps/web/`
+- Contract: do not check in generated web bundles (no `apps/web/dist/`)
 
 ### Node Benchmark Workspace
 
@@ -45,6 +45,6 @@ Canonical high-level map of runtime surfaces, tooling boundaries, and ownership.
 
 - `tests/` regression + docs-parity checks
 - `tools/` utility scripts and external benchmark workspaces
-- `mcp-server/` MCP integration surface
+- `apps/mcp-server/` MCP integration surface
 - `docs/` operator/developer documentation
 

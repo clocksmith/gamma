@@ -91,7 +91,7 @@ to fold fresh `compare_eval_summary.json` outputs into the leaderboards under `p
 - `gamma/mind_meld/` - Multi-model collaboration
 - `gamma/benchmarks/` - Performance testing
 - `gamma/comparison/` - Model comparison tools
-- `games/2038/` - Mandate 2038 spec, browser prototype, and simulation lab
+- `apps/games/2038/` - Mandate 2038 spec, browser prototype, and simulation lab
 
 ### Guardrails
 - Enforce `EMOJI.md`; use only approved Unicode symbols, no emojis
