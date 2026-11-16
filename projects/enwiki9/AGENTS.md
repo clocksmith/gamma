@@ -15,9 +15,9 @@ The objective was not achieved; this resource decision does not establish
 scientific impossibility.
 
 Applies throughout `projects/enwiki9/`, including `ledger/` and `workbench/`.
-Obey [Gamma's instructions](../../AGENTS.md), including its
-[Unicode policy](../../EMOJI.md) and CATSCAN boundary rules, and the applicable
-`CATSCAN.md` chain; a nearer instruction file may narrow these rules.
+Follow [Gamma's instructions](../../AGENTS.md) and its
+[Unicode policy](../../EMOJI.md). Consult component `CATSCAN.md` maps when
+needed; archive maintenance has no mandatory ancestor-reading chain.
 
 Use [ADAPTIVE_WORKFLOW.md](ADAPTIVE_WORKFLOW.md) as the command manual and
 `tools/enwiki9_lab.py` as the operational entrance. [README.md](README.md) is the
@@ -27,23 +27,13 @@ action to a recorded result, and continue independent work when one gate is held
 At decision boundaries, use the manual's [test/mutate/explore rules](ADAPTIVE_WORKFLOW.md#choose-testing-mutation-or-exploration)
 and the [creative prompts](workbench/PROMPTS.md#creative-discovery) when changing direction.
 
-## Git workflow: direct to main
-
-- Commit on the owning repo's `main` and push to `origin/main`. No feature
-  branches, branch-backed worktrees, or PRs unless the user asks for them.
-- On another branch, preserve its work and move the task to `main` safely;
-  never discard changes to switch. Never force-push `main`.
-- Stage only task-related changes; integrate remote updates without
-  overwriting unrelated work.
-- Report the pushed commit or the concrete blocker. A local commit is not a push.
-
 ## Authority and permissions
 
 - Standing permission covers source inspection, research, synthetic fixtures,
   targeted regression tests, the release canary, and independently bounded
   discovery gates on assigned resources. Large launches and dependency/model
   installation require explicit user authorization; never auto-install them.
-- Before source changes or resource-intensive work, inspect host occupancy
+- Before resource-intensive work, inspect host occupancy
   with `python3 tools/enwiki9_lab.py start` (CPU, RAM, cgroup limits, jobs,
   budgets) and size the move with the manual's
   [resource planning instructions](ADAPTIVE_WORKFLOW.md#resources-parallel-work-and-event-timing),

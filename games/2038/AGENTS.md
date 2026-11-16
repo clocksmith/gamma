@@ -1,24 +1,15 @@
 # Mandate 2038 Org Instructions
 
-These instructions apply to the entire Mandate 2038 project.
-
-## Git workflow: direct to main
-
-- Commit on the owning repo's `main` and push to `origin/main`. No feature
-  branches, branch-backed worktrees, or PRs unless the user asks for them.
-- On another branch, preserve its work and move the task to `main` safely;
-  never discard changes to switch. Never force-push `main`.
-- Stage only task-related changes; integrate remote updates without
-  overwriting unrelated work.
-- Report the pushed commit or the concrete blocker. A local commit is not a push.
+These instructions apply to the entire Mandate 2038 project, in addition to
+[Gamma's instructions](../../AGENTS.md).
 
 ## Component Intent
 
-Before modifying a file, read the `CATSCAN.md` chain from the repository root
-to the target directory. Treat Target, Authority, Invariants, Acceptance, and
-Non-goals as implementation constraints; a child may narrow but not contradict
-its parent. Boundary changes require the affected charter to change with the
-implementation; algorithms remain free inside those constraints.
+Use `CATSCAN.md` as an optional component map when ownership or an invariant
+is unclear. Investigate the relevant code and observed game behavior directly;
+no ancestor-reading chain is required. When a legitimate redesign changes a
+boundary, update the affected reference with the implementation. Preserve the
+user-selected rules and the promotion requirements below.
 
 ## Product Intent
 
@@ -193,8 +184,8 @@ delta, and explicit user approval.
 
 ## Git And Publication
 
-- This game has no publication target independent of Gamma and is not
-  publishable through `rdpush` until it has an explicit remote and is in the
-  canonical Deco workspace registry.
+- Source changes belong to Gamma's Git repository. Pushing those changes does
+  not publish the game or authorize a retail release. The game has no
+  independent publication target.
 - Do not invent a remote, deployment target, crowdfunding status, quote, or
   manufacturing commitment.
