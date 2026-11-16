@@ -35,11 +35,13 @@ and frozen mechanisms. Active experiments retain their own namespaces.
 belongs to Flux; it is not the toolkit's former `src` namespace. The toolkit's
 Python wheel excludes all applications, research projects and run output.
 
-The self-transform family keeps distinct experiment directories and versions
-under `projects/self_transform/`; mechanisms and sealed evidence are not merged
+The [self-transform family](../projects/self_transform/README.md) keeps distinct
+experiment directories and versions under `projects/self_transform/`;
+mechanisms and sealed evidence are not merged
 into interchangeable configurations.
 
-Current commands and navigation use the new paths. The separate relocation map
+Current commands and navigation use the new paths. The separate
+[relocation map](path-relocations-20261116.json)
 records original prefixes; historical receipts, source revisions, digests and
 path strings remain evidence of the original run. It does not rewrite them.
 Original versions remain available at the map's published source revision.

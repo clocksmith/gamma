@@ -23,6 +23,24 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  node_contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            projects/self_transform
+            tools/codegen-bench
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preserved study tests from a foreign working directory
+        run: npm --prefix projects/self_transform test
+      - name: Benchmark infrastructure and optional browser dependency
+        run: |
+          node tools/codegen-bench/tests/benchmark.test.js
+          node tools/codegen-bench/index.js --help
+
   retained_artifacts:
     runs-on: ubuntu-latest
     steps:
