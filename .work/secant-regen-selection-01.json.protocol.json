@@ -1,0 +1,145 @@
+{
+  "protocol": {
+    "schema": "gamma.self-transform-secant-regen.selection/v1",
+    "stage": "selection",
+    "status": "frozen before selection execution; disjoint from confirmation seeds",
+    "selectionSeeds": [
+      610000,
+      620000,
+      630000,
+      640000,
+      650000,
+      660000
+    ],
+    "candidates": [
+      "secant_qn_trust",
+      "diag_secant_trust",
+      "secant_qn_no_rollback",
+      "first_order_mlp_only"
+    ],
+    "families": [
+      "twisted_huber_valley",
+      "anisotropic_gated_mlp"
+    ],
+    "parameterCount": 52,
+    "generations": 4,
+    "metaStepsPerGeneration": 6,
+    "innerSteps": 7,
+    "metaSupportTasks": 8,
+    "holdoutTasksPerGeneration": 32,
+    "preprocessing": {
+      "trainingCandidates": 9,
+      "trainingEnvironments": 2,
+      "trainSupportCount": 6,
+      "trainQueryCount": 8,
+      "trainInnerSteps": 7,
+      "trainMetaSteps": 6,
+      "sgdGrid": [
+        [
+          0.005,
+          0
+        ],
+        [
+          0.02,
+          0
+        ],
+        [
+          0.08,
+          0
+        ],
+        [
+          0.25,
+          0
+        ],
+        [
+          0.8,
+          0
+        ],
+        [
+          0.02,
+          0.8
+        ],
+        [
+          0.08,
+          0.8
+        ],
+        [
+          0.25,
+          0.8
+        ],
+        [
+          0.8,
+          0.8
+        ]
+      ],
+      "adamGrid": [
+        [
+          0.005,
+          0.5
+        ],
+        [
+          0.02,
+          0.5
+        ],
+        [
+          0.06,
+          0.5
+        ],
+        [
+          0.15,
+          0.5
+        ],
+        [
+          0.4,
+          0.5
+        ],
+        [
+          0.01,
+          0.9
+        ],
+        [
+          0.04,
+          0.9
+        ],
+        [
+          0.12,
+          0.9
+        ],
+        [
+          0.3,
+          0.9
+        ]
+      ],
+      "bfgsRates": [
+        0.005,
+        0.02,
+        0.06,
+        0.15,
+        0.35,
+        0.7,
+        1.2,
+        2,
+        3.5
+      ]
+    },
+    "arms": [
+      "evolving_ser_reset",
+      "fixed_ser_reset",
+      "serialization_only",
+      "tuned_sgd_reset",
+      "tuned_adam_reset",
+      "tuned_bfgs_reset"
+    ],
+    "selectionCriterion": "Compute per-family median relative loss reduction at final generation (g=3) of evolving_ser_reset vs fixed_ser_reset and vs each tuned conventional baseline (sgd, adam, bfgs). Rank candidates by compositeScore = 0.5 * min_family(medianProposerRelative) + 0.5 * min_{family,conv}(medianConvRelative). Deterministic tie-break: higher min_family(medianProposerRelative), then declaration order.",
+    "tieTolerance": 0.000001
+  },
+  "protocolHash": "3ab401b599960c152855061c78ea5746c9cdd15b191996667874e6722907e8b4",
+  "sourceHashes": {
+    "observation.mjs": "d1743ef400ddcbaffeec6e89a245ace7c8ce929293fff685e8e7f4ea6395b69e",
+    "autodiff.mjs": "c01cd3893639247b89b2b309a7aaa8bccadc5094fca765573a59e809176aa9fe",
+    "operator.mjs": "2bb9c6c8c06dfb80b764923e5f1c7eeb030e7d74be1d0c6518809d25bf4e2782",
+    "tasks.mjs": "b1e5364bd960da8ba14214331f1a0aace741c5563d4a5d20e01aa6fe86fa9049",
+    "stats.mjs": "d8b9326c61bfeb8051e0087df619d7beedc970a14906cb41bee37907396801c3",
+    "select.mjs": "e80d8d1a931b573c7a59f217b01906937c65596afecc49cd6828024b4ffd3352"
+  }
+}

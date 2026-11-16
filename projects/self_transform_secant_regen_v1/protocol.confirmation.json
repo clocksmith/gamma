@@ -1,0 +1,103 @@
+{
+  "schema": "gamma.self-transform-secant-regen.confirmation/v1",
+  "stage": "confirmation",
+  "status": "sealed after Stage 1 selection; single-shot execution on 12 unseen confirmation seeds",
+  "selectedRule": "secant_qn_no_rollback",
+  "selectionReceiptPath": ".work/secant-regen-selection-01.json",
+  "selectionReceiptSha256": "324f6cc633d0ae932c6463e143e5fcb32a8ebc5671f007d94379f5a23b316fed",
+  "seeds": [
+    901000,
+    902000,
+    903000,
+    904000,
+    905000,
+    906000,
+    907000,
+    908000,
+    909000,
+    910000,
+    911000,
+    912000
+  ],
+  "families": [
+    "twisted_huber_valley",
+    "anisotropic_gated_mlp"
+  ],
+  "parameterCount": 52,
+  "generations": 4,
+  "metaStepsPerGeneration": 6,
+  "innerSteps": 7,
+  "metaSupportTasks": 8,
+  "holdoutTasksPerGeneration": 64,
+  "neuralRegeneration": {
+    "transcriptProbes": 24,
+    "regenSteps": 16
+  },
+  "budgetMatchedRegen": {
+    "metaStepsPerGeneration": 5,
+    "regenSteps": 16
+  },
+  "preprocessing": {
+    "trainingCandidates": 9,
+    "trainingEnvironments": 2,
+    "trainSupportCount": 6,
+    "trainQueryCount": 8,
+    "trainInnerSteps": 7,
+    "trainMetaSteps": 6,
+    "sgdGrid": [
+      [0.005, 0.0],
+      [0.02, 0.0],
+      [0.08, 0.0],
+      [0.25, 0.0],
+      [0.8, 0.0],
+      [0.02, 0.8],
+      [0.08, 0.8],
+      [0.25, 0.8],
+      [0.8, 0.8]
+    ],
+    "adamGrid": [
+      [0.005, 0.5],
+      [0.02, 0.5],
+      [0.06, 0.5],
+      [0.15, 0.5],
+      [0.4, 0.5],
+      [0.01, 0.9],
+      [0.04, 0.9],
+      [0.12, 0.9],
+      [0.3, 0.9]
+    ],
+    "bfgsRates": [
+      0.005,
+      0.02,
+      0.06,
+      0.15,
+      0.35,
+      0.7,
+      1.2,
+      2.0,
+      3.5
+    ]
+  },
+  "arms": [
+    "evolving_ser_reset",
+    "fixed_ser_reset",
+    "evolving_ser_retain",
+    "fixed_ser_retain",
+    "evolving_regen_reset",
+    "evolving_regen_budget_matched",
+    "serialization_only",
+    "tuned_sgd_reset",
+    "tuned_sgd_retain",
+    "tuned_adam_reset",
+    "tuned_adam_retain",
+    "tuned_bfgs_reset",
+    "tuned_bfgs_retain"
+  ],
+  "signTestAlpha": 0.025,
+  "tieTolerance": 1e-6,
+  "thresholds": {
+    "retainedAdaptationMedianRelative": 0.05,
+    "proposerMedianRelative": 0.01,
+    "conventionalMedianRelative": 0.01
+  }
+}
