@@ -27,6 +27,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /tools/
+            /tests/
+            /projects/enwiki9/tools/
+            /projects/enwiki9/tests/
+            /projects/enwiki9/docs/archive-maintenance/
+            /projects/enwiki9/operations/adaptive/experiments/
+            /projects/enwiki9/operations/evidence/fixtures/
+            /projects/enwiki9/results/raw_reverse_bz2250k_q0_v1/artifacts.json
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
