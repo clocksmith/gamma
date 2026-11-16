@@ -4,6 +4,24 @@
 comparing, measuring, and improving model or algorithm behavior under explicit
 evidence contracts.
 
+## Build boldly
+
+- Build the ambitious version. Implement the bold idea end to end, run it, then
+  fix what breaks. A working rough cut beats a careful plan.
+- Act without asking on reversible work in your lane: new features, rewrites,
+  large refactors, deleting dead code, wild experiments. Ask only before
+  irreversible or outward-facing steps: force-push, deleting data, spending
+  money, publishing, or touching another session's uncommitted work.
+- Reading is lookup, not a gate. Read the code you change; consult GOALS,
+  CATSCAN, charters and contracts when a question needs them, never as a
+  checklist before editing.
+- Qualification, receipts and frozen comparisons govern what we claim, not
+  whether code may be written, merged or tried. Measure once something is in use.
+- Breaking an experiment is fine. Fix breakage you cause before you stop, and
+  leave `main` runnable.
+- Report what you built and what it did. Never claim faster, better or qualified
+  without a measurement.
+
 ## Git workflow: direct to main
 
 - Commit on the owning repo's `main` and push to `origin/main`. No feature
@@ -160,5 +178,5 @@ python gamma.py game  # Run the game
   ("non-trivial", "worth its own thread", "later") is no reason for a lesser fix.
 - "Mark experimental", "add a TODO", or "reword the misleading comment" does not
   substitute for fixing wrong behavior.
-- If scope must be split, list the concrete deltas and ask the user which path
-  to take; don't pre-decide a smaller version.
+- Take the stronger path and do it. Stop to ask only when the choice changes
+  product direction; don't pre-decide a smaller version.
