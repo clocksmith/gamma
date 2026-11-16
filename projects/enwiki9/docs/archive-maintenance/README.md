@@ -89,7 +89,7 @@ migration does not change the archived project's scientific status.
 A pinned GitHub-history URL is not WORM storage
 and moving current-tree outputs does not shrink existing Git history.
 
-## Next reviewed family: recorded attention streams
+## Recorded attention streams
 
 [The next candidate](attention-trace-candidate.json) identifies exactly sixteen
 streams from `fx2_attention_anchor250k_v1` and `v2`: P/K/D/S encode and repeat
@@ -107,9 +107,15 @@ pinning that retention source. The [fresh-input list](attention-trace-verifier-i
 names eleven currently tracked metadata/source files needed by the verifier;
 they remain unchanged. No prior commit checkout or model installation is needed.
 
-After the actual retained catalog restores the sixteen original paths:
+The sixteen tracked streams were removed after a successful independent
+GitHub restoration and CPU comparison, recorded in the
+[restoration check](attention-restoration-check.json). Restore their original
+paths and reproduce the checks:
 
 ```bash
+python3 tools/retained_artifacts.py restore \
+  --catalog projects/enwiki9/docs/archive-maintenance/retained-attention-traces.json \
+  --root . --fetch
 python3 projects/enwiki9/tools/verify_attention_trace_restore.py \
   --source-root FRESH_METADATA_REPOSITORY_ROOT \
   --restored-root RESTORED_REPOSITORY_ROOT
@@ -123,6 +129,5 @@ recorded contrasts each inspect 151,210 rows of 205 FP16 words per stream,
 including finite values and pre-boundary identity; results must equal the kept
 original comparison JSON. Including hashes, this entails approximately 2.48 GB
 of sequential reads and 371,976,600 FP16 exponent checks with bounded buffers.
-The v1 and v2 negative scientific conclusions remain unchanged. The candidate
-is not proof of a published restore: publication, independent restoration and
-verification must precede any removal.
+The v1 and v2 negative scientific conclusions remain unchanged. Default CI
+rejects re-adding these sixteen files, including force-added copies.
