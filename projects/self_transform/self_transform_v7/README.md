@@ -90,9 +90,9 @@ ordinary optimizer-state persistence autonomous RSI.
 ## Reproduce and analyze
 
 ```
-node projects/self_transform_v7/test.mjs
-node projects/self_transform_v7/run.mjs .work/self-transform-v7-new.json
-node projects/self_transform_v7/analyze.mjs .work/self-transform-v7-new.json
+node projects/self_transform/self_transform_v7/test.mjs
+node projects/self_transform/self_transform_v7/run.mjs .work/self-transform-v7-new.json
+node projects/self_transform/self_transform_v7/analyze.mjs .work/self-transform-v7-new.json
 ```
 
 The analysis implements the frozen sign/median endpoint and reports all seed

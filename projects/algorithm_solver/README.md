@@ -1,5 +1,19 @@
 # Algorithm solver lane
 
+## Local development frontdoor
+
+From this directory, run the requirement/record controls without model downloads:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m pytest -p no:cacheprovider -c pyproject.toml
+```
+
+`pyproject.toml` configures checkout tests, not an independent wheel. `algsolve`,
+`catalogue`, `contracts`, `literals` and declared data remain adjacent:
+`algsolve.records.LANE_ROOT` and source-bound reproduction code depend on that
+relationship. Existing `python -m algsolve.<command>` entrypoints below still run
+from this project directory. Keep sealed sources and receipts unchanged.
+
 Current milestone gates, evidence and status: [milestone registry view](catalogue/MILESTONES.md).
 [STATUS.md](STATUS.md) preserves dated historical scorecards; goals are tags, not completion units.
 For source-bound known answers and explicit editor insertion, see

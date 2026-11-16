@@ -123,7 +123,7 @@ underscores tuned-baseline comparisons. No novelty claim is made here.
 ## Commands
 
 ```
-node projects/self_transform_curvature_v1/test.mjs
-node projects/self_transform_curvature_v1/run.mjs .work/curvature-state-new.json
-node projects/self_transform_curvature_v1/analyze.mjs .work/curvature-state-new.json
+node projects/self_transform/self_transform_curvature_v1/test.mjs
+node projects/self_transform/self_transform_curvature_v1/run.mjs .work/curvature-state-new.json
+node projects/self_transform/self_transform_curvature_v1/analyze.mjs .work/curvature-state-new.json
 ```

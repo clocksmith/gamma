@@ -67,8 +67,8 @@ boundary against malicious code. The controlled evaluator is fixed trusted code.
 ## Run
 
 ```
-node projects/self_transform_v1/test.mjs
-node projects/self_transform_v1/run.mjs .work/self-transform-01.json
+node projects/self_transform/self_transform_v1/test.mjs
+node projects/self_transform/self_transform_v1/run.mjs .work/self-transform-01.json
 ```
 
 The runner writes the protocol and source lock first with exclusive creation and

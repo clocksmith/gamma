@@ -138,3 +138,10 @@ When explicitly asked for Hutter status, include the `96,000,000` byte and
 forecast and signed target distance, and the active gate's receipt-backed scope,
 progress, guard state, and terminal status. Historical detailed instructions are
 preserved at `docs/reference/legacy_instructions/AGENTS_20260724.md`.
+
+## Archive maintenance checks
+
+Local `pyproject.toml` and [README](README.md#local-maintenance-frontdoor) select
+existing CPU contract tests. They do not resume research or change thresholds.
+This remains a source checkout with adjacent contracts, native sources and
+immutable evidence; no portable wheel is claimed.

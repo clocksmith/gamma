@@ -84,8 +84,8 @@ now-exposed holdouts or count tiny differences as meaningful progress.
 ## Run
 
 ```
-node projects/self_transform_v5/test.mjs
-node projects/self_transform_v5/run.mjs .work/self-transform-v5-new.json
+node projects/self_transform/self_transform_v5/test.mjs
+node projects/self_transform/self_transform_v5/run.mjs .work/self-transform-v5-new.json
 ```
 
 Focused tests cover deterministic selection, equal training budgets, zero-signal

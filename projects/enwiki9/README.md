@@ -1,5 +1,18 @@
 # enwiki9
 
+## Local maintenance frontdoor
+
+`pyproject.toml` selects existing Clockwork contract tests. From this directory:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m pytest -p no:cacheprovider -c pyproject.toml
+```
+
+This is archive maintenance, not permission to resume experiments. Services under
+`src/gamma_enwiki9` still resolve adjacent contracts, native source and retained
+evidence in this checkout. This test configuration does not promise a portable
+wheel or bundle historical artifacts into a package.
+
 **Archived by user decision on 2026-10-08.** Active research and compute are
 stopped. All 27 pending jobs are held; the lab refuses new research, queue release
 and execution while archived. Source and evidence remain available for inspection.

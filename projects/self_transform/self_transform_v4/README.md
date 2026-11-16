@@ -82,9 +82,9 @@ No LLM, generalization across domains, AGI or autonomous RSI was tested.
 ## Run
 
 ```
-node projects/self_transform_v2/test.mjs
-node projects/self_transform_v4/test.mjs
-node projects/self_transform_v4/run.mjs .work/self-transform-v4-new.json
+node projects/self_transform/self_transform_v2/test.mjs
+node projects/self_transform/self_transform_v4/test.mjs
+node projects/self_transform/self_transform_v4/run.mjs .work/self-transform-v4-new.json
 ```
 
 Focused checks verify equal training budgets, deterministic mutation trajectories,
