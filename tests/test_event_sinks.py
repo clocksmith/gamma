@@ -14,7 +14,7 @@ from io import StringIO
 from unittest.mock import patch
 
 
-from src.mind_meld.core.event_sinks import (
+from gamma.mind_meld.core.event_sinks import (
     TokenEvent,
     SwapEvent,
     EventSink,

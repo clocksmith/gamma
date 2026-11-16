@@ -20,22 +20,22 @@ from unittest.mock import MagicMock, Mock
 
 
 # Import all new components
-from src.core.models.model_registry import ModelSelector, ModelProfile, ModelSpecialization, get_recommended_ensemble, MODEL_ZOO
-from src.mind_meld.strategies.base_strategy import (
+from gamma.core.models.model_registry import ModelSelector, ModelProfile, ModelSpecialization, get_recommended_ensemble, MODEL_ZOO
+from gamma.mind_meld.strategies.base_strategy import (
     SwapStrategyBase, SwapDecision,
     FixedIntervalStrategy, PatternBasedStrategy, RoundRobinStrategy, RandomStrategy
 )
-from src.mind_meld.strategies.perplexity_strategy import PerplexitySwapStrategy, ConfidenceBasedStrategy
-from src.mind_meld.strategies.semantic_strategy import SemanticSimilarityStrategy, SyntacticRoleStrategy
-from src.mind_meld.advanced.speculative_decoding import SpeculativeDecoder, SpeculativeMeldEngine
-from src.mind_meld.advanced.contrastive_decoding import ContrastiveDecoder, ContrastiveConfig
-from src.mind_meld.advanced.moe_router import ContentType, ContentClassifier, MoERouter, AdaptiveMoERouter
-from src.mind_meld.advanced.feedback_loop import FeedbackLoop, FeedbackType, FeedbackResult
-from src.mind_meld.advanced.hierarchical_control import HierarchicalController, PlanStep, ExecutionPlan
-from src.mind_meld.advanced.adversarial import AdversarialDebate, Claim, Challenge, DebateResult
-from src.benchmarks.mind_meld_benchmark import MindMeldBenchmark, BenchmarkConfig, BenchmarkResult
-from src.infrastructure.cache_manager import KVCacheCompressor, ModelCache, AsyncModelLoader, StreamingGenerator
-from src.mind_meld.presets import (
+from gamma.mind_meld.strategies.perplexity_strategy import PerplexitySwapStrategy, ConfidenceBasedStrategy
+from gamma.mind_meld.strategies.semantic_strategy import SemanticSimilarityStrategy, SyntacticRoleStrategy
+from gamma.mind_meld.advanced.speculative_decoding import SpeculativeDecoder, SpeculativeMeldEngine
+from gamma.mind_meld.advanced.contrastive_decoding import ContrastiveDecoder, ContrastiveConfig
+from gamma.mind_meld.advanced.moe_router import ContentType, ContentClassifier, MoERouter, AdaptiveMoERouter
+from gamma.mind_meld.advanced.feedback_loop import FeedbackLoop, FeedbackType, FeedbackResult
+from gamma.mind_meld.advanced.hierarchical_control import HierarchicalController, PlanStep, ExecutionPlan
+from gamma.mind_meld.advanced.adversarial import AdversarialDebate, Claim, Challenge, DebateResult
+from gamma.benchmarks.mind_meld_benchmark import MindMeldBenchmark, BenchmarkConfig, BenchmarkResult
+from gamma.infrastructure.cache_manager import KVCacheCompressor, ModelCache, AsyncModelLoader, StreamingGenerator
+from gamma.mind_meld.presets import (
     PresetType, MeldPreset, get_preset, list_presets,
     get_preset_by_name, get_recommended_preset, create_custom_preset
 )
@@ -263,7 +263,7 @@ def test_speculative_decoding(results: TestResults):
     try:
         # Test generation step
         context = "Test context"
-        from src.mind_meld.advanced.speculative_decoding import SpeculativeResult
+        from gamma.mind_meld.advanced.speculative_decoding import SpeculativeResult
         result = decoder.generate_step(context)
         assert isinstance(result, SpeculativeResult)
         assert result.num_accepted >= 0

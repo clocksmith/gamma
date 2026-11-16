@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from src.mind_meld.latent_handoff.contract import ContractError
-from src.mind_meld.latent_handoff.experiment import load_config
+from gamma.mind_meld.latent_handoff.contract import ContractError
+from gamma.mind_meld.latent_handoff.experiment import load_config
 
 
 CONFIG = Path("configs/latent_handoff/qwen3_0_6b_to_1_7b.yaml")

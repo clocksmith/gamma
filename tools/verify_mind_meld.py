@@ -22,9 +22,9 @@ print("=" * 80)
 # Test 1: Core imports
 print("\n[1/7] Testing core imports...")
 try:
-    from src.mind_meld.core.engine import MeldEngine
-    from src.mind_meld.core.config import MeldConfig, SwapConfig, TranslationConfig, BridgeConfig
-    from src.mind_meld.core.mode import MindMeldMode
+    from gamma.mind_meld.core.engine import MeldEngine
+    from gamma.mind_meld.core.config import MeldConfig, SwapConfig, TranslationConfig, BridgeConfig
+    from gamma.mind_meld.core.mode import MindMeldMode
     print("✅ Core imports successful")
 except Exception as e:
     print(f"❌ Core import failed: {e}")
@@ -33,7 +33,7 @@ except Exception as e:
 # Test 2: Strategy imports
 print("\n[2/7] Testing strategy imports...")
 try:
-    from src.mind_meld.strategies import (
+    from gamma.mind_meld.strategies import (
         PerplexitySwapStrategy,
         ConfidenceBasedStrategy,
         SemanticSimilarityStrategy,
@@ -47,7 +47,7 @@ except Exception as e:
 # Test 3: Visualization imports
 print("\n[3/7] Testing visualization imports...")
 try:
-    from src.mind_meld.visualization import SwapVisualizer, SwapEvent, ModelContribution
+    from gamma.mind_meld.visualization import SwapVisualizer, SwapEvent, ModelContribution
     print("✅ Visualization imports successful")
 except Exception as e:
     print(f"❌ Visualization import failed: {e}")

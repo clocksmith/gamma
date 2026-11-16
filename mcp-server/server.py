@@ -39,8 +39,8 @@ mcp = FastMCP("gamma",
 def get_gamma_available_models() -> dict[str, Any]:
     """Get all available models detected by GAMMA."""
     try:
-        from src.core.models.model_discovery import discover_all_models
-        from src.core.hardware.gpu_discovery import get_gpu_info
+        from gamma.core.models.model_discovery import discover_all_models
+        from gamma.core.hardware.gpu_discovery import get_gpu_info
 
         gpu_info = get_gpu_info()
         models = discover_all_models()
@@ -257,7 +257,7 @@ async def run_inference(
     """
     try:
         # Import GAMMA's inference engine
-        from src.engines.engine_factory import get_engine
+        from gamma.engines.engine_factory import get_engine
 
         logger.info(f"Running inference with model={model}, engine={engine}")
 

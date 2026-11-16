@@ -12,7 +12,8 @@ setup(
     description="Shared infrastructure for educational ML learning tools",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    packages=find_packages(),
+    package_dir={"": "src"},
+    packages=find_packages("src"),
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Education",

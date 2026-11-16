@@ -3,8 +3,8 @@ from types import SimpleNamespace
 import numpy as np
 import torch
 
-from src.mind_meld.bridges.kv_cache_handler import PyTorchKVCache
-from src.mind_meld.latent_handoff.hf_cache import LBSHDCache
+from gamma.mind_meld.bridges.kv_cache_handler import PyTorchKVCache
+from gamma.mind_meld.latent_handoff.hf_cache import LBSHDCache
 
 
 def _config() -> SimpleNamespace:

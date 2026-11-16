@@ -31,7 +31,7 @@ def main() -> int:
     import numpy as np
     import torch
 
-    from src.engines.engine_factory import get_engine
+    from gamma.engines.engine_factory import get_engine
 
     model_name = args.model
     engine_type = args.engine

@@ -8,7 +8,7 @@ capabilities are properly defined. Also tests new helper constants.
 
 import unittest
 
-from src.engines.capability_registry import (
+from gamma.engines.capability_registry import (
     ENGINES,
     EngineCapabilities,
     EngineInfo,
@@ -20,13 +20,13 @@ from src.engines.capability_registry import (
     get_engine_requirements,
     format_engine_table,
 )
-from src.engines.sampling_utils import (
+from gamma.engines.sampling_utils import (
     TRANSLATION_LOGIT_FLOOR,
     LOGIT_FLOOR,
     LOGIT_CEILING,
     EPSILON,
 )
-from src.mind_meld.core.meld_engine import (
+from gamma.mind_meld.core.meld_engine import (
     FALLBACK_TOP_K,
     TARGET_SELECTION_ROUND_ROBIN,
     TARGET_SELECTION_NEXT,
@@ -190,7 +190,7 @@ class TestHelperConstants(unittest.TestCase):
 
     def test_fallback_top_k_defined(self):
         """Test that FALLBACK_TOP_K constant is defined."""
-        from src.mind_meld.core.meld_engine import FALLBACK_TOP_K
+        from gamma.mind_meld.core.meld_engine import FALLBACK_TOP_K
         self.assertIsInstance(FALLBACK_TOP_K, int)
         self.assertGreater(FALLBACK_TOP_K, 0)
         self.assertEqual(FALLBACK_TOP_K, 100)
@@ -230,7 +230,7 @@ class TestVocabularyTranslatorConstants(unittest.TestCase):
 
     def test_translator_uses_shared_constant(self):
         """Test that vocabulary translator imports from sampling_utils."""
-        from src.mind_meld.translators.vocabulary_translator import VocabularyTranslator
+        from gamma.mind_meld.translators.vocabulary_translator import VocabularyTranslator
         # Should match the sampling_utils constant
         self.assertEqual(VocabularyTranslator.DEFAULT_LOGIT_FLOOR, TRANSLATION_LOGIT_FLOOR)
         self.assertEqual(VocabularyTranslator.DEFAULT_LOGIT_FLOOR, -10.0)

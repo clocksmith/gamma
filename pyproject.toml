@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gamma-toolkit"
+version = "0.1.0"
+description = "Model inspection, comparison and collaboration toolkit"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "gamma-core>=0.1.0", "numpy>=1.24", "requests>=2.31", "psutil>=5.9",
+  "PyYAML>=6", "rich>=13.7", "transformers>=4.35", "gguf>=0.1.0",
+]
+
+[project.optional-dependencies]
+pytorch = ["torch>=2.1", "accelerate>=0.25", "safetensors>=0.4"]
+test = ["pytest>=7"]
+
+[project.scripts]
+gamma = "gamma.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["gamma*"]
+exclude = ["gamma-core*"]
+
+[tool.setuptools.package-data]
+"gamma" = ["py.typed"]
+"gamma.mind_meld" = ["configs/*.yaml", "configs/presets/*.yaml"]

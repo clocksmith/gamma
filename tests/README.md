@@ -267,4 +267,4 @@ python3 -m pytest tests/test_difficulty.py::test_level_up
 
 - **[Main README](../README.md)** - GAMMA overview
 - **[Run Tests Script](../run_tests.sh)** - Test runner
-- **[Game Module](../src/game/README.md)** - Game module docs
+- **[Game Module](../gamma/game/README.md)** - Game module docs

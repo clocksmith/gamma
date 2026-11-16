@@ -2,7 +2,7 @@ from dataclasses import replace
 
 import pytest
 
-from src.mind_meld.latent_handoff.contract import (
+from gamma.mind_meld.latent_handoff.contract import (
     CacheGeometry,
     CacheLayout,
     ContractError,

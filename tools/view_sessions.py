@@ -19,7 +19,7 @@ except ModuleNotFoundError:
     from _path_setup import ensure_project_root_on_path
 
 ensure_project_root_on_path()
-from src.game.difficulty_levels import GameSession
+from gamma.game.difficulty_levels import GameSession
 
 
 def list_sessions():

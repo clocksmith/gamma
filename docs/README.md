@@ -17,14 +17,14 @@ This directory is the canonical documentation index for GAMMA.
 | Cross-repository experiment register | [../projects/samer/experiments/README.md](../projects/samer/experiments/README.md) |
 | Translation distillation ops + leaderboards | [../projects/distillation/translation/README.md](../projects/distillation/translation/README.md) |
 | Integrations/API usage | [integration-guide.md](integration-guide.md) |
-| Mind Meld usage + status | [../src/mind_meld/README.md](../src/mind_meld/README.md) |
+| Mind Meld usage + status | [../gamma/mind_meld/README.md](../gamma/mind_meld/README.md) |
 | Runtime optimization tips | [optimization-guide.md](optimization-guide.md) |
 | Natural-language command patterns | [NATURAL_LANGUAGE_COMMANDS.md](NATURAL_LANGUAGE_COMMANDS.md) |
 
 ## Fast Entry Points
 
 - Project overview: [../README.md](../README.md)
-- Engine setup and support matrix: [../src/engines/README.md](../src/engines/README.md)
+- Engine setup and support matrix: [../gamma/engines/README.md](../gamma/engines/README.md)
 - Tooling commands: [../tools/README.md](../tools/README.md)
 - Flux docs: [../flux/README.md](../flux/README.md)
 - Translation distillation results bundle: [../projects/distillation/translation/README.md](../projects/distillation/translation/README.md)

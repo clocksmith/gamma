@@ -16,7 +16,7 @@ import os
 import unittest
 from unittest.mock import patch, MagicMock, Mock
 
-from src.core.hardware import memory_estimator
+from gamma.core.hardware import memory_estimator
 
 
 class MockGGUFMeta:
@@ -43,7 +43,7 @@ class MockGGUFMeta:
 class TestEstimateGGUFMemory(unittest.TestCase):
     """Test estimate_gguf_memory function."""
 
-    @patch('src.core.hardware.memory_estimator.parse_gguf_file')
+    @patch('gamma.core.hardware.memory_estimator.parse_gguf_file')
     @patch('os.path.getsize')
     def test_estimate_gguf_memory_basic(self, mock_getsize, mock_parse):
         """Should estimate memory for GGUF file."""
@@ -58,7 +58,7 @@ class TestEstimateGGUFMemory(unittest.TestCase):
         self.assertIn('total_mb', result)
         self.assertGreater(result['total_mb'], 0)
 
-    @patch('src.core.hardware.memory_estimator.parse_gguf_file')
+    @patch('gamma.core.hardware.memory_estimator.parse_gguf_file')
     @patch('os.path.getsize')
     def test_estimate_gguf_memory_with_context(self, mock_getsize, mock_parse):
         """Should scale KV cache with context length."""
@@ -71,7 +71,7 @@ class TestEstimateGGUFMemory(unittest.TestCase):
         # Larger context should need more KV cache
         self.assertGreater(result_large['kv_cache_mb'], result_small['kv_cache_mb'])
 
-    @patch('src.core.hardware.memory_estimator.parse_gguf_file')
+    @patch('gamma.core.hardware.memory_estimator.parse_gguf_file')
     @patch('os.path.getsize')
     def test_estimate_gguf_memory_invalid_metadata(self, mock_getsize, mock_parse):
         """Should fall back when metadata is invalid."""
@@ -84,7 +84,7 @@ class TestEstimateGGUFMemory(unittest.TestCase):
         self.assertIn('total_mb', result)
         self.assertGreater(result['total_mb'], 0)
 
-    @patch('src.core.hardware.memory_estimator.parse_gguf_file')
+    @patch('gamma.core.hardware.memory_estimator.parse_gguf_file')
     @patch('os.path.getsize')
     def test_estimate_gguf_memory_includes_metadata(self, mock_getsize, mock_parse):
         """Should include metadata in result when available."""
@@ -97,7 +97,7 @@ class TestEstimateGGUFMemory(unittest.TestCase):
         self.assertEqual(result['quantization'], "Q4_K_M")
         self.assertEqual(result['param_billions'], 7.0)
 
-    @patch('src.core.hardware.memory_estimator.parse_gguf_file')
+    @patch('gamma.core.hardware.memory_estimator.parse_gguf_file')
     @patch('os.path.getsize')
     def test_estimate_gguf_memory_file_error(self, mock_getsize, mock_parse):
         """Should handle file size errors gracefully."""
@@ -242,7 +242,7 @@ class TestEstimateModelSizeFromName(unittest.TestCase):
 class TestEstimateModelMemory(unittest.TestCase):
     """Test estimate_model_memory function."""
 
-    @patch('src.core.hardware.memory_estimator.estimate_gguf_memory')
+    @patch('gamma.core.hardware.memory_estimator.estimate_gguf_memory')
     @patch('os.path.exists')
     def test_estimate_gguf_file(self, mock_exists, mock_estimate_gguf):
         """Should use GGUF estimator for .gguf files."""
@@ -254,7 +254,7 @@ class TestEstimateModelMemory(unittest.TestCase):
         mock_estimate_gguf.assert_called_once()
         self.assertEqual(result['total_mb'], 8000)
 
-    @patch('src.core.hardware.memory_estimator.estimate_transformers_memory')
+    @patch('gamma.core.hardware.memory_estimator.estimate_transformers_memory')
     @patch('os.path.exists')
     def test_estimate_hf_model(self, mock_exists, mock_estimate_hf):
         """Should use transformers estimator for HF models."""
@@ -270,7 +270,7 @@ class TestEstimateModelMemory(unittest.TestCase):
 class TestCheckModelFits(unittest.TestCase):
     """Test check_model_fits function."""
 
-    @patch('src.core.hardware.memory_estimator.estimate_model_memory')
+    @patch('gamma.core.hardware.memory_estimator.estimate_model_memory')
     def test_model_fits_with_margin(self, mock_estimate):
         """Should return True when model fits."""
         mock_estimate.return_value = {'total_mb': 8000, 'model_size_mb': 7000,
@@ -282,7 +282,7 @@ class TestCheckModelFits(unittest.TestCase):
         self.assertIn("fits", message.lower())
         self.assertIn("margin", message.lower())
 
-    @patch('src.core.hardware.memory_estimator.estimate_model_memory')
+    @patch('gamma.core.hardware.memory_estimator.estimate_model_memory')
     def test_model_does_not_fit(self, mock_estimate):
         """Should return False when model doesn't fit."""
         mock_estimate.return_value = {'total_mb': 16000, 'model_size_mb': 14000,
@@ -293,7 +293,7 @@ class TestCheckModelFits(unittest.TestCase):
         self.assertFalse(fits)
         self.assertIn("insufficient", message.lower())
 
-    @patch('src.core.hardware.memory_estimator.estimate_model_memory')
+    @patch('gamma.core.hardware.memory_estimator.estimate_model_memory')
     def test_suggests_quantization_large_shortage(self, mock_estimate):
         """Should suggest smaller model for large shortage."""
         mock_estimate.return_value = {'total_mb': 28000, 'model_size_mb': 26000,
@@ -305,7 +305,7 @@ class TestCheckModelFits(unittest.TestCase):
         # Shortage is 20GB, should suggest smaller model
         self.assertIn("smaller model", message.lower())
 
-    @patch('src.core.hardware.memory_estimator.estimate_model_memory')
+    @patch('gamma.core.hardware.memory_estimator.estimate_model_memory')
     def test_suggests_4bit_medium_shortage(self, mock_estimate):
         """Should suggest 4-bit for medium shortage."""
         mock_estimate.return_value = {'total_mb': 14000, 'model_size_mb': 12000,
@@ -317,7 +317,7 @@ class TestCheckModelFits(unittest.TestCase):
         # Shortage is 6GB, should suggest 4-bit
         self.assertIn("4-bit", message.lower())
 
-    @patch('src.core.hardware.memory_estimator.estimate_model_memory')
+    @patch('gamma.core.hardware.memory_estimator.estimate_model_memory')
     def test_suggests_close_apps_small_shortage(self, mock_estimate):
         """Should suggest closing apps for small shortage."""
         mock_estimate.return_value = {'total_mb': 9000, 'model_size_mb': 8000,

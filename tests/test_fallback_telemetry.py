@@ -6,7 +6,7 @@ import logging
 
 import pytest
 
-from src.core.fallback_telemetry import FallbackTelemetry
+from gamma.core.fallback_telemetry import FallbackTelemetry
 
 
 @pytest.mark.regression

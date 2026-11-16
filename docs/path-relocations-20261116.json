@@ -1,0 +1,45 @@
+{
+  "schema": "gamma.path-relocations/v1",
+  "originalSourceCommit": "88bd675cf192b70efc1a0f7cf56168b8b0104709",
+  "notes": [
+    "Historical receipts retain original path strings, source revisions and hashes.",
+    "Mappings locate current code; they do not assert original measured bytes changed location without modification.",
+    "Frozen versions remain available at originalSourceCommit."
+  ],
+  "relocations": [
+    {
+      "from": "src/",
+      "to": "gamma/",
+      "kind": "toolkit_namespace"
+    },
+    {
+      "from": "configs/mind_meld/",
+      "to": "gamma/mind_meld/configs/",
+      "kind": "packaged_resources"
+    },
+    {
+      "from": "tools/run_mind_meld_cli.py",
+      "to": "gamma/commands/run_mind_meld_cli.py",
+      "kind": "implementation",
+      "compatibility_launcher": true
+    },
+    {
+      "from": "tools/benchmark_model_speed.py",
+      "to": "gamma/commands/benchmark_model_speed.py",
+      "kind": "implementation",
+      "compatibility_launcher": true
+    },
+    {
+      "from": "tools/engine_selector.py",
+      "to": "gamma/commands/engine_selector.py",
+      "kind": "implementation",
+      "compatibility_launcher": true
+    },
+    {
+      "from": "tools/list_models.py",
+      "to": "gamma/commands/list_models.py",
+      "kind": "implementation",
+      "compatibility_launcher": true
+    }
+  ]
+}

@@ -69,7 +69,7 @@ python gamma.py game --comparison --help
 python gamma.py mind-meld --help
 ```
 
-The [state-log compiler](src/core/state_context.py) runs on CPU without a model.
+The [state-log compiler](gamma/core/state_context.py) runs on CPU without a model.
 It supports explicit `SET`, `UPDATE`, `COPY` and integer `ADD` records, retaining
 original lines and source hashes for the requested `READ`. Its JSON output
 contains the compacted prompt and evidence references; `--prompt-only` prints
@@ -105,12 +105,15 @@ Gamma does not turn a benchmark result into a general model claim. Distillation,
 RLVR, routing, custom kernels, and prompt changes remain separate experiment
 variables unless a study explicitly combines them. Engine-specific setup may
 require local GPU, API, or backend configuration; see
-[`src/engines/README.md`](src/engines/README.md). Model weights are not
+[`gamma/engines/README.md`](gamma/engines/README.md). Model weights are not
 installed automatically.
 
 ## Repository map
 
-- [`src/`](src/) — runtime, engines, game logic, comparison, and benchmarks
+See [code, apps, project and evidence boundaries](docs/REPOSITORY_LAYOUT.md) for
+installation and the relocation/restore contracts.
+
+- [`gamma/`](gamma/) — runtime, engines, game logic, comparison, and benchmarks
 - [`projects/`](projects/) — distillation, SAME-R, embedding, translation, WGSL, and compression work
 - [`tools/`](tools/) — developer and model-analysis utilities
 - [`requirements/`](requirements/) — dependency manifests by hardware and engine

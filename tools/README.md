@@ -45,7 +45,7 @@ Benchmark canonical docs: [../docs/BENCHMARKING.md](../docs/BENCHMARKING.md)
 | `quick_mind_meld_test.py` | Fast sanity checks |
 | `verify_mind_meld.py` | Deeper setup and config validation |
 
-Mind Meld canonical docs: [../src/mind_meld/README.md](../src/mind_meld/README.md)
+Mind Meld canonical docs: [../gamma/mind_meld/README.md](../gamma/mind_meld/README.md)
 
 ### Routing and API
 

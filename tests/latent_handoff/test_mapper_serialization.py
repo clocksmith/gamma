@@ -2,9 +2,9 @@ from pathlib import Path
 
 import torch
 
-from src.mind_meld.latent_handoff.contract import ModelIdentity
-from src.mind_meld.latent_handoff.hf_cache import LBSHDCache
-from src.mind_meld.latent_handoff.mapper import (
+from gamma.mind_meld.latent_handoff.contract import ModelIdentity
+from gamma.mind_meld.latent_handoff.hf_cache import LBSHDCache
+from gamma.mind_meld.latent_handoff.mapper import (
     DirectionalMapper,
     fit_directional_mapper,
 )

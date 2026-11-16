@@ -16,7 +16,7 @@ and 256one production editor hosting.
 
 ## Scope
 
-Model engines, benchmarks and comparison under `src/`; translation/WGSL distillation,
+Model engines, benchmarks and comparison under `gamma/`; translation/WGSL distillation,
 SAME-R and algorithm-solving research under `projects/`; game simulations.
 `projects/enwiki9/` is archived.
 

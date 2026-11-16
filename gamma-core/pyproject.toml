@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=45", "wheel"]
-build-backend = "setuptools.build_backend"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "gamma-core"
@@ -23,3 +23,7 @@ dev = [
     "black>=23.0.0",
     "mypy>=1.0.0",
 ]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["engine*", "game*", "ui*", "utils*"]

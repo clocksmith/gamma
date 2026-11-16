@@ -5,16 +5,16 @@ import pytest
 import torch
 from transformers import Qwen3Config, Qwen3ForCausalLM, __version__ as transformers_version
 
-from src.mind_meld.latent_handoff.calibration import capture_prefill
-from src.mind_meld.latent_handoff.contract import (
+from gamma.mind_meld.latent_handoff.calibration import capture_prefill
+from gamma.mind_meld.latent_handoff.contract import (
     ContractError,
     ExperimentContract,
     ModelIdentity,
     RouteOutcome,
     digest_object,
 )
-from src.mind_meld.latent_handoff.injection import inject_and_forward
-from src.mind_meld.latent_handoff.rope import rope_contract_from_config
+from gamma.mind_meld.latent_handoff.injection import inject_and_forward
+from gamma.mind_meld.latent_handoff.rope import rope_contract_from_config
 
 
 def _identity(model: Qwen3ForCausalLM) -> ModelIdentity:

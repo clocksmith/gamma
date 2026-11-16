@@ -15,7 +15,7 @@ import unittest
 import tempfile
 import json
 
-from src.mind_meld.core.config import (
+from gamma.mind_meld.core.config import (
     MeldConfig,
     SwapConfig,
     TranslationConfig,

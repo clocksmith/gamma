@@ -6,12 +6,12 @@ from unittest.mock import MagicMock, patch
 from dataclasses import dataclass
 
 # State Bridge
-from src.mind_meld.bridges.state_bridge import (
+from gamma.mind_meld.bridges.state_bridge import (
     BridgeState, StateBridge
 )
 
 # KV Cache Handler
-from src.mind_meld.bridges.kv_cache_handler import (
+from gamma.mind_meld.bridges.kv_cache_handler import (
     ModelArchitecture,
     ARCHITECTURE_GROUPS,
     get_architecture_group,

@@ -3,19 +3,19 @@ import hashlib
 import torch
 from transformers import Qwen3Config, Qwen3ForCausalLM, __version__ as transformers_version
 
-from src.mind_meld.latent_handoff.calibration import (
+from gamma.mind_meld.latent_handoff.calibration import (
     apply_directional_mapper,
     capture_prefill,
 )
-from src.mind_meld.latent_handoff.contract import (
+from gamma.mind_meld.latent_handoff.contract import (
     ExperimentContract,
     ModelIdentity,
     RouteOutcome,
     digest_object,
 )
-from src.mind_meld.latent_handoff.injection import inject_and_forward
-from src.mind_meld.latent_handoff.mapper import fit_directional_mapper
-from src.mind_meld.latent_handoff.rope import rope_contract_from_config
+from gamma.mind_meld.latent_handoff.injection import inject_and_forward
+from gamma.mind_meld.latent_handoff.mapper import fit_directional_mapper
+from gamma.mind_meld.latent_handoff.rope import rope_contract_from_config
 
 
 def test_fitted_mapper_runs_from_capture_through_target_decode() -> None:

@@ -13,7 +13,7 @@ import sys
 import unittest
 import numpy as np
 
-from src.engines.sampling_utils import temperature_scale, top_k_filter, top_p_filter, softmax
+from gamma.engines.sampling_utils import temperature_scale, top_k_filter, top_p_filter, softmax
 
 
 class TestTemperatureScale(unittest.TestCase):

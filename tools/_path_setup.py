@@ -15,16 +15,6 @@ def ensure_project_root_on_path() -> str:
     return root_str
 
 
-def ensure_src_on_path() -> str:
-    """Insert repository ``src`` directory into ``sys.path`` once and return it."""
-    root = Path(ensure_project_root_on_path())
-    src = root / "src"
-    src_str = str(src)
-    if src_str not in sys.path:
-        sys.path.insert(0, src_str)
-    return src_str
-
-
 def ensure_tools_on_path() -> str:
     """Insert repository ``tools`` directory into ``sys.path`` once and return it."""
     root = Path(ensure_project_root_on_path())

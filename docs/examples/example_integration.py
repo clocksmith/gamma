@@ -247,7 +247,7 @@ def main():
         print("\nNext steps:")
         print("  1. Run actual models: python gamma.py game --mind-meld --meld-models ...")
         print("  2. Test benchmarks: See MIND_MELD_GUIDE.md")
-        print("  3. Customize presets: See src/mind_meld/presets.py")
+        print("  3. Customize presets: See gamma/mind_meld/presets.py")
         print()
 
     except Exception as e:

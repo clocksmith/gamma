@@ -11,7 +11,7 @@ Tests for the ModelCompatibilityValidator including:
 import unittest
 from unittest.mock import MagicMock, PropertyMock
 
-from src.mind_meld.core.compatibility import (
+from gamma.mind_meld.core.compatibility import (
     ModelCompatibilityValidator,
     CompatibilityLevel,
     CompatibilityReport,

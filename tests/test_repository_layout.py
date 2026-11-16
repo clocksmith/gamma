@@ -5,7 +5,7 @@ from __future__ import annotations
 import inspect
 from pathlib import Path
 
-from src.benchmarks.mind_meld_benchmark import MindMeldBenchmark
+from gamma.benchmarks.mind_meld_benchmark import MindMeldBenchmark
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

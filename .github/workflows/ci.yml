@@ -113,5 +113,13 @@ jobs:
           python gamma.py help mind-meld
           python gamma.py help benchmark
           python gamma.py help codegen
+      - name: Install the toolkit and its independent core
+        run: python -m pip install --no-deps ./gamma-core .
+      - name: Installed entrypoints and resources outside the checkout
+        run: |
+          cd "$(mktemp -d)"
+          gamma help game
+          python -m gamma benchmark --help
+          python -c "from gamma.mind_meld.cli.config import PRESETS_DIR; assert len(list(PRESETS_DIR.glob('*.yaml'))) == 6"
       - name: Engine, game, and UI tests
         run: python -m pytest -q tests/test_engine_interface.py tests/test_engine_factory.py tests/test_game.py tests/test_ui_components.py

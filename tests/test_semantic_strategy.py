@@ -12,11 +12,11 @@ import unittest
 from unittest.mock import MagicMock, patch, Mock
 import numpy as np
 
-from src.mind_meld.strategies.semantic_strategy import (
+from gamma.mind_meld.strategies.semantic_strategy import (
     SemanticSimilarityStrategy,
     SyntacticRoleStrategy
 )
-from src.mind_meld.strategies.base_strategy import SwapDecision
+from gamma.mind_meld.strategies.base_strategy import SwapDecision
 
 
 class TestSemanticSimilarityStrategyInit(unittest.TestCase):
@@ -24,7 +24,7 @@ class TestSemanticSimilarityStrategyInit(unittest.TestCase):
 
     def test_initialization_default(self):
         """Should initialize with default parameters."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
             strategy = SemanticSimilarityStrategy(use_embeddings=False)
 
             self.assertEqual(strategy.similarity_threshold, 0.7)
@@ -36,7 +36,7 @@ class TestSemanticSimilarityStrategyInit(unittest.TestCase):
 
     def test_initialization_custom(self):
         """Should initialize with custom parameters."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
             strategy = SemanticSimilarityStrategy(
                 similarity_threshold=0.8,
                 window_size=100,
@@ -84,7 +84,7 @@ class TestSemanticEmbedding(unittest.TestCase):
 
     def setUp(self):
         """Create strategy with mocked embedder."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
             self.strategy = SemanticSimilarityStrategy(use_embeddings=False, verbose=False)
 
     def test_embed_text_with_embedder(self):
@@ -176,7 +176,7 @@ class TestWordOverlap(unittest.TestCase):
 
     def setUp(self):
         """Create strategy."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
             self.strategy = SemanticSimilarityStrategy(use_embeddings=False, verbose=False)
 
     def test_word_overlap_identical(self):
@@ -221,7 +221,7 @@ class TestCalculateSimilarity(unittest.TestCase):
 
     def setUp(self):
         """Create strategy."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
             self.strategy = SemanticSimilarityStrategy(use_embeddings=False, verbose=False)
 
     def test_calculate_similarity_with_embeddings(self):
@@ -258,7 +258,7 @@ class TestUpdateReferenceContext(unittest.TestCase):
 
     def setUp(self):
         """Create strategy."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
             self.strategy = SemanticSimilarityStrategy(use_embeddings=False, verbose=False)
 
     def test_update_reference_context(self):
@@ -286,7 +286,7 @@ class TestWordOverlapEdgeCases(unittest.TestCase):
 
     def setUp(self):
         """Create strategy."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
             self.strategy = SemanticSimilarityStrategy(use_embeddings=False, verbose=False)
 
     def test_word_overlap_one_empty_set(self):
@@ -301,7 +301,7 @@ class TestSemanticShouldSwap(unittest.TestCase):
 
     def setUp(self):
         """Create strategy."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
             self.strategy = SemanticSimilarityStrategy(
                 similarity_threshold=0.7,
                 update_interval=5,
@@ -399,7 +399,7 @@ class TestSemanticGetStats(unittest.TestCase):
 
     def setUp(self):
         """Create strategy."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
             self.strategy = SemanticSimilarityStrategy(use_embeddings=False, verbose=False)
 
     def test_get_stats(self):
@@ -425,7 +425,7 @@ class TestSemanticReset(unittest.TestCase):
 
     def setUp(self):
         """Create strategy."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SemanticSimilarityStrategy._init_embedder'):
             self.strategy = SemanticSimilarityStrategy(use_embeddings=False, verbose=False)
 
     def test_reset(self):
@@ -450,7 +450,7 @@ class TestSyntacticRoleStrategy(unittest.TestCase):
 
     def test_initialization_default(self):
         """Should initialize with default role mapping."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
             strategy = SyntacticRoleStrategy(verbose=False)
 
             self.assertIsNotNone(strategy.role_mapping)
@@ -461,7 +461,7 @@ class TestSyntacticRoleStrategy(unittest.TestCase):
         """Should accept custom role mapping."""
         custom_mapping = {'VERB': 0, 'NOUN': 1}
 
-        with patch('src.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
             strategy = SyntacticRoleStrategy(role_mapping=custom_mapping, verbose=False)
 
             self.assertEqual(strategy.role_mapping, custom_mapping)
@@ -469,7 +469,7 @@ class TestSyntacticRoleStrategy(unittest.TestCase):
     def test_init_tagger_success(self):
         """Should load spaCy tagger if available."""
         # Test initialization behavior
-        with patch('src.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
             strategy = SyntacticRoleStrategy(verbose=False)
             # Can't easily test actual loading without installing spaCy
             # The init_tagger method is called, behavior tested in integration
@@ -497,7 +497,7 @@ class TestSyntacticRoleStrategy(unittest.TestCase):
         mock_tagger = MagicMock()
         mock_tagger.return_value = mock_doc
 
-        with patch('src.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
             strategy = SyntacticRoleStrategy(verbose=False)
             strategy.tagger = mock_tagger
 
@@ -507,7 +507,7 @@ class TestSyntacticRoleStrategy(unittest.TestCase):
 
     def test_get_pos_tag_no_tagger(self):
         """Should return None without tagger."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
             strategy = SyntacticRoleStrategy(verbose=False)
             strategy.tagger = None
 
@@ -519,7 +519,7 @@ class TestSyntacticRoleStrategy(unittest.TestCase):
         """Should handle tagging errors gracefully."""
         mock_tagger = MagicMock(side_effect=Exception("Tagging error"))
 
-        with patch('src.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
             strategy = SyntacticRoleStrategy(verbose=False)
             strategy.tagger = mock_tagger
 
@@ -529,7 +529,7 @@ class TestSyntacticRoleStrategy(unittest.TestCase):
 
     def test_should_swap_no_tagger(self):
         """Should not swap without tagger."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
             strategy = SyntacticRoleStrategy(verbose=False)
             strategy.tagger = None
 
@@ -541,7 +541,7 @@ class TestSyntacticRoleStrategy(unittest.TestCase):
 
     def test_should_swap_matching_role(self):
         """Should swap when POS tag requires different model."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
             strategy = SyntacticRoleStrategy(
                 role_mapping={'NOUN': 1, 'VERB': 0},
                 verbose=False
@@ -558,7 +558,7 @@ class TestSyntacticRoleStrategy(unittest.TestCase):
 
     def test_should_swap_no_role_change(self):
         """Should not swap when already on correct model."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
             strategy = SyntacticRoleStrategy(
                 role_mapping={'NOUN': 0},
                 verbose=False
@@ -573,7 +573,7 @@ class TestSyntacticRoleStrategy(unittest.TestCase):
 
     def test_should_swap_unmapped_pos(self):
         """Should not swap for unmapped POS tags."""
-        with patch('src.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
+        with patch('gamma.mind_meld.strategies.semantic_strategy.SyntacticRoleStrategy._init_tagger'):
             strategy = SyntacticRoleStrategy(
                 role_mapping={'NOUN': 1},
                 verbose=False

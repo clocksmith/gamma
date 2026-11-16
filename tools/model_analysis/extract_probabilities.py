@@ -40,8 +40,8 @@ def main() -> int:
     args = parse_args()
     import numpy as np
 
-    from src.engines import sampling_utils
-    from src.engines.engine_factory import get_engine
+    from gamma.engines import sampling_utils
+    from gamma.engines.engine_factory import get_engine
 
     model_name = args.model
     engine_type = args.engine

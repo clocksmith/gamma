@@ -15,7 +15,7 @@ from typing import Dict
 
 import numpy as np
 
-from src.mind_meld.translators.vocabulary_aligner import (
+from gamma.mind_meld.translators.vocabulary_aligner import (
     VocabularyAligner,
     VocabularyMapping,
     MappingQuality,

@@ -5,32 +5,32 @@ import numpy as np
 from unittest.mock import MagicMock, patch
 
 # MoE Router
-from src.mind_meld.advanced.moe_router import (
+from gamma.mind_meld.advanced.moe_router import (
     ContentType, ContentClassifier, MoERouter, AdaptiveMoERouter
 )
 
 # Speculative Decoding
-from src.mind_meld.advanced.speculative_decoding import (
+from gamma.mind_meld.advanced.speculative_decoding import (
     SpeculativeResult, SpeculativeDecoder, SpeculativeMeldEngine
 )
 
 # Contrastive Decoding
-from src.mind_meld.advanced.contrastive_decoding import (
+from gamma.mind_meld.advanced.contrastive_decoding import (
     ContrastiveConfig, ContrastiveDecoder, MultiModelContrastiveDecoder
 )
 
 # Feedback Loop
-from src.mind_meld.advanced.feedback_loop import (
+from gamma.mind_meld.advanced.feedback_loop import (
     FeedbackType, Feedback, FeedbackResult, FeedbackLoop
 )
 
 # Hierarchical Control
-from src.mind_meld.advanced.hierarchical_control import (
+from gamma.mind_meld.advanced.hierarchical_control import (
     PlanStep, ExecutionPlan, ExecutionResult, HierarchicalController
 )
 
 # Adversarial
-from src.mind_meld.advanced.adversarial import (
+from gamma.mind_meld.advanced.adversarial import (
     Claim, Challenge, DebateResult, AdversarialDebate
 )
 

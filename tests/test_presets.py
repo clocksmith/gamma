@@ -17,7 +17,7 @@ import unittest
 from unittest.mock import MagicMock
 from dataclasses import fields
 
-from src.mind_meld.presets import (
+from gamma.mind_meld.presets import (
     PresetType,
     MeldPreset,
     PRESETS,

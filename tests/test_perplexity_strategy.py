@@ -11,11 +11,11 @@ import sys
 import unittest
 import numpy as np
 
-from src.mind_meld.strategies.perplexity_strategy import (
+from gamma.mind_meld.strategies.perplexity_strategy import (
     PerplexitySwapStrategy,
     ConfidenceBasedStrategy
 )
-from src.mind_meld.strategies.base_strategy import SwapDecision
+from gamma.mind_meld.strategies.base_strategy import SwapDecision
 
 
 class TestPerplexityStrategyInit(unittest.TestCase):

@@ -7,7 +7,7 @@ and uses a router model to determine the best response.
 
 import argparse
 
-# Add project root to the path to allow importing from src
+# Add project root to the path to allow importing from gamma
 try:
     from tools._path_setup import ensure_project_root_on_path
 except ImportError:
@@ -15,7 +15,7 @@ except ImportError:
 
 ensure_project_root_on_path()
 
-from src.core.menu.routing_logic import get_responses, route_responses
+from gamma.core.menu.routing_logic import get_responses, route_responses
 
 def main():
     parser = argparse.ArgumentParser(description="Rapid LLM Evaluation and Routing Framework CLI")

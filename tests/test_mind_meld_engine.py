@@ -22,7 +22,7 @@ if 'numpy' not in sys.modules:  # pragma: no cover - exercised when numpy missin
     sys.modules['numpy'] = _MinimalNumpy()
 
 
-from src.mind_meld.core.meld_engine import MeldEngine
+from gamma.mind_meld.core.meld_engine import MeldEngine
 
 
 class MindMeldEngineTests(unittest.TestCase):
@@ -334,7 +334,7 @@ class MindMeldEngineTests(unittest.TestCase):
 
     def test_round_robin_counter_increments_each_step(self) -> None:
         """Round-robin counter should increment each step for proper rotation."""
-        from src.mind_meld.core.meld_engine import TARGET_SELECTION_ROUND_ROBIN
+        from gamma.mind_meld.core.meld_engine import TARGET_SELECTION_ROUND_ROBIN
 
         args = SimpleNamespace(
             temperature=0.7,
@@ -381,7 +381,7 @@ class MindMeldEngineTests(unittest.TestCase):
 
     def test_target_selection_next_constant(self) -> None:
         """TARGET_SELECTION_NEXT should produce next model in sequence."""
-        from src.mind_meld.core.meld_engine import TARGET_SELECTION_NEXT
+        from gamma.mind_meld.core.meld_engine import TARGET_SELECTION_NEXT
 
         args = SimpleNamespace(
             temperature=0.7,

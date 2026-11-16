@@ -14,7 +14,7 @@ import unittest
 import tempfile
 import json
 
-from src.mind_meld.visualization import (
+from gamma.mind_meld.visualization import (
     SwapVisualizer,
     SwapEvent,
     ModelContribution,

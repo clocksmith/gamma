@@ -26,8 +26,8 @@ warnings.filterwarnings("ignore")
 
 ensure_project_root_on_path()
 
-from src.engines.engine_factory import get_engine
-from src.engines import sampling_utils
+from gamma.engines.engine_factory import get_engine
+from gamma.engines import sampling_utils
 
 def setup_args():
     parser = argparse.ArgumentParser(description="Analyze prompt probabilities and attention.")
@@ -170,7 +170,8 @@ def analyze_attention(engine, result, input_ids_list, focus_str=None):
     # Always show the last token's attention (what generated the prediction)
     last_idx = len(input_ids_list) - 1
     if not focus_indices or last_idx not in focus_indices:
-        print(f"\nLast Token {last_idx} ('{engine.get_token_text(input_ids_list[last_idx]).replace(chr(10), str(r'\\n'))}') attention (driving next prediction):")
+        last_text = engine.get_token_text(input_ids_list[last_idx]).replace(chr(10), r'\\n')
+        print(f"\nLast Token {last_idx} ('{last_text}') attention (driving next prediction):")
         weights = attn_matrix[last_idx]
         sorted_indices = np.argsort(weights)[::-1]
         for k in range(min(5, len(sorted_indices))):

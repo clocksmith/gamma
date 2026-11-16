@@ -16,7 +16,7 @@ import unittest
 from unittest.mock import Mock, MagicMock, patch
 import numpy as np
 
-from src.mind_meld.core.transformer_pipeline import TransformerStep, UnifiedTransformerPipeline
+from gamma.mind_meld.core.transformer_pipeline import TransformerStep, UnifiedTransformerPipeline
 
 
 class TestTransformerStep(unittest.TestCase):

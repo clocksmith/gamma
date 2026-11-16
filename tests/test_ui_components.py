@@ -14,8 +14,8 @@ import unittest
 from unittest.mock import patch, MagicMock
 from io import StringIO
 
-from src.ui import components as ui_components
-from src.core import config as cfg
+from gamma.ui import components as ui_components
+from gamma.core import config as cfg
 
 
 class TestColorText(unittest.TestCase):

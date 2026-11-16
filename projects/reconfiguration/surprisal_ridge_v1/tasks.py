@@ -21,7 +21,7 @@ import sys
 import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
-from src.core.state_context import compact_state_context
+from gamma.core.state_context import compact_state_context
 
 DOMAINS = ("kv_registry", "cipher_codebook", "state_trace")
 

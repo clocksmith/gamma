@@ -4,7 +4,7 @@ Use GAMMA engines with common API and framework surfaces.
 
 ## Integration Modules
 
-The integration code lives in `src/integrations/`:
+The integration code lives in `gamma/integrations/`:
 
 - `openai_compat.py`
 - `langchain_compat.py`
@@ -13,8 +13,8 @@ The integration code lives in `src/integrations/`:
 ## OpenAI-Compatible Wrapper
 
 ```python
-from src.engines.native.pytorch_engine import PyTorchEngine
-from src.integrations.openai_compat import OpenAICompatibleEngine
+from gamma.engines.native.pytorch_engine import PyTorchEngine
+from gamma.integrations.openai_compat import OpenAICompatibleEngine
 
 engine = PyTorchEngine("google/gemma-2-2b-it")
 engine.load()
@@ -40,8 +40,8 @@ Supported surface:
 ## LangChain Wrapper
 
 ```python
-from src.engines.native.pytorch_engine import PyTorchEngine
-from src.integrations.langchain_compat import GAMMALangChainLLM
+from gamma.engines.native.pytorch_engine import PyTorchEngine
+from gamma.integrations.langchain_compat import GAMMALangChainLLM
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 
@@ -57,7 +57,7 @@ result = chain.run(question="What is Python?")
 Embeddings wrapper:
 
 ```python
-from src.integrations.langchain_compat import GAMMAEmbeddings
+from gamma.integrations.langchain_compat import GAMMAEmbeddings
 
 embeddings = GAMMAEmbeddings(engine=engine)
 vectors = embeddings.embed_documents(["Hello world", "Goodbye"])
@@ -66,7 +66,7 @@ vectors = embeddings.embed_documents(["Hello world", "Goodbye"])
 ## Ecosystem Recommendation Helpers
 
 ```python
-from src.integrations.ecosystem_utils import (
+from gamma.integrations.ecosystem_utils import (
     get_available_frameworks,
     suggest_framework_for_model,
     get_recommended_engine_for_model,

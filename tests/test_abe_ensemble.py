@@ -16,7 +16,7 @@ import unittest
 from unittest.mock import Mock, MagicMock
 import numpy as np
 
-from src.mind_meld.core.abe_ensemble import ABECandidate, ABEEnsemble
+from gamma.mind_meld.core.abe_ensemble import ABECandidate, ABEEnsemble
 
 
 class MockModel:

@@ -14,7 +14,7 @@ import unittest
 from unittest.mock import Mock, MagicMock
 import time
 
-from src.mind_meld.core.model_state import ModelState, StateSnapshot
+from gamma.mind_meld.core.model_state import ModelState, StateSnapshot
 
 
 class TestStateSnapshot(unittest.TestCase):

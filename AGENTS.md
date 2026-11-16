@@ -22,7 +22,7 @@ failure.
 
 - `README.md` describes the CLI; `EMOJI.md` records the Unicode convention.
 - `docs/COMPONENT_INDEX.md` locates component owners and contracts.
-- `src/engines/README.md` documents engine interfaces; `src/game/README.md`
+- `gamma/engines/README.md` documents engine interfaces; `gamma/game/README.md`
   documents the token game. Consult the owner relevant to the change.
 - These documents are searchable references, not a checklist before editing.
 
@@ -86,11 +86,11 @@ to fold fresh `compare_eval_summary.json` outputs into the leaderboards under `p
 - If a reporting artifact is the source of truth, encode gaps and next commands inside it, not in chat prose.
 
 ### Key Paths
-- `src/game/` - Game logic and UI
-- `src/engines/` - Engine backends (llamacpp, pytorch, vllm, ollama)
-- `src/mind_meld/` - Multi-model collaboration
-- `src/benchmarks/` - Performance testing
-- `src/comparison/` - Model comparison tools
+- `gamma/game/` - Game logic and UI
+- `gamma/engines/` - Engine backends (llamacpp, pytorch, vllm, ollama)
+- `gamma/mind_meld/` - Multi-model collaboration
+- `gamma/benchmarks/` - Performance testing
+- `gamma/comparison/` - Model comparison tools
 - `games/2038/` - Mandate 2038 spec, browser prototype, and simulation lab
 
 ### Guardrails

@@ -29,7 +29,7 @@ GAMMA uses a modular engine architecture that abstracts away the underlying ML f
 
 ## LLMEngine Interface
 
-All engines implement the `LLMEngine` abstract base class defined in `src/core/engine_interface.py`:
+All engines implement the `LLMEngine` abstract base class defined in `gamma/core/engine_interface.py`:
 
 ### Core Methods (Required)
 
@@ -65,10 +65,10 @@ def bridge_kv_cache_to(self, target: LLMEngine) -> bool
 
 ### Engine Factory
 
-The `get_engine()` function in `src/engines/engine_factory.py` handles engine instantiation:
+The `get_engine()` function in `gamma/engines/engine_factory.py` handles engine instantiation:
 
 ```python
-from src.engines.engine_factory import get_engine
+from gamma.engines.engine_factory import get_engine
 
 # Create engine with explicit type
 engine = get_engine("pytorch", "google/gemma-2-2b-it")
@@ -101,7 +101,7 @@ engine = get_engine("mlx", "mlx-community/gemma-2-2b-it-4bit")
 Standard HuggingFace Transformers engine with MPS/CUDA/CPU support.
 
 ```python
-from src.engines.native.pytorch_engine import PyTorchEngine
+from gamma.engines.native.pytorch_engine import PyTorchEngine
 
 engine = PyTorchEngine("google/gemma-2-2b-it")
 engine.load()
@@ -195,13 +195,13 @@ For Mind Meld multi-model collaboration, engines must support:
 
 ## Adding Custom Engines
 
-1. Create a new file in `src/engines/native/` or `src/engines/wrappers/`
+1. Create a new file in `gamma/engines/native/` or `gamma/engines/wrappers/`
 2. Inherit from `LLMEngine`
 3. Implement all abstract methods
 4. Register in `engine_factory.py`
 
 ```python
-from src.core.engine_interface import LLMEngine
+from gamma.core.engine_interface import LLMEngine
 
 class MyCustomEngine(LLMEngine):
     def load(self) -> None:
@@ -260,6 +260,6 @@ class MyCustomEngine(LLMEngine):
 
 ## See Also
 
-- [Engine Documentation](../src/engines/README.md)
+- [Engine Documentation](../gamma/engines/README.md)
 - [Benchmarking Guide](BENCHMARKING.md)
 - [Optimization Guide](optimization-guide.md)

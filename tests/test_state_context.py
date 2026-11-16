@@ -6,7 +6,7 @@ import random
 from pathlib import Path
 import unittest
 
-from src.core.state_context import compact_state_context, read_state
+from gamma.core.state_context import compact_state_context, read_state
 
 
 def replay(context, validate_examples=True):

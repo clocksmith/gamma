@@ -37,9 +37,9 @@ except ImportError:
 
 ensure_project_root_on_path()
 
-from src.engines.engine_factory import get_engine
-from src.core.model_validator import ModelValidator, print_validation_result
-from src.benchmarks.framework.quality_metrics import (
+from gamma.engines.engine_factory import get_engine
+from gamma.core.model_validator import ModelValidator, print_validation_result
+from gamma.benchmarks.framework.quality_metrics import (
     QualityAnalyzer,
     QualityMetrics,
     BenchmarkReport,

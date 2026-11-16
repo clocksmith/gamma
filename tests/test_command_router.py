@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from src.core import command_router as cr
+from gamma.core import command_router as cr
 
 
 @pytest.mark.regression

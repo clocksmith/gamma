@@ -14,7 +14,7 @@ import sys
 import unittest
 from typing import List
 
-from src.core.models.model_registry import (
+from gamma.core.models.model_registry import (
     ModelSpecialization,
     ModelProfile,
     MODEL_ZOO,

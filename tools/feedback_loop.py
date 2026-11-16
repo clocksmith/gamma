@@ -25,12 +25,11 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 try:
-    from tools._path_setup import ensure_project_root_on_path, ensure_src_on_path
+    from tools._path_setup import ensure_project_root_on_path
 except ModuleNotFoundError:
-    from _path_setup import ensure_project_root_on_path, ensure_src_on_path
+    from _path_setup import ensure_project_root_on_path
 
 ROOT_DIR = Path(ensure_project_root_on_path())
-ensure_src_on_path()
 
 try:
     from tools.log_analyzer import LogAnalyzer, TestFailure

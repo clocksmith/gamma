@@ -1,7 +1,7 @@
 import torch
 from transformers import Qwen3Config
 
-from src.mind_meld.latent_handoff.rope import (
+from gamma.mind_meld.latent_handoff.rope import (
     apply_rope,
     qwen3_cos_sin,
     strip_rope,

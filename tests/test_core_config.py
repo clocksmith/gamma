@@ -12,7 +12,7 @@ import os
 import unittest
 from unittest.mock import patch, MagicMock
 
-from src.core import config
+from gamma.core import config
 
 
 class TestGemmaModelInfo(unittest.TestCase):

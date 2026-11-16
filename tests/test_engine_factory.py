@@ -16,7 +16,7 @@ import unittest
 from unittest.mock import Mock, MagicMock, patch
 import platform
 
-from src.engines import engine_factory
+from gamma.engines import engine_factory
 
 
 def stub_backend(module_path, class_name):
@@ -52,7 +52,7 @@ class TestGetEngine(unittest.TestCase):
 
         self.assertIn("Unsupported engine", str(ctx.exception))
 
-    @patch('src.engines.wrappers.ollama_wrapper.OllamaEngine')
+    @patch('gamma.engines.wrappers.ollama_wrapper.OllamaEngine')
     def test_ollama_engine(self, mock_ollama):
         """Should return Ollama engine."""
         mock_instance = Mock()
@@ -64,7 +64,7 @@ class TestGetEngine(unittest.TestCase):
         # Config is normalized to include mode
         mock_ollama.assert_called_once_with("test-model", {"mode": "interactive"})
 
-    @patch('src.engines.wrappers.ollama_wrapper.OllamaEngine')
+    @patch('gamma.engines.wrappers.ollama_wrapper.OllamaEngine')
     def test_ollama_engine_with_config(self, mock_ollama):
         """Should pass config to Ollama engine."""
         mock_instance = Mock()
@@ -80,7 +80,7 @@ class TestGetEngine(unittest.TestCase):
 
     def test_pytorch_engine(self):
         """Should return PyTorch engine."""
-        stub, mock_pytorch = stub_backend('src.engines.native.pytorch_engine', 'PyTorchEngine')
+        stub, mock_pytorch = stub_backend('gamma.engines.native.pytorch_engine', 'PyTorchEngine')
         mock_instance = Mock()
         mock_pytorch.return_value = mock_instance
 
@@ -93,7 +93,7 @@ class TestGetEngine(unittest.TestCase):
 
     def test_tensorflow_engine(self):
         """Should return TensorFlow engine."""
-        stub, mock_tf = stub_backend('src.engines.native.tensorflow_engine', 'TensorFlowEngine')
+        stub, mock_tf = stub_backend('gamma.engines.native.tensorflow_engine', 'TensorFlowEngine')
         mock_instance = Mock()
         mock_tf.return_value = mock_instance
 
@@ -105,7 +105,7 @@ class TestGetEngine(unittest.TestCase):
 
     def test_jax_engine(self):
         """Should return JAX engine."""
-        stub, mock_jax = stub_backend('src.engines.native.jax_engine', 'JaxEngine')
+        stub, mock_jax = stub_backend('gamma.engines.native.jax_engine', 'JaxEngine')
         mock_instance = Mock()
         mock_jax.return_value = mock_instance
 
@@ -117,7 +117,7 @@ class TestGetEngine(unittest.TestCase):
 
     def test_llamacpp_engine(self):
         """Should return Llama.cpp engine."""
-        stub, mock_llamacpp = stub_backend('src.engines.native.llama_cpp_engine', 'LlamaCppEngine')
+        stub, mock_llamacpp = stub_backend('gamma.engines.native.llama_cpp_engine', 'LlamaCppEngine')
         mock_instance = Mock()
         mock_llamacpp.return_value = mock_instance
 
@@ -127,7 +127,7 @@ class TestGetEngine(unittest.TestCase):
         self.assertEqual(result, mock_instance)
 
 
-    @patch('src.engines.wrappers.ollama_wrapper.OllamaEngine')
+    @patch('gamma.engines.wrappers.ollama_wrapper.OllamaEngine')
     def test_engine_name_case_insensitive(self, mock_ollama):
         """Should handle engine name case insensitively."""
         mock_instance = Mock()
@@ -143,7 +143,7 @@ class TestGetEngine(unittest.TestCase):
 
     def test_none_config_treated_as_empty(self):
         """Should treat None config as empty dict with normalized mode."""
-        stub, mock_pytorch = stub_backend('src.engines.native.pytorch_engine', 'PyTorchEngine')
+        stub, mock_pytorch = stub_backend('gamma.engines.native.pytorch_engine', 'PyTorchEngine')
         mock_instance = Mock()
         mock_pytorch.return_value = mock_instance
 

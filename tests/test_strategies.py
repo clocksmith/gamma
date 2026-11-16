@@ -12,14 +12,14 @@ import sys
 
 import unittest
 
-from src.mind_meld.strategies import (
+from gamma.mind_meld.strategies import (
     ConfidenceBasedStrategy,
     SyntacticRoleStrategy,
     PerplexitySwapStrategy,
     SemanticSimilarityStrategy,
     SwapStrategyBase
 )
-from src.mind_meld.strategies.base_strategy import (
+from gamma.mind_meld.strategies.base_strategy import (
     SwapDecision,
     FixedIntervalStrategy,
     PatternBasedStrategy,
@@ -386,7 +386,7 @@ class TestStrategyImports(unittest.TestCase):
 
     def test_all_strategies_importable(self):
         """All strategies should be importable from strategies module."""
-        from src.mind_meld.strategies import (
+        from gamma.mind_meld.strategies import (
             SwapStrategyBase,
             ConfidenceBasedStrategy,
             SyntacticRoleStrategy,
@@ -402,7 +402,7 @@ class TestStrategyImports(unittest.TestCase):
 
     def test_strategies_have_should_swap(self):
         """All strategies should implement should_swap method."""
-        from src.mind_meld.strategies import (
+        from gamma.mind_meld.strategies import (
             ConfidenceBasedStrategy,
             SyntacticRoleStrategy
         )

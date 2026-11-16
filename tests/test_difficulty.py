@@ -7,9 +7,9 @@ Tests the progressive difficulty levels, achievements, and session management.
 import sys
 import os
 
-# Add parent directory to path so we can import from src
+# Add parent directory to path so we can import from gamma
 
-from src.game.difficulty_levels import (
+from gamma.game.difficulty_levels import (
     DifficultyLevel,
     GameSession,
     RoundStats,

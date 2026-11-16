@@ -17,8 +17,8 @@ from unittest.mock import MagicMock, patch
 import numpy as np
 from typing import Dict, Any, Tuple, Optional, List
 
-from src.core.engine_interface import LLMEngine, TokenCategory
-from src.core import config as cfg
+from gamma.core.engine_interface import LLMEngine, TokenCategory
+from gamma.core import config as cfg
 
 
 class ConcreteEngine(LLMEngine):

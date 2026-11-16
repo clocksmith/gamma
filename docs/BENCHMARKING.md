@@ -3,7 +3,7 @@
 GAMMA benchmarking has four primary lanes:
 
 1. Runtime speed/latency benchmarking (`gamma.py benchmark`)
-2. Mind Meld strategy benchmarking (`src/benchmarks/mind_meld_benchmark.py`)
+2. Mind Meld strategy benchmarking (`gamma/benchmarks/mind_meld_benchmark.py`)
 3. Codegen benchmarking (`gamma.py codegen`, `tools/codegen-bench/`)
 4. Quality metric analysis (coherence/diversity/perplexity via benchmark tools)
 
@@ -38,7 +38,7 @@ python gamma.py benchmark \
 Run direct strategy comparisons using the dedicated benchmark runner:
 
 ```bash
-PYTHONPATH=. python3 src/benchmarks/mind_meld_benchmark.py \
+PYTHONPATH=. python3 gamma/benchmarks/mind_meld_benchmark.py \
   --strategies confidence perplexity fixed_interval \
   --prompt "Once upon a time" \
   --models gpt2 gpt2-medium \

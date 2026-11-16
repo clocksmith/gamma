@@ -7,7 +7,7 @@ Performance tuning and memory optimization for GAMMA.
 ### Basic Profiling
 
 ```python
-from src.utils.profiling import profile, measure, print_results
+from gamma.utils.profiling import profile, measure, print_results
 
 # Using decorator
 @profile("generation")
@@ -25,7 +25,7 @@ print_results()
 ### Detailed Engine Profiling
 
 ```python
-from src.utils.profiling import profile_engine_generation
+from gamma.utils.profiling import profile_engine_generation
 
 metrics = profile_engine_generation(
     engine=engine,
@@ -42,7 +42,7 @@ print(f"Peak memory: {metrics['peak_memory_mb']} MB")
 ### Memory Tracking
 
 ```python
-from src.utils.profiling import track_memory
+from gamma.utils.profiling import track_memory
 
 with track_memory("model_load") as tracker:
     engine.load()
@@ -55,7 +55,7 @@ print(f"Memory used: {tracker.memory_used_mb} MB")
 ### Function Memoization
 
 ```python
-from src.utils.caching import memoize, disk_cache
+from gamma.utils.caching import memoize, disk_cache
 
 # In-memory cache
 @memoize(maxsize=256)
@@ -72,7 +72,7 @@ def expensive_computation(data):
 ### Manual Cache Management
 
 ```python
-from src.utils.caching import LRUCache, DiskCache
+from gamma.utils.caching import LRUCache, DiskCache
 
 # LRU cache
 cache = LRUCache(maxsize=1000)
@@ -88,7 +88,7 @@ obj = disk.get("key")
 ### Token Decoding Cache
 
 ```python
-from src.utils.caching import get_token_cache, print_cache_stats
+from gamma.utils.caching import get_token_cache, print_cache_stats
 
 # Use global token cache
 token_cache = get_token_cache()
@@ -103,7 +103,7 @@ print_cache_stats()
 ### Monitoring
 
 ```python
-from src.utils.memory import (
+from gamma.utils.memory import (
     print_memory_usage,
     print_vram_usage,
     get_memory_snapshot
@@ -124,7 +124,7 @@ print(f"Available: {snapshot.available_mb} MB")
 ### Optimization Strategies
 
 ```python
-from src.utils.memory import optimize_model_memory
+from gamma.utils.memory import optimize_model_memory
 
 # Automatic optimization
 results = optimize_model_memory(engine, strategy="auto")
@@ -137,7 +137,7 @@ results = optimize_model_memory(engine, strategy="aggressive")
 ### Manual Cleanup
 
 ```python
-from src.utils.memory import (
+from gamma.utils.memory import (
     force_garbage_collection,
     clear_vram_cache,
     get_top_memory_objects
@@ -218,7 +218,7 @@ prompts = ["Hello", "World", "Test"]
 results = engine.batch_generate(prompts, max_tokens=50)
 
 # Manual batching for other engines
-from src.utils.batching import BatchProcessor
+from gamma.utils.batching import BatchProcessor
 
 processor = BatchProcessor(engine, batch_size=8)
 results = processor.process(prompts, max_tokens=50)
@@ -242,7 +242,7 @@ result2 = engine.generate("", max_tokens=20, continue_from_cache=True)
 Pre-configured strategies for different use cases:
 
 ```python
-from src.core.sampling_strategies import (
+from gamma.core.sampling_strategies import (
     CREATIVE_WRITING,
     PRECISE_FACTUAL,
     CODE_GENERATION,
@@ -289,7 +289,7 @@ result = engine.generate(
 ## Monitoring Dashboard
 
 ```python
-from src.utils.memory import MemoryMonitor
+from gamma.utils.memory import MemoryMonitor
 
 monitor = MemoryMonitor()
 

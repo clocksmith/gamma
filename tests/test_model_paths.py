@@ -18,7 +18,7 @@ from pathlib import Path
 import tempfile
 import shutil
 
-from src.core.models import model_paths
+from gamma.core.models import model_paths
 
 
 class TestGetProjectRoot(unittest.TestCase):
@@ -32,6 +32,12 @@ class TestGetProjectRoot(unittest.TestCase):
         # Should be a valid directory
         self.assertTrue(root.exists())
         self.assertTrue(root.is_dir())
+        self.assertEqual(root, Path(__file__).resolve().parents[1])
+
+    def test_explicit_workspace_overrides_checkout(self):
+        with tempfile.TemporaryDirectory() as workspace:
+            with patch.dict(os.environ, {"GAMMA_WORKSPACE": workspace}):
+                self.assertEqual(model_paths.get_project_root(), Path(workspace).resolve())
 
 
 class TestResolveModelPath(unittest.TestCase):

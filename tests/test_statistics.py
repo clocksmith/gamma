@@ -18,7 +18,7 @@ import time
 from unittest.mock import patch, MagicMock
 from io import StringIO
 
-from src.mind_meld.core.statistics import (
+from gamma.mind_meld.core.statistics import (
     ModelStatistics,
     SwapEvent,
     MeldStatistics,

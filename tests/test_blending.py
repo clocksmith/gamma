@@ -16,7 +16,7 @@ import unittest
 from unittest.mock import Mock, MagicMock, patch
 import numpy as np
 
-from src.mind_meld.core.blending import BlendingStrategy, BlendingConfig, LogitBlender
+from gamma.mind_meld.core.blending import BlendingStrategy, BlendingConfig, LogitBlender
 
 
 class TestBlendingStrategy(unittest.TestCase):

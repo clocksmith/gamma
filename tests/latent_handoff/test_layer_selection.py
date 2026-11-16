@@ -1,8 +1,8 @@
 import torch
 
-from src.mind_meld.latent_handoff.hf_cache import LBSHDCache
-from src.mind_meld.latent_handoff.layer_selection import select_source_layers
-from src.mind_meld.latent_handoff.ridge import (
+from gamma.mind_meld.latent_handoff.hf_cache import LBSHDCache
+from gamma.mind_meld.latent_handoff.layer_selection import select_source_layers
+from gamma.mind_meld.latent_handoff.ridge import (
     RidgeAccumulator,
     coefficient_of_determination,
 )

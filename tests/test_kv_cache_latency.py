@@ -14,7 +14,7 @@ from typing import List, Tuple, Dict, Any
 from unittest.mock import MagicMock, patch
 from dataclasses import dataclass
 
-from src.mind_meld.bridges.kv_cache_handler import (
+from gamma.mind_meld.bridges.kv_cache_handler import (
     KVCache,
     PyTorchKVCache,
     KVCacheTranslator,

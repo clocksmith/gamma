@@ -7,7 +7,7 @@ Tests the consolidated functions:
 """
 import pytest
 import numpy as np
-from src.engines import sampling_utils
+from gamma.engines import sampling_utils
 
 
 class TestGetTopKTokens:

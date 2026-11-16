@@ -8,11 +8,11 @@ Canonical high-level map of runtime surfaces, tooling boundaries, and ownership.
 
 - Entry point: `gamma.py`
 - Core packages:
-- `src/core/` shared interfaces, routing helpers, validation
-- `src/game/` CLI gameplay + tutorial + displays
-- `src/mind_meld/` multi-model generation strategies
-- `src/engines/` engine backends and wrappers
-- `src/benchmarks/` Python benchmark runners
+- `gamma/core/` shared interfaces, routing helpers, validation
+- `gamma/game/` CLI gameplay + tutorial + displays
+- `gamma/mind_meld/` multi-model generation strategies
+- `gamma/engines/` engine backends and wrappers
+- `gamma/benchmarks/` Python benchmark runners
 
 ### Web Runtime (No Build Contract)
 
@@ -27,12 +27,12 @@ Canonical high-level map of runtime surfaces, tooling boundaries, and ownership.
 - Source of truth: `tools/codegen-bench/`
 - Purpose: TypeScript/JavaScript codegen benchmark suite
 - Invoked by CLI via `gamma.py codegen language`
-- Kept out of `src/` to preserve Python/Node boundary
+- Kept out of `gamma/` to preserve Python/Node boundary
 
 ## Shared Infrastructure Contract
 
 - Vendored dependency: `gamma-core/src`
-- GAMMA adapter: `src/core/gamma_core_adapter.py`
+- GAMMA adapter: `gamma/core/gamma_core_adapter.py`
 - Optional override env var: `GAMMA_CORE_SRC_PATH` (absolute path to `gamma-core/src`)
 
 ## Training / Distillation Pipelines

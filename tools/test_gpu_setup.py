@@ -14,7 +14,7 @@ except ImportError:
 
 ensure_project_root_on_path()
 
-from src.core.hardware.gpu_discovery import get_gpu_info, format_gpu_info
+from gamma.core.hardware.gpu_discovery import get_gpu_info, format_gpu_info
 
 
 def test_pytorch():

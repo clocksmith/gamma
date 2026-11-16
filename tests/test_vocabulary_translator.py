@@ -15,9 +15,9 @@ from unittest.mock import MagicMock
 
 import numpy as np
 
-from src.engines.sampling_utils import TRANSLATION_LOGIT_FLOOR
-from src.mind_meld.core.meld_engine import EngineTokenizerAdapter
-from src.mind_meld.translators.vocabulary_translator import (
+from gamma.engines.sampling_utils import TRANSLATION_LOGIT_FLOOR
+from gamma.mind_meld.core.meld_engine import EngineTokenizerAdapter
+from gamma.mind_meld.translators.vocabulary_translator import (
     AligningVocabularyTranslator,
     FallbackToUnkTranslator,
     SemanticMappingTranslator,

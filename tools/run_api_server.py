@@ -24,7 +24,7 @@ except ImportError:
     from _path_setup import ensure_project_root_on_path
 
 ensure_project_root_on_path()
-from src.r import llm_utils
+from gamma.r import llm_utils
 
 
 class GenerationRequest(BaseModel):
