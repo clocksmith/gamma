@@ -9,6 +9,9 @@ Test genuinely distinct training-free prompt-conditioned low-rank transforms (`u
 ## Authority
 
 - Owns task generators, transform operators, MPS/Doppler runners, unit tests, and reports under `projects/reconfiguration/surprisal_ridge_v1/`.
+- The opt-in `--context-only` runners consume Gamma's reusable
+  [state context compiler](../../../src/core/state_context.py) as a separate
+  symbolic preprocessing comparison; they do not modify or qualify B1/B2 operators.
 - Does not modify frozen `channel_gain`, `rotation_v1`, `contrastive_rank_one_v1`, `associative_delta_v1`, or Doppler runtime files.
 
 ## Scope
@@ -24,6 +27,10 @@ Test genuinely distinct training-free prompt-conditioned low-rank transforms (`u
 
 - Base weights remain bit-identical after every request; zero-factor adapters match base outputs.
 - Transform derivation accesses only the prompt context span before the query suffix, never evaluation answers.
+- Query-aware context preprocessing may inspect the query and context, never
+  the expected answer. Its source-linked slice preserves replay semantics;
+  unsupported inputs remain unchanged. It runs on every state case, independently
+  of the weight-transform discrimination gates.
 - Discriminative base gates execute before transform arms; trained-checkpoint baselines stay strictly separate.
 
 ## Acceptance

@@ -16,6 +16,12 @@ from __future__ import annotations
 
 import hashlib
 import random
+from pathlib import Path
+import sys
+import time
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
+from src.core.state_context import compact_state_context
 
 DOMAINS = ("kv_registry", "cipher_codebook", "state_trace")
 
@@ -54,7 +60,11 @@ def is_valid_domain_format(domain: str, output: str) -> bool:
     return False
 
 
-def build_domain_tasks(seed: int, count_per_domain: int = 12) -> list[dict]:
+def build_domain_tasks(seed: int, count_per_domain: int = 12, state_updates: int = 20) -> list[dict]:
+    if count_per_domain < 1 or state_updates < 2:
+        raise ValueError("count_per_domain must be positive and state_updates must be at least two")
+    if state_updates > len(SYLLABLES) * 90 - 22:
+        raise ValueError("state_updates exhausts the fixture's unique value space")
     rng = random.Random(seed)
     all_tasks = []
 
@@ -187,9 +197,9 @@ def build_domain_tasks(seed: int, count_per_domain: int = 12) -> list[dict]:
             state[a] = v
             init_lines.append(f"SET {a} = {v}\n")
 
-        # 20 updates: target_acct and sample_acct each updated once amidst 18 distractor updates
+        # Default fixture stays unchanged; longer histories may be requested explicitly.
         distractors = [x for x in accts if x not in (target_acct, sample_acct)]
-        sched = [target_acct, sample_acct] + [rng.choice(distractors) for _ in range(18)]
+        sched = [target_acct, sample_acct] + [rng.choice(distractors) for _ in range(state_updates - 2)]
         rng.shuffle(sched)
         update_lines = []
         for a in sched:
@@ -217,4 +227,9 @@ def build_domain_tasks(seed: int, count_per_domain: int = 12) -> list[dict]:
             "prompt_sha256": hashlib.sha256(full_prompt.encode()).hexdigest(),
         })
 
+    for task in all_tasks:
+        if task["domain"] == "state_trace":
+            started = time.perf_counter()
+            task["state_compaction"] = compact_state_context(task["context_text"], task["query_text"])
+            task["state_compaction_seconds"] = time.perf_counter() - started
     return all_tasks

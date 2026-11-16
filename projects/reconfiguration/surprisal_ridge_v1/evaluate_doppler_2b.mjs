@@ -11,8 +11,20 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 
-const [dopplerRoot, modelPath, outputPath] = process.argv.slice(2);
-assert.ok(dopplerRoot && modelPath && outputPath, 'Usage: node evaluate_doppler_2b.mjs DOPPLER_ROOT LOCAL_2B_MODEL OUTPUT_JSON');
+const [dopplerRoot, modelPath, outputPath, ...flags] = process.argv.slice(2);
+assert.ok(dopplerRoot && modelPath && outputPath, 'Usage: node evaluate_doppler_2b.mjs DOPPLER_ROOT LOCAL_2B_MODEL OUTPUT_JSON [--context-only] [--prepare-only] [--seed N] [--cases-per-domain N] [--state-updates N]');
+const options = { contextOnly: false, prepareOnly: false, seed: 839501, cases: 8, stateUpdates: 20 };
+for (let i = 0; i < flags.length; i += 1) {
+  const flag = flags[i];
+  if (flag === '--context-only') options.contextOnly = true;
+  else if (flag === '--prepare-only') options.prepareOnly = true;
+  else {
+    const key = { '--seed': 'seed', '--cases-per-domain': 'cases', '--state-updates': 'stateUpdates' }[flag];
+    assert.ok(key && /^\d+$/.test(flags[i + 1] ?? ''), `Unknown option or invalid value: ${flag}`);
+    options[key] = Number(flags[++i]);
+    assert.ok(Number.isSafeInteger(options[key]), `Value is outside the exact integer range: ${flag}`);
+  }
+}
 
 const hash = x => createHash('sha256').update(x).digest('hex');
 
@@ -25,7 +37,7 @@ function buildTransferTasks() {
 import json, sys
 sys.path.insert(0, ${JSON.stringify(__dirname)})
 from tasks import build_domain_tasks
-print(json.dumps(build_domain_tasks(seed=839501, count_per_domain=8)))
+print(json.dumps(build_domain_tasks(seed=${options.seed}, count_per_domain=${options.cases}, state_updates=${options.stateUpdates})))
 `], { encoding: 'utf8' });
   if (py.status !== 0) throw new Error(py.stderr);
   return JSON.parse(py.stdout);
@@ -135,7 +147,7 @@ function deriveContextualRidgeRankR(actFlat, hidFlat, T, dInter, dHidden, rank =
   return { a: aFactor, b: bFactor, rank: k, frobNorm: frob * scale };
 }
 
-const tasks = buildTransferTasks();
+const tasks = buildTransferTasks().filter(t => !options.contextOnly || t.domain === 'state_trace');
 const runtimeConfig = {
   inference: {
     session: {
@@ -147,7 +159,7 @@ const runtimeConfig = {
   },
 };
 
-const arms = [
+const arms = options.contextOnly ? ['base', 'matched_compute_base', 'query_aware_context'] : [
   'base',
   'zero_adapter',
   'contextual_ridge_r8',
@@ -155,6 +167,15 @@ const arms = [
   'random_r8',
   'matched_compute_base',
 ];
+
+// Exercise the real Python compiler bridge without importing or reserving a
+// GPU. This emits prompts/source references, never model-quality claims.
+if (options.prepareOnly) {
+  const prepared = { schema: 'gamma.state-context-preparation/v1', options, tasks, arms, modelExecuted: false };
+  await writeFile(outputPath, JSON.stringify(prepared, null, 2), { flag: 'wx' });
+  console.log(JSON.stringify({ preparedCases: tasks.length, modelExecuted: false }));
+  process.exit(0);
+}
 
 const mod = p => import(pathToFileURL(join(resolve(dopplerRoot), p)));
 const [gpu, fetcher, loader, deviceAPI, pool, fp16, adapters, chat] = await Promise.all([
@@ -170,14 +191,17 @@ const [gpu, fetcher, loader, deviceAPI, pool, fp16, adapters, chat] = await Prom
 
 const receipt = {
   schema: 'gamma.reconfiguration.doppler-2b-transfer/v1',
-  classification: 'TRAINING-FREE cross-domain & 2B model-size transfer on Doppler WebGPU (multi-token free decode)',
+  classification: options.contextOnly
+    ? 'symbolic query-aware context preprocessing; no weight updates; not B1/B2 evidence'
+    : 'TRAINING-FREE cross-domain & 2B model-size transfer on Doppler WebGPU (multi-token free decode)',
   modelPath: resolve(modelPath),
-  rank: 8,
+  rank: options.contextOnly ? null : 8,
   maxNewTokens: 16,
   arms,
   domainGates: {},
   rows: [],
   complete: false,
+  options,
 };
 await writeFile(`${outputPath}.protocol.json`, JSON.stringify({ tasks, runtimeConfig, arms }, null, 2), { flag: 'wx' });
 
@@ -300,6 +324,56 @@ try {
     assert.ok(t.promptIds.length < 3000, `Prompt too long (${t.promptIds.length}) for maxSeqLen=3072`);
   }
 
+  if (options.contextOnly) {
+    for (let i = 0; i < tasks.length; i += 1) {
+      const t = tasks[i];
+      for (let j = 0; j < arms.length; j += 1) {
+        const arm = arms[(i + j) % arms.length];
+        await reset();
+        const started = performance.now();
+        const prompts = arm === 'base' ? [t.prompt]
+          : arm === 'matched_compute_base' ? [t.half_a_prompt, t.half_b_prompt]
+            : [t.state_compaction.prompt];
+        const inputs = prompts.map(encodeRaw);
+        const compileMs = arm === 'query_aware_context' ? t.state_compaction_seconds * 1000 : 0;
+        const setupMs = performance.now() - started + compileMs;
+        const candidates = [];
+        for (const ids of inputs) {
+          if (candidates.length) await reset();
+          candidates.push(await greedyDecodeIds(ids, 16));
+        }
+        const ranked = [...candidates].sort((a, b) => {
+          const format = x => Number(normalizeLine(x.text).startsWith('STATE='));
+          return format(b) - format(a) || b.meanLogProb - a.meanLogProb;
+        });
+        const chosen = ranked[0];
+        const totalMs = performance.now() - started + compileMs;
+        const firstTokenMs = candidates.length > 1 ? totalMs : setupMs + chosen.firstTokenMs;
+        receipt.rows.push({
+          id: t.id, domain: t.domain, arm, inputTokens: inputs.reduce((n, ids) => n + ids.length, 0),
+          output: chosen.text, expected: t.expected, correct: normalizeLine(chosen.text) === t.expected,
+          setupMs, donorSetupMs: 0, firstTokenMs, decodeMs: totalMs - firstTokenMs, totalMs,
+          firstCandidateTokenMs: setupMs + candidates[0].firstTokenMs,
+          logicalBytes: 0, rssBytes: process.memoryUsage().rss,
+          ...(arm === 'query_aware_context' ? { compaction: t.state_compaction } : {}),
+        });
+        console.log(JSON.stringify({ id: t.id, arm, correct: receipt.rows.at(-1).correct, totalMs }));
+      }
+    }
+    receipt.summary = {};
+    const base = new Map(receipt.rows.filter(r => r.arm === 'base').map(r => [r.id, r]));
+    for (const arm of arms) {
+      const rows = receipt.rows.filter(r => r.arm === arm);
+      receipt.summary[arm] = {
+        correct: rows.filter(r => r.correct).length, count: rows.length,
+        inputTokens: rows.reduce((sum, r) => sum + r.inputTokens, 0),
+        meanTotalMs: rows.reduce((sum, r) => sum + r.totalMs, 0) / rows.length,
+        pairedWinsVsBase: rows.filter(r => r.correct && !base.get(r.id).correct).length,
+        pairedRegressionsVsBase: rows.filter(r => !r.correct && base.get(r.id).correct).length,
+      };
+    }
+    receipt.complete = true;
+  } else {
   // Phase 1: Base discrimination gate per domain
   const baseLogitsSamples = new Map();
   for (const t of tasks) {
@@ -514,6 +588,7 @@ try {
   }
   receipt.summary = summary;
   receipt.complete = true;
+  }
 } finally {
   if (pipeline) {
     await deviceAPI.getDevice()?.queue.onSubmittedWorkDone();
@@ -525,4 +600,5 @@ try {
   await gpu.releaseNodeWebGPU();
   await writeFile(outputPath, JSON.stringify(receipt, null, 2), { flag: 'wx' });
 }
-console.log(JSON.stringify({ domainGates: receipt.domainGates, summary: receipt.summary?.overall }, null, 2));
+console.log(JSON.stringify({ domainGates: receipt.domainGates,
+  summary: options.contextOnly ? receipt.summary : receipt.summary?.overall }, null, 2));

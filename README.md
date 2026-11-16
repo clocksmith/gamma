@@ -54,6 +54,7 @@ python gamma.py [command] [options]
 | Comparison | `python gamma.py comparison` | Compare model outputs and decoding behavior. |
 | Benchmarking | `python gamma.py benchmark` | Measure throughput, latency, output quality, or code generation. |
 | Mind Meld | `python gamma.py mind-meld` | Coordinate and route across active model engines. |
+| State-log context | `python -m src.core.state_context events.txt --query 'READ REG_03 =>'` | Keep the requested state's source dependencies while discarding irrelevant events. |
 | SAME-R | [`projects/samer/`](projects/samer/) | Run matched capability-transfer trials. |
 | Interview inventory | [`question bank`](projects/question_bank/README.md) | Browse categorized Hack2Hire entries and review LeetCode overlap. |
 | Domain research | [`projects/`](projects/) | Inspect translation, embedding, WGSL, and compression experiments. |
@@ -67,6 +68,15 @@ python gamma.py help codegen
 python gamma.py game --comparison --help
 python gamma.py mind-meld --help
 ```
+
+The [state-log compiler](src/core/state_context.py) runs on CPU without a model.
+It supports explicit `SET`, `UPDATE`, `COPY` and integer `ADD` records, retaining
+original lines and source hashes for the requested `READ`. Its JSON output
+contains the compacted prompt and evidence references; `--prompt-only` prints
+the prompt, while `--read-state` also returns an exact symbolic answer. Unknown
+operations, inconsistent examples and unsupported queries fall back to the
+original prompt; exact-answer mode rejects them. This is structured context
+preprocessing, not a learned transformation or general-language interpreter.
 
 ## Evidence and method
 

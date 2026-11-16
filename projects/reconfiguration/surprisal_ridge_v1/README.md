@@ -91,6 +91,65 @@ On `2B`, `kv_registry` hit `8/8` base ceiling (`discriminative = false`, skipped
 
 ## Reproduction Commands
 
+### Query-aware state context controls
+
+Both runners accept `--context-only` to compare full context, the existing
+blind two-window baseline and a query-directed dependency slice. The shared
+compiler lives in [`src/core/state_context.py`](../../../src/core/state_context.py);
+Doppler consumes the same Python-generated prompts and source references,
+rather than implementing a second parser. The compiler never receives expected
+answers. This is a symbolic preprocessing capability, separate from all
+weight-transform and heredity claims above. Every state case runs; the original
+weight-transform discrimination gates and default task inputs remain unchanged.
+
+```bash
+.venv/bin/python projects/reconfiguration/surprisal_ridge_v1/evaluate_mps.py \
+  <LOCAL_HF_MODEL_DIR> .work/state-context-new.json --context-only \
+  --device cpu --seed 174619 --cases-per-domain 4 --state-updates 512
+
+node projects/reconfiguration/surprisal_ridge_v1/evaluate_doppler_2b.mjs \
+  <DOPPLER_ROOT> <LOCAL_2B_MODEL> .work/state-context-doppler-new.json --context-only
+```
+
+Add `--prepare-only` to the Doppler command to exercise the real compiler bridge
+and write prepared prompts without importing WebGPU or running a model. This
+does not establish runtime parity or model quality. The Python runner supports
+either CPU or a separately reserved MPS device. No command downloads weights.
+`--state-updates` explicitly changes the history length; its default of 20 keeps
+historical inputs unchanged. Tokenization and compaction are charged in request
+latency. Blind selection requires both decoded windows, so its selected first
+token becomes available only at selection, not at the first window's first token.
+
+#### Bounded CPU implementation check, 2026-11-16
+
+Existing local `Qwen3-0.6B-NHS` backbone, FP32 CPU, four threads, raw prompts,
+24-token greedy cap; arm order rotated per case. The unused trained `ttt_proj`
+weights were not applied. These are generated structured-log engineering cases,
+not evidence for B1 adaptation, B2 heredity or general model improvement.
+
+| History | Cases | Full correct | Blind correct | Slice correct | Total prompt tokens: full / blind / slice |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| [20 updates](context_preprocessing_cpu_20261116.json), seed 164203 | 8 | 3/8 | 3/8 | 7/8 | 3,536 / 5,472 / 496 |
+| [512 updates](context_preprocessing_cpu_20261116.json), seed 174619 | 4 | 0/4 | 0/4 | 3/4 | 21,448 / 22,416 / 248 |
+
+In the long-history check, mean resident-request time including tokenization and
+compaction was **10.713s full, 10.665s blind and 0.393s slice**. Model loading is
+reported separately. The short check's initial timer summed decoder intervals
+and setup rather than measuring the complete wrapper; its latency is not used
+for this comparison. These small runs are not isolated-machine qualification.
+
+Independent full replay verifies the requested state in every retained context;
+the two model misses copied an unrelated `READ` example despite retaining the
+correct state. `--read-state` answers the supported grammar exactly without an
+LLM. CPU regression checks also cover 640 queried states across randomized
+500-event histories with overwrites, copies and arithmetic, and unchanged
+fallback for unknown syntax. The Doppler consumer's real `--prepare-only` bridge
+ran, but its WebGPU/model execution was not exercised in this implementation
+check. Existing default task inputs and weight-transform acceptance rules remain
+unchanged.
+
+### Weight-transform reproduction
+
 ```bash
 # 1. Unit tests (task answer-isolation oracles, shared-hyperbasis pointer sharing, zero-adapter identity, base weight immutability)
 .venv/bin/python -m unittest projects/reconfiguration/surprisal_ridge_v1/test_surprisal_ridge.py

@@ -7,6 +7,9 @@ Enforces:
    prompt_nll_ridge_lora, wrong_context, random_low_rank, and matched_compute_base.
 4. Conditional GPU-resident single-prefill KV-reuse fusion benchmark ONLY if a transform shows
    non-negative/positive quality lift, recording exact setup, first-token, decode, and memory costs.
+
+The separate --context-only mode compares full, blind-split and query-aware state
+prompts on every case without deriving transforms or changing their gates.
 """
 
 from __future__ import annotations
@@ -88,6 +91,90 @@ def format_chat_or_raw(tokenizer, text: str, use_chat: bool) -> list[int]:
     return tokenizer.encode(text, add_special_tokens=False)
 
 
+def run_state_context_controls(args, model, tokenizer, tasks, sync, dev_bytes, load_seconds):
+    """Compare source-preserving preprocessing separately from fast-weight arms."""
+    import torch
+
+    arms = ("base", "matched_compute_base", "query_aware_context")
+    state_tasks = [task for task in tasks if task["domain"] == "state_trace"]
+    receipt = {
+        "schema": "gamma.state-context-comparison/v1",
+        "classification": "symbolic query-aware context preprocessing; no weight updates; not B1/B2 evidence",
+        "model_path": str(args.model), "device": args.device,
+        "seed": args.seed, "state_updates": args.state_updates,
+        "load_seconds": load_seconds, "arms": arms, "rows": [], "complete": False,
+        "source_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+    }
+    stop_ids = {tokenizer.eos_token_id}
+    for text in ("\n", "\r\n", "<|im_end|>", "<|endoftext|>"):
+        ids = tokenizer.encode(text, add_special_tokens=False)
+        if len(ids) == 1:
+            stop_ids.add(ids[0])
+    with args.output.open("x") as stream:
+        json.dump(receipt, stream)
+    for index, task in enumerate(state_tasks):
+        # Rotate order so no arm gets all cold/warm runs. No discrimination
+        # gate: source-preserving preprocessing is tested on every case.
+        for arm in arms[index % len(arms):] + arms[:index % len(arms)]:
+            started = time.perf_counter()
+            if arm == "base":
+                prompts = [task["prompt"]]
+            elif arm == "matched_compute_base":
+                prompts = [task["half_a_prompt"], task["half_b_prompt"]]
+            else:
+                prompts = [task["state_compaction"]["prompt"]]
+            encoded = [format_chat_or_raw(tokenizer, prompt, args.chat_template) for prompt in prompts]
+            prep = time.perf_counter() - started
+            if arm == "query_aware_context":
+                prep += task["state_compaction_seconds"]
+            candidates = []
+            for ids in encoded:
+                tensor = torch.tensor([ids], device=args.device)
+                dec = greedy_decode(model, tokenizer, tensor, 24, stop_ids, sync)
+                text = tokenizer.decode(dec["generated_ids"], skip_special_tokens=True)
+                candidates.append((text, dec))
+                del tensor
+            chosen_text, chosen = max(
+                candidates,
+                key=lambda item: (is_valid_domain_format("state_trace", item[0]), item[1]["mean_logprob"]),
+            )
+            # Charge both windows and preprocessing. The selected answer from
+            # the blind splitter cannot be exposed until both passes finish.
+            compile_seconds = task["state_compaction_seconds"] if arm == "query_aware_context" else 0.0
+            total = time.perf_counter() - started + compile_seconds
+            first = total if len(candidates) > 1 else prep + chosen["first_token_seconds"]
+            row = {
+                "id": task["id"], "domain": "state_trace", "arm": arm,
+                "input_tokens": sum(map(len, encoded)), "output": chosen_text,
+                "expected": task["expected"],
+                "correct": score_domain_output("state_trace", chosen_text, task["expected"]),
+                "setup_seconds": prep, "first_token_seconds": first,
+                "decode_interval_seconds": total - first, "total_seconds": total,
+                "first_candidate_token_seconds": prep + candidates[0][1]["first_token_seconds"],
+                "device_bytes_after": dev_bytes(), "process_peak_rss_bytes": peak_rss_bytes(),
+            }
+            if arm == "query_aware_context":
+                row["compaction"] = task["state_compaction"]
+            receipt["rows"].append(row)
+            args.output.write_text(json.dumps(receipt, indent=2))
+            print(json.dumps({"id": row["id"], "arm": arm, "correct": row["correct"],
+                              "tokens": row["input_tokens"], "total_seconds": total}), flush=True)
+    base = {r["id"]: r for r in receipt["rows"] if r["arm"] == "base"}
+    receipt["summary"] = {}
+    for arm in arms:
+        rows = [r for r in receipt["rows"] if r["arm"] == arm]
+        receipt["summary"][arm] = {
+            "correct": sum(r["correct"] for r in rows), "count": len(rows),
+            "input_tokens": sum(r["input_tokens"] for r in rows),
+            "mean_total_seconds": sum(r["total_seconds"] for r in rows) / len(rows),
+            "paired_wins_vs_base": sum(r["correct"] and not base[r["id"]]["correct"] for r in rows),
+            "paired_regressions_vs_base": sum(not r["correct"] and base[r["id"]]["correct"] for r in rows),
+        }
+    receipt["complete"] = True
+    args.output.write_text(json.dumps(receipt, indent=2))
+    print(json.dumps(receipt["summary"], indent=2), flush=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("model", type=Path)
@@ -96,10 +183,13 @@ def main():
     parser.add_argument("--cases-per-domain", type=int, default=12)
     parser.add_argument("--device", choices=("cpu", "mps"), default="mps")
     parser.add_argument("--chat-template", action="store_true")
+    parser.add_argument("--context-only", action="store_true", help="Compare full, blind-split and query-aware state prompts without weight transforms")
+    parser.add_argument("--state-updates", type=int, default=20, help="Explicit state-history length; default preserves prior fixtures")
     args = parser.parse_args()
 
     if args.output.exists():
         raise ValueError("Refusing to overwrite existing receipt")
+    tasks = build_domain_tasks(args.seed, args.cases_per_domain, state_updates=args.state_updates)
 
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -141,8 +231,11 @@ def main():
         if len(enc) == 1:
             stop_ids.add(enc[0])
 
-    tasks = build_domain_tasks(args.seed, args.cases_per_domain)
     use_chat = bool(args.chat_template)
+
+    if args.context_only:
+        run_state_context_controls(args, model, tokenizer, tasks, sync, dev_bytes, load_seconds)
+        return
 
     for t in tasks:
         t["prompt_ids"] = format_chat_or_raw(tokenizer, t["prompt"], use_chat)
