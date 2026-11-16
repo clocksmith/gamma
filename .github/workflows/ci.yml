@@ -23,6 +23,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  retained_artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Retained artifacts stay outside the maintained tree
+        run: |
+          python tools/retained_artifacts.py check-boundary --catalog projects/enwiki9/docs/archive-maintenance/retained-artifacts.json --root .
+          python -m unittest discover -s tests -p test_retained_artifacts.py
+          python -m unittest discover -s projects/enwiki9/tests -p test_archive_inventory.py
+          python -m unittest discover -s projects/enwiki9/tests -p test_raw_reverse_restore.py
+
   enwiki9:
     if: github.event_name == 'workflow_dispatch' && inputs.enwiki9_groups
     runs-on: ubuntu-latest

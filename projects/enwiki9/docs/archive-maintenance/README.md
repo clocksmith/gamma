@@ -26,7 +26,32 @@ these outputs and its artifact receipt binds their sizes/hashes. All JSON
 receipts, the original codec, frozen experiment/source bindings and the bound
 `operations/evidence/fixtures/dualstream_opening250k_v1.raw` input stay unchanged.
 
-After the migration lane restores the nine original repository-relative paths:
+The nine binaries are now retained outside the maintained Git tree. Restore
+them into an ignored directory or their original paths (existing files are
+verified and never overwritten):
+
+```bash
+python3 tools/retained_artifacts.py restore \
+  --catalog projects/enwiki9/docs/archive-maintenance/retained-artifacts.json \
+  --root . --fetch
+python3 tools/retained_artifacts.py check-boundary \
+  --catalog projects/enwiki9/docs/archive-maintenance/retained-artifacts.json \
+  --root .
+```
+
+`--fetch` explicitly allows downloads from the catalog's pinned public GitHub
+URLs when local Git objects are unavailable. The catalog binds every original
+path to its full source commit, Git blob, SHA-256, size and mode. The boundary
+check examines the Git index and rejects even force-added retained binaries;
+default CI runs it along with the focused archival tests.
+
+[The restoration check](restoration-check.json) records a successful depth-one,
+blobless GitHub clone with only the selected source files materialized, no
+shared object store and no original historical commit locally available. It
+restored all nine binaries using this command before their tracked copies were
+removed. All six archives passed the original CPU decoder and exact encoder.
+
+Verify the restored original repository-relative paths:
 
 ```bash
 python3 projects/enwiki9/tools/verify_raw_reverse_restore.py \
@@ -60,6 +85,6 @@ The existing codec tests passed eight portable cases on macOS. Their additional
 Linux's `os.sched_getaffinity`; it was attempted and failed on that missing API,
 then excluded without modifying the frozen test. CPU byte restoration establishes
 neither historical timing/resource isolation nor full-corpus performance. The
-migration lane must additionally exercise its actual published restore command
-before removing tracked copies. A pinned GitHub-history URL is not WORM storage
+migration does not change the archived project's scientific status.
+A pinned GitHub-history URL is not WORM storage
 and moving current-tree outputs does not shrink existing Git history.
