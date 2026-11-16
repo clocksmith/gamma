@@ -107,6 +107,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*.py
+            /**/*.py
+            /ruff.toml
+            /**/ruff.toml
+            /.ruff.toml
+            /**/.ruff.toml
+            /pyproject.toml
+            /**/pyproject.toml
+            /.gitignore
+            /**/.gitignore
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -126,6 +139,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            gamma
+            gamma-core
+            tests
+            requirements
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
