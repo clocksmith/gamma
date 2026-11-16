@@ -180,12 +180,12 @@ Relative reduction is $(\mathcal{L}_{\text{comp}} - \mathcal{L}_{\text{focal}}) 
 
 ```bash
 # 1. Run unit tests (oracle/failed-attempt charging, autodiff vs FD, affine invariance, neural regeneration, subprocess parity, budget equality)
-node projects/self_transform_secant_regen_v1/test.mjs
+node projects/self_transform/self_transform_secant_regen_v1/test.mjs
 
 # 2. Re-analyze the sealed Stage 2 confirmation receipt
-node projects/self_transform_secant_regen_v1/stats.mjs .work/secant-regen-confirmation-01.json > .work/secant-regen-confirmation-01.analysis.json
+node projects/self_transform/self_transform_secant_regen_v1/stats.mjs .work/secant-regen-confirmation-01.json > .work/secant-regen-confirmation-01.analysis.json
 
 # 3. Run Stage 1 selection or Stage 2 confirmation to fresh output paths (exclusive wx protection)
-node projects/self_transform_secant_regen_v1/select.mjs .work/secant-regen-selection-repro.json
-node projects/self_transform_secant_regen_v1/confirm.mjs .work/secant-regen-confirmation-repro.json
+node projects/self_transform/self_transform_secant_regen_v1/select.mjs .work/secant-regen-selection-repro.json
+node projects/self_transform/self_transform_secant_regen_v1/confirm.mjs .work/secant-regen-confirmation-repro.json
 ```

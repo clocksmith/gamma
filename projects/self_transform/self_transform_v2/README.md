@@ -76,8 +76,8 @@ contributes anything.
 ## Run
 
 ```
-node projects/self_transform_v2/test.mjs
-node projects/self_transform_v2/run.mjs .work/self-transform-v2-new.json
+node projects/self_transform/self_transform_v2/test.mjs
+node projects/self_transform/self_transform_v2/run.mjs .work/self-transform-v2-new.json
 ```
 
 Protocol and source locks are saved before execution, refusing path reuse. Raw

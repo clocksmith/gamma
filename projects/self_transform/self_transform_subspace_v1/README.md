@@ -180,18 +180,18 @@ The generation trajectories and subspace-overlap receipts expose a sharp geometr
 Run unit, budget-parity, scale-homogeneity, and subprocess-isolation checks:
 
 ```bash
-node projects/self_transform_subspace_v1/test.mjs
+node projects/self_transform/self_transform_subspace_v1/test.mjs
 ```
 
 Re-run Stage 1 candidate selection (`6` selection seeds x `2` families x `4` candidates) to a new local receipt path:
 
 ```bash
-node projects/self_transform_subspace_v1/select.mjs .work/subspace-selection-repro.json
+node projects/self_transform/self_transform_subspace_v1/select.mjs .work/subspace-selection-repro.json
 ```
 
 Re-run sealed Stage 2 confirmation (`12` unseen confirmation seeds x `2` families, `2,016` isolated subprocess calls + in-process parity audit; requires `.work/subspace-selection-01.json` matching `selectionReceiptSha256` in [`protocol.confirmation.json`](protocol.confirmation.json)):
 
 ```bash
-node projects/self_transform_subspace_v1/confirm.mjs .work/subspace-confirmation-repro.json
-node projects/self_transform_subspace_v1/stats.mjs .work/subspace-confirmation-repro.json
+node projects/self_transform/self_transform_subspace_v1/confirm.mjs .work/subspace-confirmation-repro.json
+node projects/self_transform/self_transform_subspace_v1/stats.mjs .work/subspace-confirmation-repro.json
 ```

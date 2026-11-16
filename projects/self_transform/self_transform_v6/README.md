@@ -80,8 +80,8 @@ this stronger baseline, not merely reproduce monotonic self-application gains.
 ## Run
 
 ```
-node projects/self_transform_v6/test.mjs
-node projects/self_transform_v6/run.mjs .work/self-transform-v6-new.json
+node projects/self_transform/self_transform_v6/test.mjs
+node projects/self_transform/self_transform_v6/run.mjs .work/self-transform-v6-new.json
 ```
 
 Focused checks cover training-only selection, invalid rates, deterministic

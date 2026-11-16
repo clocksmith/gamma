@@ -1,5 +1,22 @@
 # Request-specific reconfiguration experiments
 
+## Local test frontdoor
+
+From this directory, run existing CPU contract/oracle controls:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m pytest -p no:cacheprovider -c pyproject.toml
+node rotation_v1/test_operator.mjs
+node contrastive_rank_one_v1/test_operator.mjs
+```
+
+These are distinct Python and Node mechanisms, not configurations of one generic
+operator. `pyproject.toml` defines checkout tests, not a portable model package.
+Cross-domain Node adapters consume sibling WGSL study modules; Python launchers
+may also require Gamma toolkit utilities. Preserve pinned source closures and
+protocol/receipt bytes. Active untracked `query_swiglu_fastweight_*` experiments
+retain their paths and are outside this mechanical cleanup.
+
 This component holds multi-domain evaluations owned by Gamma. The first
 [WGSL channel-gain study](../distillation/wgsl/channel_gain/README.md) remains in
 its original directory and has completed its frozen selection/confirmation protocol.

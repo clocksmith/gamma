@@ -78,9 +78,9 @@ use new evaluation seeds. Do not retrofit these held-out outcomes into selection
 ## Run and checks
 
 ```
-node projects/self_transform_v2/test.mjs
-node projects/self_transform_v3/test.mjs
-node projects/self_transform_v3/run.mjs .work/self-transform-v3-new.json
+node projects/self_transform/self_transform_v2/test.mjs
+node projects/self_transform/self_transform_v3/test.mjs
+node projects/self_transform/self_transform_v3/run.mjs .work/self-transform-v3-new.json
 ```
 
 The runner reuses v2's operator and isolated worker. Every dependency is source
