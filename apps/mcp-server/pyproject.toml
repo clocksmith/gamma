@@ -6,11 +6,18 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "mcp[cli]>=1.2.0",
+    "gamma-toolkit>=0.1.0",
 ]
 
 [project.scripts]
 gamma-mcp-server = "gamma_mcp_server:main"
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["gamma_mcp_server"]
+
+[tool.setuptools.data-files]
+"share/gamma-mcp-server" = ["claude_desktop_config.example.json"]

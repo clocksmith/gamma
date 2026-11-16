@@ -16,6 +16,15 @@ pip install -e ".[pytorch]"   # default backend
 pip install -e ".[mlx]"
 ```
 
+The wheel includes the `flux:main` entry module and Flux's own `src` package.
+Installed launches use the declared `gamma-core` dependency; checkout launches
+can use adjacent `gamma-core/src` or an explicit `GAMMA_CORE_SRC_PATH`. Optional
+model runtimes are not imported for `flux --help`.
+
+The static web lab is included under `share/flux/web/` in the installation prefix.
+Its bytes are the same as the source `web/` directory; installing them does not
+start a backend or load a diffusion model.
+
 ## CLI Quick Start
 
 ```bash

@@ -8,6 +8,10 @@ Main CLI entry point for all Flux features.
 import sys
 import argparse
 import logging
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.engines.diffusers_engine import DiffusersEngine
 
 from src.core.gamma_core_path import configure_gamma_core_path
 configure_gamma_core_path()

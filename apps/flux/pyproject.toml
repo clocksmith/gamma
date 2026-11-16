@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=45", "wheel"]
-build-backend = "setuptools.build_backend"
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "flux-diffusion"
@@ -10,6 +10,18 @@ readme = "README.md"
 requires-python = ">=3.10"
 authors = [
     {name = "Flux Team"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
     "gamma-core>=0.1.0",
@@ -45,3 +57,13 @@ dev = [
 
 [project.scripts]
 flux = "flux:main"
+
+[tool.setuptools]
+py-modules = ["flux"]
+
+[tool.setuptools.packages.find]
+include = ["src", "src.*"]
+namespaces = false
+
+[tool.setuptools.data-files]
+"share/flux/web" = ["web/index.html", "web/README.md"]

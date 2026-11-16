@@ -36,6 +36,22 @@ The server exposes three MCP primitive types:
 
 ## Installation
 
+### Installed command
+
+From the repository root, install the local packages together:
+
+```bash
+python -m pip install ./gamma-core . ./apps/mcp-server
+gamma-mcp-server --help
+```
+
+The wheel owns `gamma_mcp_server:main` and declares its `gamma-toolkit` and MCP
+SDK dependencies. It runs over stdio without a checkout or `PYTHONPATH` override.
+Use `gamma-mcp-server` in the example configuration, or the absolute path to that
+command inside your virtual environment when Claude Desktop does not inherit its
+`PATH`. The example is also installed under `share/gamma-mcp-server/`.
+The source-checkout `server.py` launcher remains available for existing setups.
+
 ### Prerequisites
 
 - Python 3.10 or higher

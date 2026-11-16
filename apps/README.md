@@ -10,3 +10,8 @@
 Each application keeps its own dependencies and build surface. Shared Gamma
 runtime code stays at the repository root; gamma-core is an adjacent checkout or
 installed dependency. Flux accepts `GAMMA_CORE_SRC_PATH` for an explicit checkout.
+
+To verify installed Python app boundaries without fetching dependencies, run
+`python3 -m unittest discover -s apps/tests -p test_installed_wheels.py`. It uses
+available setuptools/wheel and an isolated environment; actual MCP stdio coverage
+requires the already-installed MCP SDK. It performs no model execution.
