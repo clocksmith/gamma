@@ -163,7 +163,8 @@ class Writer:
     if (value['kind'],value['id'])!=key:raise ValueError('Historical record identity mismatch')
     versions.append(({'kind':kind,'id':id,'version':value['version'],'path':str(path.relative_to(self.run.dest)),'sha256':sha(raw)},value))
    self.authored_versions[key]=versions
-  versions=self.authored_versions[key];match=next(((r,v) for r,v in versions if semantic({k:x for k,x in v.items() if k!='version'},True)==semantic(base,True)),None)
+  versions=self.authored_versions[key]
+  match=next(((r,v) for r,v in versions if semantic({k:x for k,x in v.items() if k!='version'},True)==semantic(base,True)),None)
   if match:reference,value=match
   else:
    version=max((r['version'] for r,v in versions),default=0)+1;value={**base,'version':version};raw=encoded(value);relative=f'records/{kind}/{slug(id)}/v{version}.json';path=self.run.dest/relative

@@ -17,6 +17,10 @@ import random
 import resource
 import sys
 import time
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from artifact_contract import LAYERS, qualify
