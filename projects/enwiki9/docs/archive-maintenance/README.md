@@ -89,6 +89,11 @@ migration does not change the archived project's scientific status.
 A pinned GitHub-history URL is not WORM storage
 and moving current-tree outputs does not shrink existing Git history.
 
+[The post-removal check](post-removal-restoration-check.json) repeats both
+restores from a new published depth-one GitHub clone after the tracked outputs
+were removed: **25 files, 993,125,618 logical bytes**. Both boundary checks pass,
+the original historical commit is absent locally, and both CPU verifiers pass.
+
 ## Recorded attention streams
 
 [The next candidate](attention-trace-candidate.json) identifies exactly sixteen
