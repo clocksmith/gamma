@@ -46,6 +46,20 @@ class ClassificationTests(unittest.TestCase):
         original = {"path": "tools/original.py", "sha256": "sha256:abc"}
         self.assertEqual(list(INVENTORY.references({"input": original})), [original])
 
+    def test_trace_selection_requires_exact_manifest_entries(self):
+        family = "fx2_attention_anchor250k_v1"
+        entries = [{"path": f"results/{family}/work/native/{arm}-{phase}.probs", "bytes": 3 * 205 * 2}
+                   for arm in "PKDS" for phase in ("encode", "repeat")]
+        manifest = {"errors": [], "files": entries + [{"path": "results/work/model.tfwc2", "bytes": 999}]}
+        selected = INVENTORY.trace_manifest_entries(manifest, family, 3)
+        self.assertEqual(len(selected), 8)
+        self.assertNotIn("results/work/model.tfwc2", selected)
+        for bad in ({"errors": ["incomplete"], "files": entries},
+                    {"errors": [], "files": entries[:-1]},
+                    {"errors": [], "files": entries + [entries[0]]}):
+            with self.assertRaises(ValueError):
+                INVENTORY.trace_manifest_entries(bad, family, 3)
+
 
 if __name__ == "__main__":
     unittest.main()

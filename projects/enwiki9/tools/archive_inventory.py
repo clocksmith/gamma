@@ -8,7 +8,9 @@ Unresolved output-looking paths stay unresolved. Git lazy fetches are disabled.
 from __future__ import annotations
 
 import argparse
+import ast
 from collections import Counter, defaultdict
+import hashlib
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -29,7 +31,90 @@ RULES = {
     "reference_document": "Documentation/reference surface retained in Git; generated-versus-authored status may need review.",
     "unresolved": "No inspected producer/input declaration establishes the role; protected pending family review.",
     "gitlink": "Pinned upstream Git revision, not a blob or generated output.",
+    "reviewed_probability_trace": "Exact original artifact-manifest entry, original producer trace-write contract and retained neural-comparison identity agree; no input binding.",
 }
+
+
+def trace_manifest_entries(manifest: dict, family: str, rows: int) -> dict:
+    """Select eight explicit entries, never an entire mixed results directory."""
+    if manifest.get("errors") != []:
+        raise ValueError("Trace family has original artifact errors")
+    selected = {}
+    for arm in "PKDS":
+        for phase in ("encode", "repeat"):
+            path = f"results/{family}/work/native/{arm}-{phase}.probs"
+            matches = [entry for entry in manifest["files"] if entry["path"] == path]
+            if len(matches) != 1 or matches[0]["bytes"] != rows * 205 * 2:
+                raise ValueError(f"Missing, duplicate or wrong-size trace entry: {path}")
+            selected[path] = matches[0]
+    return selected
+
+
+def reviewed_trace_families(repo: Path, revision: str, by_path: dict, inputs: dict) -> list[dict]:
+    """Two manually inspected original producers; no other families inferred."""
+    result = []
+    for family in ("fx2_attention_anchor250k_v1", "fx2_attention_anchor250k_v2"):
+        bindings = []
+
+        def read(relative):
+            row = by_path[PREFIX + relative]
+            data = git(repo, "cat-file", "blob", row["git_oid"])
+            bindings.append(dict(path=PREFIX + relative, git_oid=row["git_oid"],
+                                 bytes=len(data), sha256=hashlib.sha256(data).hexdigest()))
+            return data
+
+        experiment_path = f"operations/adaptive/experiments/{family}.json"
+        experiment = json.loads(read(experiment_path))
+        producer_path = f"tools/{family}.py"
+        producer = read(producer_path)
+        source_ref = next(ref for ref in experiment["inputs"] if ref["path"] == producer_path)
+        if hashlib.sha256(producer).hexdigest() != source_ref["sha256"].removeprefix("sha256:"):
+            raise ValueError(f"Original trace producer changed: {producer_path}")
+        syntax = ast.parse(producer)
+        row_count = next(node.value.value for node in syntax.body if isinstance(node, ast.Assign)
+                         and any(isinstance(target, ast.Name) and target.id == "N" for target in node.targets))
+        if row_count != 151210 or not any(isinstance(node, ast.FunctionDef) and node.name == "neural_compare" for node in syntax.body):
+            raise ValueError("Original trace comparison contract differs")
+        if b"--save-transformer-probs" not in producer:
+            raise ValueError("Inspected producer no longer declares trace writes")
+        artifact_path = f"results/{family}/artifacts.json"
+        entries = trace_manifest_entries(json.loads(read(artifact_path)), family, row_count)
+        decision = json.loads(read(f"results/{family}/decision.json"))
+        comparison = json.loads(read(f"results/{family}/neural-comparison.json"))
+        if decision.get("status") != "passed" or decision.get("child_closure_ok") is not True:
+            raise ValueError("Original trace family correctness closure is incomplete")
+        validity_path = "results/fx2_residual_features250k_v3/closure/feature_validity.json"
+        validity = read(validity_path)
+        validity_ref = next(ref for ref in experiment["inputs"] if ref["path"] == validity_path)
+        if hashlib.sha256(validity).hexdigest() != validity_ref["sha256"].removeprefix("sha256:"):
+            raise ValueError("Original trace population/prefix input changed")
+        selected = []
+        for relative, entry in entries.items():
+            path = PREFIX + relative
+            row = by_path.get(path)
+            if row is None:
+                continue  # A later archived tree may already externalize a family.
+            if inputs.get(path) or row["bytes"] != entry["bytes"]:
+                raise ValueError(f"Trace is bound input or its recorded size differs: {path}")
+            selected.append({**row, "expected_sha256": entry["sha256"], "original_receipt": PREFIX + artifact_path,
+                             "classification": "retained_outputs", "input_binding_count": 0})
+        def identity(arm, phase="encode"):
+            return entries[f"results/{family}/work/native/{arm}-{phase}.probs"]["sha256"]
+        if identity("P") != identity("K") or any(identity(arm) != identity(arm, "repeat") for arm in "PKDS"):
+            raise ValueError("Original P/K or repeat trace identity differs")
+        for arm in "KDS":
+            record = comparison[arm]
+            if record["parent_sha256"] != identity("P") or record["treatment_sha256"] != identity(arm) or record["rows"] != row_count:
+                raise ValueError("Original comparison is not bound to selected trace identities")
+        result.append(dict(family=family, source_revision=revision, files=selected,
+                           logical_bytes=sum(row["bytes"] for row in selected), bindings=bindings,
+                           row_count=row_count, distribution_width=205, element_bytes=2,
+                           producer=PREFIX + producer_path, artifact_manifest=PREFIX + artifact_path,
+                           comparison_receipt=PREFIX + f"results/{family}/neural-comparison.json",
+                           validity_input=PREFIX + validity_path,
+                           proof="Original producer emits these exact streams; exact manifest and comparison identities agree. No model, archive, source or JSON receipt is selected.",
+                           cpu_recheck="Run only original neural_compare on restored trace streams and retained prefix coordinates; never execute producer main/train/encode."))
+    return result
 
 
 def git(repo: Path, *args) -> bytes:
@@ -142,8 +227,14 @@ def inventory(repo: Path, revision: str):
                 blob = project_path(ref["blobPath"])
                 if blob in by_path:
                     inputs[blob].append(identity)
+    trace_families = reviewed_trace_families(repo, revision, by_path, inputs)
+    reviewed = {entry["path"]: entry for family in trace_families for entry in family["files"]}
+    for path, entry in reviewed.items():
+        outputs[path].append(entry["original_receipt"])
     for row in rows:
         category, rule, review = classify(row, roles, inputs, outputs)
+        if row["path"] in reviewed:
+            rule, review = "reviewed_probability_trace", False
         row.update(classification=category, reason_code=rule, needs_review=review,
                    input_binding_count=len(inputs[row["path"]]), output_binding_count=len(outputs[row["path"]]),
                    binding_examples=inputs[row["path"]][:2], output_declarations=outputs[row["path"]][:2],
@@ -176,7 +267,9 @@ def inventory(repo: Path, revision: str):
     summary = dict(schema="gamma.enwiki9.archive-classification-candidate/v1", source_revision=revision,
                    scope=PREFIX, tracked_entries=len(rows), tracked_blob_bytes=sum(row["bytes"] or 0 for row in rows),
                    counts=dict(counts), bytes_by_classification=dict(sizes), rules=RULES,
-                   metadata_files_inspected=len(inspected), metadata_scope="frozen declarations and source roles only",
+                   metadata_files_inspected=len(inspected), metadata_scope="frozen declarations, source roles and two explicitly reviewed probability-trace families",
+                   reviewed_trace_bindings_verified=len({binding["path"] for family in trace_families for binding in family["bindings"]}),
+                   reviewed_trace_families=trace_families,
                    limitations=["Classification is not edit/removal authority.",
                                 "Unresolved families have not been invented as outputs from directory names.",
                                 "A bound input may also be a previous output; that overlap is protected.",
