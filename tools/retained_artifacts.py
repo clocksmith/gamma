@@ -214,7 +214,8 @@ def open_remote(row: dict):
     return build_opener(NoRedirect()).open(Request(row["url"], headers={"User-Agent": "gamma-retained-artifacts/1"}), timeout=30)
 
 
-def restore_file(row: dict, root: Path, repo: Path, fetch: bool = False) -> Path:
+def restore_file(row: dict, root: Path, repo: Path, fetch: bool = False,
+                 from_restored: str | None = None) -> Path:
     validate_row(row)
     with parent_directory(root, row["path"], create=True) as (directory, name):
         try:
@@ -227,7 +228,17 @@ def restore_file(row: dict, root: Path, repo: Path, fetch: bool = False) -> Path
         try:
             with os.fdopen(descriptor, "wb") as destination:
                 available = git(repo, "cat-file", "-e", row["gitBlob"], check=False).returncode == 0
-                if available:
+                if from_restored is not None:
+                    # Reuse a previous verified identity without another network
+                    # transfer. Copy and rehash; never couple outputs by hard link.
+                    with parent_directory(root, from_restored, create=False) as (source_directory, source_name):
+                        source_fd = os.open(source_name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK,
+                                            dir_fd=source_directory)
+                        with os.fdopen(source_fd, "rb") as stream:
+                            if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+                                raise ValueError("Restored source must be an ordinary file")
+                            measure(stream, row, destination)
+                elif available:
                     with local_blob(repo, row) as stream:
                         measure(stream, row, destination)
                 elif fetch:
@@ -249,6 +260,14 @@ def restore_file(row: dict, root: Path, repo: Path, fetch: bool = False) -> Path
         finally:
             os.unlink(temporary, dir_fd=directory)
     return root / row["path"]
+
+
+def restore_files(rows: list[dict], root: Path, repo: Path, fetch: bool = False) -> None:
+    restored = {}
+    for row in rows:
+        identity = (row["gitBlob"], row["sha256"], row["bytes"])
+        restore_file(row, root, repo, fetch, from_restored=restored.get(identity))
+        restored[identity] = row["path"]
 
 
 def check_files(rows: list[dict], root: Path) -> None:
@@ -310,8 +329,7 @@ def main(argv: list[str] | None = None) -> int:
         else:
             rows = selected(read_catalog(args.catalog), args.prefix)
             if args.command == "restore":
-                for row in rows:
-                    restore_file(row, args.root, args.repo, args.fetch)
+                restore_files(rows, args.root, args.repo, args.fetch)
             elif args.command == "check":
                 check_files(rows, args.root)
             else:

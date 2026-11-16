@@ -129,6 +129,22 @@ class RetainedArtifactTests(unittest.TestCase):
             with patch.object(artifacts, "open_remote", return_value=response), self.assertRaises(ValueError):
                 artifacts.restore_file(self.row, self.destination, self.empty_repo, fetch=True)
 
+    def test_repeated_identities_fetch_once_and_restore_independent_files(self):
+        second = {**self.row, "path": "outputs/repeat/proof.bin", "mode": "100644"}
+        second["url"] = artifacts.artifact_url(second["sourceCommit"], second["path"])
+        with patch.object(artifacts, "open_remote", return_value=Response(self.data, self.row["url"], len(self.data))) as remote:
+            artifacts.restore_files([self.row, second], self.destination, self.empty_repo, fetch=True)
+            remote.assert_called_once()
+        first_path, second_path = self.destination / self.name, self.destination / second["path"]
+        self.assertEqual(second_path.stat().st_mode & 0o777, 0o644)
+        first_path.write_bytes(b"modified original")
+        self.assertEqual(second_path.read_bytes(), self.data)
+        third = {**self.row, "path": "outputs/third.bin"}
+        third["url"] = artifacts.artifact_url(third["sourceCommit"], third["path"])
+        with self.assertRaises(ValueError):
+            artifacts.restore_file(third, self.destination, self.empty_repo, from_restored=self.name)
+        self.assertFalse((self.destination / third["path"]).exists())
+
     def test_no_overwrite_even_when_a_writer_races_atomic_publication(self):
         def raced(*args, **kwargs):
             (self.destination / self.name).write_bytes(b"other session work")
