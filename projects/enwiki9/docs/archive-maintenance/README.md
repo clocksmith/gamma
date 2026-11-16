@@ -88,3 +88,41 @@ neither historical timing/resource isolation nor full-corpus performance. The
 migration does not change the archived project's scientific status.
 A pinned GitHub-history URL is not WORM storage
 and moving current-tree outputs does not shrink existing Git history.
+
+## Next reviewed family: recorded attention streams
+
+[The next candidate](attention-trace-candidate.json) identifies exactly sixteen
+streams from `fx2_attention_anchor250k_v1` and `v2`: P/K/D/S encode and repeat
+FP16 observations. These are **991,937,600 logical bytes**, with three distinct
+byte identities totaling **185,988,300 bytes**. They were previously unresolved
+because experiment output lists omit the dynamically constructed filenames.
+The inspected original producers explicitly request these trace files; exact
+artifact manifests enumerate them and retained comparison receipts agree with
+their identities. This evidence reclassifies only those sixteen paths, not the
+mixed work directories, weights, archives, source copies or JSON receipts.
+
+Every selected data and kept metadata/source Git object was compared with
+published original commit `88bd675cf192b70efc1a0f7cf56168b8b0104709` before
+pinning that retention source. The [fresh-input list](attention-trace-verifier-inputs.txt)
+names eleven currently tracked metadata/source files needed by the verifier;
+they remain unchanged. No prior commit checkout or model installation is needed.
+
+After the actual retained catalog restores the sixteen original paths:
+
+```bash
+python3 projects/enwiki9/tools/verify_attention_trace_restore.py \
+  --source-root FRESH_METADATA_REPOSITORY_ROOT \
+  --restored-root RESTORED_REPOSITORY_ROOT
+python3 -m unittest discover -s projects/enwiki9/tests -p test_attention_trace_restore.py -v
+```
+
+The verifier checks all original source/metadata bindings and all sixteen data
+identities, then extracts only each original `neural_compare` function. It never
+imports the native driver or executes its build, codec or model pipeline. Six
+recorded contrasts each inspect 151,210 rows of 205 FP16 words per stream,
+including finite values and pre-boundary identity; results must equal the kept
+original comparison JSON. Including hashes, this entails approximately 2.48 GB
+of sequential reads and 371,976,600 FP16 exponent checks with bounded buffers.
+The v1 and v2 negative scientific conclusions remain unchanged. The candidate
+is not proof of a published restore: publication, independent restoration and
+verification must precede any removal.

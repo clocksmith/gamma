@@ -48,7 +48,15 @@ def verify(candidate: dict, source_root: Path, restored_root: Path):
     for family in candidate["families"]:
         require(len(family["files"]) == 8 and family["row_count"] == 151210,
                 "Candidate trace population is incomplete")
+        expected_paths = {f"projects/enwiki9/results/{family['family']}/work/native/{arm}-{phase}.probs"
+                          for arm in "PKDS" for phase in ("encode", "repeat")}
+        require({entry["path"] for entry in family["files"]} == expected_paths,
+                "Candidate trace paths are incomplete or duplicated")
         bindings = {entry["path"]: entry for entry in family["bindings"]}
+        required = {family["producer"], family["artifact_manifest"], family["comparison_receipt"], family["validity_input"],
+                    f"projects/enwiki9/operations/adaptive/experiments/{family['family']}.json",
+                    f"projects/enwiki9/results/{family['family']}/decision.json"}
+        require(required <= bindings.keys(), "Original metadata/source bindings are incomplete")
         for path, entry in bindings.items():
             actual = source_root / path
             require(actual.stat().st_size == entry["bytes"] and sha(actual) == entry["sha256"],
