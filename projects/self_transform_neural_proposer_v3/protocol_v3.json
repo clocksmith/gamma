@@ -1,0 +1,82 @@
+{
+  "schema": "gamma.b2.self_transform_neural_proposer_v3.protocol/v3",
+  "pre_registered_before_confirmation_tasks": true,
+  "lineage_seeds": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005,
+    1006,
+    1007,
+    1008,
+    1009,
+    1010,
+    1011,
+    1012
+  ],
+  "num_lineage_seeds": 12,
+  "generations": 4,
+  "proposer_parameter_count": 1688,
+  "gamma_head_present": false,
+  "cold_target_oracle_support_budget": 10,
+  "meta_query_pass_billed_in_oracle": true,
+  "meta_steps_per_generation": 5,
+  "meta_train_tasks_per_step": 8,
+  "validation_anchor_tasks": 12,
+  "proposer_exact_passes_per_generation": 1160,
+  "behavioral_regen_probes": 96,
+  "behavioral_regen_distill_steps": 60,
+  "behavioral_regen_flops_per_generation": 58661376,
+  "measured_mean_curriculum_pass_flops": 286515.0,
+  "behavioral_regen_pass_equivalents_per_generation": 205,
+  "proposer_regen_total_pass_equivalents_per_generation": 1365,
+  "conventional_exact_matched_passes_per_generation": 1200,
+  "conventional_regen_matched_passes_per_generation": 1400,
+  "required_baselines": [
+    "sgd_nesterov",
+    "adamw_cosine",
+    "damped_lbfgs",
+    "zero_head_adam",
+    "constant_step_rule",
+    "kfac_no_proposer"
+  ],
+  "confirmation_seed_base": 9750000,
+  "confirmation_seed_minimum_lock": 5000000,
+  "disjoint_confirmation_seed_formula": "confirmation_seed_base + seed_idx * 10000 + fam_idx * 1000 + task_idx",
+  "confirmation_tasks_per_family_per_seed": 12,
+  "confirmation_families": [
+    "real_qwen35_swiglu_lora_cls",
+    "fourier_kan_multifreq_reg",
+    "bilinear_gated_interaction_cls",
+    "layernorm_residual_gelu_cls"
+  ],
+  "real_pretrained_model": {
+    "model_id": "Qwen/Qwen3.5-0.8B",
+    "revision": "2fc0636",
+    "local_path": "/Users/xyz/deco/valera/generated/hf-models/Qwen-Qwen3.5-0.8B-2fc0636"
+  },
+  "primary_inference": {
+    "unit_of_analysis": "independent_lineage_seed",
+    "sample_size_S": 12,
+    "tests": [
+      "two_sided_paired_t_test",
+      "exact_two_sided_wilcoxon_signed_rank_test",
+      "exact_two_sided_sign_test"
+    ],
+    "co_primary_metrics": [
+      "pooled_normalized_loss_ratio",
+      "classification_query_accuracy_and_regression_query_r2",
+      "real_qwen35_swiglu_lora_cls_query_accuracy"
+    ]
+  },
+  "acceptance_gates": {
+    "improves_at_proposing": "exact_gen4 beats fixed_proposer_gen4 significantly at the lineage level (S = 12, alpha = 0.05 two-sided) AND accepted-proposal rate does not collapse to zero across generations; otherwise report 'meta-training improves a rule' with exact lineage-level effect size.",
+    "beats_optimizers": "exact_gen4 wins on held-out accuracy against all 6 matched-budget baselines on real_qwen35_swiglu_lora_cls (and report exact comparisons across all 4 families at both exact-matched and regen-matched budgets)."
+  },
+  "locked_code_sha256": {
+    "proposer_v3.py": "48238ccf5341b0cfacba527c0707699e5958329fb948de50537394df9a7b544c",
+    "baselines_v3.py": "4fa27d23a8e4ae3396f2a24a15522bd058216bf850ffa96c456355fafb2eb06c",
+    "worker_v3.py": "6f727216fe1c1f7dc3e402323d0f1aaa7fc8a0fcc0e8b58388d4b4e1eb63090a"
+  }
+}
