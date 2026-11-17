@@ -2,90 +2,98 @@
 
 Charter: [CATSCAN.md](CATSCAN.md)
 
-## Overview and Architectural Advances Over `v1`
+> **Track B2 Status: NOT MET.** Sealed `.work/` receipts remain untouched, and the claims below are corrected to match lineage-level evidence. Meta-training improves the `2,073`-parameter update rule from `Gen 0` to `Gen 4` across all `5` seeds (`0.3273 -> 0.2953`, lineage-level paired `t = -4.52`, `p = 0.0106`), **but recursive self-improvement is not shown** (`exact_gen4` vs non-recursive `fixed_proposer_gen4`: lineage-level `t = -0.52`, `p = 0.6298`, `n = 5`; seed `303` favors `fixed_proposer` and seed `202` stalls with `0` accepted proposals after `Gen 1`), and **conventional optimizers beat `M_Phi_v2` on held-out accuracy across all three classification families** (and `L-BFGS` beats it on regression $R^2$). All four target families—including `unseen_fastweight_adapter_bridge`—are synthetic `1.3k–2.5k` parameter random-teacher toy MLPs touching no real pretrained model.
 
-`self_transform_neural_proposer_v2` evaluates **Gamma Track B2** (cumulative hereditary self-improvement) across `S = 5` independent lineage seeds (`101, 202, 303, 404, 505`) and `G = 4` cold-subprocess generations (`g = 0 -> 1 -> 2 -> 3 -> 4`) on `64` untouched unseen neural target tasks (`seed_base = 850000`, `B = 10` cold support passes per task, `320` pooled evaluations per arm).
+## Overview and Methodological Audit
 
-`v1` (`projects/self_transform_neural_proposer_v1/`) established genuine neural self-modification over `Gen 0` (`p = 0.0133` exact / `p = 0.00209` regen), but plateaued after `Gen 1..2` (`p = 0.666` vs `Gen 1`) and lost to calibrated `AdamW` and `SGD+Nesterov` on pooled noisy-label cross-entropy due to degrading accepted steps, basis-norm entanglement, uncalibrated logit temperatures across activation scales, and unregularized weight decay erasing learned proposer weights during self-modification.
+`self_transform_neural_proposer_v2` runs `S = 5` lineage seeds (`101, 202, 303, 404, 505`) across `G = 4` cold-subprocess generations (`g = 0 -> 1 -> 2 -> 3 -> 4`) evaluated on `64` synthetic toy target tasks (`seed_base = 850000`, `B = 10` support passes per target).
 
-`M_Phi_v2` (`2,073` float64 parameters across `W_gate [48x17]`, `W_up [48x17]`, `W_out [9x49]`) resolves each failure mechanism at **zero extra target forward-backward passes**:
+What `M_Phi_v2` implements vs what confounds the `v2` study:
 
-1. **Unit-RMS Basis Decoupling + Newton-Schulz Polar & Two-Sided K-FAC Basis**:
-   - Computes 5-iteration polynomial Newton-Schulz polar orthogonalization (`B_spec`) on layer momentum alongside Marchenko-Pastur sample-aspect-damped two-sided Kronecker curvature (`B_kfac`, `B_in_k` with `damp_in = 0.08 + 0.36 * (d_in1 / N)`).
-   - Normalizes the combined basis direction `B_comb = norm_dir(D_comb)` to unit RMS so unlocking `B_curv` and `B_spec` rotates update geometry without inflating step magnitude.
-2. **muP Functional Output-Scale Step Calibration & Split-Half Gradient Coherence**:
-   - Exposes `16` scale-free per-row features including total network depth `log(L)`, sample aspect ratio `log(d_in1 / N)`, zero-extra-pass split-half gradient coherence `cos(G_half1, G_half2)`, and pre-activation functional output scale `log(sqrt(d_in1) * act_rms * ||w_i||)`.
-   - Scales row step size by `layer_scale = max(init_layer_rms, min(0.24, 1 / (sqrt(d_in1) * act_rms)))`, lifting under-scaled output heads (`||Z|| < 1`) at `O(1)` functional speed without exploding over-confident classification heads (`||Z|| >= 1`) under `10%–15%` label noise.
-3. **Proximal Self-Modification & Active Conventional Opponent Sparring**:
-   - During `self_modify_proposer_v2`, shrinkage acts proximally toward `parent_phi` (`W - W_parent`) rather than `0`, preserving inherited proposer structure across generations.
-   - Inside every generation subprocess (`worker_v2.py`), `M_Phi_v2` competes directly against an escalating tournament of `SGD+Nesterov` and `AdamW+Cosine` sparring opponents on a 12-task progressive validation anchor (`2/3/4`-layer `Tanh`/`GELU`/`SiLU` + gated `SwiGLU` networks, strictly disjoint from all 4 confirmation architectures), retaining improvements under coarse-to-fine trust radii.
-
-## Full Cost Accounting and Matched Lineages
-
-Every upstream evaluation, active-opponent pass, elitist selection check, and behavioral reconstruction step is explicitly billed:
-
-- **`exact` (`exact_gen0..gen4`)**: Recursive self-modification (`M_{Phi_g}` modifies `Phi_g`) across isolated OS subprocesses; consumes exact `1,320` target-oracle passes per generation (`240` active-opponent tournament passes + `120` parent-anchor passes + `3` batches x `320` proposal/opponent/2-scale-anchor passes = `5,280` cumulative passes at `g = 4`).
-- **`regen` (`regen_gen0..gen4`)**: True 4-generation **weight-free behavioral regeneration** at **every** generation boundary (`512` Gaussian-probe evaluations + `240` fresh-init student distillation steps per boundary, zero weight scalars crossing any OS subprocess boundary; `1.53e9` FLOPs = `+80` target-pass-equivalents billed per boundary -> `1,400 * g` = `5,600` total pass-equivalents at `g = 4`). Across all `20` regeneration boundaries (`5` seeds x `4` generations), `functional_mse_after` ranged in `[2.02e-6, 1.20e-5]` while `raw_parameter_cosine_vs_teacher` ranged in `[0.519, 0.624]`, confirming functional distillation across SwiGLU permutation/scaling symmetries.
-- **`fixed_proposer` (`fixed_proposer_gen0..gen4`)**: Identical `1,320 * g` budget, anchor tasks, active opponents, elitist parent retention, and trust-radius schedule, except `self_modify_proposer_v2` holds the proposer update rule fixed at `M_{Phi_0}` (`proposer_rule_phi = Phi_0`). Isolates genuine recursive compounding from parent retention + curriculum effects.
-- **Conventional Optimizer Controls (`sgd_nesterov`, `adamw_cosine`, `damped_lbfgs`)**: Each receives `1,400 * g` (`1400, 2800, 4200, 5600`) upstream target-oracle calibration passes (`14` configurations/gen x `10` calibration tasks x `10` passes = `56` configurations per seed), strictly `>=` both `exact` (`5,280`) and `regen` (`5,600`).
+1. **Preconditioned Basis + Unmatched Output-Head Shrinkage (`proposer_v2.py`)**:
+   - Hardcodes 5-step Newton-Schulz momentum orthogonalization (`B_spec`) and two-sided damped K-FAC (`B_kfac`) before applying the `2,073`-parameter SwiGLU gate network.
+   - Grants `M_Phi_v2` an output-head multiplicative shrinkage gate (`gamma_head = 0.16 * sigmoid(...)`, shrinking logits up to `16%/step`) not available to `SGD`, `AdamW`, or `L-BFGS`. On `unseen_swiglu_3layer_cls` (where multi-layer gated init produces initial CE loss `~1,265`), damping logit scale slashes cross-entropy loss without improving classification boundaries. Zeroing the output head and running plain `Adam`—an omitted baseline—reaches `0.2914` in `4/5` seeds (`0.456` in `1`) when calibrated beforehand (`0.231` with a post-hoc learning rate), and a constant 1-scalar step-size rule chosen post-hoc gets `0.2950` on seed `101` (`vs 0.2984` for `exact_gen4`).
+   - Conventional controls also get only `B = 10` passes per target from a single global hyperparameter search (where `adamw_cosine_b5600` selected the identical config scoring `0.4013` in `4/5` seeds), and untrained `gen0` (`0.3273`) already beats them on normalized loss.
+2. **Synthetic Toy Targets (`tasks_b2_v2.py`, `v1/targets.py`)**:
+   - All four confirmation families are random-teacher synthetic networks (`1.3k–2.5k` parameters), three of the four families were `v1`'s confirmation families, and **`unseen_fastweight_adapter_bridge` is entirely synthetic** (a random `[48x24] -> [48x48]` frozen MLP trunk with a `[16x48]` synthetic head; no real language model or `B1` adapter is touched).
+3. **Cost-Accounting Discrepancies & Receipt Omissions (`worker_v2.py`, `run_study_v2.py`)**:
+   - **`regen` is ordinary Adam behavioral distillation costing `~13,900` pass-equivalents per boundary, not `80`**: `worker_v2.py` logs `regen_flops = 1.53e9` (`512` Gaussian probes x `240` Adam distillation steps on a fresh-init student) and states `1` target-oracle pass is `~1.1e5` FLOPs—which equals **`~13,914` pass-equivalents per generation (`~55,655` across `4` generations)**, contradicting the `80`-pass (`8.8e6` FLOPs) allowance charged in the script.
+   - `evaluate_diff_query_v2` runs `12` differentiable meta-query forward-backward passes per generation (`n_qry = 128`) outside `ChargedTargetOracleV2` (`0` passes billed).
+   - `confirmation_receipt_v2.json` stripped per-task `rows` prior to serialization (so `320`-pair win/loss counts cannot be independently audited from the receipt alone), and `.protocol.json` was written at runtime by `run_study_v2.py`.
 
 ## Artifacts and Hashes
 
-- Protocol lock: `.work/self-transform-neural-proposer-v2/confirmation_receipt_v2.protocol.json`
-- Sealed confirmation receipt (`145` isolated OS subprocesses, `360` logged candidate proposals, `275.64s` wall-clock): `.work/self-transform-neural-proposer-v2/confirmation_receipt_v2.json`
+- Runtime-written protocol file: `.work/self-transform-neural-proposer-v2/confirmation_receipt_v2.protocol.json`
+- Sealed confirmation receipt (`145` subprocesses, `360` candidate proposals, summary-only without per-task `rows`): `.work/self-transform-neural-proposer-v2/confirmation_receipt_v2.json`
 - Code `sha256`:
   - `proposer_v2.py`: `fca1a43b9a947e10323ec6c9dfc4acf19273eeb368cb26eb4bcdb4cbc76321ec`
   - `tasks_b2_v2.py`: `73a581f93c21307159a361db52eb262df8cc39619f6106e65190da028c1429ca`
   - `worker_v2.py`: `3ac88baeb23910f3da23ae4c4358614e3dfff126045a39ec94d033a686df2a74`
   - `run_study_v2.py`: `98e082787ccc7c6e0cb8f8e4aba2cac48aad5d188790e256abe9fc736cb8d1d1`
 
-## Generational Held-Out Confirmation Curves (`seed_base = 850000`, `S = 5` Seeds, `64` Tasks/Seed)
+## Generational Curves & Per-Seed Trajectories (`n = 5` Independent Lineages)
 
-Normalized query-loss ratio (`final_query_loss / init_query_loss`, lower is better):
+All `5` seeds were evaluated on the **identical `64` confirmation tasks** (`seed_base = 850000`), so the independent unit of inference is the **lineage (`n = 5`)**, not `320` pseudoreplicated task-seed pairs. Note that seed `202` accepted `[2, 0, 0, 0]` proposals across `Gen 1..4` (completely stalled after `Gen 1`), and seed `303` accepted `[3, 3, 0, 1]` and finished worse on `exact_gen4` (`0.2958`) than non-recursive `fixed_proposer_gen4` (`0.2858`).
 
-| Lineage | `Gen 0` (`0` passes) | `Gen 1` (`1.32k / 1.4k`) | `Gen 2` (`2.64k / 2.8k`) | `Gen 3` (`3.96k / 4.2k`) | `Gen 4` (`5.28k / 5.6k`) |
+| Arm | `s = 101` | `s = 202` | `s = 303` | `s = 404` | `s = 505` | Lineage Mean `+-` Sample SD (`n = 5`) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| `gen0` (`M_{Phi_0}` untrained) | `0.3270` | `0.3278` | `0.3279` | `0.3276` | `0.3263` | `0.3273 +- 0.0007` |
+| `exact_gen1` (`1.32k` billed + query) | `0.3147` | `0.3202` | `0.3133` | `0.3126` | `0.3140` | `0.3150 +- 0.0030` |
+| `exact_gen2` (`2.64k` billed + query) | `0.3029` | `0.3202` | `0.2992` | `0.3006` | `0.2975` | `0.3041 +- 0.0092` |
+| `exact_gen3` (`3.96k` billed + query) | `0.3025` | `0.3202` | `0.2992` | `0.2901` | `0.2857` | `0.2995 +- 0.0134` |
+| `exact_gen4` (`M_{Phi_g}` recursive) | `0.2984` | `0.3202` | `0.2958` | `0.2803` | `0.2819` | `0.2953 +- 0.0161` |
+| `regen_gen4` (Adam distill, `~13.9k` pass-eq/gen) | `0.3032` | `0.3190` | `0.2837` | `0.2848` | `0.2857` | `0.2953 +- 0.0155` |
+| `fixed_proposer_gen4` (`M_{Phi_0}` fixed rule) | `0.2994` | `0.3203` | `0.2858` | `0.2869` | `0.2937` | `0.2972 +- 0.0140` |
+| `sgd_nesterov_b5600` | `0.3964` | `0.4240` | `0.3332` | `0.3268` | `0.3268` | `0.3614 +- 0.0456` |
+| `adamw_cosine_b5600` | `0.5086` | `0.4013` | `0.4013` | `0.4013` | `0.4013` | `0.4228 +- 0.0480` |
+| `damped_lbfgs_b5600` | `0.4530` | `0.4201` | `0.4773` | `0.4201` | `0.4129` | `0.4367 +- 0.0275` |
+
+### Lineage-Level Paired Comparisons on Normalized Loss (`n = 5` Seeds)
+
+Per-seed `exact_gen4 - fixed_proposer_gen4` differences are `[-0.0010, -0.0001, +0.0100, -0.0066, -0.0119]` (`mean = -0.0019 +- 0.0082`, paired `t = -0.52`, `|t| = 0.52`, two-sided `p = 0.6298`), showing **no statistically significant recursive advantage over `fixed_proposer_gen4`**. Note also that with `n = 5` lineages, a two-sided exact sign test has a floor of `p = 0.0625` even at `5/0`.
+
+| Lineage Comparison (`n = 5`) | Mean Diff (`Focal - Ref`) `+-` SD | Seed Wins / Losses / Ties | Paired `t` (`df = 4`) | Two-Sided `p` (`t`-test / Sign) | Audit Verdict |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| `exact_gen4` vs `gen0` | `-0.0320 +- 0.0158` | `5 / 0 / 0` | `-4.52` | `0.0106` / `0.0625` | Meta-training improves rule over `Gen 0` |
+| `exact_gen4` vs `exact_gen1` | `-0.0197 +- 0.0134` | `4 / 0 / 1` | `-3.28` | `0.0305` / `0.1250` | Seed `202` tied (`0` post-Gen1 accepts) |
+| `exact_gen4` vs `exact_gen2` | `-0.0088 +- 0.0087` | `4 / 0 / 1` | `-2.25` | `0.0879` / `0.1250` | Not significant at `alpha = 0.05` |
+| `exact_gen4` vs `exact_gen3` | `-0.0042 +- 0.0035` | `4 / 0 / 1` | `-2.66` | `0.0564` / `0.1250` | Not significant at `alpha = 0.05` |
+| **`exact_gen4` vs `fixed_proposer_gen4`** | **`-0.0019 +- 0.0082`** | **`4 / 1 / 0`** | **`-0.52`** | **`0.6298` / `0.3750`** | **Null — recursive self-improvement NOT shown** |
+| `regen_gen4` vs `fixed_proposer_gen4` | `-0.0020 +- 0.0042` | `4 / 1 / 0` | `-1.04` | `0.3553` / `0.3750` | Null — Adam distillation (`~13.9k` pass-eq/gen) |
+| `exact_gen4` vs `sgd_nesterov_b5600` | `-0.0661 +- 0.0320` | `5 / 0 / 0` | `-4.62` | `0.0099` / `0.0625` | Confounded by `gamma_head` logit damping (loses on Acc) |
+| `exact_gen4` vs `adamw_cosine_b5600` | `-0.1274 +- 0.0490` | `5 / 0 / 0` | `-5.82` | `0.0043` / `0.0625` | Confounded by `gamma_head` logit damping (loses `0/5` on Acc) |
+| `exact_gen4` vs `damped_lbfgs_b5600` | `-0.1413 +- 0.0300` | `5 / 0 / 0` | `-10.52` | `0.0005` / `0.0625` | Confounded by `gamma_head` (loses on Acc & `0/5` on $R^2$) |
+
+## Held-Out Task Accuracy and Regression $R^2$ (Conventional Controls Win)
+
+On predictive task metrics (classification accuracy across all three classification families, and held-out $R^2$ on `unseen_bottleneck_4layer_reg`), **conventional optimizers beat `exact_gen4` and `regen_gen4`**:
+- **`adamw_cosine_b5600` wins on mean classification accuracy in `5/5` seeds** (`48.64%` vs `45.78%`, paired `t = -3.56`, `p = 0.0236`), leading on every classification family (`32.09% vs 30.16%`, `54.34% vs 49.45%`, `59.49% vs 57.74%`).
+- **`sgd_nesterov_b5600` beats `exact_gen4` on all three classification families** (`46.87%` vs `45.78%` mean accuracy; wins `4/5` seeds).
+- **`damped_lbfgs_b5600` beats `exact_gen4` on `unseen_bottleneck_4layer_reg` $R^2$ in `5/5` seeds** (`+0.619` vs `+0.562`, paired `t = -1.71`, `p = 0.1627`) and on mean classification accuracy (`46.70%` vs `45.78%`).
+
+| Arm (`B = 10` cold passes) | `swiglu_3layer_cls` Acc (Loss) | `synthetic_adapter_bridge` Acc (Loss) | `deep_elu_5layer_cls` Acc (Loss) | Mean 3-Family Cls Acc (`n = 5` Seeds) | `bottleneck_4layer_reg` $R^2$ (MSE) |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **`exact` (`M_{Phi_g}` recursive)** | `0.3273 +- 0.0006` | `0.3150 +- 0.0027` | `0.3041 +- 0.0083` | `0.2995 +- 0.0120` | **`0.2953 +- 0.0144`** |
-| **`regen` (weight-free 4-gen)** | `0.3273 +- 0.0006` | `0.3154 +- 0.0024` | `0.3036 +- 0.0087` | `0.2985 +- 0.0111` | **`0.2953 +- 0.0139`** |
-| `fixed_proposer` (`M_{Phi_0}` rule) | `0.3273 +- 0.0006` | `0.3158 +- 0.0027` | `0.3050 +- 0.0077` | `0.3021 +- 0.0101` | `0.2972 +- 0.0125` |
+| `gen0` (`M_{Phi_0}`) | `27.41%` (`349.92`) | `44.12%` (`1.819`) | `55.97%` (`1.248`) | `42.50%` | `+0.436` (`0.567`) |
+| `exact_gen4` | `30.16%` (`278.79`) | `49.45%` (`1.716`) | `57.74%` (`1.202`) | `45.78%` | `+0.562` (`0.440`) |
+| `regen_gen4` | `30.05%` (`278.60`) | `49.16%` (`1.721`) | `57.93%` (`1.199`) | `45.72%` | `+0.558` (`0.444`) |
+| `fixed_proposer_gen4` | `30.13%` (`284.72`) | `48.87%` (`1.724`) | `57.74%` (`1.201`) | `45.58%` | `+0.555` (`0.447`) |
+| **`sgd_nesterov_b5600`** | `31.46%` (`307.36`) | `50.65%` (`2.082`) | `58.49%` (`1.237`) | **`46.87%`** (`4/5` seeds > `exact`) | `+0.277` (`0.726`) |
+| **`adamw_cosine_b5600`** | **`32.09%`** (`544.33`) | **`54.34%`** (`2.589`) | **`59.49%`** (`1.340`) | **`48.64%`** (**`5/5` seeds > `exact`**) | `+0.518` (`0.484`) |
+| **`damped_lbfgs_b5600`** | `27.56%` (`723.06`) | `54.13%` (`2.239`) | `58.39%` (`1.329`) | **`46.70%`** (`3/5` seeds > `exact`) | **`+0.619`** (`0.381`, **`5/5` seeds > `exact`**) |
 
-### Per-Architecture Confirmation Breakdown (Mean Across `5` Seeds x `16` Tasks = `80` Evals/Family)
+## Requirements for `self_transform_neural_proposer_v3`
 
-Every unseen target family improves monotonically across all 4 generations on both loss and accuracy/$R^2$:
-
-| Arm (`B = 10` cold passes) | Pooled Norm Ratio | `unseen_swiglu_3layer_cls` (Norm / Loss / Acc) | `unseen_bottleneck_4layer_reg` (Norm / MSE / $R^2$) | `unseen_fastweight_adapter_bridge` (Norm / Loss / Acc) | `unseen_deep_elu_5layer_cls` (Norm / Loss / Acc) |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| `gen0` (`M_{Phi_0}`) | `0.3273` | `0.2765` / `349.92` / `27.41%` | `0.2184` / `0.567` / `+0.436` | `0.4185` / `1.819` / `44.12%` | `0.3959` / `1.248` / `55.97%` |
-| `exact_gen1` | `0.3150` | `0.2537` / `323.05` / `28.71%` | `0.2060` / `0.531` / `+0.472` | `0.4108` / `1.780` / `45.73%` | `0.3894` / `1.228` / `56.60%` |
-| `exact_gen2` | `0.3041` | `0.2359` / `294.60` / `29.50%` | `0.1905` / `0.486` / `+0.517` | `0.4061` / `1.751` / `46.97%` | `0.3840` / `1.211` / `57.03%` |
-| `exact_gen3` | `0.2995` | `0.2283` / `286.87` / `29.85%` | `0.1842` / `0.467` / `+0.536` | `0.4033` / `1.736` / `47.85%` | `0.3823` / `1.205` / `57.35%` |
-| **`exact_gen4`** | **`0.2953`** | **`0.2249` / `278.79` / `30.16%`** | **`0.1758` / `0.440` / `+0.562`** | **`0.3996` / `1.716` / `49.45%`** | **`0.3810` / `1.202` / `57.74%`** |
-| **`regen_gen4`** | **`0.2953`** | **`0.2234` / `278.60` / `30.05%`** | **`0.1764` / `0.444` / `+0.558`** | **`0.4011` / `1.721` / `49.16%`** | **`0.3802` / `1.199` / `57.93%`** |
-| `fixed_proposer_gen4` | `0.2972` | `0.2291` / `284.72` / `30.13%` | `0.1776` / `0.447` / `+0.555` | `0.4013` / `1.724` / `48.87%` | `0.3809` / `1.201` / `57.74%` |
-| `sgd_nesterov_b5600` | `0.3614` | `0.2690` / `307.36` / `31.46%` | `0.2909` / `0.726` / `+0.277` | `0.4917` / `2.082` / `50.65%` | `0.3941` / `1.237` / `58.49%` |
-| `adamw_cosine_b5600` | `0.4228` | `0.4567` / `544.33` / `32.09%` | `0.1977` / `0.484` / `+0.518` | `0.6048` / `2.589` / `54.34%` | `0.4320` / `1.340` / `59.49%` |
-| `damped_lbfgs_b5600` | `0.4367` | `0.6265` / `723.06` / `27.56%` | `0.1719` / `0.381` / `+0.619` | `0.5260` / `2.239` / `54.13%` | `0.4223` / `1.329` / `58.39%` |
-
-### Pooled Paired Sign-Test Results (`N = 320` Task Evaluations)
-
-| Comparison | Focal Wins / Ref Wins | Clipped Mean Rel Gain | Exact Two-Sided Sign `p` |
-| :--- | :---: | :---: | :---: |
-| `exact_gen4` vs `gen0` | `305 / 15` (`64` ties=`0`) | `+12.75%` | `2.04e-71` |
-| `exact_gen4` vs `exact_gen1` | `229 / 27` (`64` ties) | `+8.70%` | `4.57e-41` |
-| `exact_gen4` vs `exact_gen2` | `208 / 48` (`64` ties) | `+4.46%` | `6.41e-25` |
-| `exact_gen4` vs `exact_gen3` | `200 / 56` (`64` ties) | `+2.54%` | `3.65e-20` |
-| **`exact_gen4` vs `fixed_proposer_gen4`** | **`219 / 101`** | **`+0.69%`** | **`3.71e-11`** |
-| **`exact_gen4` vs `sgd_nesterov_b5600`** | **`207 / 113`** | **`+5.66%`** | **`1.65e-7`** |
-| **`exact_gen4` vs `adamw_cosine_b5600`** | **`231 / 89`** | **`+13.17%`** | **`1.08e-15`** |
-| **`exact_gen4` vs `damped_lbfgs_b5600`** | **`238 / 82`** | **`+12.32%`** | **`8.91e-19`** |
-| `regen_gen4` vs `gen0` | `304 / 16` | `+12.66%` | `3.90e-70` |
-| `regen_gen4` vs `regen_gen1` | `279 / 41` | `+8.56%` | `1.16e-44` |
-| `regen_gen4` vs `regen_gen2` | `266 / 54` | `+4.14%` | `8.38e-35` |
-| `regen_gen4` vs `regen_gen3` | `207 / 113` | `+1.94%` | `1.65e-7` |
-| **`regen_gen4` vs `fixed_proposer_gen4`** | **`201 / 119`** | **`+0.69%`** | **`5.32e-6`** |
-| **`regen_gen4` vs `sgd_nesterov_b5600`** | **`210 / 110`** | **`+5.42%`** | **`2.43e-8`** |
-| **`regen_gen4` vs `adamw_cosine_b5600`** | **`232 / 88`** | **`+12.91%`** | **`4.11e-16`** |
-| **`regen_gen4` vs `damped_lbfgs_b5600`** | **`238 / 82`** | **`+12.16%`** | **`8.91e-19`** |
+1. **Lineage-level design (`S >= 12`)**: Draw disjoint confirmation targets per lineage seed, run at least `12` independent lineage seeds, and make the lineage-level paired test primary.
+2. **Co-primary accuracy/$R^2$ & matched head-scale freedom**: Make held-out accuracy/$R^2$ co-primary with loss, and either remove `gamma_head` or grant every baseline identical output-shrinkage / logit-temperature freedom.
+3. **Required new baselines**:
+   - `zero_head + Adam` with learning rate calibrated beforehand;
+   - a constant-step hand rule;
+   - a K-FAC / Newton-Schulz preconditioned optimizer *without* the learned proposer network.
+4. **Honest compute billing & complete receipts**: Bill meta-query passes (`evaluate_diff_query_v2`) and `regen` FLOPs at the code's actual conversion rate (`~13,900` pass-equivalents), and retain all per-task `rows` in the confirmation receipt.
+5. **Real pretrained model bridge & fresh families**: Make at least one confirmation family edit a real pretrained language model, replace all `v1` confirmation families, and change the default `--confirmation-seed-base` so development runs cannot touch confirmation seeds.
+6. **Acceptance gates**:
+   - *"Improves at proposing"* is met only when `exact` beats `fixed_proposer` significantly at the lineage level (`S >= 12`) and the accepted-proposal rate does not collapse across generations (otherwise report *"meta-training improves a rule"*).
+   - *"Beats optimizers"* is met only when `exact` wins on held-out accuracy against all added baselines on the real-model target.
 
 ## Reproduction
 
