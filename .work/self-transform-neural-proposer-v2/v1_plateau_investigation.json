@@ -1,0 +1,76 @@
+{
+  "source_receipt": "/Users/xyz/deco/gamma/.work/self-transform-neural-proposer-v1/confirmation_receipt.json",
+  "finding_1_non_elitist_walk_and_fixed_radius": [
+    {
+      "generation_out": 1,
+      "meta_val_before": 0.7418828529874911,
+      "meta_val_after": 0.38306912053102177,
+      "improving_steps": 11,
+      "degrading_walk_steps": 1,
+      "last_step_vs_best_gap": 0.0
+    },
+    {
+      "generation_out": 2,
+      "meta_val_before": 0.372605066268217,
+      "meta_val_after": 0.34056076457414736,
+      "improving_steps": 4,
+      "degrading_walk_steps": 8,
+      "last_step_vs_best_gap": 0.005452014304111186
+    },
+    {
+      "generation_out": 3,
+      "meta_val_before": 0.31272861304406824,
+      "meta_val_after": 0.3095630442606983,
+      "improving_steps": 2,
+      "degrading_walk_steps": 10,
+      "last_step_vs_best_gap": 0.002763645533403414
+    },
+    {
+      "generation_out": 4,
+      "meta_val_before": 0.36289553405057484,
+      "meta_val_after": 0.35209374416347505,
+      "improving_steps": 1,
+      "degrading_walk_steps": 11,
+      "last_step_vs_best_gap": 0.0160187705748307
+    }
+  ],
+  "finding_2_accuracy_vs_crossentropy_logit_inflation": {
+    "gen0_fixed": {
+      "accuracy": 0.1933593745343387,
+      "query_cross_entropy": 7.7740111786877515
+    },
+    "exact_gen1": {
+      "accuracy": 0.4542968738824129,
+      "query_cross_entropy": 2.464556948792177
+    },
+    "exact_gen2": {
+      "accuracy": 0.5027343723922968,
+      "query_cross_entropy": 2.4414041819403907
+    },
+    "exact_gen3": {
+      "accuracy": 0.49570312909781933,
+      "query_cross_entropy": 2.3183889765060695
+    },
+    "exact_gen4": {
+      "accuracy": 0.4976562485098839,
+      "query_cross_entropy": 2.8242417086962397
+    },
+    "sgd_nesterov": {
+      "accuracy": 0.4343750011175871,
+      "query_cross_entropy": 1.9401682503532758
+    },
+    "adamw_cosine": {
+      "accuracy": 0.4964843727648258,
+      "query_cross_entropy": 2.234743084191232
+    },
+    "damped_lbfgs": {
+      "accuracy": 0.4164062514901161,
+      "query_cross_entropy": 2.4784032250030115
+    }
+  },
+  "v2_design_consequences": [
+    "Enforce elitist parent anchor (`cur_phi` steps from `best_phi`) with coarse-to-fine radius schedule `0.20 * (0.62 ** g)`.",
+    "Use a shared per-seed validation anchor across `g = 0..4` plus progressive 2/3/4-layer meta-curriculum.",
+    "Add zero-extra-pass split-half gradient coherence `cos(G_half1, G_half2)` + dual input/output Kronecker damping + output-head logit shrinkage."
+  ]
+}

@@ -21,6 +21,14 @@ class PyTorchEngine(LLMEngine):
         logger.debug("PyTorchEngine initialized.")
         super().__init__(model_name, engine_specific_config)
         self._device: Optional[torch.device] = None
+        self._fastweight_session: Optional[Any] = None
+        self._fastweight_step: int = 0
+        self.fastweight_stats: Optional[Dict[str, Any]] = None
+
+    def reset_kv_cache(self) -> None:
+        super().reset_kv_cache()
+        self._fastweight_session = None
+        self._fastweight_step = 0
 
     @property
     def supports_attention(self) -> bool:
@@ -484,9 +492,13 @@ class PyTorchEngine(LLMEngine):
                     # For Gemma models with KV cache, set attention_mask to None for single token inference
                     attention_mask = None
             
+            fw_enabled = bool(self.engine_config.get("fastweight", False))
+            fw_prefill = fw_enabled and (current_past_key_values is None) and (input_ids.shape[-1] >= 24)
+            req_hidden = output_hidden_states or fw_prefill
+
             try:
                 outputs = self.model(input_ids=input_ids, attention_mask=attention_mask, past_key_values=current_past_key_values,
-                                     output_attentions=output_attentions, output_hidden_states=output_hidden_states,
+                                     output_attentions=output_attentions, output_hidden_states=req_hidden,
                                      use_cache=use_kv_cache)
             except Exception as exc:
                 if current_past_key_values is None:
@@ -497,7 +509,7 @@ class PyTorchEngine(LLMEngine):
                 if converted_cache is not None:
                     try:
                         outputs = self.model(input_ids=input_ids, attention_mask=attention_mask, past_key_values=converted_cache,
-                                             output_attentions=output_attentions, output_hidden_states=output_hidden_states,
+                                             output_attentions=output_attentions, output_hidden_states=req_hidden,
                                              use_cache=use_kv_cache)
                         current_past_key_values = converted_cache
                         self._kv_cache = converted_cache
@@ -506,20 +518,66 @@ class PyTorchEngine(LLMEngine):
                         current_past_key_values = None
                         self._kv_cache = None
                         outputs = self.model(input_ids=input_ids, attention_mask=attention_mask, past_key_values=None,
-                                             output_attentions=output_attentions, output_hidden_states=output_hidden_states,
+                                             output_attentions=output_attentions, output_hidden_states=req_hidden,
                                              use_cache=use_kv_cache)
                 else:
                     logger.warning(f"PyTorchEngine: KV cache failed; retrying without cache: {exc}")
                     current_past_key_values = None
                     self._kv_cache = None
                     outputs = self.model(input_ids=input_ids, attention_mask=attention_mask, past_key_values=None,
-                                         output_attentions=output_attentions, output_hidden_states=output_hidden_states,
+                                         output_attentions=output_attentions, output_hidden_states=req_hidden,
                                          use_cache=use_kv_cache)
         if use_kv_cache and hasattr(outputs, "past_key_values"): 
             self._kv_cache = outputs.past_key_values
-        
+
+        if fw_prefill and hasattr(outputs, "hidden_states") and outputs.hidden_states:
+            from gamma.fastweight import FastWeightSession, derive_fastweight, find_default_context_split, make_zero_adapter
+            t_fw0 = time.perf_counter()
+            nl_toks = self.tokenizer.encode("\n", add_special_tokens=False) if self.tokenizer else []
+            nl_id = int(nl_toks[-1]) if nl_toks else 10
+            c_len_cfg = self.engine_config.get("fastweight_context_len")
+            c_len = int(c_len_cfg) if c_len_cfg is not None else find_default_context_split(input_ids[0], nl_id)
+            ctx_txt = self.decode(input_ids[0, :c_len], skip_special_tokens=True) if self.tokenizer else ""
+            qry_txt = self.decode(input_ids[0, c_len:], skip_special_tokens=True) if self.tokenizer else ""
+            in_emb = self.model.get_input_embeddings().weight
+            out_emb = self.model.get_output_embeddings().weight
+            h_last_seq = outputs.hidden_states[-1][0]
+            ad, xq_raw = derive_fastweight(
+                input_ids, c_len, nl_id, in_emb, h_last_seq, out_emb,
+                context_text=ctx_txt,
+                query_line_text=qry_txt,
+                enable_key_gate=bool(self.engine_config.get("fastweight_key_gate", True)),
+                enable_loo_nll_gate=bool(self.engine_config.get("fastweight_loo_gate", True)),
+            )
+            if self.engine_config.get("fastweight_zero", False):
+                ad = make_zero_adapter(ad)
+            enc_fn = (lambda s: self.tokenizer.encode(s, add_special_tokens=False)) if self.tokenizer else None
+            s_deltas = ad.evaluate_query(
+                xq_raw,
+                enable_key_gate=bool(self.engine_config.get("fastweight_key_gate", True)),
+                encode_fn=enc_fn,
+            )
+            fw_ms = (time.perf_counter() - t_fw0) * 1000.0
+            self._fastweight_session = FastWeightSession(
+                adapter=ad,
+                step_deltas=s_deltas,
+                device=self._device,
+                enable_dynamic_hop=bool(self.engine_config.get("fastweight_dynamic_hop", True)),
+            )
+            self._fastweight_step = 0
+            self.fastweight_stats = {
+                "mode": ad.mode,
+                "anchors_count": ad.anchors_count,
+                "setup_ms": fw_ms,
+                "logical_bytes": ad.logical_bytes,
+                "step_etas": ad.step_etas,
+            }
+
         # Get raw logits and ensure they're valid
         l_raw = outputs.logits[:, -1, :]
+        if self._fastweight_session is not None:
+            l_adj = self._fastweight_session.apply_to_logits(l_raw[0].to(torch.float32), self._fastweight_step)
+            l_raw = l_adj.unsqueeze(0).to(l_raw.dtype if l_raw.device.type != "mps" else torch.float32)
         
         # Check for invalid values and handle them
         if torch.isnan(l_raw).any() or torch.isinf(l_raw).any():
@@ -562,6 +620,14 @@ class PyTorchEngine(LLMEngine):
             p_proc = torch.ones_like(p_proc) / p_proc.shape[-1]
 
         next_id_val = pipeline_results["next_token_id"]
+        if self._fastweight_session is not None and self.tokenizer is not None:
+            self._fastweight_step += 1
+            self._fastweight_session.on_token_sampled(
+                int(next_id_val),
+                self._fastweight_step,
+                decode_fn=lambda ids: self.tokenizer.decode(ids, skip_special_tokens=True),
+                encode_fn=lambda s: self.tokenizer.encode(s, add_special_tokens=False),
+            )
         top_txts = pipeline_results["top_tokens"]
         top_p_list = pipeline_results["top_probs"]
         
@@ -677,7 +743,8 @@ class PyTorchEngine(LLMEngine):
             "Quantization": "None",
             "PyTorch Attn Impl": cfg_args.get("pytorch_attn", game_config.PYTORCH_ATTN_IMPLEMENTATION),
             "Device Map": cfg_args.get("pytorch_device_map", game_config.PYTORCH_DEVICE_MAP),
-            "KV Cache Used": cfg_args.get("use_kv_cache", game_config.PYTORCH_USE_KV_CACHE)
+            "KV Cache Used": cfg_args.get("use_kv_cache", game_config.PYTORCH_USE_KV_CACHE),
+            "FastWeight Enabled": bool(cfg_args.get("fastweight", False)),
         }
         if cfg_args.get("load_in_4bit"): 
             summary["Quantization"] = f"4-bit ({cfg_args.get('bnb_4bit_compute_dtype', 'bfloat16')})"
