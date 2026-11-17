@@ -242,8 +242,23 @@ class PyTorchEngine(LLMEngine):
         trust_remote = self.get_trust_remote_code()
         token = self.engine_config.get("hf_token", None)  # HuggingFace API token if needed
 
+        mps_active = (
+            str(device_map) == "mps"
+            or (
+                str(device_map) == "auto"
+                and not torch.cuda.is_available()
+                and hasattr(torch.backends, "mps")
+                and torch.backends.mps.is_available()
+            )
+        )
+        default_attn = (
+            "eager"
+            if (mps_active and bool(self.engine_config.get("fastweight", False)))
+            else game_config.PYTORCH_ATTN_IMPLEMENTATION
+        )
+        attn_impl = self.engine_config.get("pytorch_attn", default_attn)
         model_kwargs: Dict[str, Any] = {"device_map": device_map,
-                                        "attn_implementation": self.engine_config.get("pytorch_attn", game_config.PYTORCH_ATTN_IMPLEMENTATION),
+                                        "attn_implementation": attn_impl,
                                         "trust_remote_code": trust_remote, "low_cpu_mem_usage": low_cpu_mem, "token": token}
         dtype_kwargs: Dict[str, Any] = {}
         if torch_dtype is not None:

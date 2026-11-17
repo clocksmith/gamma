@@ -196,6 +196,7 @@ class FastWeightAdapter:
         xq_raw: torch.Tensor | None,
         enable_key_gate: bool = True,
         encode_fn: Callable[[str], list[int]] | None = None,
+        enable_string_heuristics: bool = True,
     ) -> dict[int, tuple[torch.Tensor, torch.Tensor]]:
         if self.mode == "inactive" or not self.step_weights or self.X_support is None or self.mu is None or xq_raw is None:
             return {}
@@ -204,7 +205,8 @@ class FastWeightAdapter:
 
         # Heal BPE delimiter merges (e.g. `EXPORT KEY=val` vs `EXPORT KEY=`) when key_recall > 0.85
         if (
-            self.mode == "window"
+            enable_string_heuristics
+            and self.mode == "window"
             and enable_key_gate
             and self.boundary_merged
             and encode_fn is not None
@@ -254,6 +256,7 @@ class FastWeightSession:
     step_deltas: dict[int, tuple[torch.Tensor, torch.Tensor]]
     device: torch.device
     enable_dynamic_hop: bool = True
+    enable_string_heuristics: bool = True
     generated_ids: list[int] = field(default_factory=list)
     dynamic_hops_triggered: int = 0
 
@@ -278,6 +281,7 @@ class FastWeightSession:
         self.generated_ids.append(int(token_id))
         if (
             not self.enable_dynamic_hop
+            or not self.enable_string_heuristics
             or decode_fn is None
             or encode_fn is None
             or not self.adapter.context_text
@@ -606,3 +610,395 @@ def extract_query_features_for_donor(
         mask_q = ((line_id_cpu[win_q_c] == line_id_cpu[T - 1]) & (((T - 1) + offs_l_c) >= 0)).to(device)
         return (bg_q_win @ donor_ad.protos.T).masked_fill(~mask_q.unsqueeze(-1), -2.0).max(dim=0, keepdim=True).values
     return None
+
+
+# ---------------------------------------------------------------------------
+# v4: Forward-Only Reversible Per-Layer MLP `down_proj` LoRA (`DeltaW_l(alpha)`)
+#     and Grave et al. (2017) Continuous-Cache kNN Output-Logit Baseline
+# ---------------------------------------------------------------------------
+
+
+def discover_support_anchors(support_ids: list[int], nl_id: int) -> list[dict[str, int]]:
+    """Token-only support delimiter discovery (`lastInSuffix`, smallest `mean_dist >= 1`, `>= 2` distinct spans)."""
+    lines: list[tuple[int, int]] = []
+    start = 0
+    for idx, tok in enumerate(support_ids):
+        if tok == nl_id:
+            if idx - start >= 6:
+                lines.append((start, idx))
+            start = idx + 1
+
+    tok_line_positions: dict[int, list[dict[str, int]]] = {}
+    for li, (s, e) in enumerate(lines):
+        last_in_suffix: dict[int, int] = {}
+        for p in range(max(s + 3, e - 8), e):
+            if p <= e - 2:
+                last_in_suffix[support_ids[p]] = p
+        for tok, p in last_in_suffix.items():
+            tok_line_positions.setdefault(tok, []).append(
+                {"line_idx": li, "pos": p, "line_start": s, "line_end": e}
+            )
+
+    best_tok = -1
+    best_count = 0
+    best_small_span = float("inf")
+    for tok, arr in tok_line_positions.items():
+        if len(arr) < 4:
+            continue
+        spans = {tuple(support_ids[x["pos"] + 1 : x["line_end"]]) for x in arr}
+        if len(spans) < 2:
+            continue
+        mean_dist = sum(x["line_end"] - x["pos"] for x in arr) / float(len(arr))
+        if len(arr) > best_count or (len(arr) == best_count and mean_dist < best_small_span):
+            best_count = len(arr)
+            best_small_span = mean_dist
+            best_tok = tok
+
+    return tok_line_positions[best_tok] if best_tok >= 0 else []
+
+
+@dataclass
+class ClosedFormLayerLoRA:
+    """Reversible per-layer MLP `down_proj` LoRA (`W_l(alpha) = W_l + alpha * (A_l @ B_l)^T` in input-major layout)."""
+
+    active: bool
+    rank: int
+    d_hidden: int
+    d_inter: int
+    target_layers: list[int]
+    layers: dict[int, tuple[torch.Tensor, torch.Tensor]]  # layer_idx -> (A_l [d_inter, rank], B_l [rank, d_hidden])
+    uniq_target_tokens: list[int]
+    anchors_count: int
+    logical_bytes: int
+
+
+def _solve_spd_float64(G: torch.Tensor, Rhs: torch.Tensor) -> torch.Tensor:
+    """Deterministic Gauss-Jordan SPD linear solver matching `solveSPDLinearSystem` in `doppler_fastweight.mjs`."""
+    m = int(G.shape[0])
+    cols = int(Rhs.shape[1])
+    aug = torch.cat([G.to(torch.float64), Rhs.to(torch.float64)], dim=1).clone()
+    for i in range(m):
+        piv = i + int(torch.argmax(aug[i:, i].abs()).item())
+        if piv != i:
+            tmp = aug[i].clone()
+            aug[i] = aug[piv]
+            aug[piv] = tmp
+        diag = float(aug[i, i].item())
+        if diag == 0.0:
+            diag = 1e-9
+        aug[i, i:] = aug[i, i:] / diag
+        for r in range(m):
+            if r == i:
+                continue
+            f = float(aug[r, i].item())
+            if f != 0.0:
+                aug[r, i:] = aug[r, i:] - f * aug[i, i:]
+    return aug[:, m:]
+
+
+@torch.no_grad()
+def compile_closed_form_layer_lora(
+    support_ids: list[int],
+    header_ids: list[int],
+    nl_id: int,
+    d_hidden: int,
+    d_inter: int,
+    target_layers: list[int],
+    iso_entries: list[dict],
+    cat_entry: dict,
+    final_norm_g: torch.Tensor,
+    get_lm_row: Callable[[int], torch.Tensor],
+    post_ffn_norm_map: dict[int, torch.Tensor] | None = None,
+    sigma_u0_map: dict[int, float] | None = None,
+) -> ClosedFormLayerLoRA:
+    """Compile closed-form per-layer MLP `down_proj` LoRA factors `(A_l, B_l)` without gradient steps or string heuristics.
+
+    Matches `compileClosedFormLayerLoRA` in `doppler_fastweight.mjs` equation-for-equation.
+    """
+    anc_objs = discover_support_anchors(support_ids, nl_id)
+    m = len(anc_objs)
+    if m < 4 or len(iso_entries) != m or not target_layers:
+        return ClosedFormLayerLoRA(False, 0, d_hidden, d_inter, [], {}, [], m, 0)
+
+    samples: list[dict] = []
+    stop_samples: list[dict] = []
+    bg_samples: list[dict] = []
+    for ex in range(m):
+        iso = iso_entries[ex]
+        rel_anchor = int(iso["rel_anchor"])
+        line_len = len(iso["line_ids"])
+        cat_anchor = anc_objs[ex]["pos"]
+        cat_end = anc_objs[ex]["line_end"]
+        cat_start = anc_objs[ex]["line_start"]
+        answer_len = max(1, cat_end - cat_anchor - 1)
+        for off in range(answer_len):
+            if rel_anchor + off >= line_len or cat_anchor + off + 1 >= cat_end:
+                continue
+            next_tok = int(support_ids[cat_anchor + off + 1])
+            if next_tok == nl_id:
+                continue
+            samples.append({"kind": "iso", "ex": ex, "off": off, "next_tok": next_tok, "pos": rel_anchor + off})
+            samples.append({"kind": "cat", "ex": ex, "off": off, "next_tok": next_tok, "pos": cat_anchor + off})
+        if rel_anchor + answer_len < line_len:
+            stop_samples.append({"kind": "iso", "ex": ex, "pos": rel_anchor + answer_len})
+        if cat_anchor + answer_len < cat_end:
+            stop_samples.append({"kind": "cat", "ex": ex, "pos": cat_anchor + answer_len})
+        for p in range(len(header_ids) + 1, rel_anchor, 2):
+            bg_samples.append({"kind": "iso", "ex": ex, "pos": p})
+        bg_samples.append({"kind": "cat", "ex": ex, "pos": (cat_start + cat_anchor) // 2})
+
+    if not samples:
+        return ClosedFormLayerLoRA(False, 0, d_hidden, d_inter, [], {}, [], m, 0)
+
+    h_rms_list: list[float] = []
+    for ex in range(m):
+        h_iso = iso_entries[ex]["h_flat"].to(torch.float64)
+        ra = int(iso_entries[ex]["rel_anchor"])
+        vec = h_iso[ra * d_hidden : (ra + 1) * d_hidden]
+        h_rms_list.append(float(torch.sqrt((vec * vec).mean()).item()))
+    h_rms_list.sort()
+    median_h_rms = h_rms_list[len(h_rms_list) // 2]
+
+    uniq_target_toks = sorted({s["next_tok"] for s in samples})
+    uniq_set = set(uniq_target_toks)
+    bare_set: set[int] = {int(nl_id)}
+    for ex in range(m):
+        for tid in iso_entries[ex].get("bare_top", []):
+            t_int = int(tid)
+            if t_int not in uniq_set:
+                bare_set.add(t_int)
+    bare_default_toks = sorted(bare_set)
+
+    K_u = len(uniq_target_toks)
+    rank = K_u + 2
+    suppress_col = K_u
+    stop_col = K_u + 1
+    tok_to_col = {t: i for i, t in enumerate(uniq_target_toks)}
+
+    N_s = len(samples)
+    N_stop = len(stop_samples)
+    N_bg = len(bg_samples)
+    N_tot = N_s + N_stop + N_bg
+
+    Y_base = torch.zeros((N_tot, rank), dtype=torch.float64)
+    neg_val = -1.0 / float(max(1, K_u - 1))
+    for r, s in enumerate(samples):
+        tc = tok_to_col[s["next_tok"]]
+        for u in range(K_u):
+            Y_base[r, u] = 1.0 if u == tc else neg_val
+        if s["kind"] == "iso":
+            Y_base[r, suppress_col] = 1.0
+            Y_base[r, stop_col] = -1.0
+    for s_idx in range(N_stop):
+        Y_base[N_s + s_idx, stop_col] = 1.35
+
+    span_keys: list[tuple[int, ...]] = []
+    for a in anc_objs:
+        sk = tuple(support_ids[a["pos"] + 1 : a["line_end"]])
+        if sk not in span_keys:
+            span_keys.append(sk)
+    y_cls_cols: list[torch.Tensor] = []
+    y_cls_norm2: list[float] = []
+    for sk in span_keys:
+        col = torch.tensor(
+            [1.0 if tuple(support_ids[anc_objs[i]["pos"] + 1 : anc_objs[i]["line_end"]]) == sk else 0.0 for i in range(m)],
+            dtype=torch.float64,
+        )
+        col = col - col.mean()
+        y_cls_cols.append(col)
+        y_cls_norm2.append(max(float((col * col).sum().item()), 1e-8))
+
+    fn_g = final_norm_g.to(torch.float64)
+    w_targets = [get_lm_row(t).to(torch.float64) for t in uniq_target_toks]
+    w_target_mean = torch.stack(w_targets, dim=0).mean(dim=0)
+    w_bares = [get_lm_row(t).to(torch.float64) for t in bare_default_toks]
+    w_bare_mean = torch.stack(w_bares, dim=0).mean(dim=0)
+    w_nl = get_lm_row(int(nl_id)).to(torch.float64)
+
+    pfn_map = post_ffn_norm_map or {}
+    sig_map = sigma_u0_map or {}
+    bg_gamma = float((0.80) ** 0.5)
+
+    layers_out: dict[int, tuple[torch.Tensor, torch.Tensor]] = {}
+    total_bytes = 0
+
+    for l_idx in target_layers:
+        pfn = pfn_map.get(l_idx)
+        pfn_f64 = pfn.to(torch.float64) if pfn is not None else None
+        sigma_u0 = float(sig_map.get(l_idx, 1.0))
+        pfn_rms = float(torch.sqrt((pfn_f64 * pfn_f64).mean()).item()) if pfn_f64 is not None else 1.0
+        target_rms = (0.24 * sigma_u0) if pfn_f64 is not None else (0.30 * median_h_rms / float(len(target_layers)))
+
+        if pfn_f64 is not None:
+            floor_v = 0.15 * pfn_rms
+            sign_pfn = torch.where(pfn_f64 < 0.0, torch.full_like(pfn_f64, -1.0), torch.ones_like(pfn_f64))
+            denom = torch.where(pfn_f64.abs() > floor_v, pfn_f64, sign_pfn * floor_v)
+            g_factor = fn_g / denom
+        else:
+            g_factor = fn_g
+
+        B_unit = torch.zeros((rank, d_hidden), dtype=torch.float32)
+
+        def _write_b_row(r_idx: int, raw_dir: torch.Tensor) -> None:
+            tmp = g_factor * raw_dir
+            r_val = float(torch.sqrt((tmp * tmp).mean() + 1e-12).item())
+            B_unit[r_idx] = ((tmp / r_val) * target_rms).to(torch.float32)
+
+        for u in range(K_u):
+            _write_b_row(u, w_targets[u] - 0.55 * w_target_mean)
+        _write_b_row(suppress_col, 0.70 * w_target_mean - 0.85 * w_bare_mean)
+        _write_b_row(stop_col, w_nl - 0.85 * w_target_mean)
+
+        iso_z0 = torch.stack(
+            [
+                iso_entries[ex]["layer_z_map"][l_idx][
+                    int(iso_entries[ex]["rel_anchor"]) * d_inter : (int(iso_entries[ex]["rel_anchor"]) + 1) * d_inter
+                ].to(torch.float64)
+                for ex in range(m)
+            ],
+            dim=0,
+        )
+        cat_z_all = cat_entry["layer_z_map"][l_idx].to(torch.float64)
+        cat_z0 = torch.stack(
+            [cat_z_all[anc_objs[ex]["pos"] * d_inter : (anc_objs[ex]["pos"] + 1) * d_inter] for ex in range(m)],
+            dim=0,
+        )
+        dI = iso_z0 - iso_z0.mean(dim=0, keepdim=True)
+        dC = cat_z0 - cat_z0.mean(dim=0, keepdim=True)
+        sqI = (dI * dI).sum(dim=0)
+        sqC = (dC * dC).sum(dim=0)
+        rho2 = torch.zeros(d_inter, dtype=torch.float64)
+        for c_idx, yc in enumerate(y_cls_cols):
+            dotI = (dI * yc.unsqueeze(1)).sum(dim=0)
+            dotC = (dC * yc.unsqueeze(1)).sum(dim=0)
+            rI = torch.where(sqI > 1e-8, (dotI * dotI) / (sqI * y_cls_norm2[c_idx]), torch.zeros_like(sqI))
+            rC = torch.where(sqC > 1e-8, (dotC * dotC) / (sqC * y_cls_norm2[c_idx]), torch.zeros_like(sqC))
+            rho2 = torch.maximum(rho2, 0.5 * (rI + rC))
+        max_rho = max(float(rho2.max().item()), 1e-8)
+        feat_w = torch.sqrt(0.25 + 1.75 * (rho2 / max_rho)).to(torch.float32).to(torch.float64)
+
+        def _get_z(item: dict) -> torch.Tensor:
+            pos = int(item["pos"])
+            if item["kind"] == "iso":
+                src = iso_entries[int(item["ex"])]["layer_z_map"][l_idx]
+            else:
+                src = cat_entry["layer_z_map"][l_idx]
+            return src[pos * d_inter : (pos + 1) * d_inter].to(torch.float32).to(torch.float64)
+
+        z_rows_list: list[torch.Tensor] = []
+        mean_sq = 0.0
+        for s in samples:
+            r_vec = (_get_z(s) * feat_w).to(torch.float32).to(torch.float64)
+            mean_sq += float((r_vec * r_vec).sum().item()) / float(N_s)
+            z_rows_list.append(r_vec)
+        for st in stop_samples:
+            z_rows_list.append((_get_z(st) * feat_w).to(torch.float32).to(torch.float64))
+        for bg in bg_samples:
+            z_rows_list.append((_get_z(bg) * feat_w * bg_gamma).to(torch.float32).to(torch.float64))
+
+        Z_mat = torch.stack(z_rows_list, dim=0)
+        lam = 0.15 * mean_sq
+        G = Z_mat @ Z_mat.T + lam * torch.eye(N_tot, dtype=torch.float64)
+        C = _solve_spd_float64(G, Y_base)
+
+        extra_scale = torch.ones((N_tot, 1), dtype=torch.float64)
+        if N_bg > 0:
+            extra_scale[N_s + N_stop :, 0] = bg_gamma
+        Z_back = Z_mat * feat_w.unsqueeze(0) * extra_scale
+        A_l = (Z_back.T @ C).to(torch.float32)
+
+        layers_out[int(l_idx)] = (A_l, B_unit)
+        total_bytes += _tensor_bytes(A_l, B_unit)
+
+    return ClosedFormLayerLoRA(
+        active=True,
+        rank=rank,
+        d_hidden=d_hidden,
+        d_inter=d_inter,
+        target_layers=list(target_layers),
+        layers=layers_out,
+        uniq_target_tokens=uniq_target_toks,
+        anchors_count=m,
+        logical_bytes=total_bytes,
+    )
+
+
+def make_zero_layer_lora(lora: ClosedFormLayerLoRA) -> ClosedFormLayerLoRA:
+    zero_layers = {
+        l_idx: (torch.zeros_like(A_l), torch.zeros_like(B_l))
+        for l_idx, (A_l, B_l) in lora.layers.items()
+    }
+    return ClosedFormLayerLoRA(
+        active=lora.active,
+        rank=lora.rank,
+        d_hidden=lora.d_hidden,
+        d_inter=lora.d_inter,
+        target_layers=list(lora.target_layers),
+        layers=zero_layers,
+        uniq_target_tokens=list(lora.uniq_target_tokens),
+        anchors_count=lora.anchors_count,
+        logical_bytes=lora.logical_bytes,
+    )
+
+
+def make_random_layer_lora(lora: ClosedFormLayerLoRA, seed: int) -> ClosedFormLayerLoRA:
+    gen = torch.Generator(device="cpu")
+    gen.manual_seed(int(seed))
+    rand_layers: dict[int, tuple[torch.Tensor, torch.Tensor]] = {}
+    for l_idx, (A_l, B_l) in lora.layers.items():
+        a_norm = float(A_l.float().cpu().norm().item())
+        b_norm = float(B_l.float().cpu().norm().item())
+        a_noise = torch.randn(A_l.shape, generator=gen, dtype=torch.float32)
+        b_noise = torch.randn(B_l.shape, generator=gen, dtype=torch.float32)
+        a_scaled = a_noise * (a_norm / max(float(a_noise.norm().item()), 1e-8))
+        b_scaled = b_noise * (b_norm / max(float(b_noise.norm().item()), 1e-8))
+        rand_layers[l_idx] = (a_scaled.to(A_l.device), b_scaled.to(B_l.device))
+    return ClosedFormLayerLoRA(
+        active=lora.active,
+        rank=lora.rank,
+        d_hidden=lora.d_hidden,
+        d_inter=lora.d_inter,
+        target_layers=list(lora.target_layers),
+        layers=rand_layers,
+        uniq_target_tokens=list(lora.uniq_target_tokens),
+        anchors_count=lora.anchors_count,
+        logical_bytes=lora.logical_bytes,
+    )
+
+
+@torch.no_grad()
+def derive_continuous_cache_knn(
+    prompt_ids: list[int],
+    c_len: int,
+    nl_id: int,
+    h_last: torch.Tensor,
+    tau: float = 0.08,
+    eta_cache: float = 8.0,
+) -> dict[int, tuple[torch.Tensor, torch.Tensor]]:
+    """Grave et al. (2017) continuous-cache / prompt kNN-LM output-logit baseline (`Delta W_l = 0`)."""
+    anc_objs = discover_support_anchors(prompt_ids[:c_len], nl_id)
+    if len(anc_objs) < 4:
+        return {}
+    hl = safe_norm(h_last.float())
+    T = len(prompt_ids)
+    q_vec = hl[T - 1]
+    keys = torch.stack([hl[a["pos"]] for a in anc_objs], dim=0)
+    vals = [int(prompt_ids[a["pos"] + 1]) for a in anc_objs]
+    uniq_vals = sorted(set(vals))
+    if len(uniq_vals) < 2:
+        return {}
+    sims = (keys @ q_vec) / max(tau, 1e-4)
+    probs = F.softmax(sims, dim=0)
+    dv_list: list[float] = []
+    prior = 1.0 / float(len(uniq_vals))
+    for uv in uniq_vals:
+        p_sum = sum(float(probs[i].item()) for i, v in enumerate(vals) if v == uv)
+        dv_list.append(eta_cache * (p_sum - prior))
+    dev = h_last.device
+    return {
+        0: (
+            torch.tensor(uniq_vals, device=dev, dtype=torch.long),
+            torch.tensor(dv_list, device=dev, dtype=torch.float32),
+        )
+    }
+

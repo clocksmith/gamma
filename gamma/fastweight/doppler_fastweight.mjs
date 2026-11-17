@@ -622,7 +622,7 @@ export function deriveFastweight(
   };
 }
 
-export function evaluateQuery(adapter, xqRaw, enableKeyGate = true, encodeFn = null) {
+export function evaluateQuery(adapter, xqRaw, enableKeyGate = true, encodeFn = null, enableStringHeuristics = true) {
   const deltas = new Map();
   if (!adapter || adapter.mode === 'inactive' || !xqRaw || adapter.stepWeights.size === 0) {
     return deltas;
@@ -632,7 +632,7 @@ export function evaluateQuery(adapter, xqRaw, enableKeyGate = true, encodeFn = n
   }
 
   const { m, D, mu, vStd, wSnr, X, boundaryMerged, stepWeights, contextText, queryLineText } = adapter;
-  if (adapter.mode === 'window' && enableKeyGate && boundaryMerged && encodeFn && contextText && queryLineText) {
+  if (enableStringHeuristics && adapter.mode === 'window' && enableKeyGate && boundaryMerged && encodeFn && contextText && queryLineText) {
     let maxW = 0;
     for (const { Wdown } of stepWeights.values()) {
       for (let i = 0; i < Wdown.length; i += 1) {
@@ -731,4 +731,450 @@ export function extractQueryFeaturesForDonor(donorAd, promptIds, nlId, etRows, h
     return xqRaw;
   }
   return null;
+}
+
+// ---------------------------------------------------------------------------
+// v4: Forward-Only Reversible Per-Layer MLP `down_proj` LoRA (`DeltaW_l(alpha)`)
+//     and Grave et al. (2017) Continuous-Cache kNN Output-Logit Baseline
+// ---------------------------------------------------------------------------
+
+export function discoverSupportAnchors(supportIds, nlId) {
+  const lines = [];
+  let start = 0;
+  for (let i = 0; i < supportIds.length; i += 1) {
+    if (supportIds[i] === nlId) {
+      if (i - start >= 6) lines.push({ start, end: i });
+      start = i + 1;
+    }
+  }
+  const tokLinePositions = new Map();
+  for (let li = 0; li < lines.length; li += 1) {
+    const { start: s, end: e } = lines[li];
+    const lastInSuffix = new Map();
+    for (let p = Math.max(s + 3, e - 8); p < e; p += 1) {
+      if (p <= e - 2) lastInSuffix.set(supportIds[p], p);
+    }
+    for (const [tok, p] of lastInSuffix.entries()) {
+      if (!tokLinePositions.has(tok)) tokLinePositions.set(tok, []);
+      tokLinePositions.get(tok).push({ lineIdx: li, pos: p, lineStart: s, lineEnd: e });
+    }
+  }
+  let bestTok = -1;
+  let bestCount = 0;
+  let bestSmallSpan = Infinity;
+  for (const [tok, arr] of tokLinePositions.entries()) {
+    if (arr.length < 4) continue;
+    const spans = new Set(arr.map(x => supportIds.slice(x.pos + 1, x.lineEnd).join(',')));
+    if (spans.size < 2) continue;
+    const meanDist = arr.reduce((acc, x) => acc + (x.lineEnd - x.pos), 0) / arr.length;
+    if (arr.length > bestCount || (arr.length === bestCount && meanDist < bestSmallSpan)) {
+      bestCount = arr.length;
+      bestSmallSpan = meanDist;
+      bestTok = tok;
+    }
+  }
+  return bestTok >= 0 ? tokLinePositions.get(bestTok) : [];
+}
+
+export function compileClosedFormLayerLoRA({
+  supportIds,
+  headerIds,
+  nlId,
+  dHidden,
+  dInter,
+  targetLayers,
+  isoEntries,
+  catEntry,
+  finalNormG,
+  getLmRow,
+  postFfnNormMap = null,
+  sigmaU0Map = null,
+}) {
+  const ancObjs = discoverSupportAnchors(supportIds, nlId);
+  const m = ancObjs.length;
+  if (m < 4 || !isoEntries || isoEntries.length !== m || !targetLayers || targetLayers.length === 0) {
+    return {
+      active: false,
+      rank: 0,
+      dHidden,
+      dInter,
+      targetLayers: [],
+      layers: new Map(),
+      uniqTargetTokens: [],
+      anchorsCount: m,
+      logicalBytes: 0,
+    };
+  }
+
+  const samples = [];
+  const stopSamples = [];
+  const bgSamples = [];
+  for (let ex = 0; ex < m; ex += 1) {
+    const iso = isoEntries[ex];
+    const relAnchor = iso.relAnchor;
+    const lineLen = iso.lineIds.length;
+    const { pos: catAnchor, lineEnd: catEnd, lineStart: catStart } = ancObjs[ex];
+    const answerLen = Math.max(1, catEnd - catAnchor - 1);
+    for (let off = 0; off < answerLen; off += 1) {
+      if (relAnchor + off >= lineLen || catAnchor + off + 1 >= catEnd) continue;
+      const nextTok = supportIds[catAnchor + off + 1];
+      if (nextTok === nlId) continue;
+      samples.push({ kind: 'iso', ex, off, nextTok, pos: relAnchor + off });
+      samples.push({ kind: 'cat', ex, off, nextTok, pos: catAnchor + off });
+    }
+    if (relAnchor + answerLen < lineLen) stopSamples.push({ kind: 'iso', ex, pos: relAnchor + answerLen });
+    if (catAnchor + answerLen < catEnd) stopSamples.push({ kind: 'cat', ex, pos: catAnchor + answerLen });
+    for (let p = headerIds.length + 1; p < relAnchor; p += 2) {
+      bgSamples.push({ kind: 'iso', ex, pos: p });
+    }
+    bgSamples.push({ kind: 'cat', ex, pos: Math.floor((catStart + catAnchor) / 2) });
+  }
+
+  if (samples.length === 0) {
+    return {
+      active: false,
+      rank: 0,
+      dHidden,
+      dInter,
+      targetLayers: [],
+      layers: new Map(),
+      uniqTargetTokens: [],
+      anchorsCount: m,
+      logicalBytes: 0,
+    };
+  }
+
+  const hRmsArr = [];
+  for (let ex = 0; ex < m; ex += 1) {
+    let sqI = 0;
+    const ra = isoEntries[ex].relAnchor;
+    const hf = isoEntries[ex].hFlat;
+    for (let j = 0; j < dHidden; j += 1) {
+      const v = hf[ra * dHidden + j];
+      sqI += v * v;
+    }
+    hRmsArr.push(Math.sqrt(sqI / dHidden));
+  }
+  hRmsArr.sort((a, b) => a - b);
+  const medianHRms = hRmsArr[Math.floor(hRmsArr.length / 2)];
+
+  const uniqTargetTokens = Array.from(new Set(samples.map(s => s.nextTok))).sort((a, b) => a - b);
+  const uniqSet = new Set(uniqTargetTokens);
+  const bareSet = new Set([nlId]);
+  for (let ex = 0; ex < m; ex += 1) {
+    for (const tid of (isoEntries[ex].bareTop ?? [])) {
+      if (!uniqSet.has(tid)) bareSet.add(tid);
+    }
+  }
+  const bareDefaultToks = Array.from(bareSet).sort((a, b) => a - b);
+
+  const K_u = uniqTargetTokens.length;
+  const rank = K_u + 2;
+  const suppressCol = K_u;
+  const stopCol = K_u + 1;
+  const tokToCol = new Map(uniqTargetTokens.map((t, i) => [t, i]));
+
+  const N_s = samples.length;
+  const N_stop = stopSamples.length;
+  const N_bg = bgSamples.length;
+  const N_tot = N_s + N_stop + N_bg;
+  const Y_base = new Float64Array(N_tot * rank);
+  const negVal = -1.0 / Math.max(1, K_u - 1);
+  for (let r = 0; r < N_s; r += 1) {
+    const tgtCol = tokToCol.get(samples[r].nextTok);
+    for (let u = 0; u < K_u; u += 1) {
+      Y_base[r * rank + u] = (u === tgtCol) ? 1.0 : negVal;
+    }
+    if (samples[r].kind === 'iso') {
+      Y_base[r * rank + suppressCol] = 1.0;
+      Y_base[r * rank + stopCol] = -1.0;
+    }
+  }
+  for (let s = 0; s < N_stop; s += 1) {
+    Y_base[(N_s + s) * rank + stopCol] = 1.35;
+  }
+
+  const spanKeys = [];
+  for (const a of ancObjs) {
+    const sk = supportIds.slice(a.pos + 1, a.lineEnd).join(',');
+    if (!spanKeys.includes(sk)) spanKeys.push(sk);
+  }
+  const yClsCols = spanKeys.map(sk => {
+    const col = new Float64Array(m);
+    let s = 0;
+    for (let i = 0; i < m; i += 1) {
+      col[i] = supportIds.slice(ancObjs[i].pos + 1, ancObjs[i].lineEnd).join(',') === sk ? 1.0 : 0.0;
+      s += col[i];
+    }
+    const mu = s / m;
+    for (let i = 0; i < m; i += 1) col[i] -= mu;
+    return col;
+  });
+  const yClsNorm2 = yClsCols.map(c => Math.max(c.reduce((s, v) => s + v * v, 0), 1e-8));
+
+  const wTargets = uniqTargetTokens.map(tid => getLmRow(tid));
+  const wTargetMean = new Float64Array(dHidden);
+  for (let u = 0; u < K_u; u += 1) {
+    const w = wTargets[u];
+    for (let j = 0; j < dHidden; j += 1) wTargetMean[j] += w[j] / K_u;
+  }
+  const wBareMean = new Float64Array(dHidden);
+  for (const tid of bareDefaultToks) {
+    const w = getLmRow(tid);
+    for (let j = 0; j < dHidden; j += 1) wBareMean[j] += w[j] / bareDefaultToks.length;
+  }
+  const wNl = getLmRow(nlId);
+  const bgGamma = Math.sqrt(0.80);
+
+  const layersOut = new Map();
+  let totalBytes = 0;
+
+  for (const l of targetLayers) {
+    const pfn = postFfnNormMap ? (postFfnNormMap.get(l) ?? null) : null;
+    const sigmaU0 = sigmaU0Map ? (sigmaU0Map.get(l) ?? 1.0) : 1.0;
+    let pfnRms = 1.0;
+    if (pfn) {
+      let psq = 0;
+      for (let j = 0; j < dHidden; j += 1) psq += pfn[j] * pfn[j];
+      pfnRms = Math.sqrt(psq / dHidden);
+    }
+    const targetRms = pfn ? (0.24 * sigmaU0) : (0.30 * medianHRms / targetLayers.length);
+
+    const B_unit = new Float32Array(rank * dHidden);
+    const writeBRow = (rowIdx, rawDir) => {
+      let sq = 0;
+      const tmp = new Float64Array(dHidden);
+      const floorV = 0.15 * pfnRms;
+      for (let j = 0; j < dHidden; j += 1) {
+        let gFactor = finalNormG[j];
+        if (pfn) {
+          const denom = Math.abs(pfn[j]) > floorV ? pfn[j] : (pfn[j] < 0 ? -1.0 : 1.0) * floorV;
+          gFactor /= denom;
+        }
+        tmp[j] = gFactor * rawDir[j];
+        sq += tmp[j] * tmp[j];
+      }
+      const r = Math.sqrt(sq / dHidden + 1e-12);
+      for (let j = 0; j < dHidden; j += 1) {
+        B_unit[rowIdx * dHidden + j] = (tmp[j] / r) * targetRms;
+      }
+    };
+
+    for (let u = 0; u < K_u; u += 1) {
+      const w = wTargets[u];
+      const diff = new Float64Array(dHidden);
+      for (let j = 0; j < dHidden; j += 1) diff[j] = w[j] - 0.55 * wTargetMean[j];
+      writeBRow(u, diff);
+    }
+    const supDir = new Float64Array(dHidden);
+    for (let j = 0; j < dHidden; j += 1) supDir[j] = 0.70 * wTargetMean[j] - 0.85 * wBareMean[j];
+    writeBRow(suppressCol, supDir);
+    const stopDir = new Float64Array(dHidden);
+    for (let j = 0; j < dHidden; j += 1) stopDir[j] = wNl[j] - 0.85 * wTargetMean[j];
+    writeBRow(stopCol, stopDir);
+
+    const zMeanI = new Float64Array(dInter);
+    const zMeanC = new Float64Array(dInter);
+    const catZ = catEntry.layerZMap.get(l);
+    for (let ex = 0; ex < m; ex += 1) {
+      const ri = isoEntries[ex].layerZMap.get(l);
+      const pI = isoEntries[ex].relAnchor * dInter;
+      const pC = ancObjs[ex].pos * dInter;
+      for (let k = 0; k < dInter; k += 1) {
+        zMeanI[k] += ri[pI + k] / m;
+        zMeanC[k] += catZ[pC + k] / m;
+      }
+    }
+    const rho2 = new Float64Array(dInter);
+    let maxRho = 1e-8;
+    for (let k = 0; k < dInter; k += 1) {
+      let sqI = 0;
+      let sqC = 0;
+      const dI = new Float64Array(m);
+      const dC = new Float64Array(m);
+      for (let ex = 0; ex < m; ex += 1) {
+        dI[ex] = isoEntries[ex].layerZMap.get(l)[isoEntries[ex].relAnchor * dInter + k] - zMeanI[k];
+        dC[ex] = catZ[ancObjs[ex].pos * dInter + k] - zMeanC[k];
+        sqI += dI[ex] * dI[ex];
+        sqC += dC[ex] * dC[ex];
+      }
+      let best = 0;
+      for (let c = 0; c < yClsCols.length; c += 1) {
+        let dotI = 0;
+        let dotC = 0;
+        for (let ex = 0; ex < m; ex += 1) {
+          dotI += dI[ex] * yClsCols[c][ex];
+          dotC += dC[ex] * yClsCols[c][ex];
+        }
+        const rAvg = 0.5 * (
+          (sqI > 1e-8 ? (dotI * dotI) / (sqI * yClsNorm2[c]) : 0)
+          + (sqC > 1e-8 ? (dotC * dotC) / (sqC * yClsNorm2[c]) : 0)
+        );
+        if (rAvg > best) best = rAvg;
+      }
+      rho2[k] = best;
+      if (best > maxRho) maxRho = best;
+    }
+    const featW = new Float32Array(dInter);
+    for (let k = 0; k < dInter; k += 1) {
+      featW[k] = Math.sqrt(0.25 + 1.75 * (rho2[k] / maxRho));
+    }
+
+    const getZ = item => {
+      const src = item.kind === 'iso' ? isoEntries[item.ex].layerZMap.get(l) : catZ;
+      return src.subarray(item.pos * dInter, (item.pos + 1) * dInter);
+    };
+
+    const Z_rows = new Array(N_tot);
+    let meanSq = 0;
+    for (let r = 0; r < N_s; r += 1) {
+      const zv = getZ(samples[r]);
+      const row = new Float32Array(dInter);
+      let sq = 0;
+      for (let k = 0; k < dInter; k += 1) {
+        row[k] = zv[k] * featW[k];
+        sq += row[k] * row[k];
+      }
+      Z_rows[r] = row;
+      meanSq += sq / N_s;
+    }
+    for (let s = 0; s < N_stop; s += 1) {
+      const zv = getZ(stopSamples[s]);
+      const row = new Float32Array(dInter);
+      for (let k = 0; k < dInter; k += 1) row[k] = zv[k] * featW[k];
+      Z_rows[N_s + s] = row;
+    }
+    for (let b = 0; b < N_bg; b += 1) {
+      const zv = getZ(bgSamples[b]);
+      const row = new Float32Array(dInter);
+      for (let k = 0; k < dInter; k += 1) row[k] = zv[k] * featW[k] * bgGamma;
+      Z_rows[N_s + N_stop + b] = row;
+    }
+
+    const lambda = 0.15 * meanSq;
+    const G = new Float64Array(N_tot * N_tot);
+    for (let i = 0; i < N_tot; i += 1) {
+      for (let j = i; j < N_tot; j += 1) {
+        let d = 0;
+        for (let k = 0; k < dInter; k += 1) d += Z_rows[i][k] * Z_rows[j][k];
+        G[i * N_tot + j] = d + (i === j ? lambda : 0);
+        G[j * N_tot + i] = G[i * N_tot + j];
+      }
+    }
+    const C = solveSPDLinearSystem(G, Y_base, N_tot, rank);
+    const A_l = new Float32Array(dInter * rank);
+    for (let i = 0; i < N_tot; i += 1) {
+      const ri = Z_rows[i];
+      const extraBg = i >= (N_s + N_stop) ? bgGamma : 1.0;
+      for (let k = 0; k < dInter; k += 1) {
+        const rik = ri[k] * featW[k] * extraBg;
+        if (rik === 0) continue;
+        for (let u = 0; u < rank; u += 1) A_l[k * rank + u] += rik * C[i * rank + u];
+      }
+    }
+
+    layersOut.set(l, { a: A_l, b: B_unit, rank, alpha: 1.0, scale: 1.0 });
+    totalBytes += A_l.byteLength + B_unit.byteLength;
+  }
+
+  return {
+    active: true,
+    rank,
+    dHidden,
+    dInter,
+    targetLayers: [...targetLayers],
+    layers: layersOut,
+    uniqTargetTokens,
+    anchorsCount: m,
+    logicalBytes: totalBytes,
+  };
+}
+
+function mulberry32Gen(seed) {
+  let a = seed >>> 0;
+  return function next() {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+export function makeZeroLayerLoRA(lora) {
+  const zeroLayers = new Map();
+  for (const [l, entry] of lora.layers.entries()) {
+    zeroLayers.set(l, {
+      a: new Float32Array(entry.a.length),
+      b: new Float32Array(entry.b.length),
+      rank: entry.rank,
+      alpha: 1.0,
+      scale: 0.0,
+    });
+  }
+  return { ...lora, layers: zeroLayers };
+}
+
+export function makeRandomLayerLoRA(lora, seed = 1) {
+  const rng = mulberry32Gen(seed);
+  const gaussVec = orig => {
+    let origSq = 0;
+    for (let i = 0; i < orig.length; i += 1) origSq += orig[i] * orig[i];
+    const noise = new Float32Array(orig.length);
+    let noiseSq = 0;
+    for (let i = 0; i < orig.length; i += 1) {
+      const u1 = Math.max(rng(), 1e-12);
+      const u2 = rng();
+      const g = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+      noise[i] = g;
+      noiseSq += g * g;
+    }
+    const sc = Math.sqrt(origSq) / Math.max(Math.sqrt(noiseSq), 1e-8);
+    for (let i = 0; i < noise.length; i += 1) noise[i] *= sc;
+    return noise;
+  };
+  const randLayers = new Map();
+  for (const [l, entry] of lora.layers.entries()) {
+    randLayers.set(l, {
+      a: gaussVec(entry.a),
+      b: gaussVec(entry.b),
+      rank: entry.rank,
+      alpha: 1.0,
+      scale: 1.0,
+    });
+  }
+  return { ...lora, layers: randLayers };
+}
+
+export function deriveContinuousCacheKnn(promptIds, cLen, nlId, hLastFlat, dHidden, tau = 0.08, etaCache = 8.0) {
+  const ancObjs = discoverSupportAnchors(promptIds.slice(0, cLen), nlId);
+  const deltas = new Map();
+  if (ancObjs.length < 4) return deltas;
+  const T = promptIds.length;
+  const qVec = safeNormRow(hLastFlat, (T - 1) * dHidden, dHidden);
+  const keys = ancObjs.map(a => safeNormRow(hLastFlat, a.pos * dHidden, dHidden));
+  const vals = ancObjs.map(a => promptIds[a.pos + 1]);
+  const uniqVals = Array.from(new Set(vals)).sort((a, b) => a - b);
+  if (uniqVals.length < 2) return deltas;
+  const invTau = 1.0 / Math.max(tau, 1e-4);
+  const sims = keys.map(kv => {
+    let dot = 0;
+    for (let j = 0; j < dHidden; j += 1) dot += kv[j] * qVec[j];
+    return dot * invTau;
+  });
+  const maxS = Math.max(...sims);
+  const exps = sims.map(s => Math.exp(s - maxS));
+  const sumE = exps.reduce((a, b) => a + b, 0);
+  const probs = exps.map(e => e / sumE);
+  const prior = 1.0 / uniqVals.length;
+  const dv = new Float32Array(uniqVals.length);
+  for (let u = 0; u < uniqVals.length; u += 1) {
+    let pSum = 0;
+    for (let i = 0; i < vals.length; i += 1) {
+      if (vals[i] === uniqVals[u]) pSum += probs[i];
+    }
+    dv[u] = etaCache * (pSum - prior);
+  }
+  deltas.set(0, { uTokens: uniqVals, dv });
+  return deltas;
 }

@@ -1,0 +1,80 @@
+{
+  "protocol_id": "gamma.reconfiguration.query_swiglu_fastweight_v4",
+  "version": "4.0.0",
+  "pre_registered_before_tasks_v4": true,
+  "confirmation_seed": 1040001,
+  "min_confirmation_seed_enforced": 1040000,
+  "domains_count": 6,
+  "specialties_per_domain": 2,
+  "queries_per_specialty": 8,
+  "tasks_per_model": 96,
+  "unit_of_inference": "unpooled_per_model_exact_two_sided_mcnemar",
+  "enable_string_heuristics": false,
+  "literature_baselines_acknowledged": [
+    "Grave et al. (2017) Continuous Cache (arXiv:1612.04426)",
+    "Khandelwal et al. (2020) Nearest Neighbor Language Models / kNN-LM (arXiv:1911.00172)",
+    "Shi et al. (2024) Context-Aware Decoding / CAD (arXiv:2305.14739)",
+    "Dherin et al. (2025) Implicit rank-1 MLP dynamics of in-context learning (arXiv:2507.16003)",
+    "FAAST (2026) Forward-Only Associative Learning via Closed-Form Fast Weights (arXiv:2605.04651)"
+  ],
+  "hyperparameters_frozen": {
+    "post_feedforward_norm_top_layers": 10,
+    "standard_prenorm_top_layers": 2,
+    "post_feedforward_norm_target_rms_ratio": 0.24,
+    "standard_prenorm_target_rms_ratio": 0.30,
+    "target_unembed_center_alpha": 0.55,
+    "suppress_dir_weights": [0.70, -0.85],
+    "stop_dir_target_mean_weight": -0.85,
+    "stop_sample_rhs": 1.35,
+    "iso_stop_rhs": -1.0,
+    "snr_feature_gate_floor_and_span": [0.25, 1.75],
+    "bg_gamma_sq": 0.80,
+    "ridge_lambda_ratio": 0.15,
+    "alpha_dial_grid": [0.0, 0.25, 0.50, 0.75, 1.0],
+    "primary_alpha": 1.0,
+    "continuous_cache_knn_tau": 0.08,
+    "continuous_cache_knn_eta": 8.0,
+    "context_aware_decoding_beta": 0.50,
+    "string_lookup_confidence_threshold": 0.45
+  },
+  "acceptance_criteria": {
+    "invariants": {
+      "zero_lora_equals_base_max_abs_logit_diff": 0.0,
+      "revert_after_hotswap_max_abs_logit_diff": 0.0,
+      "standalone_string_lookup_max_accuracy": 0.50
+    },
+    "regime_a_prompt_removed_skill_retention": {
+      "primary_arm": "closed_form_layer_lora_no_prompt (alpha=1.0)",
+      "required_controls": [
+        "base_no_prompt",
+        "zero_lora_no_prompt",
+        "wrong_specialty_lora_no_prompt",
+        "random_lora_no_prompt"
+      ],
+      "alpha_significance": 0.05
+    },
+    "regime_b_prompt_present_matched_compute": {
+      "primary_arm": "closed_form_layer_lora_in_context (alpha=1.0)",
+      "required_controls": [
+        "base_in_context",
+        "base_chat",
+        "base_plus_string_lookup",
+        "continuous_cache_knn",
+        "context_aware_decoding"
+      ],
+      "alpha_significance": 0.05
+    }
+  },
+  "frozen_code_sha256": {
+    "adapter_py": "3d9bd86331f74f71b3f8f73a755ef86ee015ba4de94c440e359201d842aa10cf",
+    "doppler_fastweight_mjs": "27ce5a4f90aef796754f7835fc27cd0ea5c45983362f0508c939f19879b48143",
+    "pytorch_engine_py": "98562d8a5f216124f89876608dbfff56744899cb055d6b5efed77200da2a53dd",
+    "regex_baseline_v4_py": "ddb210c6ba2d7bc6488194c3db30542b1b7e7cc69ca0aa3a83e176ebc85b127f",
+    "evaluate_doppler_v4_mjs": "f0c8b590e12acd3d6cabd1870485d7ededd062961285e5d91ca549cb6a7db862",
+    "evaluate_v4_mps_py": "f561cd006338bf4cfb45c47cb055850c5df79de888cc12cb3eb5ff1d204ab663"
+  },
+  "provisioned_stock_models_sha256": {
+    "gemma_3_270m_it_q4k_manifest": "afecba81640288d0849838c8d4d8c763af80edc1fc22051853ce6700dda4b315",
+    "qwen3_5_0_8b_q4k_manifest": "c5fcf38e945f1c048faca9ccda8991f1494563317f46a6dd79e0714ad001c569"
+  }
+}

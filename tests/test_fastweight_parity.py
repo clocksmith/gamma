@@ -10,9 +10,14 @@ import torch
 
 from gamma.fastweight import (
     FastWeightSession,
+    compile_closed_form_layer_lora,
+    derive_continuous_cache_knn,
     derive_fastweight,
+    discover_support_anchors,
     find_default_context_split,
+    make_random_layer_lora,
     make_zero_adapter,
+    make_zero_layer_lora,
 )
 from gamma.fastweight.adapter import resolve_hop_continuation_tokens, safe_norm
 
@@ -223,6 +228,171 @@ class TestFastWeightCrossEngineParity(unittest.TestCase):
         for _, dv in z_ad.evaluate_query(xq_rl).values():
             self.assertEqual(float(dv.abs().max().item()), 0.0)
         self.assertEqual(find_default_context_split(p_rl, nl_id), c_rl)
+
+    def test_v4_closed_form_layer_lora_and_continuous_cache_parity(self) -> None:
+        gen = torch.Generator().manual_seed(90401)
+        nl_id = 10
+        delim_id = 11
+        d_hidden = 16
+        d_inter = 24
+        V = 64
+        header_ids = [2, 3, 4, nl_id]
+        support_ids = list(header_ids)
+        classes = [40, 41, 42, 43]
+        for ex in range(8):
+            support_ids.extend([5, 12 + ex, 20 + (ex % 3), 25 + ex, delim_id, classes[ex % 4], nl_id])
+
+        ancs = discover_support_anchors(support_ids, nl_id)
+        self.assertEqual(len(ancs), 8)
+
+        target_layers = [2, 3]
+        iso_entries_py = []
+        iso_entries_js = []
+        for ex, a in enumerate(ancs):
+            line_ids = header_ids + support_ids[a["line_start"] : a["line_end"]]
+            rel_anchor = len(header_ids) + (a["pos"] - a["line_start"])
+            h_flat = 0.4 * torch.randn(len(line_ids) * d_hidden, generator=gen, dtype=torch.float32)
+            lz_py = {l_idx: torch.randn(len(line_ids) * d_inter, generator=gen, dtype=torch.float32) for l_idx in target_layers}
+            bare_top = [50, 51, 52]
+            iso_entries_py.append({
+                "line_ids": line_ids,
+                "rel_anchor": rel_anchor,
+                "h_flat": h_flat,
+                "layer_z_map": lz_py,
+                "bare_top": bare_top,
+            })
+            iso_entries_js.append({
+                "lineIds": line_ids,
+                "relAnchor": rel_anchor,
+                "hFlat": h_flat.tolist(),
+                "layerZMap": {str(k): v.tolist() for k, v in lz_py.items()},
+                "bareTop": bare_top,
+            })
+
+        cat_h = 0.4 * torch.randn(len(support_ids) * d_hidden, generator=gen, dtype=torch.float32)
+        cat_lz = {l_idx: torch.randn(len(support_ids) * d_inter, generator=gen, dtype=torch.float32) for l_idx in target_layers}
+        cat_entry_py = {"h_flat": cat_h, "layer_z_map": cat_lz}
+        cat_entry_js = {"hFlat": cat_h.tolist(), "layerZMap": {str(k): v.tolist() for k, v in cat_lz.items()}}
+
+        final_norm_g = 1.0 + 0.1 * torch.randn(d_hidden, generator=gen, dtype=torch.float32)
+        pfn_map = {l_idx: 20.0 + 2.0 * torch.randn(d_hidden, generator=gen, dtype=torch.float32) for l_idx in target_layers}
+        sig_map = {2: 0.085, 3: 0.092}
+        W_lm = torch.randn((V, d_hidden), generator=gen, dtype=torch.float32)
+
+        for use_pfn in (False, True):
+            lora_py = compile_closed_form_layer_lora(
+                support_ids=support_ids,
+                header_ids=header_ids,
+                nl_id=nl_id,
+                d_hidden=d_hidden,
+                d_inter=d_inter,
+                target_layers=target_layers,
+                iso_entries=iso_entries_py,
+                cat_entry=cat_entry_py,
+                final_norm_g=final_norm_g,
+                get_lm_row=lambda tid: W_lm[tid],
+                post_ffn_norm_map=(pfn_map if use_pfn else None),
+                sigma_u0_map=(sig_map if use_pfn else None),
+            )
+            self.assertTrue(lora_py.active)
+            self.assertEqual(lora_py.rank, 6)
+
+            z_lora = make_zero_layer_lora(lora_py)
+            r_lora = make_random_layer_lora(lora_py, seed=77)
+            for l_idx in target_layers:
+                self.assertEqual(float(z_lora.layers[l_idx][0].abs().max().item()), 0.0)
+                self.assertAlmostEqual(
+                    float(r_lora.layers[l_idx][0].norm().item()),
+                    float(lora_py.layers[l_idx][0].norm().item()),
+                    places=3,
+                )
+
+            js_script = f"""
+import {{ compileClosedFormLayerLoRA, deriveContinuousCacheKnn }} from {json.dumps(MJS_PATH.as_uri())};
+const req = JSON.parse(await new Promise(res => {{
+  let s = ''; process.stdin.on('data', c => s += c); process.stdin.on('end', () => res(s));
+}}));
+const isoEntries = req.iso_entries.map(e => ({{
+  lineIds: e.lineIds,
+  relAnchor: e.relAnchor,
+  hFlat: Float32Array.from(e.hFlat),
+  layerZMap: new Map(Object.entries(e.layerZMap).map(([k, v]) => [Number(k), Float32Array.from(v)])),
+  bareTop: e.bareTop,
+}}));
+const catEntry = {{
+  hFlat: Float32Array.from(req.cat_entry.hFlat),
+  layerZMap: new Map(Object.entries(req.cat_entry.layerZMap).map(([k, v]) => [Number(k), Float32Array.from(v)])),
+}};
+const wMap = new Map(Object.entries(req.w_lm).map(([k, v]) => [Number(k), Float32Array.from(v)]));
+const pfnMap = req.pfn_map ? new Map(Object.entries(req.pfn_map).map(([k, v]) => [Number(k), Float32Array.from(v)])) : null;
+const sigMap = req.sig_map ? new Map(Object.entries(req.sig_map).map(([k, v]) => [Number(k), Number(v)])) : null;
+const out = compileClosedFormLayerLoRA({{
+  supportIds: req.support_ids,
+  headerIds: req.header_ids,
+  nlId: req.nl_id,
+  dHidden: req.d_hidden,
+  dInter: req.d_inter,
+  targetLayers: req.target_layers,
+  isoEntries,
+  catEntry,
+  finalNormG: Float32Array.from(req.final_norm_g),
+  getLmRow: tid => wMap.get(tid),
+  postFfnNormMap: pfnMap,
+  sigmaU0Map: sigMap,
+}});
+const layers = {{}};
+for (const [l, obj] of out.layers.entries()) {{
+  layers[String(l)] = {{ a: Array.from(obj.a), b: Array.from(obj.b) }};
+}}
+const knn = deriveContinuousCacheKnn(req.knn_prompt, req.c_len, req.nl_id, Float32Array.from(req.knn_h), req.d_hidden);
+const knn0 = knn.get(0);
+process.stdout.write(JSON.stringify({{
+  rank: out.rank,
+  layers,
+  knn: knn0 ? {{ u: knn0.uTokens, dv: Array.from(knn0.dv) }} : null,
+}}) + '\\n');
+"""
+            knn_prompt = support_ids + [5, 19, 21, 31, delim_id]
+            knn_h = torch.randn((len(knn_prompt), d_hidden), generator=gen, dtype=torch.float32)
+            knn_py = derive_continuous_cache_knn(knn_prompt, len(support_ids), nl_id, knn_h)
+
+            proc = subprocess.run(
+                ["node", "--input-type=module", "-e", js_script],
+                input=json.dumps({
+                    "support_ids": support_ids,
+                    "header_ids": header_ids,
+                    "nl_id": nl_id,
+                    "d_hidden": d_hidden,
+                    "d_inter": d_inter,
+                    "target_layers": target_layers,
+                    "iso_entries": iso_entries_js,
+                    "cat_entry": cat_entry_js,
+                    "final_norm_g": final_norm_g.tolist(),
+                    "w_lm": {str(i): W_lm[i].tolist() for i in range(V)},
+                    "pfn_map": ({str(k): v.tolist() for k, v in pfn_map.items()} if use_pfn else None),
+                    "sig_map": ({str(k): v for k, v in sig_map.items()} if use_pfn else None),
+                    "knn_prompt": knn_prompt,
+                    "c_len": len(support_ids),
+                    "knn_h": knn_h.reshape(-1).tolist(),
+                }),
+                text=True,
+                capture_output=True,
+                check=True,
+            )
+            js_out = json.loads(proc.stdout.strip().splitlines()[-1])
+            self.assertEqual(js_out["rank"], lora_py.rank)
+            for l_idx in target_layers:
+                A_py, B_py = lora_py.layers[l_idx]
+                A_js = js_out["layers"][str(l_idx)]["a"]
+                B_js = js_out["layers"][str(l_idx)]["b"]
+                max_a = max(abs(x - y) for x, y in zip(A_py.reshape(-1).tolist(), A_js))
+                max_b = max(abs(x - y) for x, y in zip(B_py.reshape(-1).tolist(), B_js))
+                self.assertLess(max_a, 1e-5)
+                self.assertLess(max_b, 1e-5)
+
+            self.assertEqual(knn_py[0][0].tolist(), js_out["knn"]["u"])
+            max_knn = max(abs(x - y) for x, y in zip(knn_py[0][1].tolist(), js_out["knn"]["dv"]))
+            self.assertLess(max_knn, 1e-5)
 
 
 if __name__ == "__main__":

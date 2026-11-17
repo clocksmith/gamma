@@ -13,12 +13,13 @@ Provide an explicit, opt-in prompt-conditioned fast-weight session (`FastWeightS
 
 ## Scope
 
-- Single-prefill associative key verification, dynamic multi-hop decode-step resolution, and leave-one-out calibrated SwiGLU rule kernels from `(prompt_ids, embed_tokens, h_last, lm_head)`.
+- Single-prefill associative key verification, dynamic multi-hop decode-step resolution, and leave-one-out calibrated SwiGLU rule kernels from `(prompt_ids, embed_tokens, h_last, lm_head)`, with string/boundary heuristics explicitly gatable (`enable_string_heuristics`).
+- Forward-only closed-form reversible per-layer MLP `down_proj` LoRA compilation (`compile_closed_form_layer_lora` / `compileClosedFormLayerLoRA`, `W_l(alpha) = W_l + alpha * B_l A_l`) and continuous-cache kNN output-logit baseline helpers across PyTorch and quantized Doppler WebGPU.
 
 ## Contracts
 
-- Input: Tokenized prompt with context boundary `c_len`, frozen embedding/unembedding matrices, and final hidden states.
-- Output: Step-indexed sparse vocabulary logit deltas `(token_ids, delta_logits)` and measured setup/memory telemetry.
+- Input: Tokenized prompt or support context, frozen embedding/unembedding/norm weights, and final hidden states or per-layer MLP `ffn_act` pre-activations.
+- Output: Step-indexed sparse vocabulary logit deltas `(token_ids, delta_logits)` or reversible per-layer `down_proj` low-rank weight factors `(A_l, B_l)` controlled by scalar `alpha >= 0`, plus measured setup/memory telemetry.
 
 ## Invariants
 
