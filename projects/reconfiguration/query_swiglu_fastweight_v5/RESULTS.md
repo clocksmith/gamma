@@ -60,3 +60,28 @@ final; it was never tuned on them.
   freed context.
 - Seeds 1001 and 1002 were looked at while the selected adapter was being changed. The fixed
   adapter's code did not change between any of the runs.
+
+## Runs with same-prompt baselines (2026-11-18, fresh seeds, fixed adapter compiled alone)
+
+64 questions per run. Arms with the table present unless marked.
+
+| Model | Examples per group | Seed | Base | Fixed adapter | Nearest-neighbour cache | Context-aware decoding | Fixed adapter, table removed |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Qwen3.5-0.8B | 3 | 1005 | 37 | 41 | 43 | 38 | 34 |
+| Qwen3.5-2B | 3 | 1005 | 46 | 47 | 46 | 44 | 40 |
+| Qwen3.5-0.8B | 20 | 1006 | 59 | 62 | 59 | 57 | 55 |
+| Total | | | 142 | 150 | 148 | 139 | 129 |
+
+- With the table present the fixed adapter is ahead of the base model in all three runs, by 1 to 4
+  questions; no run is significant, and a nearest-neighbour cache over the table's own answers is
+  about level with it (148 against 150). On this evidence the adapter has no clear examples-present
+  advantage over that cache.
+- With the table removed the fixed adapter trails the base model with the table in all three of
+  these runs (129 against 142), which is weaker than the earlier seven runs (331 against 312).
+- Compiling the fixed adapter alone took 2.1 to 2.6 s per 12-line table on Qwen3.5-0.8B.
+
+## State at handoff (2026-11-18 08:00 EST)
+
+Nothing is locked. `protocol_v5_draft.json` awaits an independent review and the owner's pin of an
+unseen model. Not built: the cached-prompt comparison. The owner's priority is A1 to A3; B1 uses
+the Mac GPU only when no A lane needs it.
