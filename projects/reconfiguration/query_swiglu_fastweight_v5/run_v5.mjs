@@ -1,12 +1,16 @@
 // B1 v5 development runner on Doppler WebGPU (Q4K). Development only: results are exploratory until a
 // protocol is locked. The `confirm` split is refused unless B1_ALLOW_CONFIRM names a locked protocol hash.
 //
-// For each support table it compiles the v5 adapter (fastweight_v5.mjs) and decodes every query six ways:
-//   base_bare   base model, table removed            (floor)
-//   base_ctx    base model, table in the prompt      (the opponent: accuracy with examples present)
-//   v5_bare     v5 adapter, table removed            (the claim)
-//   v5_ctx      v5 adapter, table in the prompt      (must not hurt)
-//   top2_bare / top2_ctx   same fit forced to v4's choices (top two layers, fixed ridge 0.15), an ablation
+// For each support table it compiles the fixed adapter (top two layers, ridge 0.15) and decodes every query:
+//   base_bare   base model, table removed                      (floor)
+//   base_ctx    base model, table in the prompt                (accuracy with examples present)
+//   top2_bare   fixed adapter, table removed                   (reported separately)
+//   top2_ctx    fixed adapter, table in the prompt             (the primary comparison against base_ctx)
+//   knn_ctx     base model + nearest-neighbour cache over the table's own answers (Grave et al. 2017)
+//   cad_ctx     base model + context-aware decoding, two passes per token (Shi et al. 2024)
+// With B1_WITH_SELECTED=1 it also compiles the per-table selected adapter (v5_bare, v5_ctx), which
+// development showed to be worse; that mode captures many more layers, so its compile times are not
+// the fixed adapter's.
 //
 // Usage: B1_RESOURCE_CHECK="..." node run_v5.mjs DOPPLER_ROOT MODEL_DIR OUT_JSON SPLIT SEED SPECIALTIES SHOTS QUERIES
 import assert from 'node:assert/strict';
@@ -110,8 +114,10 @@ const nlId = encodeRaw('\n').at(-1);
 const stopTokens = new Set([nlId]);
 if (pipeline.tokenizer.eosTokenId != null) stopTokens.add(pipeline.tokenizer.eosTokenId);
 
+const withSelected = process.env.B1_WITH_SELECTED === '1';
+const top2Layers = [numLayers - 2, numLayers - 1];
 const firstCandidate = Math.floor(numLayers / 3);
-const candidateLayers = Array.from({ length: numLayers - firstCandidate }, (_, i) => firstCandidate + i);
+const candidateLayers = withSelected ? Array.from({ length: numLayers - firstCandidate }, (_, i) => firstCandidate + i) : top2Layers;
 const MAX_CAT_TOKENS = 1500;
 
 async function readNormWeightF32(weightObj, len, addOneOffset) {
@@ -442,18 +448,6 @@ async function compileSpecialty(task) {
   }
   const cat = await capturePass(supportIds.slice(0, catEnd), candidateLayers, catWant, []);
 
-  // Which layer, and how much ridge? Ask the table itself, leaving one example out at a time.
-  const probes = new Map();
-  for (const l of candidateLayers) {
-    const anchorRows = iso.map(e => e.cap.rowsByLayer.get(l).get(e.relAnchor));
-    const bgAll = iso.flatMap(e => e.bgPos.map(p => e.cap.rowsByLayer.get(l).get(p)));
-    const bgRows = spread(0, bgAll.length - 1, 2 * anchorRows.length).map(i => bgAll[i]);
-    probes.set(l, leaveOneOutProbe({ anchorRows, labels, bgRows, nClasses: spans.length, dInter }));
-  }
-  const pick = chooseLayer(probes, anc.length);
-  const chance = 1 / spans.length;
-  const abstain = pick.bestAccuracy <= chance + 0.15;
-
   const hRms = iso.map(e => {
     const h = e.cap.hRows.get(e.relAnchor);
     let sq = 0;
@@ -490,43 +484,183 @@ async function compileSpecialty(task) {
   const vocab = [...new Set([...targetToks, ...bareDefault])].sort((x, y) => x - y);
   const lmRows = await readMatrixRowsF32(lmHeadRaw, vocab, dHidden);
   const common = { dHidden, dInter, nlId, bareDefaultToks: [...bareDefault], getLmRow: t => lmRows.get(t), finalNormG };
-
   const BASE_WRITE = 0.30;
-  const spec = fitLayer({ layer: pick.layer, ...rowsFor(pick.layer), ...common, ratio: pick.ratio, writeRms: BASE_WRITE * medianHRms });
-  assert.ok(spec, 'v5 fit failed');
-  const v5 = await materializeGpuAdapter(`v5_${task.specialty_id}`, spec);
-  // Write strength: the smallest of three that makes the adapter name the table's own lines with the table removed.
-  let scaleMult = 1;
-  let trainHit = 0;
-  const tried = [];
-  for (const m of [1, 2, 4]) {
-    setAdapterScale(v5.adapter, m);
-    const h = await firstTokenHits(v5.adapter, iso);
-    tried.push({ mult: m, hit: h });
-    if (h > trainHit + 1e-9) { trainHit = h; scaleMult = m; }
-    if (h >= 0.9) break;
-  }
-  setAdapterScale(v5.adapter, scaleMult);
 
-  // Ablation: the same fit forced to v4's choices (top two layers fitted independently, ridge fixed at 0.15).
-  const top2Layers = [numLayers - 2, numLayers - 1];
+  // The fixed adapter: top two layers fitted independently, ridge 0.15, half the write strength each.
   const parts = top2Layers.map(l => fitLayer({ layer: l, ...rowsFor(l), ...common, ratio: 0.15, writeRms: (BASE_WRITE / 2) * medianHRms }));
+  assert.ok(parts[0] && parts[1], 'fixed fit failed');
   const top2Spec = { ...parts[0], targetLayers: top2Layers, layers: new Map([...parts[0].layers, ...parts[1].layers]) };
   const top2 = await materializeGpuAdapter(`top2_${task.specialty_id}`, top2Spec);
   setAdapterScale(top2.adapter, 1);
+  const fixedCompileMs = performance.now() - t0;
 
-  const looByLayer = {};
-  for (const [l, res] of probes) looByLayer[l] = Math.max(...res.map(r => r.accuracy));
-  return {
-    v5: v5.adapter, top2: top2.adapter, abstain, gpuBuffers: [...v5.gpuBuffers, ...top2.gpuBuffers],
-    diag: {
-      specialty_id: task.specialty_id, examples: anc.length, classes: spans.length, table_tokens: supportIds.length,
-      table_lines_in_context_capture: catCount, layer: pick.layer, ridge_ratio: pick.ratio,
-      loo_accuracy: pick.accuracy, loo_best_accuracy: pick.bestAccuracy, loo_margin: pick.margin, loo_by_layer: looByLayer,
-      abstain, write_scale: BASE_WRITE * scaleMult, write_calibration: tried, train_first_token_hit: trainHit,
-      rank: spec.rank, adapter_bytes: spec.logicalBytes, compile_ms: performance.now() - t0,
-    },
+  const diag = {
+    specialty_id: task.specialty_id, examples: anc.length, classes: spans.length, table_tokens: supportIds.length,
+    table_lines_in_context_capture: catCount, fixed_layers: top2Layers, fixed_rank: parts[0].rank,
+    fixed_adapter_bytes: parts[0].logicalBytes + parts[1].logicalBytes,
+    fixed_compile_ms: withSelected ? null : fixedCompileMs, forward_passes: anc.length + 1,
   };
+  const gpuBuffers = [...top2.gpuBuffers];
+  let v5 = null;
+  let abstain = false;
+  if (withSelected) {
+    // Which layer, and how much ridge? Ask the table itself, leaving one example out at a time.
+    const probes = new Map();
+    for (const l of candidateLayers) {
+      const anchorRows = iso.map(e => e.cap.rowsByLayer.get(l).get(e.relAnchor));
+      const bgAll = iso.flatMap(e => e.bgPos.map(p => e.cap.rowsByLayer.get(l).get(p)));
+      const bgRows = spread(0, bgAll.length - 1, 2 * anchorRows.length).map(i => bgAll[i]);
+      probes.set(l, leaveOneOutProbe({ anchorRows, labels, bgRows, nClasses: spans.length, dInter }));
+    }
+    const pick = chooseLayer(probes, anc.length);
+    abstain = pick.bestAccuracy <= 1 / spans.length + 0.15;
+    const spec = fitLayer({ layer: pick.layer, ...rowsFor(pick.layer), ...common, ratio: pick.ratio, writeRms: BASE_WRITE * medianHRms });
+    assert.ok(spec, 'selected fit failed');
+    const mat = await materializeGpuAdapter(`v5_${task.specialty_id}`, spec);
+    let scaleMult = 1;
+    let trainHit = 0;
+    const tried = [];
+    for (const m of [1, 2, 4]) {
+      setAdapterScale(mat.adapter, m);
+      const h = await firstTokenHits(mat.adapter, iso);
+      tried.push({ mult: m, hit: h });
+      if (h > trainHit + 1e-9) { trainHit = h; scaleMult = m; }
+      if (h >= 0.9) break;
+    }
+    setAdapterScale(mat.adapter, scaleMult);
+    v5 = mat.adapter;
+    gpuBuffers.push(...mat.gpuBuffers);
+    const looByLayer = {};
+    for (const [l, res] of probes) looByLayer[l] = Math.max(...res.map(r => r.accuracy));
+    Object.assign(diag, {
+      layer: pick.layer, ridge_ratio: pick.ratio, loo_accuracy: pick.accuracy, loo_best_accuracy: pick.bestAccuracy,
+      loo_margin: pick.margin, loo_by_layer: looByLayer, abstain, write_scale: BASE_WRITE * scaleMult,
+      write_calibration: tried, train_first_token_hit: trainHit, rank: spec.rank, adapter_bytes: spec.logicalBytes,
+      compile_ms: performance.now() - t0,
+    });
+  }
+  return { v5, top2: top2.adapter, abstain, gpuBuffers, sepTok, diag };
+}
+
+// Nearest-neighbour cache over the table's own answers (Grave et al. 2017), with v4's frozen temperature
+// and strength. Keys are the final hidden states at each table line's anchor; it biases the first token.
+async function greedyDecodeKnnCache(fullIds, sepTok, maxNewTokens) {
+  await device.queue.onSubmittedWorkDone();
+  const t0 = performance.now();
+  pipeline.setLoRAAdapter(null);
+  pipeline.resetGenerationState();
+  pipeline.generator._resetDecodeRuntimeState();
+  const opts = genRtMod.resolvePrefillOptions(genState, { inputIds: fullIds, useChatTemplate: false });
+  const prefill = await pipeline.generator._prefillToHidden(fullIds, opts);
+  if (prefill.currentRecorder) {
+    textSessMod.recordPrefillRecorderStats(genState, prefill.currentRecorder);
+    await prefill.currentRecorder.submitAndWait();
+    await prefill.recordProfile(prefill.currentRecorder);
+  } else await device.queue.onSubmittedWorkDone();
+  genState.currentSeqLen = prefill.startPos + prefill.numTokens;
+  let firstLogits;
+  try {
+    const hBpe = prefill.activationDtype === 'f16' ? 2 : 4;
+    const hBytes = await pool.readBuffer(prefill.currentHiddenBuffer, fullIds.length * dHidden * hBpe);
+    const h = prefill.activationDtype === 'f16' ? fp16.f16ToF32Array(new Uint16Array(hBytes, 0, fullIds.length * dHidden)) : new Float32Array(hBytes, 0, fullIds.length * dHidden);
+    const unit = p => {
+      const v = Float32Array.from(h.subarray(p * dHidden, (p + 1) * dHidden));
+      let sq = 0;
+      for (let j = 0; j < dHidden; j += 1) sq += v[j] * v[j];
+      const n = Math.sqrt(sq) + 1e-8;
+      for (let j = 0; j < dHidden; j += 1) v[j] /= n;
+      return v;
+    };
+    const anc = findAnchors(fullIds, nlId, sepTok);
+    const q = unit(fullIds.length - 1);
+    const sims = anc.map(a => { const k = unit(a.pos); let d = 0; for (let j = 0; j < dHidden; j += 1) d += k[j] * q[j]; return d / 0.08; });
+    const vals = anc.map(a => fullIds[a.pos + 1]);
+    const uniq = [...new Set(vals)];
+    const mx = Math.max(...sims);
+    const ex = sims.map(x => Math.exp(x - mx));
+    const tot = ex.reduce((x, y) => x + y, 0);
+    const rawLogits = await logitsMod.computeLogits(
+      prefill.currentHiddenBuffer, prefill.numTokens, logitsCfgMod.getLogitsWeights(genState), logitsCfgMod.getLogitsConfig(genState, 'prefill'),
+      genState.useGPU, genState.debugFlags, undefined, prefill.debugCheckBuffer,
+      genState.runtimeConfig.shared.debug.probes, { lastPositionOnly: true }, genState.operatorDiagnostics,
+    );
+    firstLogits = rawLogits.length === vocabSize ? Float32Array.from(rawLogits) : Float32Array.from(logitsMod.extractLastPositionLogits(rawLogits, prefill.numTokens, vocabSize));
+    for (const u of uniq) {
+      let p = 0;
+      for (let i = 0; i < vals.length; i += 1) if (vals[i] === u) p += ex[i] / tot;
+      firstLogits[u] += 8.0 * (p - 1 / uniq.length);
+    }
+  } finally { pool.releaseBuffer(prefill.currentHiddenBuffer); }
+  const gen = [argmaxLogits(firstLogits)];
+  if (!stopTokens.has(gen[0])) {
+    const cur = [...fullIds, gen[0]];
+    const snaps = [];
+    try {
+      while (gen.length < maxNewTokens && !stopTokens.has(gen.at(-1))) {
+        const st = await pipeline.decodeStepLogits(cur, { useChatTemplate: false });
+        snaps.push(st);
+        await device.queue.onSubmittedWorkDone();
+        const nid = argmaxLogits(st.logits);
+        gen.push(nid);
+        cur.push(nid);
+        if (pipeline.tokenizer.decode(gen).includes('\n')) break;
+      }
+    } finally {
+      for (const sn of snaps) { if (sn?.logitsBuffer) pool.releaseBuffer(sn.logitsBuffer); sn?.cache?.destroy(); }
+    }
+  }
+  await device.queue.onSubmittedWorkDone();
+  const text = stopTokens.has(gen[0]) ? '' : pipeline.tokenizer.decode(gen).trim().split('\n')[0].trim();
+  return { text, canonical: canonicalizeAnswer(text), totalMs: performance.now() - t0, generatedTokens: [...gen], truncated: false };
+}
+
+// Context-aware decoding (Shi et al. 2024): (1 + beta) * logits with the table - beta * logits without, beta 0.5.
+async function oneStepLogitsFresh(inputIds) {
+  pipeline.resetGenerationState();
+  pipeline.generator._resetDecodeRuntimeState();
+  const opts = genRtMod.resolvePrefillOptions(genState, { inputIds, useChatTemplate: false });
+  const prefill = await pipeline.generator._prefillToHidden(inputIds, opts);
+  if (prefill.currentRecorder) {
+    textSessMod.recordPrefillRecorderStats(genState, prefill.currentRecorder);
+    await prefill.currentRecorder.submitAndWait();
+    await prefill.recordProfile(prefill.currentRecorder);
+  } else await device.queue.onSubmittedWorkDone();
+  try {
+    const rawLogits = await logitsMod.computeLogits(
+      prefill.currentHiddenBuffer, prefill.numTokens, logitsCfgMod.getLogitsWeights(genState), logitsCfgMod.getLogitsConfig(genState, 'prefill'),
+      genState.useGPU, genState.debugFlags, undefined, prefill.debugCheckBuffer,
+      genState.runtimeConfig.shared.debug.probes, { lastPositionOnly: true }, genState.operatorDiagnostics,
+    );
+    return rawLogits.length === vocabSize ? Float32Array.from(rawLogits) : Float32Array.from(logitsMod.extractLastPositionLogits(rawLogits, prefill.numTokens, vocabSize));
+  } finally { pool.releaseBuffer(prefill.currentHiddenBuffer); }
+}
+
+async function greedyDecodeCad(fullIds, bareIds, maxNewTokens, beta = 0.5) {
+  await device.queue.onSubmittedWorkDone();
+  const t0 = performance.now();
+  pipeline.setLoRAAdapter(null);
+  const gen = [];
+  const curFull = [...fullIds];
+  const curBare = [...bareIds];
+  for (let step = 0; step < maxNewTokens; step += 1) {
+    const lCtx = await oneStepLogitsFresh(curFull);
+    const lBare = await oneStepLogitsFresh(curBare);
+    let bestId = 0;
+    let bestVal = -Infinity;
+    for (let v = 0; v < vocabSize; v += 1) {
+      const val = (1 + beta) * lCtx[v] - beta * lBare[v];
+      if (val > bestVal) { bestVal = val; bestId = v; }
+    }
+    gen.push(bestId);
+    if (stopTokens.has(bestId)) break;
+    curFull.push(bestId);
+    curBare.push(bestId);
+    if (pipeline.tokenizer.decode(gen).includes('\n')) break;
+  }
+  await device.queue.onSubmittedWorkDone();
+  const ids = stopTokens.has(gen[0]) ? [] : (stopTokens.has(gen.at(-1)) ? gen.slice(0, -1) : gen);
+  const text = ids.length ? pipeline.tokenizer.decode(ids).trim().split('\n')[0].trim() : '';
+  return { text, canonical: canonicalizeAnswer(text), totalMs: performance.now() - t0, generatedTokens: [...gen], truncated: false };
 }
 
 const bySpecialty = new Map();
@@ -534,7 +668,7 @@ for (const t of tasks) {
   if (bySpecialty.has(t.specialty_id)) continue;
   const c = await compileSpecialty(t);
   bySpecialty.set(t.specialty_id, c);
-  console.log(`[${modelId}] ${t.specialty_id}: layer ${c.diag.layer}, ridge ${c.diag.ridge_ratio}, leave-one-out ${c.diag.loo_accuracy.toFixed(2)}, write ${c.diag.write_scale}, train hit ${c.diag.train_first_token_hit.toFixed(2)}, abstain ${c.abstain}, ${c.diag.compile_ms.toFixed(0)} ms`);
+  console.log(`[${modelId}] ${t.specialty_id}: fixed adapter ${c.diag.fixed_adapter_bytes} bytes${c.diag.fixed_compile_ms == null ? '' : `, compiled in ${c.diag.fixed_compile_ms.toFixed(0)} ms`}${withSelected ? `; selected layer ${c.diag.layer}, ridge ${c.diag.ridge_ratio}, leave-one-out ${c.diag.loo_accuracy.toFixed(2)}` : ''}`);
 }
 
 const rows = [];
@@ -542,31 +676,32 @@ for (const task of tasks) {
   const c = bySpecialty.get(task.specialty_id);
   const fullIds = encodeRaw(task.prompt);
   assert.ok(fullIds.length < 2000, `prompt of ${fullIds.length} tokens exceeds the context budget`);
-  const arms = [
-    ['base', null],
-    ['v5', c.abstain ? null : c.v5],
-    ['top2', c.top2],
-  ];
+  const arms = [['base', null], ['top2', c.top2]];
+  if (withSelected) arms.push(['v5', c.abstain ? null : c.v5]);
+  const bareIds = encodeRaw(task.bare_prompt);
+  const record = (arm, ids, r) => rows.push({
+    task_id: task.task_id, specialty_id: task.specialty_id, multi_token: task.multi_token, group: task.group,
+    arm, expected: task.expected, text: r.text, correct: r.canonical === canonicalizeAnswer(task.expected),
+    valid_code: task.codes.map(canonicalizeAnswer).includes(r.canonical), prompt_tokens: ids.length,
+    generated_tokens: r.generatedTokens, truncated: r.truncated, total_ms: r.totalMs,
+  });
   for (const [arm, adapter] of arms) {
-    for (const [regime, ids] of [['bare', encodeRaw(task.bare_prompt)], ['ctx', fullIds]]) {
+    for (const [regime, ids] of [['bare', bareIds], ['ctx', fullIds]]) {
       pipeline.setLoRAAdapter(adapter);
       const r = await greedyDecodeSinglePass(ids, Number(task.max_new_tokens), false);
       pipeline.setLoRAAdapter(null);
-      rows.push({
-        task_id: task.task_id, specialty_id: task.specialty_id, multi_token: task.multi_token, group: task.group,
-        arm: `${arm}_${regime}`, expected: task.expected, text: r.text, correct: r.canonical === canonicalizeAnswer(task.expected),
-        valid_code: task.codes.map(canonicalizeAnswer).includes(r.canonical), prompt_tokens: ids.length,
-        generated_tokens: r.generatedTokens, truncated: r.truncated, total_ms: r.totalMs,
-      });
+      record(`${arm}_${regime}`, ids, r);
     }
   }
+  record('knn_ctx', fullIds, await greedyDecodeKnnCache(fullIds, c.sepTok, Number(task.max_new_tokens)));
+  record('cad_ctx', fullIds, await greedyDecodeCad(fullIds, bareIds, Number(task.max_new_tokens)));
   if ((task.task_id + 1) % 8 === 0) console.log('progress', task.task_id + 1, tasks.length);
 }
 
 const receipt = {
   scope: split === 'dev' ? 'development only, exploratory' : 'confirmation', split, seed, specialties: nSpecialties, shots_per_group: shots,
   queries_per_group: queries, task_count: tasks.length, model: modelId, num_layers: numLayers, hidden_size: dHidden,
-  intermediate_size: dInter, candidate_layers: candidateLayers, resource_check: process.env.B1_RESOURCE_CHECK,
+  intermediate_size: dInter, with_selected_adapter: withSelected, captured_layers: candidateLayers, resource_check: process.env.B1_RESOURCE_CHECK,
   confirm_protocol: process.env.B1_ALLOW_CONFIRM ?? null,
   source_sha256: {
     runner: sha256Hex(await readFile(fileURLToPath(import.meta.url))), compiler: sha256Hex(await readFile(join(here, 'fastweight_v5.mjs'))),
