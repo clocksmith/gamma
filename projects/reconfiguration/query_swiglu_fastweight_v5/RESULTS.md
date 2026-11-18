@@ -80,6 +80,35 @@ final; it was never tuned on them.
   these runs (129 against 142), which is weaker than the earlier seven runs (331 against 312).
 - Compiling the fixed adapter alone took 2.1 to 2.6 s per 12-line table on Qwen3.5-0.8B.
 
+## Table-level reanalysis by the new B1 owner (2026-11-18, no new run)
+
+`power_v5.py` over all ten development receipts. The unit is the support table and the number is the
+difference in accuracy between two arms on that table.
+
+| Comparison | Tables | Mean difference | Better / worse / equal | Sign-flip p |
+|---|---:|---:|---:|---:|
+| Fixed adapter against base, table present | 64 | +6.3 points | 35 / 9 / 20 | 0.007 |
+| Fixed adapter against nearest-neighbour cache, table present | 20 | +0.3 points | 5 / 4 / 11 | 1.0 |
+| Nearest-neighbour cache against base, table present | 20 | +3.8 points | 10 / 2 / 8 | 0.29 |
+| Fixed adapter, table removed, against base with the table | 64 | +1.2 points | 26 / 22 / 16 | 0.68 |
+
+- With the table present the adapter is ahead of the base model at the table level. That is development
+  data: some seeds were seen while code changed, and the three runs made afterwards show +4.1 points over
+  20 tables (p 0.45).
+- It is not ahead of the nearest-neighbour cache. Both are a vote from the table's own examples added at
+  the output, so there is no mechanism by which the adapter should beat the cache with the table present,
+  and the data shows none. An examples-present claim of "better than a cache" is not supported.
+- With the table removed the adapter is level with the base model that has the table over all runs, and
+  6.9 points behind in the three later runs. "Not worse" is unproven; the draft now requires a
+  non-inferiority test for it.
+- Power: at the development effect, 48 tables per model pass the primary gate about 68% of the time and
+  96 tables about 91%. The draft protocol now asks for 96.
+
+What the adapter can offer that a cache over the prompt cannot is the table removed: 110 to 200 KB in
+place of the table's tokens, and no limit from the context window. The claim with a mechanism behind it is
+therefore "table removed, not worse than the base model reading the table", tested against a cached prompt
+on size and time, and "more examples than fit in the prompt", which no arm here tests yet.
+
 ## State at handoff (2026-11-18 08:00 EST)
 
 Nothing is locked. `protocol_v5_draft.json` awaits an independent review and the owner's pin of an
