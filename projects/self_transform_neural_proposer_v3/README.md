@@ -8,6 +8,22 @@ Charter: [CATSCAN.md](CATSCAN.md) | Core Protocol Lock (`Commit 1`: `72ac6685b`)
 > 1. **Gate 1 (`exact` vs `fixed_proposer` — *"Meta-training improves a rule"*)**: Meta-training significantly improves the `1,688`-parameter proposer `M_Phi_v3` from `Gen 0` to `Gen 4` across **`12/12` independent seeds** on normalized loss (`0.6092 -> 0.5902`, `t = -8.80`, `p = 2.62e-6`, exact Wilcoxon `p = 0.000488`), classification accuracy (`38.71% -> 43.43%`, `t = +18.60`, `p = 1.16e-9`), and real pretrained `Qwen/Qwen3.5-0.8B` SwiGLU LoRA prompt-removed accuracy (`40.82% -> 48.59%`, `t = +10.12`, `p = 6.57e-7`). However, **recursive self-application (`exact_gen4`, `M_{Phi_g}` modifying `Phi_g`) shows no statistically significant gain over `fixed_proposer_gen4` (`M_{Phi_0}` modifying `Phi_g`)** (`0.5902` vs `0.5912` norm loss, `t = -0.46`, `p = 0.6566`; `43.43%` vs `43.63%` cls acc, `t = -0.58`, `p = 0.5716`; `48.59%` vs `48.73%` real `Qwen3.5-0.8B` acc, `t = -0.27`, `p = 0.7918`).
 > 2. **Gate 2 (`exact` vs Six Matched-Budget Baselines — Preconditioning Drives the Gain, Not `Phi`)**: On the real pretrained `Qwen/Qwen3.5-0.8B` Layer-23 SwiGLU LoRA target (`B = 10` support steps, prompt removed at query time), `exact_gen4` (`48.59%`) beats `sgd_nesterov` (`20.73%`, `12/0`, `p = 1.33e-12`), `damped_lbfgs` (`32.91%`, `12/0`, `p = 1.41e-6`), and `constant_step_rule` (`40.76%`, `11/1`, `p = 0.0041`), and leads `adamw_cosine` (`46.91%`, `8/4`, `p = 0.1027`) and `zero_head_adam` (`46.55%`, `8/4`, `p = 0.0742`) without `gamma_head`. Crucially, **`kfac_no_proposer` (`51.25%` real Qwen acc, `45.77%` cls acc, `0.5543` norm loss)—which uses the identical 5-basis Woodbury K-FAC + Newton-Schulz + Adam preconditioning with calibrated scalar weights and *no* neural proposer network—beats `exact_gen4` on `12/12` seeds (`p = 0.00041`)**, isolating the empirical capability to the preconditioned curvature basis rather than the learned `1,688`-parameter gate network.
 
+## Post-Seal Review Note (2026-11-17, not part of the pre-registered analysis)
+
+Two limits on what this study shows, both checked against the code and the receipt:
+
+- `real_qwen35_swiglu_lora_cls` is not an edit of the running model. `tasks_b2_v3.py` averages
+  the token embeddings of each sentence into one vector, normalises it, and passes it through
+  the layer-23 MLP alone, with a readout over six codeword tokens. No attention layer and no
+  full forward pass is involved. The weights are real; the model is not being run.
+- On that family the recursive proposer at generation 4 scores `48.59%` against `48.73%` for
+  the fixed proposer (5 wins, 7 losses over 12 lineages, paired `t` `p = 0.79`), and `51.25%`
+  for `kfac_no_proposer` (0 wins, 12 losses, `p = 0.0004`).
+
+The experiment is finished; the goal of hereditary self-improvement is not met. A successor
+needs a mechanism for why self-application should help, and a target evaluated through the
+full model.
+
 ## Literature Positioning
 
 Learned optimizers training themselves and self-modifying update rules are established results in prior literature:

@@ -63,6 +63,12 @@ Exact two-sided McNemar on the 24 paired tasks, Qwen3.5-0.8B, changed anchor rul
   support present its stop signal fires before the first token on every one-word task; with
   the stop signal zeroed and the adapter limited to the top two layers it matches the base
   model (16 against 14) and does not beat it.
+- The 24 tasks hold only 8 distinct query phrases and 16 distinct question-and-answer pairs.
+  Counted by pair, the changed adapter is fully right on 13 of 16 with the support removed and
+  14 of 16 with it present (base model 10 of 16). Guessing one of the four valid codes would
+  score about 4 of 16.
+- Gemma-3-270M-IT's support-removed outputs are not codes at all (`institut`, `-1-1-1-1`,
+  `cotton`). The cause is not isolated.
 - The tasks are easier than v4's (four codes, each shown three times) and were written after v4
   was unsealed. The anchor rule was chosen after seeing v4's failure. A fresh locked study is
   needed before any of this is a result.
@@ -107,3 +113,7 @@ between the two runs of each model.
 4. Keep v4's tests and controls: per-model exact McNemar, support-removed against four
    controls, support-present against the base model, the nearest-neighbour cache and
    context-aware decoding.
+5. Add a guess-a-valid-code control to the support-removed test (v4 had none; see the
+   post-seal note in the v4 README), and count distinct questions, not repeated ones.
+6. Make support-present accuracy at matched compute the main gate. Support-removed retention
+   is reported beside it.

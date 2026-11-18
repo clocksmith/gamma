@@ -15,6 +15,26 @@ Charter: [CATSCAN.md](CATSCAN.md) | Core Protocol Lock (`Commit 1`: `a2d9988e8`)
 >    - On both quantized `Q4_K_M` models (`192/192` total task rows), `zero_lora_no_prompt` (`scale = 0.0`) and `reverted_after_hotswap_no_prompt` (after `Specialty A -> Specialty B -> detach`) achieve **`max_abs_logit_diff = 0.0`** bit-for-bit against unmodified `base_no_prompt`.
 >    - Post-hoc diagnostic split on `Qwen3.5-0.8B` (explanatory, not a primary gate): all `23` Regime A wins (`23/64 = 35.9%` vs `0/64`) and all `30` Regime B hits (`30/64 = 46.9%` vs `22/64 = 34.4%` `base_in_context`, `25/64` `knn`, `23/64` `CAD`) occur on the **four single-token code domains**, whereas on the **two multi-token code domains (`32` tasks: `red-1`, `north/1`)**, static position-blind `down_proj` LoRA collapses to **`0/32`** (`""` on `32/32` rows in both regimes). A likely cause, not tested by this study, is that a single static `(A_l, B_l)` cannot separate step-0 target emission from step-1+ stop/continuation dynamics. The single-token/multi-token split was chosen after seeing the results.
 
+## Post-Seal Review Note (2026-11-17, not part of the pre-registered analysis)
+
+The Qwen3.5-0.8B Regime A pass is weaker than the `p = 2.38e-7` above suggests. Read it as
+"the adapter emits codes from the removed table", not as "the adapter answers the query".
+
+- None of the four pre-registered controls can emit a valid code: the base, zero and random
+  arms never do, and the wrong-specialty adapter emits the other specialty's codes, which are
+  disjoint by construction. All four score `0/96` for that reason.
+- Each specialty has four codes and each code is the answer to two of its eight queries, so
+  emitting any one code every time scores `2/8`, or `16/64` on the four single-token domains.
+- The adapter scores `23/64` there, and all `64` of its outputs are valid codes. In five of
+  the eight specialties one code makes up at least six of the eight outputs (one specialty
+  emits `cedar` eight times). Against a guess-a-valid-code rate of `0.25`, `23/64` has a
+  one-sided binomial `p` of about `0.034`.
+- A guess-a-valid-code control was not pre-registered. Any successor study must include one.
+
+The `0/32` on the two multi-token domains has a specific cause, found afterwards and recorded
+in [`../query_swiglu_fastweight_v5_dev/README.md`](../query_swiglu_fastweight_v5_dev/README.md):
+the compiler anchors on the internal `-` or `/` of those answers instead of `=>`.
+
 ## Literature Positioning
 
 `v4` makes no claim of inventing continuous caches, test-time logit adjustment, or closed-form fast weights. It evaluates a specific engineering variant—forward-only ridge-compiled MLP `down_proj` LoRA (`W_l(alpha) = W_l + alpha * B_l A_l`) over quantized `Q4_K_M` WebGPU weights—against established prior mechanisms:
