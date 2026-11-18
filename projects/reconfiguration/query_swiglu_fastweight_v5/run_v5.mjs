@@ -8,6 +8,9 @@
 //   top2_ctx    fixed adapter, table in the prompt             (the primary comparison against base_ctx)
 //   knn_ctx     base model + nearest-neighbour cache over the table's own answers (Grave et al. 2017)
 //   cad_ctx     base model + context-aware decoding, two passes per token (Shi et al. 2024)
+// With B1_WITH_SHUFFLED=1 it also compiles the fixed adapter from the same table with every answer code replaced
+// by the next code in the table's list (shuf_bare, shuf_ctx). That adapter is taught a consistent wrong mapping:
+// if it helps as much as the real one with the table present, the gain is not information from the table.
 // With B1_WITH_SELECTED=1 it also compiles the per-table selected adapter (v5_bare, v5_ctx), which
 // development showed to be worse; that mode captures many more layers, so its compile times are not
 // the fixed adapter's.
@@ -115,6 +118,27 @@ const stopTokens = new Set([nlId]);
 if (pipeline.tokenizer.eosTokenId != null) stopTokens.add(pipeline.tokenizer.eosTokenId);
 
 const withSelected = process.env.B1_WITH_SELECTED === '1';
+const withShuffled = process.env.B1_WITH_SHUFFLED === '1';
+
+// The code the shuffled-label control teaches for a group whose true code is `code`: the next one in the list.
+function shuffledCode(task, code) {
+  const at = task.codes.indexOf(code);
+  assert.ok(at >= 0 && task.codes.length >= 2, `code ${code} is not in the table's code list`);
+  return task.codes[(at + 1) % task.codes.length];
+}
+
+// The support table with every answer replaced by its shuffled code. Questions and line order are unchanged.
+function shuffledSupportText(task) {
+  let changed = 0;
+  const lines = task.support_text.split('\n').map(line => {
+    const at = line.lastIndexOf(' => ');
+    if (at < 0 || !task.codes.includes(line.slice(at + 4))) return line;
+    changed += 1;
+    return line.slice(0, at + 4) + shuffledCode(task, line.slice(at + 4));
+  });
+  assert.ok(changed >= 8, `shuffled-label control changed only ${changed} support lines`);
+  return lines.join('\n');
+}
 const top2Layers = [numLayers - 2, numLayers - 1];
 const firstCandidate = Math.floor(numLayers / 3);
 const candidateLayers = withSelected ? Array.from({ length: numLayers - firstCandidate }, (_, i) => firstCandidate + i) : top2Layers;
@@ -667,6 +691,12 @@ const bySpecialty = new Map();
 for (const t of tasks) {
   if (bySpecialty.has(t.specialty_id)) continue;
   const c = await compileSpecialty(t);
+  if (withShuffled) {
+    const shuffled = await compileSpecialty({ ...t, specialty_id: `${t.specialty_id}__shuffled`, support_text: shuffledSupportText(t) });
+    c.shuf = shuffled.top2;
+    c.diag.shuffled_compile_ms = shuffled.diag.fixed_compile_ms;
+    assert.equal(shuffled.diag.examples, c.diag.examples, 'shuffled table must keep every support line');
+  }
   bySpecialty.set(t.specialty_id, c);
   console.log(`[${modelId}] ${t.specialty_id}: fixed adapter ${c.diag.fixed_adapter_bytes} bytes${c.diag.fixed_compile_ms == null ? '' : `, compiled in ${c.diag.fixed_compile_ms.toFixed(0)} ms`}${withSelected ? `; selected layer ${c.diag.layer}, ridge ${c.diag.ridge_ratio}, leave-one-out ${c.diag.loo_accuracy.toFixed(2)}` : ''}`);
 }
@@ -678,12 +708,16 @@ for (const task of tasks) {
   assert.ok(fullIds.length < 2000, `prompt of ${fullIds.length} tokens exceeds the context budget`);
   const arms = [['base', null], ['top2', c.top2]];
   if (withSelected) arms.push(['v5', c.abstain ? null : c.v5]);
+  if (withShuffled) arms.push(['shuf', c.shuf]);
+  const taught = withShuffled ? canonicalizeAnswer(shuffledCode(task, task.expected)) : null;
   const bareIds = encodeRaw(task.bare_prompt);
   const record = (arm, ids, r) => rows.push({
     task_id: task.task_id, specialty_id: task.specialty_id, multi_token: task.multi_token, group: task.group,
     arm, expected: task.expected, text: r.text, correct: r.canonical === canonicalizeAnswer(task.expected),
     valid_code: task.codes.map(canonicalizeAnswer).includes(r.canonical), prompt_tokens: ids.length,
     generated_tokens: r.generatedTokens, truncated: r.truncated, total_ms: r.totalMs,
+    // For the shuffled-label arms: did the answer match the wrong code that adapter was taught?
+    ...(arm.startsWith('shuf_') ? { matches_shuffled_code: r.canonical === taught } : {}),
   });
   for (const [arm, adapter] of arms) {
     for (const [regime, ids] of [['bare', bareIds], ['ctx', fullIds]]) {
@@ -701,7 +735,7 @@ for (const task of tasks) {
 const receipt = {
   scope: split === 'dev' ? 'development only, exploratory' : 'confirmation', split, seed, specialties: nSpecialties, shots_per_group: shots,
   queries_per_group: queries, task_count: tasks.length, model: modelId, num_layers: numLayers, hidden_size: dHidden,
-  intermediate_size: dInter, with_selected_adapter: withSelected, captured_layers: candidateLayers, resource_check: process.env.B1_RESOURCE_CHECK,
+  intermediate_size: dInter, with_selected_adapter: withSelected, with_shuffled_adapter: withShuffled, captured_layers: candidateLayers, resource_check: process.env.B1_RESOURCE_CHECK,
   confirm_protocol: process.env.B1_ALLOW_CONFIRM ?? null,
   source_sha256: {
     runner: sha256Hex(await readFile(fileURLToPath(import.meta.url))), compiler: sha256Hex(await readFile(join(here, 'fastweight_v5.mjs'))),

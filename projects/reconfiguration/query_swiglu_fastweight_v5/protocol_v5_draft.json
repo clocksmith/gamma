@@ -35,7 +35,9 @@
     "top2_ctx": "PRIMARY: fixed adapter, table in the prompt",
     "knn_ctx": "matched compute: base model plus a nearest-neighbour cache over the table's own answers (one pass)",
     "cad_ctx": "greater compute: base model with context-aware decoding (two passes per token)",
-    "top2_bare": "secondary: fixed adapter, table removed"
+    "top2_bare": "secondary: fixed adapter, table removed",
+    "shuf_ctx": "control: fixed adapter compiled from the same table with every answer code replaced by the next code in the table's list, table in the prompt (B1_WITH_SHUFFLED=1)",
+    "shuf_bare": "control: the same shuffled-label adapter, table removed; matches_shuffled_code records whether it answers with the wrong code it was taught"
   },
   "gates": {
     "PRIMARY_examples_present": {
@@ -51,7 +53,7 @@
     "guessing_control": {
       "comparison": "every arm's rate of valid codes; top2_bare accuracy against 0.25 (always emitting one of four valid codes), tested per table",
       "pass": "one-sided sign-flip test on per-table (accuracy minus 0.25), p < 0.01, for top2_bare; valid-code rates reported for all arms",
-      "shuffled_label_control": "REQUIRED BEFORE LOCK, NOT IMPLEMENTED: the fixed adapter compiled from the same table with the answer codes permuted across groups, run with the table present and removed. If it helps as much as the real adapter with the table present, the gain is not information from the table."
+      "shuffled_label_control": "REQUIRED AT LOCK, implemented in run_v5.mjs (B1_WITH_SHUFFLED=1) and not yet run on a GPU. Reported: shuf_ctx against base_ctx and top2_ctx against shuf_ctx, table-level. Fixed in advance: if shuf_ctx is not below top2_ctx (same test, p < 0.05), the write-up says the examples-present gain is not shown to be information from the table."
     },
     "do_no_harm": {
       "comparison": "top2_ctx against base_ctx",
@@ -107,7 +109,7 @@
       "cached-prompt arm marked required before lock"
     ],
     "open_before_lock": [
-      "implement and smoke-test the shuffled-label control and the cached-prompt arm (needs the Mac GPU; ask the A3 owner first)",
+      "smoke-test the shuffled-label control on a development seed and implement the cached-prompt arm with Doppler's prefillKVOnly and applyKVCacheSnapshot (both need the Mac GPU; ask the A3 owner first)",
       "owner pins the unseen model (decision 6)",
       "owner decides whether to keep the examples-present claim as primary, given that development shows no advantage over a nearest-neighbour cache; see RESULTS.md"
     ]
