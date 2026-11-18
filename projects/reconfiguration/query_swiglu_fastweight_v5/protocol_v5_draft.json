@@ -4,9 +4,9 @@
   "owner_direction": {
     "decision_5": "Draft and review B1 v5 before locking it. Make accuracy with examples present the primary gate, compare against matched compute, and include the valid-code guessing control.",
     "decision_6": "Pin the unseen Qwen checkpoint before downloading. Name the host, storage path, and exact revision. Reserve the model for confirmation.",
-    "open_question": "Decision 5 can be read two ways. Both are written below as gates A and B; the owner picks which is primary before the lock."
+    "reading_applied": "Accuracy with examples present is the primary gate: the adapter runs with the table in the prompt, against the base model with the same prompt and against same-prompt baselines of equal or greater compute. Prompt removal is kept as a separate reported result. (As restated in the owner's status summary of 2026-11-18.)"
   },
-  "claim": "A support table can be compiled, in closed form and with no gradient step, into one low-rank update on one MLP layer of a frozen model, such that the model with the table removed answers unseen questions as accurately as the unmodified model does with the table in its prompt, at lower time per question.",
+  "claim": "A support table can be compiled, in closed form and with no gradient step, into a low-rank update on the top two MLP layers of a frozen model such that, with the table still in the prompt, the model answers unseen questions more accurately than the unmodified model given the same prompt.",
   "tasks": {
     "generator": "tasks_v5.py, split 'confirm' (eight item groups never used in development)",
     "confirmation_seed": "to be drawn at lock time, >= 2000000",
@@ -14,51 +14,52 @@
       {
         "name": "few",
         "shots_per_group": 3,
-        "tables": 16,
+        "tables": 32,
         "queries_per_group": 2,
-        "tasks": 128
+        "tasks": 256
       },
       {
         "name": "many",
         "shots_per_group": 20,
-        "tables": 8,
+        "tables": 16,
         "queries_per_group": 4,
-        "tasks": 128
+        "tasks": 256
       }
     ],
     "half_of_tables_use_multi_token_codes": true,
-    "unit_of_analysis": "the question, paired across arms; per model and per setting, never pooled across models"
+    "unit_of_analysis": "the support table. Questions that share a table are not independent, so each table contributes one number per arm (its count of correct answers). Per model, never pooled across models."
   },
   "arms": {
     "base_bare": "base model, table removed",
-    "base_ctx": "base model, table in the prompt (accuracy with examples present)",
-    "top2_bare": "PRIMARY: fixed adapter, table removed",
-    "top2_ctx": "fixed adapter, table in the prompt",
-    "v5_bare, v5_ctx": "secondary: adapter with layer and ridge selected per table by leave-one-out"
+    "base_ctx": "base model, table in the prompt",
+    "top2_ctx": "PRIMARY: fixed adapter, table in the prompt",
+    "knn_ctx": "matched compute: base model plus a nearest-neighbour cache over the table's own answers (one pass)",
+    "cad_ctx": "greater compute: base model with context-aware decoding (two passes per token)",
+    "top2_bare": "secondary: fixed adapter, table removed"
   },
   "gates": {
-    "A_adapter_without_table_matches_base_with_table": {
-      "comparison": "top2_bare against base_ctx",
-      "pass": "top2_bare accuracy is at least base_ctx accuracy minus 5 points, and exact two-sided McNemar does not show top2_bare worse at 0.05",
-      "note": "This is the gate the mechanism is built for."
+    "PRIMARY_examples_present": {
+      "comparison": "top2_ctx against base_ctx, per model, over the tables of both settings",
+      "test": "exact two-sided sign-flip permutation test on the per-table difference in correct answers (table_level_v5.py)",
+      "pass": "top2_ctx is higher and p < 0.05"
     },
-    "B_adapter_with_table_beats_base_with_table": {
+    "matched_compute": {
+      "comparison": "top2_ctx against knn_ctx and against cad_ctx, same test",
+      "pass": "reported, with this rule fixed in advance: if top2_ctx does not beat knn_ctx, the write-up says the adapter has no examples-present advantage over a nearest-neighbour cache, whatever the primary gate shows",
+      "cost_accounting": "seconds per question for every arm from the same run; the adapter's compile time per table measured with only the fixed adapter compiled (fixed_compile_ms) and its forward-pass count; questions that share a table share one compile"
+    },
+    "guessing_control": {
+      "comparison": "every arm's rate of valid codes; top2_bare against a rate of 0.25 (one of four valid codes)",
+      "pass": "one-sided binomial p < 0.01 for top2_bare; valid-code rates reported for all arms"
+    },
+    "do_no_harm": {
       "comparison": "top2_ctx against base_ctx",
-      "pass": "top2_ctx accuracy is higher and exact two-sided McNemar p < 0.05",
-      "note": "Stricter. In development the fixed adapter with the table scored 343/448 against 312/448; one of seven runs reached p < 0.05."
+      "pass": "the table-level test does not show top2_ctx worse at 0.05"
     },
-    "C_above_guessing": {
-      "comparison": "top2_bare against a rate of 0.25 (one of four valid codes)",
-      "pass": "one-sided binomial p < 0.01, and the valid-code rate of every arm is reported"
-    },
-    "D_cost": {
-      "comparison": "mean time per question, top2_bare against base_ctx, same machine and run",
-      "pass": "top2_bare is faster; compile time per table and the number of questions needed to repay it are reported",
-      "matched_compute_note": "A cached copy of the prompt would give base_ctx accuracy at close to base_bare time. It is reported as the strongest conventional alternative; the adapter's case against it is size (hundreds of kilobytes) and freed context, not accuracy."
-    },
-    "E_do_no_harm": {
-      "comparison": "top2_ctx against base_ctx",
-      "pass": "exact two-sided McNemar does not show top2_ctx worse at 0.05"
+    "SECONDARY_prompt_removed": {
+      "comparison": "top2_bare against base_ctx, table-level",
+      "pass": "top2_bare is within 5 points of base_ctx and the test does not show it worse at 0.05; time per question reported",
+      "known_gap": "A cached copy of the prompt would give base_ctx accuracy at about base_bare time. That arm is not implemented (Doppler exposes prefix snapshots; the runner does not use them yet). Until it is, the timing advantage is against re-reading the prompt, and the adapter's case against a cache is size and freed context."
     }
   },
   "models": {
@@ -67,7 +68,10 @@
       "qwen-3-5-2b-q4k-ehaf16"
     ],
     "unseen_confirmation_model": {
-      "status": "not chosen; owner pins host, storage path and exact revision before any download",
+      "status": "NOT PINNED. Nothing is downloaded until the owner fills these in (decision 6).",
+      "host": null,
+      "storage_path": null,
+      "exact_revision": null,
       "constraint": "must add its MLP output straight to the residual stream; a Doppler Q4K build avoids porting the compiler to PyTorch"
     },
     "out_of_scope": "gemma-3-270m-it (post-feedforward norm); its v4 failure stands as reported"
@@ -77,9 +81,10 @@
     "run_v5.mjs",
     "tasks_v5.py",
     "tally_v5.py",
-    "fixed adapter: top two layers, ridge 0.15, write strength 0.15 of the median final hidden RMS per layer"
+    "table_level_v5.py",
+    "fixed adapter: top two layers, ridge 0.15, write strength 0.15 of the median final hidden RMS per layer; nearest-neighbour cache temperature 0.08 and strength 8.0; context-aware decoding beta 0.5; the selected adapter is not run"
   ],
   "procedure": "Two commits. Commit 1 locks this file with status LOCKED and the SHA-256 of the frozen files, before the confirmation seed is drawn. Commit 2 adds the receipts and the write-up. The confirmation runs once per model and setting.",
-  "primary_adapter": "fixed: top two layers, ridge 0.15 (the `top2_*` arms). Development showed the per-table selected adapter (`v5_*` arms) is worse; it is kept as a reported secondary arm.",
-  "development_evidence": "RESULTS.md: seven dev runs, 448 questions. Fixed adapter with the table removed 331, base model with the table 312."
+  "development_evidence": "RESULTS.md. Development runs are not confirmation; several seeds were looked at while the code changed.",
+  "secondary_result": "With the table removed, the adapted model is not less accurate than the unmodified model with the table present, at lower time per question."
 }
