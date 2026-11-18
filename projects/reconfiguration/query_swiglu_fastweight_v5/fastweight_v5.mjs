@@ -167,8 +167,11 @@ export function leaveOneOutProbe({ anchorRows, labels, bgRows, nClasses, dInter,
   return results;
 }
 
-// Pick the layer and ridge strength: best leave-one-out accuracy; among layers within one example of
-// the best, the latest layer (a write nearer the output is distorted less); then the larger margin.
+// Pick the layer and ridge strength: best leave-one-out accuracy; among choices within one example of
+// the best, the latest layer (a write nearer the output is distorted less), then the strongest ridge.
+// Leave-one-out accuracy on a dozen examples cannot separate near-ties, so ties go to the more
+// regularised fit. (The first development rule broke ties by margin, which favours the weakest ridge
+// and did worse than a fixed ridge on small tables.)
 export function chooseLayer(probesByLayer, nExamples) {
   let top = 0;
   for (const res of probesByLayer.values()) for (const r of res) if (r.accuracy > top) top = r.accuracy;
@@ -177,7 +180,7 @@ export function chooseLayer(probesByLayer, nExamples) {
   for (const [layer, res] of probesByLayer.entries()) {
     for (const r of res) {
       if (r.accuracy < top - tol) continue;
-      if (!pick || layer > pick.layer || (layer === pick.layer && r.margin > pick.margin)) pick = { layer, ...r };
+      if (!pick || layer > pick.layer || (layer === pick.layer && r.ratio > pick.ratio)) pick = { layer, ...r };
     }
   }
   return { ...pick, bestAccuracy: top };
