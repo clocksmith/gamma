@@ -30,10 +30,17 @@ v4 is sealed and negative. Reading its compiler found these defects; v5 fixes ea
 v4's test was also at the floor: with the table in its prompt the base model scored 22 of 64 on
 single-token answers where a constant guess scores 16. v5's tasks are ones the base model can do.
 
+## What development showed
+
+The first three rows of that table are what matter. The last four (choosing the layer and ridge
+per table, and the self-check) were tried and made things worse; the adapter that works is the
+fixed one on the top two layers. Details and numbers are in [RESULTS.md](RESULTS.md).
+
 ## Files
 
 - `fastweight_v5.mjs`: the compiler.
-- `run_v5.mjs`: the runner (six arms per question, per-table compile diagnostics).
+- `run_v5.mjs`: the runner. Its `top2_*` arms are the fixed adapter (the result); its `v5_*` arms are the
+  per-table selected adapter (worse).
 - `tasks_v5.py`: task generator with disjoint `dev` and `confirm` item groups.
 - `tally_v5.py`: counts and paired tests from a receipt.
 - `protocol_v5_draft.json`: the draft protocol, for review before any lock.

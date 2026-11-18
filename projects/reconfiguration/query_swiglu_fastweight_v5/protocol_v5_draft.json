@@ -11,8 +11,20 @@
     "generator": "tasks_v5.py, split 'confirm' (eight item groups never used in development)",
     "confirmation_seed": "to be drawn at lock time, >= 2000000",
     "settings": [
-      {"name": "few", "shots_per_group": 3, "tables": 16, "queries_per_group": 2, "tasks": 128},
-      {"name": "many", "shots_per_group": 20, "tables": 8, "queries_per_group": 4, "tasks": 128}
+      {
+        "name": "few",
+        "shots_per_group": 3,
+        "tables": 16,
+        "queries_per_group": 2,
+        "tasks": 128
+      },
+      {
+        "name": "many",
+        "shots_per_group": 20,
+        "tables": 8,
+        "queries_per_group": 4,
+        "tasks": 128
+      }
     ],
     "half_of_tables_use_multi_token_codes": true,
     "unit_of_analysis": "the question, paired across arms; per model and per setting, never pooled across models"
@@ -20,37 +32,40 @@
   "arms": {
     "base_bare": "base model, table removed",
     "base_ctx": "base model, table in the prompt (accuracy with examples present)",
-    "v5_bare": "v5 adapter, table removed",
-    "v5_ctx": "v5 adapter, table in the prompt",
-    "top2_bare, top2_ctx": "ablation: same fit forced to the top two layers with ridge 0.15"
+    "top2_bare": "PRIMARY: fixed adapter, table removed",
+    "top2_ctx": "fixed adapter, table in the prompt",
+    "v5_bare, v5_ctx": "secondary: adapter with layer and ridge selected per table by leave-one-out"
   },
   "gates": {
     "A_adapter_without_table_matches_base_with_table": {
-      "comparison": "v5_bare against base_ctx",
-      "pass": "v5_bare accuracy is at least base_ctx accuracy minus 5 points, and exact two-sided McNemar does not show v5_bare worse at 0.05",
+      "comparison": "top2_bare against base_ctx",
+      "pass": "top2_bare accuracy is at least base_ctx accuracy minus 5 points, and exact two-sided McNemar does not show top2_bare worse at 0.05",
       "note": "This is the gate the mechanism is built for."
     },
     "B_adapter_with_table_beats_base_with_table": {
-      "comparison": "v5_ctx against base_ctx",
-      "pass": "v5_ctx accuracy is higher and exact two-sided McNemar p < 0.05",
-      "note": "Stricter. Development runs suggest it is winnable, which the code reviews did not expect."
+      "comparison": "top2_ctx against base_ctx",
+      "pass": "top2_ctx accuracy is higher and exact two-sided McNemar p < 0.05",
+      "note": "Stricter. In development the fixed adapter with the table scored 343/448 against 312/448; one of seven runs reached p < 0.05."
     },
     "C_above_guessing": {
-      "comparison": "v5_bare against a rate of 0.25 (one of four valid codes)",
+      "comparison": "top2_bare against a rate of 0.25 (one of four valid codes)",
       "pass": "one-sided binomial p < 0.01, and the valid-code rate of every arm is reported"
     },
     "D_cost": {
-      "comparison": "mean time per question, v5_bare against base_ctx, same machine and run",
-      "pass": "v5_bare is faster; compile time per table and the number of questions needed to repay it are reported",
+      "comparison": "mean time per question, top2_bare against base_ctx, same machine and run",
+      "pass": "top2_bare is faster; compile time per table and the number of questions needed to repay it are reported",
       "matched_compute_note": "A cached copy of the prompt would give base_ctx accuracy at close to base_bare time. It is reported as the strongest conventional alternative; the adapter's case against it is size (hundreds of kilobytes) and freed context, not accuracy."
     },
     "E_do_no_harm": {
-      "comparison": "v5_ctx against base_ctx",
-      "pass": "exact two-sided McNemar does not show v5_ctx worse at 0.05"
+      "comparison": "top2_ctx against base_ctx",
+      "pass": "exact two-sided McNemar does not show top2_ctx worse at 0.05"
     }
   },
   "models": {
-    "seen_in_development": ["qwen-3-5-0-8b-q4k-ehaf16", "qwen-3-5-2b-q4k-ehaf16"],
+    "seen_in_development": [
+      "qwen-3-5-0-8b-q4k-ehaf16",
+      "qwen-3-5-2b-q4k-ehaf16"
+    ],
     "unseen_confirmation_model": {
       "status": "not chosen; owner pins host, storage path and exact revision before any download",
       "constraint": "must add its MLP output straight to the residual stream; a Doppler Q4K build avoids porting the compiler to PyTorch"
@@ -58,8 +73,13 @@
     "out_of_scope": "gemma-3-270m-it (post-feedforward norm); its v4 failure stands as reported"
   },
   "frozen_at_lock": [
-    "fastweight_v5.mjs", "run_v5.mjs", "tasks_v5.py", "tally_v5.py",
-    "candidate layers = top two thirds; ridge grid; write strengths 0.3, 0.6, 1.2; abstain when leave-one-out accuracy <= chance + 0.15"
+    "fastweight_v5.mjs",
+    "run_v5.mjs",
+    "tasks_v5.py",
+    "tally_v5.py",
+    "fixed adapter: top two layers, ridge 0.15, write strength 0.15 of the median final hidden RMS per layer"
   ],
-  "procedure": "Two commits. Commit 1 locks this file with status LOCKED and the SHA-256 of the frozen files, before the confirmation seed is drawn. Commit 2 adds the receipts and the write-up. The confirmation runs once per model and setting."
+  "procedure": "Two commits. Commit 1 locks this file with status LOCKED and the SHA-256 of the frozen files, before the confirmation seed is drawn. Commit 2 adds the receipts and the write-up. The confirmation runs once per model and setting.",
+  "primary_adapter": "fixed: top two layers, ridge 0.15 (the `top2_*` arms). Development showed the per-table selected adapter (`v5_*` arms) is worse; it is kept as a reported secondary arm.",
+  "development_evidence": "RESULTS.md: seven dev runs, 448 questions. Fixed adapter with the table removed 331, base model with the table 312."
 }
