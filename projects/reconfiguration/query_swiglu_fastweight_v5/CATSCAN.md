@@ -19,8 +19,9 @@ question.
 
 - A single-layer MLP `down_proj` update whose layer and ridge strength are chosen per table by
   leave-one-out accuracy on that table.
-- Two disjoint task splits. Development uses the `dev` item groups only; the `confirm` groups are
-  reserved for a locked confirmation and the runner refuses them without a protocol hash.
+- Two disjoint task splits. Development uses the eight `dev` item groups only; the 37 `confirm` groups
+  are reserved for a locked confirmation and the runner refuses them without a protocol hash.
+  Confirmation tables follow a block design in which any two tables share at most one group.
 - Models whose MLP output is added straight to the residual stream. Models that renormalise it
   (post-feedforward norm) are out of scope.
 
@@ -36,6 +37,9 @@ question.
 - The compiler sees the support table only. Query text and query answers never reach it, except
   the final token of the query format, which marks where an answer begins.
 - Every comparison includes the base model with the table present and a guess-a-valid-code rate.
+- The controls see what the compiler sees and no more: the most-frequent-code control reads the support
+  lines; the classifier control reads the same anchor activations and support labels as the adapter.
+- Development tasks never change: `design_check_v5.py` pins their hashes.
 - One WebGPU process at a time, started only after the GPU is confirmed free.
 
 ## Acceptance

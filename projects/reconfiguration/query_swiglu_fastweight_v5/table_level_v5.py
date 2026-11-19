@@ -6,7 +6,7 @@ Usage: python -I table_level_v5.py RECEIPT_JSON [RECEIPT_JSON ...]   (receipts a
 """
 import collections, itertools, json, random, sys
 
-PAIRS = [('top2_ctx', 'base_ctx'), ('top2_ctx', 'knn_ctx'), ('shuf_ctx', 'base_ctx'), ('top2_ctx', 'shuf_ctx'), ('top2_bare', 'shuf_bare'), ('top2_ctx', 'cad_ctx'), ('knn_ctx', 'base_ctx'), ('cad_ctx', 'base_ctx'), ('top2_bare', 'base_ctx'), ('v5_ctx', 'base_ctx'), ('v5_bare', 'base_ctx'), ('kv_ctx', 'base_ctx'), ('top2_bare', 'kv_ctx')]
+PAIRS = [('top2_ctx', 'base_ctx'), ('top2_ctx', 'knn_ctx'), ('shuf_ctx', 'base_ctx'), ('top2_ctx', 'shuf_ctx'), ('top2_bare', 'shuf_bare'), ('top2_ctx', 'cad_ctx'), ('knn_ctx', 'base_ctx'), ('cad_ctx', 'base_ctx'), ('top2_bare', 'base_ctx'), ('v5_ctx', 'base_ctx'), ('v5_bare', 'base_ctx'), ('kv_ctx', 'base_ctx'), ('top2_bare', 'kv_ctx'), ('top2_bare', 'probe_bare'), ('probe_bare', 'base_ctx'), ('top2_bare', 'mfc_bare'), ('probe_bare', 'mfc_bare')]
 
 def sign_flip_p(diffs):
     d = [x for x in diffs if x != 0]
@@ -37,4 +37,4 @@ for model, tables in by_model.items():
             if not all(a in t and b in t for t in sub): continue
             diffs = [t[a] - t[b] for t in sub]
             up = sum(x > 0 for x in diffs); down = sum(x < 0 for x in diffs)
-            print(f"  examples/group={shots!s:>3}  {a:9s} vs {b}: {sum(t[a] for t in sub):3d} vs {sum(t[b] for t in sub):3d}  tables better/worse/equal {up}/{down}/{len(sub)-up-down}  sign-flip p = {sign_flip_p(diffs):.3g}")
+            print(f"  examples/group={shots!s:>3}  {a:10s} vs {b}: {sum(t[a] for t in sub):3d} vs {sum(t[b] for t in sub):3d}  tables better/worse/equal {up}/{down}/{len(sub)-up-down}  sign-flip p = {sign_flip_p(diffs):.3g}")

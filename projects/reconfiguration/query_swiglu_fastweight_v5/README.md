@@ -41,8 +41,15 @@ fixed one on the top two layers. Details and numbers are in [RESULTS.md](RESULTS
 - `fastweight_v5.mjs`: the compiler.
 - `run_v5.mjs`: the runner. Its `top2_*` arms are the fixed adapter (the result); its `v5_*` arms are the
   per-table selected adapter (worse).
-- `tasks_v5.py`: task generator with disjoint `dev` and `confirm` item groups.
-- `tally_v5.py`: counts and paired tests from a receipt.
+- `controls_v5.mjs`: two controls that answer without the adapter: the most frequent support code, and a
+  plain classifier on the same activations and support lines the adapter is fitted on (`mfc_bare`,
+  `probe_bare`; `B1_WITH_CONTROLS=1`). Written and unit-tested on CPU; not yet run on a GPU.
+- `tasks_v5.py`: task generator with disjoint `dev` and `confirm` item groups. Confirmation uses 37 groups in
+  a block design: 111 tables, any two sharing at most one group.
+- `tally_v5.py`, `table_level_v5.py`: counts and paired tests from a receipt, per question and per table.
+- `audit_v5.py`, `power_v5.py`, `design_power_v5.py`: error shape, power, and whether the table-level test
+  is calibrated when tables share groups.
+- `design_check_v5.py`, `controls_v5.test.mjs`: checks that need no model.
 - `protocol_v5_draft.json`: the draft protocol, for review before any lock.
 
 ## Run
@@ -53,6 +60,17 @@ One WebGPU process at a time, after confirming the GPU is free.
 B1_RESOURCE_CHECK="<who confirmed the GPU is free>" \
   node run_v5.mjs DOPPLER_ROOT MODEL_DIR OUT.json dev SEED TABLES SHOTS_PER_GROUP QUERIES_PER_GROUP
 python -I tally_v5.py OUT.json
+```
+
+Optional arms: `B1_WITH_SHUFFLED=1` (wrong-label adapter), `B1_WITH_KV_SNAPSHOT=1` (cached prompt),
+`B1_WITH_CONTROLS=1` (most-frequent code and plain classifier).
+
+Checks with no model or GPU:
+
+```
+python3 -I design_check_v5.py            # nouns, development tasks unchanged, confirmation design, 25% control
+node --test controls_v5.test.mjs         # the two controls
+python design_power_v5.py RECEIPT_DIR OUT.json   # needs numpy
 ```
 
 Results are in [RESULTS.md](RESULTS.md).

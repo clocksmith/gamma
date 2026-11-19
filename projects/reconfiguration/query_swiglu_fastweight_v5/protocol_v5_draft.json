@@ -1,6 +1,6 @@
 {
   "protocol_id": "gamma.reconfiguration.query_swiglu_fastweight_v5",
-  "status": "DRAFT for owner review. Not locked. No confirmation task has been generated or run. Reviewed and revised by the new B1 owner on 2026-11-18; see review_20261118.",
+  "status": "DRAFT for owner review. Not locked. No confirmation task has been generated or run. Reviewed on 2026-11-18 and 2026-11-19; the gates below predate those reviews, and the shape proposed for lock is in review_20261119_design_and_controls.proposed_lock_shape. The owner reviews the revised power estimate before any lock.",
   "owner_direction": {
     "decision_5": "Draft and review B1 v5 before locking it. Make accuracy with examples present the primary gate, compare against matched compute, and include the valid-code guessing control.",
     "decision_6": "Pin the unseen Qwen checkpoint before downloading. Name the host, storage path, and exact revision. Reserve the model for confirmation.",
@@ -8,7 +8,7 @@
   },
   "claim": "A support table can be compiled, in closed form and with no gradient step, into a low-rank update on the top two MLP layers of a frozen model such that, with the table still in the prompt, the model answers unseen questions more accurately than the unmodified model given the same prompt.",
   "tasks": {
-    "generator": "tasks_v5.py, split 'confirm' (eight item groups never used in development)",
+    "generator": "tasks_v5.py, split 'confirm': 37 item groups never used in development, tables from a block design (111 tables; any two share at most one group; a group sits in at most 12)",
     "confirmation_seed": "to be drawn at lock time, >= 2000000",
     "settings": [
       {
@@ -37,7 +37,10 @@
     "cad_ctx": "greater compute: base model with context-aware decoding (two passes per token)",
     "top2_bare": "secondary: fixed adapter, table removed",
     "shuf_ctx": "control: fixed adapter compiled from the same table with every answer code replaced by the next code in the table's list, table in the prompt (B1_WITH_SHUFFLED=1)",
-    "shuf_bare": "control: the same shuffled-label adapter, table removed; matches_shuffled_code records whether it answers with the wrong code it was taught"
+    "shuf_bare": "control: the same shuffled-label adapter, table removed; matches_shuffled_code records whether it answers with the wrong code it was taught",
+    "kv_ctx": "rival: base model with the table's prefix state built once and restored per question (B1_WITH_KV_SNAPSHOT=1)",
+    "mfc_bare": "control: the most frequent support code, ties to the code seen first; 25% by construction (B1_WITH_CONTROLS=1)",
+    "probe_bare": "control: plain ridge classifier on the same top-two-layer anchor activations and support labels as the fixed adapter, table removed, scored on the same rows (B1_WITH_CONTROLS=1)"
   },
   "gates": {
     "PRIMARY_examples_present": {
@@ -87,7 +90,10 @@
     "table_level_v5.py",
     "power_v5.py",
     "fixed adapter: top two layers, ridge 0.15, write strength 0.15 of the median final hidden RMS per layer; nearest-neighbour cache temperature 0.08 and strength 8.0; context-aware decoding beta 0.5; the selected adapter is not run",
-    "audit_v5.py"
+    "audit_v5.py",
+    "controls_v5.mjs",
+    "design_check_v5.py",
+    "design_power_v5.py"
   ],
   "procedure": "Two commits. Commit 1 locks this file with status LOCKED and the SHA-256 of the frozen files, before the confirmation seed is drawn. Commit 2 adds the receipts and the write-up. The confirmation runs once per model and setting.",
   "development_evidence": "RESULTS.md. Development runs are not confirmation; several seeds were looked at while the code changed.",
@@ -137,8 +143,75 @@
       "one development GPU run with B1_WITH_KV_SNAPSHOT=1 and B1_WITH_SHUFFLED=1 on a fresh development seed, kv_ctx answers checked against base_ctx",
       "re-run seed 1003 on the same Doppler worktree (e45824b09, unchanged across all ten development runs by its reflog) with the current runner, as a diagnostic outside confirmation",
       "owner pins the unseen model (host, path, revision): Doppler has conversion settings that pass the runner's no-post-feedforward-norm check for Qwen 3 4B Instruct, Qwen 3.5 9B, MiniCPM4 0.5B and LFM2.5 1.2B; none has weights on disk, so each needs a download; smoke-test on public examples before any held-out run",
-      "owner confirms the primary population",
-      "table independence: each split has eight item groups of 28 nouns and every table samples four of them, so 96 tables are not independent draws; add confirmation groups or resample by group combination, and recompute power, before lock"
+      "owner confirms the primary population"
+    ]
+  },
+  "review_20261119_design_and_controls": {
+    "by": "B1 owner (bus name B), CPU only, on the owner's go-ahead of 2026-11-19; nothing locked, nothing run on a GPU",
+    "owner_direction": "Widen the confirmation groups with the 37-group design if confirmation nouns stay disjoint from development and every pair of tables shares at most one group; recalculate power under the remaining dependence; keep 96 large tables as the target; verify the sign-flip test and interval are calibrated for the design; add the most-frequent-code control with a frozen tie rule and the trained classifier on the same internal states and labelled support examples, query labels sealed, scored on the same rows; keep bias correction and batched compilation in development; review the revised power estimate before locking or booking confirmation.",
+    "done": {
+      "groups": "37 confirmation groups of 28 nouns (1,036 nouns), none a development noun, none repeated; development tasks unchanged (hashes pinned in design_check_v5.py)",
+      "design": "Steiner system S(2,4,37), cyclic, base blocks (0,1,3,24) (0,4,9,15) (0,7,17,25) mod 37: 111 tables, every pair of groups in exactly one table; the first 96 of the seeded order are used (1,827 of 4,560 table pairs share one group, none shares two)",
+      "mfc_bare": "implemented in controls_v5.mjs and mirrored in design_check_v5.py; exactly 25% on every table of both splits",
+      "probe_bare": "implemented in controls_v5.mjs, wired into run_v5.mjs behind B1_WITH_CONTROLS=1; seven CPU tests pass; not run on a GPU"
+    },
+    "development_group_share": "share of table variance in (top2_bare minus base_ctx) that travels with item groups: 0.00 over 64 development tables (5th-95th percentile -0.37 to 0.42, permutation p 0.46). No sign of a group effect in the tested difference; a share up to about 0.4 is not excluded.",
+    "calibration_and_power_96_large_tables": {
+      "method": "design_power_v5.py: 4,000 simulated confirmations per cell; noise resampled from the 16 development 20-example tables (SD 9.6 points); normal group effects; one-sided sign-flip at 0.05, margin 5 points",
+      "false_pass_at_margin_claim_about_these_37_groups": {
+        "share 0": "5.7%",
+        "share 0.05": "5.4%",
+        "share 0.10": "5.0%",
+        "share 0.25": "3.2%"
+      },
+      "false_pass_at_margin_claim_about_new_groups": {
+        "share 0": "5.1%",
+        "share 0.05": "8.8%",
+        "share 0.10": "11.9%",
+        "share 0.25": "19.1%",
+        "old eight-group design": "4.4%, 18.8%, 25.2%, 32.4%"
+      },
+      "false_pass_group_aware_test_new_groups": {
+        "share 0": "4.1%",
+        "share 0.05": "5.6%",
+        "share 0.10": "6.3%",
+        "share 0.25": "6.8%"
+      },
+      "power_true_difference_0": {
+        "share 0": "99.9%",
+        "share 0.10": "99.2%",
+        "share 0.25": "96.4%"
+      },
+      "power_true_difference_minus_2.5_points": {
+        "sign_flip": {
+          "share 0": "80.0%",
+          "share 0.05": "76.2%",
+          "share 0.10": "72.5%",
+          "share 0.25": "68.6%"
+        },
+        "group_aware": {
+          "share 0": "70.5%",
+          "share 0.05": "63.5%",
+          "share 0.10": "56.8%",
+          "share 0.25": "41.8%"
+        }
+      },
+      "interval_90_percent": "paired bootstrap over tables covers the mean for these groups 89-93% of the time at every share; it covers the truth for new groups 89% at share 0, 74% at 0.10, 61% at 0.25; the group-aware interval covers it 93%, 87%, 86%"
+    },
+    "proposed_lock_shape": {
+      "status": "PROPOSED, not adopted. For the owner's review of the power estimate.",
+      "population": "96 tables per model, 20 examples per group, 4 questions per group (1,536 questions), on the block design; 3-example tables reported as secondary",
+      "primary_gate": "top2_bare against base_ctx, one-sided sign-flip on per-table (accuracy difference + 0.05) at 0.05; the claim is worded for tables built from these 37 groups",
+      "generalisation_rule": "always report the group-aware interval and the group share estimated from the confirmation tables; describe the result as holding for new groups only if the group-aware test also passes",
+      "interval": "90% paired-bootstrap interval over tables, reported with the gate whether it passes or fails",
+      "controls": "mfc_bare, probe_bare, shuf_bare and shuf_ctx, kv_ctx with its build time, restore time and state bytes; cad_ctx is not part of the primary campaign",
+      "decision_rule_owner_20261119": "After the short diagnostic Mac window (seed 1003 reproducibility, cached-prompt parity, adapter against the plain classifier): if the classifier ties the adapter and the cache fits the memory budget, close the practical adapter claim and publish the readout result.",
+      "to_define_at_lock": "what counts as a tie between top2_bare and probe_bare (proposed: top2_bare is not higher at table level, sign-flip p < 0.05), and the memory budget for the cached prompt"
+    },
+    "still_required_before_lock": [
+      "owner reviews this power estimate and the proposed lock shape",
+      "one short diagnostic Mac GPU window after X1: seed 1003 replay on the e45824b09 worktree, kv_ctx token parity with base_ctx and its build, restore and bytes, shuf_* and probe_bare/mfc_bare on a fresh development seed",
+      "owner pins the unseen model"
     ]
   }
 }

@@ -14,6 +14,11 @@
 // With B1_WITH_KV_SNAPSHOT=1 it adds kv_ctx, the cached-prompt rival: the base model's prefix state for the
 // table is built once and restored per question. Its answers come from the same tokens as base_ctx; the receipt
 // records its build time, restore time, time per question and the state bytes it keeps, beside the adapter's.
+// With B1_WITH_CONTROLS=1 it adds two controls that answer table-removed questions without the adapter
+// (controls_v5.mjs): mfc_bare, the most frequent support code (one question in four by construction), and
+// probe_bare, a plain ridge classifier fitted on the same top-two-layer anchor activations and the same
+// labelled support lines the fixed adapter is fitted on, and scored on the same questions. If probe_bare
+// matches top2_bare, the adapter is a readout of those activations for this task.
 // With B1_WITH_SELECTED=1 it also compiles the per-table selected adapter (v5_bare, v5_ctx), which
 // development showed to be worse; that mode captures many more layers, so its compile times are not
 // the fixed adapter's.
@@ -27,6 +32,7 @@ import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { findAnchors, leaveOneOutProbe, chooseLayer, fitLayer } from './fastweight_v5.mjs';
 import { dequantizeQ4KRow } from '../../../gamma/fastweight/doppler_fastweight.mjs';
+import { mostFrequentCode, fitSupportClassifier } from './controls_v5.mjs';
 
 const [dopplerRoot, modelPath, outputPath, split, seedArg, specialtiesArg, shotsArg, queriesArg] = process.argv.slice(2);
 assert.ok(dopplerRoot && modelPath && outputPath && split && seedArg, 'Usage: node run_v5.mjs DOPPLER_ROOT MODEL_DIR OUT_JSON SPLIT SEED SPECIALTIES SHOTS QUERIES');
@@ -130,6 +136,7 @@ if (pipeline.tokenizer.eosTokenId != null) stopTokens.add(pipeline.tokenizer.eos
 const withSelected = process.env.B1_WITH_SELECTED === '1';
 const withShuffled = process.env.B1_WITH_SHUFFLED === '1';
 const withKvSnapshot = process.env.B1_WITH_KV_SNAPSHOT === '1';
+const withControls = process.env.B1_WITH_CONTROLS === '1';
 
 // The code the shuffled-label control teaches for a group whose true code is `code`: the next one in the list.
 function shuffledCode(task, code) {
@@ -469,7 +476,7 @@ async function firstTokenHits(adapter, examples, limit = 12) {
   return hit / use.length;
 }
 
-async function compileSpecialty(task) {
+async function compileSpecialty(task, { controls = withControls } = {}) {
   const t0 = performance.now();
   const headerIds = encodeRaw(task.header_text);
   const supportIds = encodeRaw(task.support_text);
@@ -563,6 +570,31 @@ async function compileSpecialty(task) {
     fixed_adapter_bytes: parts[0].logicalBytes + parts[1].logicalBytes,
     fixed_compile_ms: withSelected ? null : fixedCompileMs, forward_passes: anc.length + 1,
   };
+  // Controls. They are built after the adapter so that fixed_compile_ms above is the adapter's alone.
+  let probe = null;
+  let mfc = null;
+  if (controls) {
+    mfc = mostFrequentCode(task.support_text);
+    assert.ok(task.codes.includes(mfc.code), `most-frequent-code control picked ${mfc.code}, which is not a code of this table`);
+    // The plain classifier is given what the fixed adapter is given: the top-two-layer MLP activations at each
+    // support line's answer marker, in both captured contexts, labelled with that line's code. It never sees
+    // a query or a query answer; `task` is used here only for the table's code list.
+    const tp = performance.now();
+    const examples = [];
+    for (let ex = 0; ex < anc.length; ex += 1) {
+      examples.push({ features: top2Layers.map(l => iso[ex].cap.rowsByLayer.get(l).get(iso[ex].relAnchor)), label: labels[ex] });
+      if (ex < catCount) examples.push({ features: top2Layers.map(l => cat.rowsByLayer.get(l).get(anc[ex].pos)), label: labels[ex] });
+    }
+    const classCodes = spans.map(k => canonicalizeAnswer(pipeline.tokenizer.decode(k.split(',').map(Number))));
+    const known = task.codes.map(canonicalizeAnswer);
+    assert.ok(new Set(classCodes).size === classCodes.length && classCodes.every(code => known.includes(code)), `classifier control: support answers [${classCodes}] are not this table's codes`);
+    const clf = fitSupportClassifier({ examples, nClasses: spans.length, ratio: 0.15 });
+    probe = { clf, classCodes };
+    Object.assign(diag, {
+      mfc_code: mfc.code, probe_examples: clf.examples, probe_layers: top2Layers, probe_ridge_ratio: clf.ratio,
+      probe_leave_one_out_accuracy: clf.leaveOneOutAccuracy, probe_fit_ms: performance.now() - tp,
+    });
+  }
   const gpuBuffers = [...top2.gpuBuffers];
   let v5 = null;
   let abstain = false;
@@ -602,7 +634,7 @@ async function compileSpecialty(task) {
       compile_ms: performance.now() - t0,
     });
   }
-  return { v5, top2: top2.adapter, abstain, gpuBuffers, sepTok, diag };
+  return { v5, top2: top2.adapter, abstain, gpuBuffers, sepTok, diag, probe, mfc };
 }
 
 // The cached-prompt rival: prefill the table once with the base model, keep Doppler's prefix state
@@ -769,7 +801,7 @@ for (const t of tasks) {
   if (bySpecialty.has(t.specialty_id)) continue;
   const c = await compileSpecialty(t);
   if (withShuffled) {
-    const shuffled = await compileSpecialty({ ...t, specialty_id: `${t.specialty_id}__shuffled`, support_text: shuffledSupportText(t) });
+    const shuffled = await compileSpecialty({ ...t, specialty_id: `${t.specialty_id}__shuffled`, support_text: shuffledSupportText(t) }, { controls: false });
     c.shuf = shuffled.top2;
     c.diag.shuffled_compile_ms = shuffled.diag.fixed_compile_ms;
     assert.equal(shuffled.diag.examples, c.diag.examples, 'shuffled table must keep every support line');
@@ -815,18 +847,31 @@ for (const task of tasks) {
     pipeline.setLoRAAdapter(null);
     record('kv_ctx', fullIds, await greedyDecodeSinglePass(fullIds, Number(task.max_new_tokens), false, null, c.kv));
   }
+  if (withControls) {
+    assert.equal(bareIds.at(-1), c.sepTok, 'a table-removed question must end at the answer marker');
+    record('mfc_bare', bareIds, { text: c.mfc.code, canonical: canonicalizeAnswer(c.mfc.code), generatedTokens: [], truncated: false, totalMs: 0 });
+    // One forward pass of the base model on the table-removed question, read at the answer marker: the same
+    // activations the adapter reads there. The classifier names a code; nothing is decoded.
+    const tq = performance.now();
+    const at = bareIds.length - 1;
+    const cap = await capturePass(bareIds, top2Layers, [at], []);
+    const guess = c.probe.clf.predict(top2Layers.map(l => cap.rowsByLayer.get(l).get(at)));
+    const code = c.probe.classCodes[guess.index];
+    record('probe_bare', bareIds, { text: code, canonical: code, generatedTokens: [], truncated: false, totalMs: performance.now() - tq });
+  }
   if ((task.task_id + 1) % 8 === 0) console.log('progress', task.task_id + 1, tasks.length);
 }
 
 const receipt = {
   scope: split === 'dev' ? 'development only, exploratory' : 'confirmation', split, seed, specialties: nSpecialties, shots_per_group: shots,
   queries_per_group: queries, task_count: tasks.length, model: modelId, num_layers: numLayers, hidden_size: dHidden,
-  intermediate_size: dInter, with_selected_adapter: withSelected, with_shuffled_adapter: withShuffled, with_kv_snapshot: withKvSnapshot,
+  intermediate_size: dInter, with_selected_adapter: withSelected, with_shuffled_adapter: withShuffled, with_kv_snapshot: withKvSnapshot, with_controls: withControls,
   captured_layers: candidateLayers, resource_check: process.env.B1_RESOURCE_CHECK, doppler_source: dopplerSource,
   confirm_protocol: process.env.B1_ALLOW_CONFIRM ?? null,
   source_sha256: {
     runner: sha256Hex(await readFile(fileURLToPath(import.meta.url))), compiler: sha256Hex(await readFile(join(here, 'fastweight_v5.mjs'))),
     tasks: sha256Hex(await readFile(join(here, 'tasks_v5.py'))), manifest: sha256Hex(manifestBytes),
+    controls: sha256Hex(await readFile(join(here, 'controls_v5.mjs'))),
   },
   specialties_compiled: [...bySpecialty.values()].map(c => c.diag), rows,
 };

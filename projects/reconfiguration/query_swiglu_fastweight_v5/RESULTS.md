@@ -180,6 +180,7 @@ and at most 70 group combinations. The sign-flip test and the power figures abov
 independent; they therefore say nothing beyond these eight groups, and probably overstate power. Before
 lock: add confirmation groups, or run the test and its power calculation with the group combination as the
 resampling unit. The 28-noun limit also caps a table at 28 examples per group, questions included.
+Addressed the same day; see "Confirmation design and controls" below.
 
 **Cached-prompt arm, written, not run.** `B1_WITH_KV_SNAPSHOT=1` adds `kv_ctx`: the base model's prefix
 state for the table (attention KV plus linear-attention recurrent state) is built once with
@@ -196,6 +197,76 @@ Qwen 3.5 9B, MiniCPM4 0.5B and LFM2.5 1.2B. LFM2.5 has convolution layers, and w
 snapshot restores their state is unchecked. There is no Qwen 3.5 4B entry. None of the four has weights on
 disk here (manifests only), so each needs a download, which is the owner's decision (host, path, revision).
 None has been run through this runner, so a smoke test on public examples comes before any held-out run.
+
+## Confirmation design and controls (2026-11-19, CPU only, owner-approved; nothing locked, nothing run on a GPU)
+
+**Wider confirmation groups.** The confirmation split now has 37 item groups of 28 nouns (1,036 nouns; the
+original eight plus 29 new ones). No confirmation noun is a development noun, and no noun is used twice.
+Tables are no longer drawn at random: they follow a block design of 111 four-group tables in which every pair
+of groups meets in exactly one table, so two tables share at most one group and a group sits in at most 12
+tables. A 96-table confirmation uses the first 96 of the seeded order (1,827 of its 4,560 table pairs share one
+group; none shares two). Development tasks are byte-for-byte unchanged: their hashes are pinned in
+`design_check_v5.py`, which also re-checks the nouns and the design. Six nouns in the original eight
+confirmation groups share a whole word with a development noun or an answer code (`apple juice`,
+`orange juice`, `coffee`, `bell pepper`, `green bean`, `green tea`); they were left as they were.
+
+**Do item groups matter in development?** `design_power_v5.py` regresses products of centred table
+differences on the number of groups two tables share. For the tested number (adapter with the table removed
+minus base model with the table) the share of table variance that travels with groups is estimated at 0.00
+over all 64 tables (5th to 95th percentile -0.37 to 0.42, permutation p 0.46), and negative on the 16
+20-example tables. So there is no sign of a group effect in the difference, and the data cannot exclude a
+share up to about 0.4. Each arm's own accuracy on 20-example tables does lean on the groups (share about 0.76,
+p 0.09 and 0.10); pairing the arms on the same table removes it.
+
+**Is the gate calibrated, and what is its power?** 4,000 simulated 96-table confirmations per cell, 20-example
+development tables as the noise pool (16 tables, SD 9.6 points), one-sided sign-flip gate at 0.05 with the
+5-point margin. "False pass" is the pass rate when the truth sits exactly on the margin; 5% is correct.
+
+| Group share of table variance | 0 | 0.05 | 0.10 | 0.25 |
+|---|---:|---:|---:|---:|
+| False pass, claim about tables from these 37 groups | 5.7% | 5.4% | 5.0% | 3.2% |
+| False pass, claim about new groups | 5.1% | 8.8% | 11.9% | 19.1% |
+| Same, old design (eight groups) | 4.4% | 18.8% | 25.2% | 32.4% |
+| False pass, new groups, group-aware test | 4.1% | 5.6% | 6.3% | 6.8% |
+| Power at a true difference of 0 | 99.9% | 99.7% | 99.2% | 96.4% |
+| Power at -2.5 points | 80.0% | 76.2% | 72.5% | 68.6% |
+| Power at -2.5 points, group-aware test | 70.5% | 63.5% | 56.8% | 41.8% |
+| 90% paired-bootstrap interval covers the mean for these groups | 89% | 90% | 91% | 93% |
+| 90% paired-bootstrap interval covers the truth for new groups | 89% | 81% | 74% | 61% |
+| 90% group-aware interval covers the truth for new groups | 93% | 89% | 87% | 86% |
+
+Read:
+- With no group effect, which is the development estimate, the frozen sign-flip gate and the bootstrap
+  interval are calibrated on the new design, and the earlier 80% power at a 2.5-point deficit stands.
+- As a statement about tables built from these 37 groups, the gate stays calibrated whatever the group share.
+- As a statement about new groups, it passes too often once groups matter: 12% at a share of 0.10, against
+  25% under the old eight-group design. The new design halves the problem and does not remove it.
+- The group-aware test (standard error widened by the covariance between tables that share a group, estimated
+  from the confirmation tables themselves) holds 4% to 7%, at a cost of about 10 points of power.
+- The noise pool is 16 tables. These are planning figures.
+
+Proposed for the protocol, for owner review before lock: the sign-flip gate stays the primary test and its
+claim is worded for tables from these 37 groups; the group-aware interval and the group share estimated from
+the confirmation tables are always reported; the result is described as holding for new groups only if the
+group-aware test also passes.
+
+**Most-frequent-code control (`mfc_bare`).** One code per table, chosen from the support lines alone. Frozen
+rule: the most frequent support code; ties go to the code whose first support line comes first. Tables are
+balanced, so it scores exactly 25% on every table: checked on development tables and on all 96 tables of a
+confirmation draw, in both the Python check and the JavaScript the runner uses.
+
+**Plain classifier control (`probe_bare`).** A ridge classifier in closed form, fitted per table on what the
+fixed adapter is fitted on: the top-two-layer MLP activations at each support line's answer marker, in both
+captured contexts, labelled with that line's code. Features are centred and scaled per layer, ridge 0.15 as
+for the adapter. For each question it reads the same activations from one base-model pass on the
+table-removed question and names a code; nothing is decoded. It is never given a query or a query answer, and
+it is scored on the same rows as `top2_bare`. Seven CPU tests pass (it learns synthetic labels, falls to chance
+when labels are scrambled, and is unchanged by feature rescaling and class renaming). The runner wiring
+(`B1_WITH_CONTROLS=1`) passes a syntax check and has not run on a GPU; its one model-dependent step reuses the
+capture function the compiler already uses.
+
+Not changed, by the owner's direction: the bias correction and a batched compile stay in development and are
+not in this runner.
 
 ## State at handoff (2026-11-18 08:00 EST)
 
