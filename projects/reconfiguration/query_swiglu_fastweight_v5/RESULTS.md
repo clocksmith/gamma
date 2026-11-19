@@ -464,6 +464,58 @@ tables from eight item groups. The readout still beats the adapter; the adapter'
 ordinary adapter (Reploid requests can already select a prepared one) and that the model itself emits the
 answer. Next: port the design to the runner and validate it through the runtime on fresh tables.
 
+## Validation of the readout adapter through the runtime (2026-11-19 night, fresh tables, declared beforehand)
+
+The run and its pass rule were written into `protocol_v5_draft.json` before it was made: seed 1103, 48 tables of
+20 examples, 768 questions, Qwen 3.5 0.8B on the Mac GPU, Doppler `e45824b09` clean; the adapter is
+`readout_adapter_v5.mjs` exactly as chosen offline on seed 1102 (last layer, gain 1.0, ridge 0.15). Development
+split, not a confirmation. Receipt `qwen35_08b_dev1103_k20_readout_adapter.json`.
+
+| Arm | Table in the prompt | Correct of 768 | |
+|---|---|---:|---:|
+| Readout (`probe_bare`) | no | 747 | 97.3% |
+| Readout adapter on the cached prompt (`ra_kv`) | yes | 743 | 96.7% |
+| **Readout adapter (`ra_bare`)** | no | **739** | **96.2%** |
+| Adapter as built (`top2_bare`) | no | 716 | 93.2% |
+| Nearest-neighbour vote (`nn_bare`) | no | 708 | 92.2% |
+| Model given the table (`kv_ctx`) | yes | 700 | 91.1% |
+| The same, calibrated offline from this run's recordings | yes | 703 to 711 | 91.5 to 92.6% |
+| Most frequent code (`mfc_bare`) | no | 192 | 25.0% |
+
+- **Declared primary read: it holds up.** `ra_bare` minus `kv_ctx`: +5.1 points, 90% bootstrap interval +3.3 to
+  +6.9, better on 28 tables, worse on 8, equal on 12, exact one-sided sign-flip p 3.2e-5 (rule: p < 0.05). The
+  offline prediction was +6.8 points; the model given the table did better on these tables (91.1%) than on
+  seed 1102 (87.6%).
+- **Against the calibrated in-context answer** (reported beside the rule, as amended before the run): +4.2
+  points over batch calibration (707; interval +2.2 to +6.1, one-sided p 0.0008) and +3.6 over the best
+  calibrated variant here (711).
+- **Against the readout:** -1.0 point (-2.1 to -0.1): the readout is still ahead, inside the 5-point margin.
+- **Against the adapter as built:** +3.0 points (+1.8 to +4.3), p 0.0002.
+- **On top of the cached prompt:** `ra_kv` minus `kv_ctx` +5.6 points (+4.0 to +7.2), better on 50 questions and
+  worse on 7.
+- **The simulator was exact.** Run on this seed's recordings it predicted `ra_bare` right or wrong on 768 of 768
+  questions and gave 743 for `ra_kv`, the count the runtime produced.
+- **Cost.** The adapter is 92 KB (word codes) or 184 KB (two-part codes) against a median 32.4 MB of cached-prompt
+  state, about 180 to 350 times smaller. It is fitted in a median 0.87 s after the same per-line passes the old
+  adapter needs. Per question it takes 255 ms against 246 ms for the cached prompt.
+- **Its errors.** 29 wrong: 24 another valid code, 5 a stray first token (`.**`) that is not a code. No answer
+  ran on past the line break.
+
+The readout results repeat on these tables: covered against uncovered questions, AUROC 0.94 for the readout's
+top score against 0.81 for the decoder's top-code probability, and the model again answered all 384 uncovered
+questions with a code; at about 35 lookups per 100 questions, 5.2 wrong direct answers gating on the readout
+against 13.9 gating on the decoder's confidence (41.4 never looking up); the readout with 3 examples per code
+scores 88.4%, with 10 scores 95.6%.
+
+**What this establishes, and what it does not.** On two independent sets of 48 development tables, one model
+and one runtime, a 92 to 184 KB last-layer adapter compiled in closed form from a table's examples answers
+table-removed questions about 5 points more accurately than the model given the table, at the same time per
+question and with about 200 times less state than a cached prompt; the plain readout it is compiled from is
+about 1 point better still, and its score also tells when a table does not cover a question. Not established:
+a second model, tables beyond the eight development item groups (the 37 confirmation groups are untouched),
+tasks other than placing an item in one of four groups, and any behaviour beyond one short answer. The 5-token
+stray answers and the gain were not retuned on this seed.
+
 ## State at handoff (2026-11-18 08:00 EST)
 
 Nothing is locked. `protocol_v5_draft.json` awaits an independent review and the owner's pin of an

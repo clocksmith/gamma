@@ -138,7 +138,7 @@ def compare(tables, a, b, groups=False):
     diffs = [accuracy(t, a) - accuracy(t, b) for t in use]
     lo, hi = bootstrap_interval(diffs)
     out = {
-        "tables": len(use), "questions": sum(t["n"][b] for t in use),
+        "arms": [a, b], "tables": len(use), "questions": sum(t["n"][b] for t in use),
         a: f"{sum(t['correct'][a] for t in use)}/{sum(t['n'][a] for t in use)}",
         b: f"{sum(t['correct'][b] for t in use)}/{sum(t['n'][b] for t in use)}",
         "mean_difference_points": round(100 * float(sum(diffs) / len(diffs)), 2),
@@ -242,14 +242,16 @@ def controls(tables, compiled, shots):
     kv = [t for t in use if t["n"]["kv_ctx"]]
     if kv:
         questions = mismatches = 0
+        comparable = any(t["n"]["base_ctx"] for t in kv)          # parity needs base_ctx in the same run
         for t in kv:
             for task, toks in t["tokens"]["kv_ctx"].items():
                 questions += 1
-                mismatches += toks != t["tokens"]["base_ctx"].get(task)
+                mismatches += comparable and toks != t["tokens"]["base_ctx"].get(task)
         mean = lambda xs: sum(xs) / len(xs) if xs else None
         diag = [s for s in compiled if s.get("kv_snapshot") and any(s.get("specialty_id") == t["table"] for t in kv)]
         out["cached_prompt"] = {
-            "questions": questions, "questions_with_different_tokens_from_base_with_table": mismatches, "token_parity": mismatches == 0,
+            "questions": questions, "questions_with_different_tokens_from_base_with_table": mismatches if comparable else None,
+            "token_parity": (mismatches == 0) if comparable else None,
             "ms_per_question": {arm: round(mean([m for t in kv for m in t["ms"][arm]]), 1) for arm in ("kv_ctx", "base_ctx", "top2_bare") if any(t["ms"][arm] for t in kv)},
             "restore_ms_mean": round(mean([m for t in kv for m in t["restore_ms"]]), 2) if any(t["restore_ms"] for t in kv) else None,
             "build_ms_mean": round(mean([s["kv_snapshot"]["kv_build_ms"] for s in diag]), 1) if diag else None,
@@ -300,10 +302,11 @@ def main(argv):
             if name == "most_frequent_code":
                 print(f"  most-frequent-code control: {c['accuracy_values_seen']} on {c['tables']} tables")
             elif name == "cached_prompt":
-                print(f"  cached prompt: token parity {c['token_parity']} ({c['questions_with_different_tokens_from_base_with_table']} of {c['questions']} differ); "
+                parity = "not checked in this run (base_ctx was skipped)" if c["token_parity"] is None else f"{c['token_parity']} ({c['questions_with_different_tokens_from_base_with_table']} of {c['questions']} differ)"
+                print(f"  cached prompt: token parity {parity}; "
                       f"build {c['build_ms_mean']} ms, restore {c['restore_ms_mean']} ms, state {c['state_bytes_mean']} bytes against adapter {c['adapter_bytes_mean']} bytes")
             else:
-                a, b = [k for k in c if k.endswith(("_bare", "_ctx"))][:2]
+                a, b = c["arms"]
                 iv = c["bootstrap_interval_90_points"]
                 print(f"  {name}: {c[a]} against {c[b]}, {c['mean_difference_points']:+.2f} points, 90% interval {iv[0]:+.2f} to {iv[1]:+.2f}, two-sided p {c['sign_flip_p_two_sided']:.3g}")
                 if "tie_rule" in c:

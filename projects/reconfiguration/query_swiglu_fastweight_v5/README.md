@@ -9,7 +9,12 @@ owner's rule fixed before the run, the practical claim for the adapter as built 
 Follow-up the same evening, at the owner's direction: on recorded activations, a last-layer adapter
 compiled from the readout reaches 94.4% with the table removed in an exact offline simulation, against 87.6%
 for the model given the table, and the readout's score tells covered from uncovered questions better than
-the decoder's confidence. Not yet run through the runtime. See "Offline discovery" in RESULTS.md.
+the decoder's confidence. See "Offline discovery" in RESULTS.md.
+
+Validated the same night through the runtime on 48 fresh development tables, with the pass rule declared
+beforehand: the readout adapter answered 739 of 768 table-removed questions against 700 for the model given
+the table (+5.1 points, one-sided p 3e-5), at 92 to 184 KB against a 32 MB cached prompt. The plain readout it
+is compiled from scored 747. One model, development tables. See "Validation of the readout adapter".
 
 ## What it does
 

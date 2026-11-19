@@ -442,6 +442,30 @@
     "also_reported": "ra_bare against probe_bare with the tie rule; ra_bare against top2_bare; ra_kv against kv_ctx; mfc_bare must be exactly 25%; adapter bytes and fit time",
     "if_it_does_not_hold": "report it as a failed transfer from simulation to runtime, with the per-table differences, and do not retune on this seed",
     "amended_before_the_run": "2026-11-19, on the X2 owner's suggestion, still before the run: the run also records activations, so that from the same tables (a) ra_bare is compared with the calibrated in-context answer as well (batch calibration scored 90.4% offline on seed 1102, which cuts the predicted lead to about 4 points), and (b) the simulator's prediction for the adapter is checked question by question against what the runtime actually produced. The pass rule is unchanged: ra_bare against the uncalibrated in-context answer. The calibrated comparison is reported beside it.",
-    "stated_limits": "The plain readout still beats the adapter offline (by 2.2 points on seed 1102); this run tests the adapter against the in-context answer, not against the readout, which is reported with the tie rule."
+    "stated_limits": "The plain readout still beats the adapter offline (by 2.2 points on seed 1102); this run tests the adapter against the in-context answer, not against the readout, which is reported with the tie rule.",
+    "result": {
+      "when": "2026-11-19, 21:19Z to 22:15Z, exit 0; Doppler e45824b09 clean",
+      "correct_of_768": {
+        "ra_bare": 739,
+        "kv_ctx": 700,
+        "ra_kv": 743,
+        "probe_bare": 747,
+        "top2_bare": 716,
+        "nn_bare": 708,
+        "mfc_bare": 192
+      },
+      "primary_read": "ra_bare minus kv_ctx +5.08 points, 90% interval +3.26 to +6.90, tables better/worse/equal 28/8/12, exact one-sided sign-flip p 3.2e-5",
+      "verdict": "HOLDS UP under the rule declared before the run (one-sided p < 0.05)",
+      "beside_the_rule": {
+        "against_batch_calibrated_in_context": "+4.17 points, interval +2.21 to +6.12, one-sided p 0.0008",
+        "against_best_calibrated_variant": "+3.6 points (739 against 711)",
+        "against_readout": "-1.04 points, interval -2.08 to -0.13",
+        "against_adapter_as_built": "+2.99 points, interval +1.82 to +4.30",
+        "ra_kv_against_kv_ctx": "+5.60 points, interval +4.04 to +7.16"
+      },
+      "simulator_check": "predicted ra_bare right or wrong on 768 of 768 questions; predicted 743 for ra_kv, as observed",
+      "cost": "92 or 184 KB against a median 32.4 MB of cached-prompt state; fit median 0.87 s; 255 ms per question against 246 ms",
+      "not_retuned": "gain and ridge as chosen on seed 1102; five stray non-code first tokens left as they are"
+    }
   }
 }
