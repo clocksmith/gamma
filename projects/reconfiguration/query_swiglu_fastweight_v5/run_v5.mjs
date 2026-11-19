@@ -163,13 +163,17 @@ function outsideQuestions(task, perGroup = 4, groupCount = 2) {
   // Deterministic choice from the table's id, so a rerun asks the same questions.
   let h = 2166136261;
   for (const ch of task.specialty_id) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
-  const next = () => { h ^= h << 13; h >>>= 0; h ^= h >>> 17; h ^= h << 5; h >>>= 0; return h; };
+  const next = () => { h = (Math.imul(h, 1664525) + 1013904223) >>> 0; return h >>> 8; };
+  // Without replacement: distinct groups, and distinct nouns inside a group.
+  const pick = (list, count) => {
+    const pool = [...list];
+    const got = [];
+    while (got.length < count && pool.length) got.push(pool.splice(next() % pool.length, 1)[0]);
+    return got;
+  };
   const out = [];
-  for (let gi = 0; gi < groupCount; gi += 1) {
-    const name = unused[next() % unused.length];
-    const nouns = outsideGroups.groups[name];
-    for (let i = 0; i < perGroup; i += 1) {
-      const noun = nouns[next() % nouns.length];
+  for (const name of pick(unused, groupCount)) {
+    for (const noun of pick(outsideGroups.groups[name], perGroup)) {
       const tail = outsideGroups.tails[next() % outsideGroups.tails.length];
       out.push({ group: name, noun, line: `Item: a ${noun} ${tail} =>` });
     }

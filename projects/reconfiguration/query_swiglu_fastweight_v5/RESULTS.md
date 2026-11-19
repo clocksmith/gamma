@@ -377,6 +377,93 @@ its token stream. Nothing here tested whether that is worth its cost.
 
 Not run, and not needed for the decision: run C on the 2B model, the unseen model, and the confirmation.
 
+## Offline discovery on recorded activations (2026-11-19 evening, owner asked to keep going)
+
+The owner's direction after the decision above: do not stop at the closed claim; find a version that works
+and can transfer to Doppler and Reploid. The lead was in the same data: a plain readout of the model's
+activations (96.6%) beats the model given the table. This section follows it. Development tables only (seed
+1102, the same 48 tables as run C); nothing here is a confirmation.
+
+**Method.** One more GPU run (`B1_DUMP_FEATURES`, receipt `qwen35_08b_dev1102_k20_features.json`) recorded,
+for every support line and question, the top-two-layer MLP activations and the final hidden row at every
+answer position, with the table removed and with it present through the cached prompt, plus 384 questions
+about item groups a table does not contain. `discover_v5.py` then scores methods offline. A write into the
+last layer's MLP output is simulated exactly, because only the final norm and the output matrix read it
+(`dump_head_v5.mjs` extracts that matrix). Check: the simulated first token gave the same verdict as the
+runtime on 768 of 768 questions with the table present and 768 of 768 with it removed. Outputs are in
+`.work/query-swiglu-fastweight-v5/discover-20261119/`.
+
+**Accuracy on the same 768 questions.**
+
+| Method | Table in the prompt | Correct | |
+|---|---|---:|---:|
+| Readout (ridge classifier, both layers) | no | 742 | 96.6% |
+| Readout, last layer only | no | 741 | 96.5% |
+| Last-layer adapter fitted in logit space, with the cached prompt | yes | 743 | 96.7% |
+| **Last-layer adapter compiled from the readout (simulated)** | no | **725** | **94.4%** |
+| The same, taught to stay quiet at other positions | no | 712 | 92.7% |
+| The adapter as built (`top2_bare`, actual run) | no | 689 | 89.7% |
+| Nearest-neighbour vote | no | 702 | 91.4% |
+| In-context answer, batch-calibrated | yes | 694 | 90.4% |
+| In-context answer, calibrated on the table's own lines | yes | 686 to 693 | 89.3 to 90.2% |
+| In-context answer as the model gives it (`kv_ctx`, actual run) | yes | 673 | 87.6% |
+| In-context answer constrained to the table's codes | yes | 673 | 87.6% |
+
+Paired per table (48 tables, 90% bootstrap interval, exact sign-flip p):
+- new adapter minus in-context: +6.8 points (+4.4 to +9.1), better on 30 tables, worse on 8, p 2.4e-5;
+- new adapter minus calibrated in-context: +4.0 points (+2.2 to +5.9), p 0.0017;
+- new adapter minus readout: -2.2 points (-3.4 to -1.0), p 0.006: lower, and inside the 5-point margin;
+- readout minus in-context: +9.0 points (+6.9 to +11.2), better on 34 tables, worse on 2;
+- calibrated in-context minus in-context: +2.7 points (+0.7 to +4.8). Calibration recovers under a third of
+  the readout's lead, so that lead is not only label bias in decoding.
+
+**The new adapter design.** One layer (the last), rank equal to the number of distinct answer tokens plus
+the line break (5 for word codes, 10 for two-part codes; 92 KB and 184 KB as 32-bit floats). It is the
+readout written into the weight: a ridge fit from the last layer's MLP activations at every answer position
+to one-against-the-rest targets over the next token, features centred and scaled, the centring folded in
+through a direction that reads 1.00 (SD 0.01) at answer positions because an adapter has no bias input, and
+a write along each token's own output direction at a gain of one median hidden RMS. Gains from 0.5 to 2.0
+all give 93.9 to 94.5%. Two-part codes lose nothing: every later token and the line break were right
+whenever the first token was (answers fed in for later positions). What separated it from the adapter as
+built: one layer, not two fitted independently; centred features; one-against-the-rest targets, with no
+separate suppression and stop columns; no background rows.
+
+**Fewer examples.** The readout with 3 examples per code matches the model with 20 per code in its prompt
+(87.8% against 87.6%); 5 give 91.7%, 10 give 95.2%, 20 give 96.6%.
+
+**What does not work.** A readout trained only on the single in-context pass does not transfer to
+table-removed questions (44%), so the per-line passes are needed (they can be batched). Asking the write to
+stay quiet at non-answer positions costs 1.8 points. The logit-space fit is poor with the table removed
+(88.8% at best) and best with it present.
+
+**Knowing when a table does not cover a question.** Given the table, the model answered all 384 uncovered
+questions with one of the table's codes. Ranking covered above uncovered questions (AUROC, 0.5 is chance):
+readout top score 0.91 with the table removed and 0.89 with it present; nearest support line 0.85 (table
+present); the decoder's top-code probability 0.80; its margin between its two best codes 0.76.
+
+**Answer directly or look it up** (`lookup_gate_v5.py`; per 100 questions, two covered to one uncovered;
+threshold fitted on half the tables, scored on the other half, both ways round):
+
+| Policy, at about 35 lookups per 100 | Wrong direct answers | Unnecessary lookups |
+|---|---:|---:|
+| Readout score, table removed | 7.2 | 6.8 |
+| Readout score, table present | 8.0 | 8.0 |
+| Decoder's top-code probability | 14.9 | 7.9 |
+| Decoder's margin | 16.1 | 9.6 |
+| Nearest support line | 18.1 | 13.5 |
+| Never look up | 41.6 | 0 |
+| Always look up | 0 | 64.4 |
+
+At 40 lookups per 100 the readout gives 5.4 wrong direct answers against the decoder's 11.9; at 50, 2.3 against
+7.7. With the uncovered item groups held out as well, the order is the same (2.4 against 8.1 at 35 lookups).
+
+**Limits.** The adapter numbers are a simulation, exact for a last-layer write and checked against the
+runtime on the unmodified model, but not yet run through the runtime with the adapter applied; later answer
+tokens were scored with the true answer fed in. The gain was chosen on these tables. One model. Development
+tables from eight item groups. The readout still beats the adapter; the adapter's case is that it is an
+ordinary adapter (Reploid requests can already select a prepared one) and that the model itself emits the
+answer. Next: port the design to the runner and validate it through the runtime on fresh tables.
+
 ## State at handoff (2026-11-18 08:00 EST)
 
 Nothing is locked. `protocol_v5_draft.json` awaits an independent review and the owner's pin of an

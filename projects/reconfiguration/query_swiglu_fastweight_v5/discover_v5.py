@@ -28,10 +28,13 @@ def standardizer(X):
     return mu, inv
 
 
-def ridge_fit(blocks, Y, ratio):
+def ridge_fit(blocks, Y, ratio, intercept=False):
     """Dual ridge over one or more feature blocks, each centred, scaled and divided by its mean kernel diagonal.
-    Returns a predictor and, per block, primal weights W (features x targets) with its mu and inv."""
+    Returns a predictor and, per block, primal weights W (features x targets) with its mu and inv. With
+    `intercept` the targets' mean is fitted as a constant (an adapter gets it from a near-constant direction)."""
     n = len(Y)
+    y0 = Y.mean(0) if intercept else 0.0
+    Y = Y - y0
     K = np.zeros((n, n))
     parts = []
     for X in blocks:
@@ -46,7 +49,7 @@ def ridge_fit(blocks, Y, ratio):
     weights = [(mu, inv, (Xs.T @ alpha) / md) for mu, inv, Xs, md in parts]
 
     def predict(qblocks):
-        s = 0
+        s = y0
         for Q, (mu, inv, W) in zip(qblocks, weights):
             s = s + ((Q - mu) * inv) @ W
         return s
@@ -103,6 +106,21 @@ class Head:
         for s in range(0, len(H), chunk):
             out.append((self.normed(H[s:s + chunk]) @ self.lm.T).argmax(1))
         return np.concatenate(out) if out else np.zeros(0, dtype=int)
+
+    def raw(self, H, tokens):
+        """Logits before the final norm's shared divisor: the argmax over the vocabulary is the same."""
+        return (np.asarray(H, dtype=np.float32) * self.g) @ self.lm[tokens].T
+
+    def raw_full(self, H, chunk=96):
+        """Rows x vocabulary logits before the shared divisor."""
+        H = np.asarray(H, dtype=np.float32) * self.g
+        return np.concatenate([H[s:s + chunk] @ self.lm.T for s in range(0, len(H), chunk)]) if len(H) else np.zeros((0, len(self.lm)), np.float32)
+
+    def raw_top(self, H, chunk=96):
+        out = []
+        for s in range(0, len(H), chunk):
+            out.append(((np.asarray(H[s:s + chunk], dtype=np.float32) * self.g) @ self.lm.T).max(1))
+        return np.concatenate(out) if out else np.zeros(0)
 
     def code_mass(self, H, tokens, chunk=96):
         """Per row: probability mass the full-vocabulary softmax puts on `tokens`, and the largest single one."""
@@ -226,24 +244,48 @@ def study_table(table, dump_dir, head, dI, dH, layers_n, grid):
     variants["answer rows only, as a real adapter (no bias term)"] = lambda blocks: blocks[0] @ A
     res["_a0_fit_on_questions"] = [float(np.mean(zl(Qb0) @ a0)), float(np.std(zl(Qb0) @ a0))]
 
+    # Every answer position of every question, per regime, with the model's own logits computed once. A write
+    # S @ D changes the logits by S @ P, so each design costs one small product.
+    want = np.array([int(g) for q in qs for g in list(q["answer_tokens"]) + [table["_newline"]]])
+    owner = np.array([qi for qi, q in enumerate(qs) for _ in range(len(q["answer_tokens"]) + 1)])
+    is_first = np.array([o == 0 for q in qs for o in range(len(q["answer_tokens"]) + 1)])
+    P = head.raw_full(D)                                                     # targets x vocabulary
+    flat = {col: np.concatenate([b[:, col] for b in qrows]) for col in (0, 1)}
+    base_logits = {col: head.raw_full(hid(flat[col])) for col in (0, 1)}
+    zq = {col: zl(flat[col]) for col in (0, 1)}
+
+    def score_design(name, write):
+        for regime, col in (("table removed", 0), ("table present", 1)):
+            got = (base_logits[col] + write(zq[col]).astype(np.float32) @ P).argmax(1)
+            right = got == want
+            res[f"adapter[{name}] {regime}: first token"] = np.array([right[(owner == qi) & is_first][0] for qi in range(len(qs))])
+            res[f"adapter[{name}] {regime}: whole answer"] = np.array([right[owner == qi].all() for qi in range(len(qs))])
+
     for vname, score in variants.items():
         for beta in grid:
-            for regime, col in (("table removed", 0), ("table present", 1)):
-                ok_all = np.ones(len(qs), dtype=bool)
-                ok_first = np.zeros(len(qs), dtype=bool)
-                for qi, (q, block) in enumerate(zip(qs, qrows)):
-                    gold = list(q["answer_tokens"]) + [None]
-                    X = block[:, col]
-                    Hn = hid(X) + beta * rms * (score([zl(X)]) @ D)
-                    got = head.argmax(Hn)
-                    for o, g in enumerate(gold):
-                        want = g if g is not None else table["_newline"]
-                        right = int(got[o]) == int(want)
-                        if o == 0:
-                            ok_first[qi] = right
-                        ok_all[qi] &= right
-                res[f"adapter[{vname}|gain {beta}] {regime}: first token"] = ok_first
-                res[f"adapter[{vname}|gain {beta}] {regime}: whole answer"] = ok_all
+            score_design(f"{vname}|gain {beta}", lambda Z, score=score, beta=beta: beta * rms * score([Z]))
+
+    # A second design, fitted in logit space. For every support answer row it knows the model's own logits, so it
+    # asks for exactly the write that lifts the right next token `margin` above the model's current best token
+    # and puts the table's other tokens the same distance below it. Background rows ask for no write.
+    Ha = hid(S[answer])
+    Ut = head.raw(Ha, tokens)                              # rows x targets, the model's own logits on the table's tokens
+    top = head.raw_top(Ha)                                 # rows, the model's best logit over the whole vocabulary
+    M = head.raw(D, tokens)                                # targets x targets: what one unit of each write does
+    spread = float(np.mean(top - Ut.mean(1)))
+    residual = {}
+    for c in (0.5, 1.0, 2.0, 4.0):
+        target = np.where(one_vs_rest(ya, len(tokens)) > 0, top[:, None] + c * spread, top[:, None] - c * spread)
+        Sstar = (target - Ut) @ np.linalg.inv(M)
+        for rname, ratio in (("ridge 0.15", 0.15), ("ridge 0.03", 0.03)):
+            if background.any():
+                predq, _ = ridge_fit([np.concatenate([Xa, zl(S[background])])], np.concatenate([Sstar, np.zeros((int(background.sum()), len(tokens)))]), ratio, intercept=True)
+                residual[f"logit-space fit, quiet background, margin {c}, {rname}"] = predq
+            predr, _ = ridge_fit([Xa], Sstar, ratio, intercept=True)
+            residual[f"logit-space fit, margin {c}, {rname}"] = predr
+    for vname, score in residual.items():
+        score_design(vname, lambda Z, score=score: score([Z]))
+
     # --- can anything tell that the table does not cover a question? ----------------------------------------
     if table.get("outside") and os.path.exists(os.path.join(dump_dir, table["outside_file"])):
         O = np.fromfile(os.path.join(dump_dir, table["outside_file"]), dtype=np.float32).reshape(-1, 2, row)
@@ -275,6 +317,14 @@ def study_table(table, dump_dir, head, dI, dH, layers_n, grid):
         margin = lambda L: np.sort(L, 1)[:, -1] - np.sort(L, 1)[:, -2]
         signals["decoder: margin between its two best codes, table present"] = (margin(Lq), margin(Lo))
         res["_abstain"] = {name: (np.asarray(a, float).tolist(), np.asarray(b, float).tolist()) for name, (a, b) in signals.items()}
+        res["_records"] = {
+            "signals": res["_abstain"], "uncovered_groups": [o["group"] for o in table["outside"]],
+            "covered_correct": {
+                "readout, table removed": (pred_b(both(Qb0)).argmax(1) == qy).tolist(),
+                "readout, table present": (pred_c(both(Qc0)).argmax(1) == qy).tolist(),
+                "decoder, table present": np.asarray(res["icl_free"]).tolist(),
+                "nearest neighbour, table removed": np.asarray(res["nearest_neighbour[both_layers] table removed"]).tolist(),
+            }}
         res["_outside_decoder_says_a_code"] = float(np.mean(np.isin(head.argmax(hid(Oc)), first)))
     res["_adapter_rank"] = len(tokens)
     res["_adapter_bytes_f32"] = (dI + dH) * len(tokens) * 4
@@ -311,6 +361,8 @@ def run(dump_dir, lm_path, out_path, receipt_path=None, grid=(0.5, 1.0, 2.0, 4.0
                        "background_peak_with_background": float(np.mean(extras["_adapter_background_peak_with_background"])) if extras["_adapter_background_peak_with_background"] else None,
                        "a0_on_questions_mean_and_sd": np.mean(np.array(extras["_a0_fit_on_questions"]), 0).round(4).tolist()},
            "per_table": per_table}
+    if extras["_records"]:
+        out["records"] = {table["specialty_id"]: rec for table, rec in zip(idx["tables"], extras["_records"])}
     if extras["_abstain"]:
         ab = {}
         for name in extras["_abstain"][0]:

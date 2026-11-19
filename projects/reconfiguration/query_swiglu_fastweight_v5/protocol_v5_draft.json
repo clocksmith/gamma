@@ -391,5 +391,39 @@
     },
     "decision": "Owner's rule: stop if the classifier matches or beats the adapter. The classifier beats it by more than the 5-point margin, so it is not a tie. The practical adapter claim is closed and the readout result is recorded in RESULTS.md.",
     "not_run": "run C on the 2B model (optional in the plan), the unseen model, the confirmation"
+  },
+  "followup_20261119_evening": {
+    "status": "Development only. The stop above applies to the adapter as built. The owner then directed further work toward a version that transfers to Doppler and Reploid.",
+    "method": "one recording run (B1_DUMP_FEATURES, seed 1102, 48 tables) and offline scoring with discover_v5.py; a last-layer write is simulated exactly and the simulation agreed with the runtime on 768 of 768 questions in both regimes",
+    "correct_of_768": {
+      "readout_table_removed": 742,
+      "new_last_layer_adapter_table_removed_simulated": 725,
+      "adapter_as_built_actual": 689,
+      "in_context_actual": 673,
+      "in_context_batch_calibrated": 694,
+      "last_layer_adapter_with_cached_prompt_simulated": 743
+    },
+    "paired_per_table": {
+      "new_adapter_minus_in_context_points": 6.77,
+      "interval_90": [
+        4.43,
+        9.11
+      ],
+      "new_adapter_minus_readout_points": -2.21,
+      "readout_interval_90": [
+        -3.39,
+        -1.04
+      ]
+    },
+    "uncovered_questions": {
+      "auroc_readout_top_score": 0.91,
+      "auroc_decoder_top_code_probability": 0.8,
+      "decoder_answers_uncovered_with_a_code": "384 of 384",
+      "wrong_direct_answers_per_100_at_35_lookups": {
+        "readout": 7.2,
+        "decoder_confidence": 14.9
+      }
+    },
+    "not_yet_done": "run the new adapter through the runtime on fresh development tables; second model"
   }
 }

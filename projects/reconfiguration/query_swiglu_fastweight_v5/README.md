@@ -3,8 +3,13 @@
 Status: closed before lock on 2026-11-19. A diagnostic run declared in advance found that a plain
 classifier on the model's own activations beats the adapter by 6.9 points with the table removed
 (96.6% against 89.7% over 48 development tables), and a cached prompt matches the adapter's speed. By the
-owner's rule fixed before the run, the practical adapter claim is closed; see the last sections of
+owner's rule fixed before the run, the practical claim for the adapter as built is closed; see
 [RESULTS.md](RESULTS.md). Nothing was locked or confirmed: every number comes from the `dev` task split.
+
+Follow-up the same evening, at the owner's direction: on recorded activations, a last-layer adapter
+compiled from the readout reaches 94.4% with the table removed in an exact offline simulation, against 87.6%
+for the model given the table, and the readout's score tells covered from uncovered questions better than
+the decoder's confidence. Not yet run through the runtime. See "Offline discovery" in RESULTS.md.
 
 ## What it does
 
@@ -66,6 +71,9 @@ fixed one on the top two layers. Details and numbers are in [RESULTS.md](RESULTS
 - `gate_v5.py`: the gate itself from receipts: exact one-sided sign-flip test with the 5-point margin, bootstrap
   interval, group-aware test, controls and cached-prompt parity.
 - `replay_compare_v5.py`: whether a replay reproduces an earlier receipt, arm by arm.
+- `dump_head_v5.mjs`, `discover_v5.py`, `lookup_gate_v5.py`: offline study on recorded activations: the
+  model's output matrix, the scoring of readouts, in-context variants and last-layer adapter designs, and the
+  answer-or-look-up trade-off.
 - `design_check_v5.py`, `controls_v5.test.mjs`: checks that need no model.
 - `protocol_v5_draft.json`: the draft protocol, for review before any lock.
 
