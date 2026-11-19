@@ -6,7 +6,7 @@ Usage: python -I table_level_v5.py RECEIPT_JSON [RECEIPT_JSON ...]   (receipts a
 """
 import collections, itertools, json, random, sys
 
-PAIRS = [('top2_ctx', 'base_ctx'), ('top2_ctx', 'knn_ctx'), ('shuf_ctx', 'base_ctx'), ('top2_ctx', 'shuf_ctx'), ('top2_bare', 'shuf_bare'), ('top2_ctx', 'cad_ctx'), ('knn_ctx', 'base_ctx'), ('cad_ctx', 'base_ctx'), ('top2_bare', 'base_ctx'), ('v5_ctx', 'base_ctx'), ('v5_bare', 'base_ctx')]
+PAIRS = [('top2_ctx', 'base_ctx'), ('top2_ctx', 'knn_ctx'), ('shuf_ctx', 'base_ctx'), ('top2_ctx', 'shuf_ctx'), ('top2_bare', 'shuf_bare'), ('top2_ctx', 'cad_ctx'), ('knn_ctx', 'base_ctx'), ('cad_ctx', 'base_ctx'), ('top2_bare', 'base_ctx'), ('v5_ctx', 'base_ctx'), ('v5_bare', 'base_ctx'), ('kv_ctx', 'base_ctx'), ('top2_bare', 'kv_ctx')]
 
 def sign_flip_p(diffs):
     d = [x for x in diffs if x != 0]

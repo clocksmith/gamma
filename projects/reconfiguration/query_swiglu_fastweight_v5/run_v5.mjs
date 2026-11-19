@@ -11,6 +11,9 @@
 // With B1_WITH_SHUFFLED=1 it also compiles the fixed adapter from the same table with every answer code replaced
 // by the next code in the table's list (shuf_bare, shuf_ctx). That adapter is taught a consistent wrong mapping:
 // if it helps as much as the real one with the table present, the gain is not information from the table.
+// With B1_WITH_KV_SNAPSHOT=1 it adds kv_ctx, the cached-prompt rival: the base model's prefix state for the
+// table is built once and restored per question. Its answers come from the same tokens as base_ctx; the receipt
+// records its build time, restore time, time per question and the state bytes it keeps, beside the adapter's.
 // With B1_WITH_SELECTED=1 it also compiles the per-table selected adapter (v5_bare, v5_ctx), which
 // development showed to be worse; that mode captures many more layers, so its compile times are not
 // the fixed adapter's.
@@ -36,6 +39,13 @@ const queries = Number(queriesArg ?? 2);
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, '..', '..', '..');
 const sha256Hex = buf => createHash('sha256').update(buf).digest('hex');
+// Receipts before 2026-11-19 did not record which Doppler they ran on; record its commit and whether the
+// runtime source under src/ had uncommitted changes.
+const gitIn = args => spawnSync('git', ['-C', resolve(dopplerRoot), ...args], { encoding: 'utf8' });
+const dopplerSource = {
+  commit: gitIn(['rev-parse', 'HEAD']).stdout.trim() || null,
+  src_dirty: gitIn(['status', '--porcelain', '--', 'src']).stdout.trim() !== '',
+};
 
 function canonicalizeAnswer(s) {
   let t = String(s ?? '').trim().split('\n')[0].trim();
@@ -119,6 +129,7 @@ if (pipeline.tokenizer.eosTokenId != null) stopTokens.add(pipeline.tokenizer.eos
 
 const withSelected = process.env.B1_WITH_SELECTED === '1';
 const withShuffled = process.env.B1_WITH_SHUFFLED === '1';
+const withKvSnapshot = process.env.B1_WITH_KV_SNAPSHOT === '1';
 
 // The code the shuffled-label control teaches for a group whose true code is `code`: the next one in the list.
 function shuffledCode(task, code) {
@@ -266,14 +277,39 @@ function argmaxLogits(arr) {
 }
 
 // Identical single-pass prefill + greedy decode path across all arms!
-async function greedyDecodeSinglePass(promptIds, maxNewTokens = 5, captureStep0Logits = false, adapterForStep = null) {
+// With `kv` ({ snap, prefixLen }) the table's saved prefix state is restored first and only the query tokens
+// are prefilled; the decode that follows is the same. The pipeline's own cache is put back afterwards and the
+// restored copy destroyed, so one question's state never leaks into the next.
+async function greedyDecodeSinglePass(promptIds, maxNewTokens = 5, captureStep0Logits = false, adapterForStep = null, kv = null) {
   await device.queue.onSubmittedWorkDone();
   if (adapterForStep) pipeline.setLoRAAdapter(adapterForStep(0));
   const t0 = performance.now();
   pipeline.resetGenerationState();
   pipeline.generator._resetDecodeRuntimeState();
-  const opts = genRtMod.resolvePrefillOptions(genState, { inputIds: promptIds, useChatTemplate: false });
-  const prefill = await pipeline.generator._prefillToHidden(promptIds, opts);
+  const originalCache = pipeline.kvCache;
+  let prefillIds = promptIds;
+  let restoreMs = null;
+  if (kv) {
+    const tr = performance.now();
+    pipeline.applyKVCacheSnapshot(kv.snap);
+    restoreMs = performance.now() - tr;
+    assert.equal(genState.currentSeqLen, kv.prefixLen, 'restored state must sit at the end of the table');
+    prefillIds = promptIds.slice(kv.prefixLen);
+  }
+  try {
+    return { ...(await decodeAfterRestore(promptIds, prefillIds, maxNewTokens, captureStep0Logits, adapterForStep, t0)), restoreMs };
+  } finally {
+    if (kv) {
+      const restored = pipeline.kvCache;
+      pipeline.kvCache = originalCache;
+      if (restored && restored !== originalCache) restored.destroy();
+    }
+  }
+}
+
+async function decodeAfterRestore(promptIds, prefillIds, maxNewTokens, captureStep0Logits, adapterForStep, t0) {
+  const opts = genRtMod.resolvePrefillOptions(genState, { inputIds: prefillIds, useChatTemplate: false });
+  const prefill = await pipeline.generator._prefillToHidden(prefillIds, opts);
   if (prefill.currentRecorder) {
     textSessMod.recordPrefillRecorderStats(genState, prefill.currentRecorder);
     await prefill.currentRecorder.submitAndWait();
@@ -566,6 +602,44 @@ async function compileSpecialty(task) {
   return { v5, top2: top2.adapter, abstain, gpuBuffers, sepTok, diag };
 }
 
+// The cached-prompt rival: prefill the table once with the base model, keep Doppler's prefix state
+// (attention KV plus the recurrent state of linear-attention layers), and restore it for every question.
+// It answers from the same tokens as base_ctx, so its accuracy should match base_ctx; what it is measured on
+// is build time, restore time, time per question and the state it has to keep.
+async function buildTableSnapshot(task) {
+  await device.queue.onSubmittedWorkDone();
+  pipeline.setLoRAAdapter(null);
+  const t0 = performance.now();
+  pipeline.resetGenerationState();
+  pipeline.generator._resetDecodeRuntimeState();
+  const prefixIds = encodeRaw(task.support_text);
+  const fullIds = encodeRaw(task.prompt);
+  assert.deepEqual(fullIds.slice(0, prefixIds.length), prefixIds, 'the table must tokenize as a prefix of the prompt');
+  const snap = await pipeline.prefillKVOnly('', { inputIds: prefixIds, useChatTemplate: false });
+  await device.queue.onSubmittedWorkDone();
+  const buildMs = performance.now() - t0;
+  assert.equal(snap.seqLen, prefixIds.length, 'snapshot must end at the last table token');
+  const kvStats = snap.cache.getMemoryStats();
+  // Only the per-request state: recurrent and convolution state. The snapshot also copies each layer's
+  // fixed weights (conv, norm, dt, A), which every arm already holds, so those are not charged.
+  let linearStateBytes = 0;
+  let linearLayers = 0;
+  const layerStates = snap.linearAttention?.layers instanceof Map ? [...snap.linearAttention.layers.values()] : [];
+  for (const s of layerStates) {
+    linearStateBytes += s.recurrentState.byteLength + s.convState.byteLength;
+    linearLayers += 1;
+  }
+  return {
+    snap,
+    prefixLen: prefixIds.length,
+    diag: {
+      kv_build_ms: buildMs, kv_prefix_tokens: prefixIds.length, kv_layout: kvStats.layout, kv_dtype: kvStats.kvDtype,
+      kv_used_bytes: kvStats.used, kv_allocated_bytes: kvStats.allocated, linear_attention_layers: linearLayers,
+      linear_state_bytes: linearStateBytes, kv_state_bytes: kvStats.used + linearStateBytes,
+    },
+  };
+}
+
 // Nearest-neighbour cache over the table's own answers (Grave et al. 2017), with v4's frozen temperature
 // and strength. Keys are the final hidden states at each table line's anchor; it biases the first token.
 async function greedyDecodeKnnCache(fullIds, sepTok, maxNewTokens) {
@@ -697,6 +771,10 @@ for (const t of tasks) {
     c.diag.shuffled_compile_ms = shuffled.diag.fixed_compile_ms;
     assert.equal(shuffled.diag.examples, c.diag.examples, 'shuffled table must keep every support line');
   }
+  if (withKvSnapshot) {
+    c.kv = await buildTableSnapshot(t);
+    c.diag.kv_snapshot = c.kv.diag;
+  }
   bySpecialty.set(t.specialty_id, c);
   console.log(`[${modelId}] ${t.specialty_id}: fixed adapter ${c.diag.fixed_adapter_bytes} bytes${c.diag.fixed_compile_ms == null ? '' : `, compiled in ${c.diag.fixed_compile_ms.toFixed(0)} ms`}${withSelected ? `; selected layer ${c.diag.layer}, ridge ${c.diag.ridge_ratio}, leave-one-out ${c.diag.loo_accuracy.toFixed(2)}` : ''}`);
 }
@@ -718,6 +796,7 @@ for (const task of tasks) {
     generated_tokens: r.generatedTokens, truncated: r.truncated, total_ms: r.totalMs,
     // For the shuffled-label arms: did the answer match the wrong code that adapter was taught?
     ...(arm.startsWith('shuf_') ? { matches_shuffled_code: r.canonical === taught } : {}),
+    ...(r.restoreMs != null ? { restore_ms: r.restoreMs } : {}),
   });
   for (const [arm, adapter] of arms) {
     for (const [regime, ids] of [['bare', bareIds], ['ctx', fullIds]]) {
@@ -729,13 +808,18 @@ for (const task of tasks) {
   }
   record('knn_ctx', fullIds, await greedyDecodeKnnCache(fullIds, c.sepTok, Number(task.max_new_tokens)));
   record('cad_ctx', fullIds, await greedyDecodeCad(fullIds, bareIds, Number(task.max_new_tokens)));
+  if (withKvSnapshot) {
+    pipeline.setLoRAAdapter(null);
+    record('kv_ctx', fullIds, await greedyDecodeSinglePass(fullIds, Number(task.max_new_tokens), false, null, c.kv));
+  }
   if ((task.task_id + 1) % 8 === 0) console.log('progress', task.task_id + 1, tasks.length);
 }
 
 const receipt = {
   scope: split === 'dev' ? 'development only, exploratory' : 'confirmation', split, seed, specialties: nSpecialties, shots_per_group: shots,
   queries_per_group: queries, task_count: tasks.length, model: modelId, num_layers: numLayers, hidden_size: dHidden,
-  intermediate_size: dInter, with_selected_adapter: withSelected, with_shuffled_adapter: withShuffled, captured_layers: candidateLayers, resource_check: process.env.B1_RESOURCE_CHECK,
+  intermediate_size: dInter, with_selected_adapter: withSelected, with_shuffled_adapter: withShuffled, with_kv_snapshot: withKvSnapshot,
+  captured_layers: candidateLayers, resource_check: process.env.B1_RESOURCE_CHECK, doppler_source: dopplerSource,
   confirm_protocol: process.env.B1_ALLOW_CONFIRM ?? null,
   source_sha256: {
     runner: sha256Hex(await readFile(fileURLToPath(import.meta.url))), compiler: sha256Hex(await readFile(join(here, 'fastweight_v5.mjs'))),

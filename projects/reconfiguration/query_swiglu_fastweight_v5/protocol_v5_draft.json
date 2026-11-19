@@ -86,7 +86,8 @@
     "tally_v5.py",
     "table_level_v5.py",
     "power_v5.py",
-    "fixed adapter: top two layers, ridge 0.15, write strength 0.15 of the median final hidden RMS per layer; nearest-neighbour cache temperature 0.08 and strength 8.0; context-aware decoding beta 0.5; the selected adapter is not run"
+    "fixed adapter: top two layers, ridge 0.15, write strength 0.15 of the median final hidden RMS per layer; nearest-neighbour cache temperature 0.08 and strength 8.0; context-aware decoding beta 0.5; the selected adapter is not run",
+    "audit_v5.py"
   ],
   "procedure": "Two commits. Commit 1 locks this file with status LOCKED and the SHA-256 of the frozen files, before the confirmation seed is drawn. Commit 2 adds the receipts and the write-up. The confirmation runs once per model and setting.",
   "development_evidence": "RESULTS.md. Development runs are not confirmation; several seeds were looked at while the code changed.",
@@ -112,6 +113,31 @@
       "smoke-test the shuffled-label control on a development seed and implement the cached-prompt arm with Doppler's prefillKVOnly and applyKVCacheSnapshot (both need the Mac GPU; ask the A3 owner first)",
       "owner pins the unseen model (decision 6)",
       "owner decides whether to keep the examples-present claim as primary, given that development shows no advantage over a nearest-neighbour cache; see RESULTS.md"
+    ]
+  },
+  "review_20261119": {
+    "by": "B1 owner (bus name B), zero-GPU audit with audit_v5.py on a CPU host; no new run; nothing locked",
+    "findings": [
+      "Errors are wrong-class choices: 176 of 180 table-removed misses are another valid code from the same table; 3 drift after a right start; none are stop-token failures. Multi-token codes are not the cause (238/320 against 239/320). Teaching all answer tokens plus the stop token is not indicated.",
+      "Favourite-code bias in every arm (47-49% of a table's answers go to one code against 25% balanced); with the table removed the adapter's favourite is often 'alpha', which does not cost accuracy overall (87/144 against 85/144).",
+      "The -6.9-point drop in seeds 1005-1006 has no cause in the runner diff (fixed-adapter construction unchanged); the Doppler revision was not recorded, so a runtime change is not excluded. The runner now records doppler_source.",
+      "Fixed adapter size is 221-405 KB (0.8B) and 393-721 KB (2B), not 110-200 KB; compile takes a median 2.3 s for a 3-example table and 22.6 s for a 20-example table on 0.8B."
+    ],
+    "power_prompt_removed_gate": "One-sided sign-flip, margin 5 points, alpha 0.05. If the true difference is 0: 96% at 48 tables and 100% at 96 for 20-example tables; 46% at 48 and 70% at 96 for 3-example tables. At -2.5 points: 58%/80% and 18%/29%. At -6.9 points: about 1% everywhere.",
+    "proposed_not_adopted": {
+      "primary_population": "20-example tables for the prompt-removed claim, 3-example tables reported as secondary. Awaiting owner confirmation; this narrows the claim.",
+      "state_size_gate": "kv_ctx state bytes at least 10 times the fixed adapter's bytes, measured on the same model and runtime, with zero table tokens at inference.",
+      "break_even": "report the number of questions after which the adapter's compile time is repaid against kv_ctx build plus restore time, or state that there is none in the tested range"
+    },
+    "implemented_not_run": [
+      "kv_ctx cached-prompt arm (B1_WITH_KV_SNAPSHOT=1) in run_v5.mjs",
+      "shuf_bare / shuf_ctx shuffled-label control (B1_WITH_SHUFFLED=1)"
+    ],
+    "still_required_before_lock": [
+      "one development GPU run with B1_WITH_KV_SNAPSHOT=1 and B1_WITH_SHUFFLED=1 on a fresh development seed, kv_ctx answers checked against base_ctx",
+      "optionally re-run seed 1003 with the current runner to test the runtime-change explanation of the 1005-1006 drop",
+      "owner pins the unseen model: qwen-3-5-4b is not in Doppler's catalog, so it needs a download and conversion decision (host, path, revision)",
+      "owner confirms the primary population"
     ]
   }
 }

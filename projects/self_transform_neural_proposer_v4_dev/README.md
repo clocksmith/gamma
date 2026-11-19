@@ -60,6 +60,40 @@ Not run. The gate was that the proposer first beat tuned K-FAC, and it only ties
 - There is still no evidence for or against recursive self-improvement, and no reason yet to
   expect it in a test bed where constants are all there is to learn.
 
+## Close-out (2026-11-19)
+
+Recommended closing result for B2, written by the B owner. `analyze_v4dev.py` was re-run on a CPU host
+from the retained Stage 1 and Stage 2 outputs and reproduced `summary_v4dev.json` byte for byte.
+
+What the evidence supports:
+
+- **Training the rule helps against a weak baseline.** Sealed v3: the proposer improved over its own
+  generation 0 in 12 of 12 lineages (p 2.6e-6). Here it beat the sealed-grid K-FAC in 8 of 8.
+- **That gain is tuning, not the proposer.** Eight constants trained on the same budget tie it on
+  normalised loss (0.4111 against 0.4127, 4 / 4, p 0.56), and replacing its per-row outputs with their
+  mean leaves the loss unchanged (p 0.86).
+- **"No state-dependent behaviour" above is slightly too strong.** The per-row outputs trade one task
+  type for another. Against their own mean they give better regression R² (0.7876 against 0.7756, 8 / 0,
+  p 0.034) and worse classification accuracy (0.4444 against 0.4487, 2 / 6, p 0.027). Against the trained
+  constants: R² 7 / 1 (p 0.018) for the proposer, accuracy 2 / 6 (p 0.14) for the constants. These are
+  two of about twenty comparisons in the analysis, uncorrected, and they point in opposite directions:
+  no net task benefit.
+- **Self-modification has not shown a benefit, and here was not tested.** Sealed v3 found no detectable
+  benefit from recursive self-application (p 0.66), on a test bed whose "real model" family runs one MLP
+  layer on pooled embeddings, not the model (see the v3 post-seal note). In v2's five lineages the
+  self-modifying proposer had lower loss than the fixed one in 4 of 5 (mean difference -0.0019,
+  p 0.63). Stage 3 here was gated on the proposer first beating trained constants, and it did not run.
+
+So the closing statement is: learning an update rule beat a badly tuned optimizer; it did not beat
+trained constants; and no experiment has shown that letting the rule modify itself adds anything. This
+is the absence of a demonstrated advantage, not proof that self-modification cannot help.
+
+**Reopen only if** one development test, within a single task family (the only place Stage 2 found
+headroom, 0.3909 against 0.4153 on loss, with accuracy unchanged), shows a differentiable self-modifying
+arm beating eight trained constants, a matched non-recursive rule and the mean-output ablation on
+**accuracy**, with all meta-training, reconstruction and inner updates charged to the same measured
+compute. Otherwise B2 stays closed.
+
 ## Rerun
 
 ```

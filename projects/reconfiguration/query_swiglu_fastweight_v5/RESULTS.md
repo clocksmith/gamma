@@ -109,6 +109,75 @@ place of the table's tokens, and no limit from the context window. The claim wit
 therefore "table removed, not worse than the base model reading the table", tested against a cached prompt
 on size and time, and "more examples than fit in the prompt", which no arm here tests yet.
 
+## Zero-GPU audit (2026-11-19, no new run)
+
+`audit_v5.py` over the same ten development receipts, run on a CPU host. It regenerates each receipt's
+tables from `tasks_v5.py` and checks every expected answer against the receipt.
+
+**What the misses are.** With the table removed the fixed adapter missed 180 of 640 questions: 176 answered
+with a different valid code from the same table, 3 started the right code and drifted, 1 was not a code,
+and none were empty or stopped early or late. The base model reading the table misses the same way (183 of
+186). Multi-token codes are not the problem: 238 of 320 against 239 of 320 for the base model with the
+table. Teaching every answer token plus the stop token would address 3 misses in 180.
+
+**A favourite code.** In a balanced table each code is the right answer a quarter of the time. The most
+frequent answer takes 47% of a table's answers for the base model with the table, 49% for the adapter with
+the table removed and 49% for the adapter with the table. 76% of the adapter's table-removed errors are its
+favourite. With the table removed that favourite is often the word `alpha` (42 more `alpha` answers than
+there were `alpha` questions); with the table present the adapter's favourite is the code of the last
+support line in 30 of 64 tables, against about 16 by chance. The `alpha` pull does not cost accuracy
+overall: on tables that use `alpha` the adapter scores 87 of 144 against 85 for the base model with the
+table.
+
+**The 6.9-point drop in the last three runs.** By run group, adapter with the table removed minus base model
+with the table:
+
+| Seeds | Tables | Difference | Standard error | Runner | Compiler |
+|---|---:|---:|---:|---|---|
+| 1001-1002 | 24 | +3.9 | 3.8 | `1b252eaf9` | `1b252eaf9` |
+| 1003-1004 | 20 | +5.9 | 4.6 | `1b252eaf9` | `8d3272084` |
+| 1005-1006 | 20 | -6.9 | 4.4 | `2c7c83566` | `8d3272084` |
+
+The runner change between the last two groups does not touch how the fixed adapter is built: the same
+`fitLayer` calls with the same ridge, write strength and rows. It only stops capturing the layers that the
+dropped per-table selected adapter needed. The receipts do not record which Doppler they ran on, so a
+runtime change between 2026-11-18 00:13 and 07:15 cannot be excluded; the runner now records it. The base
+model with the table scored 70.3% in the last group against 58.1% in the one before, so those tables were
+easier for it, and most of the drop is on two-part codes (66 of 96 against 75 of 96). Read: no code cause
+found; most likely table-to-table variation, not excluded as a runtime change. Re-running seed 1003 with
+the current runner would settle it.
+
+**Size and compile time, corrected.** The 110 to 200 KB quoted above is the single-layer selected adapter.
+The fixed two-layer adapter that every comparison uses is 221 to 405 KB on Qwen3.5-0.8B and 393 to 721 KB
+on Qwen3.5-2B. It compiles in a median 2.3 s on 0.8B for a 3-example table (about 160 tokens) and 22.6 s for
+a 20-example table (about 956 tokens), because it runs one forward pass per support line. Earlier receipts
+include the selected adapter's search in their compile time and are not comparable.
+
+**Power for the exact prompt-removed gate** (one-sided sign-flip test at 0.05 on per-table adapter accuracy
+minus base-with-table accuracy plus 5 points; 600 simulated confirmations per cell, tables resampled from
+development and re-centred on the assumed true difference):
+
+| True difference | 20 examples per group, 48 tables | 96 tables | 3 examples per group, 48 tables | 96 tables |
+|---|---:|---:|---:|---:|
+| 0 points | 96% | 100% | 46% | 70% |
+| -2.5 points | 58% | 80% | 18% | 29% |
+| -6.9 points | 1% | 0% | 1% | 1% |
+
+Large tables are where a confirmation can pass at a feasible size: there the adapter ties the base model
+exactly in development (89.1% both, table-level spread 9.9 points) and removing the table saves about 930
+prompt tokens. Small tables have a spread of 22.4 points and save about 140 tokens. The earlier "91% at 96
+tables" was for the examples-present gate, not this one.
+
+**Cached-prompt arm, written, not run.** `B1_WITH_KV_SNAPSHOT=1` adds `kv_ctx`: the base model's prefix
+state for the table (attention KV plus linear-attention recurrent state) is built once with
+`prefillKVOnly` and restored per question. It decodes through the same function as every other arm, so its
+answers should match `base_ctx`; the receipt records its build time, restore time, time per question and
+state bytes beside the adapter's size and compile time. The pipeline's own cache is restored after each
+question and the restored copy destroyed.
+
+**Unseen model.** No B1 receipt has used a 4B Qwen, but `qwen-3-5-4b` is not in Doppler's model catalog:
+pinning it means downloading and converting it, which is the owner's decision (host, path, revision).
+
 ## State at handoff (2026-11-18 08:00 EST)
 
 Nothing is locked. `protocol_v5_draft.json` awaits an independent review and the owner's pin of an
