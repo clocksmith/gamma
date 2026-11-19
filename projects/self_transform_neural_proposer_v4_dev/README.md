@@ -62,7 +62,11 @@ Not run. The gate was that the proposer first beat tuned K-FAC, and it only ties
 
 ## Close-out (2026-11-19)
 
-Recommended closing result for B2, written by the B owner. `analyze_v4dev.py` was re-run on a CPU host
+**Status: closed on 2026-11-19 on the owner's approval** (relayed to the B owner by the X1 session; no new
+experiment was run to close it). Self-modification stays marked untested in this rebuild, and the
+uncorrected secondary comparisons below stay as recorded.
+
+Closing result for B2, written by the B owner. `analyze_v4dev.py` was re-run on a CPU host
 from the retained Stage 1 and Stage 2 outputs and reproduced `summary_v4dev.json` byte for byte.
 
 What the evidence supports:
