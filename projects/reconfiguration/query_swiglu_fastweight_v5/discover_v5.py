@@ -382,8 +382,10 @@ def run(dump_dir, lm_path, out_path, receipt_path=None, grid=(0.5, 1.0, 2.0, 4.0
         out["receipt_arms"] = {arm: {"correct": sum(bool(by[arm][t]["correct"]) for t in task_ids if t in by[arm]), "of": sum(t in by[arm] for t in task_ids)} for arm in sorted(by)}
         # Does the simulation agree with what the runtime actually generated first?
         checks = {}
-        for arm, name in (("kv_ctx", "icl_free"), ("base_bare", "base_free_table_removed")):
-            if arm in by:
+        for arm, name in (("kv_ctx", "icl_free"), ("base_bare", "base_free_table_removed"),
+                          ("ra_bare", "adapter[answer rows only, as a real adapter (no bias term)|gain 1.0] table removed: whole answer"),
+                          ("ra_kv", "adapter[answer rows only, as a real adapter (no bias term)|gain 1.0] table present: whole answer")):
+            if arm in by and name in totals:
                 sim = np.concatenate(totals[name])
                 gpu = np.array([bool(by[arm][t]["correct"]) for t in task_ids])
                 checks[f"{name} against {arm}"] = {"same_verdict": int((sim == gpu).sum()), "of": n}
