@@ -494,7 +494,7 @@ split, not a confirmation. Receipt `qwen35_08b_dev1103_k20_readout_adapter.json`
 - **On top of the cached prompt:** `ra_kv` minus `kv_ctx` +5.6 points (+4.0 to +7.2), better on 50 questions and
   worse on 7.
 - **The simulator was exact.** Run on this seed's recordings it predicted `ra_bare` right or wrong on 768 of 768
-  questions and gave 743 for `ra_kv`, the count the runtime produced.
+  questions, and `ra_kv` on 768 of 768.
 - **Cost.** The adapter is 92 KB (word codes) or 184 KB (two-part codes) against a median 32.4 MB of cached-prompt
   state, about 180 to 350 times smaller. It is fitted in a median 0.87 s after the same per-line passes the old
   adapter needs. Per question it takes 255 ms against 246 ms for the cached prompt.
@@ -504,7 +504,7 @@ split, not a confirmation. Receipt `qwen35_08b_dev1103_k20_readout_adapter.json`
 The readout results repeat on these tables: covered against uncovered questions, AUROC 0.94 for the readout's
 top score against 0.81 for the decoder's top-code probability, and the model again answered all 384 uncovered
 questions with a code; at about 35 lookups per 100 questions, 5.2 wrong direct answers gating on the readout
-against 13.9 gating on the decoder's confidence (41.4 never looking up); the readout with 3 examples per code
+against 13.9 gating on the decoder's confidence (39.2 never looking up); the readout with 3 examples per code
 scores 88.4%, with 10 scores 95.6%.
 
 **What this establishes, and what it does not.** On two independent sets of 48 development tables, one model
