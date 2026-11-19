@@ -150,6 +150,32 @@ const dumpDir = process.env.B1_DUMP_FEATURES ? resolve(process.env.B1_DUMP_FEATU
 assert.ok(!dumpDir || (withControls && withKvSnapshot), 'B1_DUMP_FEATURES needs B1_WITH_CONTROLS=1 and B1_WITH_KV_SNAPSHOT=1');
 if (dumpDir) mkdirSync(dumpDir, { recursive: true });
 const dumpIndex = [];
+// Questions the table does not cover: nouns from item groups that are not in the table. Only recorded when
+// features are dumped; no arm answers them. They test whether anything can tell that a table has no answer.
+let outsideGroups = null;
+if (dumpDir) {
+  const g = spawnSync(join(repoRoot, '.venv', 'bin', 'python'), ['-B', join(here, 'tasks_v5.py'), '--groups', split], { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  if (g.status !== 0) throw new Error(g.stderr);
+  outsideGroups = JSON.parse(g.stdout);
+}
+function outsideQuestions(task, perGroup = 4, groupCount = 2) {
+  const unused = Object.keys(outsideGroups.groups).sort().filter(name => !task.groups.includes(name));
+  // Deterministic choice from the table's id, so a rerun asks the same questions.
+  let h = 2166136261;
+  for (const ch of task.specialty_id) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
+  const next = () => { h ^= h << 13; h >>>= 0; h ^= h >>> 17; h ^= h << 5; h >>>= 0; return h; };
+  const out = [];
+  for (let gi = 0; gi < groupCount; gi += 1) {
+    const name = unused[next() % unused.length];
+    const nouns = outsideGroups.groups[name];
+    for (let i = 0; i < perGroup; i += 1) {
+      const noun = nouns[next() % nouns.length];
+      const tail = outsideGroups.tails[next() % outsideGroups.tails.length];
+      out.push({ group: name, noun, line: `Item: a ${noun} ${tail} =>` });
+    }
+  }
+  return out;
+}
 // One dump row: [activations of each requested layer ... | final hidden row], float32.
 function dumpRow(layerRows, hiddenRow) {
   const out = new Float32Array(layerRows.reduce((n, r) => n + r.length, 0) + hiddenRow.length);
@@ -722,7 +748,9 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
         class_first_tokens: spans.map(k => Number(k.split(',')[0])), class_token_ids: spans.map(k => k.split(',').map(Number)),
         support_file: `${task.specialty_id}.support.f32`, support_rows: rowsMeta,
         query_file: `${task.specialty_id}.query.f32`, queries: [],
+        outside_file: `${task.specialty_id}.outside.f32`, outside: [],
       });
+      writeFileSync(join(dumpDir, `${task.specialty_id}.outside.f32`), Buffer.alloc(0));
       writeFileSync(join(dumpDir, `${task.specialty_id}.query.f32`), Buffer.alloc(0));
     }
     Object.assign(diag, {
@@ -944,6 +972,22 @@ for (const t of tasks) {
   if (withKvSnapshot) {
     c.kv = await buildTableSnapshot(t);
     c.diag.kv_snapshot = c.kv.diag;
+  }
+  if (dumpDir) {
+    // Two rows per uncovered question: table removed, then table present. Answer marker only.
+    const entry = dumpIndex.find(e => e.specialty_id === t.specialty_id);
+    const file = join(dumpDir, entry.outside_file);
+    for (const q of outsideQuestions(t)) {
+      const bare = encodeRaw(t.header_text + q.line);
+      const full = encodeRaw(t.support_text + q.line);
+      assert.equal(bare.at(-1), c.sepTok, 'an uncovered question must end at the answer marker');
+      const at = bare.length - 1;
+      const capBare = await capturePass(bare, top2Layers, [at], []);
+      const withTable = await captureAfterRestore(c.kv, full, top2Layers, 1);
+      appendFileSync(file, dumpRow(top2Layers.map(l => capBare.rowsByLayer.get(l).get(at)), capBare.hRows.get(at)));
+      appendFileSync(file, dumpRow(top2Layers.map(l => withTable[0].rows.get(l)), withTable[0].hidden));
+      entry.outside.push({ group: q.group, noun: q.noun });
+    }
   }
   bySpecialty.set(t.specialty_id, c);
   console.log(`[${modelId}] ${t.specialty_id}: fixed adapter ${c.diag.fixed_adapter_bytes} bytes${c.diag.fixed_compile_ms == null ? '' : `, compiled in ${c.diag.fixed_compile_ms.toFixed(0)} ms`}${withSelected ? `; selected layer ${c.diag.layer}, ridge ${c.diag.ridge_ratio}, leave-one-out ${c.diag.loo_accuracy.toFixed(2)}` : ''}`);

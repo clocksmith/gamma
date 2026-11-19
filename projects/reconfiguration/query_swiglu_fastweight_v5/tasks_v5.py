@@ -302,4 +302,8 @@ def build_tasks(seed: int, split: str, specialties: int = 8, shots: int = 3, que
 
 if __name__ == "__main__":
     a = sys.argv[1:]
-    print(json.dumps(build_tasks(int(a[0]), a[1], int(a[2]), int(a[3]), int(a[4]))))
+    if a and a[0] == "--groups":
+        # The item groups of one split and the tails, for building questions that a table does not cover.
+        print(json.dumps({"groups": GROUPS[a[1]], "tails": TAILS}))
+    else:
+        print(json.dumps(build_tasks(int(a[0]), a[1], int(a[2]), int(a[3]), int(a[4]))))

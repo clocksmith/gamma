@@ -72,6 +72,21 @@ def fit_bias(L, y, steps=300, lr=0.5):
     return b - b.mean()
 
 
+def auroc(pos, neg):
+    """Probability that a covered question scores above an uncovered one (ties count half)."""
+    pos, neg = np.asarray(pos, float), np.asarray(neg, float)
+    if not len(pos) or not len(neg):
+        return None
+    allv = np.concatenate([pos, neg])
+    order = allv.argsort(kind="mergesort")
+    ranks = np.empty(len(allv))
+    ranks[order] = np.arange(1, len(allv) + 1)
+    for v in np.unique(allv):                      # average ranks over ties
+        m = allv == v
+        ranks[m] = ranks[m].mean()
+    return float((ranks[:len(pos)].sum() - len(pos) * (len(pos) + 1) / 2) / (len(pos) * len(neg)))
+
+
 class Head:
     def __init__(self, lm, g, eps):
         self.lm, self.g, self.eps = lm, g.astype(np.float32), eps
@@ -88,6 +103,18 @@ class Head:
         for s in range(0, len(H), chunk):
             out.append((self.normed(H[s:s + chunk]) @ self.lm.T).argmax(1))
         return np.concatenate(out) if out else np.zeros(0, dtype=int)
+
+    def code_mass(self, H, tokens, chunk=96):
+        """Per row: probability mass the full-vocabulary softmax puts on `tokens`, and the largest single one."""
+        mass, top = [], []
+        for s in range(0, len(H), chunk):
+            L = self.normed(H[s:s + chunk]) @ self.lm.T
+            L = L - L.max(1, keepdims=True)
+            P = np.exp(L)
+            P /= P.sum(1, keepdims=True)
+            mass.append(P[:, tokens].sum(1))
+            top.append(P[:, tokens].max(1))
+        return np.concatenate(mass), np.concatenate(top)
 
     def direction(self, token):
         d = self.g * self.lm[token]
@@ -217,6 +244,38 @@ def study_table(table, dump_dir, head, dI, dH, layers_n, grid):
                         ok_all[qi] &= right
                 res[f"adapter[{vname}|gain {beta}] {regime}: first token"] = ok_first
                 res[f"adapter[{vname}|gain {beta}] {regime}: whole answer"] = ok_all
+    # --- can anything tell that the table does not cover a question? ----------------------------------------
+    if table.get("outside") and os.path.exists(os.path.join(dump_dir, table["outside_file"])):
+        O = np.fromfile(os.path.join(dump_dir, table["outside_file"]), dtype=np.float32).reshape(-1, 2, row)
+        Ob, Oc = O[:, 0], O[:, 1]
+        both = feats["both_layers"]
+        signals = {}
+        pred_b, _ = ridge_fit(both(S[iso0 | cat0]), one_vs_rest(lab[iso0 | cat0], k), 0.15)
+        signals["readout top score, table removed"] = (pred_b(both(Qb0)).max(1), pred_b(both(Ob)).max(1))
+        pred_c, _ = ridge_fit(both(S[cat0]), one_vs_rest(lab[cat0], k), 0.15)
+        signals["readout top score, table present"] = (pred_c(both(Qc0)).max(1), pred_c(both(Oc)).max(1))
+
+        def nearest(Xq, mask):
+            s = 0
+            for l in range(layers_n):
+                mu_, inv_ = standardizer(z(S[mask], l))
+                a_ = (z(S[mask], l) - mu_) * inv_
+                a_ /= np.linalg.norm(a_, axis=1, keepdims=True) + 1e-12
+                b_ = (z(Xq, l) - mu_) * inv_
+                b_ /= np.linalg.norm(b_, axis=1, keepdims=True) + 1e-12
+                s = s + b_ @ a_.T / layers_n
+            return s.max(1)
+        signals["nearest support line similarity, table removed"] = (nearest(Qb0, iso0 | cat0), nearest(Ob, iso0 | cat0))
+        signals["nearest support line similarity, table present"] = (nearest(Qc0, cat0), nearest(Oc, cat0))
+        mq, tq_ = head.code_mass(hid(Qc0), first)
+        mo, to_ = head.code_mass(hid(Oc), first)
+        signals["decoder: probability on any code, table present"] = (mq, mo)
+        signals["decoder: probability of its top code, table present"] = (tq_, to_)
+        Lo = head.at(hid(Oc), first)
+        margin = lambda L: np.sort(L, 1)[:, -1] - np.sort(L, 1)[:, -2]
+        signals["decoder: margin between its two best codes, table present"] = (margin(Lq), margin(Lo))
+        res["_abstain"] = {name: (np.asarray(a, float).tolist(), np.asarray(b, float).tolist()) for name, (a, b) in signals.items()}
+        res["_outside_decoder_says_a_code"] = float(np.mean(np.isin(head.argmax(hid(Oc)), first)))
     res["_adapter_rank"] = len(tokens)
     res["_adapter_bytes_f32"] = (dI + dH) * len(tokens) * 4
     res["_task_ids"] = [q["task_id"] for q in qs]
@@ -252,6 +311,17 @@ def run(dump_dir, lm_path, out_path, receipt_path=None, grid=(0.5, 1.0, 2.0, 4.0
                        "background_peak_with_background": float(np.mean(extras["_adapter_background_peak_with_background"])) if extras["_adapter_background_peak_with_background"] else None,
                        "a0_on_questions_mean_and_sd": np.mean(np.array(extras["_a0_fit_on_questions"]), 0).round(4).tolist()},
            "per_table": per_table}
+    if extras["_abstain"]:
+        ab = {}
+        for name in extras["_abstain"][0]:
+            per = [auroc(t_[name][0], t_[name][1]) for t_ in extras["_abstain"]]
+            pooled = auroc(sum((t_[name][0] for t_ in extras["_abstain"]), []), sum((t_[name][1] for t_ in extras["_abstain"]), []))
+            ab[name] = {"mean_auroc_per_table": round(float(np.mean(per)), 4), "pooled_auroc": round(pooled, 4)}
+        out["covered_against_uncovered_questions"] = {
+            "what": "AUROC for telling the table's own questions from questions about item groups the table does not contain; 0.5 is chance",
+            "covered_questions": n, "uncovered_questions": int(sum(len(t_[next(iter(t_))][1]) for t_ in extras["_abstain"])),
+            "decoder_answers_an_uncovered_question_with_a_code": round(float(np.mean(extras["_outside_decoder_says_a_code"])), 4),
+            "signals": ab}
     if receipt_path:
         rec = json.load(open(receipt_path))
         by = collections.defaultdict(dict)
@@ -271,7 +341,7 @@ def run(dump_dir, lm_path, out_path, receipt_path=None, grid=(0.5, 1.0, 2.0, 4.0
     width = max(len(k) for k in summary)
     for name, v in sorted(summary.items(), key=lambda kv: -kv[1]["share"]):
         print(f"{name:<{width}}  {v['correct']:4d}/{v['of']}  {100 * v['share']:5.1f}%")
-    for key in ("adapter", "receipt_arms", "simulation_check"):
+    for key in ("adapter", "receipt_arms", "simulation_check", "covered_against_uncovered_questions"):
         if key in out:
             print(key, json.dumps(out[key]))
     return out
@@ -313,10 +383,18 @@ def self_test():
             qrows += [row(y), row(y), stop_row(), stop_row()]
             queries.append({"task_id": qi, "expected": str(y), "label": y, "group": "g", "answer_tokens": [codes[y]], "rows": 4})
         np.stack(qrows).tofile(os.path.join(d, "t.query.f32"))
+        far = rng.normal(0, 1, dI)
+        orows = []
+        for _ in range(6):
+            zz = [shared + far + rng.normal(0, 0.6, dI) for _ in range(2)]
+            for _context in (0, 1):
+                orows.append(np.concatenate(zz + [rng.normal(0, 1, dH)]).astype(np.float32))
+        np.stack(orows).tofile(os.path.join(d, "t.outside.f32"))
         json.dump({"model": "synthetic", "seed": 0, "layers": [0, 1], "hidden_size": dH, "intermediate_size": dI, "newline_token": newline,
                    "rms_norm_eps": 1e-6, "final_norm_weight": [1.0] * dH,
                    "tables": [{"specialty_id": "t", "class_first_tokens": codes, "support_file": "t.support.f32", "support_rows": meta,
-                               "query_file": "t.query.f32", "queries": queries}]}, open(os.path.join(d, "index.json"), "w"))
+                               "query_file": "t.query.f32", "queries": queries,
+                               "outside_file": "t.outside.f32", "outside": [{"group": "x", "noun": "y"}] * 6}]}, open(os.path.join(d, "index.json"), "w"))
         lm.tofile(os.path.join(d, "lm.f32"))
         json.dump({"shape": [V, dH]}, open(os.path.join(d, "lm.f32.json"), "w"))
         out = run(d, os.path.join(d, "lm.f32"), os.path.join(d, "out.json"), grid=(4.0, 16.0))
@@ -324,6 +402,9 @@ def self_test():
     assert m["probe[both_layers|train iso_and_cat] table removed"]["share"] == 1.0, m
     assert m["adapter[answer rows only|gain 16.0] table removed: whole answer"]["share"] >= 0.75, m
     assert m["adapter[answer rows only, as a real adapter (no bias term)|gain 16.0] table removed: first token"]["share"] >= 0.75, m
+    ab = out["covered_against_uncovered_questions"]["signals"]
+    assert ab["nearest support line similarity, table removed"]["pooled_auroc"] >= 0.8, ab
+    assert abs(auroc([3, 2, 1], [0, 0, 0]) - 1.0) < 1e-9 and abs(auroc([1, 1], [1, 1]) - 0.5) < 1e-9
     print("self-test ok")
 
 
