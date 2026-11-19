@@ -145,11 +145,12 @@ The runner change between the last two groups does not touch how the fixed adapt
 dropped per-table selected adapter needed. The receipts do not record which Doppler they ran on (the runner
 now does). Corrected 2026-11-19: the Doppler worktree the runs were launched from has sat at `e45824b09`
 with a clean `src` since 2026-11-17 17:14 EST by its reflog, and the first of the ten receipts was written
-at 22:27 that evening. A runtime change is therefore excluded unless a run was pointed at another checkout,
-which the old receipts cannot show. The base model with the table scored 70.3% in the last group against
-58.1% in the one before, so those tables were easier for it, and most of the drop is on two-part codes
-(66 of 96 against 75 of 96). Read: no code or runtime cause found; table-to-table variation is the leading
-explanation. Re-running seed 1003 on that worktree with the current runner would confirm it, as a
+at 22:27 that evening. A change in Doppler's source is therefore excluded unless a run was pointed at
+another checkout, which the old receipts cannot show. Other run conditions (GPU load, memory pressure) were
+not recorded. The base model with the table scored 70.3% in the last group against 58.1% in the one before,
+so those tables were easier for it, and most of the drop is on two-part codes (66 of 96 against 75 of 96).
+Read: no cause found in the runner, the compiler or Doppler's source; table-to-table variation is the
+leading explanation. Re-running seed 1003 on that worktree with the current runner would confirm it, as a
 diagnostic outside confirmation.
 
 **Size and compile time, corrected.** The 110 to 200 KB quoted above is the single-layer selected adapter.
@@ -172,6 +173,13 @@ Large tables are where a confirmation can pass at a feasible size: there the ada
 exactly in development (89.1% both, table-level spread 9.9 points) and removing the table saves about 930
 prompt tokens. Small tables have a spread of 22.4 points and save about 140 tokens. The earlier "91% at 96
 tables" was for the examples-present gate, not this one.
+
+**Tables are not independent draws (found 2026-11-19).** Each split in `tasks_v5.py` has eight item groups
+of 28 nouns, and every table samples four of the eight. So 96 confirmation tables reuse the same 224 nouns
+and at most 70 group combinations. The sign-flip test and the power figures above treat tables as
+independent; they therefore say nothing beyond these eight groups, and probably overstate power. Before
+lock: add confirmation groups, or run the test and its power calculation with the group combination as the
+resampling unit. The 28-noun limit also caps a table at 28 examples per group, questions included.
 
 **Cached-prompt arm, written, not run.** `B1_WITH_KV_SNAPSHOT=1` adds `kv_ctx`: the base model's prefix
 state for the table (attention KV plus linear-attention recurrent state) is built once with
