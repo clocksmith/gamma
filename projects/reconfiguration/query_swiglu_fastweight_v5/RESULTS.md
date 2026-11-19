@@ -278,6 +278,16 @@ runs: Qwen 0.8B, 12 tables of 20 examples, 171 of 192 against 169 of 192, +1.0 p
 one-sided p 0.028; Qwen 2B has four such tables, which cannot pass at any outcome (smallest possible p is
 0.0625). These are development tables that were looked at while the code changed, not a confirmation.
 
+**Owner confirmations and the diagnostic plan (2026-11-19, before any diagnostic run).** The table-removed
+comparison is confirmed as the primary gate. A tie between the adapter and the plain classifier is confirmed to
+mean the 90% interval on their difference lying inside -5 to +5 points; a difference that is merely not
+significant is not a tie. On the short Mac check the rule is: stop if the classifier matches or beats the
+adapter, or if the adapter's upside is capped below 5 points and the cached prompt shows no clear residency
+win. `protocol_v5_draft.json` declares the three diagnostic runs and that rule before they are made: a seed
+1003 replay, a cached-prompt parity and cost run, and a 48-table table-removed run for the adapter against the
+classifier (48 so that the comparison is not underpowered). `B1_SKIP_ARMS` lets the runner leave arms out, and
+`replay_compare_v5.py` compares a replay with its original receipt.
+
 ## State at handoff (2026-11-18 08:00 EST)
 
 Nothing is locked. `protocol_v5_draft.json` awaits an independent review and the owner's pin of an

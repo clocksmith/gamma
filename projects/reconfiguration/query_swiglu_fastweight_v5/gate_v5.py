@@ -185,6 +185,33 @@ def gate(tables, shots):
     return out
 
 
+def tie_rule(c, margin_points=float(100 * MARGIN)):
+    """The owner's rule of 2026-11-19 for the adapter against the plain classifier, from the 90% interval.
+
+    A true tie needs the interval on (adapter - classifier) to sit inside the 5-point margin; a difference that
+    is merely not significant is not a tie. Stop if the classifier matches or beats the adapter, or if the
+    adapter's upside is capped below 5 points and the cached prompt shows no clear residency win.
+    """
+    lo, hi = c["bootstrap_interval_90_points"]
+    mean = c["mean_difference_points"]
+    out = {
+        "margin_points": margin_points,
+        "true_tie_interval_inside_margin": -margin_points < lo and hi < margin_points,
+        "classifier_matches_or_beats_adapter": mean <= 0,
+        "adapter_upside_capped_below_margin": hi < margin_points,
+        "adapter_higher_interval_above_zero": lo > 0,
+    }
+    if out["classifier_matches_or_beats_adapter"]:
+        out["reading"] = "STOP: the classifier matches or beats the adapter."
+    elif out["adapter_upside_capped_below_margin"]:
+        out["reading"] = "STOP unless the cached prompt shows a clear residency win: the adapter's upside over the classifier is capped below 5 points."
+    elif out["adapter_higher_interval_above_zero"]:
+        out["reading"] = "ADVANCE if the cached prompt also shows a residency win: the adapter is higher than the classifier and its upside is not capped below 5 points."
+    else:
+        out["reading"] = "INCONCLUSIVE, not a tie: the interval is too wide to show a tie or an advantage. More tables are needed."
+    return out
+
+
 def controls(tables, compiled, shots):
     use = [t for t in tables if t["shots"] == shots]
     out = {}
@@ -197,14 +224,16 @@ def controls(tables, compiled, shots):
                        ("adapter_vs_wrong_label_adapter_table_present", "top2_ctx", "shuf_ctx"),
                        ("adapter_vs_most_frequent_code", "top2_bare", "mfc_bare"),
                        ("secondary_table_present", "top2_ctx", "base_ctx"), ("cached_prompt_vs_base_with_table", "kv_ctx", "base_ctx")):
-        c = compare(use, a, b)
+        c = compare(use, a, b, groups=True)
         if c:
+            diffs, groups = c.pop("_diffs"), c.pop("_groups")
+            if name == "adapter_vs_plain_classifier" and len(diffs) > 1:
+                aware = group_aware(diffs, groups, margin=0)
+                c["group_aware_interval_90_points"] = [round(100 * x, 2) for x in aware["interval_90"]]
+                c["group_share_of_table_variance"] = aware["group_share_of_table_variance"]
             out[name] = c
     if "adapter_vs_plain_classifier" in out:
-        c = out["adapter_vs_plain_classifier"]
-        # Proposed tie rule, to be fixed at lock: the adapter beats the classifier only if it is higher at
-        # table level with a one-sided sign-flip p below 0.05. Anything else is a tie or a loss.
-        c["adapter_beats_classifier_proposed_rule"] = c["mean_difference_points"] > 0 and c["sign_flip_p_one_sided_a_higher"] < ALPHA
+        out["adapter_vs_plain_classifier"]["tie_rule"] = tie_rule(out["adapter_vs_plain_classifier"])
     kv = [t for t in use if t["n"]["kv_ctx"]]
     if kv:
         questions = mismatches = 0
@@ -270,8 +299,10 @@ def main(argv):
                       f"build {c['build_ms_mean']} ms, restore {c['restore_ms_mean']} ms, state {c['state_bytes_mean']} bytes against adapter {c['adapter_bytes_mean']} bytes")
             else:
                 a, b = [k for k in c if k.endswith(("_bare", "_ctx"))][:2]
-                extra = f"; adapter beats classifier under the proposed rule: {c['adapter_beats_classifier_proposed_rule']}" if "adapter_beats_classifier_proposed_rule" in c else ""
-                print(f"  {name}: {c[a]} against {c[b]}, {c['mean_difference_points']:+.2f} points, two-sided p {c['sign_flip_p_two_sided']:.3g}{extra}")
+                iv = c["bootstrap_interval_90_points"]
+                print(f"  {name}: {c[a]} against {c[b]}, {c['mean_difference_points']:+.2f} points, 90% interval {iv[0]:+.2f} to {iv[1]:+.2f}, two-sided p {c['sign_flip_p_two_sided']:.3g}")
+                if "tie_rule" in c:
+                    print(f"    {c['tie_rule']['reading']}")
         for s, c in r["other_table_sizes"].items():
             if c:
                 print(f"  secondary, {s} examples per group: top2_bare {c['top2_bare']} against base_ctx {c['base_ctx']}, {c['mean_difference_points']:+.2f} points over {c['tables']} tables")

@@ -141,10 +141,26 @@ class EndToEnd(unittest.TestCase):
         tables = self.tables(12, 12, extra={"mfc_bare": 4, "probe_bare": 12})
         gate, controls = self.run_gate([receipt("m", tables)])["m"]
         self.assertTrue(controls["most_frequent_code"]["exactly_one_in_four_on_every_table"])
-        self.assertFalse(controls["adapter_vs_plain_classifier"]["adapter_beats_classifier_proposed_rule"])
+        rule = controls["adapter_vs_plain_classifier"]["tie_rule"]
+        self.assertTrue(rule["true_tie_interval_inside_margin"])
+        self.assertTrue(rule["reading"].startswith("STOP: the classifier matches or beats"))
         tables = self.tables(14, 12, extra={"probe_bare": 9})
         _, controls = self.run_gate([receipt("m", tables)])["m"]
-        self.assertTrue(controls["adapter_vs_plain_classifier"]["adapter_beats_classifier_proposed_rule"])
+        rule = controls["adapter_vs_plain_classifier"]["tie_rule"]
+        self.assertFalse(rule["true_tie_interval_inside_margin"])
+        self.assertTrue(rule["reading"].startswith("ADVANCE"))
+
+    def test_tie_rule_separates_a_tie_from_an_underpowered_comparison(self):
+        base = {"mean_difference_points": 1.0}
+        self.assertTrue(gate_v5.tie_rule({**base, "bootstrap_interval_90_points": [-1.5, 3.5]})["reading"].startswith("STOP unless"))
+        self.assertTrue(gate_v5.tie_rule({**base, "bootstrap_interval_90_points": [-1.5, 3.5]})["true_tie_interval_inside_margin"])
+        wide = gate_v5.tie_rule({**base, "bootstrap_interval_90_points": [-6.0, 8.0]})
+        self.assertFalse(wide["true_tie_interval_inside_margin"])
+        self.assertTrue(wide["reading"].startswith("INCONCLUSIVE"))
+        small_win = gate_v5.tie_rule({"mean_difference_points": 2.5, "bootstrap_interval_90_points": [0.5, 4.5]})
+        self.assertTrue(small_win["reading"].startswith("STOP unless"))
+        loss = gate_v5.tie_rule({"mean_difference_points": -0.5, "bootstrap_interval_90_points": [-9.0, 8.0]})
+        self.assertTrue(loss["reading"].startswith("STOP: the classifier"))
 
 
 if __name__ == "__main__":

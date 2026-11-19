@@ -6,7 +6,8 @@
     "decision_6": "Pin the unseen Qwen checkpoint before downloading. Name the host, storage path, and exact revision. Reserve the model for confirmation.",
     "reading_applied": "Accuracy with examples present is the primary gate: the adapter runs with the table in the prompt, against the base model with the same prompt and against same-prompt baselines of equal or greater compute. Prompt removal is kept as a separate reported result. (As restated in the owner's status summary of 2026-11-18.)",
     "decision_20261119": "Owner, directly, on 2026-11-19: widen the confirmation groups with the 37-group design and write both controls now, as CPU work to prepare the protocol; keep 96 large tables as the target; keep bias correction and batched compilation in development; the short Mac window after X1 should establish seed 1003 reproducibility, cache parity, and whether the adapter beats the plain classifier; if the classifier ties and the cache fits the memory budget, close the practical adapter claim and publish the readout result. Then 'yes go ahead' to: the sign-flip gate stays primary, the claim is worded for tables built from these 37 groups, and it is said to hold for new groups only if the group-aware test also passes.",
-    "note_on_decision_5": "The adopted shape makes the table-removed comparison primary and reports the examples-present comparison as secondary. That replaces the reading of decision 5 applied on 2026-11-18. It is listed in still_required_before_lock for the owner to confirm in so many words."
+    "note_on_decision_5": "Confirmed by the owner on 2026-11-19: the table-removed comparison is the primary gate. The examples-present comparison of decision 5 is reported as secondary.",
+    "confirmation_20261119_lock_items": "Owner, 2026-11-19: (1) make table-removed (zero table tokens, against the full table or its cached prompt) the primary B1 gate; (2) tighten the classifier tie rule with the 5-point margin: a true tie requires the interval on (adapter minus classifier) to fall inside -5 to +5 points; do not treat an underpowered diagnostic as a tie; on the short Mac check, stop if the classifier matches or beats the adapter, or caps its upside below +5 points without a clear cached-prompt residency win; (3) wait for the X1 owner's message that the Mac GPU is free."
   },
   "claim": "With the support table removed from the prompt, a fixed closed-form low-rank update on the top two MLP layers of a frozen model answers unseen questions about a 20-example-per-group table within 5 points of the unmodified model given the table in its prompt, on tables built from the 37 confirmation item groups.",
   "tasks": {
@@ -57,13 +58,13 @@
     "controls": {
       "most_frequent_code": "mfc_bare must score exactly 25% on every table; anything else invalidates the run",
       "wrong_labels": "shuf_bare and shuf_ctx reported against top2_bare and top2_ctx, table-level; if the wrong-label adapter is not below the real one (sign-flip p < 0.05), the write-up says the result is not shown to be information from the table",
-      "plain_classifier": "probe_bare against top2_bare on the same rows. Owner's rule: if the classifier ties the adapter and the cached prompt fits the memory budget, the practical adapter claim is closed and the readout result is published.",
-      "tie_definition": "TO DEFINE AT LOCK. Proposed: the adapter beats the classifier only if it is higher at table level with a one-sided sign-flip p < 0.05; anything else is a tie or a loss."
+      "plain_classifier": "probe_bare against top2_bare on the same rows, read from the 90% paired-bootstrap interval on per-table (adapter minus classifier) (gate_v5.py, tie_rule). Owner's rule: stop, close the practical adapter claim and publish the readout result if the classifier matches or beats the adapter (mean difference at or below 0), or if the adapter's upside is capped below 5 points (interval upper bound under +5) and the cached prompt shows no clear residency win. Advance to the 96-table confirmation only if the adapter shows real upside over both the classifier and cached-prompt residency.",
+      "tie_definition": "Confirmed by the owner on 2026-11-19: a true tie requires the interval on (adapter minus classifier) to lie inside -5 to +5 points. A difference that is merely not significant is not a tie; an interval too wide to show either is reported as inconclusive and needs more tables."
     },
     "cached_prompt": {
       "parity": "kv_ctx must give the same tokens as base_ctx on every question; otherwise its timings are not used",
       "reported": "build time, restore time, time per question and state bytes beside the adapter's compile time and bytes; tables resident under a fixed memory cap",
-      "memory_budget": "TO DEFINE AT LOCK"
+      "memory_budget": "TO DEFINE AT LOCK. 'A clear residency win' in the owner's rule needs it. Proposed: under one fixed memory cap, the adapter keeps at least 10 times as many tables resident as the cached prompt (state bytes per table), with cached-prompt token parity confirmed."
     },
     "secondary_table_present": "top2_ctx against base_ctx and against knn_ctx, two-sided sign-flip, reported; small tables reported",
     "failure_response": "Fixed in advance. If the primary gate fails on a model, that model is reported as not confirmed. No rerun, and no change of population, margin, arms, test or exclusions after outcomes are read. Per-table differences, both intervals and every control result are published whether the gate passes or fails."
@@ -95,6 +96,7 @@
     "design_check_v5.py",
     "design_power_v5.py",
     "gate_v5.py",
+    "replay_compare_v5.py",
     "not in the frozen runner, by the owner's direction: the favourite-code bias correction and a batched compile (both stay in development)"
   ],
   "procedure": "Two commits. Commit 1 locks this file with status LOCKED and the SHA-256 of the frozen files, before the confirmation seed is drawn. Commit 2 adds the receipts and the write-up. The confirmation runs once per model and setting.",
@@ -266,12 +268,57 @@
     }
   },
   "still_required_before_lock": [
-    "one short diagnostic Mac GPU window after X1, outside confirmation: seed 1003 replay on the Doppler e45824b09 worktree; kv_ctx token parity with base_ctx and its build, restore and bytes; shuf_*, mfc_bare and probe_bare on a fresh development seed",
-    "apply the owner's rule after that window: if the plain classifier ties the adapter and the cache fits the memory budget, close the practical adapter claim and publish the readout result; otherwise continue to lock",
-    "owner defines the tie rule and the cached-prompt memory budget (proposals are in gates)",
+    "run the diagnostic window in diagnostic_window_plan and apply the owner's rule: stop and publish the readout result, or continue to lock",
+    "owner defines the cached-prompt memory budget, which fixes what 'a clear residency win' means (proposal in gates.cached_prompt)",
     "owner pins the unseen model (host, path, revision); MiniCPM4 0.5B is the proposed first cross-family model and needs a download",
-    "owner confirms in so many words that the table-removed gate replaces the examples-present gate of decision 5 as primary",
     "fix the small-table count",
     "then: lock commit with the SHA-256 of every frozen file, before the confirmation seed is drawn"
-  ]
+  ],
+  "diagnostic_window_plan": {
+    "status": "Declared on 2026-11-19 before any of these runs. Development split only; outside confirmation; nothing here is a confirmed result.",
+    "where": "Mac GPU, after the X1 owner's message that it is free; one WebGPU process at a time; Doppler worktree at e45824b09",
+    "runs": [
+      {
+        "name": "A. seed 1003 replay",
+        "models": [
+          "qwen-3-5-0-8b-q4k-ehaf16",
+          "qwen-3-5-2b-q4k-ehaf16"
+        ],
+        "seed": 1003,
+        "tables": 8,
+        "shots_per_group": 3,
+        "queries_per_group": 2,
+        "arms": "default arms, no selected adapter",
+        "read": "replay_compare_v5.py against the 2026-11-17 receipts: same tokens and answers per arm"
+      },
+      {
+        "name": "B. cached-prompt parity and cost",
+        "models": [
+          "qwen-3-5-0-8b-q4k-ehaf16"
+        ],
+        "seed": 1101,
+        "tables": 4,
+        "shots_per_group": 20,
+        "queries_per_group": 4,
+        "arms": "B1_WITH_KV_SNAPSHOT=1 B1_WITH_SHUFFLED=1 B1_WITH_CONTROLS=1 B1_SKIP_ARMS=cad_ctx",
+        "read": "kv_ctx tokens against base_ctx on every question; build, restore, per-question time and state bytes beside the adapter's; wrong-label adapter; controls"
+      },
+      {
+        "name": "C. adapter against the plain classifier",
+        "models": [
+          "qwen-3-5-0-8b-q4k-ehaf16"
+        ],
+        "seed": 1102,
+        "tables": 48,
+        "shots_per_group": 20,
+        "queries_per_group": 4,
+        "arms": "B1_WITH_CONTROLS=1 B1_SKIP_ARMS=base_ctx,top2_ctx,knn_ctx,cad_ctx (table-removed arms only, so 48 tables fit in a short window)",
+        "read": "gate_v5.py tie_rule on top2_bare minus probe_bare; mfc_bare must be exactly 25%",
+        "why_48_tables": "so the comparison is not underpowered: if the per-table difference has an SD near 10 points, the 90% interval half-width is about 2.4 points, inside the 5-point margin",
+        "optional": "the same on qwen-3-5-2b-q4k-ehaf16 with 24 tables if the window allows"
+      }
+    ],
+    "decision_rule": "the owner's rule in gates.controls.plain_classifier, applied to run C with run B's cached-prompt parity, bytes and times",
+    "caveat": "development tables come from eight item groups and share groups heavily; the group-aware interval is reported beside the bootstrap interval"
+  }
 }

@@ -51,6 +51,7 @@ fixed one on the top two layers. Details and numbers are in [RESULTS.md](RESULTS
   is calibrated when tables share groups.
 - `gate_v5.py`: the gate itself from receipts: exact one-sided sign-flip test with the 5-point margin, bootstrap
   interval, group-aware test, controls and cached-prompt parity.
+- `replay_compare_v5.py`: whether a replay reproduces an earlier receipt, arm by arm.
 - `design_check_v5.py`, `controls_v5.test.mjs`: checks that need no model.
 - `protocol_v5_draft.json`: the draft protocol, for review before any lock.
 

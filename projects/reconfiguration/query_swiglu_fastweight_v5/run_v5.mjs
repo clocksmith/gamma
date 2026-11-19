@@ -19,6 +19,8 @@
 // probe_bare, a plain ridge classifier fitted on the same top-two-layer anchor activations and the same
 // labelled support lines the fixed adapter is fitted on, and scored on the same questions. If probe_bare
 // matches top2_bare, the adapter is a readout of those activations for this task.
+// B1_SKIP_ARMS=arm,arm leaves decode arms out (for example cad_ctx, which is not part of the primary campaign,
+// or every *_ctx arm for a table-removed-only diagnostic). The arms that do run are unchanged by it.
 // With B1_WITH_SELECTED=1 it also compiles the per-table selected adapter (v5_bare, v5_ctx), which
 // development showed to be worse; that mode captures many more layers, so its compile times are not
 // the fixed adapter's.
@@ -137,6 +139,9 @@ const withSelected = process.env.B1_WITH_SELECTED === '1';
 const withShuffled = process.env.B1_WITH_SHUFFLED === '1';
 const withKvSnapshot = process.env.B1_WITH_KV_SNAPSHOT === '1';
 const withControls = process.env.B1_WITH_CONTROLS === '1';
+const SKIPPABLE_ARMS = ['base_bare', 'base_ctx', 'top2_bare', 'top2_ctx', 'v5_bare', 'v5_ctx', 'shuf_bare', 'shuf_ctx', 'knn_ctx', 'cad_ctx', 'kv_ctx'];
+const skipArms = new Set((process.env.B1_SKIP_ARMS ?? '').split(',').map(s => s.trim()).filter(Boolean));
+for (const arm of skipArms) assert.ok(SKIPPABLE_ARMS.includes(arm), `B1_SKIP_ARMS: unknown arm ${arm}`);
 
 // The code the shuffled-label control teaches for a group whose true code is `code`: the next one in the list.
 function shuffledCode(task, code) {
@@ -835,15 +840,16 @@ for (const task of tasks) {
   });
   for (const [arm, adapter] of arms) {
     for (const [regime, ids] of [['bare', bareIds], ['ctx', fullIds]]) {
+      if (skipArms.has(`${arm}_${regime}`)) continue;
       pipeline.setLoRAAdapter(adapter);
       const r = await greedyDecodeSinglePass(ids, Number(task.max_new_tokens), false);
       pipeline.setLoRAAdapter(null);
       record(`${arm}_${regime}`, ids, r);
     }
   }
-  record('knn_ctx', fullIds, await greedyDecodeKnnCache(fullIds, c.sepTok, Number(task.max_new_tokens)));
-  record('cad_ctx', fullIds, await greedyDecodeCad(fullIds, bareIds, Number(task.max_new_tokens)));
-  if (withKvSnapshot) {
+  if (!skipArms.has('knn_ctx')) record('knn_ctx', fullIds, await greedyDecodeKnnCache(fullIds, c.sepTok, Number(task.max_new_tokens)));
+  if (!skipArms.has('cad_ctx')) record('cad_ctx', fullIds, await greedyDecodeCad(fullIds, bareIds, Number(task.max_new_tokens)));
+  if (withKvSnapshot && !skipArms.has('kv_ctx')) {
     pipeline.setLoRAAdapter(null);
     record('kv_ctx', fullIds, await greedyDecodeSinglePass(fullIds, Number(task.max_new_tokens), false, null, c.kv));
   }
@@ -865,7 +871,7 @@ for (const task of tasks) {
 const receipt = {
   scope: split === 'dev' ? 'development only, exploratory' : 'confirmation', split, seed, specialties: nSpecialties, shots_per_group: shots,
   queries_per_group: queries, task_count: tasks.length, model: modelId, num_layers: numLayers, hidden_size: dHidden,
-  intermediate_size: dInter, with_selected_adapter: withSelected, with_shuffled_adapter: withShuffled, with_kv_snapshot: withKvSnapshot, with_controls: withControls,
+  intermediate_size: dInter, with_selected_adapter: withSelected, with_shuffled_adapter: withShuffled, with_kv_snapshot: withKvSnapshot, with_controls: withControls, skipped_arms: [...skipArms].sort(),
   captured_layers: candidateLayers, resource_check: process.env.B1_RESOURCE_CHECK, doppler_source: dopplerSource,
   confirm_protocol: process.env.B1_ALLOW_CONFIRM ?? null,
   source_sha256: {
