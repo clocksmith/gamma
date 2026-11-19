@@ -23,6 +23,10 @@
 // in the table, so these are the simple ways to do what the adapter does; none of them recalls a stored item.
 // B1_SKIP_ARMS=arm,arm leaves decode arms out (for example cad_ctx, which is not part of the primary campaign,
 // or every *_ctx arm for a table-removed-only diagnostic). The arms that do run are unchanged by it.
+// B1_DUMP_FEATURES=DIR (needs B1_WITH_CONTROLS=1 and B1_WITH_KV_SNAPSHOT=1) writes, for offline study, the
+// activations every method here reads: for each support line and each question, the top-two-layer MLP
+// activations and the final hidden row at the answer marker, with the table removed and with the table present
+// (through the cached prompt). Rows are float32, [layer L-2 activations | layer L-1 activations | final hidden].
 // With B1_WITH_SELECTED=1 it also compiles the per-table selected adapter (v5_bare, v5_ctx), which
 // development showed to be worse; that mode captures many more layers, so its compile times are not
 // the fixed adapter's.
@@ -30,6 +34,7 @@
 // Usage: B1_RESOURCE_CHECK="..." node run_v5.mjs DOPPLER_ROOT MODEL_DIR OUT_JSON SPLIT SEED SPECIALTIES SHOTS QUERIES
 import assert from 'node:assert/strict';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { appendFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
@@ -141,6 +146,18 @@ const withSelected = process.env.B1_WITH_SELECTED === '1';
 const withShuffled = process.env.B1_WITH_SHUFFLED === '1';
 const withKvSnapshot = process.env.B1_WITH_KV_SNAPSHOT === '1';
 const withControls = process.env.B1_WITH_CONTROLS === '1';
+const dumpDir = process.env.B1_DUMP_FEATURES ? resolve(process.env.B1_DUMP_FEATURES) : null;
+assert.ok(!dumpDir || (withControls && withKvSnapshot), 'B1_DUMP_FEATURES needs B1_WITH_CONTROLS=1 and B1_WITH_KV_SNAPSHOT=1');
+if (dumpDir) mkdirSync(dumpDir, { recursive: true });
+const dumpIndex = [];
+// One dump row: [activations of each requested layer ... | final hidden row], float32.
+function dumpRow(layerRows, hiddenRow) {
+  const out = new Float32Array(layerRows.reduce((n, r) => n + r.length, 0) + hiddenRow.length);
+  let at = 0;
+  for (const r of layerRows) { out.set(r, at); at += r.length; }
+  out.set(hiddenRow, at);
+  return Buffer.from(out.buffer, out.byteOffset, out.byteLength);
+}
 const SKIPPABLE_ARMS = ['base_bare', 'base_ctx', 'top2_bare', 'top2_ctx', 'v5_bare', 'v5_ctx', 'shuf_bare', 'shuf_ctx', 'knn_ctx', 'cad_ctx', 'kv_ctx'];
 const skipArms = new Set((process.env.B1_SKIP_ARMS ?? '').split(',').map(s => s.trim()).filter(Boolean));
 for (const arm of skipArms) assert.ok(SKIPPABLE_ARMS.includes(arm), `B1_SKIP_ARMS: unknown arm ${arm}`);
@@ -463,6 +480,74 @@ async function capturePass(ids, layers, wantPositions, topAt = []) {
   return { rowsByLayer, hRows, top };
 }
 
+// The same capture for a question with the table present, without re-reading the table: restore the table's
+// cached prefix state, prefill only the question tokens, and read the last position. Returns the requested
+// layers' MLP activations and the final hidden rows of the last `lastCount` positions, oldest first. The
+// pipeline's own cache is put back afterwards.
+async function captureAfterRestore(kv, promptIds, layers, lastCount = 1) {
+  await device.queue.onSubmittedWorkDone();
+  pipeline.setLoRAAdapter(null);
+  pipeline.resetGenerationState();
+  pipeline.generator._resetDecodeRuntimeState();
+  const originalCache = pipeline.kvCache;
+  pipeline.applyKVCacheSnapshot(kv.snap);
+  await device.queue.onSubmittedWorkDone();
+  assert.equal(genState.currentSeqLen, kv.prefixLen, 'restored state must sit at the end of the table');
+  const suffix = promptIds.slice(kv.prefixLen);
+  assert.ok(suffix.length >= 1, 'the question must add tokens after the table');
+  const last = suffix.length - 1;
+  try {
+    const opts = genRtMod.resolvePrefillOptions(genState, { inputIds: suffix, useChatTemplate: false });
+    let idx = 0;
+    const bufs = [];
+    const trainingCapture = {
+      layerIdx: layers[0],
+      stage: 'ffn_act',
+      async capture({ layerIdx, tensor, numTokens, hiddenSize, recorder }) {
+        const bpe = tensor.dtype === 'f16' ? 2 : 4;
+        const byteLen = Math.ceil((numTokens * hiddenSize * bpe) / 4) * 4;
+        const buf = pool.acquireBuffer(byteLen, undefined, `capkv_L${layerIdx}`);
+        if (recorder) recorder.getEncoder().copyBufferToBuffer(tensor.buffer, 0, buf, 0, byteLen);
+        else {
+          const enc = device.createCommandEncoder();
+          enc.copyBufferToBuffer(tensor.buffer, 0, buf, 0, byteLen);
+          device.queue.submit([enc.finish()]);
+        }
+        bufs.push({ layerIdx, buf, byteLen, dtype: tensor.dtype, numTokens, hiddenSize });
+        idx += 1;
+        this.layerIdx = idx < layers.length ? layers[idx] : -1;
+      },
+    };
+    const prefill = await pipeline.generator._prefillToHidden(suffix, { ...opts, _trainingCapture: trainingCapture });
+    if (prefill.currentRecorder) {
+      textSessMod.recordPrefillRecorderStats(genState, prefill.currentRecorder);
+      await prefill.currentRecorder.submitAndWait();
+      await prefill.recordProfile(prefill.currentRecorder);
+    } else await device.queue.onSubmittedWorkDone();
+    assert.equal(prefill.numTokens, suffix.length, 'the restored prefill must cover exactly the question tokens');
+    const hBpe = prefill.activationDtype === 'f16' ? 2 : 4;
+    const hBytes = await pool.readBuffer(prefill.currentHiddenBuffer, suffix.length * dHidden * hBpe);
+    const hAll = prefill.activationDtype === 'f16' ? fp16.f16ToF32Array(new Uint16Array(hBytes, 0, suffix.length * dHidden)) : new Float32Array(hBytes, 0, suffix.length * dHidden);
+    assert.ok(lastCount >= 1 && lastCount <= suffix.length, 'asked for more positions than the question has');
+    const positions = Array.from({ length: lastCount }, (_, i) => last - (lastCount - 1) + i);
+    const out = positions.map(p => ({ rows: new Map(), hidden: Float32Array.from(hAll.subarray(p * dHidden, (p + 1) * dHidden)) }));
+    pool.releaseBuffer(prefill.currentHiddenBuffer);
+    for (const lb of bufs) {
+      assert.equal(lb.numTokens, suffix.length, 'captured activations must cover exactly the question tokens');
+      const b = await pool.readBuffer(lb.buf, lb.byteLen);
+      const arr = lb.dtype === 'f16' ? fp16.f16ToF32Array(new Uint16Array(b, 0, lb.numTokens * lb.hiddenSize)) : new Float32Array(b, 0, lb.numTokens * lb.hiddenSize);
+      positions.forEach((p, i) => out[i].rows.set(lb.layerIdx, Float32Array.from(arr.subarray(p * dInter, (p + 1) * dInter))));
+      pool.releaseBuffer(lb.buf);
+    }
+    assert.equal(out[0].rows.size, layers.length, 'every requested layer must be captured');
+    return out;
+  } finally {
+    const restored = pipeline.kvCache;
+    pipeline.kvCache = originalCache;
+    if (restored && restored !== originalCache) restored.destroy();
+  }
+}
+
 function spread(from, to, count) {
   const out = [];
   if (to < from) return out;
@@ -598,6 +683,48 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
     const clf = fitSupportClassifier({ examples, nClasses: spans.length, ratio: 0.15 });
     const nn = fitNearestNeighbour({ examples, nClasses: spans.length, temperature: 0.08 });
     probe = { clf, nn, classCodes };
+    if (dumpDir) {
+      const file = join(dumpDir, `${task.specialty_id}.support.f32`);
+      writeFileSync(file, Buffer.alloc(0));
+      const rowsMeta = [];
+      // Every answer position of every support line: offset 0 is the answer marker, the last offset is the
+      // final answer token, whose next token is the line break.
+      for (let ex = 0; ex < anc.length; ex += 1) {
+        const a = anc[ex];
+        const e = iso[ex];
+        for (let off = 0; off <= e.answerLen; off += 1) {
+          const next = off < e.answerLen ? supportIds[a.pos + off + 1] : nlId;
+          appendFileSync(file, dumpRow(top2Layers.map(l => e.cap.rowsByLayer.get(l).get(e.relAnchor + off)), e.cap.hRows.get(e.relAnchor + off)));
+          rowsMeta.push({ context: 'iso', example: ex, label: labels[ex], offset: off, next_token: next });
+        }
+      }
+      for (let ex = 0; ex < catCount; ex += 1) {
+        const a = anc[ex];
+        for (let off = 0; off <= iso[ex].answerLen; off += 1) {
+          const next = off < iso[ex].answerLen ? supportIds[a.pos + off + 1] : nlId;
+          appendFileSync(file, dumpRow(top2Layers.map(l => cat.rowsByLayer.get(l).get(a.pos + off)), cat.hRows.get(a.pos + off)));
+          rowsMeta.push({ context: 'cat', example: ex, label: labels[ex], offset: off, next_token: next });
+        }
+      }
+      // A few positions that are not answer positions, so that a write can be taught to stay quiet there.
+      for (let ex = 0; ex < anc.length; ex += 1) {
+        for (const pos of iso[ex].bgPos) {
+          appendFileSync(file, dumpRow(top2Layers.map(l => iso[ex].cap.rowsByLayer.get(l).get(pos)), iso[ex].cap.hRows.get(pos)));
+          rowsMeta.push({ context: 'iso_background', example: ex, label: -1, offset: -1, next_token: -1 });
+        }
+      }
+      for (let ex = 0; ex < catCount; ex += 1) {
+        appendFileSync(file, dumpRow(top2Layers.map(l => cat.rowsByLayer.get(l).get(catBg[ex])), cat.hRows.get(catBg[ex])));
+        rowsMeta.push({ context: 'cat_background', example: ex, label: -1, offset: -1, next_token: -1 });
+      }
+      dumpIndex.push({
+        specialty_id: task.specialty_id, multi_token: task.multi_token, class_codes: classCodes,
+        class_first_tokens: spans.map(k => Number(k.split(',')[0])), class_token_ids: spans.map(k => k.split(',').map(Number)),
+        support_file: `${task.specialty_id}.support.f32`, support_rows: rowsMeta,
+        query_file: `${task.specialty_id}.query.f32`, queries: [],
+      });
+      writeFileSync(join(dumpDir, `${task.specialty_id}.query.f32`), Buffer.alloc(0));
+    }
     Object.assign(diag, {
       mfc_code: mfc.code, probe_examples: clf.examples, probe_layers: top2Layers, probe_ridge_ratio: clf.ratio,
       probe_leave_one_out_accuracy: clf.leaveOneOutAccuracy, probe_fit_ms: performance.now() - tp,
@@ -866,6 +993,29 @@ for (const task of tasks) {
     const cap = await capturePass(bareIds, top2Layers, [at], []);
     const queryRows = top2Layers.map(l => cap.rowsByLayer.get(l).get(at));
     const captureMs = performance.now() - tq;
+    if (dumpDir) {
+      // For offline study only: the same question followed by its true answer, so that the state at every answer
+      // position can be read (offset 0 is unchanged by what follows it). The arms above never see these passes.
+      const goldBare = encodeRaw(`${task.bare_prompt} ${task.expected}`);
+      const goldFull = encodeRaw(`${task.prompt} ${task.expected}`);
+      assert.deepEqual(goldBare.slice(0, bareIds.length), bareIds, 'the answer must tokenize after the question');
+      assert.deepEqual(goldFull.slice(0, fullIds.length), fullIds, 'the answer must tokenize after the question');
+      const answerIds = goldBare.slice(bareIds.length);
+      assert.deepEqual(goldFull.slice(fullIds.length), answerIds, 'the answer must tokenize the same with and without the table');
+      const offsets = Array.from({ length: answerIds.length + 1 }, (_, i) => i);
+      const bareGold = await capturePass(goldBare, top2Layers, offsets.map(o => at + o), []);
+      const withTable = await captureAfterRestore(c.kv, goldFull, top2Layers, offsets.length);
+      const entry = dumpIndex.find(e => e.specialty_id === task.specialty_id);
+      const file = join(dumpDir, entry.query_file);
+      for (const o of offsets) {
+        appendFileSync(file, dumpRow(top2Layers.map(l => bareGold.rowsByLayer.get(l).get(at + o)), bareGold.hRows.get(at + o)));
+        appendFileSync(file, dumpRow(top2Layers.map(l => withTable[o].rows.get(l)), withTable[o].hidden));
+      }
+      entry.queries.push({
+        task_id: task.task_id, expected: canonicalizeAnswer(task.expected), label: entry.class_codes.indexOf(canonicalizeAnswer(task.expected)),
+        group: task.group, answer_tokens: answerIds, rows: offsets.length * 2,
+      });
+    }
     for (const [arm, model] of [['probe_bare', c.probe.clf], ['nn_bare', c.probe.nn]]) {
       const tp = performance.now();
       const code = c.probe.classCodes[model.predict(queryRows).index];
@@ -888,6 +1038,17 @@ const receipt = {
   },
   specialties_compiled: [...bySpecialty.values()].map(c => c.diag), rows,
 };
+if (dumpDir) {
+  writeFileSync(join(dumpDir, 'index.json'), JSON.stringify({
+    model: modelId, seed, split, shots_per_group: shots, queries_per_group: queries, layers: top2Layers, hidden_size: dHidden,
+    intermediate_size: dInter, row_floats: top2Layers.length * dInter + dHidden, row_layout: 'float32: [layer activations in `layers` order | final hidden row]',
+    support_order: 'rows in support_rows order',
+    query_order: 'per question, for each answer offset 0..len(answer_tokens): one row with the table removed, then one with the table present (cached prompt); offsets after 0 are read with the true answer fed in',
+    newline_token: nlId, rms_norm_eps: config.rmsNormEps ?? null, rms_norm_weight_offset: Boolean(config.rmsNormWeightOffset),
+    final_norm_weight: Array.from(finalNormG), receipt: resolve(outputPath), tables: dumpIndex,
+  }) + '\n');
+  console.log('features written', dumpDir);
+}
 await mkdir(dirname(resolve(outputPath)), { recursive: true });
 await writeFile(resolve(outputPath), JSON.stringify(receipt, null, 1) + '\n', { flag: 'wx' });
 console.log('receipt written', resolve(outputPath));
