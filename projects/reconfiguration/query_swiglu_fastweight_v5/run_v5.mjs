@@ -292,6 +292,9 @@ async function greedyDecodeSinglePass(promptIds, maxNewTokens = 5, captureStep0L
   if (kv) {
     const tr = performance.now();
     pipeline.applyKVCacheSnapshot(kv.snap);
+    // The restore clones the saved buffers on the GPU. Wait for those copies, or the clock stops at submission.
+    // The wait sits inside this arm's per-question time too, so it is charged to the cached prompt, not hidden.
+    await device.queue.onSubmittedWorkDone();
     restoreMs = performance.now() - tr;
     assert.equal(genState.currentSeqLen, kv.prefixLen, 'restored state must sit at the end of the table');
     prefillIds = promptIds.slice(kv.prefixLen);

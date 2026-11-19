@@ -120,7 +120,9 @@ and none were empty or stopped early or late. The base model reading the table m
 186). Multi-token codes are not the problem: 238 of 320 against 239 of 320 for the base model with the
 table. Teaching every answer token plus the stop token would address 3 misses in 180.
 
-**A favourite code.** In a balanced table each code is the right answer a quarter of the time. The most
+**A favourite code.** In a balanced table each code is the right answer a quarter of the time, so always
+answering one code scores exactly 25%; the adapter's 331 of 448 with the table removed (74%) is far above
+that, and the skew below is a bias inside real retrieval, not the source of the score. The most
 frequent answer takes 47% of a table's answers for the base model with the table, 49% for the adapter with
 the table removed and 49% for the adapter with the table. 76% of the adapter's table-removed errors are its
 favourite. With the table removed that favourite is often the word `alpha` (42 more `alpha` answers than
@@ -140,12 +142,15 @@ with the table:
 
 The runner change between the last two groups does not touch how the fixed adapter is built: the same
 `fitLayer` calls with the same ridge, write strength and rows. It only stops capturing the layers that the
-dropped per-table selected adapter needed. The receipts do not record which Doppler they ran on, so a
-runtime change between 2026-11-18 00:13 and 07:15 cannot be excluded; the runner now records it. The base
-model with the table scored 70.3% in the last group against 58.1% in the one before, so those tables were
-easier for it, and most of the drop is on two-part codes (66 of 96 against 75 of 96). Read: no code cause
-found; most likely table-to-table variation, not excluded as a runtime change. Re-running seed 1003 with
-the current runner would settle it.
+dropped per-table selected adapter needed. The receipts do not record which Doppler they ran on (the runner
+now does). Corrected 2026-11-19: the Doppler worktree the runs were launched from has sat at `e45824b09`
+with a clean `src` since 2026-11-17 17:14 EST by its reflog, and the first of the ten receipts was written
+at 22:27 that evening. A runtime change is therefore excluded unless a run was pointed at another checkout,
+which the old receipts cannot show. The base model with the table scored 70.3% in the last group against
+58.1% in the one before, so those tables were easier for it, and most of the drop is on two-part codes
+(66 of 96 against 75 of 96). Read: no code or runtime cause found; table-to-table variation is the leading
+explanation. Re-running seed 1003 on that worktree with the current runner would confirm it, as a
+diagnostic outside confirmation.
 
 **Size and compile time, corrected.** The 110 to 200 KB quoted above is the single-layer selected adapter.
 The fixed two-layer adapter that every comparison uses is 221 to 405 KB on Qwen3.5-0.8B and 393 to 721 KB
@@ -175,8 +180,14 @@ answers should match `base_ctx`; the receipt records its build time, restore tim
 state bytes beside the adapter's size and compile time. The pipeline's own cache is restored after each
 question and the restored copy destroyed.
 
-**Unseen model.** No B1 receipt has used a 4B Qwen, but `qwen-3-5-4b` is not in Doppler's model catalog:
-pinning it means downloading and converting it, which is the owner's decision (host, path, revision).
+**Unseen model.** Corrected 2026-11-19; an earlier version said only that `qwen-3-5-4b` is missing from
+Doppler's catalog. v5 has run on Qwen 3.5 0.8B and 2B only. The runner refuses models that normalise after
+the feed-forward block (`run_v5.mjs` asserts `!postFeedforwardNorm`), which rules out every Gemma. Doppler
+has conversion settings for four candidates that pass that check and use SiLU gating: Qwen 3 4B Instruct,
+Qwen 3.5 9B, MiniCPM4 0.5B and LFM2.5 1.2B. LFM2.5 has convolution layers, and whether the cached-prompt
+snapshot restores their state is unchecked. There is no Qwen 3.5 4B entry. None of the four has weights on
+disk here (manifests only), so each needs a download, which is the owner's decision (host, path, revision).
+None has been run through this runner, so a smoke test on public examples comes before any held-out run.
 
 ## State at handoff (2026-11-18 08:00 EST)
 
