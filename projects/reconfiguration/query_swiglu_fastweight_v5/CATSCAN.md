@@ -44,7 +44,7 @@ question.
 
 ## Acceptance
 
-- `tally_v5.py` reproduces every reported count from a receipt.
+- `tally_v5.py` reproduces every reported count from a receipt; `gate_v5.py` computes the gate from receipts.
 - No result is called confirmed until a protocol is locked before the confirmation tasks are
   generated, and the confirmation is run once.
 

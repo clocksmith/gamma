@@ -1,72 +1,72 @@
 {
   "protocol_id": "gamma.reconfiguration.query_swiglu_fastweight_v5",
-  "status": "DRAFT for owner review. Not locked. No confirmation task has been generated or run. Reviewed on 2026-11-18 and 2026-11-19; the gates below predate those reviews, and the shape proposed for lock is in review_20261119_design_and_controls.proposed_lock_shape. The owner reviews the revised power estimate before any lock.",
+  "status": "DRAFT. Not locked. No confirmation task has been generated or run. The lock shape was adopted by the owner on 2026-11-19 and the claim, tasks, arms and gates below are rewritten to it; the earlier versions are kept under superseded_20261118. Lock still needs the items in still_required_before_lock.",
   "owner_direction": {
     "decision_5": "Draft and review B1 v5 before locking it. Make accuracy with examples present the primary gate, compare against matched compute, and include the valid-code guessing control.",
     "decision_6": "Pin the unseen Qwen checkpoint before downloading. Name the host, storage path, and exact revision. Reserve the model for confirmation.",
-    "reading_applied": "Accuracy with examples present is the primary gate: the adapter runs with the table in the prompt, against the base model with the same prompt and against same-prompt baselines of equal or greater compute. Prompt removal is kept as a separate reported result. (As restated in the owner's status summary of 2026-11-18.)"
+    "reading_applied": "Accuracy with examples present is the primary gate: the adapter runs with the table in the prompt, against the base model with the same prompt and against same-prompt baselines of equal or greater compute. Prompt removal is kept as a separate reported result. (As restated in the owner's status summary of 2026-11-18.)",
+    "decision_20261119": "Owner, directly, on 2026-11-19: widen the confirmation groups with the 37-group design and write both controls now, as CPU work to prepare the protocol; keep 96 large tables as the target; keep bias correction and batched compilation in development; the short Mac window after X1 should establish seed 1003 reproducibility, cache parity, and whether the adapter beats the plain classifier; if the classifier ties and the cache fits the memory budget, close the practical adapter claim and publish the readout result. Then 'yes go ahead' to: the sign-flip gate stays primary, the claim is worded for tables built from these 37 groups, and it is said to hold for new groups only if the group-aware test also passes.",
+    "note_on_decision_5": "The adopted shape makes the table-removed comparison primary and reports the examples-present comparison as secondary. That replaces the reading of decision 5 applied on 2026-11-18. It is listed in still_required_before_lock for the owner to confirm in so many words."
   },
-  "claim": "A support table can be compiled, in closed form and with no gradient step, into a low-rank update on the top two MLP layers of a frozen model such that, with the table still in the prompt, the model answers unseen questions more accurately than the unmodified model given the same prompt.",
+  "claim": "With the support table removed from the prompt, a fixed closed-form low-rank update on the top two MLP layers of a frozen model answers unseen questions about a 20-example-per-group table within 5 points of the unmodified model given the table in its prompt, on tables built from the 37 confirmation item groups.",
   "tasks": {
     "generator": "tasks_v5.py, split 'confirm': 37 item groups never used in development, tables from a block design (111 tables; any two share at most one group; a group sits in at most 12)",
     "confirmation_seed": "to be drawn at lock time, >= 2000000",
     "settings": [
       {
-        "name": "few",
-        "shots_per_group": 3,
-        "tables": 64,
-        "queries_per_group": 2,
-        "tasks": 512
+        "name": "large (primary)",
+        "shots_per_group": 20,
+        "tables": 96,
+        "queries_per_group": 4,
+        "tasks": 1536
       },
       {
-        "name": "many",
-        "shots_per_group": 20,
-        "tables": 32,
-        "queries_per_group": 4,
-        "tasks": 512
+        "name": "small (secondary, reported only)",
+        "shots_per_group": 3,
+        "tables": null,
+        "queries_per_group": 2,
+        "tasks": null,
+        "note": "table count fixed at lock"
       }
     ],
     "half_of_tables_use_multi_token_codes": true,
     "unit_of_analysis": "the support table. Questions that share a table are not independent, so each table contributes one number per arm: its accuracy (correct answers divided by its question count), so 8-question and 16-question tables weigh the same. Per model, never pooled across models."
   },
   "arms": {
-    "base_bare": "base model, table removed",
-    "base_ctx": "base model, table in the prompt",
-    "top2_ctx": "PRIMARY: fixed adapter, table in the prompt",
-    "knn_ctx": "matched compute: base model plus a nearest-neighbour cache over the table's own answers (one pass)",
-    "cad_ctx": "greater compute: base model with context-aware decoding (two passes per token)",
-    "top2_bare": "secondary: fixed adapter, table removed",
-    "shuf_ctx": "control: fixed adapter compiled from the same table with every answer code replaced by the next code in the table's list, table in the prompt (B1_WITH_SHUFFLED=1)",
-    "shuf_bare": "control: the same shuffled-label adapter, table removed; matches_shuffled_code records whether it answers with the wrong code it was taught",
+    "base_bare": "base model, table removed (floor)",
+    "base_ctx": "base model, table in the prompt (the reference)",
+    "top2_bare": "PRIMARY: fixed adapter, table removed",
+    "top2_ctx": "secondary: fixed adapter, table in the prompt",
     "kv_ctx": "rival: base model with the table's prefix state built once and restored per question (B1_WITH_KV_SNAPSHOT=1)",
     "mfc_bare": "control: the most frequent support code, ties to the code seen first; 25% by construction (B1_WITH_CONTROLS=1)",
-    "probe_bare": "control: plain ridge classifier on the same top-two-layer anchor activations and support labels as the fixed adapter, table removed, scored on the same rows (B1_WITH_CONTROLS=1)"
+    "probe_bare": "control: plain ridge classifier on the same top-two-layer anchor activations and support labels as the fixed adapter, table removed, scored on the same rows (B1_WITH_CONTROLS=1)",
+    "shuf_bare": "control: fixed adapter compiled from the same table with every answer code replaced by the next code in the table's list, table removed (B1_WITH_SHUFFLED=1)",
+    "shuf_ctx": "control: the same wrong-label adapter, table in the prompt",
+    "knn_ctx": "reported: base model plus a nearest-neighbour cache over the table's own answers (one pass)",
+    "cad_ctx": "not part of the primary campaign (two passes per token); may be run separately"
   },
   "gates": {
-    "PRIMARY_examples_present": {
-      "comparison": "top2_ctx against base_ctx, per model, over the tables of both settings",
-      "test": "exact or Monte Carlo two-sided sign-flip permutation test on the per-table difference in accuracy (table_level_v5.py)",
-      "pass": "top2_ctx is higher and p < 0.05, on the unseen model and on at least one development model. A pass on development models only is reported as not confirmed."
+    "PRIMARY_table_removed": {
+      "comparison": "top2_bare against base_ctx, per model, over the 96 large tables; the unit is the table",
+      "test": "exact one-sided sign-flip test on per-table (accuracy difference + 0.05) at 0.05 (gate_v5.py); it rejects 'worse by 5 points or more'. Failing to show a difference is not a pass.",
+      "pass": "on the unseen model and on at least one development model. A pass on development models only is reported as not confirmed.",
+      "claim_scope": "tables built from the 37 confirmation item groups"
     },
-    "matched_compute": {
-      "comparison": "top2_ctx against knn_ctx and against cad_ctx, same test",
-      "pass": "reported, with this rule fixed in advance: if top2_ctx does not beat knn_ctx, the write-up says the adapter has no examples-present advantage over a nearest-neighbour cache, whatever the primary gate shows",
-      "cost_accounting": "seconds per question for every arm from the same run; the adapter's compile time per table measured with only the fixed adapter compiled (fixed_compile_ms) and its forward-pass count; questions that share a table share one compile"
+    "new_groups_rule": "The group-aware interval and the group share of table variance estimated from the confirmation tables are always reported. The result is described as holding for new item groups only if the group-aware one-sided test at 0.05 (gate_v5.py: standard error widened by the covariance between tables that share a group) also passes.",
+    "interval": "90% paired-bootstrap percentile interval over tables for the accuracy difference, 20,000 resamples, fixed seed (gate_v5.py), reported whether the gate passes or fails",
+    "controls": {
+      "most_frequent_code": "mfc_bare must score exactly 25% on every table; anything else invalidates the run",
+      "wrong_labels": "shuf_bare and shuf_ctx reported against top2_bare and top2_ctx, table-level; if the wrong-label adapter is not below the real one (sign-flip p < 0.05), the write-up says the result is not shown to be information from the table",
+      "plain_classifier": "probe_bare against top2_bare on the same rows. Owner's rule: if the classifier ties the adapter and the cached prompt fits the memory budget, the practical adapter claim is closed and the readout result is published.",
+      "tie_definition": "TO DEFINE AT LOCK. Proposed: the adapter beats the classifier only if it is higher at table level with a one-sided sign-flip p < 0.05; anything else is a tie or a loss."
     },
-    "guessing_control": {
-      "comparison": "every arm's rate of valid codes; top2_bare accuracy against 0.25 (always emitting one of four valid codes), tested per table",
-      "pass": "one-sided sign-flip test on per-table (accuracy minus 0.25), p < 0.01, for top2_bare; valid-code rates reported for all arms",
-      "shuffled_label_control": "REQUIRED AT LOCK, implemented in run_v5.mjs (B1_WITH_SHUFFLED=1) and not yet run on a GPU. Reported: shuf_ctx against base_ctx and top2_ctx against shuf_ctx, table-level. Fixed in advance: if shuf_ctx is not below top2_ctx (same test, p < 0.05), the write-up says the examples-present gain is not shown to be information from the table."
+    "cached_prompt": {
+      "parity": "kv_ctx must give the same tokens as base_ctx on every question; otherwise its timings are not used",
+      "reported": "build time, restore time, time per question and state bytes beside the adapter's compile time and bytes; tables resident under a fixed memory cap",
+      "memory_budget": "TO DEFINE AT LOCK"
     },
-    "do_no_harm": {
-      "comparison": "top2_ctx against base_ctx",
-      "pass": "non-inferiority at a 5-point margin: one-sided sign-flip test on per-table (top2_ctx accuracy minus base_ctx accuracy plus 0.05) rejects 'worse by 5 points or more' at 0.05. Failing to show a difference is not a pass."
-    },
-    "SECONDARY_prompt_removed": {
-      "comparison": "top2_bare against base_ctx, table-level",
-      "pass": "non-inferiority at a 5-point margin: one-sided sign-flip test on per-table (top2_bare accuracy minus base_ctx accuracy plus 0.05) rejects 'worse by 5 points or more' at 0.05; time per question reported. Failing to show a difference is not a pass.",
-      "known_gap": "REQUIRED BEFORE LOCK: a cached copy of the prompt gives base_ctx accuracy at about base_bare time, so it is the real competitor for this claim. That arm is not implemented (Doppler exposes prefix snapshots; the runner does not use them yet). The adapter's case against it is size and freed context, and the write-up must report the cache's bytes beside the adapter's."
-    }
+    "secondary_table_present": "top2_ctx against base_ctx and against knn_ctx, two-sided sign-flip, reported; small tables reported",
+    "failure_response": "Fixed in advance. If the primary gate fails on a model, that model is reported as not confirmed. No rerun, and no change of population, margin, arms, test or exclusions after outcomes are read. Per-table differences, both intervals and every control result are published whether the gate passes or fails."
   },
   "models": {
     "seen_in_development": [
@@ -93,11 +93,13 @@
     "audit_v5.py",
     "controls_v5.mjs",
     "design_check_v5.py",
-    "design_power_v5.py"
+    "design_power_v5.py",
+    "gate_v5.py",
+    "not in the frozen runner, by the owner's direction: the favourite-code bias correction and a batched compile (both stay in development)"
   ],
   "procedure": "Two commits. Commit 1 locks this file with status LOCKED and the SHA-256 of the frozen files, before the confirmation seed is drawn. Commit 2 adds the receipts and the write-up. The confirmation runs once per model and setting.",
   "development_evidence": "RESULTS.md. Development runs are not confirmation; several seeds were looked at while the code changed.",
-  "secondary_result": "With the table removed, the adapted model is not less accurate than the unmodified model with the table present, at lower time per question.",
+  "secondary_result": "With the table in the prompt, the adapted model against the unmodified model and against a nearest-neighbour cache; small tables; time and bytes against the cached prompt.",
   "review_20261118": {
     "by": "B1 owner (bus name B), read-only reanalysis of the ten development receipts with power_v5.py; no new run",
     "table_level_development_effects": {
@@ -138,12 +140,6 @@
     "implemented_not_run": [
       "kv_ctx cached-prompt arm (B1_WITH_KV_SNAPSHOT=1) in run_v5.mjs",
       "shuf_bare / shuf_ctx shuffled-label control (B1_WITH_SHUFFLED=1)"
-    ],
-    "still_required_before_lock": [
-      "one development GPU run with B1_WITH_KV_SNAPSHOT=1 and B1_WITH_SHUFFLED=1 on a fresh development seed, kv_ctx answers checked against base_ctx",
-      "re-run seed 1003 on the same Doppler worktree (e45824b09, unchanged across all ten development runs by its reflog) with the current runner, as a diagnostic outside confirmation",
-      "owner pins the unseen model (host, path, revision): Doppler has conversion settings that pass the runner's no-post-feedforward-norm check for Qwen 3 4B Instruct, Qwen 3.5 9B, MiniCPM4 0.5B and LFM2.5 1.2B; none has weights on disk, so each needs a download; smoke-test on public examples before any held-out run",
-      "owner confirms the primary population"
     ]
   },
   "review_20261119_design_and_controls": {
@@ -199,7 +195,7 @@
       "interval_90_percent": "paired bootstrap over tables covers the mean for these groups 89-93% of the time at every share; it covers the truth for new groups 89% at share 0, 74% at 0.10, 61% at 0.25; the group-aware interval covers it 93%, 87%, 86%"
     },
     "proposed_lock_shape": {
-      "status": "PROPOSED, not adopted. For the owner's review of the power estimate.",
+      "status": "ADOPTED by the owner on 2026-11-19 ('yes go ahead'): sign-flip gate primary, claim worded for tables built from these 37 groups, new groups only if the group-aware test also passes. Written into the claim, tasks, arms and gates above. The tie rule and the memory budget are still to be defined at lock.",
       "population": "96 tables per model, 20 examples per group, 4 questions per group (1,536 questions), on the block design; 3-example tables reported as secondary",
       "primary_gate": "top2_bare against base_ctx, one-sided sign-flip on per-table (accuracy difference + 0.05) at 0.05; the claim is worded for tables built from these 37 groups",
       "generalisation_rule": "always report the group-aware interval and the group share estimated from the confirmation tables; describe the result as holding for new groups only if the group-aware test also passes",
@@ -207,11 +203,75 @@
       "controls": "mfc_bare, probe_bare, shuf_bare and shuf_ctx, kv_ctx with its build time, restore time and state bytes; cad_ctx is not part of the primary campaign",
       "decision_rule_owner_20261119": "After the short diagnostic Mac window (seed 1003 reproducibility, cached-prompt parity, adapter against the plain classifier): if the classifier ties the adapter and the cache fits the memory budget, close the practical adapter claim and publish the readout result.",
       "to_define_at_lock": "what counts as a tie between top2_bare and probe_bare (proposed: top2_bare is not higher at table level, sign-flip p < 0.05), and the memory budget for the cached prompt"
+    }
+  },
+  "superseded_20261118": {
+    "note": "The claim, settings, arms and gates as they stood before the 2026-11-19 adoption. Kept for the record; not in force.",
+    "claim": "A support table can be compiled, in closed form and with no gradient step, into a low-rank update on the top two MLP layers of a frozen model such that, with the table still in the prompt, the model answers unseen questions more accurately than the unmodified model given the same prompt.",
+    "gates": {
+      "PRIMARY_examples_present": {
+        "comparison": "top2_ctx against base_ctx, per model, over the tables of both settings",
+        "test": "exact or Monte Carlo two-sided sign-flip permutation test on the per-table difference in accuracy (table_level_v5.py)",
+        "pass": "top2_ctx is higher and p < 0.05, on the unseen model and on at least one development model. A pass on development models only is reported as not confirmed."
+      },
+      "matched_compute": {
+        "comparison": "top2_ctx against knn_ctx and against cad_ctx, same test",
+        "pass": "reported, with this rule fixed in advance: if top2_ctx does not beat knn_ctx, the write-up says the adapter has no examples-present advantage over a nearest-neighbour cache, whatever the primary gate shows",
+        "cost_accounting": "seconds per question for every arm from the same run; the adapter's compile time per table measured with only the fixed adapter compiled (fixed_compile_ms) and its forward-pass count; questions that share a table share one compile"
+      },
+      "guessing_control": {
+        "comparison": "every arm's rate of valid codes; top2_bare accuracy against 0.25 (always emitting one of four valid codes), tested per table",
+        "pass": "one-sided sign-flip test on per-table (accuracy minus 0.25), p < 0.01, for top2_bare; valid-code rates reported for all arms",
+        "shuffled_label_control": "REQUIRED AT LOCK, implemented in run_v5.mjs (B1_WITH_SHUFFLED=1) and not yet run on a GPU. Reported: shuf_ctx against base_ctx and top2_ctx against shuf_ctx, table-level. Fixed in advance: if shuf_ctx is not below top2_ctx (same test, p < 0.05), the write-up says the examples-present gain is not shown to be information from the table."
+      },
+      "do_no_harm": {
+        "comparison": "top2_ctx against base_ctx",
+        "pass": "non-inferiority at a 5-point margin: one-sided sign-flip test on per-table (top2_ctx accuracy minus base_ctx accuracy plus 0.05) rejects 'worse by 5 points or more' at 0.05. Failing to show a difference is not a pass."
+      },
+      "SECONDARY_prompt_removed": {
+        "comparison": "top2_bare against base_ctx, table-level",
+        "pass": "non-inferiority at a 5-point margin: one-sided sign-flip test on per-table (top2_bare accuracy minus base_ctx accuracy plus 0.05) rejects 'worse by 5 points or more' at 0.05; time per question reported. Failing to show a difference is not a pass.",
+        "known_gap": "REQUIRED BEFORE LOCK: a cached copy of the prompt gives base_ctx accuracy at about base_bare time, so it is the real competitor for this claim. That arm is not implemented (Doppler exposes prefix snapshots; the runner does not use them yet). The adapter's case against it is size and freed context, and the write-up must report the cache's bytes beside the adapter's."
+      }
     },
-    "still_required_before_lock": [
-      "owner reviews this power estimate and the proposed lock shape",
-      "one short diagnostic Mac GPU window after X1: seed 1003 replay on the e45824b09 worktree, kv_ctx token parity with base_ctx and its build, restore and bytes, shuf_* and probe_bare/mfc_bare on a fresh development seed",
-      "owner pins the unseen model"
-    ]
-  }
+    "secondary_result": "With the table removed, the adapted model is not less accurate than the unmodified model with the table present, at lower time per question.",
+    "tasks_settings": [
+      {
+        "name": "few",
+        "shots_per_group": 3,
+        "tables": 64,
+        "queries_per_group": 2,
+        "tasks": 512
+      },
+      {
+        "name": "many",
+        "shots_per_group": 20,
+        "tables": 32,
+        "queries_per_group": 4,
+        "tasks": 512
+      }
+    ],
+    "arms": {
+      "base_bare": "base model, table removed",
+      "base_ctx": "base model, table in the prompt",
+      "top2_ctx": "PRIMARY: fixed adapter, table in the prompt",
+      "knn_ctx": "matched compute: base model plus a nearest-neighbour cache over the table's own answers (one pass)",
+      "cad_ctx": "greater compute: base model with context-aware decoding (two passes per token)",
+      "top2_bare": "secondary: fixed adapter, table removed",
+      "shuf_ctx": "control: fixed adapter compiled from the same table with every answer code replaced by the next code in the table's list, table in the prompt (B1_WITH_SHUFFLED=1)",
+      "shuf_bare": "control: the same shuffled-label adapter, table removed; matches_shuffled_code records whether it answers with the wrong code it was taught",
+      "kv_ctx": "rival: base model with the table's prefix state built once and restored per question (B1_WITH_KV_SNAPSHOT=1)",
+      "mfc_bare": "control: the most frequent support code, ties to the code seen first; 25% by construction (B1_WITH_CONTROLS=1)",
+      "probe_bare": "control: plain ridge classifier on the same top-two-layer anchor activations and support labels as the fixed adapter, table removed, scored on the same rows (B1_WITH_CONTROLS=1)"
+    }
+  },
+  "still_required_before_lock": [
+    "one short diagnostic Mac GPU window after X1, outside confirmation: seed 1003 replay on the Doppler e45824b09 worktree; kv_ctx token parity with base_ctx and its build, restore and bytes; shuf_*, mfc_bare and probe_bare on a fresh development seed",
+    "apply the owner's rule after that window: if the plain classifier ties the adapter and the cache fits the memory budget, close the practical adapter claim and publish the readout result; otherwise continue to lock",
+    "owner defines the tie rule and the cached-prompt memory budget (proposals are in gates)",
+    "owner pins the unseen model (host, path, revision); MiniCPM4 0.5B is the proposed first cross-family model and needs a download",
+    "owner confirms in so many words that the table-removed gate replaces the examples-present gate of decision 5 as primary",
+    "fix the small-table count",
+    "then: lock commit with the SHA-256 of every frozen file, before the confirmation seed is drawn"
+  ]
 }

@@ -49,6 +49,8 @@ fixed one on the top two layers. Details and numbers are in [RESULTS.md](RESULTS
 - `tally_v5.py`, `table_level_v5.py`: counts and paired tests from a receipt, per question and per table.
 - `audit_v5.py`, `power_v5.py`, `design_power_v5.py`: error shape, power, and whether the table-level test
   is calibrated when tables share groups.
+- `gate_v5.py`: the gate itself from receipts: exact one-sided sign-flip test with the 5-point margin, bootstrap
+  interval, group-aware test, controls and cached-prompt parity.
 - `design_check_v5.py`, `controls_v5.test.mjs`: checks that need no model.
 - `protocol_v5_draft.json`: the draft protocol, for review before any lock.
 
@@ -71,6 +73,7 @@ Checks with no model or GPU:
 python3 -I design_check_v5.py            # nouns, development tasks unchanged, confirmation design, 25% control
 node --test controls_v5.test.mjs         # the two controls
 python design_power_v5.py RECEIPT_DIR OUT.json   # needs numpy
+python3 -I gate_v5.py RECEIPT.json [...]  # the gate, per model
 ```
 
 Results are in [RESULTS.md](RESULTS.md).

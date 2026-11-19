@@ -268,6 +268,16 @@ capture function the compiler already uses.
 Not changed, by the owner's direction: the bias correction and a batched compile stay in development and are
 not in this runner.
 
+**Lock shape adopted (owner, 2026-11-19).** The sign-flip gate is the primary test, its claim is worded for
+tables built from these 37 groups, and the result is said to hold for new groups only if the group-aware test
+also passes. `protocol_v5_draft.json` is rewritten to that shape (still a draft; the earlier gates are kept
+in it as superseded). `gate_v5.py` computes the gate from receipts: an exact one-sided sign-flip test with the
+5-point margin, a 90% paired-bootstrap interval, the group-aware test and the group share, the controls, and
+the cached prompt's token parity. Ten unit tests pass. Run on the development receipts only to check that it
+runs: Qwen 0.8B, 12 tables of 20 examples, 171 of 192 against 169 of 192, +1.0 points, interval -3.7 to +5.2,
+one-sided p 0.028; Qwen 2B has four such tables, which cannot pass at any outcome (smallest possible p is
+0.0625). These are development tables that were looked at while the code changed, not a confirmation.
+
 ## State at handoff (2026-11-18 08:00 EST)
 
 Nothing is locked. `protocol_v5_draft.json` awaits an independent review and the owner's pin of an
