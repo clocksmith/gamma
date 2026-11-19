@@ -274,6 +274,7 @@
     "owner defines the cached-prompt memory budget, which fixes what 'a clear residency win' means (proposal in gates.cached_prompt)",
     "owner pins the unseen model (host, path, revision); MiniCPM4 0.5B is the proposed first cross-family model and needs a download",
     "fix the small-table count",
+    "owner decides whether FAAST (arXiv 2605.04651) is run as a baseline before confirmation; it needs its released code and a supported model, which are downloads",
     "then: lock commit with the SHA-256 of every frozen file, before the confirmation seed is drawn"
   ],
   "diagnostic_window_plan": {
@@ -324,5 +325,15 @@
     "caveat": "development tables come from eight item groups and share groups heavily; the group-aware interval is reported beside the bootstrap interval",
     "amended": "2026-11-19, still before any run: nn_bare added to the controls. It reuses the classifier's forward pass, so the runs and their sizes are unchanged."
   },
-  "scope_note": "The task is classification by example: every question is about a noun that does not appear in the table. Nothing here tests recall of a stored item (arbitrary item-to-code lookup); that would be a separate experiment. The simple ways to do this task are the controls: a nearest-neighbour vote and a plain classifier over the same activations, and the cached prompt."
+  "scope_note": "The task is classification by example: every question is about a noun that does not appear in the table. Nothing here tests recall of a stored item (arbitrary item-to-code lookup); that would be a separate experiment. The simple ways to do this task are the controls: a nearest-neighbour vote and a plain classifier over the same activations, and the cached prompt.",
+  "prior_art": {
+    "faast": {
+      "reference": "Bao et al., 'FAAST: Forward-Only Associative Learning via Closed-Form Fast Weights for Test-Time Supervised Adaptation', arXiv 2605.04651, submitted 6 May 2026; code at github.com/baoguangsheng/faast",
+      "read": "2026-11-19, the arXiv abstract and the first 100,000 characters of the HTML through a summarising fetch; the appendix was not read. Read the method in full before confirmation.",
+      "what_it_does": "Compiles labelled examples into fast weights in closed form (least squares with a filtered pseudoinverse), with no gradient step at adaptation time, and discards the examples afterwards. For language models it adds a fast-weight matrix per layer whose output returns through a readout projection that is trained once and then frozen. Evaluated on image classification (frozen CLIP ResNet-50), sentiment and language modelling (GPT-2 family) and translation (Qwen2.5 3B and 7B Instruct), against linear projection, kNN memory, LoRA, in-context learning and kNN-LM. No cached-prompt baseline in the part read.",
+      "consequence_for_this_study": "Compiling labelled examples into weights in closed form without a gradient step is not new, and this study does not claim it. What is tested here is a systems result: with the table removed, accuracy within 5 points of the model given the table (or its cached prompt), with how much less state and time, on Q4K models in Doppler's WebGPU runtime, writing into an existing MLP weight with no trained component.",
+      "differences": "FAAST adds a module with a trained readout and reads hidden states; v5 writes a low-rank update into the existing down_proj of the top two layers, aimed at output-token directions, with nothing trained. In FAAST's few-shot classification tables its closed-form map, a linear probe and kNN are within about 2 points of each other, which is what this study's classifier and nearest-neighbour controls test for here.",
+      "as_a_baseline": "It has released code and models, so it is a direct baseline. Running it needs its code and a model it supports, which are downloads and a second runtime: an owner decision, listed in still_required_before_lock."
+    }
+  }
 }

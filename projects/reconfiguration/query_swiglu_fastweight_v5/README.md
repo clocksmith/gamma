@@ -17,6 +17,14 @@ What the task is: every question is about a noun that is not in the table. The m
 noun in one of the table's four groups and return that group's code. That is classification by example. It is
 not recall of a stored item, which nothing here tests.
 
+## Prior work
+
+Compiling labelled examples into weights in closed form, with no gradient step, is not new. FAAST (Bao et al.,
+arXiv 2605.04651, May 2026) does it with least squares and a trained readout, and reports its closed-form
+map, a linear probe and kNN within about 2 points of each other on few-shot classification. This study does
+not claim the mechanism. It tests a systems result: with the table removed, how close is accuracy to the
+model given the table, and at how much less state and time, on Q4K models in Doppler's WebGPU runtime.
+
 ## What changed from v4
 
 v4 is sealed and negative. Reading its compiler found these defects; v5 fixes each.

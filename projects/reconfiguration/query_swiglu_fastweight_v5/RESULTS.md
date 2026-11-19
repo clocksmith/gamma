@@ -296,6 +296,15 @@ activations, and the cached prompt. A nearest-neighbour control with the table r
 beside the plain classifier; it reuses the classifier's forward pass. The earlier nearest-neighbour arm
 (`knn_ctx`) has the table in the prompt and biases the model's first token, so it is not that control.
 
+**Prior work (recorded 2026-11-19).** FAAST (Bao et al., arXiv 2605.04651, May 2026) compiles labelled
+examples into fast weights in closed form with no gradient step at adaptation time and then discards the
+examples; it has released code and models. So closed-form compilation is not this study's contribution. What
+is left to claim is a systems result, and the plain classifier and nearest-neighbour controls matter more:
+FAAST's own few-shot classification tables put its closed-form map, a linear probe and kNN within about 2
+points of each other. Differences: FAAST adds a module with a readout that is trained once; v5 writes into an
+existing MLP weight with nothing trained. Only the abstract and main text were read, through a summarising
+fetch; the method should be read in full, and whether to run it as a baseline decided, before confirmation.
+
 ## State at handoff (2026-11-18 08:00 EST)
 
 Nothing is locked. `protocol_v5_draft.json` awaits an independent review and the owner's pin of an
