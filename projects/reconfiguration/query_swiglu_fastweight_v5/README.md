@@ -70,6 +70,8 @@ fixed one on the top two layers. Details and numbers are in [RESULTS.md](RESULTS
   is calibrated when tables share groups.
 - `gate_v5.py`: the gate itself from receipts: exact one-sided sign-flip test with the 5-point margin, bootstrap
   interval, group-aware test, controls and cached-prompt parity.
+- `readout_adapter_v5.mjs`: the adapter design found offline: the plain classifier written into the last layer
+  (`ra_bare`, `ra_kv`; `B1_WITH_READOUT_ADAPTER=1`). Unit-tested on CPU.
 - `replay_compare_v5.py`: whether a replay reproduces an earlier receipt, arm by arm.
 - `dump_head_v5.mjs`, `discover_v5.py`, `lookup_gate_v5.py`: offline study on recorded activations: the
   model's output matrix, the scoring of readouts, in-context variants and last-layer adapter designs, and the

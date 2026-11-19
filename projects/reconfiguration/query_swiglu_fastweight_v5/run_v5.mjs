@@ -21,6 +21,10 @@
 // matches top2_bare, the adapter is a readout of those activations for this task. nn_bare is the same without
 // any fitting: a nearest-neighbour vote over those activations. The task asks for the code of a noun that is not
 // in the table, so these are the simple ways to do what the adapter does; none of them recalls a stored item.
+// With B1_WITH_READOUT_ADAPTER=1 it also compiles the readout adapter (readout_adapter_v5.mjs): the plain
+// classifier written into the last layer's MLP down-projection. ra_bare decodes with it and the table removed.
+// With B1_WITH_KV_SNAPSHOT=1 as well, ra_kv decodes with it on top of the cached prompt; a last-layer write
+// changes nothing the cache holds, so the two compose exactly.
 // B1_SKIP_ARMS=arm,arm leaves decode arms out (for example cad_ctx, which is not part of the primary campaign,
 // or every *_ctx arm for a table-removed-only diagnostic). The arms that do run are unchanged by it.
 // B1_DUMP_FEATURES=DIR (needs B1_WITH_CONTROLS=1 and B1_WITH_KV_SNAPSHOT=1) writes, for offline study, the
@@ -42,6 +46,7 @@ import { spawnSync } from 'node:child_process';
 import { findAnchors, leaveOneOutProbe, chooseLayer, fitLayer } from './fastweight_v5.mjs';
 import { dequantizeQ4KRow } from '../../../gamma/fastweight/doppler_fastweight.mjs';
 import { mostFrequentCode, fitSupportClassifier, fitNearestNeighbour } from './controls_v5.mjs';
+import { compileReadoutAdapter } from './readout_adapter_v5.mjs';
 
 const [dopplerRoot, modelPath, outputPath, split, seedArg, specialtiesArg, shotsArg, queriesArg] = process.argv.slice(2);
 assert.ok(dopplerRoot && modelPath && outputPath && split && seedArg, 'Usage: node run_v5.mjs DOPPLER_ROOT MODEL_DIR OUT_JSON SPLIT SEED SPECIALTIES SHOTS QUERIES');
@@ -146,6 +151,8 @@ const withSelected = process.env.B1_WITH_SELECTED === '1';
 const withShuffled = process.env.B1_WITH_SHUFFLED === '1';
 const withKvSnapshot = process.env.B1_WITH_KV_SNAPSHOT === '1';
 const withControls = process.env.B1_WITH_CONTROLS === '1';
+const withReadoutAdapter = process.env.B1_WITH_READOUT_ADAPTER === '1';
+assert.ok(!withReadoutAdapter || withControls, 'B1_WITH_READOUT_ADAPTER needs B1_WITH_CONTROLS=1');
 const dumpDir = process.env.B1_DUMP_FEATURES ? resolve(process.env.B1_DUMP_FEATURES) : null;
 assert.ok(!dumpDir || (withControls && withKvSnapshot), 'B1_DUMP_FEATURES needs B1_WITH_CONTROLS=1 and B1_WITH_KV_SNAPSHOT=1');
 if (dumpDir) mkdirSync(dumpDir, { recursive: true });
@@ -188,7 +195,7 @@ function dumpRow(layerRows, hiddenRow) {
   out.set(hiddenRow, at);
   return Buffer.from(out.buffer, out.byteOffset, out.byteLength);
 }
-const SKIPPABLE_ARMS = ['base_bare', 'base_ctx', 'top2_bare', 'top2_ctx', 'v5_bare', 'v5_ctx', 'shuf_bare', 'shuf_ctx', 'knn_ctx', 'cad_ctx', 'kv_ctx'];
+const SKIPPABLE_ARMS = ['base_bare', 'base_ctx', 'top2_bare', 'top2_ctx', 'v5_bare', 'v5_ctx', 'shuf_bare', 'shuf_ctx', 'knn_ctx', 'cad_ctx', 'kv_ctx', 'ra_bare', 'ra_ctx', 'ra_kv'];
 const skipArms = new Set((process.env.B1_SKIP_ARMS ?? '').split(',').map(s => s.trim()).filter(Boolean));
 for (const arm of skipArms) assert.ok(SKIPPABLE_ARMS.includes(arm), `B1_SKIP_ARMS: unknown arm ${arm}`);
 
@@ -692,6 +699,42 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
     fixed_adapter_bytes: parts[0].logicalBytes + parts[1].logicalBytes,
     fixed_compile_ms: withSelected ? null : fixedCompileMs, forward_passes: anc.length + 1,
   };
+  // The readout adapter: last layer only, fitted on every answer position of every support line in both
+  // captured contexts. Its fit time is its own; it reuses the forward passes the fixed adapter already paid for.
+  let ra = null;
+  if (withReadoutAdapter && controls) {
+    const tr = performance.now();
+    const last = numLayers - 1;
+    const raRows = [];
+    const rmsList = [];
+    const pushRow = (zRow, hRow, nextTok) => {
+      raRows.push({ z: zRow, nextTok });
+      let sq = 0;
+      for (let j = 0; j < dHidden; j += 1) sq += hRow[j] * hRow[j];
+      rmsList.push(Math.sqrt(sq / dHidden));
+    };
+    for (let ex = 0; ex < anc.length; ex += 1) {
+      const a = anc[ex];
+      const e = iso[ex];
+      for (let off = 0; off <= e.answerLen; off += 1) {
+        const nextTok = off < e.answerLen ? supportIds[a.pos + off + 1] : nlId;
+        pushRow(e.cap.rowsByLayer.get(last).get(e.relAnchor + off), e.cap.hRows.get(e.relAnchor + off), nextTok);
+        if (ex < catCount) pushRow(cat.rowsByLayer.get(last).get(a.pos + off), cat.hRows.get(a.pos + off), nextTok);
+      }
+    }
+    rmsList.sort((x, y) => x - y);
+    const spec = compileReadoutAdapter({
+      rows: raRows, layer: last, dHidden, dInter, getLmRow: tok => lmRows.get(tok), finalNormG,
+      hiddenRms: rmsList[Math.floor(rmsList.length / 2)], gain: 1.0, ratio: 0.15,
+    });
+    const mat = await materializeGpuAdapter(`ra_${task.specialty_id}`, spec);
+    setAdapterScale(mat.adapter, 1);
+    ra = mat;
+    Object.assign(diag, {
+      readout_adapter_layer: last, readout_adapter_rank: spec.rank, readout_adapter_bytes: spec.logicalBytes,
+      readout_adapter_rows: spec.rows, readout_adapter_fit_ms: performance.now() - tr,
+    });
+  }
   // Controls. They are built after the adapter so that fixed_compile_ms above is the adapter's alone.
   let probe = null;
   let mfc = null;
@@ -762,7 +805,7 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
       probe_leave_one_out_accuracy: clf.leaveOneOutAccuracy, probe_fit_ms: performance.now() - tp,
     });
   }
-  const gpuBuffers = [...top2.gpuBuffers];
+  const gpuBuffers = [...top2.gpuBuffers, ...(ra ? ra.gpuBuffers : [])];
   let v5 = null;
   let abstain = false;
   if (withSelected) {
@@ -801,7 +844,7 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
       compile_ms: performance.now() - t0,
     });
   }
-  return { v5, top2: top2.adapter, abstain, gpuBuffers, sepTok, diag, probe, mfc };
+  return { v5, top2: top2.adapter, abstain, gpuBuffers, sepTok, diag, probe, mfc, ra: ra ? ra.adapter : null };
 }
 
 // The cached-prompt rival: prefill the table once with the base model, keep Doppler's prefix state
@@ -1005,6 +1048,7 @@ for (const task of tasks) {
   const arms = [['base', null], ['top2', c.top2]];
   if (withSelected) arms.push(['v5', c.abstain ? null : c.v5]);
   if (withShuffled) arms.push(['shuf', c.shuf]);
+  if (withReadoutAdapter) arms.push(['ra', c.ra]);
   const taught = withShuffled ? canonicalizeAnswer(shuffledCode(task, task.expected)) : null;
   const bareIds = encodeRaw(task.bare_prompt);
   const record = (arm, ids, r) => rows.push({
@@ -1030,6 +1074,13 @@ for (const task of tasks) {
   if (withKvSnapshot && !skipArms.has('kv_ctx')) {
     pipeline.setLoRAAdapter(null);
     record('kv_ctx', fullIds, await greedyDecodeSinglePass(fullIds, Number(task.max_new_tokens), false, null, c.kv));
+  }
+  if (withReadoutAdapter && withKvSnapshot && !skipArms.has('ra_kv')) {
+    // The readout adapter on top of the cached prompt: restore the table's state, then decode with the adapter.
+    pipeline.setLoRAAdapter(c.ra);
+    const r = await greedyDecodeSinglePass(fullIds, Number(task.max_new_tokens), false, null, c.kv);
+    pipeline.setLoRAAdapter(null);
+    record('ra_kv', fullIds, r);
   }
   if (withControls) {
     assert.equal(bareIds.at(-1), c.sepTok, 'a table-removed question must end at the answer marker');
@@ -1076,13 +1127,14 @@ for (const task of tasks) {
 const receipt = {
   scope: split === 'dev' ? 'development only, exploratory' : 'confirmation', split, seed, specialties: nSpecialties, shots_per_group: shots,
   queries_per_group: queries, task_count: tasks.length, model: modelId, num_layers: numLayers, hidden_size: dHidden,
-  intermediate_size: dInter, with_selected_adapter: withSelected, with_shuffled_adapter: withShuffled, with_kv_snapshot: withKvSnapshot, with_controls: withControls, skipped_arms: [...skipArms].sort(),
+  intermediate_size: dInter, with_selected_adapter: withSelected, with_shuffled_adapter: withShuffled, with_kv_snapshot: withKvSnapshot, with_controls: withControls, with_readout_adapter: withReadoutAdapter, skipped_arms: [...skipArms].sort(),
   captured_layers: candidateLayers, resource_check: process.env.B1_RESOURCE_CHECK, doppler_source: dopplerSource,
   confirm_protocol: process.env.B1_ALLOW_CONFIRM ?? null,
   source_sha256: {
     runner: sha256Hex(await readFile(fileURLToPath(import.meta.url))), compiler: sha256Hex(await readFile(join(here, 'fastweight_v5.mjs'))),
     tasks: sha256Hex(await readFile(join(here, 'tasks_v5.py'))), manifest: sha256Hex(manifestBytes),
     controls: sha256Hex(await readFile(join(here, 'controls_v5.mjs'))),
+    readout_adapter: sha256Hex(await readFile(join(here, 'readout_adapter_v5.mjs'))),
   },
   specialties_compiled: [...bySpecialty.values()].map(c => c.diag), rows,
 };

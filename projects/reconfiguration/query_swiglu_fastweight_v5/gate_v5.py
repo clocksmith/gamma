@@ -219,7 +219,10 @@ def controls(tables, compiled, shots):
     if mfc:
         rates = sorted({float(accuracy(t, "mfc_bare")) for t in mfc})
         out["most_frequent_code"] = {"tables": len(mfc), "accuracy_values_seen": rates, "exactly_one_in_four_on_every_table": rates == [0.25]}
-    for name, a, b in (("adapter_vs_plain_classifier", "top2_bare", "probe_bare"), ("adapter_vs_nearest_neighbour", "top2_bare", "nn_bare"),
+    for name, a, b in (("readout_adapter_vs_cached_prompt", "ra_bare", "kv_ctx"), ("readout_adapter_vs_base_with_table", "ra_bare", "base_ctx"),
+                       ("readout_adapter_vs_plain_classifier", "ra_bare", "probe_bare"), ("readout_adapter_vs_adapter_as_built", "ra_bare", "top2_bare"),
+                       ("readout_adapter_on_cached_prompt_vs_cached_prompt", "ra_kv", "kv_ctx"),
+                       ("adapter_vs_plain_classifier", "top2_bare", "probe_bare"), ("adapter_vs_nearest_neighbour", "top2_bare", "nn_bare"),
                        ("plain_classifier_vs_nearest_neighbour", "probe_bare", "nn_bare"), ("plain_classifier_vs_base_with_table", "probe_bare", "base_ctx"),
                        ("adapter_vs_wrong_label_adapter_table_removed", "top2_bare", "shuf_bare"),
                        ("adapter_vs_wrong_label_adapter_table_present", "top2_ctx", "shuf_ctx"),
@@ -228,12 +231,12 @@ def controls(tables, compiled, shots):
         c = compare(use, a, b, groups=True)
         if c:
             diffs, groups = c.pop("_diffs"), c.pop("_groups")
-            if name in ("adapter_vs_plain_classifier", "adapter_vs_nearest_neighbour") and len(diffs) > 1:
+            if name in ("adapter_vs_plain_classifier", "adapter_vs_nearest_neighbour", "readout_adapter_vs_plain_classifier", "readout_adapter_vs_cached_prompt") and len(diffs) > 1:
                 aware = group_aware(diffs, groups, margin=0)
                 c["group_aware_interval_90_points"] = [round(100 * x, 2) for x in aware["interval_90"]]
                 c["group_share_of_table_variance"] = aware["group_share_of_table_variance"]
             out[name] = c
-    for name in ("adapter_vs_plain_classifier", "adapter_vs_nearest_neighbour"):
+    for name in ("adapter_vs_plain_classifier", "adapter_vs_nearest_neighbour", "readout_adapter_vs_plain_classifier"):
         if name in out:
             out[name]["tie_rule"] = tie_rule(out[name])
     kv = [t for t in use if t["n"]["kv_ctx"]]

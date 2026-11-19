@@ -425,5 +425,21 @@
       }
     },
     "not_yet_done": "run the new adapter through the runtime on fresh development tables; second model"
+  },
+  "validation_plan_20261119": {
+    "status": "Declared on 2026-11-19 before the run. Development split, fresh seed; not a confirmation.",
+    "what": "the readout adapter (readout_adapter_v5.mjs: last layer, gain 1.0, ridge 0.15, as chosen offline on seed 1102) run through the runtime",
+    "run": {
+      "model": "qwen-3-5-0-8b-q4k-ehaf16",
+      "seed": 1103,
+      "tables": 48,
+      "shots_per_group": 20,
+      "queries_per_group": 4,
+      "arms": "B1_WITH_CONTROLS=1 B1_WITH_KV_SNAPSHOT=1 B1_WITH_READOUT_ADAPTER=1 B1_SKIP_ARMS=base_ctx,top2_ctx,knn_ctx,cad_ctx,ra_ctx"
+    },
+    "primary_read": "ra_bare against kv_ctx (the model given the table, through the cached prompt, which matched base_ctx token for token on 2026-11-19), per table, exact one-sided sign-flip test and 90% bootstrap interval (gate_v5.py)",
+    "counts_as_holding_up": "ra_bare higher than kv_ctx with one-sided p < 0.05. The offline prediction was +6.8 points (94.4% against 87.6%).",
+    "also_reported": "ra_bare against probe_bare with the tie rule; ra_bare against top2_bare; ra_kv against kv_ctx; mfc_bare must be exactly 25%; adapter bytes and fit time",
+    "if_it_does_not_hold": "report it as a failed transfer from simulation to runtime, with the per-table differences, and do not retune on this seed"
   }
 }
