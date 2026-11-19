@@ -305,6 +305,78 @@ points of each other. Differences: FAAST adds a module with a readout that is tr
 existing MLP weight with nothing trained. Only the abstract and main text were read, through a summarising
 fetch; the method should be read in full, and whether to run it as a baseline decided, before confirmation.
 
+## Diagnostic window and decision (2026-11-19, Mac GPU, development split, declared beforehand)
+
+Three runs, declared in `protocol_v5_draft.json` before they were made, on the Doppler worktree at `e45824b09`
+(clean). Development tables only; nothing here is a confirmation. Receipts are beside the earlier ones:
+`*_dev1003_k3_replay.json`, `qwen35_08b_dev1101_k20_cache.json`, `qwen35_08b_dev1102_k20_classifier.json`.
+`gate_v5.py`, `tally_v5.py` and `replay_compare_v5.py` reproduce every number below.
+
+**A. Seed 1003 replays reproduce exactly.** On Qwen 3.5 0.8B and 2B, every question in the four arms the old
+and new receipts share (`base_bare`, `base_ctx`, `top2_bare`, `top2_ctx`) gave the same tokens as on
+2026-11-17: 64 of 64 in each arm on each model, with the same counts correct (0.8B: 0, 32, 33, 34; 2B: 0, 35,
+41, 43). A seed's outcome is deterministic on this runtime, so the 6.9-point drop in seeds 1005 and 1006 is
+those seeds' tables, not a runtime change or noise.
+
+**B. Cached prompt and controls** (0.8B, seed 1101, 4 tables of 20 examples, 64 questions):
+
+| Arm | Correct of 64 | Median ms per question | State kept per table |
+|---|---:|---:|---:|
+| Base model, table in prompt (`base_ctx`) | 55 | 6,248 | none |
+| Cached prompt (`kv_ctx`) | 55 | 246 | 31.4 to 33.3 MB |
+| Adapter, table removed (`top2_bare`) | 61 | 250 | 221 to 405 KB |
+| Adapter, table in prompt (`top2_ctx`) | 61 | 6,089 | 221 to 405 KB |
+| Plain classifier, table removed (`probe_bare`) | 64 | 170 | not measured (see below) |
+| Nearest-neighbour vote, table removed (`nn_bare`) | 59 | 170 | not measured |
+| Most frequent code (`mfc_bare`) | 16 | 0 | none |
+| Wrong-label adapter, table removed (`shuf_bare`) | 1 | 256 | as the adapter |
+
+- The cached prompt gave the same tokens as `base_ctx` on all 64 questions. It restores in 2.3 ms (median),
+  answers as fast as the adapter, and builds in 3.9 to 4.3 s against 18.7 to 24.6 s to compile the adapter.
+  The adapter has no speed advantage over it.
+- The cached prompt's state is about 100 times the adapter's. 20.6 MB of it is the linear-attention layers'
+  recurrent state, which does not depend on the table's length; the attention cache adds 10.7 to 12.7 MB.
+- The adapter carries the table's labels: compiled from wrong labels it answered with the wrong code it was
+  taught on 62 of 64 questions with the table removed (12 of 64 with the table present).
+- The most-frequent-code control scored exactly 25% on every table.
+
+**C. Adapter against the plain classifier** (0.8B, seed 1102, 48 tables of 20 examples, 768 questions,
+table-removed arms only):
+
+| Arm | Correct of 768 | Word codes (384) | Two-part codes (384) |
+|---|---:|---:|---:|
+| Plain classifier (`probe_bare`) | 742 (96.6%) | 376 | 366 |
+| Nearest-neighbour vote (`nn_bare`) | 702 (91.4%) | 352 | 350 |
+| Adapter (`top2_bare`) | 689 (89.7%) | 348 | 341 |
+| Most frequent code (`mfc_bare`) | 192 (25.0%) | 96 | 96 |
+
+- Adapter minus classifier, per table: -6.9 points, 90% bootstrap interval -8.9 to -5.1 (group-aware -8.8 to
+  -5.0); the adapter was better on 1 table, worse on 29, equal on 18 (exact sign-flip p 3e-8).
+- Adapter minus nearest-neighbour vote: -1.7 points, interval -3.7 to +0.3: a tie inside the 5-point margin
+  by the bootstrap interval (the group-aware interval, -5.3 to +2.0, reaches just past it).
+- The classifier is fitted in a median 132 ms per table against 25.1 s to compile the adapter, answers in a
+  median 150 ms against 285 ms, and stored as weights would take about 172 KB on this model (four code rows
+  plus a mean and a scale, two layers of 3,584 features, 32-bit), computed, not measured; the runner keeps it
+  in a larger form.
+- Its leave-one-out accuracy on the support lines averaged 0.97 (lowest table 0.91).
+
+**Decision, by the owner's rule fixed before the run.** The rule: stop if the classifier matches or beats the
+adapter. It beats it, by more than the 5-point margin, so this is not a tie either. The practical adapter claim
+is closed before any lock: no protocol is locked, no confirmation task is generated, and no unseen model is
+downloaded for it.
+
+**The readout result.** On this task (place an unseen noun in one of a table's four groups and return that
+group's code, 20 examples per group) what is needed is linearly readable from the frozen model's own
+activations at the answer marker. A plain classifier on the top-two-layer MLP activations, fitted in closed
+form on the table's examples, was right on 96.6% of table-removed questions; writing the same information
+back into the weights so that the model says the code (the adapter) was right on 89.7%, no better than a
+nearest-neighbour vote over those activations. In run B the model given the table in its prompt, or its
+cached prompt, was right on 55 of 64, below both. Scope: development tables from eight item groups, one model
+for run C, one runtime. The adapter keeps one property the readouts lack: the model itself emits the code in
+its token stream. Nothing here tested whether that is worth its cost.
+
+Not run, and not needed for the decision: run C on the 2B model, the unseen model, and the confirmation.
+
 ## State at handoff (2026-11-18 08:00 EST)
 
 Nothing is locked. `protocol_v5_draft.json` awaits an independent review and the owner's pin of an

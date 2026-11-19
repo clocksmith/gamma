@@ -143,7 +143,7 @@ class EndToEnd(unittest.TestCase):
         self.assertTrue(controls["most_frequent_code"]["exactly_one_in_four_on_every_table"])
         rule = controls["adapter_vs_plain_classifier"]["tie_rule"]
         self.assertTrue(rule["true_tie_interval_inside_margin"])
-        self.assertTrue(rule["reading"].startswith("STOP: the classifier matches or beats"))
+        self.assertTrue(rule["reading"].startswith("STOP: the control matches or beats"))
         tables = self.tables(14, 12, extra={"probe_bare": 9})
         _, controls = self.run_gate([receipt("m", tables)])["m"]
         rule = controls["adapter_vs_plain_classifier"]["tie_rule"]
@@ -160,7 +160,7 @@ class EndToEnd(unittest.TestCase):
         small_win = gate_v5.tie_rule({"mean_difference_points": 2.5, "bootstrap_interval_90_points": [0.5, 4.5]})
         self.assertTrue(small_win["reading"].startswith("STOP unless"))
         loss = gate_v5.tie_rule({"mean_difference_points": -0.5, "bootstrap_interval_90_points": [-9.0, 8.0]})
-        self.assertTrue(loss["reading"].startswith("STOP: the classifier"))
+        self.assertTrue(loss["reading"].startswith("STOP: the control"))
 
 
 if __name__ == "__main__":

@@ -202,11 +202,11 @@ def tie_rule(c, margin_points=float(100 * MARGIN)):
         "adapter_higher_interval_above_zero": lo > 0,
     }
     if out["classifier_matches_or_beats_adapter"]:
-        out["reading"] = "STOP: the classifier matches or beats the adapter."
+        out["reading"] = "STOP: the control matches or beats the adapter."
     elif out["adapter_upside_capped_below_margin"]:
-        out["reading"] = "STOP unless the cached prompt shows a clear residency win: the adapter's upside over the classifier is capped below 5 points."
+        out["reading"] = "STOP unless the cached prompt shows a clear residency win: the adapter's upside over the control is capped below 5 points."
     elif out["adapter_higher_interval_above_zero"]:
-        out["reading"] = "ADVANCE if the cached prompt also shows a residency win: the adapter is higher than the classifier and its upside is not capped below 5 points."
+        out["reading"] = "ADVANCE if the cached prompt also shows a residency win: the adapter is higher than the control and its upside is not capped below 5 points."
     else:
         out["reading"] = "INCONCLUSIVE, not a tie: the interval is too wide to show a tie or an advantage. More tables are needed."
     return out

@@ -1,8 +1,10 @@
 # B1 v5: compile a table of examples into a small adapter
 
-Development status. Nothing here is confirmed: the protocol in `protocol_v5_draft.json` is a
-draft for review, no confirmation task has been generated, and every number below comes from
-the `dev` task split.
+Status: closed before lock on 2026-11-19. A diagnostic run declared in advance found that a plain
+classifier on the model's own activations beats the adapter by 6.9 points with the table removed
+(96.6% against 89.7% over 48 development tables), and a cached prompt matches the adapter's speed. By the
+owner's rule fixed before the run, the practical adapter claim is closed; see the last sections of
+[RESULTS.md](RESULTS.md). Nothing was locked or confirmed: every number comes from the `dev` task split.
 
 ## What it does
 

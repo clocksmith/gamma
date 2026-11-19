@@ -1,6 +1,6 @@
 {
   "protocol_id": "gamma.reconfiguration.query_swiglu_fastweight_v5",
-  "status": "DRAFT. Not locked. No confirmation task has been generated or run. The lock shape was adopted by the owner on 2026-11-19 and the claim, tasks, arms and gates below are rewritten to it; the earlier versions are kept under superseded_20261118. Lock still needs the items in still_required_before_lock.",
+  "status": "STOPPED BEFORE LOCK on 2026-11-19 under the owner's rule fixed before the diagnostic window: the plain classifier beat the adapter. Never locked. No confirmation task was generated or run, and no unseen model was downloaded. The sections below record the protocol as it stood; diagnostic_window_result records the outcome.",
   "owner_direction": {
     "decision_5": "Draft and review B1 v5 before locking it. Make accuracy with examples present the primary gate, compare against matched compute, and include the valid-code guessing control.",
     "decision_6": "Pin the unseen Qwen checkpoint before downloading. Name the host, storage path, and exact revision. Reserve the model for confirmation.",
@@ -270,12 +270,7 @@
     }
   },
   "still_required_before_lock": [
-    "run the diagnostic window in diagnostic_window_plan and apply the owner's rule: stop and publish the readout result, or continue to lock",
-    "owner defines the cached-prompt memory budget, which fixes what 'a clear residency win' means (proposal in gates.cached_prompt)",
-    "owner pins the unseen model (host, path, revision); MiniCPM4 0.5B is the proposed first cross-family model and needs a download",
-    "fix the small-table count",
-    "owner decides whether FAAST (arXiv 2605.04651) is run as a baseline before confirmation; it needs its released code and a supported model, which are downloads",
-    "then: lock commit with the SHA-256 of every frozen file, before the confirmation seed is drawn"
+    "none: the study stopped before lock. Reopening it is the owner's decision and would need a new claim."
   ],
   "diagnostic_window_plan": {
     "status": "Declared on 2026-11-19 before any of these runs. Development split only; outside confirmation; nothing here is a confirmed result.",
@@ -335,5 +330,66 @@
       "differences": "FAAST adds a module with a trained readout and reads hidden states; v5 writes a low-rank update into the existing down_proj of the top two layers, aimed at output-token directions, with nothing trained. In FAAST's few-shot classification tables its closed-form map, a linear probe and kNN are within about 2 points of each other, which is what this study's classifier and nearest-neighbour controls test for here.",
       "as_a_baseline": "It has released code and models, so it is a direct baseline. Running it needs its code and a model it supports, which are downloads and a second runtime: an owner decision, listed in still_required_before_lock."
     }
+  },
+  "diagnostic_window_result": {
+    "when": "2026-11-19, 16:41Z to 18:09Z, Mac GPU, Doppler e45824b09 clean; development split; all runs exited 0",
+    "A_seed_1003_replay": "both models reproduce the 2026-11-17 receipts token for token: 64 of 64 questions in each of base_bare, base_ctx, top2_bare, top2_ctx",
+    "B_cached_prompt": {
+      "token_parity_with_base_ctx": "64 of 64",
+      "correct_of_64": {
+        "base_ctx": 55,
+        "kv_ctx": 55,
+        "top2_bare": 61,
+        "top2_ctx": 61,
+        "probe_bare": 64,
+        "nn_bare": 59,
+        "mfc_bare": 16,
+        "shuf_bare": 1,
+        "shuf_ctx": 47,
+        "knn_ctx": 56
+      },
+      "median_ms_per_question": {
+        "base_ctx": 6248,
+        "kv_ctx": 246,
+        "top2_bare": 250,
+        "probe_bare": 170
+      },
+      "cached_prompt": "build 3.9 to 4.3 s, restore 2.3 ms median, state 31.4 to 33.3 MB per table (20.6 MB of it linear-attention state)",
+      "adapter": "compile 18.7 to 24.6 s, 221 to 405 KB per table",
+      "wrong_label_adapter": "answers the wrong code it was taught on 62 of 64 questions with the table removed"
+    },
+    "C_adapter_against_classifier": {
+      "tables": 48,
+      "questions": 768,
+      "correct": {
+        "probe_bare": 742,
+        "nn_bare": 702,
+        "top2_bare": 689,
+        "mfc_bare": 192
+      },
+      "adapter_minus_classifier_points": -6.9,
+      "bootstrap_interval_90": [
+        -8.85,
+        -5.08
+      ],
+      "group_aware_interval_90": [
+        -8.77,
+        -5.03
+      ],
+      "tables_adapter_better_worse_equal": [
+        1,
+        29,
+        18
+      ],
+      "sign_flip_p_two_sided": 2.98e-08,
+      "adapter_minus_nearest_neighbour_points": -1.69,
+      "nearest_neighbour_interval_90": [
+        -3.65,
+        0.26
+      ],
+      "most_frequent_code": "exactly 25% on every table"
+    },
+    "decision": "Owner's rule: stop if the classifier matches or beats the adapter. The classifier beats it by more than the 5-point margin, so it is not a tie. The practical adapter claim is closed and the readout result is recorded in RESULTS.md.",
+    "not_run": "run C on the 2B model (optional in the plan), the unseen model, the confirmation"
   }
 }
