@@ -18,7 +18,9 @@
 // (controls_v5.mjs): mfc_bare, the most frequent support code (one question in four by construction), and
 // probe_bare, a plain ridge classifier fitted on the same top-two-layer anchor activations and the same
 // labelled support lines the fixed adapter is fitted on, and scored on the same questions. If probe_bare
-// matches top2_bare, the adapter is a readout of those activations for this task.
+// matches top2_bare, the adapter is a readout of those activations for this task. nn_bare is the same without
+// any fitting: a nearest-neighbour vote over those activations. The task asks for the code of a noun that is not
+// in the table, so these are the simple ways to do what the adapter does; none of them recalls a stored item.
 // B1_SKIP_ARMS=arm,arm leaves decode arms out (for example cad_ctx, which is not part of the primary campaign,
 // or every *_ctx arm for a table-removed-only diagnostic). The arms that do run are unchanged by it.
 // With B1_WITH_SELECTED=1 it also compiles the per-table selected adapter (v5_bare, v5_ctx), which
@@ -34,7 +36,7 @@ import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { findAnchors, leaveOneOutProbe, chooseLayer, fitLayer } from './fastweight_v5.mjs';
 import { dequantizeQ4KRow } from '../../../gamma/fastweight/doppler_fastweight.mjs';
-import { mostFrequentCode, fitSupportClassifier } from './controls_v5.mjs';
+import { mostFrequentCode, fitSupportClassifier, fitNearestNeighbour } from './controls_v5.mjs';
 
 const [dopplerRoot, modelPath, outputPath, split, seedArg, specialtiesArg, shotsArg, queriesArg] = process.argv.slice(2);
 assert.ok(dopplerRoot && modelPath && outputPath && split && seedArg, 'Usage: node run_v5.mjs DOPPLER_ROOT MODEL_DIR OUT_JSON SPLIT SEED SPECIALTIES SHOTS QUERIES');
@@ -594,7 +596,8 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
     const known = task.codes.map(canonicalizeAnswer);
     assert.ok(new Set(classCodes).size === classCodes.length && classCodes.every(code => known.includes(code)), `classifier control: support answers [${classCodes}] are not this table's codes`);
     const clf = fitSupportClassifier({ examples, nClasses: spans.length, ratio: 0.15 });
-    probe = { clf, classCodes };
+    const nn = fitNearestNeighbour({ examples, nClasses: spans.length, temperature: 0.08 });
+    probe = { clf, nn, classCodes };
     Object.assign(diag, {
       mfc_code: mfc.code, probe_examples: clf.examples, probe_layers: top2Layers, probe_ridge_ratio: clf.ratio,
       probe_leave_one_out_accuracy: clf.leaveOneOutAccuracy, probe_fit_ms: performance.now() - tp,
@@ -861,9 +864,13 @@ for (const task of tasks) {
     const tq = performance.now();
     const at = bareIds.length - 1;
     const cap = await capturePass(bareIds, top2Layers, [at], []);
-    const guess = c.probe.clf.predict(top2Layers.map(l => cap.rowsByLayer.get(l).get(at)));
-    const code = c.probe.classCodes[guess.index];
-    record('probe_bare', bareIds, { text: code, canonical: code, generatedTokens: [], truncated: false, totalMs: performance.now() - tq });
+    const queryRows = top2Layers.map(l => cap.rowsByLayer.get(l).get(at));
+    const captureMs = performance.now() - tq;
+    for (const [arm, model] of [['probe_bare', c.probe.clf], ['nn_bare', c.probe.nn]]) {
+      const tp = performance.now();
+      const code = c.probe.classCodes[model.predict(queryRows).index];
+      record(arm, bareIds, { text: code, canonical: code, generatedTokens: [], truncated: false, totalMs: captureMs + (performance.now() - tp) });
+    }
   }
   if ((task.task_id + 1) % 8 === 0) console.log('progress', task.task_id + 1, tasks.length);
 }

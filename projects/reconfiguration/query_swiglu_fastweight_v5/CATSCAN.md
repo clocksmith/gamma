@@ -38,7 +38,10 @@ question.
   the final token of the query format, which marks where an answer begins.
 - Every comparison includes the base model with the table present and a guess-a-valid-code rate.
 - The controls see what the compiler sees and no more: the most-frequent-code control reads the support
-  lines; the classifier control reads the same anchor activations and support labels as the adapter.
+  lines; the classifier and nearest-neighbour controls read the same anchor activations and support labels
+  as the adapter.
+- Questions are about nouns that are not in the table. The study is classification by example, not recall
+  of stored items.
 - Development tasks never change: `design_check_v5.py` pins their hashes.
 - One WebGPU process at a time, started only after the GPU is confirmed free.
 

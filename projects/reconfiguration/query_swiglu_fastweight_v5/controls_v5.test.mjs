@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { supportCodes, mostFrequentCode, fitSupportClassifier } from './controls_v5.mjs';
+import { supportCodes, mostFrequentCode, fitSupportClassifier, fitNearestNeighbour } from './controls_v5.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -107,4 +107,20 @@ test('classifier control refuses a table with a class that has no example', () =
   const w = world(14);
   const examples = [0, 0, 1, 1, 2, 2].map(c => ({ features: w.sample(c), label: c }));
   assert.throws(() => fitSupportClassifier({ examples, nClasses: 4 }));
+});
+
+test('nearest-neighbour control answers unseen rows and depends on the labels', () => {
+  const w = world(21);
+  const examples = [];
+  for (let c = 0; c < 4; c += 1) for (let i = 0; i < 20; i += 1) examples.push({ features: w.sample(c), label: c });
+  const nn = fitNearestNeighbour({ examples, nClasses: 4 });
+  let right = 0;
+  const n = 400;
+  for (let i = 0; i < n; i += 1) { const c = i % 4; if (nn.predict(w.sample(c)).index === c) right += 1; }
+  assert.ok(right / n >= 0.9, `accuracy on unseen rows ${right / n}`);
+  const scrambled = fitNearestNeighbour({ examples: examples.map((e, i) => ({ features: e.features, label: (e.label + i) % 4 })), nClasses: 4 });
+  let chance = 0;
+  for (let i = 0; i < n; i += 1) { const c = i % 4; if (scrambled.predict(w.sample(c)).index === c) chance += 1; }
+  assert.ok(Math.abs(chance / n - 0.25) < 0.12, `accuracy with scrambled labels ${chance / n}`);
+  assert.throws(() => fitNearestNeighbour({ examples: examples.filter(e => e.label !== 3), nClasses: 4 }));
 });

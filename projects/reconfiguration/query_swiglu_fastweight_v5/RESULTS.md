@@ -288,6 +288,14 @@ win. `protocol_v5_draft.json` declares the three diagnostic runs and that rule b
 classifier (48 so that the comparison is not underpowered). `B1_SKIP_ARMS` lets the runner leave arms out, and
 `replay_compare_v5.py` compares a replay with its original receipt.
 
+**Scope, stated plainly (2026-11-19, still before any diagnostic run).** Every question is about a noun that
+is not in the table, so the task is classification by example: place the new noun in one of the table's four
+groups and return that group's code. Nothing here tests recall of a stored item. The simple ways to do this
+task are therefore the right controls: a plain classifier and a nearest-neighbour vote over the same
+activations, and the cached prompt. A nearest-neighbour control with the table removed (`nn_bare`) was added
+beside the plain classifier; it reuses the classifier's forward pass. The earlier nearest-neighbour arm
+(`knn_ctx`) has the table in the prompt and biases the model's first token, so it is not that control.
+
 ## State at handoff (2026-11-18 08:00 EST)
 
 Nothing is locked. `protocol_v5_draft.json` awaits an independent review and the owner's pin of an

@@ -6,6 +6,11 @@
 //                       examples the fixed adapter is fitted on. If it answers table-removed questions as well
 //                       as the adapter does, the adapter is a readout of those states for this task and nothing
 //                       more.
+//   fitNearestNeighbour the same states and labels with nothing trained: the question takes the code of the
+//                       support lines its activations most resemble.
+//
+// The task asks for the code of a noun that is not in the table, so it is classification by example, not
+// recall of a stored item. These two controls are the simple ways to do that classification.
 //
 // Neither function takes a query or a query answer. Query answers are used only by the runner's scorer.
 
@@ -168,6 +173,47 @@ export function fitSupportClassifier({ examples, nClasses, ratio = 0.15 }) {
       }
       const scores = scoresFromKernelRow(k);
       return { index: best(scores), scores: Array.from(scores) };
+    },
+  };
+}
+
+// Nearest-neighbour vote over the same activations, with no fitting. Each layer's rows are centred and scaled
+// like the classifier's, then set to unit length; a question's similarity to a support row is the mean cosine
+// over layers; each row votes for its code with weight exp(similarity / temperature). Temperature 0.08 is the
+// value the runner's nearest-neighbour cache already uses.
+export function fitNearestNeighbour({ examples, nClasses, temperature = 0.08 }) {
+  const n = examples.length;
+  if (!(n >= nClasses && nClasses >= 2)) throw new Error(`nearest-neighbour control needs at least one example per class; got ${n} examples, ${nClasses} classes`);
+  const nLayers = examples[0].features.length;
+  const seen = new Set();
+  for (const e of examples) {
+    if (!(Number.isInteger(e.label) && e.label >= 0 && e.label < nClasses)) throw new Error(`nearest-neighbour control: bad label ${e.label}`);
+    if (e.features.length !== nLayers) throw new Error('nearest-neighbour control: examples disagree on the number of layers');
+    seen.add(e.label);
+  }
+  if (seen.size !== nClasses) throw new Error(`nearest-neighbour control: ${seen.size} of ${nClasses} classes have examples`);
+  const unit = v => { const s = Math.sqrt(dot(v, v)) + 1e-12; for (let k = 0; k < v.length; k += 1) v[k] /= s; return v; };
+  const layers = [];
+  for (let l = 0; l < nLayers; l += 1) {
+    const std = standardizer(examples.map(e => e.features[l]));
+    layers.push({ std, rows: examples.map(e => unit(std.apply(e.features[l]))) });
+  }
+  return {
+    examples: n, nClasses, nLayers, temperature,
+    predict(features) {
+      if (features.length !== nLayers) throw new Error('nearest-neighbour control: query has the wrong number of layers');
+      const sims = new Float64Array(n);
+      for (let l = 0; l < nLayers; l += 1) {
+        const q = unit(layers[l].std.apply(features[l]));
+        for (let i = 0; i < n; i += 1) sims[i] += dot(q, layers[l].rows[i]) / nLayers;
+      }
+      let top = -Infinity;
+      for (let i = 0; i < n; i += 1) if (sims[i] > top) top = sims[i];
+      const scores = new Float64Array(nClasses);
+      for (let i = 0; i < n; i += 1) scores[examples[i].label] += Math.exp((sims[i] - top) / temperature);
+      let best = 0;
+      for (let c = 1; c < nClasses; c += 1) if (scores[c] > scores[best]) best = c;
+      return { index: best, scores: Array.from(scores) };
     },
   };
 }

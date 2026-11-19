@@ -219,7 +219,8 @@ def controls(tables, compiled, shots):
     if mfc:
         rates = sorted({float(accuracy(t, "mfc_bare")) for t in mfc})
         out["most_frequent_code"] = {"tables": len(mfc), "accuracy_values_seen": rates, "exactly_one_in_four_on_every_table": rates == [0.25]}
-    for name, a, b in (("adapter_vs_plain_classifier", "top2_bare", "probe_bare"), ("plain_classifier_vs_base_with_table", "probe_bare", "base_ctx"),
+    for name, a, b in (("adapter_vs_plain_classifier", "top2_bare", "probe_bare"), ("adapter_vs_nearest_neighbour", "top2_bare", "nn_bare"),
+                       ("plain_classifier_vs_nearest_neighbour", "probe_bare", "nn_bare"), ("plain_classifier_vs_base_with_table", "probe_bare", "base_ctx"),
                        ("adapter_vs_wrong_label_adapter_table_removed", "top2_bare", "shuf_bare"),
                        ("adapter_vs_wrong_label_adapter_table_present", "top2_ctx", "shuf_ctx"),
                        ("adapter_vs_most_frequent_code", "top2_bare", "mfc_bare"),
@@ -227,13 +228,14 @@ def controls(tables, compiled, shots):
         c = compare(use, a, b, groups=True)
         if c:
             diffs, groups = c.pop("_diffs"), c.pop("_groups")
-            if name == "adapter_vs_plain_classifier" and len(diffs) > 1:
+            if name in ("adapter_vs_plain_classifier", "adapter_vs_nearest_neighbour") and len(diffs) > 1:
                 aware = group_aware(diffs, groups, margin=0)
                 c["group_aware_interval_90_points"] = [round(100 * x, 2) for x in aware["interval_90"]]
                 c["group_share_of_table_variance"] = aware["group_share_of_table_variance"]
             out[name] = c
-    if "adapter_vs_plain_classifier" in out:
-        out["adapter_vs_plain_classifier"]["tie_rule"] = tie_rule(out["adapter_vs_plain_classifier"])
+    for name in ("adapter_vs_plain_classifier", "adapter_vs_nearest_neighbour"):
+        if name in out:
+            out[name]["tie_rule"] = tie_rule(out[name])
     kv = [t for t in use if t["n"]["kv_ctx"]]
     if kv:
         questions = mismatches = 0

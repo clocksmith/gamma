@@ -13,6 +13,10 @@ new questions with the table removed. Switching it off restores the base model e
 
 The use is cost: the table is paid for once at compile time and not again on every question.
 
+What the task is: every question is about a noun that is not in the table. The model has to place the new
+noun in one of the table's four groups and return that group's code. That is classification by example. It is
+not recall of a stored item, which nothing here tests.
+
 ## What changed from v4
 
 v4 is sealed and negative. Reading its compiler found these defects; v5 fixes each.
@@ -41,9 +45,9 @@ fixed one on the top two layers. Details and numbers are in [RESULTS.md](RESULTS
 - `fastweight_v5.mjs`: the compiler.
 - `run_v5.mjs`: the runner. Its `top2_*` arms are the fixed adapter (the result); its `v5_*` arms are the
   per-table selected adapter (worse).
-- `controls_v5.mjs`: two controls that answer without the adapter: the most frequent support code, and a
-  plain classifier on the same activations and support lines the adapter is fitted on (`mfc_bare`,
-  `probe_bare`; `B1_WITH_CONTROLS=1`). Written and unit-tested on CPU; not yet run on a GPU.
+- `controls_v5.mjs`: three controls that answer without the adapter: the most frequent support code, a plain
+  classifier, and a nearest-neighbour vote, the last two on the same activations and support lines the adapter
+  is fitted on (`mfc_bare`, `probe_bare`, `nn_bare`; `B1_WITH_CONTROLS=1`). Unit-tested on CPU.
 - `tasks_v5.py`: task generator with disjoint `dev` and `confirm` item groups. Confirmation uses 37 groups in
   a block design: 111 tables, any two sharing at most one group.
 - `tally_v5.py`, `table_level_v5.py`: counts and paired tests from a receipt, per question and per table.

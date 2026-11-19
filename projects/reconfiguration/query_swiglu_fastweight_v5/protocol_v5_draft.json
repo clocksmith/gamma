@@ -9,7 +9,7 @@
     "note_on_decision_5": "Confirmed by the owner on 2026-11-19: the table-removed comparison is the primary gate. The examples-present comparison of decision 5 is reported as secondary.",
     "confirmation_20261119_lock_items": "Owner, 2026-11-19: (1) make table-removed (zero table tokens, against the full table or its cached prompt) the primary B1 gate; (2) tighten the classifier tie rule with the 5-point margin: a true tie requires the interval on (adapter minus classifier) to fall inside -5 to +5 points; do not treat an underpowered diagnostic as a tie; on the short Mac check, stop if the classifier matches or beats the adapter, or caps its upside below +5 points without a clear cached-prompt residency win; (3) wait for the X1 owner's message that the Mac GPU is free."
   },
-  "claim": "With the support table removed from the prompt, a fixed closed-form low-rank update on the top two MLP layers of a frozen model answers unseen questions about a 20-example-per-group table within 5 points of the unmodified model given the table in its prompt, on tables built from the 37 confirmation item groups.",
+  "claim": "With the support table removed from the prompt, a fixed closed-form low-rank update on the top two MLP layers of a frozen model answers questions about nouns that are not in a 20-example-per-group table (it must place the new noun in one of the table's four groups and return that group's code) within 5 points of the unmodified model given the table in its prompt, on tables built from the 37 confirmation item groups.",
   "tasks": {
     "generator": "tasks_v5.py, split 'confirm': 37 item groups never used in development, tables from a block design (111 tables; any two share at most one group; a group sits in at most 12)",
     "confirmation_seed": "to be drawn at lock time, >= 2000000",
@@ -41,6 +41,7 @@
     "kv_ctx": "rival: base model with the table's prefix state built once and restored per question (B1_WITH_KV_SNAPSHOT=1)",
     "mfc_bare": "control: the most frequent support code, ties to the code seen first; 25% by construction (B1_WITH_CONTROLS=1)",
     "probe_bare": "control: plain ridge classifier on the same top-two-layer anchor activations and support labels as the fixed adapter, table removed, scored on the same rows (B1_WITH_CONTROLS=1)",
+    "nn_bare": "control: nearest-neighbour vote over the same activations and support labels, nothing trained, table removed, scored on the same rows (B1_WITH_CONTROLS=1)",
     "shuf_bare": "control: fixed adapter compiled from the same table with every answer code replaced by the next code in the table's list, table removed (B1_WITH_SHUFFLED=1)",
     "shuf_ctx": "control: the same wrong-label adapter, table in the prompt",
     "knn_ctx": "reported: base model plus a nearest-neighbour cache over the table's own answers (one pass)",
@@ -59,7 +60,8 @@
       "most_frequent_code": "mfc_bare must score exactly 25% on every table; anything else invalidates the run",
       "wrong_labels": "shuf_bare and shuf_ctx reported against top2_bare and top2_ctx, table-level; if the wrong-label adapter is not below the real one (sign-flip p < 0.05), the write-up says the result is not shown to be information from the table",
       "plain_classifier": "probe_bare against top2_bare on the same rows, read from the 90% paired-bootstrap interval on per-table (adapter minus classifier) (gate_v5.py, tie_rule). Owner's rule: stop, close the practical adapter claim and publish the readout result if the classifier matches or beats the adapter (mean difference at or below 0), or if the adapter's upside is capped below 5 points (interval upper bound under +5) and the cached prompt shows no clear residency win. Advance to the 96-table confirmation only if the adapter shows real upside over both the classifier and cached-prompt residency.",
-      "tie_definition": "Confirmed by the owner on 2026-11-19: a true tie requires the interval on (adapter minus classifier) to lie inside -5 to +5 points. A difference that is merely not significant is not a tie; an interval too wide to show either is reported as inconclusive and needs more tables."
+      "tie_definition": "Confirmed by the owner on 2026-11-19: a true tie requires the interval on (adapter minus classifier) to lie inside -5 to +5 points. A difference that is merely not significant is not a tie; an interval too wide to show either is reported as inconclusive and needs more tables.",
+      "nearest_neighbour": "nn_bare against top2_bare and against probe_bare on the same rows, reported with the same interval and reading as the plain classifier. The owner's stop rule is applied to the plain classifier; if the nearest-neighbour vote does better than the plain classifier, the write-up says so and applies the same reading to it."
     },
     "cached_prompt": {
       "parity": "kv_ctx must give the same tokens as base_ctx on every question; otherwise its timings are not used",
@@ -313,12 +315,14 @@
         "shots_per_group": 20,
         "queries_per_group": 4,
         "arms": "B1_WITH_CONTROLS=1 B1_SKIP_ARMS=base_ctx,top2_ctx,knn_ctx,cad_ctx (table-removed arms only, so 48 tables fit in a short window)",
-        "read": "gate_v5.py tie_rule on top2_bare minus probe_bare; mfc_bare must be exactly 25%",
+        "read": "gate_v5.py tie_rule on top2_bare minus probe_bare, and the same reading for top2_bare minus nn_bare; mfc_bare must be exactly 25%",
         "why_48_tables": "so the comparison is not underpowered: if the per-table difference has an SD near 10 points, the 90% interval half-width is about 2.4 points, inside the 5-point margin",
         "optional": "the same on qwen-3-5-2b-q4k-ehaf16 with 24 tables if the window allows"
       }
     ],
     "decision_rule": "the owner's rule in gates.controls.plain_classifier, applied to run C with run B's cached-prompt parity, bytes and times",
-    "caveat": "development tables come from eight item groups and share groups heavily; the group-aware interval is reported beside the bootstrap interval"
-  }
+    "caveat": "development tables come from eight item groups and share groups heavily; the group-aware interval is reported beside the bootstrap interval",
+    "amended": "2026-11-19, still before any run: nn_bare added to the controls. It reuses the classifier's forward pass, so the runs and their sizes are unchanged."
+  },
+  "scope_note": "The task is classification by example: every question is about a noun that does not appear in the table. Nothing here tests recall of a stored item (arbitrary item-to-code lookup); that would be a separate experiment. The simple ways to do this task are the controls: a nearest-neighbour vote and a plain classifier over the same activations, and the cached prompt."
 }
