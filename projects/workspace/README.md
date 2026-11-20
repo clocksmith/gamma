@@ -537,3 +537,19 @@ establish neither semantic answer quality nor a product advantage. Historical
 workflow comparisons and frozen promotion criteria remain independently required.
 
 Private cross-client workflow storage and deployment: [shared registry](workflow-registry.md).
+
+### Standalone local document surface
+
+`src/surfaces/local-document.js` is a narrow native observation provider for
+an owner-selected, already-open file handle. It reports bounded content
+fingerprints and checks whether an expected document state is observed. It
+does not open arbitrary paths, emit file bytes, write, run commands, request
+OS permissions, or resolve a workspace action as successful. The caller owns
+the descriptor; detach fences future observations without closing it. The
+identity is the selected descriptor's file, not whatever file may later occupy
+the same pathname. Metadata stability checks detect the tested concurrent
+changes but are not a filesystem transaction.
+
+This is not wired into live workspace dispatch or a macOS picker, and supplies
+no browser or native document authority. The local fixture covers observation,
+change and detach races, and refusal when the handle or byte budget is absent.
