@@ -584,3 +584,19 @@ and awaiting that runtime measurement. The CPU script executed both full model d
 
 Receipts with every token stream and score gap are available for [seed 1107](first_token_cpu_dev1107.json)
 and [seed 1108](first_token_cpu_dev1108.json).
+
+## MiniCPM4 transfer compatibility (development, 2026-11-20)
+
+The unchanged last-layer readout adapter ran on the independently pinned F16 MiniCPM4 0.5B in Doppler on Apple Metal. All 13 weight files matched the SHA-256 values in the pinned artifact manifest. The [contract](minicpm4_confirmation_lock.json) preceded inference. This compatibility check used two development tables and 32 questions. The 96-table confirmation uses a separate split and seed.
+
+| Method | Word codes (16) | Multi-part codes (16) | Total (32) |
+| --- | ---: | ---: | ---: |
+| Readout adapter, table removed | 14 | 16 | 30 |
+| Plain classifier, table removed | 14 | 15 | 29 |
+| Nearest neighbour, table removed | 15 | 15 | 30 |
+| Warm KV and plain full-table model | 12 | 15 | 27 |
+| Most frequent code | 4 | 4 | 8 |
+
+Warm KV reproduced every generated token for all 32 plain full-table answers. The adapter occupied 102,400 bytes on the word table and 204,800 bytes on the multi-part table. Median used KV state was 14,088,192 bytes, with 25,165,824 bytes allocated on each table. The runner did not measure a serialized classifier or its heap residency.
+
+Median full adapter setup was 63.09 s, including shared support preparation and the model passes, versus a median 0.90 s for the fit and device materialization alone. Shared preparation took 40.84 s and 83.54 s on the two tables. Median classifier setup was 62.39 s, and KV snapshot build was 39.03 s. Median per-question times were 392 ms for the adapter, 234 ms for the classifier including feature acquisition, 1,112 ms for the restored prompt, and 43.40 s for fresh full prefill. These timings were collected on a contended host. The small development sample provides a compatibility check; it establishes neither held-out superiority nor portable speed. [Summary](minicpm4_dev1120_summary.json) · [Per-question receipt (gzip)](minicpm4_dev1120.json.gz)
