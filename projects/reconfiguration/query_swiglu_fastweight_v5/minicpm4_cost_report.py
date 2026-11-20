@@ -86,12 +86,14 @@ def markdown(data):
     )
     for name, e in sorted(data['tables'].items(), key=lambda x: int(x[0].split('_s')[-1].split('_')[0])):
         text.append(
-            line(name + (' (build overlap possible)' if e['reportedBuildOverlapPossible'] else ''), e)
+            line(name + (' (concurrent work reported)' if e['reportedBuildOverlapPossible'] or e.get('additionalWorkOverlapPossible') else ''), e)
         )
     text.extend(
         [
             '',
-            'The reported build ran 02:48–03:02 UTC during the first four-table range. Individual question wall-clock timestamps were unavailable. The outside-range cohort is a sensitivity comparison. Other load may have occurred. The JSON includes exact ties, milliseconds, target-specific table rows and provenance.',
+            'The original timing sensitivity excludes the first four tables for the 02:48–03:02 UTC build. The primary comparison retains every table.',
+            *[f"Additional reported work ran from {event['startUtc']} to {event['endUtc']} during table range {event['tableRange']}." for event in data['timingEvidence'].get('additionalConcurrentWork', [])],
+            'Where additional overlaps were recorded, outsideAllReportedWork omits every reported range. Individual question wall-clock timestamps are unavailable; other load may have occurred.',
             '',
         ]
     )
@@ -139,6 +141,10 @@ def finalize(study, dest):
         and prov['reported_concurrent_build_utc'] == ['2026-11-20T02:48:00Z', '2026-11-20T03:02:00Z'],
         'Unexpected timing-provenance record',
     )
+    additional_ranges = [event['tableRange'] for event in prov.get('additionalConcurrentWork', [])]
+    for start, stop in additional_ranges:
+        require(type(start) is int and type(stop) is int and 0 <= start < stop <= 96,
+                'Invalid additional timing range')
     tasks = inputs / 'tasks_v5.py'
     require(digest(tasks) == l['source_sha256']['tasks_v5.py'], 'Task vocabulary changed')
     defs = runpy.run_path(str(tasks))
@@ -184,7 +190,8 @@ def finalize(study, dest):
         )
         return published
     out = report(
-        [study / n for n in sorted(planned)], token_lengths=lengths, layout=planned, overlap=overlap
+        [study / n for n in sorted(planned)], token_lengths=lengths, layout=planned, overlap=overlap,
+        additional_work_ranges=additional_ranges,
     )
     for name, t in out['tables'].items():
         require(
@@ -198,6 +205,12 @@ def finalize(study, dest):
         and out['cohorts']['outsideReportedOverlapRange']['tables'] == 92,
         'Timing strata do not cover the locked design',
     )
+    if additional_ranges:
+        excluded = set(range(*overlap))
+        for start, stop in additional_ranges:
+            excluded.update(range(start, stop))
+        included = out['cohorts'].get('outsideAllReportedWork', {})
+        require(included.get('tables', 0) == 96 - len(excluded), 'Incomplete combined timing sensitivity')
     out.update(
         {
             'reportVersion': 2,

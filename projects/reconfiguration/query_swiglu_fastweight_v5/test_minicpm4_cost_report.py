@@ -119,6 +119,20 @@ class Costs(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, text):
                     report(self.paths(sample))
 
+    def test_additional_overlap_preserves_original_sensitivity(self):
+        cases = [fixture(i) for i in range(3)]
+        files = self.paths(*cases)
+        plan = {f.name: {d['specialties_compiled'][0]['specialty_id']: (i, set(range(i * 4, i * 4 + 4)))}
+                for i, (f, d) in enumerate(zip(files, cases))}
+        result = report(files, token_lengths={'north': 1, 'kappa': 2}, layout=plan,
+                        overlap=[0, 1], additional_work_ranges=[[2, 3]])
+        self.assertTrue(result['tables']['dev_42_s2_word']['additionalWorkOverlapPossible'])
+        c = result['cohorts']
+        self.assertEqual(c['allTables']['tables'], 3)
+        self.assertEqual(c['outsideReportedOverlapRange']['tables'], 2)
+        self.assertEqual(c['outsideAllReportedWork']['observedQuestions'], 4)
+        self.assertEqual(c['outsideAllReportedWork.target.multiTokenWord.2tokens']['observedQuestions'], 1)
+
     def test_reject_cross_file_duplicate_integer_task(self):
         a, b = fixture(), fixture(1)
         for row in b['rows']:

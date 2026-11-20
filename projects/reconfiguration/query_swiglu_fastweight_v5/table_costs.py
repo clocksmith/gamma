@@ -105,7 +105,7 @@ def cohort(tables):
     return out
 
 
-def report(paths, *, token_lengths=None, layout=None, overlap=None):
+def report(paths, *, token_lengths=None, layout=None, overlap=None, additional_work_ranges=()):
     """layout maps each receipt basename to its expected numbered tables and task IDs."""
     by_table = {}
     cohorts = defaultdict(list)
@@ -178,6 +178,12 @@ def report(paths, *, token_lengths=None, layout=None, overlap=None):
                 cohort_name = 'reportedOverlapRange' if flagged else 'outsideReportedOverlapRange'
                 cohorts[cohort_name].append(raw)
                 cohorts[cohort_name + '.' + shape].append(raw)
+                if additional_work_ranges:
+                    extra = any(start <= index < stop for start, stop in additional_work_ranges)
+                    entry['additionalWorkOverlapPossible'] = extra
+                    if not flagged and not extra:
+                        cohorts['outsideAllReportedWork'].append(raw)
+                        cohorts['outsideAllReportedWork.' + shape].append(raw)
             if token_lengths is None:
                 continue
             strata = defaultdict(list)
@@ -198,6 +204,8 @@ def report(paths, *, token_lengths=None, layout=None, overlap=None):
                 cohorts['target.' + key].append(subgroup)
                 if overlap is not None:
                     cohorts[cohort_name + '.target.' + key].append(subgroup)
+                    if additional_work_ranges and not flagged and not extra:
+                        cohorts['outsideAllReportedWork.target.' + key].append(subgroup)
     if not by_table:
         raise ValueError('No measured tables')
     return {
