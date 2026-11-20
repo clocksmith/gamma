@@ -107,3 +107,27 @@ python3 -I gate_v5.py RECEIPT.json [...]  # the gate, per model
 ```
 
 Results are in [RESULTS.md](RESULTS.md).
+
+### Batched readout compilation on a local CPU
+
+`batch_capture_v5.py` compiles the readout adapter from independent support lines on a locally
+provisioned Hugging Face Qwen3 backbone. It right-pads each batch, keeps one attention mask per
+line and gathers only the requested answer positions. The companion Node entry point calls
+the same `compileReadoutAdapter` as the Doppler runner. It then installs the fitted A and B
+as a temporary last-layer down-projection update and greedily decodes the entire answer.
+
+From this directory, with Gamma's Python environment active and Node on PATH:
+
+```sh
+HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false VECLIB_MAXIMUM_THREADS=2 \
+  python batch_capture_v5.py LOCAL_QWEN3_MODEL result.json \
+    --seed 1105 --tables 2 --shots 20 --queries 4 --batch-size 8 --threads 2
+python -m unittest test_batch_capture_v5
+```
+
+Each run draws development tables only. Its serial reference uses the same model, prompts,
+fit, dtype and decode. It records each generated token alongside the model's answer with
+the table present. Capture parity requires a relative L2 difference at most `1e-4` for
+both captured tensors and both fitted factors, and identical greedy token IDs on every
+question. The complete compile timer includes tokenization, isolated and whole-table
+captures, file interchange, the Node fit and loading the factors back into Torch.

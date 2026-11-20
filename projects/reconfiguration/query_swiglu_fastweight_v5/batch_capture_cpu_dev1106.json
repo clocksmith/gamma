@@ -1,0 +1,1046 @@
+{
+  "scope": "development CPU capture comparison",
+  "seed": 1106,
+  "split": "dev",
+  "shots": 20,
+  "queries_per_group": 4,
+  "batch_size": 8,
+  "model": "Qwen3-0.6B-NHS-786708b3",
+  "torch": "2.10.0",
+  "transformers": "4.57.6",
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "python": "3.14.2",
+  "device": "cpu",
+  "dtype": "float32",
+  "threads": 2,
+  "torch_interop_threads": 1,
+  "source_sha256": {
+    "batch_capture_v5.py": "49f3b974f0498dc6ebaf8c63dbaf591069bdcb484616e17fa06174f9f4bf19fe",
+    "tasks_v5.py": "9f314ce30eaace14ff228aed81b73e569fad9f83773425cb8ac82b861a20b396",
+    "compile_readout_files_v5.mjs": "a003b9e9a026a0f1beea6a74087b69093a03c9a4a9b8448fb9b9d2b2ebc17492",
+    "readout_adapter_v5.mjs": "1ea0edce7a13a388de12924fb4f52982f977af103f6590e999013ca81e6695e2"
+  },
+  "model_file_sha256": {
+    "config.json": "e5182db713a3e8aa5d544e05353e53ba0d183c9d4ab2690c19b9b313dee6e2cb",
+    "generation_config.json": "8c970692323e3ea0e9b8b0a4dca79388d31226e41f83c9fd6014804280ebf6e8",
+    "model.safetensors": "bbd600491d2c5dff5fc73d429fb5b4f62e5bde9777f72ed31c09eae01798bc4e",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "67e5a0a11cd35f9c00ee52e0af4cdc0baa75fea0cb5fce7d1beb251b4621d15c"
+  },
+  "tables": [
+    {
+      "specialty_id": "dev_1106_s0_word",
+      "timing": {
+        "serial": {
+          "calls": 80,
+          "tokens": 2296,
+          "padded_tokens": 2296,
+          "iso_seconds": 6.390505834016949,
+          "full_compile_seconds": 7.578627332986798,
+          "full_table_tokens": 875,
+          "fit_rows": 320,
+          "adapter_bytes": 81920
+        },
+        "batch": {
+          "calls": 10,
+          "tokens": 2296,
+          "padded_tokens": 2368,
+          "iso_seconds": 2.7141341249807738,
+          "full_compile_seconds": 3.8958594579598866,
+          "full_table_tokens": 875,
+          "fit_rows": 320,
+          "adapter_bytes": 81920
+        }
+      },
+      "error": {
+        "z": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "h": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "a": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "b": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        }
+      },
+      "answers": [
+        {
+          "task_id": 0,
+          "expected": "delta",
+          "base_table": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "serial": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "batch": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          }
+        },
+        {
+          "task_id": 1,
+          "expected": "west",
+          "base_table": {
+            "tokens": [
+              9710,
+              198
+            ],
+            "answer": "west"
+          },
+          "serial": {
+            "tokens": [
+              9710,
+              198
+            ],
+            "answer": "west"
+          },
+          "batch": {
+            "tokens": [
+              9710,
+              198
+            ],
+            "answer": "west"
+          }
+        },
+        {
+          "task_id": 2,
+          "expected": "sigma",
+          "base_table": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "serial": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "batch": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          }
+        },
+        {
+          "task_id": 3,
+          "expected": "north",
+          "base_table": {
+            "tokens": [
+              10200,
+              198
+            ],
+            "answer": "north"
+          },
+          "serial": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "batch": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          }
+        },
+        {
+          "task_id": 4,
+          "expected": "delta",
+          "base_table": {
+            "tokens": [
+              10200,
+              198
+            ],
+            "answer": "north"
+          },
+          "serial": {
+            "tokens": [
+              90587,
+              9710,
+              198
+            ],
+            "answer": "deltas west"
+          },
+          "batch": {
+            "tokens": [
+              90587,
+              9710,
+              198
+            ],
+            "answer": "deltas west"
+          }
+        },
+        {
+          "task_id": 5,
+          "expected": "west",
+          "base_table": {
+            "tokens": [
+              9710,
+              198
+            ],
+            "answer": "west"
+          },
+          "serial": {
+            "tokens": [
+              9710,
+              198
+            ],
+            "answer": "west"
+          },
+          "batch": {
+            "tokens": [
+              9710,
+              198
+            ],
+            "answer": "west"
+          }
+        },
+        {
+          "task_id": 6,
+          "expected": "sigma",
+          "base_table": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "serial": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "batch": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          }
+        },
+        {
+          "task_id": 7,
+          "expected": "north",
+          "base_table": {
+            "tokens": [
+              10200,
+              198
+            ],
+            "answer": "north"
+          },
+          "serial": {
+            "tokens": [
+              10200,
+              198
+            ],
+            "answer": "north"
+          },
+          "batch": {
+            "tokens": [
+              10200,
+              198
+            ],
+            "answer": "north"
+          }
+        },
+        {
+          "task_id": 8,
+          "expected": "delta",
+          "base_table": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "serial": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "batch": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          }
+        },
+        {
+          "task_id": 9,
+          "expected": "west",
+          "base_table": {
+            "tokens": [
+              9710,
+              198
+            ],
+            "answer": "west"
+          },
+          "serial": {
+            "tokens": [
+              9710,
+              198
+            ],
+            "answer": "west"
+          },
+          "batch": {
+            "tokens": [
+              9710,
+              198
+            ],
+            "answer": "west"
+          }
+        },
+        {
+          "task_id": 10,
+          "expected": "sigma",
+          "base_table": {
+            "tokens": [
+              10200,
+              198
+            ],
+            "answer": "north"
+          },
+          "serial": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "batch": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          }
+        },
+        {
+          "task_id": 11,
+          "expected": "north",
+          "base_table": {
+            "tokens": [
+              10200,
+              198
+            ],
+            "answer": "north"
+          },
+          "serial": {
+            "tokens": [
+              10200,
+              198
+            ],
+            "answer": "north"
+          },
+          "batch": {
+            "tokens": [
+              10200,
+              198
+            ],
+            "answer": "north"
+          }
+        },
+        {
+          "task_id": 12,
+          "expected": "delta",
+          "base_table": {
+            "tokens": [
+              9710,
+              198
+            ],
+            "answer": "west"
+          },
+          "serial": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "batch": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          }
+        },
+        {
+          "task_id": 13,
+          "expected": "west",
+          "base_table": {
+            "tokens": [
+              9710,
+              198
+            ],
+            "answer": "west"
+          },
+          "serial": {
+            "tokens": [
+              9710,
+              198
+            ],
+            "answer": "west"
+          },
+          "batch": {
+            "tokens": [
+              9710,
+              198
+            ],
+            "answer": "west"
+          }
+        },
+        {
+          "task_id": 14,
+          "expected": "sigma",
+          "base_table": {
+            "tokens": [
+              10200,
+              198
+            ],
+            "answer": "north"
+          },
+          "serial": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "batch": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          }
+        },
+        {
+          "task_id": 15,
+          "expected": "north",
+          "base_table": {
+            "tokens": [
+              10200,
+              198
+            ],
+            "answer": "north"
+          },
+          "serial": {
+            "tokens": [
+              10200,
+              198
+            ],
+            "answer": "north"
+          },
+          "batch": {
+            "tokens": [
+              10200,
+              198
+            ],
+            "answer": "north"
+          }
+        }
+      ],
+      "exact_correct": {
+        "base_table": 11,
+        "serial": 14,
+        "batch": 14
+      },
+      "codes": [
+        "delta",
+        "west",
+        "sigma",
+        "north"
+      ],
+      "guess_valid_code_rate": 0.25,
+      "parity_pass": true
+    },
+    {
+      "specialty_id": "dev_1106_s1_pair",
+      "timing": {
+        "batch": {
+          "calls": 10,
+          "tokens": 2448,
+          "padded_tokens": 2520,
+          "iso_seconds": 2.8033026659977622,
+          "full_compile_seconds": 4.681871374952607,
+          "full_table_tokens": 1027,
+          "fit_rows": 640,
+          "adapter_bytes": 163840
+        },
+        "serial": {
+          "calls": 80,
+          "tokens": 2448,
+          "padded_tokens": 2448,
+          "iso_seconds": 6.656355958955828,
+          "full_compile_seconds": 8.469164832960814,
+          "full_table_tokens": 1027,
+          "fit_rows": 640,
+          "adapter_bytes": 163840
+        }
+      },
+      "error": {
+        "z": {
+          "relative_l2": 4.5123550762582454e-07,
+          "max_abs": 0.0007171630859375
+        },
+        "h": {
+          "relative_l2": 5.098968358652201e-07,
+          "max_abs": 0.000457763671875
+        },
+        "a": {
+          "relative_l2": 1.6524963939446025e-06,
+          "max_abs": 7.636845111846924e-08
+        },
+        "b": {
+          "relative_l2": 1.7564306631356885e-07,
+          "max_abs": 4.57763671875e-05
+        }
+      },
+      "answers": [
+        {
+          "task_id": 16,
+          "expected": "gold-2",
+          "base_table": {
+            "tokens": [
+              6623,
+              12,
+              17,
+              198
+            ],
+            "answer": "gold-2"
+          },
+          "serial": {
+            "tokens": [
+              6623,
+              12,
+              17,
+              198
+            ],
+            "answer": "gold-2"
+          },
+          "batch": {
+            "tokens": [
+              6623,
+              12,
+              17,
+              198
+            ],
+            "answer": "gold-2"
+          }
+        },
+        {
+          "task_id": 17,
+          "expected": "pink-1",
+          "base_table": {
+            "tokens": [
+              18217,
+              12,
+              16,
+              198
+            ],
+            "answer": "pink-1"
+          },
+          "serial": {
+            "tokens": [
+              18217,
+              12,
+              16,
+              198
+            ],
+            "answer": "pink-1"
+          },
+          "batch": {
+            "tokens": [
+              18217,
+              12,
+              16,
+              198
+            ],
+            "answer": "pink-1"
+          }
+        },
+        {
+          "task_id": 18,
+          "expected": "green-8",
+          "base_table": {
+            "tokens": [
+              6176,
+              12,
+              23,
+              198
+            ],
+            "answer": "green-8"
+          },
+          "serial": {
+            "tokens": [
+              6176,
+              12,
+              23,
+              198
+            ],
+            "answer": "green-8"
+          },
+          "batch": {
+            "tokens": [
+              6176,
+              12,
+              23,
+              198
+            ],
+            "answer": "green-8"
+          }
+        },
+        {
+          "task_id": 19,
+          "expected": "black-6",
+          "base_table": {
+            "tokens": [
+              3691,
+              12,
+              21,
+              198
+            ],
+            "answer": "black-6"
+          },
+          "serial": {
+            "tokens": [
+              3691,
+              12,
+              21,
+              198
+            ],
+            "answer": "black-6"
+          },
+          "batch": {
+            "tokens": [
+              3691,
+              12,
+              21,
+              198
+            ],
+            "answer": "black-6"
+          }
+        },
+        {
+          "task_id": 20,
+          "expected": "gold-2",
+          "base_table": {
+            "tokens": [
+              6623,
+              12,
+              17,
+              198
+            ],
+            "answer": "gold-2"
+          },
+          "serial": {
+            "tokens": [
+              6623,
+              12,
+              17,
+              198
+            ],
+            "answer": "gold-2"
+          },
+          "batch": {
+            "tokens": [
+              6623,
+              12,
+              17,
+              198
+            ],
+            "answer": "gold-2"
+          }
+        },
+        {
+          "task_id": 21,
+          "expected": "pink-1",
+          "base_table": {
+            "tokens": [
+              18217,
+              12,
+              16,
+              198
+            ],
+            "answer": "pink-1"
+          },
+          "serial": {
+            "tokens": [
+              18217,
+              12,
+              16,
+              198
+            ],
+            "answer": "pink-1"
+          },
+          "batch": {
+            "tokens": [
+              18217,
+              12,
+              16,
+              198
+            ],
+            "answer": "pink-1"
+          }
+        },
+        {
+          "task_id": 22,
+          "expected": "green-8",
+          "base_table": {
+            "tokens": [
+              6176,
+              12,
+              23,
+              198
+            ],
+            "answer": "green-8"
+          },
+          "serial": {
+            "tokens": [
+              6176,
+              12,
+              23,
+              198
+            ],
+            "answer": "green-8"
+          },
+          "batch": {
+            "tokens": [
+              6176,
+              12,
+              23,
+              198
+            ],
+            "answer": "green-8"
+          }
+        },
+        {
+          "task_id": 23,
+          "expected": "black-6",
+          "base_table": {
+            "tokens": [
+              3691,
+              12,
+              21,
+              198
+            ],
+            "answer": "black-6"
+          },
+          "serial": {
+            "tokens": [
+              3691,
+              12,
+              21,
+              198
+            ],
+            "answer": "black-6"
+          },
+          "batch": {
+            "tokens": [
+              3691,
+              12,
+              21,
+              198
+            ],
+            "answer": "black-6"
+          }
+        },
+        {
+          "task_id": 24,
+          "expected": "gold-2",
+          "base_table": {
+            "tokens": [
+              6623,
+              12,
+              17,
+              198
+            ],
+            "answer": "gold-2"
+          },
+          "serial": {
+            "tokens": [
+              6623,
+              12,
+              17,
+              198
+            ],
+            "answer": "gold-2"
+          },
+          "batch": {
+            "tokens": [
+              6623,
+              12,
+              17,
+              198
+            ],
+            "answer": "gold-2"
+          }
+        },
+        {
+          "task_id": 25,
+          "expected": "pink-1",
+          "base_table": {
+            "tokens": [
+              18217,
+              12,
+              16,
+              198
+            ],
+            "answer": "pink-1"
+          },
+          "serial": {
+            "tokens": [
+              18217,
+              12,
+              16,
+              198
+            ],
+            "answer": "pink-1"
+          },
+          "batch": {
+            "tokens": [
+              18217,
+              12,
+              16,
+              198
+            ],
+            "answer": "pink-1"
+          }
+        },
+        {
+          "task_id": 26,
+          "expected": "green-8",
+          "base_table": {
+            "tokens": [
+              6176,
+              12,
+              23,
+              198
+            ],
+            "answer": "green-8"
+          },
+          "serial": {
+            "tokens": [
+              6176,
+              12,
+              23,
+              198
+            ],
+            "answer": "green-8"
+          },
+          "batch": {
+            "tokens": [
+              6176,
+              12,
+              23,
+              198
+            ],
+            "answer": "green-8"
+          }
+        },
+        {
+          "task_id": 27,
+          "expected": "black-6",
+          "base_table": {
+            "tokens": [
+              3691,
+              12,
+              21,
+              198
+            ],
+            "answer": "black-6"
+          },
+          "serial": {
+            "tokens": [
+              3691,
+              12,
+              21,
+              198
+            ],
+            "answer": "black-6"
+          },
+          "batch": {
+            "tokens": [
+              3691,
+              12,
+              21,
+              198
+            ],
+            "answer": "black-6"
+          }
+        },
+        {
+          "task_id": 28,
+          "expected": "gold-2",
+          "base_table": {
+            "tokens": [
+              6623,
+              12,
+              17,
+              198
+            ],
+            "answer": "gold-2"
+          },
+          "serial": {
+            "tokens": [
+              6623,
+              12,
+              17,
+              198
+            ],
+            "answer": "gold-2"
+          },
+          "batch": {
+            "tokens": [
+              6623,
+              12,
+              17,
+              198
+            ],
+            "answer": "gold-2"
+          }
+        },
+        {
+          "task_id": 29,
+          "expected": "pink-1",
+          "base_table": {
+            "tokens": [
+              18217,
+              12,
+              16,
+              198
+            ],
+            "answer": "pink-1"
+          },
+          "serial": {
+            "tokens": [
+              18217,
+              12,
+              16,
+              198
+            ],
+            "answer": "pink-1"
+          },
+          "batch": {
+            "tokens": [
+              18217,
+              12,
+              16,
+              198
+            ],
+            "answer": "pink-1"
+          }
+        },
+        {
+          "task_id": 30,
+          "expected": "green-8",
+          "base_table": {
+            "tokens": [
+              6176,
+              12,
+              23,
+              198
+            ],
+            "answer": "green-8"
+          },
+          "serial": {
+            "tokens": [
+              6176,
+              12,
+              23,
+              198
+            ],
+            "answer": "green-8"
+          },
+          "batch": {
+            "tokens": [
+              6176,
+              12,
+              23,
+              198
+            ],
+            "answer": "green-8"
+          }
+        },
+        {
+          "task_id": 31,
+          "expected": "black-6",
+          "base_table": {
+            "tokens": [
+              3691,
+              12,
+              21,
+              198
+            ],
+            "answer": "black-6"
+          },
+          "serial": {
+            "tokens": [
+              3691,
+              12,
+              21,
+              198
+            ],
+            "answer": "black-6"
+          },
+          "batch": {
+            "tokens": [
+              3691,
+              12,
+              21,
+              198
+            ],
+            "answer": "black-6"
+          }
+        }
+      ],
+      "exact_correct": {
+        "base_table": 16,
+        "serial": 16,
+        "batch": 16
+      },
+      "codes": [
+        "gold-2",
+        "pink-1",
+        "green-8",
+        "black-6"
+      ],
+      "guess_valid_code_rate": 0.25,
+      "parity_pass": true
+    }
+  ]
+}

@@ -521,3 +521,37 @@ stray answers and the gain were not retuned on this seed.
 Nothing is locked. `protocol_v5_draft.json` awaits an independent review and the owner's pin of an
 unseen model. Not built: the cached-prompt comparison. The owner's priority is A1 to A3; B1 uses
 the Mac GPU only when no A lane needs it.
+
+## Batched support compilation on CPU (2026-11-20)
+
+Four fresh development tables used 20 examples per group, 80 support lines per table and 16
+questions per table. The local Qwen3-0.6B-NHS backbone ran under stock Hugging Face Qwen3,
+FP32, on an Apple M3 CPU with two Torch threads. This checkpoint had appeared in earlier Gamma
+studies. Stock Qwen3 ignores its seven additional TTT projection tensors.
+
+| Operation, summed across four tables | Serial | Batch of 8 |
+|---|---:|---:|
+| Isolated support forward calls | 320 | 40 |
+| Isolated capture | 26.30 s | 11.04 s |
+| Complete readout compile, including one full-table pass per table and the Node fitter | 32.31 s | 17.14 s |
+| Table-removed exact answers | 58/64 | 58/64 |
+
+Every greedy token stream matched across the two paths. The largest relative L2 difference
+in the captured activations or the compiled factors was 1.66e-6 or less. The model reading
+the table answered 51/64 exactly. Two of the adapter's misses were outside the table's codes
+(`whites` and `deltas west`). These counts describe four CPU engineering tables.
+The earlier Qwen3.5-0.8B Doppler result remains the development accuracy reference.
+
+The equivalent Doppler change needs separate position, attention-cache and recurrent/convolution
+state for each support line. Its current B1 runner resets one generation state per isolated line.
+The next runtime measurement needs independent-row prefill on the provisioned Qwen3.5 model,
+one available WebGPU device, and paired serial/batch captures, factors, generated tokens and
+end-to-end compile times on fresh development tables.
+
+Receipts and individual answers: [seed 1105](batch_capture_cpu_dev1105.json),
+[seed 1106](batch_capture_cpu_dev1106.json). The CPU run command is in the [README](README.md).
+
+An existing unit test run during this work also regenerated the previously documented
+seed-2000000 confirmation-design fixture in memory for the fixed 25% constant-code control.
+Its only output was test status. The test wrote no cases, and the benchmark and model received
+only the fresh development inputs in the receipts above.
