@@ -8,6 +8,7 @@ ENV FAWN_RECIPE_DB_PATH=/data/recipes.sqlite
 
 COPY src/client/trace-graph-dp.js ./src/client/trace-graph-dp.js
 COPY src/client/recipe-generation-format.js ./src/client/recipe-generation-format.js
+COPY src/client/signed-recipe-manifest.js ./src/client/signed-recipe-manifest.js
 COPY src/recipe-service ./src/recipe-service
 
 USER node

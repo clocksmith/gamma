@@ -155,3 +155,15 @@ pin, with an optional freshness floor. Hash checks do not authenticate a
 publisher or grant local dispatch authority. The managed resolver and
 workflow execution do not consume this cache. Authenticated distribution and
 the operating policy for the initial trusted pin are still separate work.
+
+An opt-in detached Ed25519 manifest implementation lives in
+`src/recipe-service/recipe-manifest-signer.js` and
+`src/client/signed-recipe-manifest.js`. The signer takes a trusted immutable
+generation and an injected private key. The client requires an out-of-band
+public key, expected namespace and compiler/routing policy, local time, and
+an explicit minimum generation. It verifies the signed watermark, publication
+and content digests and validity interval, returning only a snapshot cache
+pin. A replay floor is caller-maintained; the verifier does not create one.
+The current HTTP signing format and default resolver are unchanged. Neither
+key provisioning/rotation nor distribution is wired, and a valid signature
+confers no local authority to replay or dispatch anything.
