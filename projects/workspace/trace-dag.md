@@ -221,3 +221,12 @@ canonical topological order, rejecting ambiguous declarations and cyclic
 dependencies. The analyzer does not evaluate facts, verify resource aliases,
 perform a rewrite or grant native dispatch authority. Existing TraceDag
 reduction and workflow execution do not use the new IR.
+
+The opt-in [shadow qualifier](qualification/patch-shadow.js) compares an
+already completed controlled workflow's immutable dispatch IDs with independent
+trusted fixture declarations. It rejects mismatched or duplicate IDs and
+reference orders that violate an explicit dependency. It neither executes its
+proposed order nor changes the runtime, store, planner protocol or admission.
+The [controlled test](test/unit/patch-shadow.test.js) verifies unchanged serial
+dispatch and outcome, including an uncertain-effect stop. A different shadow
+order is a candidate for further study, not proof of equivalent effects.
