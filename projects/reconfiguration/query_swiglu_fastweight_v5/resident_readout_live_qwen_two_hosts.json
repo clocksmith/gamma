@@ -1,0 +1,60 @@
+{
+  "experiment": "Cross-host raw-text scoring on the fixed Qwen development question",
+  "fixture": "resident_readout_live_qwen_one.json",
+  "runtimeCommit": "e45824b09ff2a7d32d4278e4ecd870c55268bfec",
+  "baseManifestSha256": "c5fcf38e945f1c048faca9ccda8991f1494563317f46a6dd79e0714ad001c569",
+  "observedFileDigestsIdenticalOnBothHosts": {
+    "runner": "255064d6bfff0a3a07f8c297c7c598f0bc2edaa78dec533ee6b53556a7279bde",
+    "classifierHeader": "daf8cef5cc2ac6a876582a14c9b62c1031e34724e260d2a862b359330af80d22",
+    "classifierWeights": "73fce62cba5905807bcf27d236880650a651a5b5d9fcdd5a75b6ad77ca8120b5",
+    "query": "9eae3e30dbb82ff6df9f1da5357d47d74784e78ef33817e557806560d7f1ee7b"
+  },
+  "hostResults": {
+    "suby": {
+      "backend": "SwiftShader driver 5.0.0",
+      "activationDtype": "f32",
+      "rawJsonSha256": "e70a1285d5776dc6b00415d821e8fc5016482de53ce4bd1e4256237c373c8fce",
+      "physicalGpuExposed": false,
+      "refitted": false
+    },
+    "jupiter": {
+      "backend": "SwiftShader driver 5.0.0",
+      "activationDtype": "f32",
+      "rawJsonSha256": "e70a1285d5776dc6b00415d821e8fc5016482de53ce4bd1e4256237c373c8fce",
+      "physicalGpuExposed": false,
+      "refitted": false
+    }
+  },
+  "rows": [
+    {
+      "id": 0,
+      "tokens": 28,
+      "promptSha256": "2d6878b452fa559d2a1a101a62b57fda0502cde6762d49260878c740f8ea77d6",
+      "calls": [
+        {
+          "layer": 22,
+          "dtype": "f32",
+          "rows": 28,
+          "width": 3584
+        },
+        {
+          "layer": 23,
+          "dtype": "f32",
+          "rows": 28,
+          "width": 3584
+        }
+      ],
+      "scores": [
+        -0.134775310754776,
+        -0.47756311297416687,
+        0.721727728843689,
+        -0.1092391312122345
+      ],
+      "code": "east",
+      "historicalCode": "east",
+      "expected": "east",
+      "classifierReadbackBytes": 16
+    }
+  ],
+  "limits": "One held-out development input from one frozen table, same engine and software Vulkan on both hosts. The classifier uses hidden activations from the base model. This execution measures neither physical GPU portability nor adapter accuracy or performance."
+}
