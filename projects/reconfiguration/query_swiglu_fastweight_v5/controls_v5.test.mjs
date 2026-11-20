@@ -74,6 +74,25 @@ test('classifier control learns the support labels and answers unseen rows', () 
   assert.ok(right / n >= 0.95, `accuracy on unseen rows ${right / n}`);
 });
 
+test('folded class weights reproduce the dual scores with unequal layer widths and a constant feature', () => {
+  const sample = (i) => [Float32Array.of(11 + Math.sin(i), 8), Float32Array.of(i % 4, Math.cos(i), i / 10)];
+  const examples = Array.from({ length: 24 }, (_, i) => ({ features: sample(i), label: i % 3 }));
+  const classifier = fitSupportClassifier({ examples, nClasses: 3 });
+  const { dimensions, nClasses, coefficients } = classifier.exportLinearReadout();
+  assert.deepEqual(dimensions, [2, 3]);
+  assert.equal(coefficients.length, nClasses * 6);
+  for (const i of [24, 31, 57]) {
+    const features = sample(i);
+    const flat = [...features[0], ...features[1]];
+    const expected = classifier.predict(features);
+    for (let c = 0; c < nClasses; c++) {
+      const base = c * 6;
+      const score = flat.reduce((sum, v, k) => sum + v * coefficients[base + k + 1], coefficients[base]);
+      assert.ok(Math.abs(score - expected.scores[c]) < 1e-10);
+    }
+  }
+});
+
 test('classifier control depends on the labels: scrambled labels fall to chance', () => {
   const w = world(12);
   const examples = [];

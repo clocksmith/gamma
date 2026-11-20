@@ -164,6 +164,27 @@ export function fitSupportClassifier({ examples, nClasses, ratio = 0.15 }) {
 
   return {
     examples: n, nClasses, nLayers, ratio, leaveOneOutAccuracy: looHits / n,
+    // For a linear kernel the standardized support rows can be folded into a
+    // dot product and intercept per class. Exporting is opt-in after fitting.
+    exportLinearReadout() {
+      const dimensions = layers.map(layer => layer.std.mean.length);
+      const stride = 1 + dimensions.reduce((sum, d) => sum + d, 0);
+      const coefficients = new Float64Array(nClasses * stride);
+      for (let c = 0; c < nClasses; c++) {
+        const base = c * stride;
+        let offset = base + 1;
+        for (const { rows, std, meanDiag } of layers) {
+          for (let k = 0; k < std.mean.length; k++) {
+            let weight = 0;
+            for (let i = 0; i < n; i++) weight += C[i * nClasses + c] * rows[i][k];
+            weight *= std.inv[k] / meanDiag;
+            coefficients[offset++] = weight;
+            coefficients[base] -= std.mean[k] * weight;
+          }
+        }
+      }
+      return { dimensions, nClasses, coefficients };
+    },
     predict(features) {
       if (features.length !== nLayers) throw new Error('classifier control: query has the wrong number of layers');
       const k = new Float64Array(n);
