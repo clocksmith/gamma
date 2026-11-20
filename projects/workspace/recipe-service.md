@@ -167,3 +167,18 @@ pin. A replay floor is caller-maintained; the verifier does not create one.
 The current HTTP signing format and default resolver are unchanged. Neither
 key provisioning/rotation nor distribution is wired, and a valid signature
 confers no local authority to replay or dispatch anything.
+
+Run `npm run qualify:recipe-generations` from `projects/workspace` for a
+controlled, in-memory SQLite fixture covering acceptance, immutable prefix
+compile, detached signing with ephemeral keys, client verification/cache,
+and pinned legacy shadow comparison. It checks both agreement and deliberate
+divergence, rejection of an older generation under a raised replay floor,
+and the unchanged default resolver. It emits only a summary receipt, not
+recipe contents or names, tokens, keys, or locators.
+
+This does not qualify an opt-in HTTP route. Before wiring one, establish
+authenticated namespace-scoped delivery of a signed manifest and its exact
+generation, deployed key provisioning and rotation, a persistent trusted
+replay-floor policy, broader parity including histories affected by legacy
+pruning, and the target store's behavior on independently exercised D1. Keep
+the legacy route authoritative and maintain a fail-closed fallback boundary.
