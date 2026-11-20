@@ -111,3 +111,16 @@ acceptance method is not an HTTP endpoint and must not be used for live
 publication until a deterministic, watermark-bound generation publisher and
 cutover checks exist. The SQLite tests exercise the shared SQL; they do not
 qualify a deployed D1 worker.
+
+The internal `graph-generations.js` store publishes an immutable snapshot only
+when the caller's expected generation is still the head, the input watermark
+advances, and that watermark exists in the namespace's accepted log. The head
+is the highest immutable generation; a single read pins its metadata and bytes.
+Reads verify the content digest and the digest that binds namespace, generation,
+watermark, compiler version and content. An exact publication retry gets its
+historical receipt, not a claim that its generation is still the head.
+
+This is storage and publication machinery, not a recipe compactor. It does not
+verify that the proposed snapshot is the serial reduction of the accepted input.
+The resolver continues to use its existing graph path until that separate
+property is tested.

@@ -90,6 +90,19 @@ CREATE TABLE IF NOT EXISTS recipe_trace_acceptance (
   UNIQUE (namespace_id, submission_id)
 );
 
+-- Immutable publication records. Latest generation is the scoped head.
+CREATE TABLE IF NOT EXISTS recipe_graph_generations (
+  namespace_id TEXT NOT NULL,
+  generation INTEGER NOT NULL CHECK (generation >= 1),
+  input_watermark INTEGER NOT NULL CHECK (input_watermark >= 1),
+  compiler_version TEXT NOT NULL,
+  snapshot_digest TEXT NOT NULL CHECK (length(snapshot_digest) = 64),
+  generation_digest TEXT NOT NULL CHECK (length(generation_digest) = 64),
+  snapshot_json TEXT NOT NULL,
+  published_at TEXT NOT NULL,
+  PRIMARY KEY (namespace_id, generation)
+);
+
 CREATE TABLE IF NOT EXISTS recipe_submissions (
   submission_id TEXT PRIMARY KEY,
   namespace_id TEXT NOT NULL,
