@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 548" width="960" height="548" role="img" aria-labelledby="title desc">
+  <title id="title">The adapter beat warm KV. The plain classifier beat both.</title>
+  <desc id="desc">Qwen 3.5 0.8B development run (seed 1103, 48 tables, 768 questions). Plain classifier scored 747/768 (97.3%), readout adapter scored 739/768 (96.2%), and warm KV scored 700/768 (91.1%).</desc>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --surface: #f8fafc;
+      --surface-alt: #f1f5f9;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #64748b;
+      --track: #e2e8f0;
+      --winner: #0f766e;
+      --winner-soft: #ccfbf1;
+      --winner-text: #115e59;
+      --adapter: #2563eb;
+      --adapter-soft: #dbeafe;
+      --adapter-text: #1d4ed8;
+      --kv: #64748b;
+      --mfc: #94a3b8;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --surface: #161b22;
+        --surface-alt: #1c2128;
+        --border: #30363d;
+        --text: #f0f6fc;
+        --text-muted: #9ca3af;
+        --text-subtle: #8b949e;
+        --track: #21262d;
+        --winner: #2dd4bf;
+        --winner-soft: #134e4a;
+        --winner-text: #99f6e4;
+        --adapter: #60a5fa;
+        --adapter-soft: #1e3a8a;
+        --adapter-text: #bfdbfe;
+        --kv: #8b949e;
+        --mfc: #6e7681;
+      }
+    }
+    .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.05em; fill: var(--text-subtle); }
+    .title { font-size: 23px; font-weight: 700; letter-spacing: -0.02em; fill: var(--text); }
+    .subtitle { font-size: 11.5px; fill: var(--text-muted); }
+    .section-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; fill: var(--text-subtle); }
+    .arm-name { font-size: 13px; font-weight: 600; fill: var(--text); }
+    .arm-sub { font-size: 11px; fill: var(--text-subtle); }
+    .score-val { font-size: 13px; font-weight: 700; fill: var(--text); }
+    .score-pct { font-size: 11px; fill: var(--text-muted); }
+    .th { font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; fill: var(--text-subtle); }
+    .row-label { font-size: 12px; font-weight: 600; fill: var(--text-muted); }
+    .cell-main { font-size: 12.5px; font-weight: 600; fill: var(--text); }
+    .cell-sub { font-size: 10.5px; fill: var(--text-subtle); }
+    .pill-text-win { font-size: 10.5px; font-weight: 600; fill: var(--winner-text); }
+    .pill-text-adp { font-size: 10.5px; font-weight: 600; fill: var(--adapter-text); }
+    .foot { font-size: 10px; fill: var(--text-subtle); }
+  </style>
+
+  <!-- Outer Card -->
+  <rect x="0.5" y="0.5" width="959" height="547" rx="12" fill="var(--bg)" stroke="var(--border)" stroke-width="1"/>
+
+  <!-- Header -->
+  <text x="32" y="34" class="mono eyebrow">GAMMA  /  QWEN 3.5 0.8B DEVELOPMENT RUN  /  SEED 1103  /  48 TABLES  /  768 QUESTIONS</text>
+  <text x="32" y="65" class="sans title">The adapter beat warm KV. The plain classifier beat both.</text>
+  <text x="32" y="86" class="sans subtitle">Exploratory development split (not a confirmation) · qwen-3-5-0-8b-q4k-ehaf16 · Doppler e45824b09 · protocol_v5_draft.json</text>
+  <line x1="32" y1="102" x2="928" y2="102" stroke="var(--border)" stroke-width="1"/>
+
+  <!-- Section 1: Accuracy (0% to 100% honest scale) -->
+  <text x="32" y="124" class="mono section-label">ACCURACY ON FRESH DEVELOPMENT TABLES (0% TO 100% SCALE)</text>
+  <text x="928" y="124" text-anchor="end" class="mono cell-sub">Dashed line: most-frequent-code baseline (192/768, 25.0%)</text>
+
+  <!-- Baseline tick: MFC 25.0% -->
+  <line x1="366.0" y1="138" x2="366.0" y2="258" stroke="var(--mfc)" stroke-width="1" stroke-dasharray="3,3"/>
+
+  <!-- Clean scale ticks at 0%, 25%, 50%, 75%, 100% -->
+  <text x="248" y="272" class="mono cell-sub">0%</text>
+  <text x="366.0" y="272" text-anchor="middle" class="mono cell-sub">25% (MFC)</text>
+  <text x="484.0" y="272" text-anchor="middle" class="mono cell-sub">50%</text>
+  <text x="602.0" y="272" text-anchor="middle" class="mono cell-sub">75%</text>
+  <text x="720" y="272" text-anchor="end" class="mono cell-sub">100%</text>
+
+  <!-- Bar 1: Plain classifier -->
+  <text x="32" y="155" class="sans arm-name">Plain classifier</text>
+  <text x="32" y="170" class="mono arm-sub">probe_bare · table removed</text>
+  <rect x="248" y="142" width="472" height="24" rx="5" fill="var(--track)"/>
+  <rect x="248" y="142" width="459.1" height="24" rx="5" fill="var(--winner)"/>
+  <text x="736" y="155" class="mono score-val">747 / 768 (97.3%)</text>
+  <text x="736" y="170" class="mono score-pct">+1.0 pt vs adapter</text>
+
+  <!-- Bar 2: Readout adapter -->
+  <text x="32" y="196" class="sans arm-name">Readout adapter</text>
+  <text x="32" y="211" class="mono arm-sub">ra_bare · table removed</text>
+  <rect x="248" y="183" width="472" height="24" rx="5" fill="var(--track)"/>
+  <rect x="248" y="183" width="454.2" height="24" rx="5" fill="var(--adapter)"/>
+  <text x="736" y="196" class="mono score-val">739 / 768 (96.2%)</text>
+  <text x="736" y="211" class="mono score-pct">+5.1 pts vs warm KV</text>
+
+  <!-- Bar 3: Warm KV -->
+  <text x="32" y="237" class="sans arm-name">Warm KV</text>
+  <text x="32" y="252" class="mono arm-sub">kv_ctx · table in prompt</text>
+  <rect x="248" y="224" width="472" height="24" rx="5" fill="var(--track)"/>
+  <rect x="248" y="224" width="430.2" height="24" rx="5" fill="var(--kv)"/>
+  <text x="736" y="237" class="mono score-val">700 / 768 (91.1%)</text>
+  <text x="736" y="252" class="mono score-pct">cached prompt baseline</text>
+
+  <!-- Section 2: Cost & State Table -->
+  <rect x="32" y="290" width="896" height="202" rx="8" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+
+  <!-- Table Header -->
+  <rect x="33" y="291" width="894" height="36" rx="7" fill="var(--surface-alt)"/>
+  <line x1="32" y1="327" x2="928" y2="327" stroke="var(--border)" stroke-width="1"/>
+  <text x="48" y="313" class="mono th">METRIC (MEDIANS)</text>
+  <text x="248" y="313" class="mono th">PLAIN CLASSIFIER</text>
+  <text x="476" y="313" class="mono th">READOUT ADAPTER</text>
+  <text x="704" y="313" class="mono th">WARM KV</text>
+
+  <!-- Row 1: Setup cost -->
+  <text x="48" y="354" class="sans row-label">Setup cost / table</text>
+  <text x="248" y="352" class="mono cell-main">202 ms ridge fit</text>
+  <text x="248" y="368" class="sans cell-sub">+ 81 shared support passes*</text>
+  <text x="476" y="352" class="mono cell-main">871 ms fit + upload</text>
+  <text x="476" y="368" class="sans cell-sub">+ 81 shared support passes*</text>
+  <text x="704" y="352" class="mono cell-main">5.31 s prefill</text>
+  <text x="704" y="368" class="sans cell-sub">1 pass (954 median tokens)</text>
+  <line x1="48" y1="382" x2="912" y2="382" stroke="var(--border)" stroke-width="1"/>
+
+  <!-- Row 2: Answer latency -->
+  <text x="48" y="409" class="sans row-label">Answer latency / q</text>
+  <rect x="248" y="392" width="76" height="22" rx="4" fill="var(--winner-soft)"/>
+  <text x="286" y="407" text-anchor="middle" class="mono pill-text-win">187 ms</text>
+  <text x="332" y="407" class="sans cell-sub">fastest</text>
+  <text x="476" y="409" class="mono cell-main">255 ms</text>
+  <text x="542" y="409" class="sans cell-sub">median / question</text>
+  <text x="704" y="409" class="mono cell-main">246 ms</text>
+  <text x="770" y="409" class="sans cell-sub">median / question</text>
+  <line x1="48" y1="430" x2="912" y2="430" stroke="var(--border)" stroke-width="1"/>
+
+  <!-- Row 3: Retained bytes -->
+  <text x="48" y="459" class="sans row-label">Retained state / table</text>
+  <text x="248" y="457" class="mono cell-main">Not logged in receipt</text>
+  <text x="248" y="473" class="sans cell-sub">4 linear rows (layers 22-23)</text>
+  <rect x="476" y="442" width="94" height="22" rx="4" fill="var(--adapter-soft)"/>
+  <text x="523" y="457" text-anchor="middle" class="mono pill-text-adp">92-184 KB</text>
+  <text x="476" y="477" class="sans cell-sub">~176-351x smaller vs warm KV</text>
+  <text x="704" y="457" class="mono cell-main">32.4 MB median</text>
+  <text x="704" y="473" class="sans cell-sub">31.3-33.5 MB (20.6 linear + 11.7 KV)</text>
+
+  <!-- Footer -->
+  <text x="32" y="514" class="sans foot">*Shared activation capture: 81 support passes/table (27.28 s median capture + top-2 compile). Table removed for classifier &amp; adapter.</text>
+  <text x="32" y="531" class="mono foot">Receipt: qwen35_08b_dev1103_k20_readout_adapter.json · All values are medians from this single run (full hashes in receipt).</text>
+</svg>
