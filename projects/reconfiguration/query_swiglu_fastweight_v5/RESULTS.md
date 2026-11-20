@@ -507,6 +507,27 @@ questions with a code; at about 35 lookups per 100 questions, 5.2 wrong direct a
 against 13.9 gating on the decoder's confidence (39.2 never looking up); the readout with 3 examples per code
 scores 88.4%, with 10 scores 95.6%.
 
+**Independent reproduction of the seed-1103 lookup gate.** Replaying the original policy on the saved scores reproduced
+its complete report byte for byte. The following counts use its existing 35-lookups-per-100 target. Sort the 48 table
+IDs lexicographically, fit the threshold on alternating whole tables, and test it on the other 24. Reverse the halves
+so each question is evaluated once. Each calibration half contains 576 scores. Use its 203rd smallest score as the
+threshold and accept equality. No held-out score tied a fitted threshold.
+
+| Direct answer and gate | Covered questions accepted | Correct among accepted covered | Uncovered questions accepted | Wrong direct per 100, all questions |
+|---|---:|---:|---:|---:|
+| Table-removed readout, top score | 678/768 (88.3%) | 673/678 (99.3%) | 55/384 (14.3%) | 5.2 |
+| Table-present decoder, top-code probability | 612/768 (79.7%) | 588/612 (96.1%) | 136/384 (35.4%) | 13.9 |
+| Table-removed nearest-neighbor vote, closest support score | 565/768 (73.6%) | 531/565 (94.0%) | 176/384 (45.8%) | 18.2 |
+
+For the readout, 31 of 48 tables accepted at least one uncovered question; the worst accepted 3 of 8. A 95% table
+bootstrap interval for its uncovered false-accept rate is 10.7–18.0%, vs. 30.2–40.9% for the decoder and 40.6–51.3%
+for nearest neighbor. The intervals resample whole tables within their evaluation halves, conditional on the two
+fitted thresholds. The observed lookup rates are 36.4%, 35.1% and 35.7%, respectively. Each policy uses its own
+direct answerer. The scoring assumes an ideal lookup and measures neither lookup latency nor classifier setup.
+The evidence covers one Qwen development distribution with two covered questions for every uncovered one.
+The [audit script](lookup_gate_reproduction.py) and [per-table counts and thresholds](lookup_gate_reproduction_1103.json)
+use only existing recorded scores and correctness indicators.
+
 **What this establishes, and what it does not.** On two independent sets of 48 development tables, one model
 and one runtime, a 92 to 184 KB last-layer adapter compiled in closed form from a table's examples answers
 table-removed questions about 5 points more accurately than the model given the table, at the same time per
