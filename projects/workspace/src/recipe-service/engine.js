@@ -545,6 +545,38 @@ export function createManagedRecipeEngine({
     };
   }
 
+  function validateSubmissionId(body) {
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      throw serviceError(400, 'invalid-body', 'JSON object required');
+    }
+    const submissionId = typeof body.submissionId === 'string' && UUID_RE.test(body.submissionId)
+      ? body.submissionId
+      : null;
+    if (!submissionId) {
+      throw serviceError(400, 'invalid-submission-id', 'Bounded submissionId is required for idempotent ingestion');
+    }
+    return submissionId;
+  }
+
+  function normalizeTraceInput(principal, body) {
+    const verificationId = validateIdentifier(body.verificationId, 'verificationId');
+    if (body.reviewVerified !== true) {
+      throw serviceError(400, 'unverified-trace-rejected', 'Only independently reviewVerified traces may be ingested');
+    }
+    const limits = validateLimits(body.limits ?? DEFAULT_LIMITS);
+    const meta = resolveNamespaceMeta(principal, {
+      scope: body.scope ?? 'workspace',
+      origin: body.origin,
+      template: body.template,
+      readScope: body.readScope ?? null,
+    });
+    if (!Array.isArray(body.steps) || body.steps.length < 1 || body.steps.length > limits.maxSteps) {
+      throw serviceError(400, 'invalid-steps', `Trace steps must contain 1..${limits.maxSteps} transitions`);
+    }
+    const steps = body.steps.map((step, index) => validateRawStep(step, index));
+    return { verificationId, limits, meta, steps };
+  }
+
   return {
     signEnvelope,
     async registerSubrecipe(principal, body) {
@@ -629,37 +661,67 @@ export function createManagedRecipeEngine({
       };
     },
 
+    // Stage-only API. Not wired to /v1/traces: acceptance does not mutate or
+    // publish an execution graph. Keep existing route and response semantics.
+    async acceptTrace(principal, body) {
+      const submissionId = validateSubmissionId(body);
+      const { verificationId, limits, meta, steps } = normalizeTraceInput(principal, body);
+      // Reject invalid chains before they become immutable production input.
+      materializeSteps(meta.dagKey, meta, steps);
+      const payload = canonicalJson({
+        format: 'gamma.recipe-trace/v1',
+        scope: meta.scope,
+        origin: meta.origin,
+        template: meta.template,
+        readScope: meta.readScope,
+        verificationId,
+        limits,
+        steps,
+        authorHash: sha256Hex(canonicalJson(['author-v1', principal.workspaceId, principal.clientId])),
+        forcePromote: principal.role === 'publisher',
+      });
+      const payloadDigest = sha256Hex(payload);
+
+      // The sequence allocation and the input/receipt insert are one atomic
+      // statement on SQLite and D1. The scoped primary key indexes MAX; an exact
+      // retry cannot create a second row or consume a sequence. The following
+      // read is of an immutable row, not a separately generated receipt.
+      await store.run(
+        `INSERT INTO recipe_trace_acceptance
+          (namespace_id, acceptance_seq, submission_id, payload_digest, payload_json, accepted_at)
+         SELECT ?, COALESCE(MAX(acceptance_seq), 0) + 1, ?, ?, ?, ?
+         FROM recipe_trace_acceptance WHERE namespace_id = ?
+         ON CONFLICT (namespace_id, submission_id) DO NOTHING`,
+        [meta.namespaceId, submissionId, payloadDigest, payload, new Date().toISOString(), meta.namespaceId],
+      );
+      const accepted = await store.get(
+        `SELECT acceptance_seq, payload_digest, payload_json, accepted_at FROM recipe_trace_acceptance
+         WHERE namespace_id = ? AND submission_id = ?`,
+        [meta.namespaceId, submissionId],
+      );
+      if (!accepted) throw serviceError(500, 'trace-receipt-unavailable', 'Accepted trace receipt is unavailable; retry by the same ID');
+      if (accepted.payload_digest !== payloadDigest || accepted.payload_json !== payload) {
+        throw serviceError(409, 'trace-id-conflict', 'Submission ID already binds different input in this namespace');
+      }
+      return {
+        status: 'accepted',
+        namespaceId: meta.namespaceId,
+        submissionId,
+        acceptanceSequence: Number(accepted.acceptance_seq),
+        payloadDigest,
+        acceptedAt: accepted.accepted_at,
+      };
+    },
+
     async ingestTrace(principal, body) {
-      if (!body || typeof body !== 'object' || Array.isArray(body)) {
-        throw serviceError(400, 'invalid-body', 'JSON object required');
-      }
-      const submissionId = typeof body.submissionId === 'string' && UUID_RE.test(body.submissionId)
-        ? body.submissionId
-        : null;
-      if (!submissionId) {
-        throw serviceError(400, 'invalid-submission-id', 'Bounded submissionId is required for idempotent ingestion');
-      }
+      const submissionId = validateSubmissionId(body);
       const prior = await store.get(
         'SELECT response_json FROM recipe_submissions WHERE submission_id = ?',
         [submissionId],
       );
       if (prior) return JSON.parse(prior.response_json);
 
-      const verificationId = validateIdentifier(body.verificationId, 'verificationId');
-      if (body.reviewVerified !== true) {
-        throw serviceError(400, 'unverified-trace-rejected', 'Only independently reviewVerified traces may be ingested');
-      }
-      const limits = validateLimits(body.limits ?? DEFAULT_LIMITS);
-      const meta = resolveNamespaceMeta(principal, {
-        scope: body.scope ?? 'workspace',
-        origin: body.origin,
-        template: body.template,
-        readScope: body.readScope ?? null,
-      });
-      if (!Array.isArray(body.steps) || body.steps.length < 1 || body.steps.length > limits.maxSteps) {
-        throw serviceError(400, 'invalid-steps', `Trace steps must contain 1..${limits.maxSteps} transitions`);
-      }
-      const steps = body.steps.map((step, index) => validateRawStep(step, index));
+      const { verificationId, limits, meta, steps } = normalizeTraceInput(principal, body);
       const materialized = materializeSteps(meta.dagKey, meta, steps);
       const authorHash = sha256Hex(canonicalJson(['author-v1', principal.workspaceId, principal.clientId]));
       const now = new Date().toISOString();

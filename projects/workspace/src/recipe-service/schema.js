@@ -77,6 +77,19 @@ CREATE TABLE IF NOT EXISTS recipe_subrecipes (
 CREATE UNIQUE INDEX IF NOT EXISTS idx_recipe_subrecipes_name
   ON recipe_subrecipes (scope_kind, workspace_id, origin, name);
 
+-- Append-only trace intake for a future generation publisher. Each immutable row
+-- is both the accepted input and the receipt (not a publication acknowledgment).
+CREATE TABLE IF NOT EXISTS recipe_trace_acceptance (
+  namespace_id TEXT NOT NULL,
+  acceptance_seq INTEGER NOT NULL CHECK (acceptance_seq >= 1),
+  submission_id TEXT NOT NULL,
+  payload_digest TEXT NOT NULL CHECK (length(payload_digest) = 64),
+  payload_json TEXT NOT NULL,
+  accepted_at TEXT NOT NULL,
+  PRIMARY KEY (namespace_id, acceptance_seq),
+  UNIQUE (namespace_id, submission_id)
+);
+
 CREATE TABLE IF NOT EXISTS recipe_submissions (
   submission_id TEXT PRIMARY KEY,
   namespace_id TEXT NOT NULL,

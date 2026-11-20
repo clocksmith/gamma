@@ -97,3 +97,17 @@ gcloud run services replace browser/workspace/deploy/cloud-run/cloud-run-service
 ```sh
 node browser/workspace/test/unit/recipe-service.test.js
 ```
+
+### Generation migration seam (internal)
+
+The engine's internal `acceptTrace` method records one normalized structural
+trace and its durable acceptance receipt under `(namespace, submissionId)`.
+Reusing an ID with the same canonical input returns the original sequence and
+receipt; different input conflicts. Accepted sequences are monotonic within
+each namespace. Acceptance is not graph publication.
+
+The HTTP ingress, resolver and current graph tables are unchanged. The
+acceptance method is not an HTTP endpoint and must not be used for live
+publication until a deterministic, watermark-bound generation publisher and
+cutover checks exist. The SQLite tests exercise the shared SQL; they do not
+qualify a deployed D1 worker.
