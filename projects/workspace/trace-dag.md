@@ -208,3 +208,16 @@ node browser/workspace/test/unit/workflow-store.test.js
 node browser/workspace/test/browser/trace-dag.test.js
 node browser/workspace/test/browser/workflow-repair.test.js
 ```
+
+### Typed patch dependency analysis (not wired to replay)
+
+`src/client/patch-ir.js` adds a bounded, data-only v1 contract for explicit
+canonical resource reads/writes, guard/effect facts, verifier identity and
+version, and explicit dependencies. The input order is the reference serial
+order. Known-local patches can commute only when neither writes a resource the
+other reads or writes. Ambient, unknown and externally ordered patches fence
+all earlier and later steps. The planner returns one lexicographically
+canonical topological order, rejecting ambiguous declarations and cyclic
+dependencies. The reporter does not evaluate facts, verify resource aliases,
+perform a rewrite or grant native dispatch authority. Existing TraceDag
+reduction and workflow execution do not use the new IR.
