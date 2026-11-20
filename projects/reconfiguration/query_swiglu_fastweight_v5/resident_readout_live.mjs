@@ -6,8 +6,8 @@ import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createReadoutKernel, loadResidentReadout } from './resident_readout.mjs';
 
-const [engine, directory, artifact, fixturePath, reportPath] = process.argv.slice(2);
-assert(reportPath, 'Expected Doppler source, pinned model, classifier, prompt fixture, and report path');
+const [engine, directory, artifact, fixturePath, reportPath, gatePath, ...extra] = process.argv.slice(2);
+assert(reportPath && !extra.length, 'Expected Doppler source, pinned model, classifier, prompt fixture, report path, and optional gate file');
 const mod = file => import(pathToFileURL(resolve(engine,file)));
 const load = async p => JSON.parse(await readFile(p));
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -18,6 +18,12 @@ const headerBytes = await readFile(join(artifact,'classifier.json'));
 assert.equal(sha(headerBytes),fixture.headerSha256);
 const classifier = JSON.parse(headerBytes);
 assert.equal(classifier.table,fixture.table);
+assert.equal(Boolean(gatePath), fixture.gateSha256 !== undefined, 'A gated fixture must supply its exact policy file');
+let gate;
+if (gatePath) {
+  const { loadReadoutGate } = await import('./readout_gate.mjs');
+  gate = await loadReadoutGate(headerBytes, await readFile(gatePath), fixture.gateSha256);
+}
 const [gpu, fetcher, loader, deviceAPI, pool, session, runtime] = await Promise.all([
   'src/tooling/node-webgpu.js','src/tooling/node-file-fetch.js','src/experimental/training/suite.js',
   'src/gpu/device.js','src/memory/buffer-pool.js','src/inference/pipelines/text/generator/session/text.js',
@@ -37,6 +43,7 @@ const layers = [config.numLayers-2,config.numLayers-1];
 const base = { model: handle.manifest.modelId, manifestSha256:sha(manifestBytes), layers, dimensions:layers.map(() => config.intermediateSize) };
 const readout = await loadResidentReadout(device,await createReadoutKernel(device),classifier,await readFile(join(artifact,'weights.bin')),base);
 const report = { base, table:classifier.table, coefficientsSha256:classifier.sha256, feature:'ffn_act', rows:[],
+  ...(gate && { gateSha256: fixture.gateSha256 }),
   backend: device.adapterInfo?.description ?? null, classifierWeightBufferBytes:readout.residentWeightBytes,
   scope:'Forward pass from raw text through a fixed development readout. Readback count covers this classifier only.' };
 try {
@@ -73,14 +80,17 @@ try {
       const scores = Array.from(new Float32Array(host.getMappedRange())); host.unmap();
       assert(scores.every(Number.isFinite));
       const code = readout.codes[scores.indexOf(Math.max(...scores))];
-      report.rows.push({id:task.id,tokens:ids.length,promptSha256:sha(task.prompt),calls,scores,code,
+      const verdict = gate?.(scores);
+      if (task.expectedAction !== undefined) assert.equal(verdict?.action, task.expectedAction);
+      report.rows.push({id:task.id,tokens:ids.length,promptSha256:sha(task.prompt),calls,scores,
+        ...(verdict ? { ...verdict, matchesHistoricalClass: code === task.historicalCode } : { code }),
         historicalCode:task.historicalCode,expected:task.expected,classifierReadbackBytes:scores.length*4});
     } finally {
       if(prefill?.currentHiddenBuffer) pool.releaseBuffer(prefill.currentHiddenBuffer);
       host.destroy(); decision.destroy();
     }
   }
-  report.matches = report.rows.every(row => row.code === row.historicalCode);
+  report.matches = report.rows.every(row => (gate ? row.matchesHistoricalClass : row.code === row.historicalCode));
   await writeFile(reportPath,JSON.stringify(report,null,2)+'\n',{flag:'wx'});
   console.log(JSON.stringify(report));
   process.exitCode=report.matches?0:1;
