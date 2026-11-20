@@ -1,13 +1,9 @@
 import { Buffer } from 'node:buffer';
-import { createHash } from 'node:crypto';
+import { MAX_RECIPE_SNAPSHOT_BYTES, recipePublicationDigest, sha256 } from '../client/recipe-generation-format.js';
 import { canonicalJson } from '../client/trace-graph-dp.js';
 
 const HEX = /^[a-f0-9]{64}$/;
 const VERSION = /^[a-zA-Z0-9._:/+-]{1,128}$/;
-const MAX_SNAPSHOT_BYTES = 1024 * 1024;
-const sha256 = text => createHash('sha256').update(text).digest('hex');
-const publicationDigest = ({ namespaceId, generation, inputWatermark, compilerVersion, snapshotDigest }) =>
-  sha256(canonicalJson(['gamma.recipe-generation/v1', namespaceId, generation, inputWatermark, compilerVersion, snapshotDigest]));
 
 function validateNamespace(namespaceId) {
   if (typeof namespaceId !== 'string' || !HEX.test(namespaceId)) throw new TypeError('Invalid recipe generation namespace');
@@ -25,7 +21,7 @@ function pinnedRecord(row) {
     publishedAt: row.published_at,
   };
   if (sha256(row.snapshot_json) !== receipt.snapshotDigest ||
-      publicationDigest(receipt) !== receipt.generationDigest) {
+      recipePublicationDigest(receipt) !== receipt.generationDigest) {
     throw Error('Recipe generation failed integrity verification');
   }
   return { receipt, snapshot: JSON.parse(row.snapshot_json) };
@@ -66,11 +62,11 @@ export function createRecipeGenerationStore(store) {
       throw new TypeError('Invalid recipe generation publication');
     }
     const snapshotJson = canonicalJson(snapshot);
-    if (Buffer.byteLength(snapshotJson) > MAX_SNAPSHOT_BYTES) throw new RangeError('Recipe snapshot exceeds byte limit');
+    if (Buffer.byteLength(snapshotJson) > MAX_RECIPE_SNAPSHOT_BYTES) throw new RangeError('Recipe snapshot exceeds byte limit');
     JSON.parse(snapshotJson); // Reject non-JSON before writing immutable bytes.
     const snapshotDigest = sha256(snapshotJson);
     const generation = expectedGeneration + 1;
-    const digest = publicationDigest({ namespaceId, generation, inputWatermark, compilerVersion, snapshotDigest });
+    const digest = recipePublicationDigest({ namespaceId, generation, inputWatermark, compilerVersion, snapshotDigest });
 
     // The head and its bytes are the same immutable row. CAS, watermark checks
     // and publication run in one statement on both SQLite and D1.

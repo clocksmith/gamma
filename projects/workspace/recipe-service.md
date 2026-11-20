@@ -145,3 +145,13 @@ runtime key. It rejects the comparison if scope, compiler, route policy or
 legacy baseline changes. Use on controlled, quiescent comparison fixtures;
 it does not turn mutable legacy reads into transactions or verify universal
 parity. There is no shadow HTTP endpoint and `/v1/recipes/resolve` is unchanged.
+
+`src/client/pinned-recipe-cache.js` is an opt-in, bounded in-memory client
+cache for a generation already pinned by an independent trusted source. It
+validates exact namespace, generation, compiler and routing policy, verifies
+both unkeyed digests, and checks the v3 graph without exporting a replay
+object or runtime key. Cached entries are detached JSON, scoped to the exact
+pin, with an optional freshness floor. Hash checks do not authenticate a
+publisher or grant local dispatch authority. The managed resolver and
+workflow execution do not consume this cache. Authenticated distribution and
+the operating policy for the initial trusted pin are still separate work.
