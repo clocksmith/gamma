@@ -1,0 +1,106 @@
+{
+  "description": "The agent-facing tool interface, identical on both sides of the model-driven comparison. The treatment backs it with the Fawn workspace service; the control backs it with Playwright agent tooling plus revalidation and takeover cancellation. Backend behavior differs; names, descriptions and schemas do not.",
+  "tools": [
+    {
+      "name": "observe",
+      "description": "Read the current page. Returns text describing the page and element ids for interactive elements. Optional regions are CSS selectors to focus on; the backend may return more than requested. With since_last, parts unchanged since your previous observation may be summarized as unchanged.",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "regions": { "type": "array", "items": { "type": "string" }, "description": "CSS selectors of the page parts you need." },
+          "since_last": { "type": "boolean", "description": "Report only what changed since your previous observation when possible." }
+        }
+      }
+    },
+    {
+      "name": "navigate",
+      "description": "Open a URL in the workspace browser. Only the application's own origin is allowed.",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["url"],
+        "properties": { "url": { "type": "string" } }
+      }
+    },
+    {
+      "name": "click",
+      "description": "Click an element from the latest observation. Name in depends_on the page parts your decision relied on; the action may be refused if they changed.",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["element"],
+        "properties": {
+          "element": { "type": "string" },
+          "depends_on": { "type": "array", "items": { "type": "string" } },
+          "external_effect": { "type": "boolean", "description": "True when this click changes state in the application, such as claiming, adding to a cart or deleting." }
+        }
+      }
+    },
+    {
+      "name": "fill",
+      "description": "Replace the value of a text field from the latest observation.",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["element", "value"],
+        "properties": {
+          "element": { "type": "string" },
+          "value": { "type": "string" },
+          "depends_on": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    {
+      "name": "submit",
+      "description": "Press a form's submit control. This is an external effect and must happen exactly once.",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["element"],
+        "properties": {
+          "element": { "type": "string" },
+          "depends_on": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    {
+      "name": "download",
+      "description": "Download the file a link from the latest observation produces. Returns the saved artifact's identifier.",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["element"],
+        "properties": { "element": { "type": "string" } }
+      }
+    },
+    {
+      "name": "pending_effects",
+      "description": "List your external effects whose outcome is not confirmed, with what is known about each.",
+      "input_schema": { "type": "object", "additionalProperties": false, "properties": {} }
+    },
+    {
+      "name": "request_human_review",
+      "description": "Stop and ask a person to decide, when you cannot determine whether an external effect happened.",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["reason"],
+        "properties": { "reason": { "type": "string" } }
+      }
+    },
+    {
+      "name": "finish",
+      "description": "End the task.",
+      "input_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["summary"],
+        "properties": {
+          "summary": { "type": "string" },
+          "artifact": { "type": "string", "description": "Identifier of a saved artifact, when the task asks for one." }
+        }
+      }
+    }
+  ]
+}

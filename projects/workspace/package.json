@@ -1,0 +1,25 @@
+{
+  "name": "@gamma/workspace",
+  "private": true,
+  "type": "module",
+  "description": "Gamma workspace runtime with stock Chromium and optional hash-pinned Fawn browser integration.",
+  "scripts": {
+    "test": "node test/run-tests.js",
+    "test:browser": "node test/run-tests.js --browser",
+    "qualify": "node qualification/run.js",
+    "compare": "node qualification/compare.js",
+    "differentiate": "node qualification/differentiate.js",
+    "start": "node src/client/main.js",
+    "start:registry": "node src/client/workflow-registry-main.js",
+    "test:boundary": "node --import ./test/workspace-boundary.js ./src/client/main.js --help && node --test ./test/workspace-boundary.test.js"
+  },
+  "dependencies": {
+    "playwright-core": "1.58.2"
+  },
+  "files": [
+    "src",
+    "ui",
+    "config",
+    "LICENSE"
+  ]
+}

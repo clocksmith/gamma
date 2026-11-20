@@ -1,0 +1,136 @@
+{
+  "suiteVersion": "2026-11-10-engineering-investigation-v1",
+  "status": "run",
+  "purpose": "Whether Fawn workspace advantages hold on a multi-step engineering incident investigation against the revalidating, takeover-cancelling Playwright agent control.",
+  "runnerPath": "browser/workspace/qualification/differentiate.js",
+  "fixtureSitePath": "browser/workspace/qualification/investigation-site.js",
+  "agentPolicyPath": "browser/workspace/qualification/agents/investigation-policy.js",
+  "task": "Claim the longest-burning unassigned Checkout incident from the live queue, read its runbook guidance, file exactly one mitigation summary (preserving any incident-commander edit) and export the postmortem bundle.",
+  "control": {
+    "id": "playwright-agent-tooling-with-revalidation",
+    "observation": "page-wide-playwright-agent-snapshot-with-incremental-tracking",
+    "actions": "aria-ref-locators-from-the-latest-snapshot",
+    "browserLifetime": "browser-host-outlives-the-agent-process",
+    "capabilities": [
+      "persistent-profile",
+      "durable-agent-checkpoint-before-and-after-each-tool-call",
+      "application-idempotency-reference-when-offered",
+      "application-state-check-before-resubmission",
+      "current-page-check-after-an-interrupted-call",
+      "cooperative-pause-during-human-control",
+      "origin-allowlist-including-form-actions",
+      "revalidate-decision-inputs-with-a-fresh-snapshot-before-every-mutation",
+      "cancel-pending-calls-and-observe-again-after-human-control"
+    ],
+    "humanControlSemantics": "cancel-the-pending-tool-call-then-observe-again"
+  },
+  "treatment": {
+    "id": "fawn-workspace-service",
+    "agentProcess": "separate-client-of-a-workspace-that-outlives-it",
+    "humanControlSemantics": "owner-handoff-to-the-human-and-back"
+  },
+  "sharedConditions": [
+    "same-agent-policy-and-think-time",
+    "same-browser-binary-and-driver",
+    "same-fixture-inputs-and-perturbation-points",
+    "same-action-timeout",
+    "same-granted-origins",
+    "same-checkpoint-file-durability"
+  ],
+  "thinkTimeMs": 400,
+  "targetAreas": ["changing-content", "incremental-observation", "human-handoff", "interruption-recovery"],
+  "scenarios": [
+    { "id": "investigation-clean", "area": "none", "perturbation": "none", "repetitions": 5 },
+    {
+      "id": "incident-claimed-during-triage",
+      "area": "changing-content",
+      "perturbation": "another-oncall-claims-the-selected-incident-after-observation-before-claim",
+      "repetitions": 3
+    },
+    {
+      "id": "live-telemetry-churn",
+      "area": "incremental-observation",
+      "perturbation": "a-40-row-telemetry-stream-updates-continuously-beside-the-incident-queue",
+      "repetitions": 3
+    },
+    {
+      "id": "commander-edits-mitigation",
+      "area": "human-handoff",
+      "perturbation": "an-incident-commander-edits-the-mitigation-summary-while-submission-is-pending",
+      "repetitions": 3
+    },
+    {
+      "id": "investigator-killed-during-mitigate",
+      "area": "interruption-recovery",
+      "perturbation": "the-investigator-process-dies-while-the-server-holds-the-mitigation-post",
+      "application": "no-audit-log-no-idempotency-and-a-confirmation-that-redirects-away",
+      "repetitions": 3
+    }
+  ],
+  "measures": [
+    "taskSuccess",
+    "incorrectActions",
+    "constraintViolatingMutations",
+    "mutationsDuringHumanControl",
+    "humanReviews",
+    "duplicateEffects",
+    "observationBytes",
+    "completeTaskLatencyMs",
+    "controlHarnessLines"
+  ],
+  "oracle": "The incident server's own state and mutation log decide success and incorrect actions: a claim of the longest-burning unassigned Checkout incident at claim time, zero claims stolen from another investigator, exactly one mitigation matching the commander's edit or the runbook-derived summary, and a postmortem bundle SHA-256 matching the server record.",
+  "improvementRequirements": [
+    {
+      "area": "changing-content",
+      "scenario": "incident-claimed-during-triage",
+      "treatmentBar": { "taskSuccessEveryRepetition": true, "incorrectActions": 0 },
+      "materialImprovement": { "measure": "incorrectActions", "treatmentBelowControl": true }
+    },
+    {
+      "area": "incremental-observation",
+      "scenario": "live-telemetry-churn",
+      "treatmentBar": { "taskSuccessEveryRepetition": true, "incorrectActions": 0 },
+      "materialImprovement": {
+        "measure": "observationBytes",
+        "statistic": "median",
+        "maximumTreatmentToControlRatio": 0.5
+      }
+    },
+    {
+      "area": "human-handoff",
+      "scenario": "commander-edits-mitigation",
+      "treatmentBar": {
+        "taskSuccessEveryRepetition": true,
+        "incorrectActions": 0,
+        "mutationsDuringHumanControl": 0
+      },
+      "materialImprovement": { "measure": "incorrectActions", "treatmentBelowControl": true }
+    },
+    {
+      "area": "interruption-recovery",
+      "scenario": "investigator-killed-during-mitigate",
+      "treatmentBar": { "taskSuccessEveryRepetition": true, "duplicateEffects": 0, "humanReviews": 0 },
+      "materialImprovement": {
+        "measure": "humanReviewsPlusDuplicateEffects",
+        "treatmentBelowControl": true
+      }
+    }
+  ],
+  "productAdvantageRule": {
+    "minimumAreasMet": 2,
+    "everyRepetition": true,
+    "noMaterialRegressionIn": [
+      "workspaceComparison.scenarios",
+      "workspaceComparison.differentiation.scenarios",
+      "workspaceComparison.revalidatedDifferentiation.scenarios",
+      "engineeringInvestigation.scenarios"
+    ],
+    "latencyRegressionRule": "workspaceComparison.criteria.latency",
+    "doesNotEstablish": [
+      "broad-product-superiority",
+      "release-qualification",
+      "compatibility-beyond-the-fixtures",
+      "model-driven-agent-results"
+    ]
+  }
+}

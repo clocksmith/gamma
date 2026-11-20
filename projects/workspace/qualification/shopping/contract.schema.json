@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Fawn controlled shopping comparison contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "scope", "cleanTrials", "faultTrialsPerKind", "heldOutRequests", "faults", "limits", "acceptance", "timing", "determinism", "failurePolicy", "seed"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "minLength": 1 },
+    "scope": { "type": "string", "minLength": 1 },
+    "cleanTrials": { "type": "integer", "minimum": 100 },
+    "faultTrialsPerKind": { "type": "integer", "minimum": 1 },
+    "heldOutRequests": { "type": "integer", "minimum": 20 },
+    "faults": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["price-change", "out-of-stock", "account-change", "layout-change", "lost-acknowledgment", "browser-restart", "missing-receipt", "revoked-purchase"] } },
+    "limits": {
+      "type": "object", "additionalProperties": false, "required": ["maxNodes", "maxEdges", "maxSteps"],
+      "properties": { "maxNodes": { "type": "integer", "minimum": 1 }, "maxEdges": { "type": "integer", "minimum": 1 }, "maxSteps": { "type": "integer", "minimum": 1 } }
+    },
+    "acceptance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["maxCriticalErrors", "minCleanCompletionRate", "maxLatencyRatio", "confidence", "bootstrapReplicates", "headlineMs", "requiresMatchedExternalTask", "requiresActualComparator"],
+      "properties": {
+        "maxCriticalErrors": { "const": 0 }, "minCleanCompletionRate": { "const": 1 },
+        "maxLatencyRatio": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1 },
+        "confidence": { "type": "number", "minimum": 0.95, "exclusiveMaximum": 1 },
+        "bootstrapReplicates": { "type": "integer", "minimum": 2000 }, "headlineMs": { "type": "number", "exclusiveMinimum": 0 },
+        "requiresMatchedExternalTask": { "const": true }, "requiresActualComparator": { "const": true }
+      }
+    },
+    "timing": { "type": "string", "minLength": 1 },
+    "determinism": { "type": "string", "minLength": 1 },
+    "failurePolicy": { "type": "string", "minLength": 1 },
+    "seed": { "type": "integer", "minimum": 1 }
+  }
+}

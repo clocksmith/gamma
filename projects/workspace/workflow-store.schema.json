@@ -1,0 +1,455 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Private personal workflow store v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "workflows",
+    "workflowVersions",
+    "workflowRuns"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "workflows": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "revision",
+          "currentVersion"
+        ],
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "currentVersion": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "workflowVersions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "workflowId",
+          "revision",
+          "parentVersion",
+          "dag"
+        ],
+        "properties": {
+          "workflowId": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "parentVersion": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dag": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "version",
+              "key",
+              "limits",
+              "nodes"
+            ],
+            "properties": {
+              "version": {
+                "enum": [
+                  1,
+                  2,
+                  3
+                ]
+              },
+              "key": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "limits": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "maxNodes",
+                  "maxEdges",
+                  "maxSteps"
+                ],
+                "properties": {
+                  "maxNodes": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "maxEdges": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "maxSteps": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              },
+              "nodes": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "depth",
+                        "edges",
+                        "terminal"
+                      ],
+                      "properties": {
+                        "depth": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "edges": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "next",
+                              "step"
+                            ],
+                            "properties": {
+                              "next": {
+                                "type": "string",
+                                "pattern": "^[a-f0-9]{64}$"
+                              },
+                              "weight": {
+                                "type": "number",
+                                "exclusiveMinimum": 0
+                              },
+                              "step": {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "required": [
+                                  "kind",
+                                  "locator",
+                                  "slot"
+                                ],
+                                "properties": {
+                                  "kind": {
+                                    "enum": [
+                                      "fill",
+                                      "select",
+                                      "click"
+                                    ]
+                                  },
+                                  "locator": {
+                                    "type": "string",
+                                    "pattern": "^[a-f0-9]{64}$"
+                                  },
+                                  "slot": {
+                                    "anyOf": [
+                                      {
+                                        "type": "string",
+                                        "pattern": "^[a-f0-9]{64}$"
+                                      },
+                                      {
+                                        "type": "null"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "allOf": [
+                                  {
+                                    "if": {
+                                      "properties": {
+                                        "kind": {
+                                          "const": "click"
+                                        }
+                                      }
+                                    },
+                                    "then": {
+                                      "properties": {
+                                        "slot": {
+                                          "type": "null"
+                                        }
+                                      }
+                                    },
+                                    "else": {
+                                      "properties": {
+                                        "slot": {
+                                          "type": "string",
+                                          "pattern": "^[a-f0-9]{64}$"
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        },
+                        "terminal": {
+                          "type": "boolean"
+                        },
+                        "repairs": {
+                          "type": "array",
+                          "uniqueItems": true,
+                          "items": {
+                            "type": "string",
+                            "pattern": "^[a-f0-9]{64}$"
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "items": false,
+                  "minItems": 2,
+                  "maxItems": 2
+                }
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "version": {
+                      "const": 1
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "nodes": {
+                      "items": {
+                        "prefixItems": [
+                          {},
+                          {
+                            "not": {
+                              "required": [
+                                "repairs"
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "nodes": {
+                      "items": {
+                        "prefixItems": [
+                          {},
+                          {
+                            "required": [
+                              "repairs"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "version": {
+                      "enum": [
+                        1,
+                        2
+                      ]
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "nodes": {
+                      "items": {
+                        "prefixItems": [
+                          {},
+                          {
+                            "properties": {
+                              "edges": {
+                                "items": {
+                                  "not": {
+                                    "required": [
+                                      "weight"
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "workflowRuns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "runId",
+          "startedAt",
+          "completedAt",
+          "mode",
+          "completed",
+          "reviewVerified",
+          "verificationId",
+          "policyHash",
+          "sourceHashes",
+          "taskSourceHashes",
+          "planner",
+          "modelCalls",
+          "cacheSteps",
+          "elapsedMs",
+          "fallbackReason",
+          "interventionRequests",
+          "workflowId",
+          "baseVersion",
+          "resultVersion"
+        ],
+        "properties": {
+          "runId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "mode": {
+            "enum": [
+              "learn",
+              "reuse",
+              "fresh"
+            ]
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "reviewVerified": {
+            "type": "boolean"
+          },
+          "verificationId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "policyHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "sourceHashes": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "taskSourceHashes": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "planner": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "declaredModel",
+              "observedModels"
+            ],
+            "properties": {
+              "declaredModel": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "observedModels": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "modelCalls": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "cacheSteps": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "elapsedMs": {
+            "type": "number",
+            "minimum": 0
+          },
+          "fallbackReason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "interventionRequests": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "workflowId": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "baseVersion": {
+            "type": "string",
+            "minLength": 1
+          },
+          "resultVersion": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

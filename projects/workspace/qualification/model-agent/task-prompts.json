@@ -1,0 +1,9 @@
+{
+  "description": "Task prompts sent as the first user turn, identical on both sides. {origin} is the application's origin for the run; other placeholders are filled from the scenario's frozen inputs.",
+  "tasks": {
+    "procurement": "In the store at {origin}, buy one unit of the cheapest item that is in stock and costs at most {budget} across every catalog page ({origin}/catalog?page=1 to page {pageCount}). Ship it to \"{address}\" unless a person has already entered a shipping address, in which case keep theirs. If the checkout offers a reference field, enter \"{reference}\". Place exactly one order, then download its invoice and finish with the invoice as the artifact.",
+    "helpdesk": "In the support desk at {origin}, open the queue at {origin}/queue and claim the oldest open, unclaimed ticket for the {product} product. Reply on that ticket exactly once: if the reply draft is empty, send this text: \"{template}\"; if a supervisor has already written a draft, send theirs unchanged. If the form offers a reference field, enter \"{reference}\". Then download the ticket transcript and finish with it as the artifact.",
+    "clinic-booking": "In the clinic portal at {origin}, book the earliest open appointment with a {clinicianType} between {windowStart} and {windowEnd} for patient \"{patient}\". Book exactly one appointment, then download the booking confirmation and finish with it as the artifact.",
+    "expense-filing": "In the expense system at {origin}, find the receipt from \"{merchant}\" dated {receiptDate} in the receipts inbox and file it as one expense under category \"{category}\" with the amount shown on the receipt. File exactly one expense, then download the filed report and finish with it as the artifact."
+  }
+}

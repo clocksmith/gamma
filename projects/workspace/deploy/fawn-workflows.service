@@ -1,0 +1,28 @@
+[Unit]
+Description=Fawn sealed workflow registry
+After=network.target
+
+[Service]
+Type=simple
+User=fawn-workflows
+Group=fawn-workflows
+ExecStart=/usr/bin/node /opt/fawn-workflows/current/src/client/workflow-registry-main.js /etc/fawn-workflows/server.private.json
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=20
+UMask=0077
+StateDirectory=fawn-workflows
+StateDirectoryMode=0700
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+MemoryMax=512M
+TasksMax=64
+LimitNOFILE=1024
+
+[Install]
+WantedBy=multi-user.target

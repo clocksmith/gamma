@@ -1,0 +1,42 @@
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { spawnSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { createGpuEvidence } from '../support/gpu-evidence.js';
+
+const root = mkdtempSync(join(tmpdir(), 'fawn-gpu-evidence-'));
+try {
+  const payload = Buffer.from('{"queueCompleted":true,"adapter":"GPU-Ω"}\n');
+  const childRoot = join(root, 'abrupt-child');
+  mkdirSync(childRoot);
+  const script = `import {createGpuEvidence} from ${JSON.stringify(new URL('../support/gpu-evidence.js', import.meta.url).href)};
+const result={status:'running',passed:false,runs:[]};
+const evidence=createGpuEvidence(${JSON.stringify(childRoot)},result);
+const report=evidence.receive('playwright',Buffer.from(${JSON.stringify(payload.toString('utf8'))}));
+result.runs.push({adapter:'playwright',passed:true,reports:[report]});
+evidence.checkpoint('first-adapter-passed','playwright');
+process.exit(17);`;
+  const child = spawnSync(process.execPath, ['--input-type=module', '-e', script], { encoding: 'utf8', timeout: 5000 });
+  assert.equal(child.status, 17, child.stderr);
+  const retained = JSON.parse(readFileSync(join(childRoot, 'result.json')));
+  assert.equal(retained.status, 'running');
+  assert.equal(retained.passed, false, 'partial success is never overall success');
+  assert.equal(retained.runs[0].passed, true);
+  assert.equal(retained.lastCheckpoint.phase, 'first-adapter-passed');
+  const raw = readFileSync(join(childRoot, retained.rawPageReports[0].path));
+  assert.deepEqual(raw, payload);
+  assert.equal(retained.rawPageReports[0].sha256, createHash('sha256').update(payload).digest('hex'));
+  assert.equal(retained.rawPageReports[0].byteLength, payload.length);
+  const invalidRoot = join(root, 'invalid-json');
+  mkdirSync(invalidRoot);
+  const result = { status: 'running', passed: false };
+  const evidence = createGpuEvidence(invalidRoot, result);
+  assert.throws(() => evidence.receive('cdp', Buffer.from('{"broken":')), SyntaxError);
+  const invalid = JSON.parse(readFileSync(join(invalidRoot, 'result.json')));
+  assert.equal(invalid.lastCheckpoint.phase, 'page-report-invalid');
+  assert.equal(invalid.rawPageReports[0].parsed, false);
+  assert.equal(readFileSync(join(invalidRoot, invalid.rawPageReports[0].path), 'utf8'), '{"broken":');
+  console.log('ok: exact raw bytes and prior adapter survive abrupt process exit; invalid input retained without promotion');
+} finally { rmSync(root, { recursive: true, force: true }); }

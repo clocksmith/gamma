@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Private workflow attempt accounting v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "attempts"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "attempts": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^[a-f0-9-]{36}$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "runId",
+          "ownerHash",
+          "scopeHash",
+          "mode",
+          "startedAt",
+          "updatedAt",
+          "status",
+          "stage",
+          "context",
+          "execution",
+          "publication",
+          "failureCode"
+        ],
+        "properties": {
+          "runId": {
+            "type": "string",
+            "pattern": "^[a-f0-9-]{36}$"
+          },
+          "ownerHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "scopeHash": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            ]
+          },
+          "mode": {
+            "enum": [
+              null,
+              "learn",
+              "reuse",
+              "fresh"
+            ]
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "finished",
+              "rejected"
+            ]
+          },
+          "stage": {
+            "enum": [
+              "preflight",
+              "executing",
+              "execution-settled",
+              "finished"
+            ]
+          },
+          "context": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "verificationId",
+                  "policyHash",
+                  "sourceHashes",
+                  "taskSourceHashes",
+                  "planner"
+                ],
+                "properties": {
+                  "verificationId": {
+                    "type": "string"
+                  },
+                  "policyHash": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "sourceHashes": {
+                    "type": "object",
+                    "minProperties": 1,
+                    "additionalProperties": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    }
+                  },
+                  "taskSourceHashes": {
+                    "type": "object",
+                    "minProperties": 1,
+                    "additionalProperties": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    }
+                  },
+                  "planner": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "declaredModel",
+                      "observedModels"
+                    ],
+                    "properties": {
+                      "declaredModel": {
+                        "anyOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "string"
+                          }
+                        ]
+                      },
+                      "observedModels": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "execution": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "completed",
+                  "reviewVerified",
+                  "modelCalls",
+                  "cacheSteps",
+                  "elapsedMs",
+                  "fallbackReason",
+                  "interventionRequests"
+                ],
+                "properties": {
+                  "completed": {
+                    "type": "boolean"
+                  },
+                  "reviewVerified": {
+                    "type": "boolean"
+                  },
+                  "modelCalls": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "cacheSteps": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "elapsedMs": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "fallbackReason": {
+                    "anyOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "interventionRequests": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                }
+              }
+            ]
+          },
+          "publication": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "status",
+                  "code",
+                  "revision",
+                  "versionId"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "published",
+                      "unchanged",
+                      "failed"
+                    ]
+                  },
+                  "code": {
+                    "anyOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "revision": {
+                    "anyOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "integer",
+                        "minimum": 0
+                      }
+                    ]
+                  },
+                  "versionId": {
+                    "anyOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "failureCode": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

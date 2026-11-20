@@ -1,0 +1,788 @@
+{
+  "$schema": "fawn-workspace-qualification.schema.json",
+  "schemaVersion": 1,
+  "caseSetVersion": "2026-10-26-behavioral-v3-platform-exits",
+  "contractPath": "docs/fawn-workspace-contract.md",
+  "serviceConfigPath": "config/fawn-workspace-service.json",
+  "strategyPath": "config/doe-product-strategy.json#fawnWorkspace",
+  "harness": {
+    "runnerPath": "browser/workspace/qualification/run.js",
+    "validatorPath": "browser/workspace/qualification/validate.js",
+    "fixtureSite": {
+      "path": "browser/workspace/qualification/fixture-site.js",
+      "sha256": "26d88112a09468f07398f6677a6bdce393f9b6a54169359ec4d3f5ec5e82dc41"
+    }
+  },
+  "adapters": ["playwright", "cdp"],
+  "owners": ["agent-a", "agent-b"],
+  "oracles": {
+    "reportSha256": {
+      "/export/report.csv": "98e79f8c6f16f49f82a7b94c42fc4ca04944cf7dddde39078df92522d5428146",
+      "/export/report-v2.csv": "d3b0e0c3d5158608348ac368583104e9269f3f55f0751334372819c47839887d"
+    },
+    "researchFindingTitles": ["Vulkan memory model", "Vulkan synchronization"]
+  },
+  "workflows": {
+    "research": {
+      "intent": "research:read",
+      "actionKinds": ["navigate", "click"],
+      "effectActionSuffix": "-open-0",
+      "effectRequest": { "server": "main", "method": "GET", "path": "/research/vulkan-memory.html" },
+      "task": { "indexPath": "/research/", "topics": ["vulkan"], "maxDocuments": 5 }
+    },
+    "form": {
+      "intent": "form:contact",
+      "actionKinds": ["navigate", "fill", "submit"],
+      "effectActionSuffix": "-submit",
+      "effectRequest": { "server": "main", "method": "POST", "path": "/form/submit" },
+      "task": {
+        "formPath": "/form",
+        "subjectPrefix": "Ada",
+        "email": "ada@example.test",
+        "completedWhen": [{ "kind": "element-present", "selector": "#receipt" }],
+        "failedWhen": [{ "kind": "element-present", "selector": "#error" }],
+        "submissionsPath": "/submissions",
+        "submissionsSelector": "#submissions"
+      }
+    },
+    "export": {
+      "intent": "export:report",
+      "actionKinds": ["navigate", "download"],
+      "effectActionSuffix": "-download",
+      "effectRequest": { "server": "main", "method": "GET", "path": "/export/report.csv" },
+      "task": { "exportPath": "/export", "linkText": "Download report" }
+    }
+  },
+  "cases": [
+    {
+      "id": "workflow-completes",
+      "procedure": "run-workflow",
+      "workflows": ["research", "form", "export"],
+      "failureLocation": "none",
+      "requirements": [
+        "shared-service-document-research-form-submission-artifact-export",
+        "workflow-logic-outside-shared-service",
+        "narrow-cdp-playwright-adapters",
+        "persistent-workspace-identity",
+        "persistent-observation-versions",
+        "persistent-action-records",
+        "completed-failed-unknown-outcomes",
+        "disclose-nonatomic-browser-external-boundary"
+      ],
+      "expected": {
+        "steps": { "workflow": { "status": "completed" } },
+        "actions": { "effect": { "dispatchStatus": "dispatched", "outcome": "completed" } },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 1, "foreignRequests": 0 }
+      },
+      "expectedByWorkflow": {
+        "research": {
+          "steps": {
+            "workflow": { "findingTitles": ["Vulkan memory model", "Vulkan synchronization"], "skipped": 1 }
+          },
+          "actions": { "effect": { "outcomeBasis": "completion-condition" } },
+          "commandRejections": ["unauthorized-target"]
+        },
+        "form": {
+          "actions": { "effect": { "outcomeBasis": "completion-condition" } },
+          "oracle": { "receipts": 1 }
+        },
+        "export": {
+          "steps": { "workflow": { "artifact": "/export/report.csv" } },
+          "actions": { "effect": { "outcomeBasis": "artifact-saved" } }
+        }
+      }
+    },
+    {
+      "id": "failure-condition",
+      "procedure": "run-workflow",
+      "workflows": ["form"],
+      "failureLocation": "application-rejects-submission",
+      "taskOverrides": { "email": "not-an-address" },
+      "requirements": ["completed-failed-unknown-outcomes"],
+      "expected": {
+        "steps": { "workflow": { "status": "failed" } },
+        "actions": {
+          "effect": {
+            "dispatchStatus": "dispatched",
+            "outcome": "failed",
+            "outcomeBasis": "failure-condition"
+          }
+        },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 1, "receipts": 0 }
+      }
+    },
+    {
+      "id": "unauthorized-intent",
+      "procedure": "run-workflow",
+      "workflows": ["research", "form", "export"],
+      "failureLocation": "admission",
+      "taskOverrides": { "intent": "admin:delete" },
+      "requirements": [
+        "reject-stale-or-unauthorized-actions",
+        "workspace-owner-intent-target-observation-preconditions"
+      ],
+      "expected": {
+        "steps": { "workflow": { "rejection": "unauthorized-intent" } },
+        "commandRejections": ["unauthorized-intent"],
+        "oracle": { "effectRequests": 0, "foreignRequests": 0 }
+      }
+    },
+    {
+      "id": "unauthorized-target",
+      "procedure": "run-workflow",
+      "workflows": ["research", "form", "export"],
+      "failureLocation": "admission",
+      "taskOverrides": { "origin": "foreign" },
+      "requirements": [
+        "reject-stale-or-unauthorized-actions",
+        "workspace-owner-intent-target-observation-preconditions"
+      ],
+      "expected": {
+        "steps": { "workflow": { "rejection": "unauthorized-target" } },
+        "commandRejections": ["unauthorized-target"],
+        "oracle": { "effectRequests": 0, "foreignRequests": 0 }
+      }
+    },
+    {
+      "id": "violated-precondition",
+      "procedure": "run-workflow",
+      "workflows": ["research", "form", "export"],
+      "failureLocation": "dispatch",
+      "fault": {
+        "kind": "effect-precondition",
+        "precondition": { "kind": "element-present", "selector": "#never-present" }
+      },
+      "requirements": [
+        "dispatch-time-authorization-and-preconditions",
+        "workspace-owner-intent-target-observation-preconditions",
+        "prove-never-dispatched-separately"
+      ],
+      "expected": {
+        "steps": { "workflow": { "status": "never-dispatched" } },
+        "actions": {
+          "effect": {
+            "dispatchStatus": "never-dispatched",
+            "neverDispatchedCode": "precondition-unestablished",
+            "neverDispatchedStage": "dispatch"
+          }
+        },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 0 }
+      },
+      "expectedByWorkflow": { "research": { "steps": { "workflow": { "status": "stopped" } } } }
+    },
+    {
+      "id": "background-change-page-scope",
+      "procedure": "run-workflow",
+      "workflows": ["export"],
+      "failureLocation": "background-page-change",
+      "taskOverrides": { "exportPath": "/live/export" },
+      "fault": { "kind": "before-effect-control", "liveState": null, "settleMs": 300 },
+      "requirements": ["versioned-observations-and-page-changes", "reject-stale-or-unauthorized-actions"],
+      "expected": {
+        "steps": { "workflow": { "status": "never-dispatched" } },
+        "actions": {
+          "effect": {
+            "dispatchStatus": "never-dispatched",
+            "neverDispatchedCode": "stale-observation",
+            "neverDispatchedStage": "dispatch"
+          }
+        },
+        "commandRejections": [],
+        "journal": { "minPageChangeObservations": 1 },
+        "oracle": { "effectRequests": 0 }
+      }
+    },
+    {
+      "id": "background-change-regions-scope",
+      "procedure": "run-workflow",
+      "workflows": ["export"],
+      "failureLocation": "background-page-change",
+      "taskOverrides": { "exportPath": "/live/export" },
+      "sessionRegions": ["#export-panel"],
+      "fault": { "kind": "before-effect-control", "liveState": null, "settleMs": 300 },
+      "requirements": [
+        "versioned-observations-and-page-changes",
+        "dispatch-time-authorization-and-preconditions"
+      ],
+      "expected": {
+        "steps": { "workflow": { "status": "completed", "artifact": "/export/report.csv" } },
+        "actions": {
+          "effect": { "dispatchStatus": "dispatched", "outcome": "completed", "observationScope": "regions" }
+        },
+        "commandRejections": [],
+        "journal": { "minPageChangeObservations": 1 },
+        "oracle": { "effectRequests": 1 }
+      }
+    },
+    {
+      "id": "background-change-target-replaced",
+      "procedure": "run-workflow",
+      "workflows": ["export"],
+      "failureLocation": "target-replaced-outside-scoped-region",
+      "taskOverrides": { "exportPath": "/live/export" },
+      "sessionRegions": ["#status"],
+      "fault": { "kind": "before-effect-control", "liveState": "replaced", "settleMs": 300 },
+      "requirements": [
+        "reject-stale-or-unauthorized-actions",
+        "dispatch-time-authorization-and-preconditions"
+      ],
+      "expected": {
+        "steps": { "workflow": { "status": "never-dispatched" } },
+        "actions": {
+          "effect": {
+            "dispatchStatus": "never-dispatched",
+            "neverDispatchedCode": "target-changed",
+            "neverDispatchedStage": "dispatch"
+          }
+        },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 0, "downloads": { "/export/report-v2.csv": 0 } }
+      }
+    },
+    {
+      "id": "background-change-scoped-region-changed",
+      "procedure": "run-workflow",
+      "workflows": ["export"],
+      "failureLocation": "scoped-region-changed",
+      "taskOverrides": { "exportPath": "/live/export" },
+      "sessionRegions": ["#export-panel"],
+      "fault": { "kind": "before-effect-control", "liveState": "rebuilding", "settleMs": 300 },
+      "requirements": ["versioned-observations-and-page-changes", "reject-stale-or-unauthorized-actions"],
+      "expected": {
+        "steps": { "workflow": { "status": "never-dispatched" } },
+        "actions": {
+          "effect": {
+            "dispatchStatus": "never-dispatched",
+            "neverDispatchedCode": "stale-observation",
+            "neverDispatchedStage": "dispatch"
+          }
+        },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 0 }
+      }
+    },
+    {
+      "id": "stale-observation",
+      "procedure": "stale-observation",
+      "workflows": ["research", "form", "export"],
+      "failureLocation": "admission",
+      "requirements": [
+        "reject-stale-or-unauthorized-actions",
+        "identical-stale-rejection-and-unknown-preservation-for-every-adapter"
+      ],
+      "expected": {
+        "steps": { "workflow": { "rejection": "stale-observation" } },
+        "commandRejections": ["stale-observation"],
+        "oracle": { "effectRequests": 0 }
+      }
+    },
+    {
+      "id": "stale-owner-after-handoff-and-restart",
+      "procedure": "stale-owner-restart",
+      "workflows": ["research", "form", "export"],
+      "failureLocation": "admission-after-handoff-and-restart",
+      "requirements": [
+        "reject-stale-generation-after-restart",
+        "persistent-ownership-generation",
+        "persistent-authorization",
+        "durably-advance-generation-before-admission",
+        "restore-authority-before-command-admission",
+        "identical-stale-rejection-and-unknown-preservation-for-every-adapter",
+        "handoff-races-stale-queues-restart-outstanding-requests"
+      ],
+      "expected": {
+        "steps": {
+          "staleWorkflow": { "rejection": "stale-owner-generation" },
+          "staleObserveAfterRestart": { "rejection": "stale-owner-generation" },
+          "restartedWorkflow": { "status": "completed" }
+        },
+        "actions": {
+          "effect": { "dispatchStatus": "dispatched", "outcome": "completed", "ownerGeneration": 2 }
+        },
+        "commandRejections": ["stale-owner-generation"],
+        "oracle": { "effectRequests": 1 }
+      },
+      "expectedByWorkflow": {
+        "research": { "commandRejections": ["stale-owner-generation", "unauthorized-target"] },
+        "form": { "oracle": { "receipts": 1 } }
+      }
+    },
+    {
+      "id": "failure-before-dispatch",
+      "procedure": "failure-before-dispatch",
+      "workflows": ["research", "form", "export"],
+      "failureLocation": "after-intent-persisted-before-dispatch",
+      "requirements": [
+        "persist-intent-before-dispatch",
+        "prove-never-dispatched-separately",
+        "failure-before-dispatch-after-submission-before-acknowledgment",
+        "persistent-action-records"
+      ],
+      "expected": {
+        "steps": {
+          "crash": { "requestedSignal": "SIGKILL", "abrupt": true },
+          "afterRestart": {
+            "dispatchStatus": "never-dispatched",
+            "neverDispatchedCode": "restart-invalidated-queue",
+            "neverDispatchedStage": "restart"
+          },
+          "retry": { "status": "completed" }
+        },
+        "actions": {
+          "effect": {
+            "dispatchStatus": "never-dispatched",
+            "neverDispatchedCode": "restart-invalidated-queue",
+            "neverDispatchedStage": "restart"
+          },
+          "retryEffect": { "dispatchStatus": "dispatched", "outcome": "completed" }
+        },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 1 }
+      },
+      "expectedByWorkflow": {
+        "research": { "commandRejections": ["unauthorized-target"] },
+        "form": {
+          "steps": { "implicitRetry": { "rejection": "resubmission-not-permitted" } },
+          "commandRejections": ["resubmission-not-permitted"],
+          "oracle": { "receipts": 1 }
+        }
+      }
+    },
+    {
+      "id": "failure-after-effect-started",
+      "procedure": "failure-after-effect-started",
+      "workflows": ["research", "form", "export"],
+      "failureLocation": "while-the-application-holds-the-effect",
+      "requirements": [
+        "preserve-unknown-across-restart",
+        "completed-failed-unknown-outcomes",
+        "failure-before-dispatch-after-submission-before-acknowledgment",
+        "identical-stale-rejection-and-unknown-preservation-for-every-adapter",
+        "handoff-outstanding-action-records",
+        "handoff-races-stale-queues-restart-outstanding-requests",
+        "missing-completion-never-authorizes-resubmission",
+        "reconcile-state-or-external-idempotency-or-human-review"
+      ],
+      "expected": {
+        "steps": {
+          "crash": { "requestedSignal": "SIGKILL", "abrupt": true },
+          "afterRestart": {
+            "outcome": "unknown",
+            "outcomeBasis": "restart-after-dispatch-start",
+            "isUncertain": true
+          },
+          "afterSecondRestart": {
+            "outcome": "unknown",
+            "outcomeBasis": "restart-after-dispatch-start",
+            "isUncertain": true
+          },
+          "handoff": { "effect": { "outcome": "unknown", "isUncertain": true } }
+        },
+        "actions": {
+          "effect": {
+            "dispatchStatus": "dispatched",
+            "outcome": "unknown",
+            "outcomeBasis": "restart-after-dispatch-start"
+          }
+        },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 2 }
+      },
+      "expectedByWorkflow": {
+        "research": {
+          "steps": { "rerun": { "status": "completed" } },
+          "commandRejections": ["unauthorized-target"]
+        },
+        "form": {
+          "steps": {
+            "resubmitBeforeReconcile": { "rejection": "effect-unresolved" },
+            "reconcile": { "reconciliationResult": "effect-present", "isUncertain": false },
+            "resubmitAfterReconcile": { "rejection": "effect-already-completed" }
+          },
+          "actions": { "effect": { "reconciliationResult": "effect-present" } },
+          "commandRejections": ["effect-unresolved", "effect-already-completed"],
+          "oracle": { "effectRequests": 1, "receipts": 1 }
+        },
+        "export": { "steps": { "rerun": { "status": "completed", "artifact": "/export/report.csv" } } }
+      }
+    },
+    {
+      "id": "failure-after-completion-before-acknowledgment",
+      "procedure": "failure-after-completion",
+      "workflows": ["research", "form", "export"],
+      "failureLocation": "after-outcome-before-acknowledgment",
+      "requirements": [
+        "failure-before-dispatch-after-submission-before-acknowledgment",
+        "missing-completion-never-authorizes-resubmission",
+        "persistent-action-records"
+      ],
+      "expected": {
+        "steps": {
+          "crash": { "requestedSignal": "SIGKILL", "abrupt": true },
+          "afterRestart": { "outcome": "completed", "acknowledged": false },
+          "outstandingBeforeAcknowledgment": { "includesEffect": true },
+          "outstandingAfterAcknowledgment": { "includesEffect": false }
+        },
+        "actions": {
+          "effect": { "dispatchStatus": "dispatched", "outcome": "completed", "acknowledged": true }
+        },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 1 }
+      },
+      "expectedByWorkflow": {
+        "form": {
+          "steps": { "resubmit": { "rejection": "effect-already-completed" } },
+          "commandRejections": ["effect-already-completed"],
+          "oracle": { "receipts": 1 }
+        }
+      }
+    },
+    {
+      "id": "handoff-while-queued",
+      "procedure": "queue-behind-held-effect",
+      "workflows": ["research", "form", "export"],
+      "failureLocation": "handoff-while-effect-in-flight-and-command-queued",
+      "interruption": "handoff",
+      "requirements": [
+        "invalidate-old-owner-queue",
+        "handoff-outstanding-action-records",
+        "disclose-in-flight-external-effects",
+        "serialize-handoff-admission-dispatch",
+        "handoff-races-stale-queues-restart-outstanding-requests",
+        "all-fawn-automated-mutations-through-dispatcher"
+      ],
+      "expected": {
+        "steps": {
+          "interruption": {
+            "effect": { "dispatchStatus": "dispatched", "outcome": null },
+            "queued": {
+              "dispatchStatus": "never-dispatched",
+              "neverDispatchedCode": "stale-owner-generation",
+              "neverDispatchedStage": "handoff"
+            },
+            "isAtomic": false
+          },
+          "queued": { "dispatchStatus": "never-dispatched", "neverDispatchedCode": "stale-owner-generation" },
+          "oldOwnerObserve": { "rejection": "stale-owner-generation" }
+        },
+        "actions": {
+          "effect": { "dispatchStatus": "dispatched", "outcome": "completed", "ownerGeneration": 1 },
+          "queued": { "dispatchStatus": "never-dispatched", "neverDispatchedStage": "handoff" }
+        },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 1, "markerRequests": 0 }
+      },
+      "expectedByWorkflow": {
+        "research": { "steps": { "workflow": { "rejection": "stale-owner-generation" } } },
+        "form": { "oracle": { "receipts": 1 }, "steps": { "workflow": { "status": "completed" } } },
+        "export": { "steps": { "workflow": { "status": "completed" } } }
+      }
+    },
+    {
+      "id": "revoked-while-queued",
+      "procedure": "queue-behind-held-effect",
+      "workflows": ["research", "form", "export"],
+      "failureLocation": "grant-revoked-while-effect-in-flight-and-command-queued",
+      "interruption": "revoke",
+      "requirements": ["dispatch-time-authorization-and-preconditions", "prove-never-dispatched-separately"],
+      "expected": {
+        "steps": {
+          "queued": {
+            "dispatchStatus": "never-dispatched",
+            "neverDispatchedCode": "unauthorized-intent",
+            "neverDispatchedStage": "dispatch"
+          }
+        },
+        "actions": {
+          "effect": { "dispatchStatus": "dispatched", "outcome": "completed" },
+          "queued": { "dispatchStatus": "never-dispatched", "neverDispatchedCode": "unauthorized-intent" }
+        },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 1, "markerRequests": 0 }
+      },
+      "expectedByWorkflow": {
+        "research": {
+          "steps": { "workflow": { "rejection": "unauthorized-intent" } },
+          "commandRejections": ["unauthorized-intent"]
+        },
+        "form": { "oracle": { "receipts": 1 }, "steps": { "workflow": { "status": "completed" } } },
+        "export": { "steps": { "workflow": { "status": "completed" } } }
+      }
+    },
+    {
+      "id": "handoff-races-effect",
+      "procedure": "handoff-race",
+      "workflows": ["research", "form", "export"],
+      "failureLocation": "handoff-racing-admission-and-dispatch",
+      "race": {
+        "iterations": [
+          { "order": "handoff-first", "delayMs": 0, "expectedClass": "rejected-at-admission" },
+          { "order": "submit-first", "delayMs": 0, "expectedClass": "ended-at-handoff" },
+          { "order": "at-dispatch-start", "delayMs": 0, "expectedClass": "in-flight-at-handoff" },
+          { "order": "submit-first", "delayMs": 2 },
+          { "order": "submit-first", "delayMs": 8 },
+          { "order": "submit-first", "delayMs": 30 }
+        ],
+        "allowedClasses": [
+          "rejected-at-admission",
+          "ended-at-handoff",
+          "rejected-at-dispatch",
+          "in-flight-at-handoff",
+          "settled-before-handoff"
+        ]
+      },
+      "requirements": [
+        "serialize-handoff-admission-dispatch",
+        "durably-advance-generation-before-admission",
+        "handoff-races-stale-queues-restart-outstanding-requests",
+        "disclose-in-flight-external-effects",
+        "invalidate-old-owner-queue"
+      ],
+      "expected": {}
+    },
+    {
+      "id": "mutation-surface",
+      "procedure": "mutation-surface",
+      "workflows": ["research", "form", "export"],
+      "failureLocation": "workflow-attempts-unsupported-mutation",
+      "requirements": [
+        "all-fawn-automated-mutations-through-dispatcher",
+        "narrow-cdp-playwright-adapters",
+        "workflow-logic-outside-shared-service"
+      ],
+      "expected": {
+        "steps": {
+          "workflow": { "status": "completed" },
+          "surface": {
+            "serviceOwnKeys": [],
+            "serviceExposesAdapter": false,
+            "sessionKeys": [
+              "acknowledge",
+              "act",
+              "action",
+              "identity",
+              "observe",
+              "outstanding",
+              "reconcile",
+              "submit"
+            ]
+          },
+          "endpoints": { "listeningTcpSockets": 0, "devToolsActivePortFiles": 0 },
+          "unsupportedKind": { "rejection": "unsupported-action-kind" }
+        },
+        "commandRejections": ["unsupported-action-kind"],
+        "oracle": { "effectRequests": 1 }
+      },
+      "expectedByWorkflow": {
+        "research": { "commandRejections": ["unauthorized-target", "unsupported-action-kind"] },
+        "form": { "oracle": { "receipts": 1 } }
+      }
+    },
+    {
+      "id": "external-idempotency",
+      "procedure": "external-idempotency",
+      "workflows": ["form"],
+      "failureLocation": "while-the-application-holds-the-effect",
+      "requirements": [
+        "reconcile-state-or-external-idempotency-or-human-review",
+        "local-action-id-is-not-external-idempotency",
+        "missing-completion-never-authorizes-resubmission",
+        "preserve-unknown-across-restart"
+      ],
+      "expected": {
+        "steps": {
+          "localActionIdKey": { "rejection": "invalid-idempotency-key" },
+          "crash": { "requestedSignal": "SIGKILL", "abrupt": true },
+          "afterRestart": { "outcome": "unknown", "isUncertain": true },
+          "reconcile": { "reconciliationResult": "idempotent-resubmission-permitted", "isUncertain": true },
+          "keylessResubmit": { "rejection": "resubmission-not-permitted" },
+          "keyedResubmit": { "status": "completed" }
+        },
+        "actions": {
+          "effect": { "outcome": "unknown", "reconciliationResult": "idempotent-resubmission-permitted" },
+          "retryEffect": { "dispatchStatus": "dispatched", "outcome": "completed" }
+        },
+        "commandRejections": ["invalid-idempotency-key", "resubmission-not-permitted"],
+        "oracle": { "effectRequests": 2, "receipts": 1, "applicationDeduplicated": 1 }
+      }
+    },
+    {
+      "id": "human-review",
+      "procedure": "human-review",
+      "workflows": ["form"],
+      "failureLocation": "while-the-application-holds-the-effect",
+      "requirements": [
+        "reconcile-state-or-external-idempotency-or-human-review",
+        "handoff-outstanding-action-records",
+        "missing-completion-never-authorizes-resubmission"
+      ],
+      "expected": {
+        "steps": {
+          "crash": { "requestedSignal": "SIGKILL", "abrupt": true },
+          "handoff": { "effect": { "outcome": "unknown", "isUncertain": true } },
+          "review": { "reconciliationResult": "human-review-requested", "isUncertain": true },
+          "resubmitDuringReview": { "rejection": "effect-unresolved" },
+          "decision": { "reconciliationResult": "effect-present", "isUncertain": false },
+          "resubmitAfterDecision": { "rejection": "effect-already-completed" }
+        },
+        "actions": { "effect": { "outcome": "unknown", "reconciliationResult": "effect-present" } },
+        "commandRejections": ["effect-unresolved", "effect-already-completed"],
+        "oracle": { "effectRequests": 1, "receipts": 1 }
+      }
+    },
+    {
+      "id": "recovery-effect-present",
+      "procedure": "recover-after-crash",
+      "workflows": ["form"],
+      "failureLocation": "while-the-application-holds-the-effect",
+      "crashAt": "while-effect-held",
+      "seedReceipts": 10,
+      "requirements": [
+        "reconcile-state-or-external-idempotency-or-human-review",
+        "missing-completion-never-authorizes-resubmission",
+        "failure-before-dispatch-after-submission-before-acknowledgment",
+        "preserve-unknown-across-restart"
+      ],
+      "expected": {
+        "steps": {
+          "crash": { "requestedSignal": "SIGKILL", "abrupt": true },
+          "afterRestart": {
+            "outcome": "unknown",
+            "outcomeBasis": "restart-after-dispatch-start",
+            "isUncertain": true
+          },
+          "recovery": { "status": "completed", "recovered": "application-state" }
+        },
+        "actions": {
+          "effect": {
+            "dispatchStatus": "dispatched",
+            "outcome": "unknown",
+            "reconciliationResult": "effect-present"
+          },
+          "resubmission": null
+        },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 1, "receipts": 1 }
+      }
+    },
+    {
+      "id": "recovery-effect-absent",
+      "procedure": "recover-after-crash",
+      "workflows": ["form"],
+      "failureLocation": "after-dispatch-journaled-before-the-effect",
+      "crashAt": "afterDispatchStarted",
+      "seedReceipts": 10,
+      "requirements": [
+        "reconcile-state-or-external-idempotency-or-human-review",
+        "missing-completion-never-authorizes-resubmission",
+        "failure-before-dispatch-after-submission-before-acknowledgment",
+        "preserve-unknown-across-restart"
+      ],
+      "expected": {
+        "steps": {
+          "crash": { "requestedSignal": "SIGKILL", "abrupt": true },
+          "afterRestart": {
+            "outcome": "unknown",
+            "outcomeBasis": "restart-after-dispatch-start",
+            "isUncertain": true
+          },
+          "recovery": { "status": "completed", "recovered": "resubmitted-after-absence" }
+        },
+        "actions": {
+          "effect": {
+            "dispatchStatus": "dispatched",
+            "outcome": "unknown",
+            "reconciliationResult": "effect-absent"
+          },
+          "resubmission": { "dispatchStatus": "dispatched", "outcome": "completed" }
+        },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 1, "receipts": 1 }
+      }
+    },
+    {
+      "id": "recovery-never-dispatched",
+      "procedure": "recover-after-crash",
+      "workflows": ["form"],
+      "failureLocation": "after-intent-persisted-before-dispatch",
+      "crashAt": "afterIntentPersisted",
+      "seedReceipts": 10,
+      "requirements": [
+        "reconcile-state-or-external-idempotency-or-human-review",
+        "missing-completion-never-authorizes-resubmission",
+        "failure-before-dispatch-after-submission-before-acknowledgment",
+        "prove-never-dispatched-separately"
+      ],
+      "expected": {
+        "steps": {
+          "crash": { "requestedSignal": "SIGKILL", "abrupt": true },
+          "afterRestart": {
+            "dispatchStatus": "never-dispatched",
+            "neverDispatchedCode": "restart-invalidated-queue"
+          },
+          "recovery": { "status": "completed", "recovered": "resubmitted-never-dispatched" }
+        },
+        "actions": {
+          "effect": {
+            "dispatchStatus": "never-dispatched",
+            "neverDispatchedCode": "restart-invalidated-queue"
+          },
+          "resubmission": { "dispatchStatus": "dispatched", "outcome": "completed" }
+        },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 1, "receipts": 1 }
+      }
+    },
+    {
+      "id": "export-recovery-after-crash",
+      "procedure": "recover-after-crash",
+      "workflows": ["export"],
+      "failureLocation": "while-the-application-holds-the-effect",
+      "crashAt": "while-effect-held",
+      "requirements": [
+        "preserve-unknown-across-restart",
+        "failure-before-dispatch-after-submission-before-acknowledgment",
+        "shared-service-document-research-form-submission-artifact-export"
+      ],
+      "expected": {
+        "steps": {
+          "crash": { "requestedSignal": "SIGKILL", "abrupt": true },
+          "afterRestart": {
+            "outcome": "unknown",
+            "outcomeBasis": "restart-after-dispatch-start",
+            "isUncertain": true
+          },
+          "recovery": { "status": "completed", "artifact": "/export/report.csv", "recovered": "rerun" }
+        },
+        "actions": {
+          "effect": { "dispatchStatus": "dispatched", "outcome": "unknown" },
+          "resubmission": {
+            "dispatchStatus": "dispatched",
+            "outcome": "completed",
+            "outcomeBasis": "artifact-saved"
+          }
+        },
+        "commandRejections": [],
+        "oracle": { "effectRequests": 2 }
+      }
+    },
+    {
+      "id": "authority-unavailable",
+      "procedure": "authority-unavailable",
+      "workflows": ["none"],
+      "failureLocation": "service-open",
+      "requirements": ["restore-authority-before-command-admission"],
+      "expected": {
+        "steps": {
+          "lockedOpen": { "rejection": "journal-locked" },
+          "corruptOpen": { "rejection": "journal-corrupt" }
+        },
+        "commandRejections": [],
+        "oracle": { "requests": 0 }
+      }
+    }
+  ]
+}

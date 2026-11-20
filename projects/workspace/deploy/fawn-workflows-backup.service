@@ -1,0 +1,15 @@
+[Unit]
+Description=Back up Fawn encrypted workflow state
+ConditionPathExists=/var/lib/fawn-workflows/registry.private.json
+
+[Service]
+Type=oneshot
+User=fawn-workflows
+Group=fawn-workflows
+UMask=0077
+ExecStart=/usr/bin/node /opt/fawn-workflows/current/deploy/backup-registry.js /var/lib/fawn-workflows /var/lib/fawn-workflows/backups
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/fawn-workflows

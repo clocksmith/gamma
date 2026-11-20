@@ -1,0 +1,74 @@
+{
+  "$schema": "fawn-workspace-service.schema.json",
+  "schemaVersion": 5,
+  "configVersion": "2026-11-19-workspace-service-v5-settle40",
+  "protocolVersion": 4,
+  "contractPath": "docs/fawn-workspace-contract.md",
+  "journal": {
+    "fileName": "journal.jsonl",
+    "lockFileName": "journal.lock",
+    "hashAlgorithm": "sha256"
+  },
+  "credentials": {
+    "secretBytes": 32
+  },
+  "observation": {
+    "maxAgeMs": 120000,
+    "maxTextChars": 20000,
+    "maxElements": 200,
+    "maxRegions": 16
+  },
+  "dispatch": {
+    "actionTimeoutMs": 15000,
+    "completionTimeoutMs": 10000,
+    "completionPollMs": 10,
+    "valueSettleMs": 40
+  },
+  "browser": {
+    "engine": "chromium",
+    "transport": "pipe",
+    "channel": "chromium-headless-shell",
+    "headless": true,
+    "persistentProfiles": true
+  },
+  "actionKinds": [
+    "navigate",
+    "click",
+    "fill",
+    "select",
+    "submit",
+    "download",
+    "upload"
+  ],
+  "observationScopes": [
+    "page",
+    "regions"
+  ],
+  "observationViews": [
+    "full",
+    "outline"
+  ],
+  "conditionKinds": [
+    "url-equals",
+    "url-not-equals",
+    "url-prefix",
+    "element-present",
+    "element-absent",
+    "element-text-includes",
+    "element-text-excludes",
+    "input-value-equals",
+    "choice-equals",
+    "input-files-equal"
+  ],
+  "reconciliationMethods": [
+    "application-state",
+    "external-idempotency",
+    "human-review"
+  ],
+  "uploads": {
+    "maxFilesPerAction": 4,
+    "maxFileBytes": 16777216,
+    "maxStagedBytes": 134217728,
+    "maxNameBytes": 200
+  }
+}

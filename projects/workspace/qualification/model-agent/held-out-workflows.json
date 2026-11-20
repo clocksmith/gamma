@@ -1,0 +1,35 @@
+{
+  "description": "Held-out applications: frozen specifications, implemented only after this freeze and never used to tune the system prompt, task prompts or tool descriptions. Each fixture keeps its own state and mutation log as the oracle, like the development fixtures.",
+  "workflows": {
+    "clinic-booking": {
+      "fixturePath": "browser/workspace/qualification/held-out/clinic-site.js",
+      "pages": [
+        "/appointments: a live table of open slots (clinician name and type, date, time, Book button); other patients book slots while the page is open, removing them in place",
+        "/appointments/{slot}: a booking form with patient name and a Confirm booking submit control",
+        "/bookings/{id}: a confirmation with a Download confirmation link; the transient variant redirects away after one second on first view"
+      ],
+      "inputs": { "clinicianType": "dermatologist", "windowStart": "2026-11-02", "windowEnd": "2026-11-06", "patient": "R. Okafor" },
+      "oracle": "Exactly one booking for the patient, for the earliest slot of that clinician type inside the window that was open when the booking was confirmed, and a saved confirmation matching it.",
+      "scenarios": [
+        { "id": "clinic-clean", "area": "none", "perturbation": "none" },
+        { "id": "clinic-live-waiting-room", "area": "incremental-observation", "perturbation": "a waiting-room feed beside the slot table updates continuously" },
+        { "id": "clinic-agent-killed-during-booking", "area": "interruption-recovery", "perturbation": "the agent process dies while the application holds the confirmation; no booking list, no idempotency, transient confirmation" }
+      ]
+    },
+    "expense-filing": {
+      "fixturePath": "browser/workspace/qualification/held-out/expense-site.js",
+      "pages": [
+        "/receipts: an inbox of receipts (merchant, date, amount, Open link) that keeps receiving new receipts",
+        "/receipts/{id}: the receipt with a File as expense form (category select, amount field, submit control)",
+        "/reports/{id}: the filed report with a Download report link; the transient variant redirects away after one second on first view"
+      ],
+      "inputs": { "merchant": "Harbor Rail", "receiptDate": "2026-10-09", "category": "Travel" },
+      "oracle": "Exactly one filed expense for that receipt with the receipt's amount and the requested category, and a saved report matching it.",
+      "scenarios": [
+        { "id": "expense-clean", "area": "none", "perturbation": "none" },
+        { "id": "expense-busy-inbox", "area": "incremental-observation", "perturbation": "new receipts keep arriving at the top of the inbox" },
+        { "id": "expense-agent-killed-during-filing", "area": "interruption-recovery", "perturbation": "the agent process dies while the application holds the filing; no report list, no idempotency, transient confirmation" }
+      ]
+    }
+  }
+}

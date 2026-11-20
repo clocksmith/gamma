@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "shopping-v1",
+  "scope": "Controlled storefront with actual browser execution; no live Best Buy or original Cerebras-agent claim",
+  "cleanTrials": 100,
+  "faultTrialsPerKind": 10,
+  "heldOutRequests": 20,
+  "faults": ["price-change", "out-of-stock", "account-change", "layout-change", "lost-acknowledgment", "browser-restart", "missing-receipt", "revoked-purchase"],
+  "limits": { "maxNodes": 128, "maxEdges": 128, "maxSteps": 24 },
+  "acceptance": {
+    "maxCriticalErrors": 0,
+    "minCleanCompletionRate": 1,
+    "maxLatencyRatio": 0.95,
+    "confidence": 0.95,
+    "bootstrapReplicates": 2000,
+    "headlineMs": 11500,
+    "requiresMatchedExternalTask": true,
+    "requiresActualComparator": true
+  },
+  "timing": "Browser preparation and prompt-to-verified-order wall time recorded separately; comparisons use complete wall time including preparation. Learning is separately recorded and included in aggregate workload cost.",
+  "determinism": "Identical frozen state and inputs must yield identical product and semantic action sequence. Changed merchant state must be revalidated. An uncertain purchase must never be dispatched twice.",
+  "failurePolicy": "Retain every attempt. Safe stops are not completions. Performance is ineligible if any required correctness or recovery case fails. Missing comparator or insufficient trials is inconclusive.",
+  "seed": 20261109
+}

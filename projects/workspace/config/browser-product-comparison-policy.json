@@ -1,0 +1,834 @@
+{
+  "$schema": "browser-product-comparison-policy.schema.json",
+  "schemaVersion": 11,
+  "policyId": "fawn-external-product-comparison-v11",
+  "authority": {
+    "strategyPath": "docs/thesis.md",
+    "browserLanePath": "docs/browser-lane.md",
+    "milestonePath": "browser/chromium/bench/workflows/browser-milestones.json",
+    "claimStatePath": "reports/claim-index.json"
+  },
+  "noRegretTrunk": {
+    "definition": "The selected Fawn product starts with shared durable browser work above Chromium. Independent native application adoption remains a separate product track; neither is a prerequisite for the other.",
+    "workItems": [
+      {
+        "id": "fawn-durable-workspace",
+        "requiredOutcome": "The shared service passes durable authority and uncertain-action recovery acceptance across reusable workflows, then establishes complete-task value against competent stock Chromium/Playwright. Native runtime wins are not a prerequisite.",
+        "authorityPath": "docs/fawn-workspace-contract.md"
+      }
+    ]
+  },
+  "internalCausalLanes": [
+    { "laneId": "A", "browser": "stock Chromium with Playwright", "runtime": "Dawn", "isolates": "incumbent browser and runtime control" },
+    { "laneId": "B", "browser": "Fawn with Playwright", "runtime": "Dawn", "isolates": "legacy Fawn shell build and agent-facing browser behavior" },
+    { "laneId": "C", "browser": "Fawn with Playwright", "runtime": "DoeRuntime", "isolates": "DoeRuntime beneath the same Fawn surface" },
+    { "laneId": "D", "browser": "Fawn Direct Protocol", "runtime": "DoeRuntime", "isolates": "Direct Protocol beyond the Fawn plus DoeRuntime control" }
+  ],
+  "externalComparators": [
+    {
+      "comparatorId": "K0",
+      "product": "Cloudflare Browser Run plus Kitesurf",
+      "owner": "Cloudflare",
+      "componentSubstitution": false,
+      "currentState": "external-beta",
+      "lastVerifiedAt": "2026-08-24T00:00:00Z",
+      "freshnessRule": "Reverify both official sources before every funded fork decision or published comparison.",
+      "officialSources": [
+        "https://blog.cloudflare.com/kitesurf/",
+        "https://developers.cloudflare.com/browser-run/kitesurf/",
+        "https://developers.cloudflare.com/browser-run/quick-actions/"
+      ],
+      "executorPath": "bench/fawn_matrix/k0_cli.py",
+      "admissionPolicyPath": "config/fawn-k0-workloads.json",
+      "claimBoundary": "Cloudflare product documentation establishes comparator scope only; it is not Doe, Fawn workspace or legacy Fawn shell build execution evidence."
+    }
+  ],
+  "suites": [
+    {
+      "suiteId": "shared-agent-browser-tasks",
+      "purpose": "Compare substitutable product outcomes without treating K0 as an internal component lane.",
+      "tasks": ["HTML extraction", "screenshots", "navigation", "automation success"],
+      "requiredObservations": ["task oracle", "wall time", "tokens", "memory", "cost", "compatibility failures", "unsupported features", "retries", "recovery behavior", "total task outcome"]
+    },
+    {
+      "suiteId": "fawn-differentiation-tasks",
+      "purpose": "Test whether persistent local browser operation creates customer value outside Kitesurf's documented fit.",
+      "tasks": ["persistent authentication", "restart recovery", "offline local operation", "WebGL", "WebGPU", "private state", "long-running sessions"],
+      "requiredObservations": ["task oracle", "state continuity", "privacy boundary", "compatibility failures", "unsupported features", "retries", "recovery behavior", "total task outcome"]
+    }
+  ],
+  "independenceTests": [
+    {
+      "id": "doeproof-incumbent-value",
+      "comparison": "I1 to W0",
+      "requiredInterpretation": "DoeProof records independent evidence for the incumbent as a supporting feature; W0 value alone does not establish primary-product adoption.",
+      "forbiddenInference": "DoeProof value grants DoeRuntime ownership."
+    },
+    {
+      "id": "fawn-shell-value",
+      "comparison": "B to A",
+      "requiredInterpretation": "Only a B-over-A application outcome grants legacy Fawn shell build value.",
+      "forbiddenInference": "Legacy Fawn shell build value grants DoeRuntime or Direct Protocol value."
+    },
+    {
+      "id": "doeruntime-browser-value",
+      "comparison": "C to B",
+      "requiredInterpretation": "Only a C-over-B application outcome grants DoeRuntime browser value for the measured tuple.",
+      "forbiddenInference": "A DoeRuntime result generalizes across applications, hardware, operating systems, drivers, or providers."
+    },
+    {
+      "id": "direct-protocol-value",
+      "comparison": "D to C",
+      "requiredInterpretation": "Only a D-over-C total task outcome funds the Direct Protocol for the measured workload.",
+      "forbiddenInference": "Lower token count alone grants Direct Protocol value."
+    },
+    {
+      "id": "external-comparator-separation",
+      "comparison": "K0 beside A/B/C/D",
+      "requiredInterpretation": "K0 compares external product outcomes and never changes the causal meaning of A/B/C/D.",
+      "forbiddenInference": "A K0 result identifies the value of a legacy Fawn shell build or DoeRuntime component."
+    }
+  ],
+  "forkAuthorities": [
+    {
+      "forkId": "doeproof-feature",
+      "decisionAuthorityPath": "config/doe-product-strategy.json",
+      "fundWhen": "Independent qualification and replay make incumbent and DoeRuntime evidence comparable without changing execution.",
+      "stopWhen": "Observation interferes with execution, hides fallback, or is treated as a substitute for runtime adoption."
+    },
+    {
+      "forkId": "fawn-product",
+      "decisionAuthorityPath": "docs/fawn-workspace-contract.md",
+      "fundWhen": "Implement and independently qualify the selected shared workspace service above stock Chromium, then compare complete workflows against competent Chromium/Playwright; native runtime wins are not prerequisites.",
+      "stopWhen": "Unsafe authority or recovery blocks acceptance; failure to improve complete workflows rejects product-value claims. K0 outcomes retain their external-comparator scope."
+    },
+    {
+      "forkId": "doeruntime-browser",
+      "decisionAuthorityPath": "docs/runtime-ownership-decision.md",
+      "fundWhen": "C beats B materially, the exact D0 tuple also beats W0 and every authorized P0, and the measured benefit justifies the integration's compatibility and maintenance costs.",
+      "stopWhen": "C does not beat B or a governed incumbent meets the application outcome at lower durable cost."
+    },
+    {
+      "forkId": "fawn-direct-protocol",
+      "decisionAuthorityPath": "docs/browser-lane.md",
+      "fundWhen": "D beats C on the complete task outcome under the same oracle and lifecycle scope, and the measured benefit justifies the hook's compatibility and maintenance costs.",
+      "stopWhen": "D does not beat C or reduces tokens while worsening the customer's declared total task outcome."
+    }
+  ],
+  "stopConditions": [
+    "Reject the measured shell-product claim when K0 wins shared tasks and customers do not value differentiation; workspace acceptance remains independently governed.",
+    "Do not grant legacy Fawn shell build value unless B beats A.",
+    "Do not grant DoeRuntime browser ownership unless C beats B for the exact measured tuple.",
+    "Do not continue Direct Protocol funding unless D beats C on the declared total task outcome.",
+    "Do not add Chromium hooks or browser-runtime integration unless measured benefits justify their compatibility and maintenance costs."
+  ],
+  "evidenceReferences": [
+    "browser/chromium/bench/workflows/browser-milestones.json",
+    "bench/fawn_matrix/config/matrix-workloads.json",
+    "config/fawn-k0-workloads.json",
+    "config/fawn-k0-bindings.schema.json",
+    "config/fawn-k0-result.schema.json",
+    "bench/fawn_matrix/k0.py",
+    "bench/fawn_matrix/k0_cli.py",
+    "bench/tests/test_fawn_k0_connector.py",
+    "reports/claim-index.json",
+    "docs/status/runtime-backends-and-bench.md",
+    "docs/fawn-workspace-contract.md",
+    "docs/status/fawn-workspace.md"
+  ],
+  "workspaceComparison": {
+    "contractPath": "docs/fawn-workspace-contract.md",
+    "strategyPath": "config/doe-product-strategy.json#fawnWorkspace",
+    "control": "competent-stock-chromium-playwright",
+    "treatment": "same-browser-and-runtime-with-fawn-workspace-service",
+    "scope": "Prospective independent workflow comparison; existing A/B/C/D and K0 receipts retain their meanings and cannot satisfy it.",
+    "requiresNativeRuntimeWins": false,
+    "comparisonVersion": "2026-10-14-workspace-comparison-v1",
+    "runnerPath": "browser/workspace/qualification/compare.js",
+    "controlImplementationPath": "browser/workspace/qualification/baseline",
+    "fixtureSitePath": "browser/workspace/qualification/fixture-site.js",
+    "browserRuntime": {
+      "driver": "playwright-core",
+      "browser": "chromium-headless-shell",
+      "treatmentAdapter": "playwright",
+      "headless": true
+    },
+    "controlCapabilities": [
+      "persistent-profile",
+      "durable-progress-file",
+      "origin-allowlist-including-form-actions",
+      "exact-accessible-name-locators-resolved-at-action-time",
+      "application-idempotency-reference",
+      "application-state-check-before-resubmission"
+    ],
+    "equalOpportunities": [
+      "same-fixture-site-and-inputs",
+      "same-browser-binary-and-driver",
+      "same-granted-origins",
+      "same-action-timeout",
+      "same-process-and-ipc-shape",
+      "same-submissions-page-for-recovery"
+    ],
+    "scenarios": [
+      {
+        "id": "clean-research",
+        "workflow": "research",
+        "fault": "none",
+        "oracle": "research-findings",
+        "repetitions": 5
+      },
+      {
+        "id": "clean-form",
+        "workflow": "form",
+        "fault": "none",
+        "oracle": "single-receipt",
+        "repetitions": 5
+      },
+      {
+        "id": "clean-export",
+        "workflow": "export",
+        "fault": "none",
+        "oracle": "report-artifact",
+        "repetitions": 5
+      },
+      {
+        "id": "crash-during-submission",
+        "workflow": "form",
+        "fault": "kill-while-effect-held",
+        "oracle": "single-receipt",
+        "repetitions": 3
+      },
+      {
+        "id": "crash-during-export",
+        "workflow": "export",
+        "fault": "kill-while-effect-held",
+        "oracle": "report-artifact",
+        "repetitions": 3
+      },
+      {
+        "id": "background-changes",
+        "workflow": "export",
+        "fault": "background-settle",
+        "pagePath": "/live/export",
+        "treatmentRegions": ["#export-panel"],
+        "oracle": "report-artifact",
+        "repetitions": 3
+      },
+      {
+        "id": "target-replaced",
+        "workflow": "export",
+        "fault": "replace-target",
+        "pagePath": "/live/export",
+        "treatmentRegions": ["#export-panel"],
+        "oracle": "no-replaced-artifact",
+        "repetitions": 3
+      }
+    ],
+    "excludedScenarios": [
+      {
+        "id": "owner-handoff",
+        "reason": "The control has no owner authority; an equivalent would have to reimplement the workspace service, so handoff is qualified by the behavioral case set instead."
+      }
+    ],
+    "measures": [
+      "taskSuccess",
+      "incorrectActions",
+      "recovery",
+      "observationBytes",
+      "completeTaskLatencyMs",
+      "serviceOverheadMs",
+      "integrationLines"
+    ],
+    "criteria": {
+      "latency": {
+        "statistic": "median",
+        "regressionRatio": 1.5,
+        "advantageRatio": 0.67,
+        "minimumDeltaMs": 250
+      },
+      "materialWhenDifferent": ["taskSuccess", "incorrectActions", "recovery"],
+      "informativeOnly": ["observationBytes", "serviceOverheadMs", "integrationLines"]
+    },
+    "differentiation": {
+      "suiteVersion": "2026-10-15-agent-workflows-v1",
+      "status": "run",
+      "purpose": "Material complete-task value over competent agent tooling on stock Chromium for persistent multipage agent workflows; the scripted comparison above showed parity.",
+      "runnerPath": "browser/workspace/qualification/differentiate.js",
+      "fixtureSitePath": "browser/workspace/qualification/workbench-site.js",
+      "agentPolicyPath": "browser/workspace/qualification/agents/procurement-policy.js",
+      "task": "Buy one unit of the cheapest in-stock item priced at or under the budget across every catalog page, ship it to the task address unless a human has entered one, place exactly one order and save its invoice.",
+      "control": {
+        "id": "playwright-agent-tooling",
+        "observation": "page-wide-playwright-agent-snapshot-with-incremental-tracking",
+        "actions": "aria-ref-locators-from-the-latest-snapshot",
+        "browserLifetime": "browser-host-outlives-the-agent-process",
+        "capabilities": [
+          "persistent-profile",
+          "durable-agent-checkpoint-before-and-after-each-tool-call",
+          "application-idempotency-reference-when-offered",
+          "application-state-check-before-resubmission",
+          "current-page-check-after-an-interrupted-call",
+          "cooperative-pause-during-human-control",
+          "origin-allowlist-including-form-actions"
+        ],
+        "humanControlSemantics": "pause-then-resume-the-pending-tool-call"
+      },
+      "treatment": {
+        "id": "fawn-workspace-service",
+        "agentProcess": "separate-client-of-a-workspace-that-outlives-it",
+        "humanControlSemantics": "owner-handoff-to-the-human-and-back"
+      },
+      "sharedConditions": [
+        "same-agent-policy-and-think-time",
+        "same-browser-binary-and-driver",
+        "same-fixture-inputs-and-perturbation-points",
+        "same-action-timeout",
+        "same-granted-origins",
+        "same-checkpoint-file-durability"
+      ],
+      "thinkTimeMs": 400,
+      "targetAreas": ["changing-content", "incremental-observation", "human-handoff", "interruption-recovery"],
+      "scenarios": [
+        { "id": "agent-clean", "area": "none", "perturbation": "none", "repetitions": 5 },
+        {
+          "id": "price-rises-during-think-time",
+          "area": "changing-content",
+          "perturbation": "the-chosen-item-price-exceeds-the-budget-after-observation-before-add",
+          "repetitions": 3
+        },
+        {
+          "id": "irrelevant-activity-churn",
+          "area": "incremental-observation",
+          "perturbation": "a-large-activity-panel-updates-continuously-on-every-catalog-page",
+          "repetitions": 3
+        },
+        {
+          "id": "human-takes-control-at-checkout",
+          "area": "human-handoff",
+          "perturbation": "a-human-enters-a-shipping-address-while-the-agent-fill-is-pending",
+          "repetitions": 3
+        },
+        {
+          "id": "agent-killed-during-order",
+          "area": "interruption-recovery",
+          "perturbation": "the-agent-process-dies-while-the-application-holds-the-order",
+          "application": "order-list-and-idempotency-reference",
+          "repetitions": 3
+        },
+        {
+          "id": "agent-killed-during-order-transient-confirmation",
+          "area": "interruption-recovery",
+          "perturbation": "the-agent-process-dies-while-the-application-holds-the-order",
+          "application": "no-order-list-no-idempotency-and-a-confirmation-that-redirects-away",
+          "repetitions": 3
+        }
+      ],
+      "measures": [
+        "taskSuccess",
+        "incorrectActions",
+        "constraintViolatingMutations",
+        "mutationsDuringHumanControl",
+        "humanReviews",
+        "duplicateOrders",
+        "observationBytes",
+        "completeTaskLatencyMs"
+      ],
+      "oracle": "The fixture site's own order, cart and mutation log decides success and incorrect actions: an order of the cheapest valid item at order time, at most one order, the shipping address the task or the human set, and a saved invoice matching the order.",
+      "improvementRequirements": [
+        {
+          "area": "changing-content",
+          "scenario": "price-rises-during-think-time",
+          "treatmentBar": {
+            "taskSuccessEveryRepetition": true,
+            "incorrectActions": 0,
+            "constraintViolatingMutations": 0
+          },
+          "materialImprovement": { "measure": "constraintViolatingMutations", "treatmentBelowControl": true }
+        },
+        {
+          "area": "incremental-observation",
+          "scenario": "irrelevant-activity-churn",
+          "treatmentBar": { "taskSuccessEveryRepetition": true, "incorrectActions": 0 },
+          "materialImprovement": {
+            "measure": "observationBytes",
+            "statistic": "median",
+            "maximumTreatmentToControlRatio": 0.5
+          }
+        },
+        {
+          "area": "human-handoff",
+          "scenario": "human-takes-control-at-checkout",
+          "treatmentBar": {
+            "taskSuccessEveryRepetition": true,
+            "incorrectActions": 0,
+            "mutationsDuringHumanControl": 0
+          },
+          "materialImprovement": { "measure": "incorrectActions", "treatmentBelowControl": true }
+        },
+        {
+          "area": "interruption-recovery",
+          "scenario": "agent-killed-during-order-transient-confirmation",
+          "treatmentBar": { "taskSuccessEveryRepetition": true, "duplicateOrders": 0, "humanReviews": 0 },
+          "materialImprovement": {
+            "measure": "humanReviewsPlusDuplicateOrders",
+            "treatmentBelowControl": true
+          }
+        }
+      ],
+      "productAdvantageRule": {
+        "minimumAreasMet": 2,
+        "everyRepetition": true,
+        "noMaterialRegressionIn": [
+          "workspaceComparison.scenarios",
+          "workspaceComparison.differentiation.scenarios"
+        ],
+        "latencyRegressionRule": "workspaceComparison.criteria.latency",
+        "doesNotEstablish": [
+          "broad-product-superiority",
+          "release-qualification",
+          "compatibility-beyond-the-fixture"
+        ]
+      },
+      "knownControlLimits": [
+        "A harness that revalidates every decision before acting, discards pending calls on human takeover or scopes reads with site-specific locators would narrow these gaps; that is task-specific scripting, which the scripted scenarios above already compare."
+      ]
+    },
+    "revalidatedDifferentiation": {
+      "suiteVersion": "2026-10-15-revalidating-control-v1",
+      "status": "run",
+      "purpose": "Whether the agent-workflow advantages survive a stronger control on a different application: Playwright agent tooling that revalidates every decision's inputs before mutating and cancels pending calls when a human takes control.",
+      "runnerPath": "browser/workspace/qualification/differentiate.js",
+      "fixtureSitePath": "browser/workspace/qualification/helpdesk-site.js",
+      "agentPolicyPath": "browser/workspace/qualification/agents/helpdesk-policy.js",
+      "task": "Take the oldest open, unclaimed ticket for the agent's product from the live queue, claim it, send exactly one reply (the approved template unless a supervisor has edited the draft) and save the ticket transcript.",
+      "control": {
+        "id": "playwright-agent-tooling-with-revalidation",
+        "observation": "page-wide-playwright-agent-snapshot-with-incremental-tracking",
+        "actions": "aria-ref-locators-from-the-latest-snapshot",
+        "browserLifetime": "browser-host-outlives-the-agent-process",
+        "capabilities": [
+          "persistent-profile",
+          "durable-agent-checkpoint-before-and-after-each-tool-call",
+          "application-idempotency-reference-when-offered",
+          "application-state-check-before-resubmission",
+          "current-page-check-after-an-interrupted-call",
+          "cooperative-pause-during-human-control",
+          "origin-allowlist-including-form-actions",
+          "revalidate-decision-inputs-with-a-fresh-snapshot-before-every-mutation",
+          "cancel-pending-calls-and-observe-again-after-human-control"
+        ],
+        "humanControlSemantics": "cancel-the-pending-tool-call-then-observe-again"
+      },
+      "treatment": {
+        "id": "fawn-workspace-service",
+        "agentProcess": "separate-client-of-a-workspace-that-outlives-it",
+        "humanControlSemantics": "owner-handoff-to-the-human-and-back"
+      },
+      "sharedConditions": [
+        "same-agent-policy-and-think-time",
+        "same-browser-binary-and-driver",
+        "same-fixture-inputs-and-perturbation-points",
+        "same-action-timeout",
+        "same-granted-origins",
+        "same-checkpoint-file-durability"
+      ],
+      "thinkTimeMs": 400,
+      "targetAreas": ["changing-content", "incremental-observation", "human-handoff", "interruption-recovery"],
+      "scenarios": [
+        { "id": "helpdesk-clean", "area": "none", "perturbation": "none", "repetitions": 5 },
+        {
+          "id": "ticket-claimed-during-think-time",
+          "area": "changing-content",
+          "perturbation": "another-agent-claims-the-chosen-ticket-after-observation-before-claim",
+          "repetitions": 3
+        },
+        {
+          "id": "live-queue-churn",
+          "area": "incremental-observation",
+          "perturbation": "an-incoming-ticket-feed-updates-continuously-beside-the-queue",
+          "repetitions": 3
+        },
+        {
+          "id": "supervisor-edits-draft",
+          "area": "human-handoff",
+          "perturbation": "a-supervisor-edits-the-reply-draft-while-the-agent-send-is-pending",
+          "repetitions": 3
+        },
+        {
+          "id": "agent-killed-during-send",
+          "area": "interruption-recovery",
+          "perturbation": "the-agent-process-dies-while-the-application-holds-the-reply",
+          "application": "no-sent-list-no-idempotency-and-a-confirmation-that-redirects-away",
+          "repetitions": 3
+        }
+      ],
+      "measures": [
+        "taskSuccess",
+        "incorrectActions",
+        "constraintViolatingMutations",
+        "mutationsDuringHumanControl",
+        "humanReviews",
+        "duplicateEffects",
+        "observationBytes",
+        "completeTaskLatencyMs",
+        "controlHarnessLines"
+      ],
+      "oracle": "The helpdesk's own ticket, reply and mutation log decides success and incorrect actions: a claim of the oldest open unclaimed ticket for the product at claim time, no claim taken from another agent, at most one reply, the draft text the supervisor left or else the template, and a saved transcript matching the ticket.",
+      "improvementRequirements": [
+        {
+          "area": "changing-content",
+          "scenario": "ticket-claimed-during-think-time",
+          "treatmentBar": { "taskSuccessEveryRepetition": true, "incorrectActions": 0 },
+          "materialImprovement": { "measure": "incorrectActions", "treatmentBelowControl": true }
+        },
+        {
+          "area": "incremental-observation",
+          "scenario": "live-queue-churn",
+          "treatmentBar": { "taskSuccessEveryRepetition": true, "incorrectActions": 0 },
+          "materialImprovement": {
+            "measure": "observationBytes",
+            "statistic": "median",
+            "maximumTreatmentToControlRatio": 0.5
+          }
+        },
+        {
+          "area": "human-handoff",
+          "scenario": "supervisor-edits-draft",
+          "treatmentBar": {
+            "taskSuccessEveryRepetition": true,
+            "incorrectActions": 0,
+            "mutationsDuringHumanControl": 0
+          },
+          "materialImprovement": { "measure": "incorrectActions", "treatmentBelowControl": true }
+        },
+        {
+          "area": "interruption-recovery",
+          "scenario": "agent-killed-during-send",
+          "treatmentBar": { "taskSuccessEveryRepetition": true, "duplicateEffects": 0, "humanReviews": 0 },
+          "materialImprovement": {
+            "measure": "humanReviewsPlusDuplicateEffects",
+            "treatmentBelowControl": true
+          }
+        }
+      ],
+      "productAdvantageRule": {
+        "minimumAreasMet": 2,
+        "everyRepetition": true,
+        "noMaterialRegressionIn": [
+          "workspaceComparison.scenarios",
+          "workspaceComparison.differentiation.scenarios",
+          "workspaceComparison.revalidatedDifferentiation.scenarios"
+        ],
+        "latencyRegressionRule": "workspaceComparison.criteria.latency",
+        "doesNotEstablish": [
+          "broad-product-superiority",
+          "release-qualification",
+          "compatibility-beyond-the-fixtures",
+          "model-driven-agent-results"
+        ]
+      },
+      "modelDrivenStage": {
+        "status": "planned-requires-its-own-freeze",
+        "requirement": "Before any model-driven run, a later suite version freezes the model, prompt, tool descriptions, sampling settings and repetition count, and replaces the deterministic policy on both sides with that agent; these scenarios and requirements apply unchanged."
+      },
+      "knownControlLimits": [
+        "Revalidation and cancellation leave the same non-atomic window between the last check and the browser effect that the treatment discloses; a perturbation inside that window is not part of this suite."
+      ]
+    },
+    "modelDrivenDifferentiation": {
+      "suiteVersion": "2026-10-15-model-driven-v2",
+      "status": "implemented-not-run",
+      "purpose": "Whether durable outcome recovery and scoped observation efficiency hold when one model drives both sides through identical tools, on familiar and held-out applications, with total inference cost counted.",
+      "runnerPath": "browser/workspace/qualification/differentiate.js",
+      "frozenArtifacts": [
+        {
+          "path": "browser/workspace/qualification/model-agent/system-prompt.md",
+          "sha256": "c5ac3c90e40697782606b92282fd3bf401508c441b92413baed984979c11d78b"
+        },
+        {
+          "path": "browser/workspace/qualification/model-agent/tools.json",
+          "sha256": "5bcb6e484ca01fe55d7910ad3376d89c6d6ef8e8c5bc5cea3110028b4f0376d2"
+        },
+        {
+          "path": "browser/workspace/qualification/model-agent/task-prompts.json",
+          "sha256": "89654fa9724d872dcc90d1b3c85d8e5023f2fb1ffb07d1855e98181219b9dcd5"
+        },
+        {
+          "path": "browser/workspace/qualification/model-agent/held-out-workflows.json",
+          "sha256": "712924e991b4a517b41871ec17b9520d51693851b0f66c4227a6ff18667778fc"
+        }
+      ],
+      "agent": {
+        "provider": "anthropic-messages-api",
+        "model": "claude-sonnet-5-5",
+        "samplingParameters": "omitted",
+        "extendedThinking": false,
+        "thinking": { "type": "disabled" },
+        "compatibilityRequest": "Before any measured run, one request with the frozen model, system prompt, tools and thinking setting must succeed; its response metadata is recorded with the run.",
+        "maxOutputTokensPerTurn": 2048,
+        "maxTurnsPerTask": 60,
+        "maxInputTokensPerTask": 600000,
+        "budgetExceeded": "task-failure",
+        "identicalOnBothSides": [
+          "model",
+          "system-prompt",
+          "task-prompts",
+          "tool-descriptions",
+          "sampling",
+          "token-budget",
+          "turn-limit"
+        ]
+      },
+      "spend": {
+        "approvedCeilingUsd": 275,
+        "approvedOn": "2026-10-15",
+        "pricesPerMillionTokensUsd": { "input": 2, "output": 10 },
+        "worstCaseUsd": 247.74,
+        "guard": "The runner keeps a spend ledger across the compatibility request, the wiring smoke and the full run, and stops before any request whose worst case could cross the ceiling.",
+        "retries": "Transient provider errors are retried with backoff at most three times per request; every billed attempt counts against the ceiling."
+      },
+      "wiringSmoke": {
+        "scenarios": ["agent-clean", "helpdesk-clean"],
+        "repetitions": 1,
+        "heldOutExcluded": true,
+        "purpose": "Verify the harness end to end; smoke results are not evidence."
+      },
+      "fullRuns": 1,
+      "browserBinary": {
+        "channel": "chromium-headless-shell",
+        "version": "Google Chrome for Testing 145.0.7632.6",
+        "sha256": "27e55cc30e487493b89b663085d6deeb0707be201a568657c922fac9076c317c"
+      },
+      "fixtureSites": {
+        "description": "Every application fixture, bound by hash after implementation; billed runs refuse a fixture that differs. Each held-out fixture includes a portal root linking to its first frozen page, because the frozen task prompts name only the origin.",
+        "sites": [
+          { "app": "procurement", "path": "browser/workspace/qualification/workbench-site.js", "sha256": "b8e8c5c9c1e11e47b05dfbde1b867a514987dc6a567523cec9ecd6a4bc9b2059" },
+          { "app": "helpdesk", "path": "browser/workspace/qualification/helpdesk-site.js", "sha256": "ec29aa6ee757ea9f44ba42355fbe55beb0439ad13cf825c82739ee9f84d891b7" },
+          { "app": "clinic-booking", "path": "browser/workspace/qualification/held-out/clinic-site.js", "sha256": "9830ed8158fe7bae8ce43cd8e974faf9f5c4464483e8ba892670615e92ce2265" },
+          { "app": "expense-filing", "path": "browser/workspace/qualification/held-out/expense-site.js", "sha256": "817a852ef6ff9de3bef1e6da62c2d528a51c43cfde69b2d1db0c4d3ff82ecbf9" }
+        ]
+      },
+      "control": {
+        "id": "playwright-agent-tooling-with-revalidation",
+        "observation": "page-wide-playwright-agent-snapshot-incremental-when-since-last-regions-accepted-but-not-scoped",
+        "actions": "aria-ref-locators-from-the-latest-snapshot",
+        "revalidation": "before each mutating call the harness takes an incremental snapshot since the model's last observation and refuses the call, returning the change, when a changed element lies inside a depends_on region; without depends_on it checks only that the target ref still resolves",
+        "takeover": "a mutating call made after a human took control since the model's last observation is cancelled and reported, and the model must observe again",
+        "capabilities": [
+          "persistent-profile",
+          "durable-agent-checkpoint-before-and-after-each-tool-call",
+          "application-idempotency-reference-when-offered",
+          "application-state-check-before-resubmission",
+          "current-page-check-after-an-interrupted-call",
+          "cooperative-pause-during-human-control",
+          "origin-allowlist-including-form-actions",
+          "revalidate-decision-inputs-with-a-fresh-snapshot-before-every-mutation",
+          "cancel-pending-calls-and-observe-again-after-human-control"
+        ],
+        "pendingEffects": "from the harness checkpoint: calls issued before the agent process ended whose result was not recorded"
+      },
+      "treatment": {
+        "id": "fawn-workspace-service",
+        "observation": "outline-view-with-regions-and-deltas-since-the-agent-previous-observation",
+        "actions": "handle-targets-with-observation-scope-from-depends-on-or-the-target-identity-alone",
+        "takeover": "owner-handoff-to-the-human-and-back",
+        "pendingEffects": "from the workspace's outstanding action records"
+      },
+      "sharedConditions": [
+        "same-model-prompts-tool-descriptions-sampling-and-token-budget",
+        "same-browser-binary-and-driver",
+        "same-fixture-inputs-and-perturbation-points",
+        "same-action-timeout",
+        "same-granted-origins",
+        "same-checkpoint-file-durability",
+        "frozen-artifacts-match-their-hashes"
+      ],
+      "repetitions": 3,
+      "workflows": {
+        "development": {
+          "procurement": "workspaceComparison.differentiation.scenarios",
+          "helpdesk": "workspaceComparison.revalidatedDifferentiation.scenarios"
+        },
+        "heldOut": "browser/workspace/qualification/model-agent/held-out-workflows.json"
+      },
+      "measures": [
+        "taskSuccess",
+        "incorrectExternalEffects",
+        "humanReviews",
+        "recovery",
+        "observationTokens",
+        "observationBytes",
+        "inputTokens",
+        "outputTokens",
+        "inferenceCostUsd",
+        "completeTaskLatencyMs"
+      ],
+      "measurement": {
+        "observationTokens": "provider token count of every observe result the model received",
+        "inferenceCostUsd": "provider-reported input and output tokens priced at the provider's list prices recorded with the run",
+        "incorrectExternalEffects": "the fixture's own records: an effect contrary to the task, a duplicate, or an overwrite of a person's entry"
+      },
+      "improvementRequirements": [
+        {
+          "area": "interruption-recovery",
+          "kind": "advantage",
+          "scenarios": [
+            "agent-killed-during-order-transient-confirmation",
+            "agent-killed-during-send",
+            "clinic-agent-killed-during-booking",
+            "expense-agent-killed-during-filing"
+          ],
+          "treatmentBar": { "minimumSuccessRate": 0.9, "incorrectExternalEffects": 0, "humanReviews": 0 },
+          "materialImprovement": {
+            "measure": "humanReviewsPlusDuplicateEffects",
+            "treatmentBelowControl": true
+          }
+        },
+        {
+          "area": "incremental-observation",
+          "kind": "advantage",
+          "scenarios": [
+            "irrelevant-activity-churn",
+            "live-queue-churn",
+            "clinic-live-waiting-room",
+            "expense-busy-inbox"
+          ],
+          "treatmentBar": { "successRateNotBelowControl": true, "incorrectExternalEffects": 0 },
+          "materialImprovement": {
+            "measure": "observationTokens",
+            "statistic": "median",
+            "maximumTreatmentToControlRatio": 0.5,
+            "alsoRequires": "treatment-total-inference-cost-below-control"
+          }
+        },
+        {
+          "area": "held-out-generalization",
+          "kind": "non-inferiority",
+          "scenarios": [
+            "clinic-clean",
+            "clinic-live-waiting-room",
+            "clinic-agent-killed-during-booking",
+            "expense-clean",
+            "expense-busy-inbox",
+            "expense-agent-killed-during-filing"
+          ],
+          "treatmentBar": {
+            "maximumSuccessRateBelowControl": 0.1,
+            "incorrectExternalEffectsNotAboveControl": true
+          }
+        },
+        {
+          "area": "built-in-guarantees",
+          "kind": "non-inferiority",
+          "scenarios": [
+            "price-rises-during-think-time",
+            "human-takes-control-at-checkout",
+            "ticket-claimed-during-think-time",
+            "supervisor-edits-draft"
+          ],
+          "treatmentBar": {
+            "maximumSuccessRateBelowControl": 0.1,
+            "incorrectExternalEffectsNotAboveControl": true
+          },
+          "reporting": "Reported as guarantees the service provides without extra orchestration, never as advantages over well-engineered Playwright automation."
+        }
+      ],
+      "productAdvantageRule": {
+        "requiresAreasMet": ["interruption-recovery", "incremental-observation"],
+        "requiresNonInferiority": ["held-out-generalization", "built-in-guarantees"],
+        "latencyRegressionRule": "workspaceComparison.criteria.latency",
+        "maximumTotalInferenceCostRatio": 1.1,
+        "doesNotEstablish": [
+          "broad-product-superiority",
+          "release-qualification",
+          "compatibility-beyond-the-fixtures",
+          "results-for-other-models"
+        ]
+      },
+      "runPrerequisites": [
+        "model API credentials for the frozen provider",
+        "a successful compatibility request",
+        "held-out fixtures implemented to their frozen specifications"
+      ],
+      "knownControlLimits": [
+        "Playwright's ref-bearing agent snapshot is page-wide; scoped reads without refs would need site-specific locators the model does not have."
+      ],
+      "knownRepresentationDifferences": [
+        "The treatment's outline names a select control by its option text (for example combobox \"Choose\\nMeals\\nTravel\"), not by its label; the control's snapshot names it by its label (combobox \"Category\"). Unchanged for this campaign; accessible naming changes only in a later protocol version with full requalification."
+      ]
+    }
+  },
+  "alternativeCompleteSystem": {
+    "categoryId": "alternative-complete-system",
+    "strategyPath": "config/doe-product-strategy.json#comparisonLaw",
+    "treatment": "Fawn workspace with explicitly integrated, independently qualified Doppler+Doe local execution",
+    "control": "ordinary-chromium-plus-native-inference-engine",
+    "separateFrom": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "K0",
+      "provider-attribution"
+    ],
+    "initialTargetPath": "config/doe-product-strategy.json#platformSequence/0/initialQualificationTarget",
+    "matchedConditions": [
+      "task-quality",
+      "context",
+      "output-requirements",
+      "concurrency",
+      "resource-budgets"
+    ],
+    "recordedDifferences": [
+      "quantization",
+      "model-format",
+      "backend",
+      "engine-build"
+    ],
+    "isolatesDoeCompiler": false,
+    "isolatesDoeRuntime": false,
+    "alternatives": [
+      {
+        "alternativeId": "N0",
+        "engine": "llama.cpp server",
+        "admissionState": "pinned-not-run",
+        "browser": "stock Chromium driven by Playwright, without Doe",
+        "engineSource": {
+          "repository": "https://github.com/ggml-org/llama.cpp",
+          "commit": "f4884293809b5227d7307140a942f1bc4176a603",
+          "describe": "b8007-10-gf48842938",
+          "buildType": "Release",
+          "backend": "Vulkan (ggml-vulkan) on RADV",
+          "buildOptions": [
+            "GGML_VULKAN=ON",
+            "GGML_NATIVE=ON"
+          ]
+        },
+        "model": {
+          "repository": "ggml-org/gemma-3-270m-it-GGUF",
+          "revision": "e7647be17ae1108f2f605ed061ca0608b171afff",
+          "file": "gemma-3-270m-it-Q8_0.gguf",
+          "sha256": "0ef57d2c838458a1952664260dcba38e5bdda37494f3af732f06e4add24068e3",
+          "bytes": 291545600,
+          "quantization": "GGUF Q8_0"
+        },
+        "treatmentModelPath": "reports/benchmarks/amd-vulkan/20261005-installed-generation/contract.json",
+        "treatmentQuantization": "Doppler RDRR q4k weights with f16 embeddings and head, f32 activations"
+      },
+      {
+        "alternativeId": "N1",
+        "engine": "Ollama",
+        "admissionState": "candidate-unassessed",
+        "admissionRequirement": "Establish its actual execution path (bundled engine, version and GPU backend on the target) and workload eligibility before any run."
+      },
+      {
+        "alternativeId": "N2",
+        "engine": "LM Studio",
+        "admissionState": "candidate-unassessed",
+        "admissionRequirement": "Establish its actual execution path (runtime, version and GPU backend on the target) and workload eligibility before any run."
+      }
+    ],
+    "claimBoundary": "A complete-system result compares whole local systems on the initial qualification target under matched conditions; it cannot isolate Doe's compiler or runtime, grants no provider attribution, and does not replace Doppler+Doe versus Doppler+Dawn."
+  },
+  "claimBoundary": "This policy defines experiments and decisions. Until schema-valid physical receipts exist, K0 and A/B/C/D have no promoted comparative product outcome."
+}

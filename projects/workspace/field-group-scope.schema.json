@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Trusted ordered workflow field groups",
+  "description": "Host policy only. Runtime additionally enforces unique group IDs, unique slots and aliases, a final click per group and the caller's trace limits.",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "steps"],
+    "properties": {
+      "id": { "type": "string", "minLength": 1 },
+      "steps": {
+        "type": "array",
+        "minItems": 2,
+        "items": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "slot", "locators"],
+              "properties": {
+                "kind": { "enum": ["fill", "select"] },
+                "slot": { "type": "string", "minLength": 1 },
+                "locators": { "$ref": "#/$defs/locators" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["kind", "locators"],
+              "properties": {
+                "kind": { "const": "click" },
+                "locators": { "$ref": "#/$defs/locators" }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "locators": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "array",
+        "minItems": 4,
+        "maxItems": 4,
+        "items": { "type": "string" }
+      }
+    }
+  }
+}

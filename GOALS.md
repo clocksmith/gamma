@@ -12,9 +12,10 @@ capabilities remain separate.
 
 Researchers compare models, programs and reusable languages under explicit
 contracts. People explore binary code composition through BITS. Autonomous
-systems consume independently qualified capabilities. Gamma supplies research
-methods and evidence; neighboring projects retain production runtime, compiler,
-editor and orchestration authority.
+systems consume independently qualified capabilities. Gamma supplies research methods and evidence. Its standalone workspace is
+a production exception: Gamma owns workspace coordination and recovery, while
+Fawn and Doe own their browser and GPU capabilities. Workspace releases do not
+import research programs.
 
 ## Desired Outcomes
 
@@ -112,6 +113,6 @@ owner reopening before research or execution.
 
 No hidden answer lookup presented as composition, uncounted source channels,
 unverified capability claims, or automatic publication. Gamma does not own
-production inference, compiler correctness, editor hosting or multi-tenant cloud
-services. Goal organization alone authorizes no new training, downloads,
+production inference, compiler correctness, editor hosting or general-purpose
+multi-tenant cloud services. Workspace-specific recipe storage and sync are in scope. Goal organization alone authorizes no new training, downloads,
 protected scoring, deployments or external submissions.
