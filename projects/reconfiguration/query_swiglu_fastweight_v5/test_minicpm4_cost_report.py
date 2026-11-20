@@ -99,7 +99,10 @@ class Costs(unittest.TestCase):
         self.assertEqual(table['byTargetTokenLength']['singleTokenWord.1tokens']['count'], 3)
         self.assertEqual(table['byTargetTokenLength']['multiTokenWord.2tokens']['count'], 1)
         self.assertTrue(table['reportedBuildOverlapPossible'])
-        self.assertEqual(rpt['cohorts']['allTables']['observedQuestions'], 4)
+        cohort = rpt['cohorts']['allTables']
+        self.assertEqual(cohort['observedQuestions'], 4)
+        self.assertEqual(cohort['comparisons']['probe_bare']['perTableCounts']['noPayback'], 1)
+        self.assertEqual(cohort['comparisons']['kv_ctx']['perTableCounts']['noPayback'], 0)
 
     def test_reject_duplicate_integer_missing_arm_and_unpaired_rows(self):
         d = fixture()

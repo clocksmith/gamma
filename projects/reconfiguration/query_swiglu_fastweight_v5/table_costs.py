@@ -86,7 +86,11 @@ def cohort(tables):
         'comparisons': {},
     }
     for a in RIVALS:
-        counts = Counter()
+        counts = Counter(
+            dict.fromkeys(
+                ('noPayback', 'onlyThroughFiniteCount', 'allPositiveCounts', 'fromThresholdOnward'), 0
+            )
+        )
         for s, m, _ in tables:
             w = cost_interval(s['ra_bare'] - s[a], m['ra_bare'] - m[a])
             if w is None:
