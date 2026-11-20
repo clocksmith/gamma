@@ -124,3 +124,14 @@ This is storage and publication machinery, not a recipe compactor. It does not
 verify that the proposed snapshot is the serial reduction of the accepted input.
 The resolver continues to use its existing graph path until that separate
 property is tested.
+
+The opt-in internal `compactAcceptedWorkspace` method resolves the namespace
+from the workspace principal and rebuilds one immutable prefix into the graph
+generation store. Compiler v1 bounds the input to 512 traces, 4 MiB of
+canonical payloads, and 4,096 input steps; it binds the ordered input digest,
+limits and routing cost policy to the output. It checks every accepted digest
+and keeps historical snapshots. It is deliberately workspace-only, performs
+full rebuilds, and does not ingest sub-recipe composition records. The focused
+parity fixture compares against the existing serial SQLite engine on the same
+replay-safe traces. It does not establish that legacy destructive pruning and
+a fresh rebuild agree for every graph or authorize a resolver cutover.

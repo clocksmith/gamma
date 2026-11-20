@@ -1,6 +1,8 @@
 // Managed recipe graph engine: PII-free sub-recipe authoring, cross-template composition,
 // quorum-gated trace ingestion, whole-graph detour compression and empirical Bellman DP serving.
 import { createHash, createHmac } from 'node:crypto';
+import { createRecipeGenerationStore } from './graph-generations.js';
+import { compileAcceptedGraph, ACCEPTED_GRAPH_COMPILER_V1 } from './accepted-graph-compiler.js';
 import {
   analyzeTraceGraph,
   canonicalJson,
@@ -241,6 +243,24 @@ function empiricalEdgeWeight(edgeRow, replanPenalty = DEFAULT_REPLAN_PENALTY) {
   return Number((1 + latencyTieBreaker + missRate * replanPenalty).toFixed(6));
 }
 
+function reduceCandidateNodes(candidateNodes, limits) {
+  const reduced = reduceTraceGraph(candidateNodes, limits, {
+    pruneDeadEnds: true,
+    pruneDetours: true,
+  });
+  const inDeg = new Map([...reduced.nodes.keys()].map(id => [id, 0]));
+  for (const node of reduced.nodes.values()) {
+    for (const edge of node.edges) inDeg.set(edge.next, (inDeg.get(edge.next) ?? 0) + 1);
+    for (const next of node.repairs ?? []) inDeg.set(next, (inDeg.get(next) ?? 0) + 1);
+  }
+  for (const [id, node] of [...reduced.nodes.entries()]) {
+    if ((inDeg.get(id) ?? 0) === 0 && node.edges.length === 0 && (node.repairs?.length ?? 0) === 0) {
+      reduced.nodes.delete(id);
+    }
+  }
+  return reduced;
+}
+
 export function createManagedRecipeEngine({
   store,
   secret,
@@ -347,20 +367,7 @@ export function createManagedRecipeEngine({
       };
     }
 
-    const reduced = reduceTraceGraph(candidateNodes, limits, {
-      pruneDeadEnds: true,
-      pruneDetours: true,
-    });
-    const inDeg = new Map([...reduced.nodes.keys()].map(id => [id, 0]));
-    for (const node of reduced.nodes.values()) {
-      for (const edge of node.edges) inDeg.set(edge.next, (inDeg.get(edge.next) ?? 0) + 1);
-      for (const next of node.repairs ?? []) inDeg.set(next, (inDeg.get(next) ?? 0) + 1);
-    }
-    for (const [id, node] of [...reduced.nodes.entries()]) {
-      if ((inDeg.get(id) ?? 0) === 0 && node.edges.length === 0 && (node.repairs?.length ?? 0) === 0) {
-        reduced.nodes.delete(id);
-      }
-    }
+    const reduced = reduceCandidateNodes(candidateNodes, limits);
 
     if (persistReduction && !promotedOnly) {
       const survivingNodeIds = new Set(reduced.nodes.keys());
@@ -711,6 +718,22 @@ export function createManagedRecipeEngine({
         payloadDigest,
         acceptedAt: accepted.accepted_at,
       };
+    },
+
+    // Internal opt-in compaction. Scope is resolved from authenticated context,
+    // never a caller-supplied namespace hash. Existing HTTP continues unchanged.
+    async compactAcceptedWorkspace(principal, selection, { expectedGeneration, inputWatermark }) {
+      const meta = resolveNamespaceMeta(principal, { ...selection, scope: 'workspace' });
+      const limits = validateLimits(selection.limits ?? DEFAULT_LIMITS);
+      const generationStore = createRecipeGenerationStore(store);
+      const snapshot = await compileAcceptedGraph({
+        store, meta, inputWatermark, limits, replanPenalty, reduceCandidateNodes,
+        materializeSteps, empiricalEdgeWeight, sha256Hex, serviceError,
+      });
+      return generationStore.publish({
+        namespaceId: meta.namespaceId, expectedGeneration, inputWatermark,
+        compilerVersion: ACCEPTED_GRAPH_COMPILER_V1, snapshot,
+      });
     },
 
     async ingestTrace(principal, body) {
