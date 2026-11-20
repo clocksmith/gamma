@@ -1,46 +1,36 @@
 # Gamma
 
-Gamma is a Python toolkit for interactive model exploration, model comparison,
-benchmarking, and controlled capability-transfer experiments. Its CLI can run a
-token-prediction game, compare model outputs, benchmark engines, and coordinate
-multiple active model engines.
+Gamma builds a catalogue of qualified JavaScript and Python programs and studies how compact vocabularies (BITS) encode and compose them. It also provides a Python toolkit (`gamma.py`) for inspecting token probabilities, comparing model runtimes, and running controlled experiments under locked protocols. Today, model and algorithm comparisons routinely blur benchmarks, omit setup costs, and drop failed runs, making it hard to tell whether a new method beats a plain baseline.
 
-- [Browser demo](https://gamma-web-game.web.app/)
-- [Architecture](docs/ARCHITECTURE.md)
-- [Documentation index](docs/README.md)
-- [Durable goals](GOALS.md)
-- [Component authority index](docs/COMPONENT_INDEX.md)
+Gamma separates protocols, execution, and reporting—fixing datasets, budgets, and baselines beforehand, charging full costs, and preserving null results alongside wins. Explore the [catalogue roadmap](projects/algorithm_solver/catalogue/ROADMAP-v1.md), [durable goals](GOALS.md), [architecture](docs/ARCHITECTURE.md), and [documentation index](docs/README.md).
 
-## Mission, goal, and value
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/qwen-b1-development-card-dark.svg">
+  <img src="assets/readme/qwen-b1-development-card-light.svg" alt="The adapter beat warm KV. The plain classifier beat both. Qwen 3.5 0.8B development run (seed 1103, 48 tables, 768 questions): plain classifier 747/768 (97.3%, +1.0 pt vs adapter, inside 5-pt margin, 187 ms/q), readout adapter 739/768 (96.2%, +5.1 pts vs warm KV, 255 ms/q, 92-184 KB), warm KV 700/768 (91.1%, 246 ms/q, 32.4 MB median)." width="100%">
+</picture>
 
-Gamma’s mission is to make model and algorithm behavior inspectable, comparable,
-and reproducible under named evaluation contracts.
+## Try it
 
-The current goal is to give researchers and engineers one place to inspect
-token choices, compare models and runtimes, run benchmark workloads, and record
-whether a change improved the named task. The repository also carries domain
-experiments for translation, embeddings, WGSL, compression, and the SAME-R
-method.
+- **BITS (program composition):** pick a vocabulary and compose a program at [256.one/labs/two-button](https://256.one/labs/two-button/).
+- **Browser token game:** [gamma-web-game.web.app](https://gamma-web-game.web.app/).
+- **Python CLI:**
+  ```bash
+  python3 -m venv .venv
+  source .venv/bin/activate
+  pip install -r requirements.txt
+  python gamma.py game          # Also: comparison, benchmark, mind-meld
+  ```
 
-Gamma serves:
+## What is verified
 
-- Researchers testing prompts, datasets, training methods, or routing policies.
-- Engineers comparing engines, kernels, latency, and output quality.
-- Reviewers checking whether an improvement survives a fixed benchmark and
-  replication contract.
-- People learning how tokenization, logits, attention, and decoding affect an
-  output.
+- **Completed:**
+  - **BITS promotion (80 qualified JavaScript programs):** reduced selections from `10,155` to `9,910` (`-2.41%`) and size from `13,002` to `12,798` bytes ([promotion receipt](projects/algorithm_solver/literals/guides-joint80-v2/README.md) · [promotion rules](projects/algorithm_solver/literals/BITS_PROMOTION.md)).
+  - **Qwen 3.5 0.8B B1 development run (seed 1103, 48 tables, 768 questions; exploratory split, not a confirmation):** the plain classifier (`probe_bare`) scored `747/768` (`97.3%`, `+1.0 pt` vs adapter, `90% CI +0.1 to +2.1`, inside the 5-point margin; `187 ms/q` median; retained bytes not reported in receipt), the readout adapter (`ra_bare`) scored `739/768` (`96.2%`, `+5.1 pts` vs warm KV; `255 ms/q`, `+9 ms` slower than warm KV; `92-184 KB`), and warm KV (`kv_ctx`) scored `700/768` (`91.1%`; `246 ms/q`; `32.4 MB` median) ([results](projects/reconfiguration/query_swiglu_fastweight_v5/RESULTS.md) · [development protocol](projects/reconfiguration/query_swiglu_fastweight_v5/protocol_v5_draft.json) · [tracked receipt JSON](.work/query-swiglu-fastweight-v5/qwen35_08b_dev1103_k20_readout_adapter.json)).
+- **Closed / Open:**
+  - **Closed:** Track B2 (self-improving proposer) closed after tying trained constants `4-4`; `enwiki9` compression is retired and archived.
+  - **Open:** locked MiniCPM4 B1 confirmation run is in progress (separate from the Qwen 3.5 0.8B development run above); original compact-library `M1` remains unmet.
 
-## How to use Gamma
-
-Create the environment and run the interactive game:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python gamma.py game
-```
+## CLI surfaces and research tracks
 
 The main command is:
 
