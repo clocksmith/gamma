@@ -93,7 +93,18 @@ function canonicalizeAnswer(s) {
 
 const py = spawnSync(join(repoRoot, '.venv', 'bin', 'python'), ['-B', join(here, 'tasks_v5.py'), String(seed), split, String(nSpecialties), String(shots), String(queries)], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
 if (py.status !== 0) throw new Error(py.stderr);
-const tasks = JSON.parse(py.stdout);
+const generated = JSON.parse(py.stdout);
+const range = process.env.B1_TABLE_RANGE;
+let tasks = generated;
+if (range != null) {
+  const fields = /^(\d+):(\d+)$/.exec(range);
+  assert.ok(fields, 'B1_TABLE_RANGE uses zero-based start:end, excluding end');
+  const [start, end] = fields.slice(1).map(Number);
+  const tableIds = [...new Set(generated.map(task => task.specialty_id))];
+  assert.ok(start < end && end <= tableIds.length, 'B1_TABLE_RANGE outside generated design');
+  const selected = new Set(tableIds.slice(start, end));
+  tasks = generated.filter(task => selected.has(task.specialty_id));
+}
 
 const mod = p => import(pathToFileURL(join(resolve(dopplerRoot), p)));
 const [
@@ -693,6 +704,8 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
   const vocab = [...new Set([...targetToks, ...bareDefault])].sort((x, y) => x - y);
   const lmRows = await readMatrixRowsF32(lmHeadRaw, vocab, dHidden);
   const common = { dHidden, dInter, nlId, bareDefaultToks: [...bareDefault], getLmRow: t => lmRows.get(t), finalNormG };
+  // Charge captures, tokenization and common preparation to every method using them.
+  const sharedSetupMs = performance.now() - t0;
   const BASE_WRITE = 0.30;
 
   // The fixed adapter: top two layers fitted independently, ridge 0.15, half the write strength each.
@@ -740,9 +753,11 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
     const mat = await materializeGpuAdapter(`ra_${task.specialty_id}`, spec);
     setAdapterScale(mat.adapter, 1);
     ra = mat;
+    const fitMs = performance.now() - tr;
     Object.assign(diag, {
+      shared_setup_ms: sharedSetupMs, readout_adapter_compile_ms: sharedSetupMs + fitMs,
       readout_adapter_layer: last, readout_adapter_rank: spec.rank, readout_adapter_bytes: spec.logicalBytes,
-      readout_adapter_rows: spec.rows, readout_adapter_fit_ms: performance.now() - tr,
+      readout_adapter_rows: spec.rows, readout_adapter_fit_ms: fitMs,
     });
   }
   // Controls. They are built after the adapter so that fixed_compile_ms above is the adapter's alone.
@@ -764,6 +779,7 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
     const known = task.codes.map(canonicalizeAnswer);
     assert.ok(new Set(classCodes).size === classCodes.length && classCodes.every(code => known.includes(code)), `classifier control: support answers [${classCodes}] are not this table's codes`);
     const clf = fitSupportClassifier({ examples, nClasses: spans.length, ratio: 0.15 });
+    const classifierFitMs = performance.now() - tp;
     const nn = fitNearestNeighbour({ examples, nClasses: spans.length, temperature: 0.08 });
     probe = { clf, nn, classCodes };
     if (dumpDir) {
@@ -813,6 +829,7 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
     Object.assign(diag, {
       mfc_code: mfc.code, probe_examples: clf.examples, probe_layers: top2Layers, probe_ridge_ratio: clf.ratio,
       probe_leave_one_out_accuracy: clf.leaveOneOutAccuracy, probe_fit_ms: performance.now() - tp,
+      classifier_fit_ms: classifierFitMs, classifier_compile_ms: sharedSetupMs + classifierFitMs,
     });
   }
   const gpuBuffers = [...top2.gpuBuffers, ...(ra ? ra.gpuBuffers : [])];
@@ -1155,6 +1172,7 @@ const receipt = {
   ...(withFirstTokenControl ? { with_first_token_control: true } : {}),
   captured_layers: candidateLayers, resource_check: process.env.B1_RESOURCE_CHECK, doppler_source: dopplerSource,
   confirm_protocol: process.env.B1_ALLOW_CONFIRM ?? null,
+  ...(range == null ? {} : { table_range: range }),
   source_sha256: {
     runner: sha256Hex(await readFile(fileURLToPath(import.meta.url))), compiler: sha256Hex(await readFile(join(here, 'fastweight_v5.mjs'))),
     tasks: sha256Hex(await readFile(join(here, 'tasks_v5.py'))), manifest: sha256Hex(manifestBytes),
