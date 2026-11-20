@@ -18,6 +18,7 @@ import { issueCredential } from './authority.js';
 import { evaluateConditions, validateConditions } from './conditions.js';
 import { REJECTION_CODES, isWorkspaceError, workspaceError } from './errors.js';
 import { Journal } from './journal.js';
+import { requireChromiumSurfaceV1 } from './surface-contract.js';
 import { UploadStore, checkUploadTarget } from './uploads.js';
 import {
   ACTION_STATUS,
@@ -179,11 +180,11 @@ class WorkspaceService {
     });
     try {
       const state = replay(journal.records);
-      const adapter = createAdapter({
+      const adapter = requireChromiumSurfaceV1(createAdapter({
         config,
         profileRoot: join(stateDir, PROFILE_DIRECTORY),
         artifactRoot: join(stateDir, ARTIFACT_DIRECTORY),
-      });
+      }));
       const uploads = new UploadStore(join(stateDir, 'uploads'), config.uploads);
       const service = new WorkspaceService({ journal, state, config, adapter, hooks, clock, uploads });
       service.#restore();

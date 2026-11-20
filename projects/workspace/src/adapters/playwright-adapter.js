@@ -1,3 +1,4 @@
+import { CHROMIUM_SURFACE_V1 } from '../surface-contract.js';
 import { pickRegion } from './region-picker.js';
 // Fawn workspace — narrow Playwright adapter over stock Chromium
 //
@@ -16,6 +17,8 @@ import { closeWithin } from './bounded-close.js';
 const UNSAFE_FILENAME_CHARS = /[^A-Za-z0-9._-]/g;
 
 class PlaywrightWorkspaceAdapter {
+  get surfaceVersion() { return CHROMIUM_SURFACE_V1; }
+
   constructor({ config, profileRoot, artifactRoot }) {
     this._config = config;
     this._profileRoot = profileRoot;

@@ -1,3 +1,4 @@
+import { CHROMIUM_SURFACE_V1 } from '../surface-contract.js';
 import { pickRegion } from './region-picker.js';
 // Fawn workspace — narrow raw-CDP adapter over stock Chromium
 //
@@ -190,6 +191,8 @@ class CdpConnection {
 }
 
 class CdpWorkspaceAdapter {
+  get surfaceVersion() { return CHROMIUM_SURFACE_V1; }
+
   constructor({ config, profileRoot, artifactRoot }) {
     this._config = config;
     this._profileRoot = profileRoot;
