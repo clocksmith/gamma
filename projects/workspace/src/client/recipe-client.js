@@ -4,6 +4,8 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { canonicalJson } from './trace-graph-dp.js';
 import { TraceDag } from './trace-dag.js';
+import { PinnedRecipeGenerationCache } from './pinned-recipe-cache.js';
+import { MAX_RECIPE_SNAPSHOT_BYTES } from './recipe-generation-format.js';
 import { runWorkflow, scopeWorkflowObservation } from './workflow-agent.js';
 import { structuralLocator, structuralOutlineHash } from '../adapters/page-query.js';
 
@@ -16,6 +18,26 @@ function sha256Hex(text) {
 function exactKeys(value, keys) {
   return value && typeof value === 'object' && !Array.isArray(value)
     && Object.keys(value).sort().join() === [...keys].sort().join();
+}
+
+async function boundedResponse(response, maximum) {
+  if (!response.body) return '';
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let length = 0, text = '';
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) return text + decoder.decode();
+      length += value.byteLength;
+      if (length > maximum) {
+        await reader.cancel().catch(() => {});
+        throw Object.assign(Error('Recipe publication response exceeds the byte limit'),
+          { code: 'generation-response-too-large' });
+      }
+      text += decoder.decode(value, { stream: true });
+    }
+  } finally { reader.releaseLock(); }
 }
 
 function locatorValid(value) {
@@ -112,7 +134,7 @@ export class ManagedRecipeClient {
     };
   }
 
-  async #request(method, path, body = null) {
+  async #request(method, path, body = null, maxResponseBytes = null) {
     const response = await this.fetchImpl(`${this.baseUrl}${path}`, {
       method,
       headers: this.headers,
@@ -120,10 +142,15 @@ export class ManagedRecipeClient {
       signal: AbortSignal.timeout(this.timeoutMs),
       ...(body !== null ? { body: JSON.stringify(body) } : {}),
     });
-    const text = await response.text();
+    const text = maxResponseBytes === null ? await response.text() : await boundedResponse(response, maxResponseBytes);
     let parsed = null;
     try { parsed = text ? JSON.parse(text) : null; } catch {}
     if (!response.ok) {
+      if (maxResponseBytes !== null) {
+        // Never surface response-controlled error text for publication reads.
+        throw Object.assign(Error(`Recipe publication HTTP ${response.status}`),
+          { status: response.status, code: `http-${response.status}` });
+      }
       throw Object.assign(
         Error(parsed?.message ?? parsed?.error ?? `Recipe service HTTP ${response.status}`),
         { status: response.status, code: parsed?.error ?? `http-${response.status}` },
@@ -151,6 +178,22 @@ export class ManagedRecipeClient {
 
   submitVerifiedTrace(spec) {
     return this.#request('POST', '/v1/traces', spec);
+  }
+
+  /** Explicit, data-only publication read. Never used by resolve or dispatch. */
+  async fetchPinnedGeneration({ origin, template, readScope = null, generation, trust, cache, clock = Date.now }) {
+    if (!Number.isSafeInteger(generation) || generation < 1 ||
+        !trust || !HASH_RE.test(trust.namespaceId ?? '') ||
+        !(cache instanceof PinnedRecipeGenerationCache) || typeof clock !== 'function') {
+      throw new TypeError('Exact generation, local namespace trust and a bounded cache are required');
+    }
+    const { publicKey, namespaceId, compilerVersion, limits, replanPenalty, minimumGeneration } = trust;
+    const policy = { publicKey, namespaceId, compilerVersion, limits: structuredClone(limits),
+      replanPenalty, minimumGeneration };
+    const packet = await this.#request('POST', '/v1/recipe-generations/read', {
+      origin, template, readScope, generation,
+    }, MAX_RECIPE_SNAPSHOT_BYTES + 8192);
+    return cache.admitSigned(packet, { ...policy, now: clock() }, generation);
   }
 
   async resolveDag({

@@ -1,6 +1,7 @@
 import { Buffer } from 'node:buffer';
 import { canonicalJson } from './trace-graph-dp.js';
 import { TraceDag } from './trace-dag.js';
+import { verifySignedRecipeManifest } from './signed-recipe-manifest.js';
 import { MAX_RECIPE_SNAPSHOT_BYTES, recipePublicationDigest, sha256 } from './recipe-generation-format.js';
 
 const HASH = /^[a-f0-9]{64}$/;
@@ -45,6 +46,14 @@ function serializeValidated(packet, pin) {
       !Number.isFinite(Date.parse(receipt.publishedAt))) {
     throw pinError('generation-pin-mismatch', 'Recipe generation does not match the local pin');
   }
+  validateSnapshot(snapshot, receipt.snapshotDigest, pin);
+  if (recipePublicationDigest(receipt) !== receipt.generationDigest) {
+    throw pinError('generation-digest-mismatch', 'Recipe generation metadata digest differs');
+  }
+  return canonicalJson({ receipt, snapshot });
+}
+
+function validateSnapshot(snapshot, snapshotDigest, pin) {
   if (!exactKeys(snapshot, 'inputDigest,limits,nodes,reduction,replanPenalty,version') ||
       snapshot.version !== 3 || !digest(snapshot.inputDigest) ||
       canonicalJson(snapshot.limits) !== canonicalJson(pin.limits) ||
@@ -58,13 +67,12 @@ function serializeValidated(packet, pin) {
   if (Buffer.byteLength(snapshotJson) > MAX_RECIPE_SNAPSHOT_BYTES) {
     throw pinError('generation-snapshot-too-large', 'Recipe generation snapshot exceeds the byte limit');
   }
-  if (sha256(snapshotJson) !== receipt.snapshotDigest || recipePublicationDigest(receipt) !== receipt.generationDigest) {
+  if (sha256(snapshotJson) !== snapshotDigest) {
     throw pinError('generation-digest-mismatch', 'Recipe generation metadata or content digest differs');
   }
   // Reuse the production structural validator without exporting its replay
   // object or the real namespace key. The placeholder never leaves validation.
   TraceDag.restore({ version: 3, key: HASH_PLACEHOLDER, limits: pin.limits, nodes: snapshot.nodes }, pin.limits);
-  return canonicalJson({ receipt, snapshot });
 }
 
 /**
@@ -93,8 +101,9 @@ export class PinnedRecipeGenerationCache {
   get size() { return this.#entries.size; }
   get bytes() { return this.#bytes; }
 
-  get(pin) {
-    const key = cacheKey(pin);
+  get(pin) { return this.#get(cacheKey(pin)); }
+
+  #get(key) {
     const stored = this.#entries.get(key);
     if (!stored) return null;
     this.#entries.delete(key);
@@ -103,8 +112,33 @@ export class PinnedRecipeGenerationCache {
   }
 
   put(packet, pin) {
-    const key = cacheKey(pin);
-    const json = serializeValidated(packet, pin);
+    return this.#put(cacheKey(pin), serializeValidated(packet, pin));
+  }
+
+  admitSigned(packet, policy, generation) {
+    if (!exactKeys(packet, 'manifest,signature,snapshot')) {
+      throw pinError('invalid-generation-packet', 'Invalid signed recipe generation packet');
+    }
+    const { manifest, signature, snapshot } = packet;
+    const pin = verifySignedRecipeManifest({ manifest, signature }, policy);
+    if (pin.generation !== generation) {
+      throw pinError('generation-pin-mismatch', 'Recipe generation does not match the exact request');
+    }
+    validateSnapshot(snapshot, manifest.snapshotDigest, pin);
+    const json = canonicalJson(packet);
+    const cached = this.#put('signed:' + cacheKey(pin), json);
+    return { pin, ...JSON.parse(json), cached };
+  }
+
+  getSigned(pin, policy) {
+    const packet = this.#get('signed:' + cacheKey(pin));
+    if (!packet) return null;
+    const { manifest, signature } = packet;
+    verifySignedRecipeManifest({ manifest, signature }, policy);
+    return packet;
+  }
+
+  #put(key, json) {
     const bytes = Buffer.byteLength(key) + Buffer.byteLength(json);
     if (bytes > this.#maxBytes) return false;
     const previous = this.#entries.get(key);

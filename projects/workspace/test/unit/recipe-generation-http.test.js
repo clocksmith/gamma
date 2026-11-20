@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
 import { createHash, generateKeyPairSync, randomBytes } from 'node:crypto';
+import { createServer } from 'node:http';
+import { ManagedRecipeClient } from '../../src/client/recipe-client.js';
+import { PinnedRecipeGenerationCache } from '../../src/client/pinned-recipe-cache.js';
 import { once } from 'node:events';
 import { canonicalJson } from '../../src/client/trace-graph-dp.js';
 import { sha256 } from '../../src/client/recipe-generation-format.js';
@@ -43,7 +46,7 @@ async function start(signer) {
   await listening;
   const base = `http://127.0.0.1:${instance.server.address().port}`;
   return {
-    ...instance,
+    ...instance, base,
     post(path, body, token = alphaToken, extraHeaders = {}) {
       return fetch(base + path, { method: 'POST', headers: { authorization: `Bearer ${token}`,
         'content-type': 'application/json', ...extraHeaders }, body: JSON.stringify(body) });
@@ -91,6 +94,63 @@ try {
     assert.equal(refusal.headers.get('cache-control'), 'private, no-store');
     assert.deepEqual(await refusal.json(), { error: 'generation-signing-unavailable' });
   }
+  signingMode = 'valid';
+  const cache = new PinnedRecipeGenerationCache({ maxEntries: 1 });
+  const trust = { publicKey, namespaceId: legacy.namespaceId, compilerVersion: ACCEPTED_GRAPH_COMPILER_V1,
+    limits: legacy.dag.limits, replanPenalty: 1000, minimumGeneration: 1, now: issuedAt + 1 };
+  const options = { ...request, generation: 1, trust, cache, clock: () => issuedAt + 1 };
+  const client = new ManagedRecipeClient({ url: enabled.base, token: alphaToken });
+  const pinned = await client.fetchPinnedGeneration(options);
+  assert.equal(pinned.cached, true);
+  assert.equal(cache.size, 1);
+  assert.deepEqual(cache.getSigned(pinned.pin, trust).snapshot, value.snapshot);
+  assert.equal(cache.get(pinned.pin), null, 'signed data does not enter legacy cache');
+  assert.throws(() => cache.getSigned(pinned.pin, { ...trust, now: issuedAt + 60_000 }),
+    { code: 'stale-recipe-manifest' });
+  await assert.rejects(client.fetchPinnedGeneration({ ...options, trust: { ...trust, namespaceId: 'f'.repeat(64) } }),
+    { code: 'recipe-manifest-scope-mismatch' });
+  await assert.rejects(client.fetchPinnedGeneration({ ...options, trust: { ...trust, minimumGeneration: 2 } }),
+    { code: 'stale-recipe-manifest' });
+  await assert.rejects(client.fetchPinnedGeneration({ ...options, trust: { ...trust, replanPenalty: 999 } }),
+    { code: 'recipe-manifest-scope-mismatch' });
+  await assert.rejects(new ManagedRecipeClient({ url: disabled.base, token: alphaToken }).fetchPinnedGeneration(options),
+    { status: 404 });
+  await assert.rejects(new ManagedRecipeClient({ url: enabled.base, token: betaToken }).fetchPinnedGeneration(options),
+    { status: 404 });
+  await assert.rejects(client.fetchPinnedGeneration({ ...options, clock: () => issuedAt + 60_000 }),
+    { code: 'stale-recipe-manifest' });
+  const withError = new ManagedRecipeClient({ url: enabled.base, token: alphaToken,
+    fetchImpl: async () => Response.json({ message: alphaToken, error: alphaToken }, { status: 403 }) });
+  await assert.rejects(withError.fetchPinnedGeneration(options),
+    { message: 'Recipe publication HTTP 403', code: 'http-403' });
+  const withPacket = packet => new ManagedRecipeClient({ url: enabled.base, token: alphaToken,
+    fetchImpl: async () => Response.json(packet) });
+  await assert.rejects(withPacket(value).fetchPinnedGeneration({ ...options, generation: 2 }),
+    { code: 'generation-pin-mismatch' });
+  const tamperedSignature = (value.signature[0] === 'a' ? 'b' : 'a') + value.signature.slice(1);
+  await assert.rejects(withPacket({ ...value, signature: tamperedSignature }).fetchPinnedGeneration(options),
+    { code: 'recipe-signature-rejected' });
+  await assert.rejects(withPacket({ ...value, snapshot: { ...value.snapshot, inputDigest: 'c'.repeat(64) } })
+    .fetchPinnedGeneration(options), { code: 'generation-digest-mismatch' });
+  await assert.rejects(withPacket({ oversized: 'x'.repeat(2 * 1024 * 1024) }).fetchPinnedGeneration(options),
+    { code: 'generation-response-too-large' });
+  let redirected = 0;
+  const redirect = createServer((req, res) => {
+    if (req.url === generationPath) {
+      res.writeHead(307, { location: '/unexpected-credential-destination' }).end();
+    } else { redirected++; res.writeHead(200).end(); }
+  });
+  try {
+    redirect.listen(0, '127.0.0.1');
+    await once(redirect, 'listening');
+    const redirectClient = new ManagedRecipeClient({
+      url: `http://127.0.0.1:${redirect.address().port}`, token: alphaToken,
+    });
+    await assert.rejects(redirectClient.fetchPinnedGeneration(options));
+    assert.equal(redirected, 0);
+  } finally { await new Promise(resolve => redirect.close(resolve)); }
+  assert.equal(cache.size, 1, 'failures did not change the admitted cache');
+  assert.deepEqual(cache.getSigned(pinned.pin, trust).snapshot, value.snapshot);
   assert.deepEqual(await enabled.post('/v1/recipes/resolve', request).then(r => r.json()), legacy);
 } finally {
   for (const instance of opened) {
