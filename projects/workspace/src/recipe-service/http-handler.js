@@ -1,5 +1,6 @@
 // Web-standard HTTP handler for Fawn Managed Recipe Service (Cloudflare Workers & Cloud Run).
 import { createHash, timingSafeEqual } from 'node:crypto';
+import { encodeRecipeManifest } from '../client/signed-recipe-manifest.js';
 
 const HASH_RE = /^[a-f0-9]{64}$/;
 const DEFAULT_MAX_BODY_BYTES = 1024 * 1024;
@@ -8,12 +9,12 @@ function sha256Bytes(value) {
   return createHash('sha256').update(value).digest();
 }
 
-function jsonResponse(status, payload) {
+function jsonResponse(status, payload, { privateResponse = false } = {}) {
   return new Response(JSON.stringify(payload), {
     status,
     headers: {
       'content-type': 'application/json; charset=utf-8',
-      'cache-control': 'no-store',
+      'cache-control': privateResponse ? 'private, no-store' : 'no-store',
       'x-content-type-options': 'nosniff',
     },
   });
@@ -91,8 +92,12 @@ export function createManagedRecipeHttpHandler({
   engine,
   clients,
   maxBodyBytes = DEFAULT_MAX_BODY_BYTES,
+  generationSigner = null,
 }) {
   if (!engine) throw Error('Managed recipe engine is required');
+  if (generationSigner !== null && typeof generationSigner !== 'function') {
+    throw new TypeError('Opt-in generation delivery requires a callable signer');
+  }
   const principals = normalizePrincipals(clients);
 
   return async function handleRequest(request) {
@@ -135,6 +140,21 @@ export function createManagedRecipeHttpHandler({
       if (request.method === 'POST' && pathname === '/v1/recipes/compose') {
         const body = await readBoundedJson(request, maxBodyBytes);
         return jsonResponse(200, await engine.composeRecipe(principal, body));
+      }
+
+      // The default handler has no signer and does not expose this path.
+      // POST keeps workspace selection metadata out of query/access logs.
+      if (generationSigner && request.method === 'POST' && pathname === '/v1/recipe-generations/read') {
+        const body = await readBoundedJson(request, maxBodyBytes);
+        const pinned = await engine.readPublishedWorkspaceGeneration(principal, body);
+        const { manifest, signature } = await generationSigner(pinned);
+        encodeRecipeManifest(manifest);
+        const boundFields = ['namespaceId', 'generation', 'inputWatermark', 'compilerVersion', 'snapshotDigest', 'generationDigest'];
+        if (!boundFields.every(key => manifest[key] === pinned.receipt[key]) ||
+            typeof signature !== 'string' || !/^[a-f0-9]{128}$/.test(signature)) {
+          throw Error('Generation signer returned an incompatible manifest');
+        }
+        return jsonResponse(200, { manifest, signature, snapshot: pinned.snapshot }, { privateResponse: true });
       }
 
       if (request.method === 'POST' && pathname === '/v1/recipes/resolve') {

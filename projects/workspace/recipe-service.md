@@ -182,3 +182,16 @@ generation, deployed key provisioning and rotation, a persistent trusted
 replay-floor policy, broader parity including histories affected by legacy
 pruning, and the target store's behavior on independently exercised D1. Keep
 the legacy route authoritative and maintain a fail-closed fallback boundary.
+
+An embedding host can explicitly inject `generationSigner` into the Node
+server or HTTP handler to enable read-only
+`POST /v1/recipe-generations/read`. It accepts `origin`, `template`, optional
+`readScope`, and an explicit positive integer `generation`. The authenticated
+bearer principal selects the workspace namespace; no catalog, raw namespace
+or implicit latest lookup is available. The response is
+`{manifest, signature, snapshot}` with `Cache-Control: private, no-store`,
+and includes no raw submission trace/receipt, dispatch key or active route.
+The signer must be supplied by a trusted host and receives only the exact
+already-published generation. There is no environment or CLI enablement and
+the default Worker and Node routes remain unchanged. The local HTTP fixture
+uses ephemeral signing keys and SQLite, not a deployed D1 system.

@@ -15,10 +15,11 @@ export function createNodeRecipeServer({
   clients,
   catalogQuorum = 2,
   maxBodyBytes = 1024 * 1024,
+  generationSigner = null,
 }) {
   const store = createSqliteRecipeStore(dbPath);
   const engine = createManagedRecipeEngine({ store, secret, catalogQuorum });
-  const handler = createManagedRecipeHttpHandler({ engine, clients, maxBodyBytes });
+  const handler = createManagedRecipeHttpHandler({ engine, clients, maxBodyBytes, generationSigner });
 
   const server = createServer(async (req, res) => {
     try {

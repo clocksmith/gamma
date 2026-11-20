@@ -841,6 +841,22 @@ export function createManagedRecipeEngine({
       });
     },
 
+    // Read only a published compiler generation selected by the authenticated
+    // workspace principal. A request cannot choose a raw namespace or head.
+    async readPublishedWorkspaceGeneration(principal, body) {
+      if (!body || typeof body !== 'object' || Array.isArray(body) ||
+          !Object.keys(body).every(key => ['origin', 'template', 'readScope', 'generation'].includes(key)) ||
+          !Number.isSafeInteger(body.generation) || body.generation < 1) {
+        throw serviceError(400, 'invalid-generation-request', 'Explicit workspace generation and recipe identity required');
+      }
+      const meta = resolveNamespaceMeta(principal, { ...body, scope: 'workspace' });
+      const pinned = await createRecipeGenerationStore(store).readGeneration(meta.namespaceId, body.generation);
+      if (!pinned || pinned.receipt.compilerVersion !== ACCEPTED_GRAPH_COMPILER_V1) {
+        throw serviceError(404, 'published-generation-unavailable', 'Published workspace generation not found');
+      }
+      return pinned;
+    },
+
     async ingestTrace(principal, body) {
       const submissionId = validateSubmissionId(body);
       const prior = await store.get(
