@@ -555,3 +555,32 @@ An existing unit test run during this work also regenerated the previously docum
 seed-2000000 confirmation-design fixture in memory for the fixed 25% constant-code control.
 Its only output was test status. The test wrote no cases, and the benchmark and model received
 only the fresh development inputs in the receipts above.
+
+## First-token decoder control on CPU (2026-11-20)
+
+All five off-code answers in the prior Qwen3.5-0.8B development validation started with token
+194805 (`.**`); 24 other errors used valid codes. The new opt-in decoder restricts only its
+first token to starts observed in the support lines. It can still emit any continuation.
+The same rule is applied to the table-removed adapter and to the base model reading the
+table. The adapter weights and unconstrained arms use the existing readout fitter.
+
+On four further development tables from seeds 1107 and 1108, with the local Qwen3-0.6B-NHS
+backbone and the CPU setup above, one of the adapter's 64 greedy decodes changed. The original
+output was `deltas`. At that position `delta` was the highest-scoring permitted token,
+1.303 logits below the unrestricted winner. The restricted decoder emitted `delta` and
+a newline, giving the exact expected code. Every other adapter token stream matched its
+unrestricted reference. The base model with the table always started with an allowed token.
+
+| Full decoded answer | Ordinary greedy | Restricted first token |
+|---|---:|---:|
+| Adapter, table removed | 58/64 | 59/64 |
+| Base model, table present | 50/64 | 50/64 |
+| Off-code answers from adapter | 1 | 0 |
+
+This is one observed recovery on a development checkpoint. A reserved Doppler run on fresh
+Qwen3.5-0.8B development tables is needed to test whether the same rule recovers its stray
+starts. `ra_first_bare` and `kv_first_ctx` are implemented, exercised in CPU selector tests
+and awaiting that runtime measurement. The CPU script executed both full model decodes.
+
+Receipts with every token stream and score gap are available for [seed 1107](first_token_cpu_dev1107.json)
+and [seed 1108](first_token_cpu_dev1108.json).

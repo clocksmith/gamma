@@ -1,0 +1,1893 @@
+{
+  "scope": "development CPU capture comparison",
+  "seed": 1108,
+  "split": "dev",
+  "shots": 20,
+  "queries_per_group": 4,
+  "batch_size": 8,
+  "model": "Qwen3-0.6B-NHS-786708b3",
+  "torch": "2.10.0",
+  "transformers": "4.57.6",
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "python": "3.14.2",
+  "device": "cpu",
+  "dtype": "float32",
+  "threads": 2,
+  "torch_interop_threads": 1,
+  "first_token_control": true,
+  "source_sha256": {
+    "batch_capture_v5.py": "e66d8e7cf147965d3e677c39b4495d6b5718cd9c5b1b3f8d42c504a76255aa59",
+    "tasks_v5.py": "9f314ce30eaace14ff228aed81b73e569fad9f83773425cb8ac82b861a20b396",
+    "compile_readout_files_v5.mjs": "a003b9e9a026a0f1beea6a74087b69093a03c9a4a9b8448fb9b9d2b2ebc17492",
+    "readout_adapter_v5.mjs": "1ea0edce7a13a388de12924fb4f52982f977af103f6590e999013ca81e6695e2"
+  },
+  "model_file_sha256": {
+    "config.json": "e5182db713a3e8aa5d544e05353e53ba0d183c9d4ab2690c19b9b313dee6e2cb",
+    "generation_config.json": "8c970692323e3ea0e9b8b0a4dca79388d31226e41f83c9fd6014804280ebf6e8",
+    "model.safetensors": "bbd600491d2c5dff5fc73d429fb5b4f62e5bde9777f72ed31c09eae01798bc4e",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "67e5a0a11cd35f9c00ee52e0af4cdc0baa75fea0cb5fce7d1beb251b4621d15c"
+  },
+  "tables": [
+    {
+      "specialty_id": "dev_1108_s0_word",
+      "timing": {
+        "serial": {
+          "calls": 80,
+          "tokens": 2309,
+          "padded_tokens": 2309,
+          "iso_seconds": 7.263987292011734,
+          "full_compile_seconds": 8.963141957996413,
+          "full_table_tokens": 888,
+          "fit_rows": 320,
+          "adapter_bytes": 81920
+        },
+        "batch": {
+          "calls": 10,
+          "tokens": 2309,
+          "padded_tokens": 2376,
+          "iso_seconds": 3.711297374975402,
+          "full_compile_seconds": 5.248800583009142,
+          "full_table_tokens": 888,
+          "fit_rows": 320,
+          "adapter_bytes": 81920
+        }
+      },
+      "error": {
+        "z": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "h": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "a": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        },
+        "b": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        }
+      },
+      "answers": [
+        {
+          "task_id": 0,
+          "expected": "alpha",
+          "base_table": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east"
+          },
+          "serial": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha"
+          },
+          "batch": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha"
+          },
+          "base_table_first": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east",
+            "first_choice": {
+              "raw": 10984,
+              "best_allowed": 10984,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha",
+            "first_choice": {
+              "raw": 8287,
+              "best_allowed": 8287,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 1,
+          "expected": "delta",
+          "base_table": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "serial": {
+            "tokens": [
+              90587,
+              198
+            ],
+            "answer": "deltas"
+          },
+          "batch": {
+            "tokens": [
+              90587,
+              198
+            ],
+            "answer": "deltas"
+          },
+          "base_table_first": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta",
+            "first_choice": {
+              "raw": 9477,
+              "best_allowed": 9477,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta",
+            "first_choice": {
+              "raw": 90587,
+              "best_allowed": 9477,
+              "logit_gap": 1.3028221130371094
+            }
+          }
+        },
+        {
+          "task_id": 2,
+          "expected": "sigma",
+          "base_table": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "serial": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "batch": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "base_table_first": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma",
+            "first_choice": {
+              "raw": 20254,
+              "best_allowed": 20254,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma",
+            "first_choice": {
+              "raw": 20254,
+              "best_allowed": 20254,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 3,
+          "expected": "east",
+          "base_table": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "serial": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "batch": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "base_table_first": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta",
+            "first_choice": {
+              "raw": 9477,
+              "best_allowed": 9477,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta",
+            "first_choice": {
+              "raw": 9477,
+              "best_allowed": 9477,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 4,
+          "expected": "alpha",
+          "base_table": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha"
+          },
+          "serial": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha"
+          },
+          "batch": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha"
+          },
+          "base_table_first": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha",
+            "first_choice": {
+              "raw": 8287,
+              "best_allowed": 8287,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha",
+            "first_choice": {
+              "raw": 8287,
+              "best_allowed": 8287,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 5,
+          "expected": "delta",
+          "base_table": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "serial": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "batch": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "base_table_first": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta",
+            "first_choice": {
+              "raw": 9477,
+              "best_allowed": 9477,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta",
+            "first_choice": {
+              "raw": 9477,
+              "best_allowed": 9477,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 6,
+          "expected": "sigma",
+          "base_table": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "serial": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "batch": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "base_table_first": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma",
+            "first_choice": {
+              "raw": 20254,
+              "best_allowed": 20254,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma",
+            "first_choice": {
+              "raw": 20254,
+              "best_allowed": 20254,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 7,
+          "expected": "east",
+          "base_table": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east"
+          },
+          "serial": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east"
+          },
+          "batch": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east"
+          },
+          "base_table_first": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east",
+            "first_choice": {
+              "raw": 10984,
+              "best_allowed": 10984,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east",
+            "first_choice": {
+              "raw": 10984,
+              "best_allowed": 10984,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 8,
+          "expected": "alpha",
+          "base_table": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha"
+          },
+          "serial": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha"
+          },
+          "batch": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha"
+          },
+          "base_table_first": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha",
+            "first_choice": {
+              "raw": 8287,
+              "best_allowed": 8287,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha",
+            "first_choice": {
+              "raw": 8287,
+              "best_allowed": 8287,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 9,
+          "expected": "delta",
+          "base_table": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "serial": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "batch": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "base_table_first": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta",
+            "first_choice": {
+              "raw": 9477,
+              "best_allowed": 9477,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta",
+            "first_choice": {
+              "raw": 9477,
+              "best_allowed": 9477,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 10,
+          "expected": "sigma",
+          "base_table": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "serial": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "batch": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "base_table_first": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma",
+            "first_choice": {
+              "raw": 20254,
+              "best_allowed": 20254,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta",
+            "first_choice": {
+              "raw": 9477,
+              "best_allowed": 9477,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 11,
+          "expected": "east",
+          "base_table": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "serial": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east"
+          },
+          "batch": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east"
+          },
+          "base_table_first": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta",
+            "first_choice": {
+              "raw": 9477,
+              "best_allowed": 9477,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east",
+            "first_choice": {
+              "raw": 10984,
+              "best_allowed": 10984,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 12,
+          "expected": "alpha",
+          "base_table": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha"
+          },
+          "serial": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha"
+          },
+          "batch": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha"
+          },
+          "base_table_first": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha",
+            "first_choice": {
+              "raw": 8287,
+              "best_allowed": 8287,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              8287,
+              198
+            ],
+            "answer": "alpha",
+            "first_choice": {
+              "raw": 8287,
+              "best_allowed": 8287,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 13,
+          "expected": "delta",
+          "base_table": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "serial": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "batch": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta"
+          },
+          "base_table_first": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta",
+            "first_choice": {
+              "raw": 9477,
+              "best_allowed": 9477,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              9477,
+              198
+            ],
+            "answer": "delta",
+            "first_choice": {
+              "raw": 9477,
+              "best_allowed": 9477,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 14,
+          "expected": "sigma",
+          "base_table": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "serial": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "batch": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma"
+          },
+          "base_table_first": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma",
+            "first_choice": {
+              "raw": 20254,
+              "best_allowed": 20254,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              20254,
+              198
+            ],
+            "answer": "sigma",
+            "first_choice": {
+              "raw": 20254,
+              "best_allowed": 20254,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 15,
+          "expected": "east",
+          "base_table": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east"
+          },
+          "serial": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east"
+          },
+          "batch": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east"
+          },
+          "base_table_first": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east",
+            "first_choice": {
+              "raw": 10984,
+              "best_allowed": 10984,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              10984,
+              198
+            ],
+            "answer": "east",
+            "first_choice": {
+              "raw": 10984,
+              "best_allowed": 10984,
+              "logit_gap": 0.0
+            }
+          }
+        }
+      ],
+      "exact_correct": {
+        "base_table": 13,
+        "serial": 13,
+        "batch": 13,
+        "base_table_first": 13,
+        "batch_first": 14
+      },
+      "codes": [
+        "alpha",
+        "delta",
+        "sigma",
+        "east"
+      ],
+      "support_first_tokens": [
+        8287,
+        9477,
+        10984,
+        20254
+      ],
+      "guess_valid_code_rate": 0.25,
+      "parity_pass": true
+    },
+    {
+      "specialty_id": "dev_1108_s1_pair",
+      "timing": {
+        "batch": {
+          "calls": 10,
+          "tokens": 2467,
+          "padded_tokens": 2528,
+          "iso_seconds": 3.467962874972727,
+          "full_compile_seconds": 6.125626790977549,
+          "full_table_tokens": 1046,
+          "fit_rows": 640,
+          "adapter_bytes": 163840
+        },
+        "serial": {
+          "calls": 80,
+          "tokens": 2467,
+          "padded_tokens": 2467,
+          "iso_seconds": 8.679043458017986,
+          "full_compile_seconds": 11.211099542037118,
+          "full_table_tokens": 1046,
+          "fit_rows": 640,
+          "adapter_bytes": 163840
+        }
+      },
+      "error": {
+        "z": {
+          "relative_l2": 5.149221351530286e-07,
+          "max_abs": 0.000732421875
+        },
+        "h": {
+          "relative_l2": 5.810265975014772e-07,
+          "max_abs": 0.000518798828125
+        },
+        "a": {
+          "relative_l2": 1.949102397702518e-06,
+          "max_abs": 1.816079020500183e-07
+        },
+        "b": {
+          "relative_l2": 0.0,
+          "max_abs": 0.0
+        }
+      },
+      "answers": [
+        {
+          "task_id": 16,
+          "expected": "gray-9",
+          "base_table": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "serial": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "batch": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "base_table_first": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9",
+            "first_choice": {
+              "raw": 17545,
+              "best_allowed": 17545,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9",
+            "first_choice": {
+              "raw": 17545,
+              "best_allowed": 17545,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 17,
+          "expected": "green-6",
+          "base_table": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5"
+          },
+          "serial": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6"
+          },
+          "batch": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6"
+          },
+          "base_table_first": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5",
+            "first_choice": {
+              "raw": 3691,
+              "best_allowed": 3691,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6",
+            "first_choice": {
+              "raw": 6176,
+              "best_allowed": 6176,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 18,
+          "expected": "black-5",
+          "base_table": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "serial": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5"
+          },
+          "batch": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5"
+          },
+          "base_table_first": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9",
+            "first_choice": {
+              "raw": 17545,
+              "best_allowed": 17545,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5",
+            "first_choice": {
+              "raw": 3691,
+              "best_allowed": 3691,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 19,
+          "expected": "blue-2",
+          "base_table": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2"
+          },
+          "serial": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2"
+          },
+          "batch": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2"
+          },
+          "base_table_first": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2",
+            "first_choice": {
+              "raw": 6303,
+              "best_allowed": 6303,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2",
+            "first_choice": {
+              "raw": 6303,
+              "best_allowed": 6303,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 20,
+          "expected": "gray-9",
+          "base_table": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "serial": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "batch": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "base_table_first": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9",
+            "first_choice": {
+              "raw": 17545,
+              "best_allowed": 17545,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9",
+            "first_choice": {
+              "raw": 17545,
+              "best_allowed": 17545,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 21,
+          "expected": "green-6",
+          "base_table": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6"
+          },
+          "serial": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6"
+          },
+          "batch": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6"
+          },
+          "base_table_first": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6",
+            "first_choice": {
+              "raw": 6176,
+              "best_allowed": 6176,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6",
+            "first_choice": {
+              "raw": 6176,
+              "best_allowed": 6176,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 22,
+          "expected": "black-5",
+          "base_table": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5"
+          },
+          "serial": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5"
+          },
+          "batch": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5"
+          },
+          "base_table_first": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5",
+            "first_choice": {
+              "raw": 3691,
+              "best_allowed": 3691,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5",
+            "first_choice": {
+              "raw": 3691,
+              "best_allowed": 3691,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 23,
+          "expected": "blue-2",
+          "base_table": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2"
+          },
+          "serial": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2"
+          },
+          "batch": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2"
+          },
+          "base_table_first": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2",
+            "first_choice": {
+              "raw": 6303,
+              "best_allowed": 6303,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2",
+            "first_choice": {
+              "raw": 6303,
+              "best_allowed": 6303,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 24,
+          "expected": "gray-9",
+          "base_table": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "serial": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "batch": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "base_table_first": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9",
+            "first_choice": {
+              "raw": 17545,
+              "best_allowed": 17545,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9",
+            "first_choice": {
+              "raw": 17545,
+              "best_allowed": 17545,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 25,
+          "expected": "green-6",
+          "base_table": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6"
+          },
+          "serial": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6"
+          },
+          "batch": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6"
+          },
+          "base_table_first": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6",
+            "first_choice": {
+              "raw": 6176,
+              "best_allowed": 6176,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6",
+            "first_choice": {
+              "raw": 6176,
+              "best_allowed": 6176,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 26,
+          "expected": "black-5",
+          "base_table": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5"
+          },
+          "serial": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5"
+          },
+          "batch": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5"
+          },
+          "base_table_first": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5",
+            "first_choice": {
+              "raw": 3691,
+              "best_allowed": 3691,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5",
+            "first_choice": {
+              "raw": 3691,
+              "best_allowed": 3691,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 27,
+          "expected": "blue-2",
+          "base_table": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "serial": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2"
+          },
+          "batch": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2"
+          },
+          "base_table_first": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9",
+            "first_choice": {
+              "raw": 17545,
+              "best_allowed": 17545,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2",
+            "first_choice": {
+              "raw": 6303,
+              "best_allowed": 6303,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 28,
+          "expected": "gray-9",
+          "base_table": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "serial": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "batch": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9"
+          },
+          "base_table_first": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9",
+            "first_choice": {
+              "raw": 17545,
+              "best_allowed": 17545,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              17545,
+              12,
+              24,
+              198
+            ],
+            "answer": "gray-9",
+            "first_choice": {
+              "raw": 17545,
+              "best_allowed": 17545,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 29,
+          "expected": "green-6",
+          "base_table": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6"
+          },
+          "serial": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6"
+          },
+          "batch": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6"
+          },
+          "base_table_first": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6",
+            "first_choice": {
+              "raw": 6176,
+              "best_allowed": 6176,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              6176,
+              12,
+              21,
+              198
+            ],
+            "answer": "green-6",
+            "first_choice": {
+              "raw": 6176,
+              "best_allowed": 6176,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 30,
+          "expected": "black-5",
+          "base_table": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5"
+          },
+          "serial": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5"
+          },
+          "batch": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5"
+          },
+          "base_table_first": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5",
+            "first_choice": {
+              "raw": 3691,
+              "best_allowed": 3691,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              3691,
+              12,
+              20,
+              198
+            ],
+            "answer": "black-5",
+            "first_choice": {
+              "raw": 3691,
+              "best_allowed": 3691,
+              "logit_gap": 0.0
+            }
+          }
+        },
+        {
+          "task_id": 31,
+          "expected": "blue-2",
+          "base_table": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2"
+          },
+          "serial": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2"
+          },
+          "batch": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2"
+          },
+          "base_table_first": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2",
+            "first_choice": {
+              "raw": 6303,
+              "best_allowed": 6303,
+              "logit_gap": 0.0
+            }
+          },
+          "batch_first": {
+            "tokens": [
+              6303,
+              12,
+              17,
+              198
+            ],
+            "answer": "blue-2",
+            "first_choice": {
+              "raw": 6303,
+              "best_allowed": 6303,
+              "logit_gap": 0.0
+            }
+          }
+        }
+      ],
+      "exact_correct": {
+        "base_table": 13,
+        "serial": 16,
+        "batch": 16,
+        "base_table_first": 13,
+        "batch_first": 16
+      },
+      "codes": [
+        "gray-9",
+        "green-6",
+        "black-5",
+        "blue-2"
+      ],
+      "support_first_tokens": [
+        3691,
+        6176,
+        6303,
+        17545
+      ],
+      "guess_valid_code_rate": 0.25,
+      "parity_pass": true
+    }
+  ]
+}
