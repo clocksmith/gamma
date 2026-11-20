@@ -1,5 +1,9 @@
 import assert from 'node:assert/strict';
 import { createHash, generateKeyPairSync, randomBytes } from 'node:crypto';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { RecipeReplayFloor } from '../../src/client/recipe-replay-floor.js';
 import { createServer } from 'node:http';
 import { ManagedRecipeClient } from '../../src/client/recipe-client.js';
 import { PinnedRecipeGenerationCache } from '../../src/client/pinned-recipe-cache.js';
@@ -151,6 +155,54 @@ try {
   } finally { await new Promise(resolve => redirect.close(resolve)); }
   assert.equal(cache.size, 1, 'failures did not change the admitted cache');
   assert.deepEqual(cache.getSigned(pinned.pin, trust).snapshot, value.snapshot);
+  const directory = mkdtempSync(join(tmpdir(), 'gamma-recipe-floor-'));
+  const floorPath = join(directory, 'floor.sqlite');
+  let floor = new RecipeReplayFloor(floorPath);
+  const peer = new RecipeReplayFloor(floorPath);
+  try {
+    const durableCache = new PinnedRecipeGenerationCache();
+    const durable = { ...options, cache: durableCache, replayFloor: floor };
+    const first = await client.fetchPinnedGeneration(durable);
+    assert.equal(durableCache.getSigned(first.pin, trust), null, 'durable entries require a floor on reads');
+    assert.ok(durableCache.getSigned(first.pin, trust, floor));
+    await client.fetchPinnedGeneration(durable); // exact repeat
+    await enabled.engine.acceptTrace(alpha, { ...trace, submissionId: 'fixture-second' });
+    await enabled.engine.compactAcceptedWorkspace(alpha, request, { expectedGeneration: 1, inputWatermark: 2 });
+    const value2 = await enabled.post(generationPath, { ...request, generation: 2 }).then(r => r.json());
+    await assert.rejects(withPacket({ ...value2, signature: tamperedSignature })
+      .fetchPinnedGeneration({ ...durable, generation: 2 }), { code: 'recipe-signature-rejected' });
+    await assert.rejects(withPacket({ ...value2, snapshot: { ...value2.snapshot, inputDigest: 'c'.repeat(64) } })
+      .fetchPinnedGeneration({ ...durable, generation: 2 }), { code: 'generation-digest-mismatch' });
+    assert.ok(durableCache.getSigned(first.pin, trust, floor));
+
+    let release, fetched;
+    const permit = new Promise(resolve => { release = resolve; });
+    const requestReached = new Promise(resolve => { fetched = resolve; });
+    const delayed = new ManagedRecipeClient({ url: enabled.base, token: alphaToken,
+      fetchImpl: async (...args) => { const response = await fetch(...args); fetched(); await permit; return response; } });
+    const oldRead = delayed.fetchPinnedGeneration(durable);
+    await requestReached;
+    try {
+      await client.fetchPinnedGeneration({ ...durable, generation: 2, replayFloor: peer });
+    } finally { release(); }
+    await assert.rejects(oldRead, { code: 'recipe-replay-refused' });
+    assert.throws(() => durableCache.getSigned(first.pin, trust, floor), { code: 'recipe-replay-refused' });
+    assert.throws(() => peer.advance({ ...first.pin, generation: 2, generationDigest: 'f'.repeat(64) }),
+      { code: 'recipe-replay-refused' });
+
+    floor.close();
+    floor = new RecipeReplayFloor(floorPath);
+    await assert.rejects(client.fetchPinnedGeneration({ ...durable, replayFloor: floor }),
+      { code: 'recipe-replay-refused' });
+    assert.equal((await client.fetchPinnedGeneration({ ...durable, generation: 2, replayFloor: floor })).pin.generation, 2);
+    floor.advance({ ...first.pin, namespaceId: 'd'.repeat(64) });
+    floor.advance({ ...first.pin, limits: { ...first.pin.limits, maxEdges: first.pin.limits.maxEdges - 1 } });
+    assert.throws(() => peer.assertCurrent(first.pin), { code: 'recipe-replay-refused' });
+  } finally {
+    floor.close();
+    peer.close();
+    rmSync(directory, { recursive: true, force: true });
+  }
   assert.deepEqual(await enabled.post('/v1/recipes/resolve', request).then(r => r.json()), legacy);
 } finally {
   for (const instance of opened) {

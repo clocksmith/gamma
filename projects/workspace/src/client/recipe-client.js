@@ -181,10 +181,11 @@ export class ManagedRecipeClient {
   }
 
   /** Explicit, data-only publication read. Never used by resolve or dispatch. */
-  async fetchPinnedGeneration({ origin, template, readScope = null, generation, trust, cache, clock = Date.now }) {
+  async fetchPinnedGeneration({ origin, template, readScope = null, generation, trust, cache, replayFloor = null, clock = Date.now }) {
     if (!Number.isSafeInteger(generation) || generation < 1 ||
         !trust || !HASH_RE.test(trust.namespaceId ?? '') ||
-        !(cache instanceof PinnedRecipeGenerationCache) || typeof clock !== 'function') {
+        !(cache instanceof PinnedRecipeGenerationCache) || typeof clock !== 'function' ||
+        (replayFloor !== null && typeof replayFloor?.advance !== 'function')) {
       throw new TypeError('Exact generation, local namespace trust and a bounded cache are required');
     }
     const { publicKey, namespaceId, compilerVersion, limits, replanPenalty, minimumGeneration } = trust;
@@ -193,7 +194,7 @@ export class ManagedRecipeClient {
     const packet = await this.#request('POST', '/v1/recipe-generations/read', {
       origin, template, readScope, generation,
     }, MAX_RECIPE_SNAPSHOT_BYTES + 8192);
-    return cache.admitSigned(packet, { ...policy, now: clock() }, generation);
+    return cache.admitSigned(packet, { ...policy, now: clock() }, generation, replayFloor);
   }
 
   async resolveDag({

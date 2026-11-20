@@ -115,7 +115,7 @@ export class PinnedRecipeGenerationCache {
     return this.#put(cacheKey(pin), serializeValidated(packet, pin));
   }
 
-  admitSigned(packet, policy, generation) {
+  admitSigned(packet, policy, generation, replayFloor = null) {
     if (!exactKeys(packet, 'manifest,signature,snapshot')) {
       throw pinError('invalid-generation-packet', 'Invalid signed recipe generation packet');
     }
@@ -126,15 +126,17 @@ export class PinnedRecipeGenerationCache {
     }
     validateSnapshot(snapshot, manifest.snapshotDigest, pin);
     const json = canonicalJson(packet);
-    const cached = this.#put('signed:' + cacheKey(pin), json);
+    replayFloor?.advance(pin);
+    const cached = this.#put((replayFloor ? 'signed-durable:' : 'signed:') + cacheKey(pin), json);
     return { pin, ...JSON.parse(json), cached };
   }
 
-  getSigned(pin, policy) {
-    const packet = this.#get('signed:' + cacheKey(pin));
+  getSigned(pin, policy, replayFloor = null) {
+    const packet = this.#get((replayFloor ? 'signed-durable:' : 'signed:') + cacheKey(pin));
     if (!packet) return null;
     const { manifest, signature } = packet;
-    verifySignedRecipeManifest({ manifest, signature }, policy);
+    const verified = verifySignedRecipeManifest({ manifest, signature }, policy);
+    replayFloor?.assertCurrent(verified);
     return packet;
   }
 
