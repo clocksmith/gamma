@@ -1,0 +1,90 @@
+{
+  "scope": "One original Qwen development prompt on Suby, raw prefill with the frozen plain ridge classifier.",
+  "fixture": {
+    "baseManifestSha256": "c5fcf38e945f1c048faca9ccda8991f1494563317f46a6dd79e0714ad001c569",
+    "sourceCommit": "e45824b09ff2a7d32d4278e4ecd870c55268bfec",
+    "headerSha256": "daf8cef5cc2ac6a876582a14c9b62c1031e34724e260d2a862b359330af80d22",
+    "table": "dev_1103_s0_word",
+    "tasks": [
+      {
+        "id": 0,
+        "prompt": "Sorting desk 1: each item gets the code of its group. Return only the code.\nItem: a rake on the list =>",
+        "expected": "east",
+        "tokens": 28,
+        "historicalCode": "east"
+      }
+    ]
+  },
+  "runtime": {
+    "commit": "e45824b09ff2a7d32d4278e4ecd870c55268bfec",
+    "engine": "Doppler",
+    "execution": "SwiftShader CPU Vulkan; F32 activations (device lacks shader-f16)",
+    "nodeVersion": "22.21.0",
+    "verifiedExistingShards": 18,
+    "requesterModelWeightDownloadBytes": 0,
+    "modelDirectoryReadOnly": true,
+    "networkEnabled": false,
+    "physicalGpuExposed": false
+  },
+  "runnerSha256AsExecuted": "255064d6bfff0a3a07f8c297c7c598f0bc2edaa78dec533ee6b53556a7279bde",
+  "rawResultSha256": "e70a1285d5776dc6b00415d821e8fc5016482de53ce4bd1e4256237c373c8fce",
+  "result": {
+    "base": {
+      "model": "qwen-3-5-0-8b-q4k-ehaf16",
+      "manifestSha256": "c5fcf38e945f1c048faca9ccda8991f1494563317f46a6dd79e0714ad001c569",
+      "layers": [
+        22,
+        23
+      ],
+      "dimensions": [
+        3584,
+        3584
+      ]
+    },
+    "table": "dev_1103_s0_word",
+    "coefficientsSha256": "73fce62cba5905807bcf27d236880650a651a5b5d9fcdd5a75b6ad77ca8120b5",
+    "feature": "ffn_act",
+    "rows": [
+      {
+        "id": 0,
+        "tokens": 28,
+        "promptSha256": "2d6878b452fa559d2a1a101a62b57fda0502cde6762d49260878c740f8ea77d6",
+        "calls": [
+          {
+            "layer": 22,
+            "dtype": "f32",
+            "rows": 28,
+            "width": 3584
+          },
+          {
+            "layer": 23,
+            "dtype": "f32",
+            "rows": 28,
+            "width": 3584
+          }
+        ],
+        "scores": [
+          -0.134775310754776,
+          -0.47756311297416687,
+          0.721727728843689,
+          -0.1092391312122345
+        ],
+        "code": "east",
+        "historicalCode": "east",
+        "expected": "east",
+        "classifierReadbackBytes": 16
+      }
+    ],
+    "backend": "SwiftShader driver 5.0.0",
+    "classifierWeightBufferBytes": 57352,
+    "scope": "Forward pass from raw text through a fixed development readout. Readback count covers this classifier only.",
+    "matches": true
+  },
+  "alternativeAttempt": {
+    "backend": "llvmpipe",
+    "result": "rejected during LM head loading",
+    "requestedBindingBytes": 143032320,
+    "maxBindingBytes": 134217728
+  },
+  "limits": "The scoped 16-byte figure counts this classifier\u2019s readback only. This single forward establishes integration, without a production latency or accuracy estimate."
+}
