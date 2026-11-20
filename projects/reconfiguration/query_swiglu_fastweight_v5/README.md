@@ -131,3 +131,17 @@ the table present. Capture parity requires a relative L2 difference at most `1e-
 both captured tensors and both fitted factors, and identical greedy token IDs on every
 question. The complete compile timer includes tokenization, isolated and whole-table
 captures, file interchange, the Node fit and loading the factors back into Torch.
+
+Pass `--first-token-control` to run two further CPU arms. Each reads the support codes'
+first token IDs, allows only those IDs for the first greedy token, then decodes freely.
+The rule is identical for the base model with the table and the adapter with the table
+removed. The receipt records the unrestricted top token, highest-scoring allowed token
+and logit gap. It verifies full-token parity whenever the original first token was allowed.
+The development comparison was fixed before collecting these arms. It uses seeds 1107 and 1108,
+two tables per seed, 20 examples and four queries per group, batch size 8.
+
+In the Doppler runner, `B1_WITH_FIRST_TOKEN_CONTROL=1` adds `ra_first_bare` and
+`kv_first_ctx` on development tables. Enable `B1_WITH_READOUT_ADAPTER=1`,
+`B1_WITH_CONTROLS=1` and `B1_WITH_KV_SNAPSHOT=1` alongside it. Compare each extra
+arm with `ra_bare` or `kv_ctx` on the same questions. A GPU run still needs the
+normal resource check. CPU evidence for the decoder rule is in [RESULTS.md](RESULTS.md).

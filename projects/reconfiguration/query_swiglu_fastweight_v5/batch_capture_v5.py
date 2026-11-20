@@ -122,9 +122,25 @@ def compile_table(model, tokenizer, header, support, batch_size):
     return (a, b), (zi, hi), timing
 
 
-def decode(model, tokenizer, prompt, limit, factors=None):
+def decode(model, tokenizer, prompt, limit, factors=None, first_tokens=None):
     ids = torch.tensor([tokenizer.encode(prompt, add_special_tokens=False)])
     newline, = tokenizer.encode("\n", add_special_tokens=False)
+    first_choice = {}
+    processors = []
+    if first_tokens is not None:
+        allowed = torch.tensor(sorted(first_tokens), dtype=torch.long)
+
+        def restrict_first(input_ids, scores):
+            if input_ids.shape[1] != ids.shape[1]:
+                return scores
+            raw = scores[0].argmax().item()
+            best = allowed[scores[0, allowed].argmax()].item()
+            first_choice.update(raw=raw, best_allowed=best, logit_gap=(scores[0, raw] - scores[0, best]).item())
+            masked = torch.full_like(scores, -torch.inf)
+            masked[:, allowed] = scores[:, allowed]
+            return masked
+
+        processors.append(restrict_first)
     with ExitStack() as hooks:
         if factors is not None:
             a, b = factors
@@ -134,10 +150,13 @@ def decode(model, tokenizer, prompt, limit, factors=None):
         # Greedy, full-vocabulary decoding includes the model's own answer termination.
         seq = model.generate(input_ids=ids, attention_mask=torch.ones_like(ids), max_new_tokens=limit,
                              do_sample=False, eos_token_id=[newline, tokenizer.eos_token_id],
-                             pad_token_id=tokenizer.eos_token_id, use_cache=True)
+                             pad_token_id=tokenizer.eos_token_id, use_cache=True, logits_processor=processors)
     new = seq[0, ids.shape[1]:].tolist()
     answer = tokenizer.decode(new, skip_special_tokens=True).strip().split("\n")[0].strip()
-    return {"tokens": new, "answer": answer}
+    result = {"tokens": new, "answer": answer}
+    if first_tokens is not None:
+        result["first_choice"] = first_choice
+    return result
 
 
 def error(actual, reference):
@@ -162,6 +181,8 @@ def main():
     parser.add_argument("--queries", type=int, default=2)
     parser.add_argument("--batch-size", type=int, default=8)
     parser.add_argument("--threads", type=int, default=2)
+    parser.add_argument("--first-token-control", action="store_true",
+                        help="Also decode both the base and readout with the first token restricted to support code starts")
     args = parser.parse_args()
     if min(args.tables, args.shots, args.queries, args.threads) < 1 or args.batch_size < 2:
         parser.error("Counts must be positive and the batch size must be at least two")
@@ -181,6 +202,7 @@ def main():
                "model": args.model.name, "torch": str(torch.__version__), "transformers": transformers.__version__,
                "platform": platform.platform(), "python": platform.python_version(), "device": "cpu",
                "dtype": "float32", "threads": args.threads, "torch_interop_threads": 1,
+               "first_token_control": args.first_token_control,
                "source_sha256": {f: sha256(HERE / f) for f in ("batch_capture_v5.py", "tasks_v5.py",
                                   "compile_readout_files_v5.mjs", "readout_adapter_v5.mjs")},
                "model_file_sha256": {f.name: sha256(f) for f in sorted(args.model.iterdir())
@@ -190,8 +212,9 @@ def main():
     # Warm the model before timing. Alternate which method runs first across tables.
     for i, (name, tasks) in enumerate(tables.items()):
         header, support = tasks[0]["header_text"], tasks[0]["support_text"]
+        isolated, _, _ = support_inputs(tokenizer, header, support)
+        first_tokens = sorted({line.ids[line.positions[0] + 1] for line in isolated})
         if i == 0:
-            isolated, _, _ = support_inputs(tokenizer, header, support)
             capture(model, isolated[:args.batch_size], args.batch_size, tokenizer.eos_token_id)
             capture(model, isolated[:1], 1, tokenizer.eos_token_id)
         factors, activations, timing = {}, {}, {}
@@ -205,13 +228,28 @@ def main():
             base = decode(model, tokenizer, q["prompt"], q["max_new_tokens"])
             bare = {arm: decode(model, tokenizer, q["bare_prompt"], q["max_new_tokens"], factors[arm])
                     for arm in ("serial", "batch")}
-            answers.append({"task_id": q["task_id"], "expected": q["expected"], "base_table": base, **bare})
+            row = {"task_id": q["task_id"], "expected": q["expected"], "base_table": base, **bare}
+            if args.first_token_control:
+                row["base_table_first"] = decode(model, tokenizer, q["prompt"], q["max_new_tokens"],
+                                                 first_tokens=first_tokens)
+                row["batch_first"] = decode(model, tokenizer, q["bare_prompt"], q["max_new_tokens"],
+                                            factors["batch"], first_tokens)
+                for arm in ("base_table", "batch"):
+                    first = row[arm + "_first"]
+                    raw = row[arm]["tokens"]
+                    if first["first_choice"]["raw"] != raw[0] or first["tokens"][0] not in first_tokens:
+                        raise ValueError("First-token control differs before restriction or emitted an invalid start")
+                    if raw[0] in first_tokens and first["tokens"] != raw:
+                        raise ValueError("The control changed a decode whose first token was already allowed")
+            answers.append(row)
         passed = (max(diff[k]["relative_l2"] for k in ("z", "h", "a", "b")) <= 1e-4
                   and all(r["serial"]["tokens"] == r["batch"]["tokens"] for r in answers))
-        correct = {arm: sum(row[arm]["answer"] == row["expected"] for row in answers)
-                   for arm in ("base_table", "serial", "batch")}
+        arms = ["base_table", "serial", "batch"]
+        if args.first_token_control:
+            arms.extend(("base_table_first", "batch_first"))
+        correct = {arm: sum(row[arm]["answer"] == row["expected"] for row in answers) for arm in arms}
         receipt["tables"].append({"specialty_id": name, "timing": timing, "error": diff, "answers": answers,
-                                  "exact_correct": correct, "codes": tasks[0]["codes"],
+                                  "exact_correct": correct, "codes": tasks[0]["codes"], "support_first_tokens": first_tokens,
                                   "guess_valid_code_rate": 1 / len(tasks[0]["codes"]), "parity_pass": passed})
         print(name, json.dumps(timing), "parity", passed, flush=True)
     args.output.parent.mkdir(parents=True, exist_ok=True)
