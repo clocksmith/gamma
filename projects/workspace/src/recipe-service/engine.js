@@ -584,6 +584,111 @@ export function createManagedRecipeEngine({
     return { verificationId, limits, meta, steps };
   }
 
+  function normalizeResolveInput(principal, body) {
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      throw serviceError(400, 'invalid-body', 'JSON object required');
+    }
+    const limits = validateLimits(body.limits ?? DEFAULT_LIMITS);
+    const meta = resolveNamespaceMeta(principal, {
+      scope: body.scope ?? 'workspace',
+      origin: body.origin,
+      template: body.template,
+      readScope: body.readScope ?? null,
+    });
+    const availableSlotNames = body.availableSlots === undefined
+      ? null
+      : body.availableSlots;
+    if (availableSlotNames !== null && (!Array.isArray(availableSlotNames)
+      || availableSlotNames.some(s => typeof s !== 'string' || !IDENT_RE.test(s)))) {
+      throw serviceError(400, 'invalid-available-slots', 'availableSlots must be an array of slot identifiers');
+    }
+    const currentOutline = body.currentOutline ?? null;
+    if (currentOutline !== null && !HASH_RE.test(currentOutline)) {
+      throw serviceError(400, 'invalid-current-outline', 'currentOutline must be a 64-hex structural hash');
+    }
+
+    return { body, limits, meta, availableSlotNames, currentOutline };
+  }
+
+  async function resolveLegacyRecipe(context) {
+    const { meta, limits } = context;
+    const nsRow = await store.get(
+      'SELECT revision FROM recipe_namespaces WHERE namespace_id = ?',
+      [meta.namespaceId],
+    );
+    const revision = Number(nsRow?.revision ?? 0);
+    const { nodes: reducedNodes, stats: reduction } = await loadGraphAndReduce(meta, limits, {
+      promotedOnly: meta.scope === 'catalog',
+      persistReduction: false,
+    });
+
+    return renderResolvedRecipe(context, { revision, reducedNodes, reduction });
+  }
+
+  function renderResolvedRecipe({ body, limits, meta, availableSlotNames, currentOutline }, { revision, reducedNodes, reduction }) {
+    const availableSlotHashes = availableSlotNames === null
+      ? null
+      : new Set(availableSlotNames.map(slot => dagHash(meta.dagKey, ['slot', slot])));
+
+    const dp = reducedNodes.size > 0
+      ? solveRecipeDp(reducedNodes, limits, { availableSlots: availableSlotHashes, replanPenalty })
+      : { values: new Map(), policy: new Map() };
+    const compressionStats = reducedNodes.size > 0
+      ? analyzeTraceGraph(reducedNodes, limits)
+      : {
+        nodeCount: 0, edgeCount: 0, repairBridgeCount: 0, terminalCount: 0,
+        sharedMergeNodes: 0, confluentDiamonds: 0, maxDepth: 0, optimalRootCosts: {},
+      };
+
+    let entryNodeId = null;
+    let entryOptimalCost = null;
+    if (currentOutline) {
+      const entry = computeStateNodeId(meta.dagKey, {
+        template: meta.template,
+        origin: meta.origin,
+        readScope: meta.readScope,
+        outlineHash: currentOutline,
+        slotNames: body.currentFilledSlots ?? [],
+        sameOutlineClicks: 0,
+      });
+      if (reducedNodes.has(entry.nodeId)) {
+        entryNodeId = entry.nodeId;
+        const val = dp.values.get(entry.nodeId);
+        entryOptimalCost = Number.isFinite(val) ? val : null;
+      }
+    }
+
+    const dag = {
+      version: VERSION,
+      key: meta.dagKey,
+      limits,
+      nodes: [...reducedNodes.entries()],
+    };
+    const dagDigest = sha256Hex(canonicalJson(dag));
+    const signature = signEnvelope({
+      namespaceId: meta.namespaceId,
+      scope: meta.scope,
+      origin: meta.origin,
+      template: meta.template,
+      revision,
+      dagDigest,
+    });
+
+    return {
+      namespaceId: meta.namespaceId,
+      scope: meta.scope,
+      origin: meta.origin,
+      template: meta.template,
+      revision,
+      dag,
+      dagDigest,
+      signature,
+      reduction,
+      compressionStats,
+      entryLookup: currentOutline ? { currentOutline, entryNodeId, entryOptimalCost } : null,
+    };
+  }
+
   return {
     signEnvelope,
     async registerSubrecipe(principal, body) {
@@ -865,99 +970,51 @@ export function createManagedRecipeEngine({
     },
 
     async resolveRecipe(principal, body) {
-      if (!body || typeof body !== 'object' || Array.isArray(body)) {
-        throw serviceError(400, 'invalid-body', 'JSON object required');
+      return resolveLegacyRecipe(normalizeResolveInput(principal, body));
+    },
+
+    // Controlled developer comparison only. The trusted caller supplies the
+    // same authenticated workspace principal as legacy, and an independently
+    // captured legacy baseline. No result here can dispatch or replace a route.
+    async compareAcceptedWorkspace(principal, body, { generation, legacyRevision, legacyDagDigest } = {}) {
+      const context = normalizeResolveInput(principal, body);
+      const { meta, limits } = context;
+      if (meta.scope !== 'workspace') {
+        throw serviceError(400, 'shadow-workspace-only', 'Shadow comparison requires workspace scope');
       }
-      const limits = validateLimits(body.limits ?? DEFAULT_LIMITS);
-      const meta = resolveNamespaceMeta(principal, {
-        scope: body.scope ?? 'workspace',
-        origin: body.origin,
-        template: body.template,
-        readScope: body.readScope ?? null,
+      if (!Number.isSafeInteger(generation) || generation < 1 ||
+          !Number.isSafeInteger(legacyRevision) || legacyRevision < 0 ||
+          typeof legacyDagDigest !== 'string' || !HASH_RE.test(legacyDagDigest)) {
+        throw serviceError(400, 'invalid-shadow-baseline', 'Pin a generation and captured legacy revision and digest');
+      }
+      const pinned = await createRecipeGenerationStore(store).readGeneration(meta.namespaceId, generation);
+      if (!pinned) throw serviceError(404, 'shadow-generation-unavailable', 'Pinned workspace generation not found');
+      const { receipt, snapshot } = pinned;
+      if (receipt.compilerVersion !== ACCEPTED_GRAPH_COMPILER_V1 ||
+          snapshot.version !== VERSION || snapshot.replanPenalty !== replanPenalty ||
+          canonicalJson(snapshot.limits) !== canonicalJson(limits) || !Array.isArray(snapshot.nodes)) {
+        throw serviceError(409, 'shadow-generation-policy-mismatch', 'Pinned generation does not use this route policy');
+      }
+      const legacy = await resolveLegacyRecipe(context);
+      if (legacy.revision !== legacyRevision || legacy.dagDigest !== legacyDagDigest) {
+        throw serviceError(409, 'shadow-legacy-baseline-changed', 'Current legacy result does not match the captured baseline');
+      }
+      const shadow = renderResolvedRecipe(context, {
+        revision: generation, reducedNodes: new Map(snapshot.nodes), reduction: snapshot.reduction,
       });
-      const availableSlotNames = body.availableSlots === undefined
-        ? null
-        : body.availableSlots;
-      if (availableSlotNames !== null && (!Array.isArray(availableSlotNames)
-        || availableSlotNames.some(s => typeof s !== 'string' || !IDENT_RE.test(s)))) {
-        throw serviceError(400, 'invalid-available-slots', 'availableSlots must be an array of slot identifiers');
-      }
-      const currentOutline = body.currentOutline ?? null;
-      if (currentOutline !== null && !HASH_RE.test(currentOutline)) {
-        throw serviceError(400, 'invalid-current-outline', 'currentOutline must be a 64-hex structural hash');
-      }
-
-      const nsRow = await store.get(
-        'SELECT revision FROM recipe_namespaces WHERE namespace_id = ?',
-        [meta.namespaceId],
-      );
-      const revision = Number(nsRow?.revision ?? 0);
-      const { nodes: reducedNodes, stats: reduction } = await loadGraphAndReduce(meta, limits, {
-        promotedOnly: meta.scope === 'catalog',
-        persistReduction: false,
-      });
-
-      const availableSlotHashes = availableSlotNames === null
-        ? null
-        : new Set(availableSlotNames.map(slot => dagHash(meta.dagKey, ['slot', slot])));
-
-      const dp = reducedNodes.size > 0
-        ? solveRecipeDp(reducedNodes, limits, { availableSlots: availableSlotHashes, replanPenalty })
-        : { values: new Map(), policy: new Map() };
-      const compressionStats = reducedNodes.size > 0
-        ? analyzeTraceGraph(reducedNodes, limits)
-        : {
-          nodeCount: 0, edgeCount: 0, repairBridgeCount: 0, terminalCount: 0,
-          sharedMergeNodes: 0, confluentDiamonds: 0, maxDepth: 0, optimalRootCosts: {},
-        };
-
-      let entryNodeId = null;
-      let entryOptimalCost = null;
-      if (currentOutline) {
-        const entry = computeStateNodeId(meta.dagKey, {
-          template: meta.template,
-          origin: meta.origin,
-          readScope: meta.readScope,
-          outlineHash: currentOutline,
-          slotNames: body.currentFilledSlots ?? [],
-          sameOutlineClicks: 0,
-        });
-        if (reducedNodes.has(entry.nodeId)) {
-          entryNodeId = entry.nodeId;
-          const val = dp.values.get(entry.nodeId);
-          entryOptimalCost = Number.isFinite(val) ? val : null;
-        }
-      }
-
-      const dag = {
-        version: VERSION,
-        key: meta.dagKey,
-        limits,
-        nodes: [...reducedNodes.entries()],
-      };
-      const dagDigest = sha256Hex(canonicalJson(dag));
-      const signature = signEnvelope({
-        namespaceId: meta.namespaceId,
-        scope: meta.scope,
-        origin: meta.origin,
-        template: meta.template,
-        revision,
-        dagDigest,
-      });
-
+      const differences = [];
+      if (legacy.dagDigest !== shadow.dagDigest) differences.push('dag');
+      if (canonicalJson(legacy.entryLookup) !== canonicalJson(shadow.entryLookup)) differences.push('entry-lookup');
       return {
-        namespaceId: meta.namespaceId,
-        scope: meta.scope,
-        origin: meta.origin,
-        template: meta.template,
-        revision,
-        dag,
-        dagDigest,
-        signature,
-        reduction,
-        compressionStats,
-        entryLookup: currentOutline ? { currentOutline, entryNodeId, entryOptimalCost } : null,
+        status: differences.length ? 'mismatch' : 'match',
+        differences,
+        generation,
+        inputWatermark: receipt.inputWatermark,
+        legacyRevision,
+        legacyDagDigest,
+        shadowDagDigest: shadow.dagDigest,
       };
+
     },
   };
 }

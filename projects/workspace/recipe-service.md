@@ -135,3 +135,13 @@ full rebuilds, and does not ingest sub-recipe composition records. The focused
 parity fixture compares against the existing serial SQLite engine on the same
 replay-safe traces. It does not establish that legacy destructive pruning and
 a fresh rebuild agree for every graph or authorize a resolver cutover.
+
+The separate internal `compareAcceptedWorkspace` method lets a developer
+compare an explicitly pinned workspace generation with a captured legacy
+revision and DAG digest. It uses the same v3 rendering and slot-aware entry
+calculation as the default resolver. It returns only agreement/mismatch,
+pinned identifiers and DAG digests, never a second executable response or a
+runtime key. It rejects the comparison if scope, compiler, route policy or
+legacy baseline changes. Use on controlled, quiescent comparison fixtures;
+it does not turn mutable legacy reads into transactions or verify universal
+parity. There is no shadow HTTP endpoint and `/v1/recipes/resolve` is unchanged.
