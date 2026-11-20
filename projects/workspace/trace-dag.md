@@ -218,6 +218,6 @@ order. Known-local patches can commute only when neither writes a resource the
 other reads or writes. Ambient, unknown and externally ordered patches fence
 all earlier and later steps. The planner returns one lexicographically
 canonical topological order, rejecting ambiguous declarations and cyclic
-dependencies. The reporter does not evaluate facts, verify resource aliases,
+dependencies. The analyzer does not evaluate facts, verify resource aliases,
 perform a rewrite or grant native dispatch authority. Existing TraceDag
 reduction and workflow execution do not use the new IR.

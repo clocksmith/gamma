@@ -13,7 +13,7 @@ const invalid = message => { throw new TypeError(message); };
 
 function idSet(value, label) {
   if (!Array.isArray(value) || value.length > MAX_DECLARATIONS
-      || value.some(id => !validId(id)) || new Set(value).size !== value.length) {
+      || [...value].some(id => !validId(id)) || new Set(value).size !== value.length) {
     invalid(`Invalid or ambiguous patch ${label}`);
   }
   return [...value].sort();
@@ -72,7 +72,7 @@ function canCommute(a, b) {
  */
 export function schedulePatchDependenciesV1(serial) {
   if (!Array.isArray(serial) || serial.length > MAX_PATCHES_V1) invalid('Invalid patch schedule size');
-  const patches = serial.map(normalizePatchV1);
+  const patches = Array.from(serial, normalizePatchV1);
   const ids = new Set(patches.map(patch => patch.id));
   if (ids.size !== patches.length) invalid('Ambiguous duplicate patch ID');
   const successors = new Map([...ids].map(id => [id, new Set()]));

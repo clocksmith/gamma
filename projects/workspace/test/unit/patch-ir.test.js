@@ -42,6 +42,8 @@ assert.throws(() => normalizePatchV1(patch('a', {
 assert.throws(() => normalizePatchV1(patch('a', { verifier: { id: 'unversioned' } })), /verifier identity/);
 assert.throws(() => normalizePatchV1(patch('a', { execute: 'arbitrary-command' })), /IR v1 declaration/);
 assert.throws(() => normalizePatchV1(patch('a', { reads: Array.from({ length: 33 }, (_, n) => `r${n}`) })), /reads/);
+assert.throws(() => normalizePatchV1(patch('a', { reads: new Array(1) })), /reads/);
+assert.throws(() => schedulePatchDependenciesV1(new Array(1)), /IR v1 declaration/);
 const atBound = Array.from({ length: MAX_PATCHES_V1 }, (_, n) => patch(`p${n}`));
 assert.equal(schedulePatchDependenciesV1(atBound).order.length, MAX_PATCHES_V1);
 assert.throws(() => schedulePatchDependenciesV1([...atBound, patch('extra')]), /schedule size/);
