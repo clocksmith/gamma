@@ -553,3 +553,19 @@ changes but are not a filesystem transaction.
 This is not wired into live workspace dispatch or a macOS picker, and supplies
 no browser or native document authority. The local fixture covers observation,
 change and detach races, and refusal when the handle or byte budget is absent.
+
+The standalone selection broker in `src/surfaces/local-document-broker.js`
+splits the owner selector from the observation port. The owner UI must call
+`owner.select()` from explicit human selection, using a trusted same-process
+selector that supplies a read-only handle and release hook. The observation
+port can only use an opaque token for the current selection. Cancel keeps the
+current selection; replacement, revocation, or close detach it and release
+the handle. A late picker result cannot reopen a revoked/closed selection.
+Neither port is exposed to workspace recipes or HTTP.
+
+The macOS gate is still pending: an AppKit host must implement the explicit
+native picker and handle lifecycle without granting broad filesystem access
+or sending a pathname over the recipe transport. Compile the real host on
+macOS and manually check selection, cancellation, denial, replacement and
+release before claiming OS support. The broker unit test uses real local
+read-only descriptors without launching or automating a GUI.
