@@ -567,9 +567,30 @@ current selection; replacement, revocation, or close detach it and release
 the handle. A late picker result cannot reopen a revoked/closed selection.
 Neither port is exposed to workspace recipes or HTTP.
 
-The macOS gate is still pending: an AppKit host must implement the explicit
-native picker, handle lifecycle and live binding without granting broad filesystem access
-or sending a pathname over the recipe transport. Compile the real host on
-macOS and manually check selection, cancellation, denial, replacement and
-release before claiming OS support. The broker unit test uses real local
-read-only descriptors without launching or automating a GUI.
+The standalone Swift component in `src/surfaces/macos/SelectedDocument.swift`
+can open an explicit AppKit picker and inspect the current selected file.
+It retains the selected inode until revocation and uses a fresh, coordinated,
+read-only open and revision check for each observation. It does not follow a
+move or replacement. After Foundation safe save or any other inode replacement,
+the owner must reselect. Neither matching bytes nor a matching Foundation
+document identifier proves that a replacement came from the expected writer.
+On the tested Mac, a tracked file's identifier also survived an unrelated
+same-name replacement; using it alone would have accepted the wrong object.
+
+Run only the generated-file qualification on macOS from this directory:
+
+```sh
+build_dir=$(mktemp -d)
+xcrun swiftc -warnings-as-errors src/surfaces/macos/SelectedDocument.swift \
+  qualification/selected-document-macos.swift -o "$build_dir/check"
+"$build_dir/check"
+rm -r "$build_dir"
+```
+
+The fixture proves in-place observation, fail-closed Foundation safe save,
+explicit reselection, and refusal for unrelated identical bytes, deletion,
+and symlink substitution. It does not open the picker, prove writer identity,
+or integrate with JavaScript/dispatch. A signed App Sandbox host with explicit
+user selection and cancellation, denied access and revoke/release still
+needs interactive qualification. No retained bookmark or entitlement change
+is introduced here.
