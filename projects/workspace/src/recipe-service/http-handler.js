@@ -1,6 +1,7 @@
 // Web-standard HTTP handler for Fawn Managed Recipe Service (Cloudflare Workers & Cloud Run).
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { encodeRecipeManifest } from '../client/signed-recipe-manifest.js';
+import { canonicalJson } from '../client/trace-graph-dp.js';
 
 const HASH_RE = /^[a-f0-9]{64}$/;
 const DEFAULT_MAX_BODY_BYTES = 1024 * 1024;
@@ -147,14 +148,20 @@ export function createManagedRecipeHttpHandler({
       if (generationSigner && request.method === 'POST' && pathname === '/v1/recipe-generations/read') {
         const body = await readBoundedJson(request, maxBodyBytes);
         const pinned = await engine.readPublishedWorkspaceGeneration(principal, body);
-        const { manifest, signature } = await generationSigner(pinned);
-        encodeRecipeManifest(manifest);
-        const boundFields = ['namespaceId', 'generation', 'inputWatermark', 'compilerVersion', 'snapshotDigest', 'generationDigest'];
-        if (!boundFields.every(key => manifest[key] === pinned.receipt[key]) ||
-            typeof signature !== 'string' || !/^[a-f0-9]{128}$/.test(signature)) {
-          throw Error('Generation signer returned an incompatible manifest');
+        try {
+          const { manifest, signature } = await generationSigner(structuredClone(pinned));
+          encodeRecipeManifest(manifest);
+          const boundFields = ['namespaceId', 'generation', 'inputWatermark', 'compilerVersion', 'snapshotDigest', 'generationDigest'];
+          if (!boundFields.every(key => manifest[key] === pinned.receipt[key]) ||
+              manifest.replanPenalty !== pinned.snapshot.replanPenalty ||
+              canonicalJson(manifest.limits) !== canonicalJson(pinned.snapshot.limits) ||
+              typeof signature !== 'string' || !/^[a-f0-9]{128}$/.test(signature)) {
+            throw Error('Generation signer returned an incompatible manifest');
+          }
+          return jsonResponse(200, { manifest, signature, snapshot: pinned.snapshot }, { privateResponse: true });
+        } catch {
+          return jsonResponse(500, { error: 'generation-signing-unavailable' }, { privateResponse: true });
         }
-        return jsonResponse(200, { manifest, signature, snapshot: pinned.snapshot }, { privateResponse: true });
       }
 
       if (request.method === 'POST' && pathname === '/v1/recipes/resolve') {

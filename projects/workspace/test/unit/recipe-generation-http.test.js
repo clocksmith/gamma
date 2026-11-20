@@ -16,10 +16,18 @@ const clients = [{ ...alpha, tokenHash: tokenHash(alphaToken) }, { ...beta, toke
 const secret = 'public-local-fixture-secret-32-characters';
 const { privateKey, publicKey } = generateKeyPairSync('ed25519');
 const issuedAt = 1700000000000;
-let signingCalls = 0;
+let signingCalls = 0, signingMode = 'valid';
 const generationSigner = packet => {
   signingCalls++;
-  return signRecipeGenerationManifest({ packet, privateKey, issuedAt, expiresAt: issuedAt + 60_000 });
+  if (signingMode === 'error') {
+    throw Object.assign(Error('fixture signer details'), { status: 400, code: 'fixture-private-signer-error' });
+  }
+  const signed = signRecipeGenerationManifest({ packet, privateKey, issuedAt, expiresAt: issuedAt + 60_000 });
+  if (signingMode === 'policy') {
+    signed.manifest.replanPenalty++;
+    packet.snapshot.replanPenalty++;
+  }
+  return signed;
 };
 const request = { origin: 'https://fixture.example', template: 'open-form' };
 const generationPath = '/v1/recipe-generations/read';
@@ -76,6 +84,13 @@ try {
   assert.equal(sha256(canonicalJson(value.snapshot)), value.manifest.snapshotDigest);
   assert.equal(Object.hasOwn(value.snapshot, 'key'), false);
   assert.equal(signingCalls, 1);
+  for (const mode of ['error', 'policy']) {
+    signingMode = mode;
+    const refusal = await enabled.post(generationPath, { ...request, generation: 1 });
+    assert.equal(refusal.status, 500);
+    assert.equal(refusal.headers.get('cache-control'), 'private, no-store');
+    assert.deepEqual(await refusal.json(), { error: 'generation-signing-unavailable' });
+  }
   assert.deepEqual(await enabled.post('/v1/recipes/resolve', request).then(r => r.json()), legacy);
 } finally {
   for (const instance of opened) {
