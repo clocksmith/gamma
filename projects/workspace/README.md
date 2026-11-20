@@ -542,7 +542,9 @@ Private cross-client workflow storage and deployment: [shared registry](workflow
 
 `src/surfaces/local-document.js` is a narrow native observation provider for
 an owner-selected, already-open file handle. It reports bounded content
-fingerprints and checks whether an expected document state is observed. It
+fingerprints of that descriptor only. Reconciliation returns unknown until
+a trusted live binding can verify the current document independently of the
+open descriptor. Even matching bytes cannot distinguish an atomic safe save. It
 does not open arbitrary paths, emit file bytes, write, run commands, request
 OS permissions, or resolve a workspace action as successful. The caller owns
 the descriptor; detach fences future observations without closing it. The
@@ -552,7 +554,9 @@ changes but are not a filesystem transaction.
 
 This is not wired into live workspace dispatch or a macOS picker, and supplies
 no browser or native document authority. The local fixture covers observation,
-change and detach races, and refusal when the handle or byte budget is absent.
+in-place changes, change and detach races, atomic same-name replacement with
+matching or different bytes, deletion, and refusal when a live binding, handle
+or byte budget is absent.
 
 The standalone selection broker in `src/surfaces/local-document-broker.js`
 splits the owner selector from the observation port. The owner UI must call
@@ -564,7 +568,7 @@ the handle. A late picker result cannot reopen a revoked/closed selection.
 Neither port is exposed to workspace recipes or HTTP.
 
 The macOS gate is still pending: an AppKit host must implement the explicit
-native picker and handle lifecycle without granting broad filesystem access
+native picker, handle lifecycle and live binding without granting broad filesystem access
 or sending a pathname over the recipe transport. Compile the real host on
 macOS and manually check selection, cancellation, denial, replacement and
 release before claiming OS support. The broker unit test uses real local

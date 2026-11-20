@@ -36,7 +36,7 @@ try {
   assert.equal(observing.sha256, digest('first'));
   assert.deepEqual(await broker.observer.reconcile(first.documentId, {
     sha256: digest('first'), byteLength: 5,
-  }), { status: 'expected-state-observed', observation: observing });
+  }), { status: 'unknown', reason: 'live-document-binding-unavailable' });
   assert.deepEqual(await broker.observer.reconcile(first.documentId, {
     sha256: digest('first'), byteLength: 5, path: firstPath,
   }), { status: 'unknown', reason: 'invalid-document-expectation' });

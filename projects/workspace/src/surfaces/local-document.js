@@ -67,15 +67,11 @@ export async function bindSelectedLocalDocument({ documentId, handle, maxBytes =
         expected.byteLength > maxBytes) {
       return unknown('invalid-document-expectation');
     }
-    const observed = await observe();
     if (!attached) return unknown('selection-detached');
-    if (observed.status !== 'observed') return observed;
-    if (observed.byteLength !== expected.byteLength || observed.sha256 !== expected.sha256) {
-      return unknown('expected-state-not-observed');
-    }
-    // This says only that the expected bytes were observed on the selected
-    // handle. It identifies no writer and never resolves action uncertainty.
-    return { status: 'expected-state-observed', observation: observed };
+    // A readable descriptor (even with matching bytes) cannot establish that
+    // the owner-selected document still points to this object after a safe save.
+    // This surface has no trusted live binding, so do not read or confirm it.
+    return unknown('live-document-binding-unavailable');
   }
 
   return Object.freeze({
