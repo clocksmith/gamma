@@ -1,6 +1,12 @@
 # Gammatron #88: independent offline holdout
 
-**Result:** 21 pairs (42 evaluation rows), three synthetic workflow domains. Both arms completed 9/9 exact reviews and safely refused 12/12 negatives before dispatch. Suffix matching used 18 vs. 42 scripted planner decisions, with 39 vs. 18 cached steps and 3 certified suffix rejoins. The 57.1% difference is in scripted decisions, not measured latency or production model calls.
+**Result:** 21 pairs (42 evaluation rows), three synthetic workflow domains.
+
+- **Nine valid pairs:** both arms completed all nine exact reviews. Exact-hash to suffix matching went from **42 to 18 scripted planner decisions (57.1% fewer)**, and from **18 to 39 cached steps**. The suffix arm recorded **three certified suffix rejoins**.
+- **Twelve negative pairs:** both arms safely refused all twelve before dispatching any effect, with **3 to 3 scripted decisions**. Each arm spent one scripted decision on each of the three duplicate-target cases; every other negative case required none.
+- **All 21 pairs:** exact-hash to suffix matching went from **45 to 21 scripted planner decisions (53.3% fewer)**.
+
+These counts measure scripted decisions, not latency or production model calls.
 
 Exact Gamma source: `5b79bceccf6cc0efbba6a35823d02bb8c77f0233` ([commit](https://github.com/clocksmith/gamma/commit/5b79bceccf6cc0efbba6a35823d02bb8c77f0233)). [DECO #88](https://github.com/clocksmith/deco/issues/88) remains open.
 
