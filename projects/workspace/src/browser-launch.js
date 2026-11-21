@@ -86,4 +86,4 @@ function playwrightLaunchOptions(browser) {
   return { channel: STOCK_CHANNELS[browser.channel] };
 }
 
-export { BROWSER_CHANNELS, validateFawnBuild, prepareFawnLaunch, playwrightLaunchOptions };
+export { BROWSER_CHANNELS, forcedRuntimeArgs, validateFawnBuild, prepareFawnLaunch, playwrightLaunchOptions };

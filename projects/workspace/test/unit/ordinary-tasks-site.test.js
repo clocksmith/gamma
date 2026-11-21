@@ -1,7 +1,8 @@
 // Unit checks for the Track C ordinary browser task suite and independent oracles.
 
 import assert from 'node:assert/strict';
-import { resolve, dirname } from 'node:path';
+import { existsSync } from 'node:fs';
+import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   buildOrdinaryTaskSpecs,
@@ -49,6 +50,14 @@ assert.equal(quote.total, '$1024.00');
 
 const rel = computeMatchingRelease({ channel: 'LTS', subsystem: 'router' });
 assert.equal(rel.version, 'v4.6.9-lts');
+
+// The served task pages come from a sibling Simulatte checkout pinned by commit. That checkout is a
+// qualification fixture, not part of the workspace package, so the pure oracle checks above still run
+// without it and the served-page checks report an explicit skip.
+if (!existsSync(join(SIMULATTE_REPO, '.git'))) {
+  console.log(`skip: served ordinary-task pages need a sibling Simulatte checkout at ${SIMULATTE_REPO}`);
+  process.exit(0);
+}
 
 const server = await startOrdinaryTasksServer({ simulatteRepo: SIMULATTE_REPO });
 try {

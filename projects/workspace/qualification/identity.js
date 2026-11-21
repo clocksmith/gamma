@@ -46,7 +46,7 @@ function repoFileSha256(repoPath) {
 function gitState() {
   try {
     const commit = execFileSync('git', ['-C', REPO_ROOT, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
-    const dirty = execFileSync('git', ['-C', REPO_ROOT, 'status', '--porcelain', '--', 'projects/workspace', 'config', 'browser/chromium/scripts/browser-runtime-selector.mjs'], {
+    const dirty = execFileSync('git', ['-C', REPO_ROOT, 'status', '--porcelain', '--', 'projects/workspace', 'config', 'projects/workspace/src/browser-launch.js'], {
       encoding: 'utf8',
     }).trim();
     return { commit, workingTreeChanges: dirty.length > 0 ? dirty.split('\n') : [] };
@@ -148,8 +148,8 @@ function resultIdentity() {
       sha256: repoFileSha256('projects/workspace/config/browser-product-comparison-policy.json'),
     },
     serviceSource: treeDigest('projects/workspace/src'),
-    runtimeSelector: { path: 'browser/chromium/scripts/browser-runtime-selector.mjs',
-      sha256: repoFileSha256('browser/chromium/scripts/browser-runtime-selector.mjs') },
+    runtimeSelector: { path: 'projects/workspace/src/browser-launch.js',
+      sha256: repoFileSha256('projects/workspace/src/browser-launch.js') },
     harness: treeDigest('projects/workspace/qualification'),
     packageLock: { path: 'projects/workspace/package-lock.json', sha256: repoFileSha256('projects/workspace/package-lock.json') },
     fixtureSite: {

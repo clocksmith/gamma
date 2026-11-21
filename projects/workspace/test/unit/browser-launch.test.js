@@ -6,9 +6,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadServiceConfig, validateServiceConfig } from '../../src/config.js';
-import { prepareFawnLaunch, validateFawnBuild, playwrightLaunchOptions } from '../../src/browser-launch.js';
+import { forcedRuntimeArgs, prepareFawnLaunch, validateFawnBuild, playwrightLaunchOptions } from '../../src/browser-launch.js';
 import { stageBrowserProfile, profileFailures, matchesSelectedBuild } from '../../qualification/browser-profile.js';
-import { forcedRuntimeArgs } from '../../../chromium/scripts/browser-runtime-selector.mjs';
 
 const root = realpathSync.native(mkdtempSync(join(tmpdir(), 'fawn-build-')));
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
