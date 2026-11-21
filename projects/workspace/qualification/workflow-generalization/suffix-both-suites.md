@@ -89,6 +89,90 @@ these results needs a new run, reported separately.
 - **Both options on:** behaves like the index arm, because replay consults the index first and
   never falls through to the profile matcher.
 
-## Result
+## Result, 2026-11-21, commit `f6dbb2a`, clean tree
 
-Pending.
+The `src/` tree at the run commit is `a186e8c`, the same as at the merged revision. No model was
+called. Node 22.20.0; the form suite ran in Chrome 158.
+
+**Verdict by the rule: S1, S2 and B1 hold; B2 fails. The index matcher is safe on both suites but
+not sufficient. Neither matcher replaces the other.**
+
+### Form suite: 104 evaluation runs per configuration
+
+| Matcher | Decisions without resume | Decisions with resume | Certified rejoins | Wrong-field fills | Rows as expected |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Index (candidate) | 93 to 64 | 59 to 29 | 23 and 30 | 0 | 104 of 104 |
+| Profile, word routes | 93 to 93 | 59 to 59 | 0 and 0 | 0 | 104 of 104 |
+| Profile, numeric routes | 93 to 93 | 59 to 59 | 0 and 0 | 0 | 104 of 104 |
+
+- **Index.** Fewer decisions on 8 of 26 vendor-variant rows in each pair, more on none. The gains
+  are on `reordered`, `changed-label`, `extra-question` and `dependent-question`. These are the
+  numbers recorded before the merge in `suffix-ablation.md`, so the merge did not change this
+  matcher here.
+- **Profile.** Every row equals exact matching, as in `suffix-crosscheck.md`.
+- **All configurations.** No submission. The 14 rows per arm that must stop stopped. Evaluation
+  left the graph and index unchanged.
+
+Hidden-state rows, for each matcher: the 16 guarded rows dispatched no effect and the 16 controls
+dispatched 112, seven in every run. On the reordered page the index matcher certified a suffix in
+4 guarded rows; the write-boundary check refused each before dispatch. In the controls, with the
+check removed, it certified 20 times and the writes went into the locked draft. The matcher cannot
+see that state. The check is what stops the write.
+
+### Sandbox suite: 32 held-out variants and 24 near-misses per arm
+
+| Arm | Held-out completed | Rejoin within two steps | Planner calls | Reused steps | Certified, held-out / near-miss | Near-miss expectations failed | Unsafe certifications |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Exact | 32 | 4 of 32 (12.5%) | 124 | 16 | 0 / 0 | 0 | 0 |
+| Index (candidate) | 32 | 4 of 32 (12.5%) | 124 | 16 | 0 / 0 | 0 | 0 |
+| Profile (ablation) | 32 | 28 of 32 (87.5%) | 20 | 120 | 28 / 8 | 0 | 0 |
+| Both options (exploratory) | 32 | 4 of 32 (12.5%) | 124 | 16 | 0 / 0 | 0 | 0 |
+
+Receipt: [`suffix-both-suites-sandbox.json`](./suffix-both-suites-sandbox.json).
+
+- **Index.** It never certified, so every row equals exact matching. It refused 1,008 candidates
+  as `prefix-unaccounted` and 168 as `page-mismatch`. Its near-miss result is therefore safe by
+  abstaining. It says nothing about whether a certification there would have been right.
+- **Profile.** It reproduces its committed receipt, 124 calls to 20. Its 8 near-miss
+  certifications are 4 on the hidden-drift case and 4 on the approval case. On hidden drift it
+  dispatched 4 actions, the same number exact matching dispatches through the planner; review
+  rejected the run and the matcher then added a guard. On the approval case the approval click
+  was made and the run completed, as the suite expects.
+- **Both options.** Identical to the index arm. `replay` and `continueReplay` in
+  `src/client/trace-dag.js` consult the index first and return, so the profile matcher is never
+  asked. The file holds both matchers; a run uses one.
+
+### What each matcher misses
+
+- **Index:** every sandbox variant that begins after the taught entry screen or enters by an
+  untaught route, which is seven of the eight classes. In the eighth, an unseen entry that leads
+  to the learned page unchanged, all arms tie at one planner call. The cause is one rule: each
+  step before a learned state must have been run in this session or be visibly settled on the
+  page.
+- **Profile:** every form-suite class that changes the page: `reordered`, `changed-label`,
+  `extra-question` and `dependent-question`. The causes were read at an earlier revision and are
+  listed in `suffix-crosscheck.md`. They were not read again here.
+- **After a hidden-state failure:** the profile matcher adds a guard or demotes the state, 4 of 4
+  here. The index matcher has no such step.
+
+### Predictions
+
+All three held.
+
+### Limits
+
+- A scripted function stands in for the planner. Decisions are not model calls, latency or spend.
+- The sandbox suite is synthetic snapshots behind an in-memory adapter. The form suite is real
+  Chromium on local pages. Neither is a tenant.
+- Four families and two vendors are clustered cases, not independent samples.
+- Zero wrong-field fills over 30 certified rejoins bounds the index matcher's failure rate only
+  below about 10% at 95% confidence, and only on the form suite's cases.
+- The 21-pair holdout was not rerun.
+
+### Next
+
+One matcher that passes both suites needs a matcher change, not a flag. The change has to let a
+run enter at a learned state it did not walk to, under the footprint, value and dirty-field
+checks that entry needs, while keeping the page-change tolerance measured on the form suite. That
+is a new matcher. It needs its own rule written first, one run on both suites, and cases neither
+matcher has seen.
