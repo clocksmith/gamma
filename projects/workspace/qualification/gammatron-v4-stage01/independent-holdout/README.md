@@ -1,5 +1,11 @@
 # Gammatron #88: independent offline holdout
 
+> **Audit note, 2026-11-21.** The difference between the arms below is not a matcher gain. The
+> runner gave the `alternate` and `layout` cases their own observation policy, which changes the
+> template that exact matching is bound to. With one policy for every case, exact matching and
+> suffix matching each take 15 decisions. The guard result stands: all twelve negative pairs stop
+> with zero effects. See [`../independent-holdout-audit/README.md`](../independent-holdout-audit/README.md).
+
 **Result:** 21 pairs (42 evaluation rows), three synthetic workflow domains.
 
 - **Nine valid pairs:** both arms completed all nine exact reviews. Exact-hash to suffix matching went from **42 to 18 scripted planner decisions (57.1% fewer)**, and from **18 to 39 cached steps**. The suffix arm recorded **three certified suffix rejoins**.
