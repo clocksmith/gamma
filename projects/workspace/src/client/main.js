@@ -14,10 +14,11 @@ import { createPlanner } from './planner.js';
 import { WorkspaceController } from './controller.js';
 import { WorkflowSync } from './workflow-sync.js';
 import { WorkflowStore } from './workflow-store.js';
+import { createNativePicker } from './native-picker.js';
 import { startWorkspaceServer } from './server.js';
 
 export async function openWorkspaceApp({ stateDir, port, headless = false, adapter = 'playwright', config: supplied, planner: suppliedPlanner,
-  workflowPersistence = null, workflowTasks = new Map(), browserConfig, browserChannel } = {}) {
+  workflowPersistence = null, workflowTasks = new Map(), browserConfig, browserChannel, nativePicker = null } = {}) {
   const config = supplied ?? JSON.parse(await readFile(new URL('../../config/fawn-workspace-client.json', import.meta.url), 'utf8'));
   for (const field of ['port', 'maxBodyBytes', 'maxEvidenceBytes', 'maxRepositoryFiles', 'maxTurns', 'maxInputBytes', 'maxOutputTokens', 'modelTimeoutMs', 'pollMs', 'delegationMaxAgeMs', 'shutdownWaitMs', 'cliTerminationGraceMs']) {
     if (!Number.isSafeInteger(config[field]) || config[field] < (field === 'port' ? 0 : 1)) throw Error(`Invalid client config ${field}`);
@@ -47,7 +48,7 @@ export async function openWorkspaceApp({ stateDir, port, headless = false, adapt
       sync: workflowPersistence.sync ? new WorkflowSync({ ...workflowPersistence.sync, ownerScope: workflowPersistence.ownerScope }) : null }) : null;
     controller = new WorkspaceController({ service, stateDir: directory, config, planner, workflowStore, workflowTasks });
     await controller.restore();
-    http = await startWorkspaceServer({ controller, config, port });
+    http = await startWorkspaceServer({ controller, config, port, nativePicker });
     return { ...http, controller, service, browser: serviceConfig.browser,
       async close() { await http.close(); await controller.close({ release: () => service.close() }); } };
   } catch (error) { controller?.store.close(); await service.close(); throw error; }
@@ -56,18 +57,23 @@ export async function openWorkspaceApp({ stateDir, port, headless = false, adapt
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2), value = name => { const index = args.indexOf(name); return index < 0 ? undefined : args[index + 1]; };
   if (args.includes('--help')) {
-    console.log('Usage: npm --prefix projects/workspace start -- [--browser-channel chrome|chromium|chromium-headless-shell|fawn] [--browser-config PATH] [--workflow-module PATH] [--state-dir PATH] [--port NUMBER] [--adapter playwright|cdp] [--headless]');
+    console.log('Usage: npm --prefix projects/workspace start -- [--browser-channel chrome|chromium|chromium-headless-shell|fawn] [--browser-config PATH] [--workflow-module PATH] [--state-dir PATH] [--port NUMBER] [--adapter playwright|cdp] [--headless] [--native-picker-bin PATH --native-picker-sha256 HASH]');
     console.log('Default: installed Google Chrome (--browser-channel chrome) under ~/.local/state/blitzen (existing state retained). Pass --browser-channel fawn or --browser-config PATH (or BLITZEN_BROWSER_CONFIG) to require a hash-pinned Fawn browser build without fallback.');
   } else {
     const workflowModulePath = value('--workflow-module') ?? process.env.BLITZEN_WORKFLOW_MODULE ?? process.env.FAWN_WORKFLOW_MODULE;
     const loadedWorkflow = workflowModulePath ? await import(pathToFileURL(resolve(workflowModulePath)).href) : null;
     const workflowConfig = typeof loadedWorkflow?.createWorkflowConfig === 'function'
       ? await loadedWorkflow.createWorkflowConfig() : (loadedWorkflow ?? {});
+    const binary = value('--native-picker-bin'), sha256 = value('--native-picker-sha256');
+    const nativePicker = binary === undefined && sha256 === undefined ? null : (() => {
+      if (process.platform !== 'darwin') throw Error('Native picker requires a local macOS desktop');
+      return createNativePicker({ executable: binary, sha256 });
+    })();
     const app = await openWorkspaceApp({ stateDir: value('--state-dir'), port: value('--port') === undefined ? undefined : Number(value('--port')),
       adapter: value('--adapter'), headless: args.includes('--headless'),
       workflowPersistence: workflowConfig.workflowPersistence ?? null,
       workflowTasks: workflowConfig.workflowTasks ?? new Map(),
-      browserConfig: value('--browser-config'), browserChannel: value('--browser-channel') });
+      browserConfig: value('--browser-config'), browserChannel: value('--browser-channel'), nativePicker });
     console.log(`Gamma workspace (${app.browser.channel}, ${app.browser.fawnBuild?.runtime.mode ?? 'stock provider'}): ${app.loginUrl}`);
     console.log('Start with human control. Model calls occur only after an explicit delegation.');
     let closing = false;

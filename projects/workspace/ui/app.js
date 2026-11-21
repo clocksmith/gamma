@@ -47,6 +47,7 @@ function syncWorkflowMeta() {
 }
 function render(state) {
   pollMs = state.pollMs;
+  $('#native-document').hidden = state.nativeDocumentPicker !== true;
   if (state.missingProjectId) { choose(''); notice('That saved investigation is unavailable. Choose one from the list or start a new one.'); }
   const select = $('#projects');
   select.replaceChildren(new Option('New investigation', ''), ...state.projects.map(project => new Option(project.goal.slice(0, 60), project.id)));
@@ -290,3 +291,10 @@ try {
   if (token) await api('/api/session', { method: 'POST', body: JSON.stringify({ token }) });
   await poll();
 } catch (error) { notice(error.message); }
+
+eventListener($('#native-document'), async () => {
+  const result = await api('/api/native-document', { method: 'POST', body: '{}' });
+  notice(result.status === 'observed'
+    ? `Local document: ${result.byteLength} bytes, SHA-256 ${result.sha256}. Not saved or shared.`
+    : 'No current document fingerprint. Select the file again to retry.');
+});

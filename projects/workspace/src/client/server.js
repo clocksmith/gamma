@@ -12,9 +12,10 @@ async function body(req, maximum) {
   }
   return JSON.parse(Buffer.concat(chunks).toString('utf8'));
 }
-export async function startWorkspaceServer({ controller, config, port = config.port }) {
+export async function startWorkspaceServer({ controller, config, port = config.port, nativePicker = null }) {
   const bootstrap = randomBytes(32).toString('base64url'), sessions = new Set();
   let origin;
+  const nativeOperations = new Set();
   const server = createServer(async (req, res) => {
     const send = (status, value) => { res.writeHead(status, { 'content-type': 'application/json' }); res.end(JSON.stringify(value)); };
     res.setHeader('cache-control', 'no-store'); res.setHeader('referrer-policy', 'no-referrer');
@@ -38,7 +39,21 @@ export async function startWorkspaceServer({ controller, config, port = config.p
       }
       const session = req.headers.cookie?.split(';').map(value => value.trim()).find(value => value.startsWith('blitzen_session='))?.slice('blitzen_session='.length);
       if (!sessions.has(session)) return send(401, { error: 'Open the login link printed by the local service' });
-      if (req.method === 'GET' && url.pathname === '/api/status') return send(200, await controller.status(url.searchParams.get('project')));
+      if (nativePicker && req.method === 'POST' && url.pathname === '/api/native-document') {
+        const input = await body(req, config.maxBodyBytes);
+        if (!input || Array.isArray(input) || typeof input !== 'object' || Object.keys(input).length) {
+          return send(400, { error: 'Document selection takes no input' });
+        }
+        const operation = new AbortController();
+        nativeOperations.add(operation);
+        const abort = () => operation.abort();
+        res.once('close', abort);
+        try { return send(200, await nativePicker({ signal: operation.signal })); }
+        finally { res.removeListener('close', abort); nativeOperations.delete(operation); }
+      }
+      if (req.method === 'GET' && url.pathname === '/api/status') {
+        return send(200, { ...await controller.status(url.searchParams.get('project')), ...(nativePicker ? { nativeDocumentPicker: true } : {}) });
+      }
       if (req.method !== 'POST' || url.pathname !== '/api/command') return send(404, { error: 'Unknown workspace route' });
       const { operation, projectId, input = {} } = await body(req, config.maxBodyBytes);
       const operations = {
@@ -73,5 +88,5 @@ export async function startWorkspaceServer({ controller, config, port = config.p
   await new Promise((resolve, reject) => { server.once('error', reject); server.listen(port, config.host, resolve); });
   origin = `http://${config.host}:${server.address().port}`;
   return { origin, loginUrl: `${origin}/#${bootstrap}`, server,
-    close: () => new Promise((resolve, reject) => { server.close(error => error ? reject(error) : resolve()); server.closeIdleConnections(); }) };
+    close: () => new Promise((resolve, reject) => { for (const operation of nativeOperations) operation.abort(); server.close(error => error ? reject(error) : resolve()); server.closeIdleConnections(); }) };
 }

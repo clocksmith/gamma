@@ -594,3 +594,36 @@ or integrate with JavaScript/dispatch. A signed App Sandbox host with explicit
 user selection and cancellation, denied access and revoke/release still
 needs interactive qualification. No retained bookmark or entitlement change
 is introduced here.
+
+#### Opt-in macOS owner evidence UI
+
+From a logged-in macOS desktop session, build into a new directory controlled
+by the owner. Keep the bundle private and do not replace it while the workspace
+runs. The build ad-hoc signs and verifies the sandboxed bundle and prints its
+executable's SHA-256 pin. It does not install, launch, or distribute the app.
+
+```sh
+build_dir=$(mktemp -d)
+sh src/surfaces/macos/build-picker.sh "$build_dir/GammaPicker.app"
+picker="$build_dir/GammaPicker.app/Contents/MacOS/GammaPicker"
+pin=$(shasum -a 256 "$picker" | cut -d ' ' -f 1)
+npm start -- --native-picker-bin "$picker" --native-picker-sha256 "$pin"
+```
+
+Open the printed workspace login link, click **Fingerprint local document**,
+and explicitly select a generated text file in the macOS Open dialog. The
+browser should display only its byte length and SHA-256, compare with
+`shasum -a 256` on that fixture. Repeat and cancel the native dialog: no
+fingerprint should appear. A second selection while the first is pending must
+not open another dialog. Disconnecting the browser request or closing the
+workspace cancels the pending child. Quit the workspace before deleting the
+private build directory. This desktop check requires the owner's active GUI
+session; a headless SSH compile and fixture run do not meet it.
+
+The authenticated same-origin request accepts no path, command, or document
+ID. The configured helper gets no arguments, input channel, inherited
+environment settings, or browser credentials. Each private stdout pipe is a
+one-shot response for its requesting browser session; the selection is not
+retained across requests. Fingerprints are displayed, not journaled, shared
+with a model, or treated as write receipts. This developer build is not a
+notarized distribution.
