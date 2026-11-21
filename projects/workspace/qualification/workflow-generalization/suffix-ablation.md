@@ -132,3 +132,30 @@ Decided before the run:
   nothing, the fixture cannot detect the failure and the extension proves nothing.
 - `hidden-prerequisite` must report the same outline as the learned page.
 - On the reordered page, the suffix arms must show a certified proposal before the refusal.
+
+### Hidden-state result, 2026-11-21
+
+Controlled run on commit `ba2e8fe` with a clean tree: two vendors, four arms, 32 runs.
+
+| Rows | Runs | Effects dispatched | Completed | Submissions |
+| --- | ---: | ---: | ---: | ---: |
+| Prerequisite checked | 16 | 0 | 0 | 0 |
+| Negative control, check removed | 16 | 112 (7 in every run) | 16 | 0 |
+
+- Every checked run stopped with "Server prerequisite not met" before any effect.
+- `hidden-prerequisite` reported the same outline as the learned page, so the exact
+  matcher proposed the first step and the gate refused it.
+- On the reordered page the suffix arms each recorded one certified proposal before
+  the refusal. The whole-page arms missed, asked the scripted planner once, and that
+  step was refused too.
+- With the check removed, every arm wrote all seven steps into the locked draft:
+  exact match, suffix eligibility and the scripted planner alike.
+
+All four expectations held.
+
+What it shows: no matcher can see server-side state, and none needs to, provided a
+prerequisite check runs between proposal and dispatch. What it does not show: the
+check here is supplied by the harness. Nothing in a learned graph declares that a
+prerequisite exists, and nothing refuses to replay when a host supplies no check.
+Before a live run, every workflow needs its prerequisite check named and wired, or
+replay should fail closed without one.
