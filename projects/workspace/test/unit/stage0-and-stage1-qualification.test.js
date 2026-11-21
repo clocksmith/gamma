@@ -296,4 +296,85 @@ test('Stage 2 gate (#88 item #3): requirePrerequisiteCheck fails closed on unren
   assert.equal((await dirtySession.replay()).reason, 'unseen-branch');
   assert.equal(dirtyPage.calls.length, 0, 'SuffixIndex must refuse dirty untracked <form> control');
   assert.ok(dirtySession.traceEvents.some(e => e.refusals?.['dirty-untracked-form-field'] > 0));
+
+  // 6. Session replacement (learnRepairs: false) preserves initial traceEvents and certified rejoins.
+  const nextBtn = {
+    label: 'Continue', role: 'button', tag: 'button', inputType: '',
+    selector: '#continue', handle: 'continue', digest: 'digest-continue', value: null,
+  };
+  const clickDag = new TraceDag(limits);
+  const clickIndex = new SuffixIndex();
+  let learnStage = 0;
+  const learnTwoPage = {
+    outstanding: async () => [],
+    observe: async () => ({
+      url: 'https://fixture.invalid/draft',
+      observationVersion: Date.now() + Math.random(),
+      isTruncated: false,
+      elements: structuredClone(learnStage ? [cityEl] : [nameEl, nextBtn]),
+    }),
+    submitAction: async action => {
+      if (action.kind === 'click') learnStage = 1;
+      return { result: Promise.resolve({ outcome: 'completed' }) };
+    },
+  };
+  const clickLearn = clickDag.session({
+    owner: { workspaceId: 'w1' }, pageId: 'main', intent: 'form', template: 'draft-2p',
+    inputs, service: learnTwoPage, suffixIndex: clickIndex,
+    intermediateClicks: [structuralLocator(nextBtn)],
+  });
+  await clickLearn.record({ kind: 'fill', locator: structuralLocator(nameEl), slot: 'name' });
+  await clickLearn.record({ kind: 'click', locator: structuralLocator(nextBtn) });
+  await clickLearn.record({ kind: 'fill', locator: structuralLocator(cityEl), slot: 'city' });
+  assert.equal((await clickLearn.finish()).reason, 'recorded-submit-boundary');
+  clickIndex.freeze();
+
+  let evalStage = 0;
+  const evalP1 = [structuredClone(nameEl), structuredClone(nextBtn), control('Referral code', 'ref')];
+  const evalP2 = [structuredClone(cityEl)];
+  const evalTwoPage = {
+    outstanding: async () => [],
+    observe: async () => ({
+      url: 'https://fixture.invalid/draft',
+      observationVersion: Date.now() + Math.random(),
+      isTruncated: false,
+      elements: structuredClone(evalStage ? evalP2 : evalP1),
+    }),
+    submitAction: async action => {
+      const els = evalStage ? evalP2 : evalP1;
+      if (action.kind === 'click') evalStage = 1;
+      else {
+        const t = els.find(el => el.handle === action.target.handle);
+        if (t) t.value = action.params.value;
+      }
+      return { result: Promise.resolve({ outcome: 'completed' }) };
+    },
+  };
+  let plannerTurns = 0;
+  const partialRes = await runWorkflow({
+    ...common,
+    dag: clickDag,
+    template: 'draft-2p',
+    inputs: { ...inputs, ref: 'REF-1' },
+    intermediateClicks: [structuralLocator(nextBtn)],
+    suffixIndex: clickIndex,
+    requirePrerequisiteCheck: false,
+    assertPrerequisite: null,
+    learnRepairs: false,
+    reconvergeMidRepair: true,
+    planner: {
+      identity: { model: 'test-planner' },
+      next: async () => {
+        plannerTurns += 1;
+        if (plannerTurns === 1) return { tool: 'act', input: { kind: 'fill', handle: 'ref', slot: 'ref' } };
+        if (plannerTurns === 2) return { tool: 'act', input: { kind: 'click', handle: 'continue' } };
+        return { tool: 'finish', input: { summary: 'Done' } };
+      },
+    },
+    service: evalTwoPage,
+    store: makeStore(),
+  });
+  assert.equal(partialRes.completed, true);
+  assert.ok(partialRes.cacheSteps >= 2, 'Prefix fill and post-repair suffix fill both cached');
+  assert.ok(partialRes.traceEvents.some(e => e.phase === 'suffix-certified'), 'traceEvents from replaced initial session must be retained');
 });
