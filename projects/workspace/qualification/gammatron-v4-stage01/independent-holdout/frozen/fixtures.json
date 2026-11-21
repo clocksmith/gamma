@@ -1,0 +1,150 @@
+{
+  "id": "deco88-independent-v1",
+  "author": "independent fixture author without matcher/results",
+  "workflows": [
+    {
+      "id": "museum-collections",
+      "tenant": "museum-amber-17",
+      "wrongTenant": "museum-amber-71",
+      "entry": "/collection/find",
+      "queryLabel": "Accession number",
+      "query": "MC.1938.0147",
+      "record": "Glazed river jar",
+      "approver": "Collections registrar",
+      "approvalStatus": "Approved",
+      "approvalRef": "REG-6402",
+      "approval": "/collection/MC.1938.0147/approval",
+      "edit": "/collection/MC.1938.0147/interpretation",
+      "review": "/collection/MC.1938.0147/review",
+      "queryRole": "accession",
+      "fields": [
+        [
+          "public_caption",
+          "Gallery caption",
+          "River jar with a blue-gray glaze."
+        ],
+        [
+          "display_credit",
+          "Display credit line",
+          "Gift of the Vela Family, 1938"
+        ]
+      ],
+      "alternate": [
+        "/exhibitions/object-lookup",
+        "Find by accession"
+      ],
+      "layout": [
+        "Archive image preview",
+        "public_caption",
+        "Visitor-facing object text"
+      ],
+      "expected": {
+        "tenant_id": "museum-amber-17",
+        "accession": "MC.1938.0147",
+        "approval": "REG-6402",
+        "public_caption": "River jar with a blue-gray glaze.",
+        "display_credit": "Gift of the Vela Family, 1938",
+        "status": "Ready for review"
+      }
+    },
+    {
+      "id": "field-research",
+      "tenant": "research-basin-29",
+      "wrongTenant": "research-basin-92",
+      "entry": "/surveys/search",
+      "queryLabel": "Station code",
+      "query": "BAS-R17-042",
+      "record": "North Fen seep",
+      "approver": "Field lead",
+      "approvalStatus": "Cleared",
+      "approvalRef": "FL-2087",
+      "approval": "/surveys/BAS-R17-042/clearance",
+      "edit": "/surveys/BAS-R17-042/visit-plan",
+      "review": "/surveys/BAS-R17-042/review",
+      "queryRole": "station_code",
+      "fields": [
+        [
+          "meeting_point",
+          "Crew meeting point",
+          "West boardwalk gate, marker 6"
+        ],
+        [
+          "observation_focus",
+          "Priority observation",
+          "Photograph the seep boundary before noon."
+        ]
+      ],
+      "alternate": [
+        "/maps/station-directory",
+        "Search station ID"
+      ],
+      "layout": [
+        "Previous visit weather summary",
+        "meeting_point",
+        "Where the crew will assemble"
+      ],
+      "expected": {
+        "tenant_id": "research-basin-29",
+        "station_code": "BAS-R17-042",
+        "approval": "FL-2087",
+        "meeting_point": "West boardwalk gate, marker 6",
+        "observation_focus": "Photograph the seep boundary before noon.",
+        "status": "Ready for review"
+      }
+    },
+    {
+      "id": "community-classes",
+      "tenant": "classes-linden-53",
+      "wrongTenant": "classes-linden-35",
+      "entry": "/programs/find-section",
+      "queryLabel": "Class section code",
+      "query": "CL-F26-718",
+      "record": "Mending for Beginners",
+      "approver": "Program coordinator",
+      "approvalStatus": "Confirmed",
+      "approvalRef": "PC-3928",
+      "approval": "/programs/CL-F26-718/approval",
+      "edit": "/programs/CL-F26-718/listing",
+      "review": "/programs/CL-F26-718/review",
+      "queryRole": "section_code",
+      "fields": [
+        [
+          "arrival_instructions",
+          "Participant arrival instructions",
+          "Enter through the courtyard door at 6:15 p.m."
+        ],
+        [
+          "bring_list",
+          "What participants should bring",
+          "One garment with a small tear and matching thread."
+        ]
+      ],
+      "alternate": [
+        "/calendar/section-lookup",
+        "Find a scheduled section"
+      ],
+      "layout": [
+        "Instructor portrait and biography",
+        "bring_list",
+        "Materials to bring from home"
+      ],
+      "expected": {
+        "tenant_id": "classes-linden-53",
+        "section_code": "CL-F26-718",
+        "approval": "PC-3928",
+        "arrival_instructions": "Enter through the courtyard door at 6:15 p.m.",
+        "bring_list": "One garment with a small tear and matching thread.",
+        "status": "Ready for review"
+      }
+    }
+  ],
+  "cases": [
+    "unchanged",
+    "alternate",
+    "layout",
+    "wrong-tenant",
+    "hidden-lock",
+    "skipped-approval",
+    "duplicate-target"
+  ]
+}
