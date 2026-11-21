@@ -191,3 +191,37 @@ Decided before the run:
 Limits known in advance: one run per cell, so timing is descriptive and one slow
 planner call can move a row; `extra-question` carries the rule it prompted and is
 reported with and without; local forms only.
+
+### Real-planner result, 2026-11-21
+
+Run on commit `0e0dae1` with a clean tree. Sonnet 5.5 through the restricted CLI
+planner: 70 calls, none failed, 2.5 s mean and 4.4 s longest. Billed 0.457 USD of the
+5 USD cap, of which 0.106 USD was the two shared teaching runs (16 calls).
+
+| 12 paired rows | Model calls | Task time | Planner time | Billed | Completed | Wrong-field fills |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `whole-rc` | 42 | 111.5 s | 103.0 s | 0.273 USD | 12 | 0 |
+| `suffix-rc` | 12 | 39.0 s | 31.8 s | 0.078 USD | 12 | 0 |
+
+| Without `extra-question`, 10 rows | Model calls | Task time | Billed |
+| --- | ---: | ---: | ---: |
+| `whole-rc` | 30 | 79.6 s | 0.193 USD |
+| `suffix-rc` | 10 | 33.3 s | 0.065 USD |
+
+- The hard conditions held: zero submissions, equal completion, graph and index
+  unchanged, spend within the cap.
+- By the rule set before the run, the savings survived: fewer calls, less total time
+  and a lower bill. No row used more calls.
+- The real planner made exactly as many decisions as the scripted one had: 42 and 12.
+- The time saved is the planner time saved: 30 fewer calls at about 2.4 s each is the
+  72.5 s difference. Rows with no planner call took 0.4 to 0.5 s in both arms.
+- `suffix-rc` was slower on three rows: `heldout` for one vendor (0.5 s against 0.4 s,
+  no calls in either arm) and `stale-page` for both (3.1 s against 2.8 s, and 5.3 s
+  against 3.3 s). Each `stale-page` run made one call in both arms, so the gap is one
+  call's latency, which suffix eligibility does not change.
+
+What this adds and what it leaves open: the decision savings turn into time and cost
+savings when a real planner is in the loop, on these forms. One run per cell, so the
+per-row times are descriptive. The forms are local projections from two vendors that
+behave almost identically. Nothing here measures a real tenant, page-load latency,
+teaching amortised over real repeat rates, or drift over days.
