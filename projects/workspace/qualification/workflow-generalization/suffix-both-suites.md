@@ -176,3 +176,38 @@ run enter at a learned state it did not walk to, under the footprint, value and 
 checks that entry needs, while keeping the page-change tolerance measured on the form suite. That
 is a new matcher. It needs its own rule written first, one run on both suites, and cases neither
 matcher has seen.
+
+## A second, independent run
+
+Another lane ran the same cross-check at the merged revision and landed it first, in
+[`../gammatron-v4-stage01/matcher-crosscheck/`](../gammatron-v4-stage01/matcher-crosscheck/README.md).
+This run finished before that one landed, and its result was pushed only afterwards. Every shared
+number agrees: 124, 20 and 124 planner calls on
+the sandbox suite; 93 to 64 and 59 to 29 for the index matcher and no change for the profile
+matcher on the form suite; zero unsafe certifications; 1,008 and 168 index refusals.
+
+This record adds four things to that one:
+
+- The decision rule and predictions, committed (`f6dbb2a`) before the first run.
+- The both-options arm, which shows a run uses only the index matcher.
+- The hidden-state rows through the write-boundary check, for each matcher.
+- The profile matcher on numeric routes, and a clean tree for every run.
+
+The two lanes changed the sandbox harness differently. Main keeps the other lane's version, with
+the both-options arm added to it. The receipt here was written by the harness at `f6dbb2a`, which
+names the arms `exact-hash-v3`, `suffix-eligibility-v4`, `suffix-index` and
+`suffix-index-plus-profile`. Main's harness, run with the four arms below, gives the same totals
+for every arm.
+
+```sh
+node projects/workspace/qualification/stage1-suffix-ablation.js OUT.json \
+  --arms exact-hash-v3,suffix-eligibility-v4,suffix-index-v1,suffix-index-plus-profile  # exits 1: index gates fail
+A=whole,suffix,whole-rc,suffix-rc
+H=hidden-prerequisite,hidden-prerequisite-reordered,hidden-prerequisite-unguarded,hidden-prerequisite-reordered-unguarded
+R=projects/workspace/qualification/workflow-generalization/run.js
+node $R --controlled --arms $A --matcher index --out NEW_DIR_1
+node $R --controlled --arms $A --matcher profile --out NEW_DIR_2
+node $R --controlled --arms $A --matcher profile --numeric-routes --out NEW_DIR_3
+node $R --controlled --arms $A --matcher index --variants $H --out NEW_DIR_4
+node $R --controlled --arms $A --matcher profile --variants $H --out NEW_DIR_5
+```

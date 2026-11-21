@@ -17,7 +17,6 @@
 // (workflowFamily, tenant) per Guardrail 4.
 
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
@@ -440,28 +439,22 @@ function makeControlledPlanner(fam, slotMap = {}, { requireApprovalBeforeFields 
   };
 }
 
-// The two arms of the original Stage 1 receipt. A caller may name other arms to run further matchers
-// over the same fixtures; every fixture, variant and near-miss below stays as it is.
-const DEFAULT_ARMS = Object.freeze([
-  Object.freeze({ armId: 'exact-hash-v3', suffixEligibility: false }),
-  Object.freeze({ armId: 'suffix-eligibility-v4', suffixEligibility: true }),
-]);
-export const STAGE1_ARMS = Object.freeze({
-  exact: DEFAULT_ARMS[0],
-  profile: DEFAULT_ARMS[1],
-  index: Object.freeze({ armId: 'suffix-index', suffixEligibility: false, suffixIndex: true }),
-  both: Object.freeze({ armId: 'suffix-index-plus-profile', suffixEligibility: true, suffixIndex: true }),
-});
+// `suffix-index-v1` replays with the merged SuffixIndex matcher (the #88 candidate) and leaves the
+// profile matcher off, configured exactly as workflow-generalization/run.js `--matcher index`.
+const ARM_DEFS = {
+  'exact-hash-v3': { suffixEligibility: false, useIndex: false },
+  'suffix-eligibility-v4': { suffixEligibility: true, useIndex: false },
+  'suffix-index-v1': { suffixEligibility: false, useIndex: true },
+  // Both options on. Replay consults the index first, so this shows whether the two combine.
+  'suffix-index-plus-profile': { suffixEligibility: true, useIndex: true },
+};
+export const DEFAULT_STAGE1_ARMS = Object.freeze(['exact-hash-v3', 'suffix-eligibility-v4']);
+const suffixCertifications = (arm, res) => arm.useIndex
+  ? (res.suffix?.certified ?? 0)
+  : (res.certifiedSuffixRejoins?.length ?? 0);
 
-/** With no arguments this reproduces the original two-arm receipt and stops at the first failed
- * expectation. With named arms it keeps every failed expectation as a row instead (`checkFailures`).
- */
-export async function runStage1SuffixAblation({ armSpecs = DEFAULT_ARMS } = {}) {
-  const extended = armSpecs !== DEFAULT_ARMS;
-  // Certifications are reported by whichever matcher an arm runs.
-  const certifiedCount = (arm, res) => arm.index ? (res.suffix?.certified ?? 0) : (res.certifiedSuffixRejoins?.length ?? 0);
-  const evalIndex = arm => arm.index ? SuffixIndex.restore(arm.index.export()).freeze() : null;
-  const fallbackReasons = res => (res.traceEvents ?? []).filter(event => event.phase === 'fallback').map(event => event.reason);
+export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_ARMS } = {}) {
+  if (!armIds.includes('exact-hash-v3') || armIds.some(id => !ARM_DEFS[id])) throw Error('Unknown or missing Stage 1 arm');
   const root = mkdtempSync(join(tmpdir(), 'gammatron-stage1-ablation-'));
   const invStore = new InvestigationStore(root);
   let seq = 0;
@@ -491,12 +484,14 @@ export async function runStage1SuffixAblation({ armSpecs = DEFAULT_ARMS } = {}) 
       ];
 
       // Teach identical single reference trace (ENTRY -> INTERIOR -> gate -> f1 -> f2 -> LEAF) to both arms!
-      const arms = armSpecs.map(spec => ({
-        armId: spec.armId,
-        suffixEligibility: Boolean(spec.suffixEligibility),
-        index: spec.suffixIndex ? new SuffixIndex() : null,
+      const arms = armIds.map(armId => ({
+        armId,
+        ...ARM_DEFS[armId],
         dag: new TraceDag(LIMITS),
+        index: ARM_DEFS[armId].useIndex ? new SuffixIndex() : null,
       }));
+      // Every evaluation run gets a frozen copy of the taught index, as run.js does.
+      const frozenIndex = arm => (arm.index ? SuffixIndex.restore(arm.index.export()).freeze() : null);
 
       for (const arm of arms) {
         const teachEnv = buildSnapshotHarness(fam, {
@@ -700,10 +695,15 @@ export async function runStage1SuffixAblation({ armSpecs = DEFAULT_ARMS } = {}) 
         skippedApprovals: 0,
         lstarHiddenStateDemotions: 0,
         landmarksSurfacedCount: 0,
+        nearMissCertifications: 0,
+        caseFailures: [],
       }]));
 
       for (const arm of arms) {
         const st = armStats.get(arm.armId);
+        // Failed expectations are recorded per case and fail the gate at the end, so one arm's
+        // failure cannot hide the rest of the suite.
+        const check = (ok, message) => { if (!ok) st.caseFailures.push(message); return ok; };
         // Evaluate held-out variants without mutating the frozen taught DAG (`learnRepairs: false`)
         for (const v of heldOutVariants) {
           const evalDag = TraceDag.restore(arm.dag.export(), LIMITS);
@@ -727,7 +727,7 @@ export async function runStage1SuffixAblation({ armSpecs = DEFAULT_ARMS } = {}) 
             learnRepairs: false,
             reconvergeMidRepair: true,
             suffixEligibility: arm.suffixEligibility,
-            suffixIndex: evalIndex(arm),
+            suffixIndex: frozenIndex(arm),
             slotRoles: fam.slotRoles,
             assertContext: async () => {
               if (env.service.liveAccount() !== fam.tenantId) throw Error('account-scope-mismatch');
@@ -740,16 +740,9 @@ export async function runStage1SuffixAblation({ armSpecs = DEFAULT_ARMS } = {}) 
             verifyReview: env.verifyReview,
             signal: new AbortController().signal,
           });
-          const checkFailures = [];
-          // The original receipt stops at the first failed expectation; named arms keep it as a row.
-          const check = (ok, message) => {
-            if (ok) return;
-            if (!extended) assert.fail(message);
-            checkFailures.push(message);
-          };
-          check(res.completed === true, `${arm.armId} must complete held-out ${v.variantId}`);
+          check(res.completed === true, `${fam.familyId} ${v.variantId}: must complete held-out variant`);
           st.heldOutCount += 1;
-          st.completedCount += res.completed ? 1 : 0;
+          if (res.completed) st.completedCount += 1;
           st.totalPlannerCalls += res.modelCalls;
           st.totalReusedSteps += res.cacheSteps;
           if (lastLandmarks().length > 0) st.landmarksSurfacedCount += 1;
@@ -770,16 +763,10 @@ export async function runStage1SuffixAblation({ armSpecs = DEFAULT_ARMS } = {}) 
             completed: res.completed,
             plannerCalls: res.modelCalls,
             reusedSteps: res.cacheSteps,
+            suffixCertifications: suffixCertifications(arm, res),
+            ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null, indexNodes: arm.index.nodes.size } : {}),
             certifiedRejoinK2: certifiedRejoin && plannerStepsUsed <= 2,
             certifiedRejoinK3: certifiedRejoin && plannerStepsUsed <= 3,
-            ...(extended ? {
-              dispatchedActions: env.service.dispatched.length,
-              suffixCertified: certifiedCount(arm, res),
-              suffixRefusals: res.suffix?.refusals ?? null,
-              fallbackReasons: fallbackReasons(res),
-              detail: res.detail,
-              checkFailures,
-            } : {}),
           });
         }
 
@@ -809,7 +796,7 @@ export async function runStage1SuffixAblation({ armSpecs = DEFAULT_ARMS } = {}) 
             learnRepairs: false,
             reconvergeMidRepair: true,
             suffixEligibility: arm.suffixEligibility,
-            suffixIndex: evalIndex(arm),
+            suffixIndex: frozenIndex(arm),
             slotRoles: fam.slotRoles,
             assertContext: async () => {
               if (env.service.liveAccount() !== fam.tenantId) throw Error('account-scope-mismatch');
@@ -824,34 +811,27 @@ export async function runStage1SuffixAblation({ armSpecs = DEFAULT_ARMS } = {}) 
           });
 
           st.nearMissCount += 1;
-          const checkFailures = [];
-          const check = (ok, message) => {
-            if (ok) return;
-            if (!extended) assert.fail(message);
-            checkFailures.push(message);
-          };
-          check(res.completed === nm.expectCompleted, `${arm.armId} near-miss ${nm.probeId} completion mismatch`);
+          const certifications = suffixCertifications(arm, res);
+          if (certifications > 0) st.nearMissCertifications += 1;
+          check(res.completed === nm.expectCompleted, `${fam.familyId} ${nm.probeId}: completion mismatch`);
           if (nm.expectZeroActions) {
-            check(env.service.dispatched.length === 0, `${arm.armId} ${nm.probeId} must dispatch 0 actions`);
+            check(env.service.dispatched.length === 0, `${fam.familyId} ${nm.probeId}: must dispatch 0 actions`);
           }
           if (nm.mustExecuteApprovalGate) {
             const clickedApproval = env.service.dispatched.some(cmd => cmd.kind === 'click' && cmd.target.handle === 'gate-ok');
             if (!clickedApproval) st.skippedApprovals += 1;
-            check(clickedApproval === true, `${arm.armId} ${nm.probeId} must NOT skip required approval click`);
+            check(clickedApproval, `${fam.familyId} ${nm.probeId}: must not skip required approval click`);
           }
           if (nm.expectZeroSuffixCertification) {
-            const falselyCertified = res.completed === true && certifiedCount(arm, res) > 0;
+            const falselyCertified = res.completed === true && certifications > 0;
             if (falselyCertified) st.unsafeCertifications += 1;
             // On NM1 (dirty untracked <form> field), suffix eligibility must reject even proposing a rejoin!
             if (nm.probeId === 'NM1_dirty_untracked_committing_form_field') {
-              check(
-                certifiedCount(arm, res) === 0,
-                'Dirty untracked <form> field must be rejected before any suffix step executes',
-              );
+              check(certifications === 0, `${fam.familyId} ${nm.probeId}: dirty untracked <form> field must be rejected before any suffix step executes`);
             }
           }
-          // The guard-learning checks below belong to the profile matcher; an index arm has no such step.
-          if (nm.verifyLstarSplitAndHiddenStateDemotion && arm.suffixEligibility && !arm.index) {
+          // The guard-learning checks belong to the profile matcher; an index arm never reaches them.
+          if (nm.verifyLstarSplitAndHiddenStateDemotion && arm.suffixEligibility && !arm.useIndex) {
             // 1. Visible-difference counterexample: L* adds an absence guard on the unrecorded control.
             assert.equal(
               res.lstarRefinement?.action,
@@ -916,18 +896,9 @@ export async function runStage1SuffixAblation({ armSpecs = DEFAULT_ARMS } = {}) 
             caseId: nm.probeId,
             completed: res.completed,
             dispatchedActions: env.service.dispatched.length,
-            candidateRejoinsProposed: res.certifiedSuffixRejoins?.length ?? 0,
+            candidateRejoinsProposed: certifications,
+            ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null } : {}),
             lstarAction: res.lstarRefinement?.action ?? null,
-            ...(extended ? {
-              plannerCalls: res.modelCalls,
-              reusedSteps: res.cacheSteps,
-              suffixCertified: certifiedCount(arm, res),
-              suffixRefusals: res.suffix?.refusals ?? null,
-              fallbackReasons: fallbackReasons(res),
-              clickedApproval: env.service.dispatched.some(cmd => cmd.kind === 'click' && cmd.target.handle === 'gate-ok'),
-              detail: res.detail,
-              checkFailures,
-            } : {}),
           });
         }
 
@@ -949,6 +920,7 @@ export async function runStage1SuffixAblation({ armSpecs = DEFAULT_ARMS } = {}) 
       const totalReused = clusters.reduce((s, c) => s + c.totalReusedSteps, 0);
       const unsafeCertifications = clusters.reduce((s, c) => s + c.unsafeCertifications, 0);
       const skippedApprovals = clusters.reduce((s, c) => s + c.skippedApprovals, 0);
+      const caseFailures = clusters.flatMap(c => c.caseFailures);
       return {
         armId,
         clusterCount: k,
@@ -961,75 +933,46 @@ export async function runStage1SuffixAblation({ armSpecs = DEFAULT_ARMS } = {}) 
         totalReusedSteps: totalReused,
         unsafeCertifications,
         skippedApprovals,
-        ...(extended ? {
-          heldOutCompleted: clusters.reduce((s, c) => s + c.completedCount, 0),
-          suffixCertifiedHeldOut: caseRows.filter(row => row.armId === armId && row.kind === 'held-out')
-            .reduce((s, row) => s + row.suffixCertified, 0),
-          suffixCertifiedNearMiss: caseRows.filter(row => row.armId === armId && row.kind === 'near-miss')
-            .reduce((s, row) => s + row.suffixCertified, 0),
-          failedExpectations: caseRows.filter(row => row.armId === armId)
-            .reduce((s, row) => s + row.checkFailures.length, 0),
-        } : {}),
+        nearMissProbesWithAnyCertification: clusters.reduce((s, c) => s + c.nearMissCertifications, 0),
+        completedHeldOut: clusters.reduce((s, c) => s + c.completedCount, 0),
+        caseFailures,
       };
     };
-    // The six Stage 1 gates, for one matcher arm against the exact-match arm.
-    const gatesFor = (exactSummary, suffixSummary) => {
-      const callRatio = Number((suffixSummary.totalPlannerCalls / exactSummary.totalPlannerCalls).toFixed(4));
+    const summaries = Object.fromEntries(armIds.map(armId => [armId, summarizeArm(armId)]));
+    // The same frozen gates, applied to each matcher against the exact-hash baseline.
+    const gatesFor = (candidate, exact) => {
+      const ratio = Number((candidate.totalPlannerCalls / exact.totalPlannerCalls).toFixed(4));
       return {
-        callRatio,
+        plannerCallRatioVsExact: ratio,
         gates: {
-          zeroUnsafeCertifications: exactSummary.unsafeCertifications === 0 && suffixSummary.unsafeCertifications === 0,
-          zeroSkippedApprovals: exactSummary.skippedApprovals === 0 && suffixSummary.skippedApprovals === 0,
-          suffixBeatsExactHashRejoinK2: suffixSummary.clusterMeanCertifiedRejoinRateK2 > exactSummary.clusterMeanCertifiedRejoinRateK2,
-          certifiedRejoinK2AtLeast60Pct: suffixSummary.clusterMeanCertifiedRejoinRateK2 >= 0.60,
-          certifiedRejoinK3AtLeast75Pct: suffixSummary.clusterMeanCertifiedRejoinRateK3 >= 0.75,
-          plannerCallRatioAtMost065x: callRatio <= 0.65,
+          zeroUnsafeCertifications: exact.unsafeCertifications === 0 && candidate.unsafeCertifications === 0,
+          zeroSkippedApprovals: exact.skippedApprovals === 0 && candidate.skippedApprovals === 0,
+          zeroCaseFailures: exact.caseFailures.length === 0 && candidate.caseFailures.length === 0,
+          suffixBeatsExactHashRejoinK2: candidate.clusterMeanCertifiedRejoinRateK2 > exact.clusterMeanCertifiedRejoinRateK2,
+          certifiedRejoinK2AtLeast60Pct: candidate.clusterMeanCertifiedRejoinRateK2 >= 0.60,
+          certifiedRejoinK3AtLeast75Pct: candidate.clusterMeanCertifiedRejoinRateK3 >= 0.75,
+          plannerCallRatioAtMost065x: ratio <= 0.65,
         },
       };
     };
+    const byMatcher = Object.fromEntries(armIds.filter(id => id !== 'exact-hash-v3')
+      .map(id => [id, gatesFor(summaries[id], summaries['exact-hash-v3'])]));
 
-    if (extended) {
-      // Named arms: the first is the baseline; each other arm gets the same six gates against it.
-      const summaries = armSpecs.map(spec => summarizeArm(spec.armId));
-      return {
-        schema: 'gammatron.stage1-offline-suffix-ablation/v1-named-arms',
-        llmSpendUsd: 0,
-        clusteringUnit: 'workflowFamily_x_tenant',
-        clusterCount: WORKFLOW_FAMILIES.length,
-        baselineArm: summaries[0].armId,
-        arms: Object.fromEntries(summaries.map(summary => [summary.armId, summary])),
-        comparisons: Object.fromEntries(summaries.slice(1).map(summary => {
-          const { callRatio, gates } = gatesFor(summaries[0], summary);
-          return [summary.armId, {
-            plannerCallRatioVsBaseline: callRatio,
-            gates,
-            allStage1GatesPassed: Object.values(gates).every(Boolean),
-          }];
-        })),
-        failedExpectations: caseRows.flatMap(row => row.checkFailures.map(message => ({
-          armId: row.armId, familyId: row.familyId, caseId: row.caseId, message,
-        }))),
-        clusters: clusterRows,
-        cases: caseRows,
-      };
-    }
-
-    const exactSummary = summarizeArm('exact-hash-v3');
-    const suffixSummary = summarizeArm('suffix-eligibility-v4');
-    const { callRatio, gates } = gatesFor(exactSummary, suffixSummary);
+    // Top-level gates keep their original meaning: the profile matcher when it ran, else the index.
+    const primary = byMatcher['suffix-eligibility-v4'] ?? byMatcher['suffix-index-v1'] ?? null;
+    const gates = primary?.gates ?? {};
+    const callRatio = primary?.plannerCallRatioVsExact ?? null;
 
     return {
       schema: 'gammatron.stage1-offline-suffix-ablation/v1',
       llmSpendUsd: 0,
       clusteringUnit: 'workflowFamily_x_tenant',
       clusterCount: WORKFLOW_FAMILIES.length,
-      arms: {
-        'exact-hash-v3': exactSummary,
-        'suffix-eligibility-v4': suffixSummary,
-      },
+      arms: summaries,
       plannerCallRatioSuffixVsExact: callRatio,
       gates,
-      allStage1GatesPassed: Object.values(gates).every(Boolean),
+      byMatcher,
+      allStage1GatesPassed: Object.values(byMatcher).every(m => Object.values(m.gates).every(Boolean)),
       clusters: clusterRows,
       cases: caseRows,
     };
@@ -1041,49 +984,23 @@ export async function runStage1SuffixAblation({ armSpecs = DEFAULT_ARMS } = {}) 
 
 const isDirect = Boolean(process.argv[1]) && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isDirect) {
-  // Usage: stage1-suffix-ablation.js [OUT.json] [--arms exact,profile,index,both]
   const cli = process.argv.slice(2);
   const armsAt = cli.indexOf('--arms');
-  const armNames = armsAt >= 0 ? (cli[armsAt + 1] ?? '').split(',') : null;
-  if (armNames && (armNames.length < 2 || armNames[0] !== 'exact' || armNames.some(name => !Object.hasOwn(STAGE1_ARMS, name))
-    || new Set(armNames).size !== armNames.length)) {
-    throw Error('--arms needs exact first, then any of profile, index, both');
-  }
-  const outArg = cli.find((value, at) => !value.startsWith('--') && (armsAt < 0 || at !== armsAt + 1));
-  const receipt = await runStage1SuffixAblation(armNames ? { armSpecs: armNames.map(name => STAGE1_ARMS[name]) } : undefined);
-  if (armNames) {
-    // Record exactly which source the named arms ran against.
-    const repo = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
-    const git = (...params) => execFileSync('git', params, { cwd: repo, encoding: 'utf8' }).trim();
-    receipt.source = {
-      commit: git('rev-parse', 'HEAD'),
-      dirty: Boolean(git('status', '--porcelain', '--ignore-submodules=all')),
-      workspaceSrcTree: git('rev-parse', 'HEAD:projects/workspace/src'),
-      harnessBlob: git('rev-parse', 'HEAD:projects/workspace/qualification/stage1-suffix-ablation.js'),
-    };
-  }
+  const armList = armsAt >= 0 ? cli.splice(armsAt, 2)[1].split(',') : DEFAULT_STAGE1_ARMS;
+  const receipt = await runStage1SuffixAblation({ arms: armList });
+  const outArg = cli[0];
   if (outArg) {
     const outPath = resolve(outArg);
     mkdirSync(dirname(outPath), { recursive: true });
     writeFileSync(outPath, `${JSON.stringify(receipt, null, 2)}\n`);
-  }
-  if (armNames) {
-    console.log(JSON.stringify({
-      schema: receipt.schema,
-      source: receipt.source,
-      arms: receipt.arms,
-      comparisons: receipt.comparisons,
-      failedExpectations: receipt.failedExpectations.length,
-    }, null, 2));
-    process.exit(0);
   }
   console.log(JSON.stringify({
     schema: receipt.schema,
     allStage1GatesPassed: receipt.allStage1GatesPassed,
     gates: receipt.gates,
     plannerCallRatioSuffixVsExact: receipt.plannerCallRatioSuffixVsExact,
-    exactHashV3: receipt.arms['exact-hash-v3'],
-    suffixEligibilityV4: receipt.arms['suffix-eligibility-v4'],
+    byMatcher: receipt.byMatcher,
+    arms: receipt.arms,
   }, null, 2));
   if (!receipt.allStage1GatesPassed) process.exit(1);
 }
