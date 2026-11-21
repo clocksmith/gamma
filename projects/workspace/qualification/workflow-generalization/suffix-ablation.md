@@ -159,3 +159,35 @@ check here is supplied by the harness. Nothing in a learned graph declares that 
 prerequisite exists, and nothing refuses to replay when a host supplies no check.
 Before a live run, every workflow needs its prerequisite check named and wired, or
 replay should fail closed without one.
+
+## Real-planner rung on the local forms
+
+Owner-approved paid run, capped at 5 USD. It asks one question: do the decision
+savings survive a real planner's latency? It uses the same local forms, not a tenant.
+
+- Arms: `whole-rc` and `suffix-rc`, so resume after planner steps is on in both and
+  only the matcher differs.
+- Shared teaching (`--pair-teaching`): one real-planner teaching run per vendor, and
+  both arms replay that same learned graph. Teaching cost is reported separately.
+- Variants: the six that complete: `heldout`, `extra-question`, `reordered`,
+  `changed-label`, `dependent-question`, `stale-page`. Two vendors, 12 paired rows.
+- Planner: Sonnet through the restricted CLI planner, as in the existing experiment.
+
+```sh
+node projects/workspace/qualification/workflow-generalization/run.js --pair-teaching \
+  --max-cost-usd 5 --arms whole-rc,suffix-rc --out bench/out/suffix-real-planner \
+  --variants heldout,extra-question,reordered,changed-label,dependent-question,stale-page
+```
+
+Decided before the run:
+
+- Hard conditions: zero wrong-field fills, zero submissions, equal completion in both
+  arms, graph and index unchanged, spend within the cap.
+- Survives: across the 12 paired rows `suffix-rc` uses fewer model calls and less
+  total task time than `whole-rc`, and bills less.
+- Fewer calls with more total time counts as a failure, not a tie.
+- Report every row, including any where `suffix-rc` is slower or uses more calls.
+
+Limits known in advance: one run per cell, so timing is descriptive and one slow
+planner call can move a row; `extra-question` carries the rule it prompted and is
+reported with and without; local forms only.

@@ -33,12 +33,17 @@ if (args.includes('--help')) {
   process.exit(0);
 }
 for (let i = 0; i < args.length; i++) {
-  if (args[i] === '--controlled') continue;
-  if (['--out', '--arms', '--variants'].includes(args[i]) && args[i + 1]) { i++; continue; }
+  if (['--controlled', '--pair-teaching'].includes(args[i])) continue;
+  if (['--out', '--arms', '--variants', '--max-cost-usd'].includes(args[i]) && args[i + 1]) { i++; continue; }
   throw Error('Unknown or incomplete option');
 }
 if (!get('--out')) throw Error('--out required');
 const out = resolve(get('--out')), controlled = args.includes('--controlled');
+// A caller may lower the frozen spend ceiling, never raise it.
+const maxTotalCostUsd = Math.min(policy.maxTotalCostUsd, Number(get('--max-cost-usd') ?? policy.maxTotalCostUsd));
+if (!(maxTotalCostUsd > 0)) throw Error('Invalid spend ceiling');
+// Paired teaching: both arm families replay one learned graph, so the planner's teaching run cannot differ between them.
+const pairTeaching = args.includes('--pair-teaching');
 const arms = (get('--arms') ?? 'whole,fresh,script').split(',');
 const variants = (get('--variants') ?? policy.variants.join(',')).split(',');
 // Hidden-state extension, outside the frozen v2 variant list and run only when named. Each row reuses
@@ -52,7 +57,8 @@ const extensions = {
   'hidden-prerequisite-reordered-unguarded': { page: 'reordered', guarded: false },
 };
 // suffix = whole-page graph plus opt-in suffix eligibility; -rc also resumes replay after planner steps.
-const graphOf = arm => ({ whole: 'whole', 'whole-rc': 'whole', scoped: 'scoped', suffix: 'suffix', 'suffix-rc': 'suffix' })[arm] ?? null;
+const graphOf = arm => ({ whole: pairTeaching ? 'suffix' : 'whole', 'whole-rc': pairTeaching ? 'suffix' : 'whole',
+  scoped: 'scoped', suffix: 'suffix', 'suffix-rc': 'suffix' })[arm] ?? null;
 if (arms.some(arm => !['whole', 'fresh', 'script', 'scoped', 'suffix', 'whole-rc', 'suffix-rc'].includes(arm))
   || variants.some(variant => !policy.variants.includes(variant) && !extensions[variant])) throw Error('Unfrozen arm or variant');
 if (existsSync(out)) throw Error('Choose a new output directory; failed evidence cannot be overwritten');
@@ -66,7 +72,7 @@ paths.push('projects/workspace/config/fawn-workspace-service.json', 'projects/wo
     'client/cli-planner', 'client/investigation'].map(path => `projects/workspace/src/${path}.js`));
 if (arms.includes('scoped')) paths.push('projects/workspace/src/client/field-group-scope.js');
 const hashes = () => Object.fromEntries(paths.map(path => [path, sha256Hex(readFileSync(join(root, path)))]));
-const frozen = { frozenAt: new Date().toISOString(), testFreeze, policy, arms, variants, controlled,
+const frozen = { frozenAt: new Date().toISOString(), testFreeze, policy, arms, variants, controlled, maxTotalCostUsd, pairTeaching,
   sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
   sourceDirty: !!execFileSync('git', ['status', '--porcelain', '--ignore-submodules=all'], { cwd: root, encoding: 'utf8' }).trim(),
   sourceHashes: hashes() };
@@ -86,7 +92,7 @@ function provider(name, vendor, isScript) {
     : { identity: { model: isScript ? 'scripted-baseline' : 'controlled-preflight' },
       next: async context => scriptedDecision(context, vendor) };
   return { identity: planner.identity, async next(...params) {
-    if (real && costUpperBoundUsd + policy.maxTurnCostUsd > policy.maxTotalCostUsd) throw Error('Spend ceiling');
+    if (real && costUpperBoundUsd + policy.maxTurnCostUsd > maxTotalCostUsd) throw Error('Spend ceiling');
     if (real) costUpperBoundUsd += policy.maxTurnCostUsd;
     const call = { run: name, real, startedAt: new Date().toISOString() }, start = performance.now();
     calls.push(call);
@@ -151,7 +157,9 @@ async function run({ vendor, variant, arm, learn = false }) {
         }
         return service.submitAction(command);
       } };
-    const graph = graphOf(arm), isScoped = graph === 'scoped', usesSuffix = graph === 'suffix';
+    const graph = graphOf(arm), isScoped = graph === 'scoped';
+    // Learning under the suffix key records the index; in reuse only the suffix arms receive it.
+    const usesSuffix = graph === 'suffix' && (learn || arm.startsWith('suffix'));
     const key = `${vendor}-${graph ?? 'whole'}`;
     const dag = !learn && graph
       ? TraceDag.restore(learned.get(key), policy.limits) : new TraceDag(policy.limits);
@@ -199,6 +207,8 @@ async function run({ vendor, variant, arm, learn = false }) {
     row = { name, vendor, variant, arm, learning: learn, ...result,
       plannerDecisions: result.modelCalls, modelCalls: callsForRun.filter(call => call.real).length,
       preparationMs, completeTaskMs: performance.now() - started, oracle,
+      plannerMs: callsForRun.reduce((sum, call) => sum + (call.elapsedMs ?? 0), 0),
+      costUsd: callsForRun.reduce((sum, call) => sum + (call.usage?.costUsd ?? 0), 0),
       cachedFieldFills: state.actions.filter(action => action.kind !== 'navigate' && action.outcome === 'completed')
         .slice(0, result.cacheSteps).filter(action => ['fill', 'select'].includes(action.kind)).length,
       // Inspect action kind counts separately; cacheSteps includes intermediate clicks.
