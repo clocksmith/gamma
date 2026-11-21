@@ -14,7 +14,7 @@ const runtime = new Miniflare({ host: '127.0.0.1', port: 0, modules: true, modul
 });
 try {
   const response = await fetch(new URL('/check', await runtime.ready), {
-    method: 'POST', redirect: 'error', signal: AbortSignal.timeout(10_000),
+    method: 'POST', redirect: 'manual', signal: AbortSignal.timeout(10_000),
   });
   const body = await response.text();
   if (!response.ok) throw new Error(`Local D1 qualification failed: ${response.status} ${body}`);

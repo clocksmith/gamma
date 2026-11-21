@@ -195,3 +195,44 @@ The signer must be supplied by a trusted host and receives only the exact
 already-published generation. There is no environment or CLI enablement and
 the default Worker and Node routes remain unchanged. The local HTTP fixture
 uses ephemeral signing keys and SQLite, not a deployed D1 system.
+
+### D1 and corpus qualification boundary
+
+The shipped Worker entry point still does not enable the signer. The local
+workerd qualification runs the real D1 adapter with synthetic in-process HTTP
+handling and ephemeral Ed25519 keys. It verifies authenticated delivery through
+the client, cache admission, different-workspace rejection and an old generation
+below the trusted floor. It does not establish a hosted account/key setup.
+
+```sh
+node qualification/recipe-generations-d1-local.js /absolute/path/to/node_modules/miniflare
+node qualification/recipe-generation-corpus-local.js
+```
+
+The same synthetic corpus runs on SQLite and local workerd D1: linear, weighted
+repeats, alternative branches with/without a required slot, contracted loops,
+persisted legacy detour pruning, a reintroduced detour, and a known-divergent
+checkpoint with a deliberately stale legacy baseline. Matching on this
+bounded corpus does not establish parity on actual historical recipe graphs
+or justify replacing the authoritative legacy resolver.
+
+Once a project owner has provided an approved staging origin, independent
+confirmation of its isolated hosted D1 binding, an explicitly enabled signer,
+a pre-seeded sanitized workspace generation, and a staging-only bearer
+credential, run the signed read without creating any resources:
+
+```sh
+# Set GAMMA_RECIPE_STAGING_ORIGIN and GAMMA_RECIPE_STAGING_TOKEN
+# through your approved existing environment/credential mechanism.
+node qualification/recipe-generations-d1-staging-read.js --approved-staging-read /path/to/staging-pin.json
+```
+
+The private config contains `endpointOrigin` (exactly the approved HTTPS
+origin), `scope` (`origin`, `template`, and optional `readScope`), `generation`,
+`trust` (`namespaceId`, `compilerVersion`, `limits`, `replanPenalty`, and
+`minimumGeneration` equal to `generation`), plus the independently pinned
+Ed25519 SPKI `publicKeyPem`. Never put a token or private key in that config.
+The probe uses the read-only signed publication route without redirects,
+prints no snapshot or credential, and verifies the independent signing and
+scope pin. It cannot independently prove the Worker uses hosted D1: retain
+the deployment binding evidence separately. Do not aim it at production.
