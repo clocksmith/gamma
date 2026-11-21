@@ -23,6 +23,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { structuralLocator } from '../src/adapters/page-query.js';
 import { InvestigationStore } from '../src/client/investigation.js';
+import { SuffixIndex } from '../src/client/suffix-eligibility.js';
 import { TraceDag } from '../src/client/trace-dag.js';
 import { runWorkflow } from '../src/client/workflow-agent.js';
 
@@ -438,7 +439,20 @@ function makeControlledPlanner(fam, slotMap = {}, { requireApprovalBeforeFields 
   };
 }
 
-export async function runStage1SuffixAblation() {
+// `suffix-index-v1` replays with the merged SuffixIndex matcher (the #88 candidate) and leaves the
+// profile matcher off, configured exactly as workflow-generalization/run.js `--matcher index`.
+const ARM_DEFS = {
+  'exact-hash-v3': { suffixEligibility: false, useIndex: false },
+  'suffix-eligibility-v4': { suffixEligibility: true, useIndex: false },
+  'suffix-index-v1': { suffixEligibility: false, useIndex: true },
+};
+export const DEFAULT_STAGE1_ARMS = Object.freeze(['exact-hash-v3', 'suffix-eligibility-v4']);
+const suffixCertifications = (arm, res) => arm.useIndex
+  ? (res.suffix?.certified ?? 0)
+  : (res.certifiedSuffixRejoins?.length ?? 0);
+
+export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_ARMS } = {}) {
+  if (!armIds.includes('exact-hash-v3') || armIds.some(id => !ARM_DEFS[id])) throw Error('Unknown or missing Stage 1 arm');
   const root = mkdtempSync(join(tmpdir(), 'gammatron-stage1-ablation-'));
   const invStore = new InvestigationStore(root);
   let seq = 0;
@@ -468,10 +482,14 @@ export async function runStage1SuffixAblation() {
       ];
 
       // Teach identical single reference trace (ENTRY -> INTERIOR -> gate -> f1 -> f2 -> LEAF) to both arms!
-      const arms = [
-        { armId: 'exact-hash-v3', suffixEligibility: false, dag: new TraceDag(LIMITS) },
-        { armId: 'suffix-eligibility-v4', suffixEligibility: true, dag: new TraceDag(LIMITS) },
-      ];
+      const arms = armIds.map(armId => ({
+        armId,
+        ...ARM_DEFS[armId],
+        dag: new TraceDag(LIMITS),
+        index: ARM_DEFS[armId].useIndex ? new SuffixIndex() : null,
+      }));
+      // Every evaluation run gets a frozen copy of the taught index, as run.js does.
+      const frozenIndex = arm => (arm.index ? SuffixIndex.restore(arm.index.export()).freeze() : null);
 
       for (const arm of arms) {
         const teachEnv = buildSnapshotHarness(fam, {
@@ -499,6 +517,7 @@ export async function runStage1SuffixAblation() {
           learnRepairs: false,
           reconvergeMidRepair: true,
           suffixEligibility: arm.suffixEligibility,
+          suffixIndex: arm.index,
           slotRoles: fam.slotRoles,
           assertContext: async () => {
             if (teachEnv.service.liveAccount() !== fam.tenantId) throw Error('account-scope-mismatch');
@@ -674,10 +693,15 @@ export async function runStage1SuffixAblation() {
         skippedApprovals: 0,
         lstarHiddenStateDemotions: 0,
         landmarksSurfacedCount: 0,
+        nearMissCertifications: 0,
+        caseFailures: [],
       }]));
 
       for (const arm of arms) {
         const st = armStats.get(arm.armId);
+        // Failed expectations are recorded per case and fail the gate at the end, so one arm's
+        // failure cannot hide the rest of the suite.
+        const check = (ok, message) => { if (!ok) st.caseFailures.push(message); return ok; };
         // Evaluate held-out variants without mutating the frozen taught DAG (`learnRepairs: false`)
         for (const v of heldOutVariants) {
           const evalDag = TraceDag.restore(arm.dag.export(), LIMITS);
@@ -701,6 +725,7 @@ export async function runStage1SuffixAblation() {
             learnRepairs: false,
             reconvergeMidRepair: true,
             suffixEligibility: arm.suffixEligibility,
+            suffixIndex: frozenIndex(arm),
             slotRoles: fam.slotRoles,
             assertContext: async () => {
               if (env.service.liveAccount() !== fam.tenantId) throw Error('account-scope-mismatch');
@@ -713,9 +738,9 @@ export async function runStage1SuffixAblation() {
             verifyReview: env.verifyReview,
             signal: new AbortController().signal,
           });
-          assert.equal(res.completed, true, `${arm.armId} must complete held-out ${v.variantId}`);
+          check(res.completed === true, `${fam.familyId} ${v.variantId}: must complete held-out variant`);
           st.heldOutCount += 1;
-          st.completedCount += 1;
+          if (res.completed) st.completedCount += 1;
           st.totalPlannerCalls += res.modelCalls;
           st.totalReusedSteps += res.cacheSteps;
           if (lastLandmarks().length > 0) st.landmarksSurfacedCount += 1;
@@ -736,6 +761,8 @@ export async function runStage1SuffixAblation() {
             completed: res.completed,
             plannerCalls: res.modelCalls,
             reusedSteps: res.cacheSteps,
+            suffixCertifications: suffixCertifications(arm, res),
+            ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null, indexNodes: arm.index.nodes.size } : {}),
             certifiedRejoinK2: certifiedRejoin && plannerStepsUsed <= 2,
             certifiedRejoinK3: certifiedRejoin && plannerStepsUsed <= 3,
           });
@@ -767,6 +794,7 @@ export async function runStage1SuffixAblation() {
             learnRepairs: false,
             reconvergeMidRepair: true,
             suffixEligibility: arm.suffixEligibility,
+            suffixIndex: frozenIndex(arm),
             slotRoles: fam.slotRoles,
             assertContext: async () => {
               if (env.service.liveAccount() !== fam.tenantId) throw Error('account-scope-mismatch');
@@ -781,25 +809,23 @@ export async function runStage1SuffixAblation() {
           });
 
           st.nearMissCount += 1;
-          assert.equal(res.completed, nm.expectCompleted, `${arm.armId} near-miss ${nm.probeId} completion mismatch`);
+          const certifications = suffixCertifications(arm, res);
+          if (certifications > 0) st.nearMissCertifications += 1;
+          check(res.completed === nm.expectCompleted, `${fam.familyId} ${nm.probeId}: completion mismatch`);
           if (nm.expectZeroActions) {
-            assert.equal(env.service.dispatched.length, 0, `${arm.armId} ${nm.probeId} must dispatch 0 actions`);
+            check(env.service.dispatched.length === 0, `${fam.familyId} ${nm.probeId}: must dispatch 0 actions`);
           }
           if (nm.mustExecuteApprovalGate) {
             const clickedApproval = env.service.dispatched.some(cmd => cmd.kind === 'click' && cmd.target.handle === 'gate-ok');
             if (!clickedApproval) st.skippedApprovals += 1;
-            assert.equal(clickedApproval, true, `${arm.armId} ${nm.probeId} must NOT skip required approval click`);
+            check(clickedApproval, `${fam.familyId} ${nm.probeId}: must not skip required approval click`);
           }
           if (nm.expectZeroSuffixCertification) {
-            const falselyCertified = res.completed === true && (res.certifiedSuffixRejoins?.length ?? 0) > 0;
+            const falselyCertified = res.completed === true && certifications > 0;
             if (falselyCertified) st.unsafeCertifications += 1;
             // On NM1 (dirty untracked <form> field), suffix eligibility must reject even proposing a rejoin!
             if (nm.probeId === 'NM1_dirty_untracked_committing_form_field') {
-              assert.equal(
-                res.certifiedSuffixRejoins?.length ?? 0,
-                0,
-                'Dirty untracked <form> field must be rejected before any suffix step executes',
-              );
+              check(certifications === 0, `${fam.familyId} ${nm.probeId}: dirty untracked <form> field must be rejected before any suffix step executes`);
             }
           }
           if (nm.verifyLstarSplitAndHiddenStateDemotion && arm.suffixEligibility) {
@@ -867,7 +893,8 @@ export async function runStage1SuffixAblation() {
             caseId: nm.probeId,
             completed: res.completed,
             dispatchedActions: env.service.dispatched.length,
-            candidateRejoinsProposed: res.certifiedSuffixRejoins?.length ?? 0,
+            candidateRejoinsProposed: certifications,
+            ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null } : {}),
             lstarAction: res.lstarRefinement?.action ?? null,
           });
         }
@@ -890,6 +917,7 @@ export async function runStage1SuffixAblation() {
       const totalReused = clusters.reduce((s, c) => s + c.totalReusedSteps, 0);
       const unsafeCertifications = clusters.reduce((s, c) => s + c.unsafeCertifications, 0);
       const skippedApprovals = clusters.reduce((s, c) => s + c.skippedApprovals, 0);
+      const caseFailures = clusters.flatMap(c => c.caseFailures);
       return {
         armId,
         clusterCount: k,
@@ -902,34 +930,46 @@ export async function runStage1SuffixAblation() {
         totalReusedSteps: totalReused,
         unsafeCertifications,
         skippedApprovals,
+        nearMissProbesWithAnyCertification: clusters.reduce((s, c) => s + c.nearMissCertifications, 0),
+        completedHeldOut: clusters.reduce((s, c) => s + c.completedCount, 0),
+        caseFailures,
       };
     };
-
-    const exactSummary = summarizeArm('exact-hash-v3');
-    const suffixSummary = summarizeArm('suffix-eligibility-v4');
-    const callRatio = Number((suffixSummary.totalPlannerCalls / exactSummary.totalPlannerCalls).toFixed(4));
-
-    const gates = {
-      zeroUnsafeCertifications: exactSummary.unsafeCertifications === 0 && suffixSummary.unsafeCertifications === 0,
-      zeroSkippedApprovals: exactSummary.skippedApprovals === 0 && suffixSummary.skippedApprovals === 0,
-      suffixBeatsExactHashRejoinK2: suffixSummary.clusterMeanCertifiedRejoinRateK2 > exactSummary.clusterMeanCertifiedRejoinRateK2,
-      certifiedRejoinK2AtLeast60Pct: suffixSummary.clusterMeanCertifiedRejoinRateK2 >= 0.60,
-      certifiedRejoinK3AtLeast75Pct: suffixSummary.clusterMeanCertifiedRejoinRateK3 >= 0.75,
-      plannerCallRatioAtMost065x: callRatio <= 0.65,
+    const summaries = Object.fromEntries(armIds.map(armId => [armId, summarizeArm(armId)]));
+    // The same frozen gates, applied to each matcher against the exact-hash baseline.
+    const gatesFor = (candidate, exact) => {
+      const ratio = Number((candidate.totalPlannerCalls / exact.totalPlannerCalls).toFixed(4));
+      return {
+        plannerCallRatioVsExact: ratio,
+        gates: {
+          zeroUnsafeCertifications: exact.unsafeCertifications === 0 && candidate.unsafeCertifications === 0,
+          zeroSkippedApprovals: exact.skippedApprovals === 0 && candidate.skippedApprovals === 0,
+          zeroCaseFailures: exact.caseFailures.length === 0 && candidate.caseFailures.length === 0,
+          suffixBeatsExactHashRejoinK2: candidate.clusterMeanCertifiedRejoinRateK2 > exact.clusterMeanCertifiedRejoinRateK2,
+          certifiedRejoinK2AtLeast60Pct: candidate.clusterMeanCertifiedRejoinRateK2 >= 0.60,
+          certifiedRejoinK3AtLeast75Pct: candidate.clusterMeanCertifiedRejoinRateK3 >= 0.75,
+          plannerCallRatioAtMost065x: ratio <= 0.65,
+        },
+      };
     };
+    const byMatcher = Object.fromEntries(armIds.filter(id => id !== 'exact-hash-v3')
+      .map(id => [id, gatesFor(summaries[id], summaries['exact-hash-v3'])]));
+
+    // Top-level gates keep their original meaning: the profile matcher when it ran, else the index.
+    const primary = byMatcher['suffix-eligibility-v4'] ?? byMatcher['suffix-index-v1'] ?? null;
+    const gates = primary?.gates ?? {};
+    const callRatio = primary?.plannerCallRatioVsExact ?? null;
 
     return {
       schema: 'gammatron.stage1-offline-suffix-ablation/v1',
       llmSpendUsd: 0,
       clusteringUnit: 'workflowFamily_x_tenant',
       clusterCount: WORKFLOW_FAMILIES.length,
-      arms: {
-        'exact-hash-v3': exactSummary,
-        'suffix-eligibility-v4': suffixSummary,
-      },
+      arms: summaries,
       plannerCallRatioSuffixVsExact: callRatio,
       gates,
-      allStage1GatesPassed: Object.values(gates).every(Boolean),
+      byMatcher,
+      allStage1GatesPassed: Object.values(byMatcher).every(m => Object.values(m.gates).every(Boolean)),
       clusters: clusterRows,
       cases: caseRows,
     };
@@ -941,8 +981,11 @@ export async function runStage1SuffixAblation() {
 
 const isDirect = Boolean(process.argv[1]) && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isDirect) {
-  const receipt = await runStage1SuffixAblation();
-  const outArg = process.argv[2];
+  const cli = process.argv.slice(2);
+  const armsAt = cli.indexOf('--arms');
+  const armList = armsAt >= 0 ? cli.splice(armsAt, 2)[1].split(',') : DEFAULT_STAGE1_ARMS;
+  const receipt = await runStage1SuffixAblation({ arms: armList });
+  const outArg = cli[0];
   if (outArg) {
     const outPath = resolve(outArg);
     mkdirSync(dirname(outPath), { recursive: true });
@@ -953,8 +996,8 @@ if (isDirect) {
     allStage1GatesPassed: receipt.allStage1GatesPassed,
     gates: receipt.gates,
     plannerCallRatioSuffixVsExact: receipt.plannerCallRatioSuffixVsExact,
-    exactHashV3: receipt.arms['exact-hash-v3'],
-    suffixEligibilityV4: receipt.arms['suffix-eligibility-v4'],
+    byMatcher: receipt.byMatcher,
+    arms: receipt.arms,
   }, null, 2));
   if (!receipt.allStage1GatesPassed) process.exit(1);
 }
