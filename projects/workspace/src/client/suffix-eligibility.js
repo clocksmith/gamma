@@ -1,14 +1,218 @@
-// Stage 1 (#85 / #88): Suffix eligibility over active downstream footprints R_u,
-// live post-condition valuation nu(o, inputs), dirty-<form>-field safety guard,
-// L*-style counterexample footprint refinement, typed slot roles, and read-only landmarks.
-// Pure analysis and verification helper; WorkspaceService remains sole dispatch authority.
+// Unified suffix eligibility for Gammatron trace replay (#85 / #88):
+//   1. `SuffixIndex` + `certifySuffix` + `labelsCompete` (bag overlap, accountedReach, blocking-dialog
+//      refusal, unlabelled/unanswered/competing-label guards; proven on the $0.457 Sonnet 5.5 rung).
+//   2. Embedded `suffixProfiles` + `evaluateSuffixEligibility` + `refineSuffixProfileOnCounterexample`
+//      (active footprint R_u, live valuation nu(o, inputs), per-<form> dirty-field guard, L* guard
+//      splitting and hidden-state exact-prefix demotion, typed slot roles, and landmark hints).
+// Pure analysis and verification module: dispatches nothing and grants nothing; WorkspaceService
+// and host prerequisite/authorization gates remain sole authorities before every effect.
 
 import { structuralLocator } from '../adapters/page-query.js';
 import { canonicalJson } from '../journal.js';
 
+const INDEX_VERSION = 1;
 const HASH = /^[a-f0-9]{64}$/;
-const VALUE_TAGS = new Set(['input', 'select', 'textarea']);
+const WRITABLE_TAGS = new Set(['input', 'select', 'textarea']);
+const WRITABLE_ROLES = new Set(['textbox', 'searchbox', 'combobox', 'listbox', 'spinbutton', 'checkbox', 'radio', 'switch', 'slider']);
+const BLOCKING_ROLES = new Set(['dialog', 'alertdialog', 'alert']);
+const UNSUPPORTED_INPUTS = new Set(['submit', 'image', 'file', 'password', 'hidden']);
 const NON_VALUE_INPUT_TYPES = new Set(['submit', 'button', 'reset', 'image']);
+const STOPPED_DECISIONS = new Set(['checkpoint', 'repair-only', 'ambiguous', 'missing-slot', 'terminal']);
+
+/** Frozen before the first evaluation run; change only with a new, separately reported run. */
+export const DEFAULT_SUFFIX_POLICY = Object.freeze({ minOverlap: 0.6, maxLocalSteps: 24 });
+
+const count = values => {
+  const counts = new Map();
+  for (const value of values) counts.set(value, (counts.get(value) ?? 0) + 1);
+  return counts;
+};
+const labelTokens = label => (label ?? '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim().split(' ').filter(Boolean);
+const isWritable = element => WRITABLE_TAGS.has(element.tag) || WRITABLE_ROLES.has(element.role);
+const isActionable = element => !element.actionability
+  || (element.actionability.visible !== false && !element.actionability.inert && !element.actionability.disabled);
+const isAnswered = element => typeof element.value === 'string' && element.value.length > 0
+  && !['checkbox', 'radio'].includes(element.inputType);
+
+/** Two labels compete when one's words are all contained in the other's ("Email" vs "Confirm email"). */
+export function labelsCompete(first, second) {
+  const a = new Set(labelTokens(first)), b = new Set(labelTokens(second));
+  if (!a.size || !b.size) return true;
+  const [small, large] = a.size <= b.size ? [a, b] : [b, a];
+  return [...small].every(token => large.has(token));
+}
+
+/** Private per-node page facts, keyed like the graph and hashed under the graph's own key. */
+export class SuffixIndex {
+  constructor() {
+    this.nodes = new Map();
+    this.frozen = false;
+  }
+  freeze() { this.frozen = true; return this; }
+  note(dag, frame) {
+    if (this.frozen || !frame?.meta || !HASH.test(frame.id)) return;
+    this.nodes.set(frame.id, {
+      scope: frame.meta.scope,
+      slots: [...frame.meta.slots],
+      clicks: frame.meta.clicks,
+      bag: frame.observation.elements.map(element => dag.hash(['locator', structuralLocator(element)])).sort(),
+    });
+  }
+  export() { return structuredClone({ version: INDEX_VERSION, nodes: [...this.nodes] }); }
+  static restore(state) {
+    if (state?.version !== INDEX_VERSION || !Array.isArray(state.nodes)) throw Error('Invalid suffix index');
+    const index = new SuffixIndex();
+    for (const entry of state.nodes) {
+      const [id, meta] = Array.isArray(entry) && entry.length === 2 ? entry : [];
+      if (!HASH.test(id ?? '') || index.nodes.has(id) || !meta || Object.keys(meta).sort().join() !== 'bag,clicks,scope,slots'
+        || !HASH.test(meta.scope) || !Number.isSafeInteger(meta.clicks) || meta.clicks < 0
+        || !Array.isArray(meta.slots) || meta.slots.some(slot => !HASH.test(slot))
+        || !Array.isArray(meta.bag) || meta.bag.some(locator => !HASH.test(locator))) throw Error('Invalid suffix index node');
+      index.nodes.set(id, structuredClone(meta));
+    }
+    return index;
+  }
+}
+
+/** Nodes reachable from a root along steps the session executed or the live page already shows settled. */
+function accountedReach(nodes, isAccounted) {
+  const hasIncoming = new Set();
+  for (const node of nodes.values()) {
+    for (const edge of node.edges ?? []) hasIncoming.add(edge.next);
+    for (const next of node.repairs ?? []) hasIncoming.add(next);
+  }
+  const reach = new Set([...nodes.keys()].filter(id => !hasIncoming.has(id)));
+  const queue = [...reach];
+  while (queue.length) {
+    const node = nodes.get(queue.pop());
+    const nexts = [...(node.edges ?? []).filter(edge => isAccounted(edge.step)).map(edge => edge.next), ...(node.repairs ?? [])];
+    for (const next of nexts) if (nodes.has(next) && !reach.has(next)) { reach.add(next); queue.push(next); }
+  }
+  return reach;
+}
+
+/**
+ * Certify at most one learned node for a live frame that missed the exact hash (SuffixIndex mode).
+ * session: { inputs: Map<slotHash,string>, clicks: Set<locatorHash>, executedSteps: step[],
+ *            sameOutlineClicks: number, isGoalTerminal(id, node): boolean }
+ * Returns { status: 'certified', nodeId, terminal } or { status: 'refused', reason, refusals }.
+ */
+export function certifySuffix({ dag, index, dp, frame, session, restrictTo = null, policy = DEFAULT_SUFFIX_POLICY }) {
+  const refusals = new Map();
+  const refused = reason => ({ status: 'refused', reason, refusals: Object.fromEntries(refusals) });
+  if (!frame?.meta || !index || !dp) return refused('suffix-unavailable');
+  const elements = frame.observation.elements;
+  if (elements.some(element => BLOCKING_ROLES.has(element.role))) return refused('blocking-dialog');
+  const live = elements.map(element => ({ element, locator: dag.hash(['locator', structuralLocator(element)]) }));
+  const liveCounts = count(live.map(entry => entry.locator));
+
+  const slotLocators = new Map();
+  for (const node of dag.nodes.values()) {
+    for (const { step } of node.edges ?? []) {
+      if (step.kind === 'click') continue;
+      if (!slotLocators.has(step.slot)) slotLocators.set(step.slot, new Set());
+      slotLocators.get(step.slot).add(step.locator);
+    }
+  }
+  // A slot is settled when exactly one live control at a learned locator for it already holds the input.
+  const settled = slot => {
+    const value = session.inputs.get(slot), locators = slotLocators.get(slot);
+    if (typeof value !== 'string' || !value.length || !locators) return false;
+    const holders = live.filter(entry => locators.has(entry.locator));
+    return holders.length === 1 && holders[0].element.value === value;
+  };
+  const executedSlots = new Set(session.executedSteps.filter(step => step.kind !== 'click').map(step => step.slot));
+  const executedClicks = new Set(session.executedSteps.filter(step => step.kind === 'click').map(step => step.locator));
+  const slotDone = slot => executedSlots.has(slot) || settled(slot);
+  const reach = accountedReach(dag.nodes, step => step.kind === 'click' ? executedClicks.has(step.locator) : slotDone(step.slot));
+
+  const eligible = [];
+  for (const [id, meta] of index.nodes) {
+    const node = dag.nodes.get(id);
+    if (!node || meta.scope !== frame.meta.scope || (restrictTo && !restrictTo.has(id))) continue;
+    const reject = reason => { refusals.set(reason, (refusals.get(reason) ?? 0) + 1); };
+    if (!reach.has(id)) { reject('prefix-unaccounted'); continue; }
+
+    const learnedCounts = count(meta.bag);
+    let common = 0;
+    for (const [locator, learned] of learnedCounts) common += Math.min(learned, liveCounts.get(locator) ?? 0);
+    if (common < policy.minOverlap * Math.max(meta.bag.length, live.length)) { reject('page-mismatch'); continue; }
+    if (meta.slots.some(slot => !slotDone(slot))) { reject('prefix-slot-unaccounted'); continue; }
+    if (meta.clicks !== session.sameOutlineClicks) { reject('click-progress-differs'); continue; }
+
+    // Writable controls the learned page did not have.
+    const spare = new Map(learnedCounts);
+    const added = live.filter(({ locator }) => {
+      const left = spare.get(locator) ?? 0;
+      if (left > 0) { spare.set(locator, left - 1); return false; }
+      return true;
+    }).map(entry => entry.element).filter(isWritable);
+    if (added.some(element => !element.label)) { reject('unlabelled-added-control'); continue; }
+
+    const terminal = session.isGoalTerminal(id, node);
+    const targets = [];
+    let failure = null, cursor = id;
+    for (let stepIndex = 0; !terminal && stepIndex < policy.maxLocalSteps; stepIndex++) {
+      const current = dag.nodes.get(cursor), decision = dp.policy.get(cursor);
+      if (!current || !decision?.step || STOPPED_DECISIONS.has(decision.kind)) {
+        if (stepIndex === 0) failure = 'no-policy-step';
+        break;
+      }
+      const { step } = decision;
+      const matches = live.filter(entry => entry.locator === step.locator);
+      // Later targets may only appear after an earlier answer; an absent one ends the local check.
+      if (matches.length === 0 && stepIndex > 0) break;
+      if (matches.length !== 1) { failure = matches.length ? 'ambiguous-target' : 'missing-target'; break; }
+      const { element } = matches[0];
+      if (!element.label || element.formAction || UNSUPPORTED_INPUTS.has(element.inputType)) { failure = 'unsupported-target'; break; }
+      // A step this session cannot take ends the lookahead; it only refuses the node when it is the next step.
+      const cannot = reason => { if (stepIndex === 0) failure = reason; };
+      if (step.kind === 'click') {
+        // Leaving the page while a new question is unanswered could skip a required answer: hand it to the planner.
+        if (!session.clicks.has(step.locator)) cannot('click-not-authorized');
+        else if (added.some(control => isActionable(control) && !isAnswered(control))) cannot('unanswered-added-control');
+        else targets.push(element);
+        break;
+      }
+      if (typeof session.inputs.get(step.slot) !== 'string') { cannot('missing-input-slot'); break; }
+      if (slotDone(step.slot)) { failure = 'pending-fill-already-done'; break; }
+      targets.push(element);
+      const outcomes = current.edges.filter(edge => edge.step.kind === step.kind && edge.step.locator === step.locator
+        && edge.step.slot === step.slot);
+      if (outcomes.length !== 1) break;
+      cursor = outcomes[0].next;
+    }
+    if (failure) { reject(failure); continue; }
+
+    // A new control must not compete in meaning with a pending target.
+    if (added.some(element => targets.some(target => labelsCompete(element.label, target.label)))) {
+      reject('lookalike-added-control'); continue;
+    }
+    // Guardrail 2: an untouched non-default field inside a target <form> must not silently ride along.
+    const targetForms = new Set(targets.map(target => target.formKey).filter(Boolean));
+    if (targetForms.size > 0) {
+      const executedLocators = new Set((session.executedSteps ?? []).map(step => step.locator));
+      const targetLocators = new Set(targets.map(target => dag.hash(['locator', structuralLocator(target)])));
+      const whitelistedInert = new Set((session.inertFormLocators ?? []).map(loc => canonicalJson(loc)));
+      const allControls = frame.observation.unfilteredElements ?? frame.observation.elements;
+      const hasDirtyUntracked = allControls.some(el => {
+        if (!el.formKey || !targetForms.has(el.formKey) || el.isDefaultValue !== false) return false;
+        const locHash = dag.hash(['locator', structuralLocator(el)]);
+        if (executedLocators.has(locHash) || targetLocators.has(locHash)) return false;
+        if ([...session.inputs.values()].some(v => typeof v === 'string' && v.length > 0 && el.value === v)) return false;
+        return !whitelistedInert.has(canonicalJson(structuralLocator(el)));
+      });
+      if (hasDirtyUntracked) {
+        reject('dirty-untracked-form-field'); continue;
+      }
+    }
+    eligible.push({ id, terminal });
+  }
+  if (eligible.length !== 1) return refused(eligible.length ? 'ambiguous-candidates' : 'no-eligible-candidate');
+  return { status: 'certified', nodeId: eligible[0].id, terminal: eligible[0].terminal };
+}
+
+// --- Active-footprint suffixProfiles, per-<form> dirty-field guard, L* refinement & landmarks ---
 
 export function normalizeRoutePattern(rawUrl) {
   const parsed = new URL(rawUrl);
@@ -27,12 +231,7 @@ export function normalizeRoutePattern(rawUrl) {
 
 export function isActionableElement(element) {
   if (!element) return false;
-  if (!element.actionability) return true;
-  return Boolean(
-    element.actionability.visible
-    && !element.actionability.inert
-    && !element.actionability.disabled,
-  );
+  return isActionable(element);
 }
 
 function defaultAttributeValue(element) {
@@ -47,8 +246,7 @@ function isValueBearingControl(element) {
   const inputType = (element.inputType ?? '').toLowerCase();
   if (tag === 'button' || tag === 'a' || role === 'button' || role === 'link') return false;
   if (tag === 'input' && NON_VALUE_INPUT_TYPES.has(inputType)) return false;
-  if (VALUE_TAGS.has(tag)) return true;
-  return ['textbox', 'searchbox', 'combobox', 'listbox', 'checkbox', 'radio', 'switch', 'spinbutton', 'slider'].includes(role);
+  return WRITABLE_TAGS.has(tag) || WRITABLE_ROLES.has(role);
 }
 
 /**
@@ -66,10 +264,6 @@ export function isCleanOrWhitelistedFormControl(element, whitelistedLocators = n
   return String(val) === defaultAttributeValue(element);
 }
 
-/**
- * Resolve input bindings across exact slot names and explicit host-declared typed slot roles.
- * Refuses ambiguous role bindings when >=2 inputs share the same role without an exact slot match.
- */
 export function resolveRoleBoundInputs({ inputs = {}, slotRoles = null, learnedSlotRoles = new Map(), hashFn }) {
   const directMap = new Map();
   const roleCandidates = new Map();
@@ -173,6 +367,7 @@ export function mergeSuffixProfiles(leftMap, rightMap, nodes) {
       locatorTable: [...tableMap.entries()].sort(([a], [b]) => a.localeCompare(b)),
       slotLocators: [...new Map([...(prev.slotLocators ?? []), ...(incoming.slotLocators ?? [])]).entries()]
         .sort(([a], [b]) => a.localeCompare(b)),
+      onScreenStepLocators: [...new Set([...(prev.onScreenStepLocators ?? []), ...(incoming.onScreenStepLocators ?? [])])].sort(),
       requiredSlots: [...new Set([...prev.requiredSlots, ...incoming.requiredSlots])].sort(),
       sameOutlineClicks: Math.max(prev.sameOutlineClicks, incoming.sameOutlineClicks),
       referenceControls: prev.referenceControls ?? incoming.referenceControls ?? [],
@@ -183,11 +378,6 @@ export function mergeSuffixProfiles(leftMap, rightMap, nodes) {
   return new Map([...merged.entries()].sort(([a], [b]) => a.localeCompare(b)));
 }
 
-/**
- * Evaluate suffix eligibility on a cache miss (`!dag.nodes.has(before.id)`).
- * Returns { eligible: true, nodeId, profile, diagnostics } ONLY if all prerequisite,
- * active-footprint, live slot valuation nu(o, inputs), and dirty-<form>-field guards pass.
- */
 export function evaluateSuffixEligibility({
   dag,
   dp,
@@ -201,6 +391,9 @@ export function evaluateSuffixEligibility({
   const rejections = [];
   if (observation?.isTruncated !== false || !Array.isArray(observation?.elements)) {
     return { eligible: false, reason: 'incomplete-observation', rejections };
+  }
+  if (observation.elements.some(el => BLOCKING_ROLES.has(el.role))) {
+    return { eligible: false, reason: 'blocking-dialog', rejections };
   }
   const { origin, routePattern } = normalizeRoutePattern(observation.url);
   const inertSet = new Set(inertFormLocators.map(loc => canonicalJson(loc)));
@@ -216,13 +409,9 @@ export function evaluateSuffixEligibility({
     const decision = dp.policy.get(nodeId);
     const cost = dp.values.get(nodeId) ?? Infinity;
     if (!decision || !Number.isFinite(cost)) continue;
-    if (decision.kind !== 'step' && decision.kind !== 'terminal') continue;
-    // Do not jump straight to a zero-step terminal leaf on a suffix miss: terminals require exact verification.
-    if (decision.kind === 'terminal') continue;
+    if (decision.kind !== 'step') continue;
 
-    if (profile.origin !== origin || profile.routePattern !== routePattern) {
-      continue;
-    }
+    if (profile.origin !== origin || profile.routePattern !== routePattern) continue;
     if (profile.requiresExactPrefix) {
       rejections.push({ nodeId, reason: 'demoted-to-exact-prefix-by-hidden-state' });
       continue;
@@ -236,7 +425,6 @@ export function evaluateSuffixEligibility({
     const slotLocatorByHash = new Map(profile.slotLocators ?? []);
     const { stepLocatorHashes, requiredSlotHashes } = collectDownstreamStepHashes(nodeId, dag.nodes, targetTerminals);
 
-    // Check role ambiguity on any downstream required slot.
     let roleConflict = false;
     for (const slotHash of requiredSlotHashes) {
       const role = dag.slotRoles.get(slotHash);
@@ -254,7 +442,6 @@ export function evaluateSuffixEligibility({
       continue;
     }
 
-    // Verify live post-condition valuation nu(o, inputs) for required upstream same-screen slots!
     let prereqFailed = false;
     const satisfiedPrereqSelectors = new Set();
     for (const reqSlotHash of profile.requiredSlots) {
@@ -278,7 +465,6 @@ export function evaluateSuffixEligibility({
       continue;
     }
 
-    // Active downstream footprint R_u check: every immediate and same-screen footprint locator must resolve uniquely.
     const immediateStepHash = decision.step.locator;
     const immediateMatches = actionableElements.filter(
       el => dag.hash(['locator', structuralLocator(el)]) === immediateStepHash,
@@ -291,8 +477,8 @@ export function evaluateSuffixEligibility({
       continue;
     }
 
-    // Check all same-screen R_u locators present in profile.onScreenStepLocators + L* extraGuards.
     const matchedFootprintSelectors = new Set([immediateMatches[0].selector]);
+    const matchedFootprintElements = [immediateMatches[0]];
     const touchedFormKeys = new Set();
     if (immediateMatches[0].formKey) touchedFormKeys.add(immediateMatches[0].formKey);
 
@@ -308,6 +494,7 @@ export function evaluateSuffixEligibility({
         break;
       }
       matchedFootprintSelectors.add(matches[0].selector);
+      matchedFootprintElements.push(matches[0]);
       if (matches[0].formKey) touchedFormKeys.add(matches[0].formKey);
     }
     if (!footprintFailed) {
@@ -336,10 +523,11 @@ export function evaluateSuffixEligibility({
       continue;
     }
 
-    // Guardrail 2: Dirty-extra-<form>-field safety guard!
-    // Every value-bearing control inside the committing <form> (or on the screen when formKey is absent)
-    // that is NOT in R_u and NOT a verified prerequisite slot MUST be empty, default, or whitelisted inert.
+    // Competing-label lookalike check on added writable controls within the committing form,
+    // plus Guardrail 2 dirty-extra-<form>-field check!
+    const refLocatorKeys = new Set((profile.referenceControls ?? []).map(c => canonicalJson(c.locator)));
     let dirtyField = null;
+    let lookalikeAdded = null;
     for (const el of observation.elements) {
       if (!isValueBearingControl(el)) continue;
       if (matchedFootprintSelectors.has(el.selector) || satisfiedPrereqSelectors.has(el.selector)) continue;
@@ -351,9 +539,20 @@ export function evaluateSuffixEligibility({
         dirtyField = structuralLocator(el);
         break;
       }
+      const elLocKey = canonicalJson(structuralLocator(el));
+      if (!refLocatorKeys.has(elLocKey) && !inertSet.has(elLocKey)) {
+        if (matchedFootprintElements.some(target => isValueBearingControl(target) && labelsCompete(el.label, target.label))) {
+          lookalikeAdded = structuralLocator(el);
+          break;
+        }
+      }
     }
     if (dirtyField) {
       rejections.push({ nodeId, reason: 'dirty-untracked-form-field', dirtyField });
+      continue;
+    }
+    if (lookalikeAdded) {
+      rejections.push({ nodeId, reason: 'lookalike-added-control', lookalikeAdded });
       continue;
     }
 
@@ -374,11 +573,6 @@ export function evaluateSuffixEligibility({
     };
   }
 
-  // Same-Route Prerequisite Non-Skip Invariant (#85):
-  // Never greedily pick a deeper suffix `v` on the same route if an eligible upstream node `u`
-  // reaches `v` on the same route and `u`'s immediate step (an approval click still visible on `o`,
-  // or a field write not yet holding its target input value) has NOT yet been executed!
-  const candidateById = new Map(candidates.map(c => [c.nodeId, c]));
   const isReachableSameRoute = (startId, targetId) => {
     const startProf = dag.suffixProfiles.get(startId);
     const seen = new Set([startId]);
@@ -424,7 +618,6 @@ export function evaluateSuffixEligibility({
     }
     return true;
   });
-  void candidateById;
 
   if (unblockedCandidates.length === 0) {
     return {
@@ -467,17 +660,9 @@ export function evaluateSuffixEligibility({
   };
 }
 
-/**
- * L*-style counterexample footprint refinement:
- * When a suffix-rejoined run fails a post-condition or fails verifyReview(), compare the
- * teaching reference controls at nodeId against the failing observation. If a visible control
- * or value/text distinguishes them, refine R_u <- R_u U {guard}; if zero visible DOM differences
- * exist (pure hidden server-side state drift), demote nodeId to requiresExactPrefix = true.
- */
 export function refineSuffixProfileOnCounterexample(dag, nodeId, failingObservation) {
   const profile = dag.suffixProfiles.get(nodeId);
   if (!profile) return { action: 'none' };
-  // Collect nodeId plus any same-route downstream nodes so a route-level counterexample refines the whole segment.
   const segmentIds = [nodeId];
   const seen = new Set([nodeId]);
   for (let i = 0; i < segmentIds.length; i++) {
@@ -515,7 +700,6 @@ export function refineSuffixProfileOnCounterexample(dag, nodeId, failingObservat
   const failByLoc = new Map(failControls.map(c => [canonicalJson(c.locator), c]));
   const existingGuardKeys = new Set((profile.extraGuards ?? []).map(g => canonicalJson(g.locator)));
 
-  // 1. Control present in reference teaching observation that is missing or changed in failing observation.
   for (const [key, ref] of refByLoc.entries()) {
     if (existingGuardKeys.has(key)) continue;
     const fail = failByLoc.get(key);
@@ -529,7 +713,6 @@ export function refineSuffixProfileOnCounterexample(dag, nodeId, failingObservat
     }
   }
 
-  // 2. Extra control present in failing observation that was absent during verified teaching.
   for (const [key, fail] of failByLoc.entries()) {
     if (existingGuardKeys.has(key)) continue;
     if (!refByLoc.has(key)) {
@@ -538,7 +721,6 @@ export function refineSuffixProfileOnCounterexample(dag, nodeId, failingObservat
     }
   }
 
-  // 3. Zero visible DOM differences: hidden server-side state drift! Demote segment to exact-prefix only.
   for (const id of segmentIds) {
     const p = dag.suffixProfiles.get(id);
     if (p) p.requiresExactPrefix = true;
@@ -546,9 +728,6 @@ export function refineSuffixProfileOnCounterexample(dag, nodeId, failingObservat
   return { action: 'demoted-to-exact-prefix-hidden-state', nodeId, refinedNodes: segmentIds.length };
 }
 
-/**
- * Read-only landmark attraction hints for the planner on cache misses.
- */
 export function computeReachableLandmarks(dag, dp, { maxLandmarks = 3 } = {}) {
   if (!dag?.suffixProfiles?.size || !dp) return [];
   const byRoute = new Map();

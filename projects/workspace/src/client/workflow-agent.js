@@ -85,10 +85,17 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
   intermediateClicks, task, planner, config, store, projectId, verifyReview, signal,
   assertContext = async () => {}, authorizeStep = async () => {}, publishTrace = null, accountScope = null, fieldGroups = null,
   learnRepairs = false, observationLocators = null, reconvergeMidRepair = false, goal = null,
-  suffixEligibility = false, slotRoles = null, inertFormLocators = [] }) {
+  suffixIndex = null, suffixEligibility = false, slotRoles = null, inertFormLocators = [],
+  assertPrerequisite = null, requirePrerequisiteCheck = false }) {
   if (!['learn', 'fresh', 'reuse'].includes(mode)) throw Error('Invalid workflow mode');
   if (typeof learnRepairs !== 'boolean') throw Error('Explicit boolean repair-learning policy required');
   if (typeof reconvergeMidRepair !== 'boolean') throw Error('Explicit boolean mid-repair reconvergence policy required');
+  if (typeof requirePrerequisiteCheck !== 'boolean') throw Error('Explicit boolean prerequisite-check policy required');
+  if (requirePrerequisiteCheck && typeof assertPrerequisite !== 'function') {
+    throw Object.assign(Error('Workflow write boundary requires an explicit server-side assertPrerequisite check'), {
+      code: 'missing-prerequisite-check',
+    });
+  }
   if (goal !== null && (typeof goal !== 'string' || !goal.trim())) throw Error('Invalid workflow goal');
   ({ service, template } = scopeWorkflowObservation(service, template, observationLocators));
   const supportsRegionDeltas = typeof service?.reconcile === 'function' || service?.supportsRegionDeltas === true;
@@ -110,7 +117,25 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
   };
   const options = { service, owner, pageId, intent, template, inputs, intermediateClicks, signal,
     assertContext: assertWorkflowContext, authorizeStep, accountScope, fieldGroups, goal,
-    suffixEligibility, slotRoles, inertFormLocators };
+    suffixIndex, suffixEligibility, slotRoles, inertFormLocators,
+    assertPrerequisite, requirePrerequisiteCheck };
+  // A replacement session keeps the steps already executed in this run, for suffix eligibility only.
+  const carriedSteps = () => suffixIndex ? [...recorder.priorSteps, ...recorder.records.map(record => record.step)] : [];
+  // Suffix decisions made by a session that was later replaced still count in the result.
+  const retiredEvents = [];
+  const replaceRecorder = () => {
+    retiredEvents.push(...(recorder.traceEvents ?? []));
+    return dag.session({ ...options, fieldGroups: null, executedSteps: carriedSteps() });
+  };
+  const suffixSummary = () => {
+    const events = [...retiredEvents, ...(recorder?.traceEvents ?? [])], refusals = {};
+    for (const event of events.filter(event => event.phase === 'suffix-refused')) {
+      for (const [reason, count] of Object.entries(event.refusals ?? {})) refusals[reason] = (refusals[reason] ?? 0) + count;
+    }
+    return { certified: events.filter(event => event.phase === 'suffix-certified').length,
+      refused: events.filter(event => event.phase === 'suffix-refused').length,
+      replayedSteps: events.filter(event => event.phase === 'certified-suffix-replay').length, refusals };
+  };
   let recorder, observation, cacheSteps = 0, prefixCacheSteps = 0, reconvergedCacheSteps = 0, replayMs = 0, fallbackReason = null;
   let askedForHelp = null;
   let canPublish = mode === 'learn', lastResult = null, modelCalls = 0;
@@ -124,6 +149,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       lstarRefinement,
       stage0Profile: recorder ? structuredClone(recorder.stage0Profile ?? null) : null,
       traceEvents: recorder ? structuredClone(recorder.traceEvents ?? []) : [],
+      ...(suffixIndex ? { suffix: suffixSummary() } : {}),
       elapsedMs: performance.now() - started, humanInterventions: 0, interventionRequests: completed ? 0 : 1 };
   };
   const observe = async ({ ifCurrentVersion } = {}) => {
@@ -198,7 +224,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       // Only structural misses can teach. Never-dispatched stale actions may replan, but their
       // changed observation cannot silently be stitched into the recorded prefix.
       canPublish = learnRepairs && CACHE_MISSES.has(replay?.reason);
-      recorder = canPublish ? await recorder.repair() : dag.session({ ...options, fieldGroups: null });
+      recorder = canPublish ? await recorder.repair() : replaceRecorder();
     }
     await observe(
       supportsRegionDeltas && recorder?.lastObservationVersion !== null && recorder?.lastObservationVersion !== undefined
@@ -230,7 +256,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       const stale = replanCode(recorded, failure);
       if (stale) {
         canPublish = false;
-        recorder = dag.session({ ...options, fieldGroups: null });
+        recorder = replaceRecorder();
         await observe();
         lastResult = { status: 'needs-replan', code: stale, neverDispatched: true };
         return lastResult;
@@ -238,7 +264,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       if (failure) throw failure;
       if (recorded.status !== 'completed') throw Error(`Workflow stopped: ${recorded.reason}`);
       let continuedSteps = 0;
-      if (reconvergeMidRepair && mode === 'reuse' && recorder.nextId && (dag.nodes.has(recorder.nextId) || suffixEligibility)) {
+      if (reconvergeMidRepair && mode === 'reuse' && recorder.nextId && (dag.nodes.has(recorder.nextId) || suffixIndex || suffixEligibility)) {
         const contStarted = performance.now();
         const resumed = await recorder.continueReplay();
         replayMs += performance.now() - contStarted;

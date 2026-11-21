@@ -166,10 +166,12 @@ class WorkspaceService {
   #hooks;
   #clock;
   #uploads;
+  #assertPrerequisite;
+  #requirePrerequisiteCheck;
   #runtime = new Map();
   #ready = false;
 
-  constructor({ journal, state, config, adapter, hooks, clock, uploads }) {
+  constructor({ journal, state, config, adapter, hooks, clock, uploads, assertPrerequisite = null, requirePrerequisiteCheck = false }) {
     this.#journal = journal;
     this.#state = state;
     this.#config = config;
@@ -177,14 +179,25 @@ class WorkspaceService {
     this.#hooks = hooks;
     this.#clock = clock;
     this.#uploads = uploads;
+    this.#assertPrerequisite = assertPrerequisite;
+    this.#requirePrerequisiteCheck = Boolean(requirePrerequisiteCheck);
   }
 
   /**
    * Restore durable authority, settle interrupted actions, then accept commands.
    * @param {{stateDir: string, config: object, createAdapter: Function, hooks?: object,
-   *   clock?: () => number}} options
+   *   clock?: () => number, assertPrerequisite?: Function|null, requirePrerequisiteCheck?: boolean}} options
    */
-  static async open({ stateDir, config, createAdapter, hooks = NO_HOOKS, clock = Date.now }) {
+  static async open({ stateDir, config, createAdapter, hooks = NO_HOOKS, clock = Date.now,
+    assertPrerequisite = null, requirePrerequisiteCheck = false }) {
+    if (typeof requirePrerequisiteCheck !== 'boolean') {
+      throw Error('Explicit boolean prerequisite-check policy required');
+    }
+    if (requirePrerequisiteCheck && typeof assertPrerequisite !== 'function') {
+      throw Object.assign(Error('WorkspaceService write boundary requires an explicit server-side assertPrerequisite check'), {
+        code: 'missing-prerequisite-check',
+      });
+    }
     const journal = Journal.open({
       directory: stateDir,
       fileName: config.journal.fileName,
@@ -198,7 +211,9 @@ class WorkspaceService {
         artifactRoot: join(stateDir, ARTIFACT_DIRECTORY),
       }));
       const uploads = new UploadStore(join(stateDir, 'uploads'), config.uploads);
-      const service = new WorkspaceService({ journal, state, config, adapter, hooks, clock, uploads });
+      const service = new WorkspaceService({
+        journal, state, config, adapter, hooks, clock, uploads, assertPrerequisite, requirePrerequisiteCheck,
+      });
       service.#restore();
       return service;
     } catch (error) {
@@ -610,6 +625,24 @@ class WorkspaceService {
       throw workspaceError(REJECTION_CODES.PRECONDITION_UNESTABLISHED, 'dispatch preconditions', {
         results: preconditions.results,
       });
+    }
+    if (request.kind !== 'navigate' && typeof this.#assertPrerequisite === 'function') {
+      const prereq = await this.#assertPrerequisite({
+        workspaceId,
+        pageId: request.pageId ?? MAIN_PAGE,
+        actionId: request.actionId,
+        authorizedIntent: request.authorizedIntent,
+        kind: request.kind,
+        url: snapshot.url,
+        origin: new URL(snapshot.url).origin,
+        target: structuredClone(request.target),
+      });
+      if (prereq === false || prereq?.ok === false) {
+        throw workspaceError(
+          REJECTION_CODES.PRECONDITION_UNESTABLISHED,
+          prereq?.reason || 'server prerequisite unestablished',
+        );
+      }
     }
     return {
       targetDigest,
