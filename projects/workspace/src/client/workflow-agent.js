@@ -121,10 +121,12 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
     assertPrerequisite, requirePrerequisiteCheck };
   // A replacement session keeps the steps already executed in this run, for suffix eligibility only.
   const carriedSteps = () => suffixIndex ? [...recorder.priorSteps, ...recorder.records.map(record => record.step)] : [];
-  // Suffix decisions made by a session that was later replaced still count in the result.
+  // Suffix decisions and certified rejoins made by a session that was later replaced still count in the result.
   const retiredEvents = [];
+  const retiredRejoins = [];
   const replaceRecorder = () => {
     retiredEvents.push(...(recorder.traceEvents ?? []));
+    retiredRejoins.push(...(recorder.certifiedSuffixRejoins ?? []));
     return dag.session({ ...options, fieldGroups: null, executedSteps: carriedSteps() });
   };
   const suffixSummary = () => {
@@ -145,10 +147,10 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       status: completed ? 'completed' : signal.aborted ? 'stopped' : 'needs-attention', detail });
     return { mode, status: completed ? 'completed' : 'needs-attention', completed, detail, verification,
       modelCalls, cacheSteps, prefixCacheSteps, reconvergedCacheSteps, replayMs, askedForHelp, fallbackReason,
-      certifiedSuffixRejoins: recorder ? structuredClone(recorder.certifiedSuffixRejoins ?? []) : [],
+      certifiedSuffixRejoins: structuredClone([...retiredRejoins, ...(recorder?.certifiedSuffixRejoins ?? [])]),
       lstarRefinement,
       stage0Profile: recorder ? structuredClone(recorder.stage0Profile ?? null) : null,
-      traceEvents: recorder ? structuredClone(recorder.traceEvents ?? []) : [],
+      traceEvents: structuredClone([...retiredEvents, ...(recorder?.traceEvents ?? [])]),
       ...(suffixIndex ? { suffix: suffixSummary() } : {}),
       elapsedMs: performance.now() - started, humanInterventions: 0, interventionRequests: completed ? 0 : 1 };
   };
