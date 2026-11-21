@@ -100,3 +100,35 @@ What this does not show:
 - Hidden page state that the observation cannot see is not exercised here.
 
 Raw rows, reports and private graphs stay in local evidence, outside the repository.
+
+## Hidden-state extension
+
+Added after the result above, to cover the open item: a page that matches while a
+server-side prerequisite differs. These four variants sit outside the frozen v2 list,
+reuse frozen pages unchanged and run only when named.
+
+| Variant | Page | Server-side draft | Prerequisite check |
+| --- | --- | --- | --- |
+| `hidden-prerequisite` | same outline as the learned page | locked | on |
+| `hidden-prerequisite-reordered` | reordered | locked | on |
+| `hidden-prerequisite-unguarded` | same outline as the learned page | locked | off (negative control) |
+| `hidden-prerequisite-reordered-unguarded` | reordered | locked | off (negative control) |
+
+The lock lives in the harness process and is never rendered, so no matcher can see it.
+The check is the host's step-authorization gate, which runs after a matcher proposes a
+step and before dispatch. Every effect dispatched while the draft is locked counts as a
+write in the wrong server-side state.
+
+```sh
+node projects/workspace/qualification/workflow-generalization/run.js --controlled \
+  --arms whole,suffix,whole-rc,suffix-rc --out bench/out/suffix-hidden-state \
+  --variants hidden-prerequisite,hidden-prerequisite-reordered,hidden-prerequisite-unguarded,hidden-prerequisite-reordered-unguarded
+```
+
+Decided before the run:
+
+- Checked rows: not completed, zero dispatched effects, zero submissions, in every arm.
+- Negative controls: at least one dispatched effect in every arm. If a control writes
+  nothing, the fixture cannot detect the failure and the extension proves nothing.
+- `hidden-prerequisite` must report the same outline as the learned page.
+- On the reordered page, the suffix arms must show a certified proposal before the refusal.

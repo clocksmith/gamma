@@ -150,6 +150,19 @@ assert.equal((await stopped.replay()).reason, 'unseen-branch');
 assert.deepEqual(handles(unanswered), ['name'], 'The fill is reused; the click waits for the planner');
 assert.ok(stopped.traceEvents.some(event => event.refusals?.['unanswered-added-control'] > 0));
 
+// Hidden state: the matcher cannot see a server-side prerequisite, so it may propose a step.
+// The step-authorization gate runs after the proposal and before dispatch, and nothing is written.
+for (const elements of [[name(), city()], [city(), name()]]) {
+  const service = page(elements);
+  const session = dag.session({ ...base, service, suffixIndex: index,
+    authorizeStep: async () => { throw Error('Server prerequisite not met'); } });
+  await assert.rejects(session.replay(), /prerequisite/);
+  assert.equal(service.calls.length, 0, 'A refused prerequisite dispatches nothing');
+  await assert.rejects(session.replay(), /stopped/, 'No implicit resume after a refusal');
+  assert.equal(session.traceEvents.some(event => event.phase === 'suffix-certified'), elements[0].label === 'City',
+    'On the reordered page the suffix matcher had proposed the step');
+}
+
 // The frozen graph and index never change during reuse.
 assert.equal(JSON.stringify(dag.export()), frozenGraph);
 assert.equal(JSON.stringify(index.export()), frozenIndex);
