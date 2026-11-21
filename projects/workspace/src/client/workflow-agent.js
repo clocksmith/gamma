@@ -90,6 +90,21 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
     assertContext: assertWorkflowContext, authorizeStep, accountScope, fieldGroups, goal, suffixIndex };
   // A replacement session keeps the steps already executed in this run, for suffix eligibility only.
   const carriedSteps = () => suffixIndex ? [...recorder.priorSteps, ...recorder.records.map(record => record.step)] : [];
+  // Suffix decisions made by a session that was later replaced still count in the result.
+  const retiredEvents = [];
+  const replaceRecorder = () => {
+    retiredEvents.push(...(recorder.traceEvents ?? []));
+    return dag.session({ ...options, fieldGroups: null, executedSteps: carriedSteps() });
+  };
+  const suffixSummary = () => {
+    const events = [...retiredEvents, ...(recorder?.traceEvents ?? [])], refusals = {};
+    for (const event of events.filter(event => event.phase === 'suffix-refused')) {
+      for (const [reason, count] of Object.entries(event.refusals ?? {})) refusals[reason] = (refusals[reason] ?? 0) + count;
+    }
+    return { certified: events.filter(event => event.phase === 'suffix-certified').length,
+      refused: events.filter(event => event.phase === 'suffix-refused').length,
+      replayedSteps: events.filter(event => event.phase === 'certified-suffix-replay').length, refusals };
+  };
   let recorder, observation, cacheSteps = 0, prefixCacheSteps = 0, reconvergedCacheSteps = 0, replayMs = 0, fallbackReason = null;
   let askedForHelp = null;
   let canPublish = mode === 'learn', lastResult = null, modelCalls = 0;
@@ -100,6 +115,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
     return { mode, status: completed ? 'completed' : 'needs-attention', completed, detail, verification,
       modelCalls, cacheSteps, prefixCacheSteps, reconvergedCacheSteps, replayMs, askedForHelp, fallbackReason,
       traceEvents: recorder ? structuredClone(recorder.traceEvents ?? []) : [],
+      ...(suffixIndex ? { suffix: suffixSummary() } : {}),
       elapsedMs: performance.now() - started, humanInterventions: 0, interventionRequests: completed ? 0 : 1 };
   };
   const observe = async () => {
@@ -147,8 +163,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       // Only structural misses can teach. Never-dispatched stale actions may replan, but their
       // changed observation cannot silently be stitched into the recorded prefix.
       canPublish = learnRepairs && CACHE_MISSES.has(replay?.reason);
-      recorder = canPublish ? await recorder.repair()
-        : dag.session({ ...options, fieldGroups: null, executedSteps: carriedSteps() });
+      recorder = canPublish ? await recorder.repair() : replaceRecorder();
     }
     await observe();
     if (mode === 'reuse' && fallbackReason) {
@@ -173,7 +188,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       const stale = replanCode(recorded, failure);
       if (stale) {
         canPublish = false;
-        recorder = dag.session({ ...options, fieldGroups: null, executedSteps: carriedSteps() });
+        recorder = replaceRecorder();
         await observe();
         lastResult = { status: 'needs-replan', code: stale, neverDispatched: true };
         return lastResult;

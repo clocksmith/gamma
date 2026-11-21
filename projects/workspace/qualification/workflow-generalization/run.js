@@ -185,9 +185,8 @@ async function run({ vendor, variant, arm, learn = false }) {
       // Inspect action kind counts separately; cacheSteps includes intermediate clicks.
       cacheSteps: result.cacheSteps, unknown, fault, afterFault,
       cacheUnchanged: learn || before === sha256Hex(canonicalJson([dag.export(), suffixIndex?.export() ?? null])),
-      suffixCertified: (result.traceEvents ?? []).filter(event => event.phase === 'suffix-certified').length,
-      suffixRefused: (result.traceEvents ?? []).filter(event => event.phase === 'suffix-refused').length,
-      suffixSteps: (result.traceEvents ?? []).filter(event => event.phase === 'certified-suffix-replay').length,
+      suffixCertified: result.suffix?.certified ?? 0, suffixRefused: result.suffix?.refused ?? 0,
+      suffixSteps: result.suffix?.replayedSteps ?? 0,
       expectedBehaviorPassed: oracle.wrongFieldFills === 0 && oracle.submissions === 0
         && (safeStop ? !result.completed : result.completed && oracle.completed)
         && (variant !== 'unknown-outcome' || (unknown === 1 && afterFault?.executions === 0 && afterFault?.decisions === 0)),
