@@ -10,7 +10,7 @@ const ELEMENT_MODE = 'element';
 const ELEMENT_TEXT_CHARS = 200;
 
 // Runs inside the page; must stay self-contained.
-function queryPage({ mode, selector, maxElements, maxTextChars, elementTextChars, regions = [], regionGroups = [], outline = false, readRoots = null }) {
+function queryPage({ mode, selector, maxElements, maxRegions = 16, maxTextChars, elementTextChars, regions = [], regionGroups = [], outline = false, readRoots = null, includeFormState = false, autoControlRegions = false }) {
   // A typed password never leaves the page: observations, evidence and digests see only whether
   // the field is filled. A person enters credentials; agents and journals do not read them.
   const controlValue = (node) => node.tagName === 'INPUT' && node.type === 'password' ? (node.value ? '[hidden]' : '') : String(node.value);
@@ -275,15 +275,66 @@ function queryPage({ mode, selector, maxElements, maxTextChars, elementTextChars
       return [];
     }
   };
+  const formsList = includeFormState ? [...document.querySelectorAll('form')] : null;
+  const formKeyOf = (node) => {
+    if (!formsList) return undefined;
+    const form = node.form ?? node.closest('form');
+    if (!form) return null;
+    if (form.id) return `#${form.id}`;
+    const idx = formsList.indexOf(form);
+    return idx >= 0 ? `form@${idx}` : null;
+  };
+  const isDefaultControlValue = (node) => {
+    if (!includeFormState) return undefined;
+    if (node.tagName === 'SELECT') {
+      const options = [...node.options];
+      if (!options.length) return true;
+      const hasExplicitDefault = options.some((o) => o.defaultSelected);
+      return hasExplicitDefault
+        ? options.every((o) => o.selected === o.defaultSelected)
+        : (node.selectedIndex <= 0 || node.value === '');
+    }
+    if (node.tagName === 'INPUT' && ['checkbox', 'radio'].includes(node.type)) {
+      return Boolean(node.checked) === Boolean(node.defaultChecked);
+    }
+    if ('value' in node) {
+      const current = controlValue(node);
+      return current === '' || current === String(node.defaultValue ?? '');
+    }
+    return true;
+  };
+  const mappedElements = nodes.slice(0, maxElements).map((node, idx) => ({
+    _node: node,
+    item: {
+      selector: stableSelector(node),
+      handle: handles.get(node),
+      role: roleOf(node),
+      label: labelOf(node),
+      inputType: node.tagName === 'INPUT' ? node.type : '',
+      ...describe(node),
+      ...(includeFormState ? { formKey: formKeyOf(node), isDefaultValue: isDefaultControlValue(node) } : {}),
+    },
+    idx,
+  }));
+  const explicitRegions = new Set(regions);
+  const autoRegions = [];
+  if (autoControlRegions) {
+    for (const { _node, item } of mappedElements) {
+      if (explicitRegions.size + autoRegions.length >= maxRegions) break;
+      if (!item.selector || explicitRegions.has(item.selector)) continue;
+      if (document.querySelectorAll(item.selector).length !== 1) continue;
+      explicitRegions.add(item.selector);
+      autoRegions.push(describeRegion(item.selector, _node));
+    }
+  }
   return {
     url: location.href,
     title: roots === null ? document.title : '',
     html: document.documentElement.outerHTML,
     text: (roots === null ? (document.body?.innerText ?? '') : roots.map(fullText).join('\n')).slice(0, maxTextChars),
     isTruncated: nodes.length > maxElements,
-    elements: nodes.slice(0, maxElements).map((node) => ({ selector: stableSelector(node), handle: handles.get(node),
-      role: roleOf(node), label: labelOf(node), inputType: node.tagName === 'INPUT' ? node.type : '', ...describe(node) })),
-    regions: [...regions.map(readRegion), ...regionGroups.flatMap(readGroup)],
+    elements: mappedElements.map(({ item }) => item),
+    regions: [...regions.map(readRegion), ...autoRegions, ...regionGroups.flatMap(readGroup)],
   };
 }
 
@@ -308,7 +359,7 @@ function structuralOutlineHash(elements) {
   return sha256Hex(canonicalJson(elements.map(structuralLocator)));
 }
 
-function snapshotArgs(config, { regions = [], regionGroups = [], outline = false, readRoots = null } = {}) {
+function snapshotArgs(config, { regions = [], regionGroups = [], outline = false, readRoots = null, includeFormState = false, autoControlRegions = false } = {}) {
   return {
     mode: SNAPSHOT_MODE,
     readRoots,
@@ -318,6 +369,8 @@ function snapshotArgs(config, { regions = [], regionGroups = [], outline = false
     regions,
     regionGroups,
     outline,
+    ...(includeFormState ? { includeFormState: true } : {}),
+    ...(autoControlRegions ? { autoControlRegions: true, maxRegions: config.observation.maxRegions } : {}),
   };
 }
 

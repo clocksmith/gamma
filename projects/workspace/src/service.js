@@ -76,6 +76,9 @@ function validateObservationRead(command, config) {
     regionGroups: command.regionGroups ?? [],
     view: command.view ?? FULL_VIEW,
     sinceVersion: command.sinceVersion,
+    ifCurrentVersion: command.ifCurrentVersion,
+    includeFormState: command.includeFormState === true,
+    autoControlRegions: command.autoControlRegions === true,
   };
   if (command.regions !== undefined) validateRegionSelectors(read.regions, config, 'regions');
   if (command.regionGroups !== undefined) validateRegionSelectors(read.regionGroups, config, 'regionGroups');
@@ -84,6 +87,15 @@ function validateObservationRead(command, config) {
   }
   if (read.sinceVersion !== undefined && !Number.isInteger(read.sinceVersion)) {
     throw workspaceError(REJECTION_CODES.INVALID_COMMAND, 'sinceVersion: expected integer', { path: 'sinceVersion' });
+  }
+  if (read.ifCurrentVersion !== undefined && !Number.isInteger(read.ifCurrentVersion)) {
+    throw workspaceError(REJECTION_CODES.INVALID_COMMAND, 'ifCurrentVersion: expected integer', { path: 'ifCurrentVersion' });
+  }
+  if (command.includeFormState !== undefined && typeof command.includeFormState !== 'boolean') {
+    throw workspaceError(REJECTION_CODES.INVALID_COMMAND, 'includeFormState: expected boolean', { path: 'includeFormState' });
+  }
+  if (command.autoControlRegions !== undefined && typeof command.autoControlRegions !== 'boolean') {
+    throw workspaceError(REJECTION_CODES.INVALID_COMMAND, 'autoControlRegions: expected boolean', { path: 'autoControlRegions' });
   }
   return read;
 }
@@ -230,7 +242,7 @@ class WorkspaceService {
 
   #runtimeFor(workspaceId) {
     if (!this.#runtime.has(workspaceId)) {
-      this.#runtime.set(workspaceId, { mutex: new Mutex(), queue: [], pumping: false, opened: null });
+      this.#runtime.set(workspaceId, { mutex: new Mutex(), queue: [], pumping: false, opened: null, latestObservations: new Map() });
     }
     return this.#runtime.get(workspaceId);
   }
@@ -278,7 +290,7 @@ class WorkspaceService {
   }
 
   /** Record a new observation version from a live snapshot. */
-  #recordObservation(workspace, snapshot, reason, pageId = MAIN_PAGE) {
+  #recordObservation(workspace, snapshot, reason, pageId = MAIN_PAGE, meta = {}) {
     const issuedMs = this.#nowMs();
     const targetDigests = Object.fromEntries(snapshot.elements.map((element) => [element.selector, element.digest]));
     const targetFormActions = Object.fromEntries(snapshot.elements
@@ -309,8 +321,18 @@ class WorkspaceService {
       handles,
       regions: snapshot.regionDigests,
     });
-    return { ...workspace.observation, title: snapshot.title, text: snapshot.text, elements: snapshot.elements,
+    const recorded = { ...workspace.observation, title: snapshot.title, text: snapshot.text, elements: snapshot.elements,
       structuralHash: snapshot.structuralHash, isTruncated: snapshot.isTruncated };
+    this.#runtimeFor(workspace.workspaceId).latestObservations.set(pageId, {
+      ownerGeneration: workspace.ownerGeneration,
+      observationVersion: workspace.observationVersion,
+      recorded,
+      snapshot,
+      readRoots: meta.readRoots ?? null,
+      includeFormState: Boolean(meta.includeFormState),
+      autoControlRegions: Boolean(meta.autoControlRegions),
+    });
+    return recorded;
   }
 
   /**
@@ -415,6 +437,7 @@ class WorkspaceService {
     }
     const runtime = this.#runtimeFor(workspaceId);
     return runtime.mutex.run(() => {
+      runtime.latestObservations.clear();
       const previous = { ownerId: workspace.ownerId, ownerGeneration: workspace.ownerGeneration };
       const { credential, credentialHash } = issueCredential(this.#config.credentials.secretBytes);
       this.#append(RECORD_TYPES.OWNERSHIP_ADVANCED, {
@@ -463,11 +486,33 @@ class WorkspaceService {
       authenticateOwner(workspace, command);
       const url = await this.#probe(command.workspaceId, pageId).url();
       const read = scopedRead(workspace, command, url, requested, this.#config, this.#nowMs());
+      const currentPageObs = pageView(workspace, pageId).observation;
+      const cached = this.#runtimeFor(command.workspaceId).latestObservations.get(pageId);
+      if (read.ifCurrentVersion !== undefined
+        && currentPageObs?.observationVersion === read.ifCurrentVersion
+        && cached?.observationVersion === read.ifCurrentVersion
+        && cached.ownerGeneration === workspace.ownerGeneration
+        && Date.parse(currentPageObs.expiresAt) > this.#nowMs()
+        && cached.recorded.url === url
+        && (read.regionGroups ?? []).length === 0
+        && (read.regions ?? []).every(sel => sel in (cached.snapshot.regionDigests ?? {}))
+        && (!read.includeFormState || cached.includeFormState)
+        && JSON.stringify(cached.readRoots ?? null) === JSON.stringify(read.readRoots ?? null)) {
+        readGrant(workspace, command, cached.recorded.url, this.#nowMs());
+        if (read.view === OUTLINE_VIEW) {
+          return { ...outlineView(workspace, cached.recorded, cached.snapshot, read.sinceVersion), reusedCurrentRevision: true, ...(command.pageId ? { pageId } : {}) };
+        }
+        return structuredClone({ ...cached.recorded, ...(workspace.scopedReads ? { readScope: { pageId, regions: read.readRoots ?? null } } : {}), boundary: NONATOMIC_BOUNDARY });
+      }
       const snapshot = await this.#snapshot(command.workspaceId, {
-        ...read, outline: read.view === OUTLINE_VIEW,
+        ...read, outline: read.view === OUTLINE_VIEW || (read.regions?.length ?? 0) > 0,
       }, pageId);
       readGrant(workspace, command, snapshot.url, this.#nowMs());
-      const recorded = this.#recordObservation(workspace, snapshot, 'observe', pageId);
+      const recorded = this.#recordObservation(workspace, snapshot, 'observe', pageId, {
+        readRoots: read.readRoots ?? null,
+        includeFormState: read.includeFormState,
+        autoControlRegions: read.autoControlRegions || (read.regions?.length ?? 0) > 0,
+      });
       if (read.view === OUTLINE_VIEW) return { ...outlineView(workspace, recorded, snapshot, read.sinceVersion), ...(command.pageId ? { pageId } : {}) };
       return structuredClone({ ...recorded, ...(workspace.scopedReads ? { readScope: { pageId, regions: read.readRoots ?? null } } : {}), boundary: NONATOMIC_BOUNDARY });
     });
@@ -499,10 +544,12 @@ class WorkspaceService {
         throw error;
       }
       const request = { ...stripCredentials(resolved), grantId, effect: resolved.effect ?? { external: false } };
+      const admitT0 = performance.now();
       this.#append(RECORD_TYPES.ACTION_ADMITTED, request);
+      const admitJournalMs = Number((performance.now() - admitT0).toFixed(3));
       this.#hooks.afterIntentPersisted?.(request);
       const settlement = deferred();
-      runtime.queue.push({ actionId: request.actionId, settle: settlement.settle });
+      runtime.queue.push({ actionId: request.actionId, settle: settlement.settle, admitJournalMs });
       return { actionId: request.actionId, result: settlement.promise };
     });
     this.#pump(command.workspaceId);
@@ -517,7 +564,7 @@ class WorkspaceService {
       while (runtime.queue.length > 0) {
         const entry = runtime.queue.shift();
         try {
-          entry.settle(await this.#dispatchOne(workspaceId, entry.actionId));
+          entry.settle(await this.#dispatchOne(workspaceId, entry.actionId, entry.admitJournalMs ?? 0));
         } catch (error) {
           // The journal or service closed mid-dispatch; the durable record, not this reply, is authoritative.
           entry.settle({ actionId: entry.actionId, serviceError: { code: error.code ?? null, message: error.message } });
@@ -572,9 +619,10 @@ class WorkspaceService {
     };
   }
 
-  async #dispatchOne(workspaceId, actionId) {
+  async #dispatchOne(workspaceId, actionId, admitJournalMs = 0) {
     const dispatchT0 = performance.now();
     let dispatchCheckMs = 0;
+    let journalMs = admitJournalMs;
     const workspace = this.#workspace(workspaceId);
     const runtime = this.#runtimeFor(workspaceId);
     const begun = await runtime.mutex.run(async () => {
@@ -597,6 +645,7 @@ class WorkspaceService {
       } finally {
         dispatchCheckMs = Number((performance.now() - checkT0).toFixed(3));
       }
+      const startJ0 = performance.now();
       this.#append(RECORD_TYPES.ACTION_DISPATCH_STARTED, {
         workspaceId,
         actionId,
@@ -604,6 +653,7 @@ class WorkspaceService {
         observationVersion: workspace.observationVersion,
         ...checks,
       });
+      journalMs += performance.now() - startJ0;
       this.#hooks.afterDispatchStarted?.(action.request);
       return { action };
     });
@@ -611,21 +661,62 @@ class WorkspaceService {
     const outcome = await this.#performEffect(workspaceId, begun.action.request);
     return runtime.mutex.run(async () => {
       let postObservationVersion = null;
+      let postObsJournalMs = 0;
       const postSnapT0 = performance.now();
       try {
         const current = pageView(workspace, begun.action.request.pageId);
         const request = begun.action.request;
         const permission = readGrant(workspace, request, await this.#probe(workspaceId, request.pageId).url(), this.#nowMs());
-        const snapshot = await this.#snapshot(workspaceId, { readRoots: permission?.readRegions ?? null }, request.pageId);
+        const priorCached = runtime.latestObservations.get(request.pageId ?? MAIN_PAGE);
+        const autoControlRegions = Boolean(priorCached?.autoControlRegions);
+        const carryRegions = request.kind === 'click' || request.kind === 'navigate'
+          ? []
+          : [...new Set([
+              ...Object.keys(current.observation?.regions ?? {}),
+              ...(request.observationScope?.kind === REGIONS_SCOPE ? request.observationScope.selectors : []),
+            ])].slice(0, this.#config.observation.maxRegions);
+        const includeFormState = Boolean(priorCached?.includeFormState);
+        const snapshot = await this.#snapshot(workspaceId, {
+          regions: carryRegions,
+          autoControlRegions: autoControlRegions && carryRegions.length === 0,
+          outline: carryRegions.length > 0 || autoControlRegions,
+          includeFormState,
+          readRoots: permission?.readRegions ?? null,
+        }, request.pageId);
         readGrant(workspace, request, snapshot.url, this.#nowMs());
         if (snapshot.contentHash !== current.observation?.contentHash || snapshot.url !== current.observation?.url) {
-          this.#recordObservation(workspace, snapshot, 'post-action', begun.action.request.pageId);
+          const obsJ0 = performance.now();
+          this.#recordObservation(workspace, snapshot, 'post-action', begun.action.request.pageId, {
+            readRoots: permission?.readRegions ?? null,
+            includeFormState,
+            autoControlRegions,
+          });
+          postObsJournalMs = performance.now() - obsJ0;
+        } else if (current.observation) {
+          runtime.latestObservations.set(request.pageId ?? MAIN_PAGE, {
+            ownerGeneration: workspace.ownerGeneration,
+            observationVersion: workspace.observationVersion,
+            recorded: {
+              ...current.observation,
+              title: snapshot.title,
+              text: snapshot.text,
+              elements: snapshot.elements,
+              structuralHash: snapshot.structuralHash,
+              isTruncated: snapshot.isTruncated,
+            },
+            snapshot,
+            readRoots: permission?.readRegions ?? null,
+            includeFormState,
+            autoControlRegions,
+          });
         }
         postObservationVersion = workspace.observationVersion;
       } catch (error) {
         outcome.evidence = { ...outcome.evidence, postObservationError: error.message };
       }
-      const postSnapshotMs = Number((performance.now() - postSnapT0).toFixed(3));
+      const postSnapshotTotalMs = performance.now() - postSnapT0;
+      const postSnapshotMs = Number(Math.max(0, postSnapshotTotalMs - postObsJournalMs).toFixed(3));
+      journalMs += postObsJournalMs;
       outcome.evidence = {
         ...outcome.evidence,
         dispatchProfileMs: {
@@ -633,6 +724,7 @@ class WorkspaceService {
           browserExecuteMs: outcome.evidence?.effectExecuteMs ?? 0,
           valueSettleMs: outcome.evidence?.valueSettleElapsedMs ?? 0,
           postSnapshotMs,
+          journalBeforeOutcomeMs: Number(journalMs.toFixed(3)),
           totalDispatchMs: Number((performance.now() - dispatchT0).toFixed(3)),
         },
       };

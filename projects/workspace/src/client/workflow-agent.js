@@ -41,15 +41,34 @@ export function scopeWorkflowObservation(service, template, locators) {
       || value.some(part => typeof part !== 'string'))) throw Error('Invalid workflow observation scope');
   const allowed = new Set(locators.map(value => canonicalJson(value)));
   const policy = [...allowed].sort();
+  const supportsRegionDeltas = typeof service?.reconcile === 'function' || service?.supportsRegionDeltas === true;
   return {
     template: `${template}:authorized-controls-v1:${sha256Hex(canonicalJson(policy))}`,
     service: {
-      observe: async identity => {
-        const observation = await service.observe(identity);
-        return { ...observation, elements: observation.elements.filter(element =>
+      supportsRegionDeltas,
+      observe: async command => {
+        const observation = await service.observe(command);
+        if (!Array.isArray(observation.elements)) return observation;
+        const filtered = observation.elements.filter(element =>
           allowed.has(canonicalJson(structuralLocator(element)))
           && (!element.actionability || (element.actionability.visible
-            && !element.actionability.inert && !element.actionability.disabled))) };
+            && !element.actionability.inert && !element.actionability.disabled)));
+        if (!command?.includeFormState) {
+          return { ...observation, elements: filtered };
+        }
+        // Sanitize untracked elements so no literal user value outside `allowed` can reach planning,
+        // while preserving formKey and isDefaultValue for Guardrail 2's dirty-<form>-field safety check.
+        const sanitizedAll = observation.elements.map(element =>
+          allowed.has(canonicalJson(structuralLocator(element)))
+            ? element
+            : {
+                ...element,
+                value: element.isDefaultValue === false
+                  ? '[non-default]'
+                  : (element.value ? '[non-default]' : ''),
+              },
+        );
+        return { ...observation, elements: filtered, unfilteredElements: sanitizedAll };
       },
       outstanding: (...args) => service.outstanding(...args),
       submitAction: (...args) => service.submitAction(...args),
@@ -65,16 +84,19 @@ export function scopeWorkflowObservation(service, template, locators) {
 export async function runWorkflow({ dag, mode, service, owner, pageId, intent, template, inputs,
   intermediateClicks, task, planner, config, store, projectId, verifyReview, signal,
   assertContext = async () => {}, authorizeStep = async () => {}, publishTrace = null, accountScope = null, fieldGroups = null,
-  learnRepairs = false, observationLocators = null, reconvergeMidRepair = false, goal = null }) {
+  learnRepairs = false, observationLocators = null, reconvergeMidRepair = false, goal = null,
+  suffixEligibility = false, slotRoles = null, inertFormLocators = [] }) {
   if (!['learn', 'fresh', 'reuse'].includes(mode)) throw Error('Invalid workflow mode');
   if (typeof learnRepairs !== 'boolean') throw Error('Explicit boolean repair-learning policy required');
   if (typeof reconvergeMidRepair !== 'boolean') throw Error('Explicit boolean mid-repair reconvergence policy required');
   if (goal !== null && (typeof goal !== 'string' || !goal.trim())) throw Error('Invalid workflow goal');
   ({ service, template } = scopeWorkflowObservation(service, template, observationLocators));
+  const supportsRegionDeltas = typeof service?.reconcile === 'function' || service?.supportsRegionDeltas === true;
   const started = performance.now();
   const identity = { ...owner, pageId };
   const runId = randomUUID();
   let verification = null;
+  let lstarRefinement = null;
   store.run(projectId, { id: runId, status: 'running', detail: 'Checking workflow', turns: 0,
     usage: [], planner: planner?.identity ?? null });
   const assertCurrent = () => {
@@ -87,7 +109,8 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
     assertCurrent();
   };
   const options = { service, owner, pageId, intent, template, inputs, intermediateClicks, signal,
-    assertContext: assertWorkflowContext, authorizeStep, accountScope, fieldGroups, goal };
+    assertContext: assertWorkflowContext, authorizeStep, accountScope, fieldGroups, goal,
+    suffixEligibility, slotRoles, inertFormLocators };
   let recorder, observation, cacheSteps = 0, prefixCacheSteps = 0, reconvergedCacheSteps = 0, replayMs = 0, fallbackReason = null;
   let askedForHelp = null;
   let canPublish = mode === 'learn', lastResult = null, modelCalls = 0;
@@ -97,30 +120,60 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       status: completed ? 'completed' : signal.aborted ? 'stopped' : 'needs-attention', detail });
     return { mode, status: completed ? 'completed' : 'needs-attention', completed, detail, verification,
       modelCalls, cacheSteps, prefixCacheSteps, reconvergedCacheSteps, replayMs, askedForHelp, fallbackReason,
+      certifiedSuffixRejoins: recorder ? structuredClone(recorder.certifiedSuffixRejoins ?? []) : [],
+      lstarRefinement,
+      stage0Profile: recorder ? structuredClone(recorder.stage0Profile ?? null) : null,
       traceEvents: recorder ? structuredClone(recorder.traceEvents ?? []) : [],
       elapsedMs: performance.now() - started, humanInterventions: 0, interventionRequests: completed ? 0 : 1 };
   };
-  const observe = async () => {
-    await assertWorkflowContext();
-    const outstanding = await service.outstanding(identity);
-    if (outstanding.some(action => action.isUncertain || action.dispatchStatus === 'queued'
-      || (action.dispatchStatus === 'dispatched' && !action.outcome))) throw Error('Outstanding action needs review; no retry');
-    observation = await service.observe(identity);
+  const observe = async ({ ifCurrentVersion } = {}) => {
+    if (ifCurrentVersion === undefined) {
+      await assertWorkflowContext();
+      const outstanding = await service.outstanding(identity);
+      if (outstanding.some(action => action.isUncertain || action.dispatchStatus === 'queued'
+        || (action.dispatchStatus === 'dispatched' && !action.outcome))) throw Error('Outstanding action needs review; no retry');
+    } else {
+      assertCurrent();
+    }
+    const obsCmd = supportsRegionDeltas
+      ? {
+          ...identity,
+          autoControlRegions: true,
+          ...(ifCurrentVersion !== undefined ? { ifCurrentVersion } : {}),
+          ...(suffixEligibility ? { includeFormState: true } : {}),
+        }
+      : identity;
+    observation = await service.observe(obsCmd);
     if (observation.isTruncated !== false) throw Error('Workflow observation is incomplete');
     assertCurrent();
   };
   const verifyCompletion = async () => {
-    await observe();
+    await observe(
+      supportsRegionDeltas && recorder?.lastObservationVersion !== null && recorder?.lastObservationVersion !== undefined
+        ? { ifCurrentVersion: recorder.lastObservationVersion }
+        : undefined,
+    );
     verification = await verifyReview();
     // Account/authority, outstanding effects and cancellation can change during review.
     // A delayed verifier cannot commit a result under a different run or context.
     await observe();
-    if (verification?.completed !== true) return { completed: false, detail: 'Review verification failed' };
+    if (verification?.completed !== true) {
+      if (suffixEligibility && recorder?.certifiedSuffixRejoins?.length) {
+        const entryRejoin = recorder.certifiedSuffixRejoins[0];
+        lstarRefinement = dag.refineOnCounterexample(
+          entryRejoin.rejoinedNodeId,
+          entryRejoin.rejoinObservation ?? observation,
+        );
+      }
+      return { completed: false, detail: 'Review verification failed' };
+    }
     if (canPublish) {
       const published = await recorder.finish({ publish: !publishTrace });
       if (published.reason !== 'recorded-submit-boundary') return { completed: false, detail: published.reason };
       if (publishTrace) await publishTrace({ records: structuredClone(recorder.records),
-        terminal: structuredClone(recorder.terminal), repairs: structuredClone(recorder.repairs) });
+        terminal: structuredClone(recorder.terminal), repairs: structuredClone(recorder.repairs),
+        ...(recorder.stagedSuffixProfiles?.size ? { suffixProfiles: [...recorder.stagedSuffixProfiles] } : {}),
+        ...(recorder.stagedSlotRoles?.size ? { slotRoles: [...recorder.stagedSlotRoles] } : {}) });
     }
     assertCurrent();
     return { completed: true, detail: canPublish ? 'Learned verified workflow' : 'Completed verified review' };
@@ -147,7 +200,11 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       canPublish = learnRepairs && CACHE_MISSES.has(replay?.reason);
       recorder = canPublish ? await recorder.repair() : dag.session({ ...options, fieldGroups: null });
     }
-    await observe();
+    await observe(
+      supportsRegionDeltas && recorder?.lastObservationVersion !== null && recorder?.lastObservationVersion !== undefined
+        ? { ifCurrentVersion: recorder.lastObservationVersion }
+        : undefined,
+    );
     if (mode === 'reuse' && fallbackReason) {
       askedForHelp = {
         afterPrefixSteps: prefixCacheSteps,
@@ -155,6 +212,9 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
         pathname: observation?.url ? new URL(observation.url).pathname : null,
       };
     }
+    const landmarksHint = suffixEligibility && mode === 'reuse'
+      ? dag.reachableLandmarks({ inputs, slotRoles, goal })
+      : [];
     let reconvergedTerminal = false;
     const execute = async (tool, input) => {
       if (tool === 'observe') { await observe(); return view(observation); }
@@ -178,7 +238,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       if (failure) throw failure;
       if (recorded.status !== 'completed') throw Error(`Workflow stopped: ${recorded.reason}`);
       let continuedSteps = 0;
-      if (reconvergeMidRepair && mode === 'reuse' && recorder.nextId && dag.nodes.has(recorder.nextId)) {
+      if (reconvergeMidRepair && mode === 'reuse' && recorder.nextId && (dag.nodes.has(recorder.nextId) || suffixEligibility)) {
         const contStarted = performance.now();
         const resumed = await recorder.continueReplay();
         replayMs += performance.now() - contStarted;
@@ -188,7 +248,11 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
         cacheSteps += continuedSteps;
         if (resumed.reachedTerminal) reconvergedTerminal = true;
       }
-      await observe();
+      await observe(
+        supportsRegionDeltas && recorder?.lastObservationVersion !== null && recorder?.lastObservationVersion !== undefined
+          ? { ifCurrentVersion: recorder.lastObservationVersion }
+          : undefined,
+      );
       lastResult = { status: 'completed', kind: input.kind, label: matches[0].label, slot: input.slot ?? null,
         ...(continuedSteps > 0 ? { reconvergedCacheSteps: continuedSteps } : {}) };
       return lastResult;
@@ -205,7 +269,11 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
     const run = startAgent({ projectId, store, planner: countedPlanner, execute, config, signal,
       runId, assertCurrent, verifyCompletion,
       context: () => ({ task, inputs, observation: view(observation), lastResult,
-        reuse: { completedSteps: cacheSteps, stoppedBecause: fallbackReason },
+        reuse: {
+          completedSteps: cacheSteps,
+          stoppedBecause: fallbackReason,
+          ...(landmarksHint.length ? { reachableLandmarks: landmarksHint } : {}),
+        },
         allowedIntermediateClicks: intermediateClicks.map(locator => locator[1]) }),
     });
     await run.done;

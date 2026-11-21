@@ -28,5 +28,5 @@ export function scopedRead(workspace, command, url, read, config, now) {
   if (read.regionGroups.length || read.regions.some(selector => !grant.readRegions.includes(selector))) {
     throw workspaceError(REJECTION_CODES.UNAUTHORIZED_TARGET, 'Read exceeds the selected page regions');
   }
-  return { ...read, regions: grant.readRegions, readRoots: grant.readRegions };
+  return { ...read, regions: grant.readRegions, readRoots: grant.readRegions, autoControlRegions: false };
 }

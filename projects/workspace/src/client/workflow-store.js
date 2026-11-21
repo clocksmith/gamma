@@ -11,8 +11,18 @@ import { WorkflowAttempts, attemptErrorCode } from './workflow-attempts.js';
 
 const VERSION = 1;
 const HASH = /^[a-f0-9]{64}$/;
-const SOURCE_FILES = ['private-json-file.js', 'workflow-attempts.js', 'workflow-sync.js', 'workflow-store.js', 'workflow-agent.js', 'trace-dag.js', 'trace-graph-dp.js', 'field-group-scope.js', 'controller.js',
+const SOURCE_FILES = ['private-json-file.js', 'workflow-attempts.js', 'workflow-sync.js', 'workflow-store.js', 'workflow-agent.js', 'trace-dag.js', 'trace-graph-dp.js', 'suffix-eligibility.js', 'field-group-scope.js', 'controller.js',
   'agent.js', '../adapters/page-query.js', '../service.js'];
+const STATIC_SOURCE_HASHES = Object.freeze(Object.fromEntries(SOURCE_FILES.map(path => [path,
+  sha256Hex(readFileSync(new URL(path, import.meta.url)))])));
+const VALIDATED_DAG_CACHE = new Map();
+const ALLOWED_DAG_OPTIONAL_KEYS = new Set(['goalTerminals', 'suffixProfiles', 'slotRoles']);
+function hasValidDagKeys(dag) {
+  if (!dag || typeof dag !== 'object' || Array.isArray(dag)) return false;
+  const baseKeys = Object.keys(dag).filter(k => !ALLOWED_DAG_OPTIONAL_KEYS.has(k)).sort().join(',');
+  return baseKeys === 'key,limits,nodes,version'
+    && Object.keys(dag).every(k => ['version', 'key', 'limits', 'nodes'].includes(k) || ALLOWED_DAG_OPTIONAL_KEYS.has(k));
+}
 const exactKeys = (value, keys) => value && typeof value === 'object'
   && !Array.isArray(value) && Object.keys(value).sort().join() === [...keys].sort().join();
 const identifier = value => typeof value === 'string' && value.trim().length > 0;
@@ -69,12 +79,16 @@ export class WorkflowStore {
         || state.workflowVersions[pointer.currentVersion]?.workflowId !== id
         || state.workflowVersions[pointer.currentVersion]?.revision !== pointer.revision) throw Error('Invalid workflow pointer');
     }
-    for (const entry of Object.values(state.workflowVersions)) {
+    for (const [verId, entry] of Object.entries(state.workflowVersions)) {
       if (!exactKeys(entry, ['workflowId', 'revision', 'parentVersion', 'dag']) || !state.workflows[entry.workflowId]
         || !Number.isSafeInteger(entry.revision) || entry.revision < 0
-        || !(exactKeys(entry.dag, ['version', 'key', 'limits', 'nodes'])
-          || exactKeys(entry.dag, ['version', 'key', 'limits', 'nodes', 'goalTerminals']))) throw Error('Invalid workflow namespace');
-      TraceDag.restore(entry.dag, this.limits);
+        || !hasValidDagKeys(entry.dag)) throw Error('Invalid workflow namespace');
+      const cacheKey = `${verId}:${canonicalJson(this.limits)}:${sha256Hex(canonicalJson(entry.dag))}`;
+      if (!VALIDATED_DAG_CACHE.has(cacheKey)) {
+        TraceDag.restore(entry.dag, this.limits);
+        if (VALIDATED_DAG_CACHE.size > 512) VALIDATED_DAG_CACHE.clear();
+        VALIDATED_DAG_CACHE.set(cacheKey, true);
+      }
       if (entry.revision === 0 ? entry.parentVersion !== null
         : state.workflowVersions[entry.parentVersion]?.revision !== entry.revision - 1
           || state.workflowVersions[entry.parentVersion]?.workflowId !== entry.workflowId
@@ -164,7 +178,12 @@ export class WorkflowStore {
         fail('workflow-store-lineage', 'Workflow lineage changed; refusing publication');
       }
       const dag = TraceDag.restore(latest.dag, this.limits);
-      if (trace) dag.publish(trace.records, trace.terminal, trace.repairs);
+      if (trace) {
+        dag.publish(trace.records, trace.terminal, trace.repairs, {
+          ...(trace.suffixProfiles ? { suffixProfiles: trace.suffixProfiles } : {}),
+          ...(trace.slotRoles ? { slotRoles: trace.slotRoles } : {}),
+        });
+      }
       const next = dag.export();
       if (canonicalJson(next) !== canonicalJson(latest.dag)) {
         if (!Number.isSafeInteger(latest.revision + 1)) throw Error('Workflow revision exhausted');
@@ -239,8 +258,7 @@ export class WorkflowStore {
       throw Error('Explicit origin, slot-to-field rules and intermediate click policy are required');
     }
     const scope = { accountScope, template: options.template };
-    const sourceHashes = Object.fromEntries(SOURCE_FILES.map(path => [path,
-      sha256Hex(readFileSync(new URL(path, import.meta.url)))]));
+    const sourceHashes = { ...STATIC_SOURCE_HASHES };
     const policyHash = sha256Hex(canonicalJson({ disclosure: policy, fieldGroups, learnRepairs,
       observationScope: 'authorized-controls-v1' }));
     accounting.context = { verificationId,
