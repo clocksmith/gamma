@@ -9,6 +9,7 @@ import { WorkspaceService } from '../../src/service.js';
 import { loadServiceConfig } from '../../src/config.js';
 import { createPlaywrightAdapter } from '../../src/adapters/playwright-adapter.js';
 import { TraceDag } from '../../src/client/trace-dag.js';
+import { SuffixIndex } from '../../src/client/suffix-eligibility.js';
 import { InvestigationStore } from '../../src/client/investigation.js';
 import { createCliPlanner } from '../../src/client/cli-planner.js';
 import { runWorkflow, WORKFLOW_SYSTEM, WORKFLOW_TOOLS } from '../../src/client/workflow-agent.js';
@@ -28,7 +29,7 @@ const client = JSON.parse(readFileSync(join(root, 'projects/workspace/config/faw
 const args = process.argv.slice(2);
 const get = name => args.includes(name) ? args[args.indexOf(name) + 1] : null;
 if (args.includes('--help')) {
-  console.log('run.js --out NEW_DIR [--controlled] [--arms whole,fresh,script,scoped] [--variants frozen,ids]');
+  console.log('run.js --out NEW_DIR [--controlled] [--arms whole,fresh,script,scoped,suffix,whole-rc,suffix-rc] [--variants frozen,ids]');
   process.exit(0);
 }
 for (let i = 0; i < args.length; i++) {
@@ -40,7 +41,9 @@ if (!get('--out')) throw Error('--out required');
 const out = resolve(get('--out')), controlled = args.includes('--controlled');
 const arms = (get('--arms') ?? 'whole,fresh,script').split(',');
 const variants = (get('--variants') ?? policy.variants.join(',')).split(',');
-if (arms.some(arm => !['whole', 'fresh', 'script', 'scoped'].includes(arm))
+// suffix = whole-page graph plus opt-in suffix eligibility; -rc also resumes replay after planner steps.
+const graphOf = arm => ({ whole: 'whole', 'whole-rc': 'whole', scoped: 'scoped', suffix: 'suffix', 'suffix-rc': 'suffix' })[arm] ?? null;
+if (arms.some(arm => !['whole', 'fresh', 'script', 'scoped', 'suffix', 'whole-rc', 'suffix-rc'].includes(arm))
   || variants.some(variant => !policy.variants.includes(variant))) throw Error('Unfrozen arm or variant');
 if (existsSync(out)) throw Error('Choose a new output directory; failed evidence cannot be overwritten');
 mkdirSync(out, { recursive: true, mode: 0o700 });
@@ -48,7 +51,8 @@ const paths = ['forms.json', 'oracle.json', 'policy.json', 'contracts.js', 'fixt
   .map(path => `projects/workspace/qualification/workflow-generalization/${path}`);
 paths.push('projects/workspace/config/fawn-workspace-service.json', 'projects/workspace/config/fawn-workspace-client.json',
   ...['service', 'state', 'admission', 'conditions', 'journal', 'adapters/page-query',
-    'adapters/playwright-adapter', 'client/trace-dag', 'client/workflow-agent', 'client/agent',
+    'adapters/playwright-adapter', 'client/trace-dag', 'client/trace-graph-dp', 'client/suffix-eligibility',
+    'client/workflow-agent', 'client/agent',
     'client/cli-planner', 'client/investigation'].map(path => `projects/workspace/src/${path}.js`));
 if (arms.includes('scoped')) paths.push('projects/workspace/src/client/field-group-scope.js');
 const hashes = () => Object.fromEntries(paths.map(path => [path, sha256Hex(readFileSync(join(root, path)))]));
@@ -57,7 +61,7 @@ const frozen = { frozenAt: new Date().toISOString(), testFreeze, policy, arms, v
   sourceDirty: !!execFileSync('git', ['status', '--porcelain', '--ignore-submodules=all'], { cwd: root, encoding: 'utf8' }).trim(),
   sourceHashes: hashes() };
 writeFileSync(join(out, 'frozen.json'), JSON.stringify(frozen, null, 2));
-const fixture = await createFixture(), learned = new Map(), rows = [], calls = [];
+const fixture = await createFixture(), learned = new Map(), learnedIndex = new Map(), rows = [], calls = [];
 const serviceConfig = loadServiceConfig(undefined, { browserChannel: 'chrome', headless: true });
 const config = { ...client, maxTurns: policy.maxTurnsPerRun, cliMaxBudgetUsd: policy.maxTurnCostUsd };
 let costUpperBoundUsd = 0;
@@ -132,11 +136,13 @@ async function run({ vendor, variant, arm, learn = false }) {
         }
         return service.submitAction(command);
       } };
-    const isScoped = arm === 'scoped';
-    const key = `${vendor}-${isScoped ? 'scoped' : 'whole'}`;
-    const dag = !learn && ['whole', 'scoped'].includes(arm)
+    const graph = graphOf(arm), isScoped = graph === 'scoped', usesSuffix = graph === 'suffix';
+    const key = `${vendor}-${graph ?? 'whole'}`;
+    const dag = !learn && graph
       ? TraceDag.restore(learned.get(key), policy.limits) : new TraceDag(policy.limits);
-    const before = sha256Hex(canonicalJson(dag.export()));
+    // Evaluation freezes the suffix index along with the graph.
+    const suffixIndex = !usesSuffix ? null : learn ? new SuffixIndex() : SuffixIndex.restore(learnedIndex.get(key)).freeze();
+    const before = sha256Hex(canonicalJson([dag.export(), suffixIndex?.export() ?? null]));
     store.create({ id: name, goal: task });
     const preparationMs = performance.now() - started;
     const assertContext = async () => {};
@@ -154,7 +160,8 @@ async function run({ vendor, variant, arm, learn = false }) {
       }
     };
     armed = true;
-    const result = await runWorkflow({ dag, mode: learn ? 'learn' : ['whole', 'scoped'].includes(arm) ? 'reuse' : 'fresh',
+    const result = await runWorkflow({ dag, mode: learn ? 'learn' : graph ? 'reuse' : 'fresh',
+      suffixIndex, reconvergeMidRepair: !learn && arm.endsWith('-rc'),
       service: port, owner, pageId: 'main', intent: 'application', template: `${vendor}-contact-projection-v1`,
       inputs: { ...policy.inputs, ...(learn ? { email: 'avery@example.test', firstName: 'Avery', fullName: 'Avery Test' } : {}) },
       intermediateClicks, task, planner: provider(name, vendor, arm === 'script'), config, store, projectId: name,
@@ -177,7 +184,10 @@ async function run({ vendor, variant, arm, learn = false }) {
         .slice(0, result.cacheSteps).filter(action => ['fill', 'select'].includes(action.kind)).length,
       // Inspect action kind counts separately; cacheSteps includes intermediate clicks.
       cacheSteps: result.cacheSteps, unknown, fault, afterFault,
-      cacheUnchanged: learn || before === sha256Hex(canonicalJson(dag.export())),
+      cacheUnchanged: learn || before === sha256Hex(canonicalJson([dag.export(), suffixIndex?.export() ?? null])),
+      suffixCertified: (result.traceEvents ?? []).filter(event => event.phase === 'suffix-certified').length,
+      suffixRefused: (result.traceEvents ?? []).filter(event => event.phase === 'suffix-refused').length,
+      suffixSteps: (result.traceEvents ?? []).filter(event => event.phase === 'certified-suffix-replay').length,
       expectedBehaviorPassed: oracle.wrongFieldFills === 0 && oracle.submissions === 0
         && (safeStop ? !result.completed : result.completed && oracle.completed)
         && (variant !== 'unknown-outcome' || (unknown === 1 && afterFault?.executions === 0 && afterFault?.decisions === 0)),
@@ -185,6 +195,10 @@ async function run({ vendor, variant, arm, learn = false }) {
     if (learn && result.completed && oracle.completed) {
       learned.set(key, dag.export());
       writeFileSync(join(out, `${key}.private.json`), JSON.stringify(dag.export()), { mode: 0o600 });
+      if (suffixIndex) {
+        learnedIndex.set(key, suffixIndex.export());
+        writeFileSync(join(out, `${key}.index.private.json`), JSON.stringify(suffixIndex.export()), { mode: 0o600 });
+      }
     }
   } catch (error) { row = { name, vendor, variant, arm, learning: learn, expectedBehaviorPassed: false, error: error.message }; }
   finally { store.close(); if (service) await service.close(); }
@@ -198,7 +212,7 @@ async function run({ vendor, variant, arm, learn = false }) {
 
 try {
   for (const vendor of ['greenhouse', 'lever']) {
-    for (const arm of arms.filter(arm => ['whole', 'scoped'].includes(arm))) {
+    for (const arm of [...new Set(arms.map(graphOf).filter(Boolean))]) {
       const row = await run({ vendor, variant: 'heldout', arm, learn: true });
       if (!row.expectedBehaviorPassed) throw Error(`Learning failed: ${row.name}`);
     }

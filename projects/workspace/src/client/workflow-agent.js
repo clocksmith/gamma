@@ -65,7 +65,7 @@ export function scopeWorkflowObservation(service, template, locators) {
 export async function runWorkflow({ dag, mode, service, owner, pageId, intent, template, inputs,
   intermediateClicks, task, planner, config, store, projectId, verifyReview, signal,
   assertContext = async () => {}, authorizeStep = async () => {}, publishTrace = null, accountScope = null, fieldGroups = null,
-  learnRepairs = false, observationLocators = null, reconvergeMidRepair = false, goal = null }) {
+  learnRepairs = false, observationLocators = null, reconvergeMidRepair = false, goal = null, suffixIndex = null }) {
   if (!['learn', 'fresh', 'reuse'].includes(mode)) throw Error('Invalid workflow mode');
   if (typeof learnRepairs !== 'boolean') throw Error('Explicit boolean repair-learning policy required');
   if (typeof reconvergeMidRepair !== 'boolean') throw Error('Explicit boolean mid-repair reconvergence policy required');
@@ -87,7 +87,9 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
     assertCurrent();
   };
   const options = { service, owner, pageId, intent, template, inputs, intermediateClicks, signal,
-    assertContext: assertWorkflowContext, authorizeStep, accountScope, fieldGroups, goal };
+    assertContext: assertWorkflowContext, authorizeStep, accountScope, fieldGroups, goal, suffixIndex };
+  // A replacement session keeps the steps already executed in this run, for suffix eligibility only.
+  const carriedSteps = () => suffixIndex ? [...recorder.priorSteps, ...recorder.records.map(record => record.step)] : [];
   let recorder, observation, cacheSteps = 0, prefixCacheSteps = 0, reconvergedCacheSteps = 0, replayMs = 0, fallbackReason = null;
   let askedForHelp = null;
   let canPublish = mode === 'learn', lastResult = null, modelCalls = 0;
@@ -145,7 +147,8 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       // Only structural misses can teach. Never-dispatched stale actions may replan, but their
       // changed observation cannot silently be stitched into the recorded prefix.
       canPublish = learnRepairs && CACHE_MISSES.has(replay?.reason);
-      recorder = canPublish ? await recorder.repair() : dag.session({ ...options, fieldGroups: null });
+      recorder = canPublish ? await recorder.repair()
+        : dag.session({ ...options, fieldGroups: null, executedSteps: carriedSteps() });
     }
     await observe();
     if (mode === 'reuse' && fallbackReason) {
@@ -170,7 +173,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       const stale = replanCode(recorded, failure);
       if (stale) {
         canPublish = false;
-        recorder = dag.session({ ...options, fieldGroups: null });
+        recorder = dag.session({ ...options, fieldGroups: null, executedSteps: carriedSteps() });
         await observe();
         lastResult = { status: 'needs-replan', code: stale, neverDispatched: true };
         return lastResult;
@@ -178,7 +181,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       if (failure) throw failure;
       if (recorded.status !== 'completed') throw Error(`Workflow stopped: ${recorded.reason}`);
       let continuedSteps = 0;
-      if (reconvergeMidRepair && mode === 'reuse' && recorder.nextId && dag.nodes.has(recorder.nextId)) {
+      if (reconvergeMidRepair && mode === 'reuse' && recorder.nextId && (dag.nodes.has(recorder.nextId) || suffixIndex)) {
         const contStarted = performance.now();
         const resumed = await recorder.continueReplay();
         replayMs += performance.now() - contStarted;
