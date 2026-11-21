@@ -30,7 +30,7 @@ const sourcePaths = ['qualification/workflow-generalization/participant.js',
   'qualification/workflow-generalization/oracle.json', 'qualification/workflow-generalization/contracts.js',
   'qualification/workflow-generalization/policy.json', 'src/service.js', 'src/admission.js', 'src/conditions.js',
   'src/client/trace-dag.js', 'src/client/field-group-scope.js', 'src/adapters/page-query.js',
-  'src/adapters/playwright-adapter.js', '../../config/fawn-workspace-service.json'];
+  'src/adapters/playwright-adapter.js', 'config/fawn-workspace-service.json'];
 const hashes = () => Object.fromEntries(sourcePaths.map(path => [path, sha256Hex(readFileSync(new URL(path, workspaceRoot)))]));
 const sourceHashes = hashes();
 const fixture = await createFixture(), token = randomBytes(32).toString('hex');
