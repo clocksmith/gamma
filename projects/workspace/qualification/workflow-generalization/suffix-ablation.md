@@ -61,3 +61,42 @@ variant, so its effect there is not independent evidence.
 One vendor holdout per vendor, synthetic faults, contact fields only. Zero observed
 wrong-field fills bounds nothing by itself: with n certified rejoins and no failure, the
 95% upper bound on the failure rate is about 3/n.
+
+## Result, 2026-11-21
+
+Controlled run on commit `24888ec` with a clean tree, headless stock Chrome 158, both
+vendors, all 13 frozen variants, four arms: 104 evaluation runs. An earlier run on
+`65503ca` gave the same decisions, cached steps and outcomes; it undercounted
+certifications because a session swap dropped them, which `24888ec` fixes.
+
+| Arm | Scripted planner decisions | Cached steps | Certified rejoins | Refusals | Wrong-field fills | Submissions |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `whole` | 93 | 35 | 0 | 0 | 0 | 0 |
+| `suffix` | 64 | 62 | 23 | 14 | 0 | 0 |
+| `whole-rc` | 59 | 59 | 0 | 0 | 0 | 0 |
+| `suffix-rc` | 29 | 89 | 30 | 27 | 0 | 0 |
+
+- Every run met its expected behaviour: 12 of 26 completed in each arm, and the 14
+  that must stop safely stopped in each arm. The graph and index were unchanged.
+- Each suffix arm used fewer decisions than its matching whole arm on 8 variant rows
+  and more on none: `reordered` (8 to 0, and 5 to 0), `changed-label`,
+  `extra-question` and `dependent-question`, for both vendors.
+- The seven safe-stop variants behaved identically with and without suffix
+  eligibility, including `semantic-decoy`, `ambiguous-label` and `hidden-duplicate`,
+  which were refused as lookalikes or ambiguous targets.
+- Leaving out `extra-question`, whose rule was prompted by that variant: 75 to 54
+  without resume, and 47 to 27 with it.
+
+The pass conditions were met and the Stage 2 condition was met.
+
+What this does not show:
+
+- No model ran. A scripted function stood in for the planner, so these are decision
+  counts, not model calls, cost or time.
+- Two vendors, one holdout each, contact fields only, synthetic faults. The 26 rows are
+  two near-identical copies of 13 variants, so four kinds of change account for the gain.
+- Zero wrong-field fills over 30 certified rejoins bounds the failure rate only below
+  about 10% at 95% confidence, before allowing for that clustering.
+- Hidden page state that the observation cannot see is not exercised here.
+
+Raw rows, reports and private graphs stay in local evidence, outside the repository.
