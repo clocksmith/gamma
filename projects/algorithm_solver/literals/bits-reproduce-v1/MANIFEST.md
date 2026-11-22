@@ -1,5 +1,7 @@
 # BITS capacity results: reproduction manifest
 
+**This bundle verifies retained certificates and dictionaries. It does not rerun any solver search and it does not reproduce timings.**
+
 One command re-checks every capacity result without a solver:
 
 ```sh
