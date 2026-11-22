@@ -169,11 +169,14 @@ class WorkspaceService {
   #assertPrerequisite;
   #requirePrerequisiteCheck;
   #requireConditionalWrite;
+  #requireMultiPredicateWrite;
+  #verifyExternalIdempotency;
   #runtime = new Map();
   #ready = false;
 
   constructor({ journal, state, config, adapter, hooks, clock, uploads,
-    assertPrerequisite = null, requirePrerequisiteCheck = false, requireConditionalWrite = false }) {
+    assertPrerequisite = null, requirePrerequisiteCheck = false, requireConditionalWrite = false,
+    requireMultiPredicateWrite = false, verifyExternalIdempotency = null }) {
     this.#journal = journal;
     this.#state = state;
     this.#config = config;
@@ -184,21 +187,28 @@ class WorkspaceService {
     this.#assertPrerequisite = assertPrerequisite;
     this.#requirePrerequisiteCheck = Boolean(requirePrerequisiteCheck);
     this.#requireConditionalWrite = Boolean(requireConditionalWrite);
+    this.#requireMultiPredicateWrite = Boolean(requireMultiPredicateWrite);
+    this.#verifyExternalIdempotency = typeof verifyExternalIdempotency === 'function' ? verifyExternalIdempotency : null;
   }
 
   /**
    * Restore durable authority, settle interrupted actions, then accept commands.
    * @param {{stateDir: string, config: object, createAdapter: Function, hooks?: object,
    *   clock?: () => number, assertPrerequisite?: Function|null, requirePrerequisiteCheck?: boolean,
-   *   requireConditionalWrite?: boolean}} options
+   *   requireConditionalWrite?: boolean, requireMultiPredicateWrite?: boolean,
+   *   verifyExternalIdempotency?: Function|null}} options
    */
   static async open({ stateDir, config, createAdapter, hooks = NO_HOOKS, clock = Date.now,
-    assertPrerequisite = null, requirePrerequisiteCheck = false, requireConditionalWrite = false }) {
+    assertPrerequisite = null, requirePrerequisiteCheck = false, requireConditionalWrite = false,
+    requireMultiPredicateWrite = false, verifyExternalIdempotency = null }) {
     if (typeof requirePrerequisiteCheck !== 'boolean') {
       throw Error('Explicit boolean prerequisite-check policy required');
     }
     if (typeof requireConditionalWrite !== 'boolean') {
       throw Error('Explicit boolean conditional-write policy required');
+    }
+    if (typeof requireMultiPredicateWrite !== 'boolean') {
+      throw Error('Explicit boolean multi-predicate-write policy required');
     }
     if (requirePrerequisiteCheck && typeof assertPrerequisite !== 'function') {
       throw Object.assign(Error('WorkspaceService write boundary requires an explicit server-side assertPrerequisite check'), {
@@ -221,6 +231,7 @@ class WorkspaceService {
       const service = new WorkspaceService({
         journal, state, config, adapter, hooks, clock, uploads,
         assertPrerequisite, requirePrerequisiteCheck, requireConditionalWrite,
+        requireMultiPredicateWrite, verifyExternalIdempotency,
       });
       service.#restore();
       return service;
@@ -635,6 +646,10 @@ class WorkspaceService {
       });
     }
     let writeVersion = request.writeCondition?.version;
+    const requestedPredicates = Array.isArray(request.writeCondition?.predicateVersions)
+      ? structuredClone(request.writeCondition.predicateVersions)
+      : null;
+    let predicateVersions = requestedPredicates ? [...requestedPredicates] : null;
     if (request.kind !== 'navigate' && typeof this.#assertPrerequisite === 'function') {
       const prereq = await this.#assertPrerequisite({
         workspaceId,
@@ -645,6 +660,7 @@ class WorkspaceService {
         url: snapshot.url,
         origin: new URL(snapshot.url).origin,
         target: structuredClone(request.target),
+        ...(requestedPredicates ? { predicateVersions: structuredClone(requestedPredicates) } : {}),
       });
       if (prereq === false || prereq?.ok === false) {
         throw workspaceError(
@@ -653,6 +669,24 @@ class WorkspaceService {
         );
       }
       if (prereq?.writeVersion !== undefined) writeVersion = prereq.writeVersion;
+      if (Array.isArray(prereq?.predicateVersions)) {
+        const merged = new Map();
+        for (const item of requestedPredicates ?? []) {
+          merged.set(`${item.account ?? ''}|${item.record}|${item.predicate}`, item);
+        }
+        for (const item of prereq.predicateVersions) {
+          const key = `${item.account ?? ''}|${item.record}|${item.predicate}`;
+          const prior = merged.get(key);
+          if (prior && prior.version !== item.version) {
+            throw workspaceError(
+              REJECTION_CODES.PRECONDITION_UNESTABLISHED,
+              `stale prerequisite version for ${item.record}:${item.predicate}`,
+            );
+          }
+          merged.set(key, item);
+        }
+        predicateVersions = [...merged.values()];
+      }
     }
     if (request.kind !== 'navigate' && (this.#requireConditionalWrite || request.requireConditionalWrite === true)) {
       if (writeVersion === undefined || writeVersion === null || this.#adapter.supportsConditionalWrites !== true) {
@@ -662,12 +696,21 @@ class WorkspaceService {
         );
       }
     }
+    if (request.kind !== 'navigate' && (this.#requireMultiPredicateWrite || request.requireMultiPredicateWrite === true)) {
+      if (!predicateVersions?.length || this.#adapter.supportsMultiPredicateWrites !== true) {
+        throw workspaceError(
+          REJECTION_CODES.PRECONDITION_UNESTABLISHED,
+          'multi-predicate write vector or multi-predicate adapter unavailable',
+        );
+      }
+    }
     return {
       targetDigest,
       preconditionResults: preconditions.results,
       observationScope: scope ?? { kind: 'page' },
       liveRegions: regions.length > 0 ? live.regions : null,
       ...(writeVersion !== undefined && writeVersion !== null ? { writeVersion } : {}),
+      ...(predicateVersions?.length ? { predicateVersions } : {}),
     };
   }
 
@@ -710,13 +753,20 @@ class WorkspaceService {
       return { action, checks };
     });
     if (begun.settled) return begun.settled;
-    const effectiveRequest = begun.checks?.writeVersion !== undefined
-      ? { ...begun.action.request, writeVersion: begun.checks.writeVersion }
+    const effectiveRequest = (begun.checks?.writeVersion !== undefined || begun.checks?.predicateVersions?.length)
+      ? {
+          ...begun.action.request,
+          ...(begun.checks?.writeVersion !== undefined ? { writeVersion: begun.checks.writeVersion } : {}),
+          ...(begun.checks?.predicateVersions?.length ? { predicateVersions: begun.checks.predicateVersions } : {}),
+        }
       : begun.action.request;
     const outcome = await this.#performEffect(workspaceId, effectiveRequest);
-    if (begun.action.request.kind !== 'navigate'
-      && (begun.checks?.writeVersion === undefined || this.#adapter.supportsConditionalWrites !== true)) {
+    const hasMultiPredicateFence = Boolean(begun.checks?.predicateVersions?.length && this.#adapter.supportsMultiPredicateWrites === true);
+    const hasSingleVersionFence = Boolean(begun.checks?.writeVersion !== undefined && this.#adapter.supportsConditionalWrites === true);
+    if (begun.action.request.kind !== 'navigate' && !hasSingleVersionFence && !hasMultiPredicateFence) {
       outcome.evidence = { ...outcome.evidence, unconditionalWriteRaceWindow: true };
+    } else if (begun.action.request.kind !== 'navigate' && hasSingleVersionFence && !hasMultiPredicateFence) {
+      outcome.evidence = { ...outcome.evidence, singleEntityWriteRaceWindow: true };
     }
     return runtime.mutex.run(async () => {
       let postObservationVersion = null;
@@ -985,6 +1035,33 @@ class WorkspaceService {
         throw workspaceError(REJECTION_CODES.RECONCILIATION_NOT_APPLICABLE, 'action carried no external idempotency key', {
           actionId: command.actionId,
         });
+      }
+      if (this.#verifyExternalIdempotency) {
+        const journalCheck = await this.#verifyExternalIdempotency({
+          workspaceId: workspace.workspaceId,
+          actionId: action.request.actionId,
+          effectKey: action.request.effect?.effectKey ?? null,
+          externalIdempotencyKey: key,
+        });
+        if (journalCheck?.committed === true) {
+          return {
+            result: 'effect-present',
+            resolvesUncertainty: true,
+            permitsResubmission: false,
+            basis: {
+              externalIdempotencyKey: key,
+              serverJournalVerified: true,
+              ...(journalCheck.serverSeq !== undefined ? { serverSeq: journalCheck.serverSeq } : {}),
+            },
+          };
+        }
+        return {
+          result: 'idempotent-resubmission-permitted',
+          resolvesUncertainty: false,
+          permitsResubmission: true,
+          requiredIdempotencyKey: key,
+          basis: { externalIdempotencyKey: key, serverJournalVerified: true },
+        };
       }
       return {
         result: 'idempotent-resubmission-permitted',

@@ -83,10 +83,11 @@ export function scopeWorkflowObservation(service, template, locators) {
  */
 export async function runWorkflow({ dag, mode, service, owner, pageId, intent, template, inputs,
   intermediateClicks, task, planner, config, store, projectId, verifyReview, signal,
-  assertContext = async () => {}, authorizeStep = async () => {}, publishTrace = null, accountScope = null, fieldGroups = null,
+  assertContext = async () => {}, authorizeStep = async () => {}, publishTrace = null, accountScope = null, recordId = null, fieldGroups = null,
   learnRepairs = false, observationLocators = null, reconvergeMidRepair = false, goal = null,
-  suffixIndex = null, suffixEligibility = false, slotRoles = null, inertFormLocators = [],
+  suffixIndex = null, suffixEligibility = false, slotRoles = null, inertFormLocators = [], includeFormState = false,
   assertPrerequisite = null, requirePrerequisiteCheck = false,
+  requireConditionalWrite = false, requireMultiPredicateWrite = false,
   crossScreenRule = false, attestPrerequisites = null, effectForStep = null }) {
   if (!['learn', 'fresh', 'reuse'].includes(mode)) throw Error('Invalid workflow mode');
   if (typeof learnRepairs !== 'boolean') throw Error('Explicit boolean repair-learning policy required');
@@ -116,19 +117,30 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
     await assertContext();
     assertCurrent();
   };
+  const externalPredicateVersions = () => (typeof planner?.predicateVersions === 'function' ? planner.predicateVersions() : []);
   const options = { service, owner, pageId, intent, template, inputs, intermediateClicks, signal,
-    assertContext: assertWorkflowContext, authorizeStep, accountScope, fieldGroups, goal,
-    suffixIndex, suffixEligibility, slotRoles, inertFormLocators,
-    assertPrerequisite, requirePrerequisiteCheck, crossScreenRule, attestPrerequisites, effectForStep };
+    assertContext: assertWorkflowContext, authorizeStep, accountScope, recordId, fieldGroups, goal,
+    suffixIndex, suffixEligibility, slotRoles, inertFormLocators, includeFormState,
+    assertPrerequisite, requirePrerequisiteCheck, requireConditionalWrite, requireMultiPredicateWrite,
+    crossScreenRule, attestPrerequisites, effectForStep, externalPredicateVersions };
   // A replacement session keeps the steps already executed in this run across all arms for entry/reconvergence accountability.
   const carriedSteps = () => [...recorder.priorSteps, ...recorder.records.map(record => record.step)];
   // Suffix decisions and certified rejoins made by a session that was later replaced still count in the result.
   const retiredEvents = [];
   const retiredRejoins = [];
+  const retiredPredicates = [];
+  const retiredUnavailable = [];
   const replaceRecorder = () => {
     retiredEvents.push(...(recorder.traceEvents ?? []));
     retiredRejoins.push(...(recorder.certifiedSuffixRejoins ?? []));
-    return dag.session({ ...options, fieldGroups: null, executedSteps: carriedSteps() });
+    retiredPredicates.push(...(recorder.attestedPredicateVersions ?? []));
+    retiredUnavailable.push(...(recorder.unavailablePredicates ?? []));
+    return dag.session({
+      ...options,
+      fieldGroups: null,
+      executedSteps: carriedSteps(),
+      attestedPredicateVersions: structuredClone(recorder.attestedPredicateVersions ?? []),
+    });
   };
   const suffixSummary = () => {
     const events = [...retiredEvents, ...(recorder?.traceEvents ?? [])], refusals = {};
@@ -148,15 +160,22 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
     const current = store.get(projectId).run;
     if (current?.id === runId) store.run(projectId, { ...current,
       status: completed ? 'completed' : signal.aborted ? 'stopped' : 'needs-attention', detail });
+    const unavailablePredicates = structuredClone([
+      ...retiredUnavailable,
+      ...(recorder?.unavailablePredicates ?? []),
+      ...(typeof planner?.unavailablePredicates === 'function' ? planner.unavailablePredicates() : []),
+    ]);
     return { mode, status: completed ? 'completed' : 'needs-attention', completed, detail, verification,
       modelCalls, cacheSteps, prefixCacheSteps, reconvergedCacheSteps, replayMs, askedForHelp, fallbackReason,
       certifiedSuffixRejoins: structuredClone([...retiredRejoins, ...(recorder?.certifiedSuffixRejoins ?? [])]),
       lstarRefinement,
       stage0Profile: recorder ? structuredClone(recorder.stage0Profile ?? null) : null,
       traceEvents: structuredClone([...retiredEvents, ...(recorder?.traceEvents ?? [])]),
+      ...(unavailablePredicates.length ? { unavailablePredicates } : {}),
       ...(suffixIndex ? { suffix: suffixSummary() } : {}),
       elapsedMs: performance.now() - started, humanInterventions: 0, interventionRequests: completed ? 0 : 1 };
   };
+  const wantsFormState = Boolean(suffixEligibility || suffixIndex || includeFormState);
   const observe = async ({ ifCurrentVersion } = {}) => {
     if (ifCurrentVersion === undefined) {
       await assertWorkflowContext();
@@ -171,9 +190,9 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
           ...identity,
           autoControlRegions: true,
           ...(ifCurrentVersion !== undefined ? { ifCurrentVersion } : {}),
-          ...(suffixEligibility || suffixIndex ? { includeFormState: true } : {}),
+          ...(wantsFormState ? { includeFormState: true } : {}),
         }
-      : suffixIndex ? { ...identity, includeFormState: true } : identity;
+      : wantsFormState ? { ...identity, includeFormState: true } : identity;
     observation = await service.observe(obsCmd);
     if (observation.isTruncated !== false) throw Error('Workflow observation is incomplete');
     assertCurrent();
@@ -308,6 +327,11 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
     const run = startAgent({ projectId, store, planner: countedPlanner, execute, config, signal,
       runId, assertCurrent, verifyCompletion,
       context: () => ({ task, inputs, observation: view(observation), lastResult,
+        rawObservation: observation ? { url: observation.url, elements: structuredClone(observation.elements) } : null,
+        unfilteredElements: structuredClone(observation?.unfilteredElements ?? observation?.elements ?? []),
+        accountScope,
+        recordId,
+        intermediateClickLocators: structuredClone(intermediateClicks),
         reuse: {
           completedSteps: cacheSteps,
           stoppedBecause: fallbackReason,

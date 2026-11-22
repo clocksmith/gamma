@@ -147,6 +147,92 @@ export function accountedReach(nodes, isAccounted, roots = null) {
 }
 
 /**
+ * Normalize host prerequisite attestation answers across both boolean vectors (v1/v2) and
+ * structured versioned bindings `{ holds, account, record, predicate, version }` or `{ status: 'unavailable' }`.
+ * Fails closed on malformed entries, wrong accountScope, or wrong recordId.
+ */
+export function normalizeAttestationAnswers(answers, { expectedCount, accountScope = null, recordId = null } = {}) {
+  if (!Array.isArray(answers) || answers.length !== expectedCount) {
+    return { valid: false, holdsByIndex: [], refutableByIndex: [], predicateVersions: [], unavailable: [] };
+  }
+  const holdsByIndex = [];
+  const refutableByIndex = [];
+  const predicateVersions = [];
+  const unavailable = [];
+  const seenKeys = new Set();
+
+  for (let index = 0; index < answers.length; index += 1) {
+    const entry = answers[index];
+    if (typeof entry === 'boolean') {
+      holdsByIndex.push(entry);
+      refutableByIndex.push(true);
+      continue;
+    }
+    if (!entry || typeof entry !== 'object') {
+      return { valid: false, holdsByIndex: [], refutableByIndex: [], predicateVersions: [], unavailable: [] };
+    }
+    if (entry.status === 'unavailable' || entry.unavailable === true) {
+      holdsByIndex.push(false);
+      refutableByIndex.push(false);
+      unavailable.push({
+        index,
+        predicate: typeof entry.predicate === 'string' ? entry.predicate : null,
+        reason: typeof entry.reason === 'string' ? entry.reason : 'predicate-unavailable',
+      });
+      continue;
+    }
+    const validVersion = (typeof entry.version === 'string' && entry.version.length > 0) || Number.isInteger(entry.version);
+    if (typeof entry.holds !== 'boolean'
+      || typeof entry.account !== 'string' || !entry.account.length
+      || typeof entry.record !== 'string' || !entry.record.length
+      || typeof entry.predicate !== 'string' || !entry.predicate.length
+      || !validVersion) {
+      return { valid: false, holdsByIndex: [], refutableByIndex: [], predicateVersions: [], unavailable: [] };
+    }
+    const accountOk = accountScope === null || entry.account === accountScope;
+    const recordOk = recordId === null || entry.record === recordId;
+    if (!accountOk || !recordOk) {
+      holdsByIndex.push(false);
+      refutableByIndex.push(true);
+      continue;
+    }
+    holdsByIndex.push(entry.holds);
+    refutableByIndex.push(true);
+    if (entry.holds) {
+      const dedupKey = `${entry.account}|${entry.record}|${entry.predicate}`;
+      if (!seenKeys.has(dedupKey)) {
+        seenKeys.add(dedupKey);
+        predicateVersions.push({
+          account: entry.account,
+          record: entry.record,
+          predicate: entry.predicate,
+          version: entry.version,
+        });
+      }
+    }
+  }
+  return { valid: true, holdsByIndex, refutableByIndex, predicateVersions, unavailable };
+}
+
+/** Shared dirty-untracked-<form>-field predicate used identically across SuffixIndex and AttestedSkill. */
+export function hasDirtyUntrackedFormControl({
+  allControls,
+  targetForms,
+  allowedLocatorJsons = new Set(),
+  inputValues = [],
+  whitelistedInert = new Set(),
+}) {
+  if (!targetForms || targetForms.size === 0 || !Array.isArray(allControls)) return false;
+  return allControls.some(el => {
+    if (!el?.formKey || !targetForms.has(el.formKey) || el.isDefaultValue !== false) return false;
+    const locJson = canonicalJson(structuralLocator(el));
+    if (allowedLocatorJsons.has(locJson) || whitelistedInert.has(locJson)) return false;
+    if (inputValues.some(v => typeof v === 'string' && v.length > 0 && el.value === v)) return false;
+    return true;
+  });
+}
+
+/**
  * Certify at most one learned node for a live frame that missed the exact hash (SuffixIndex mode).
  * session: { inputs: Map<slotHash,string>, clicks: Set<locatorHash>, executedSteps: step[],
  *            sameOutlineClicks: number, isGoalTerminal(id, node): boolean, formStateFresh?: boolean,

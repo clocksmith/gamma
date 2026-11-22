@@ -20,6 +20,7 @@ import {
   defaultEntryRoots,
   evaluateSuffixEligibility,
   mergeSuffixProfiles,
+  normalizeAttestationAnswers,
   normalizeRoutePattern,
   refineSuffixProfileOnCounterexample,
   resolveRoleBoundInputs,
@@ -419,14 +420,17 @@ export class TraceDag {
  */
 class TraceSession {
   constructor(dag, { service, owner, pageId, intent, template, inputs = {}, intermediateClicks = [], signal,
-    assertContext = async () => {}, authorizeStep = async () => {}, accountScope = null, fieldGroups = null, goal = null,
-    suffixIndex = null, executedSteps = [],
+    assertContext = async () => {}, authorizeStep = async () => {}, accountScope = null, recordId = null, fieldGroups = null, goal = null,
+    suffixIndex = null, executedSteps = [], includeFormState = false,
     suffixEligibility = false, slotRoles = null, inertFormLocators = [],
     assertPrerequisite = null, requirePrerequisiteCheck = false,
-    crossScreenRule = false, attestPrerequisites = null, effectForStep = null }) {
+    requireConditionalWrite = false, requireMultiPredicateWrite = false,
+    crossScreenRule = false, attestPrerequisites = null, effectForStep = null,
+    attestedPredicateVersions = [], externalPredicateVersions = null }) {
     if (typeof template !== 'string' || !template || typeof pageId !== 'string' || !pageId
       || typeof intent !== 'string' || !intent) throw Error('Trace requires template, pageId and intent');
     if (goal !== null && (typeof goal !== 'string' || !goal.trim())) throw Error('Invalid trace goal');
+    if (recordId !== null && (typeof recordId !== 'string' || !recordId.trim())) throw Error('Invalid trace record id');
     if (requirePrerequisiteCheck && typeof assertPrerequisite !== 'function') {
       throw Object.assign(Error('Write boundary requires an explicit server-side assertPrerequisite check'), {
         code: 'missing-prerequisite-check',
@@ -442,26 +446,35 @@ class TraceSession {
     this.goalHash = goal !== null ? dag.hash(['goal', goal]) : null;
     if (accountScope !== null && (typeof accountScope !== 'string' || !accountScope.trim())) throw Error('Invalid trace account scope');
     this.accountScope = accountScope;
+    this.recordId = recordId;
     this.fieldScope = fieldGroups ? createFieldGroupScope(fieldGroups, dag.limits.maxSteps) : null;
     // Opt-in: without suffixIndex or suffixEligibility every path below behaves exactly as before.
     this.suffixIndex = suffixIndex;
+    this.includeFormState = Boolean(includeFormState);
     this.priorSteps = structuredClone(executedSteps);
     this.suffixEligibility = Boolean(suffixEligibility);
     this.slotRolesPolicy = slotRoles ? structuredClone(slotRoles) : null;
     this.inertFormLocators = Array.isArray(inertFormLocators) ? structuredClone(inertFormLocators) : [];
     this.assertPrerequisite = assertPrerequisite;
     this.requirePrerequisiteCheck = Boolean(requirePrerequisiteCheck);
+    this.requireConditionalWrite = Boolean(requireConditionalWrite);
+    this.requireMultiPredicateWrite = Boolean(requireMultiPredicateWrite);
     // The cross-screen rule (cross-screen-rule.md) is opt-in and applies to the index matcher only.
     this.crossScreenRule = crossScreenRule === true;
     this.attestPrerequisites = typeof attestPrerequisites === 'function' ? attestPrerequisites : null;
     this.effectForStep = typeof effectForStep === 'function' ? effectForStep : null;
+    this.attestedPredicateVersions = Array.isArray(attestedPredicateVersions) ? structuredClone(attestedPredicateVersions) : [];
+    this.unavailablePredicates = [];
+    this.externalPredicateVersions = typeof externalPredicateVersions === 'function' ? externalPredicateVersions : null;
     this.clickLocators = new Map(intermediateClicks.map(locator => [dag.hash(['locator', locator]), locator]));
     this.options = { service, owner, pageId, intent, template, inputs, intermediateClicks, signal,
-      assertContext, authorizeStep, accountScope, fieldGroups, goal,
-      suffixIndex, executedSteps,
+      assertContext, authorizeStep, accountScope, recordId, fieldGroups, goal,
+      suffixIndex, executedSteps, includeFormState: this.includeFormState,
       suffixEligibility: this.suffixEligibility, slotRoles: this.slotRolesPolicy, inertFormLocators: this.inertFormLocators,
       assertPrerequisite: this.assertPrerequisite, requirePrerequisiteCheck: this.requirePrerequisiteCheck,
-      crossScreenRule: this.crossScreenRule, attestPrerequisites: this.attestPrerequisites, effectForStep: this.effectForStep };
+      requireConditionalWrite: this.requireConditionalWrite, requireMultiPredicateWrite: this.requireMultiPredicateWrite,
+      crossScreenRule: this.crossScreenRule, attestPrerequisites: this.attestPrerequisites, effectForStep: this.effectForStep,
+      externalPredicateVersions: this.externalPredicateVersions };
     const roleBinding = resolveRoleBoundInputs({
       inputs,
       slotRoles: this.slotRolesPolicy,
@@ -582,10 +595,10 @@ class TraceSession {
   /** The index matcher reads form state on every frame it judges, so the session asks for it
    * whether or not the profile matcher is on (suffix-repair-rules.md, rule 1). */
   get wantsFormState() {
-    return this.suffixEligibility || Boolean(this.suffixIndex);
+    return this.includeFormState || this.suffixEligibility || Boolean(this.suffixIndex);
   }
   get plainObserveCommand() {
-    return this.suffixIndex ? { ...this.identity, includeFormState: true } : this.identity;
+    return (this.includeFormState || this.suffixIndex) ? { ...this.identity, includeFormState: true } : this.identity;
   }
   async observe({ ifCurrentVersion, sinceVersion } = {}) {
     if (ifCurrentVersion === undefined) {
@@ -660,12 +673,15 @@ class TraceSession {
         code: 'step-not-authorized',
       });
     }
+    let prereqResult = null;
     if (typeof this.assertPrerequisite === 'function') {
-      const prereq = await this.assertPrerequisite({
+      prereqResult = await this.assertPrerequisite({
         origin, url: before.observation.url, kind: step.kind, locator, slot, stepIndex: this.depth,
+        ...(this.accountScope !== null ? { accountScope: this.accountScope } : {}),
+        ...(this.recordId !== null ? { recordId: this.recordId } : {}),
       });
-      if (prereq === false || prereq?.ok === false) {
-        throw Object.assign(Error(prereq?.reason || 'Server prerequisite check refused action'), {
+      if (prereqResult === false || prereqResult?.ok === false) {
+        throw Object.assign(Error(prereqResult?.reason || 'Server prerequisite check refused action'), {
           code: 'prerequisite-refused',
         });
       }
@@ -673,8 +689,34 @@ class TraceSession {
     const stepEffect = typeof this.effectForStep === 'function'
       ? await this.effectForStep({
           origin, url: before.observation.url, kind: step.kind, locator, slot, stepIndex: this.depth,
+          ...(this.accountScope !== null ? { accountScope: this.accountScope } : {}),
+          ...(this.recordId !== null ? { recordId: this.recordId } : {}),
         })
       : null;
+    const mergedPredicatesMap = new Map();
+    for (const item of [
+      ...this.attestedPredicateVersions,
+      ...(this.externalPredicateVersions ? this.externalPredicateVersions() : []),
+      ...(Array.isArray(prereqResult?.predicateVersions) ? prereqResult.predicateVersions : []),
+      ...(Array.isArray(stepEffect?.writeCondition?.predicateVersions) ? stepEffect.writeCondition.predicateVersions : []),
+    ]) {
+      if (item && typeof item === 'object' && item.record && item.predicate) {
+        mergedPredicatesMap.set(`${item.account ?? ''}|${item.record}|${item.predicate}`, item);
+      }
+    }
+    const mergedPredicates = [...mergedPredicatesMap.values()];
+    const explicitWriteVersion = stepEffect?.writeCondition?.version !== undefined
+      ? stepEffect.writeCondition.version
+      : prereqResult?.writeVersion;
+    const writeCondition = (explicitWriteVersion !== undefined || mergedPredicates.length > 0)
+      ? {
+          ...(stepEffect?.writeCondition ?? {}),
+          ...(explicitWriteVersion !== undefined ? { version: explicitWriteVersion } : {}),
+          ...(mergedPredicates.length > 0 ? { predicateVersions: mergedPredicates } : {}),
+        }
+      : stepEffect?.writeCondition;
+    const reqCondWrite = stepEffect?.requireConditionalWrite ?? this.requireConditionalWrite;
+    const reqMultiWrite = stepEffect?.requireMultiPredicateWrite ?? this.requireMultiPredicateWrite;
     this.signal?.throwIfAborted();
     const useRegionScope = this.supportsRegionDeltas
       && (step.kind === 'fill' || step.kind === 'select')
@@ -686,6 +728,10 @@ class TraceSession {
       ...(stepEffect?.effect !== undefined ? { effect: stepEffect.effect } : {}),
       ...(stepEffect?.completion !== undefined ? { completion: stepEffect.completion } : {}),
       ...(stepEffect?.preconditions !== undefined ? { preconditions: stepEffect.preconditions } : {}),
+      ...(stepEffect?.resubmissionOf !== undefined ? { resubmissionOf: stepEffect.resubmissionOf } : {}),
+      ...(writeCondition !== undefined ? { writeCondition } : {}),
+      ...(reqCondWrite ? { requireConditionalWrite: true } : {}),
+      ...(reqMultiWrite ? { requireMultiPredicateWrite: true } : {}),
       kind: step.kind, target: { handle: element.handle, selector: element.selector, digest: element.digest },
       ...(step.kind === 'click' ? {} : { params: { value: this.inputs.get(step.slot) } }) });
     const result = await admitted.result;
@@ -892,6 +938,8 @@ class TraceSession {
     continuation.lastObservation = this.lastObservation;
     continuation.regionSelectors = [...this.regionSelectors];
     continuation.traceEvents = structuredClone(this.traceEvents);
+    continuation.attestedPredicateVersions = structuredClone(this.attestedPredicateVersions);
+    continuation.unavailablePredicates = structuredClone(this.unavailablePredicates);
     continuation.repairedSession = true;
     const exact = continuation.frame(before.observation);
     if (this.fieldScope) continuation.repairs.push({ id: before.id, depth: this.depth, next: exact.id });
@@ -935,8 +983,8 @@ class TraceSession {
     return reach.has(nodeId);
   }
   /** Ask the host which steps this session did not take already hold for the bound record. Asked
-   * afresh for every frame, in the host's own terms; anything the host cannot be asked about, an
-   * error, or an answer that is not one boolean per step counts as not attested. */
+   * afresh for every frame, in the host's own terms; supports both boolean vectors and structured
+   * `(account, record, predicate, version)` bindings or `{ status: 'unavailable' }` entries. */
   async #attestSkipped(before) {
     if (!this.crossScreenRule || !this.attestPrerequisites) return null;
     const carried = new Set([...this.priorSteps, ...this.records.map(record => record.step)].map(step => canonicalJson(step)));
@@ -950,18 +998,32 @@ class TraceSession {
         if (step.kind === 'click' ? locator : slot) asked.set(key, { kind: step.kind, slot, locator });
       }
     }
-    if (!asked.size) return { attested: new Set(), asked: new Set(), valid: true };
+    if (!asked.size) return { attested: new Set(), refutable: new Set(), predicateVersions: [], unavailable: [], valid: true };
     let answers;
     try {
-      answers = await this.attestPrerequisites({ origin: new URL(before.observation.url).origin, url: before.observation.url,
-        skipped: structuredClone([...asked.values()]) });
-    } catch { return { attested: new Set(), asked: new Set(asked.keys()), valid: false }; }
-    if (!Array.isArray(answers) || answers.length !== asked.size || answers.some(answer => typeof answer !== 'boolean')) {
-      return { attested: new Set(), asked: new Set(asked.keys()), valid: false };
+      answers = await this.attestPrerequisites({
+        origin: new URL(before.observation.url).origin,
+        url: before.observation.url,
+        skipped: structuredClone([...asked.values()]),
+      });
+    } catch { return { attested: new Set(), refutable: new Set(asked.keys()), predicateVersions: [], unavailable: [], valid: false }; }
+    const parsed = normalizeAttestationAnswers(answers, {
+      expectedCount: asked.size,
+      accountScope: this.accountScope,
+      recordId: this.recordId,
+    });
+    if (!parsed.valid) {
+      return { attested: new Set(), refutable: new Set(asked.keys()), predicateVersions: [], unavailable: [], valid: false };
+    }
+    const keys = [...asked.keys()];
+    if (parsed.unavailable.length > 0) {
+      this.unavailablePredicates.push(...parsed.unavailable);
     }
     return {
-      attested: new Set([...asked.keys()].filter((key, index) => answers[index] === true)),
-      asked: new Set(asked.keys()),
+      attested: new Set(keys.filter((_, index) => parsed.holdsByIndex[index] === true)),
+      refutable: new Set(keys.filter((_, index) => parsed.refutableByIndex[index] === true)),
+      predicateVersions: parsed.predicateVersions,
+      unavailable: parsed.unavailable,
       valid: true,
     };
   }
@@ -974,8 +1036,8 @@ class TraceSession {
         inertFormLocators: this.inertFormLocators,
         ...(att ? {
           isAttested: step => att.attested.has(canonicalJson(step)),
-          ...(atEntry && att.valid && att.asked.size > 0
-            ? { atEntry: true, isPotentialAttested: step => att.asked.has(canonicalJson(step)) }
+          ...(atEntry && att.valid && att.refutable.size > 0
+            ? { atEntry: true, isPotentialAttested: step => att.refutable.has(canonicalJson(step)) }
             : {}),
         } : {}),
         settledSuccessors: this.crossScreenRule,
@@ -983,6 +1045,13 @@ class TraceSession {
         formStateFresh: before.observation === this.lastObservation,
         executedSteps: [...this.priorSteps, ...this.records.map(record => record.step)],
         isGoalTerminal: (id, node) => this.#isGoalTerminal(id, node) } });
+    if (outcome.status === 'certified' && att?.predicateVersions?.length) {
+      const seen = new Set(this.attestedPredicateVersions.map(p => `${p.account ?? ''}|${p.record}|${p.predicate}`));
+      for (const p of att.predicateVersions) {
+        const k = `${p.account ?? ''}|${p.record}|${p.predicate}`;
+        if (!seen.has(k)) { seen.add(k); this.attestedPredicateVersions.push(p); }
+      }
+    }
     this.traceEvents.push({
       phase: outcome.status === 'certified' ? 'suffix-certified' : 'suffix-refused',
       atStep: this.depth,
@@ -991,6 +1060,7 @@ class TraceSession {
         ? { learnedNode: outcome.nodeId.slice(0, 12), ...(outcome.attested ? { attested: true } : {}) }
         : { reason: outcome.reason, refusals: outcome.refusals,
           ...(outcome.attestationRefuted ? { attestationRefuted: true } : {}) }),
+      ...(att?.unavailable?.length ? { unavailablePredicates: att.unavailable.length } : {}),
     });
     return outcome.status === 'certified' ? outcome : null;
   }

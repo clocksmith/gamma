@@ -56,6 +56,28 @@ function validateRegionSelectors(selectors, config, path, { allowEmpty = false }
   }
 }
 
+function validatePredicateVersions(list, path) {
+  if (!Array.isArray(list) || list.length === 0 || list.length > 32) {
+    reject(REJECTION_CODES.INVALID_COMMAND, `${path}: expected 1..32 predicate version bindings`, { path, received: list });
+  }
+  for (let i = 0; i < list.length; i += 1) {
+    const item = list[i];
+    if (!item || typeof item !== 'object') {
+      reject(REJECTION_CODES.INVALID_COMMAND, `${path}[${i}]: expected object`, { path: `${path}[${i}]` });
+    }
+    if (item.account !== undefined) requireString(item.account, `${path}[${i}].account`);
+    requireString(item.record, `${path}[${i}].record`);
+    requireString(item.predicate, `${path}[${i}].predicate`);
+    const validVersion = (typeof item.version === 'string' && item.version.length > 0) || Number.isInteger(item.version);
+    if (!validVersion) {
+      reject(REJECTION_CODES.INVALID_COMMAND, `${path}[${i}].version: expected non-empty string or integer`, {
+        path: `${path}[${i}].version`,
+        received: item.version,
+      });
+    }
+  }
+}
+
 function validateObservationScope(scope, config) {
   if (scope === undefined) return;
   if (!config.observationScopes.includes(scope?.kind)) {
@@ -151,6 +173,9 @@ function validateActionShape(command, config) {
         path: 'effect.externalIdempotencyKey',
       });
     }
+  }
+  if (command.writeCondition?.predicateVersions !== undefined) {
+    validatePredicateVersions(command.writeCondition.predicateVersions, 'writeCondition.predicateVersions');
   }
 }
 
