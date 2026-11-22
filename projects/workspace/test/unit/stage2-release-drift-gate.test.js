@@ -18,8 +18,10 @@ import {
 } from '../../qualification/workflow-generalization/release-drift-runner.mjs';
 import {
   OPENPROJECT_SERVER_CODE_AUDIT,
+  computeOpenProjectOperationBinding,
   probeErpNextAfterOpenProjectQualifies,
   probeOpenProjectDualRelease,
+  reconcileOpenProjectLostAck,
 } from '../../qualification/workflow-generalization/stage2-upstream-contract-probe.mjs';
 
 const LIMITS = Object.freeze({ maxNodes: 96, maxEdges: 128, maxSteps: 32 });
@@ -355,17 +357,39 @@ const CONFIG = Object.freeze({ maxTurns: 16, maxInputBytes: 60000 });
           res.end(JSON.stringify(obj));
         };
 
+        const resolveActorHref = () => {
+          const auth = String(req.headers.authorization ?? '');
+          const decoded = auth.startsWith('Basic ')
+            ? Buffer.from(auth.slice(6), 'base64').toString('utf8')
+            : '';
+          if (decoded === 'apikey:author-tok') return '/api/v3/users/101';
+          if (decoded === 'apikey:approver-tok') return '/api/v3/users/202';
+          return '/api/v3/users/999';
+        };
+        const actorHref = resolveActorHref();
+
         if (req.method === 'POST' && /^\/api\/v3\/projects\/[^/]+\/work_packages$/.test(url.pathname)) {
           const id = nextId++;
           const wp = {
             id,
+            authorHref: actorHref,
             lockVersion: 0,
+            patchCount: 0,
+            nextPatchFailureMode: null,
             subject: body.subject ?? '',
             estimatedTime: body.estimatedTime ?? null,
             description: body.description ?? { raw: '' },
             statusHref: '/api/v3/statuses/1',
             parentHref: body._links?.parent?.href ?? null,
-            journals: [{ id: 1, version: 1, comment: { raw: 'Created' } }],
+            journals: [
+              {
+                id: 1,
+                version: 1,
+                comment: { raw: 'Created' },
+                details: [],
+                _links: { user: { href: actorHref } },
+              },
+            ],
           };
           wps.set(id, wp);
           return send(201, {
@@ -374,7 +398,7 @@ const CONFIG = Object.freeze({ maxTurns: 16, maxInputBytes: 60000 });
             subject: wp.subject,
             estimatedTime: wp.estimatedTime,
             description: wp.description,
-            _links: { status: { href: wp.statusHref } },
+            _links: { status: { href: wp.statusHref }, author: { href: wp.authorHref } },
           });
         }
 
@@ -395,7 +419,7 @@ const CONFIG = Object.freeze({ maxTurns: 16, maxInputBytes: 60000 });
             subject: wp.subject,
             estimatedTime: wp.estimatedTime,
             description: wp.description,
-            _links: { status: { href: wp.statusHref } },
+            _links: { status: { href: wp.statusHref }, author: { href: wp.authorHref } },
           });
         }
 
@@ -405,20 +429,48 @@ const CONFIG = Object.freeze({ maxTurns: 16, maxInputBytes: 60000 });
             await new Promise(r => setTimeout(r, 8));
             const wp = wps.get(id);
             if (!wp) return send(404, { message: 'not found' });
+            wp.patchCount += 1;
+            if (wp.nextPatchFailureMode === 'http-500') {
+              wp.nextPatchFailureMode = null;
+              return send(500, { message: 'simulated transient server failure' });
+            }
+            if (wp.nextPatchFailureMode === 'drop-socket-before-commit') {
+              wp.nextPatchFailureMode = null;
+              res.socket.destroy();
+              return undefined;
+            }
             if (body.lockVersion !== wp.lockVersion) {
               return send(409, { errorIdentifier: 'urn:openproject-org:api:v3:errors:UpdateConflict' });
             }
             if (body._links?.status?.href === '/api/v3/statuses/99') {
               return send(422, { errorIdentifier: 'urn:openproject-org:api:v3:errors:PropertyConstraintViolation' });
             }
+            const details = [];
+            if (body.subject !== undefined && body.subject !== wp.subject) {
+              details.push({ format: 'custom', raw: `Subject changed from ${wp.subject} to ${body.subject}` });
+              wp.subject = body.subject;
+            }
+            if (body.estimatedTime !== undefined && body.estimatedTime !== wp.estimatedTime) {
+              details.push({ format: 'custom', raw: `Estimated time set to ${body.estimatedTime}` });
+              wp.estimatedTime = body.estimatedTime;
+            }
+            if (body.description !== undefined) {
+              if ((body.description?.raw ?? '') !== (wp.description?.raw ?? '')) {
+                details.push({ format: 'custom', raw: 'Description changed' });
+              }
+              wp.description = body.description;
+            }
+            if (body._links?.status?.href) {
+              details.push({ format: 'custom', raw: `Status changed to ${body._links.status.href}` });
+              wp.statusHref = body._links.status.href;
+            }
             wp.lockVersion += 1;
-            if (body.estimatedTime !== undefined) wp.estimatedTime = body.estimatedTime;
-            if (body.description !== undefined) wp.description = body.description;
-            if (body._links?.status?.href) wp.statusHref = body._links.status.href;
             wp.journals.push({
               id: wp.journals.length + 1,
               version: wp.lockVersion + 1,
               comment: { raw: body.journalNotes ?? '' },
+              details,
+              _links: { user: { href: actorHref } },
             });
             return send(200, {
               id: wp.id,
@@ -426,7 +478,7 @@ const CONFIG = Object.freeze({ maxTurns: 16, maxInputBytes: 60000 });
               subject: wp.subject,
               estimatedTime: wp.estimatedTime,
               description: wp.description,
-              _links: { status: { href: wp.statusHref } },
+              _links: { status: { href: wp.statusHref }, author: { href: wp.authorHref } },
             });
           });
         }
@@ -436,7 +488,7 @@ const CONFIG = Object.freeze({ maxTurns: 16, maxInputBytes: 60000 });
 
     await new Promise(r => srv.listen(0, '127.0.0.1', r));
     const port = srv.address().port;
-    return { url: `http://127.0.0.1:${port}`, close: () => new Promise(r => srv.close(r)) };
+    return { url: `http://127.0.0.1:${port}`, wps, close: () => new Promise(r => srv.close(r)) };
   };
 
   const op13 = await startMockOpenProject();
@@ -461,6 +513,197 @@ const CONFIG = Object.freeze({ maxTurns: 16, maxInputBytes: 60000 });
     assert.equal(dual.v13_4_0.checks.separateEntityAbaDiagnostic.separateEntityAbaRequiresExplicitVersionValidator, true);
     assert.equal(dual.v14_0_0.checks.concurrentSameRowRaceSerialized.passes, true);
     assert.equal(dual.v14_0_0.checks.lostAckReconciliation.passes, true);
+    assert.equal(dual.v14_0_0.checks.lostAckReconciliation.disposition, 'committed');
+    assert.equal(dual.v14_0_0.checks.lostAckReconciliation.extraWritesSent, 0);
+    assert.equal(dual.v14_0_0.checks.lostAckReconciliation.interveningEditAtExpectedVersionDisposition, 'unknown');
+    assert.equal(
+      dual.v14_0_0.checks.lostAckReconciliation.interveningEditReason,
+      'intervening-or-unbound-journal-at-expected-version',
+    );
+    assert.equal(dual.v14_0_0.checks.lostAckReconciliation.unboundOperationDisposition, 'unknown');
+    assert.equal(dual.v14_0_0.checks.lostAckReconciliation.preWriteDisposition, 'not_applied_safe_to_retry');
+    assert.equal(dual.v14_0_0.checks.lostAckReconciliation.afterDescriptionOverwriteDisposition, 'committed');
+
+    // Direct runner checks for exact-operation binding (note: mock tests establish runner behavior only;
+    // the live dual-release probe establishes the upstream app contract):
+    const authHeader = {
+      Authorization: `Basic ${Buffer.from('apikey:author-tok').toString('base64')}`,
+      'Content-Type': 'application/json',
+    };
+    const approverHeader = {
+      Authorization: `Basic ${Buffer.from('apikey:approver-tok').toString('base64')}`,
+      'Content-Type': 'application/json',
+    };
+    const createRes = await fetch(`${op13.url}/api/v3/projects/demo-proj/work_packages`, {
+      method: 'POST',
+      headers: authHeader,
+      body: JSON.stringify({ subject: 'Draft', description: { raw: 'init' } }),
+    });
+    const createdWp = await createRes.json();
+    const wpId = createdWp.id;
+    const wpState = op13.wps.get(wpId);
+
+    // (a) Intervening edit at `journal.version = preCommitLockVersion + 2` (even by same user with unmarked UI edit)
+    //     MUST NOT be mistaken for success -> `unknown`, 0 extra PATCH requests:
+    await fetch(`${op13.url}/api/v3/work_packages/${wpId}`, {
+      method: 'PATCH',
+      headers: authHeader,
+      body: JSON.stringify({
+        lockVersion: 0,
+        description: { raw: 'Unmarked edit that bumped lockVersion to 1 (journal.version = 2)' },
+      }),
+    });
+    const patchesBeforeInterveningCheck = wpState.patchCount;
+    const interveningSameUser = await reconcileOpenProjectLostAck({
+      baseUrl: op13.url,
+      workPackageId: wpId,
+      apiToken: 'author-tok',
+      preCommitLockVersion: 0,
+      expectedOperation: {
+        clientOperationId: 'op-never-sent',
+        expectedActorHref: '/api/v3/users/101',
+        intendedChanges: { descriptionRaw: 'Intended review body' },
+      },
+      retryIfSafe: true,
+    });
+    assert.equal(interveningSameUser.disposition, 'unknown');
+    assert.equal(interveningSameUser.reason, 'intervening-or-unbound-journal-at-expected-version');
+    assert.equal(interveningSameUser.extraWritesSent, 0);
+    assert.equal(wpState.patchCount, patchesBeforeInterveningCheck);
+    assert.equal(interveningSameUser.allowRetryAtPreCommitVersion, false);
+
+    // (b) Token string copied into `journalNotes` by wrong actor or with missing intended field change -> `unknown` (`0` retries):
+    const spoofTargetOp = {
+      clientOperationId: 'op-spoof-check',
+      expectedActorHref: '/api/v3/users/101',
+      intendedChanges: { subject: 'Authorized Final Subject', descriptionRaw: 'Authorized Body' },
+    };
+    const spoofToken = computeOpenProjectOperationBinding({
+      workPackageId: wpId,
+      preCommitLockVersion: 1,
+      expectedActorHref: spoofTargetOp.expectedActorHref,
+      intendedChanges: spoofTargetOp.intendedChanges,
+      clientOperationId: spoofTargetOp.clientOperationId,
+    });
+    // Approver writes `spoofToken` in `journalNotes` WITHOUT changing `subject` to `'Authorized Final Subject'`:
+    await fetch(`${op13.url}/api/v3/work_packages/${wpId}`, {
+      method: 'PATCH',
+      headers: approverHeader,
+      body: JSON.stringify({
+        lockVersion: 1,
+        subject: 'Different Subject',
+        description: { raw: 'Different Body' },
+        journalNotes: `Copied ${spoofToken}`,
+      }),
+    });
+    const mismatchedJournalCheck = await reconcileOpenProjectLostAck({
+      baseUrl: op13.url,
+      workPackageId: wpId,
+      apiToken: 'author-tok',
+      preCommitLockVersion: 1,
+      expectedOperation: spoofTargetOp,
+      retryIfSafe: true,
+    });
+    assert.equal(mismatchedJournalCheck.disposition, 'unknown');
+    assert.equal(mismatchedJournalCheck.reason, 'journal-token-present-but-operation-fields-or-actor-mismatch');
+    assert.equal(mismatchedJournalCheck.extraWritesSent, 0);
+    assert.equal(mismatchedJournalCheck.allowRetryAtPreCommitVersion, false);
+
+    // (c) Retry `PATCH` HTTP 500 error and socket-drop timeout -> explicit `unknown` (forbids blind retry):
+    const op500 = {
+      clientOperationId: 'op-500',
+      expectedActorHref: '/api/v3/users/101',
+      intendedChanges: { subject: 'Subject 500' },
+    };
+    const tok500 = computeOpenProjectOperationBinding({
+      workPackageId: wpId,
+      preCommitLockVersion: 2,
+      expectedActorHref: op500.expectedActorHref,
+      intendedChanges: op500.intendedChanges,
+      clientOperationId: op500.clientOperationId,
+    });
+    wpState.nextPatchFailureMode = 'http-500';
+    const retry500 = await reconcileOpenProjectLostAck({
+      baseUrl: op13.url,
+      workPackageId: wpId,
+      apiToken: 'author-tok',
+      preCommitLockVersion: 2,
+      expectedOperation: op500,
+      payload: { subject: 'Subject 500', journalNotes: tok500 },
+      retryIfSafe: true,
+    });
+    assert.equal(retry500.disposition, 'unknown');
+    assert.equal(retry500.extraWritesSent, 1);
+    assert.equal(retry500.allowRetryAtPreCommitVersion, false);
+    assert.equal(retry500.forbidBlindRetryOnBumpedVersion, true);
+
+    wpState.nextPatchFailureMode = 'drop-socket-before-commit';
+    const retryDropped = await reconcileOpenProjectLostAck({
+      baseUrl: op13.url,
+      workPackageId: wpId,
+      apiToken: 'author-tok',
+      preCommitLockVersion: 2,
+      expectedOperation: op500,
+      payload: { subject: 'Subject 500', journalNotes: tok500 },
+      retryIfSafe: true,
+    });
+    assert.equal(retryDropped.disposition, 'unknown');
+    assert.equal(retryDropped.extraWritesSent, 1);
+    assert.equal(retryDropped.allowRetryAtPreCommitVersion, false);
+    assert.equal(retryDropped.forbidBlindRetryOnBumpedVersion, true);
+
+    // (d) Safe version-pinned retry when `lockVersion === preCommitLockVersion` succeeds cleanly,
+    //     and subsequent read-first call sends 0 extra writes even after later overwrite:
+    const safeOp = {
+      clientOperationId: 'op-safe-apply',
+      expectedActorHref: '/api/v3/users/101',
+      intendedChanges: { subject: 'Committed Subject', descriptionRaw: 'Committed Description' },
+    };
+    const safeTok = computeOpenProjectOperationBinding({
+      workPackageId: wpId,
+      preCommitLockVersion: 2,
+      expectedActorHref: safeOp.expectedActorHref,
+      intendedChanges: safeOp.intendedChanges,
+      clientOperationId: safeOp.clientOperationId,
+    });
+    const safeRetryApplied = await reconcileOpenProjectLostAck({
+      baseUrl: op13.url,
+      workPackageId: wpId,
+      apiToken: 'author-tok',
+      preCommitLockVersion: 2,
+      expectedOperation: safeOp,
+      payload: {
+        subject: 'Committed Subject',
+        description: { raw: 'Committed Description' },
+        journalNotes: `Commit ${safeTok}`,
+      },
+      retryIfSafe: true,
+    });
+    assert.equal(safeRetryApplied.disposition, 'committed');
+    assert.equal(safeRetryApplied.extraWritesSent, 1);
+    assert.equal(safeRetryApplied.reconciledToSingleDurableEffect, true);
+
+    await fetch(`${op13.url}/api/v3/work_packages/${wpId}`, {
+      method: 'PATCH',
+      headers: approverHeader,
+      body: JSON.stringify({
+        lockVersion: 3,
+        subject: 'Overwritten Subject',
+        description: { raw: 'Overwritten Description' },
+      }),
+    });
+    const patchesBeforeSecondRead = wpState.patchCount;
+    const readFirstAfterOverwrite = await reconcileOpenProjectLostAck({
+      baseUrl: op13.url,
+      workPackageId: wpId,
+      apiToken: 'author-tok',
+      preCommitLockVersion: 2,
+      expectedOperation: safeOp,
+      retryIfSafe: true,
+    });
+    assert.equal(readFirstAfterOverwrite.disposition, 'committed');
+    assert.equal(readFirstAfterOverwrite.extraWritesSent, 0);
+    assert.equal(wpState.patchCount, patchesBeforeSecondRead);
 
     const readyErp = await probeErpNextAfterOpenProjectQualifies({}, dual);
     assert.equal(readyErp.status, 'awaiting-owner-approved-erpnext-containers-and-accounts');
