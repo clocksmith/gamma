@@ -415,7 +415,7 @@ export function evaluateSuffixEligibility({
     if (decision.kind !== 'step') continue;
 
     if (profile.origin !== origin || profile.routePattern !== routePattern) continue;
-    if (profile.scope && expectedScope && profile.scope !== expectedScope) {
+    if (!profile.scope || !expectedScope || profile.scope !== expectedScope) {
       rejections.push({ nodeId, reason: 'scope-mismatch' });
       continue;
     }

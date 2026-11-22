@@ -591,4 +591,23 @@ test('Write-boundary races & scope isolation (#88): post-validation lock/revocat
   assert.equal((await wrongScopeSess.replay()).reason, 'unseen-branch');
   assert.equal(wrongScopePage.calls.length, 0);
   assert.equal(wrongScopeSess.certifiedSuffixRejoins.length, 0);
+  assert.equal(wrongScopeSess.lastSuffixRejection?.reason, 'scope-mismatch');
+
+  // Legacy profile with no recorded scope also fails closed with scope-mismatch (Rule 2.3).
+  const rawExport = dag.export();
+  rawExport.suffixProfiles = rawExport.suffixProfiles.map(([id, prof]) => {
+    const copy = structuredClone(prof);
+    delete copy.scope;
+    return [id, copy];
+  });
+  const legacyDag = TraceDag.restore(rawExport, limits);
+  const legacyPage = mkPage([elB, elA]);
+  const legacySess = legacyDag.session({
+    owner: { workspaceId: 'w' }, pageId: 'main', intent: 'edit', template: 'tmpl-v1',
+    accountScope: 'tenant-alpha', inputs: { name: 'Ada', city: 'London' },
+    service: legacyPage, suffixEligibility: true,
+  });
+  assert.equal((await legacySess.replay()).reason, 'unseen-branch');
+  assert.equal(legacyPage.calls.length, 0);
+  assert.equal(legacySess.lastSuffixRejection?.reason, 'scope-mismatch');
 });
