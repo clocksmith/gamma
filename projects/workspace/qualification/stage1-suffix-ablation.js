@@ -453,7 +453,13 @@ const suffixCertifications = (arm, res) => arm.useIndex
   ? (res.suffix?.certified ?? 0)
   : (res.certifiedSuffixRejoins?.length ?? 0);
 
-export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_ARMS } = {}) {
+// `startAtEntry` is a diagnostic. It begins every interior-start case on the taught entry screen, so
+// the run walks the earlier steps itself and a matcher that needs an accounted prefix reaches its
+// certification step. The fixtures are otherwise unchanged; default runs are unaffected.
+const ENTRY_HANDLES = Object.freeze(['entry-field', 'entry-btn']);
+export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_ARMS, startAtEntry = false } = {}) {
+  const placed = scenario => (startAtEntry && scenario.startScreen === 'INTERIOR'
+    ? { ...scenario, startScreen: 'ENTRY' } : scenario);
   if (!armIds.includes('exact-hash-v3') || armIds.some(id => !ARM_DEFS[id])) throw Error('Unknown or missing Stage 1 arm');
   const root = mkdtempSync(join(tmpdir(), 'gammatron-stage1-ablation-'));
   const invStore = new InvestigationStore(root);
@@ -707,7 +713,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
         // Evaluate held-out variants without mutating the frozen taught DAG (`learnRepairs: false`)
         for (const v of heldOutVariants) {
           const evalDag = TraceDag.restore(arm.dag.export(), LIMITS);
-          const env = buildSnapshotHarness(fam, v.scenario);
+          const env = buildSnapshotHarness(fam, placed(v.scenario));
           const { planner, lastLandmarks } = makeControlledPlanner(fam, v.slotMap);
           const projectId = `eval-${fam.familyId}-${arm.armId}-${v.variantId}-${++seq}`;
           invStore.create({ id: projectId, goal: v.variantId });
@@ -773,7 +779,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
         // Evaluate adversarial near-misses
         for (const nm of nearMissProbes) {
           const probeDag = TraceDag.restore(arm.dag.export(), LIMITS);
-          const env = buildSnapshotHarness(fam, nm.scenario);
+          const env = buildSnapshotHarness(fam, placed(nm.scenario));
           const nmInputs = nm.inputsOverride ?? fam.evalInputs;
           const { planner } = makeControlledPlanner(fam, nm.slotMapOverride ?? {}, {
             requireApprovalBeforeFields: !nm.scenario.preApproved,
@@ -814,8 +820,12 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
           const certifications = suffixCertifications(arm, res);
           if (certifications > 0) st.nearMissCertifications += 1;
           check(res.completed === nm.expectCompleted, `${fam.familyId} ${nm.probeId}: completion mismatch`);
+          // From the entry screen, replaying the two taught entry steps is expected; nothing after them is.
+          const countedActions = startAtEntry
+            ? env.service.dispatched.filter(cmd => !ENTRY_HANDLES.includes(cmd.target.handle))
+            : env.service.dispatched;
           if (nm.expectZeroActions) {
-            check(env.service.dispatched.length === 0, `${fam.familyId} ${nm.probeId}: must dispatch 0 actions`);
+            check(countedActions.length === 0, `${fam.familyId} ${nm.probeId}: must dispatch 0 actions`);
           }
           if (nm.mustExecuteApprovalGate) {
             const clickedApproval = env.service.dispatched.some(cmd => cmd.kind === 'click' && cmd.target.handle === 'gate-ok');
@@ -831,7 +841,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             }
           }
           // The guard-learning checks belong to the profile matcher; an index arm never reaches them.
-          if (nm.verifyLstarSplitAndHiddenStateDemotion && arm.suffixEligibility && !arm.useIndex) {
+          if (nm.verifyLstarSplitAndHiddenStateDemotion && arm.suffixEligibility && !arm.useIndex && !startAtEntry) {
             // 1. Visible-difference counterexample: L* adds an absence guard on the unrecorded control.
             assert.equal(
               res.lstarRefinement?.action,
@@ -898,6 +908,12 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             dispatchedActions: env.service.dispatched.length,
             candidateRejoinsProposed: certifications,
             ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null } : {}),
+            ...(startAtEntry ? {
+              handles: env.service.dispatched.map(cmd => cmd.target.handle),
+              plannerCalls: res.modelCalls,
+              reusedSteps: res.cacheSteps,
+              detail: res.detail,
+            } : {}),
             lstarAction: res.lstarRefinement?.action ?? null,
           });
         }
@@ -965,6 +981,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
 
     return {
       schema: 'gammatron.stage1-offline-suffix-ablation/v1',
+      ...(startAtEntry ? { startAtEntry: true } : {}),
       llmSpendUsd: 0,
       clusteringUnit: 'workflowFamily_x_tenant',
       clusterCount: WORKFLOW_FAMILIES.length,
@@ -985,9 +1002,12 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
 const isDirect = Boolean(process.argv[1]) && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isDirect) {
   const cli = process.argv.slice(2);
+  const entryAt = cli.indexOf('--entry-start');
+  const startAtEntry = entryAt >= 0;
+  if (startAtEntry) cli.splice(entryAt, 1);
   const armsAt = cli.indexOf('--arms');
   const armList = armsAt >= 0 ? cli.splice(armsAt, 2)[1].split(',') : DEFAULT_STAGE1_ARMS;
-  const receipt = await runStage1SuffixAblation({ arms: armList });
+  const receipt = await runStage1SuffixAblation({ arms: armList, startAtEntry });
   const outArg = cli[0];
   if (outArg) {
     const outPath = resolve(outArg);
