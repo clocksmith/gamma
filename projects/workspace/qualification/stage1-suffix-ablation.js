@@ -452,6 +452,11 @@ export const DEFAULT_STAGE1_ARMS = Object.freeze(['exact-hash-v3', 'suffix-eligi
 const suffixCertifications = (arm, res) => arm.useIndex
   ? (res.suffix?.certified ?? 0)
   : (res.certifiedSuffixRejoins?.length ?? 0);
+// Steps replayed under a suffix match, read from the trace. The profile matcher does not record a
+// rejoin made in the middle of a replay as a certified rejoin, so the count above understates it.
+const suffixReplayedSteps = res => (res.traceEvents ?? []).filter(event =>
+  event.phase === 'certified-suffix-replay' || event.phase === 'suffix-eligible-replay'
+  || event.acceptedWhy === 'suffix-eligible-footprint-and-dirty-form-guards-verified').length;
 
 // `startAtEntry` is a diagnostic. It begins every interior-start case on the taught entry screen, so
 // the run walks the earlier steps itself and a matcher that needs an accounted prefix reaches its
@@ -770,6 +775,8 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             plannerCalls: res.modelCalls,
             reusedSteps: res.cacheSteps,
             suffixCertifications: suffixCertifications(arm, res),
+            suffixReplayedSteps: suffixReplayedSteps(res),
+            dispatchedActions: env.service.dispatched.length,
             ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null, indexNodes: arm.index.nodes.size } : {}),
             certifiedRejoinK2: certifiedRejoin && plannerStepsUsed <= 2,
             certifiedRejoinK3: certifiedRejoin && plannerStepsUsed <= 3,
@@ -907,6 +914,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             completed: res.completed,
             dispatchedActions: env.service.dispatched.length,
             candidateRejoinsProposed: certifications,
+            suffixReplayedSteps: suffixReplayedSteps(res),
             ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null } : {}),
             ...(startAtEntry ? {
               handles: env.service.dispatched.map(cmd => cmd.target.handle),
