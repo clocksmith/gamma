@@ -12,7 +12,7 @@ import { WorkflowAttempts, attemptErrorCode } from './workflow-attempts.js';
 const VERSION = 1;
 const HASH = /^[a-f0-9]{64}$/;
 const SOURCE_FILES = ['private-json-file.js', 'workflow-attempts.js', 'workflow-sync.js', 'workflow-store.js', 'workflow-agent.js', 'trace-dag.js', 'trace-graph-dp.js', 'suffix-eligibility.js', 'field-group-scope.js', 'controller.js',
-  'agent.js', '../adapters/page-query.js', '../service.js'];
+  'review-batch.js', 'agent.js', '../adapters/page-query.js', '../service.js'];
 const STATIC_SOURCE_HASHES = Object.freeze(Object.fromEntries(SOURCE_FILES.map(path => [path,
   sha256Hex(readFileSync(new URL(path, import.meta.url)))])));
 const VALIDATED_DAG_CACHE = new Map();
@@ -122,7 +122,7 @@ export class WorkflowStore {
     const dag = state.workflowVersions[pointer.currentVersion].dag;
     return { revision: pointer.revision, hasLearnedGraph: Object.keys(dag.nodes).length > 0 };
   }
-  async checkout(scope) {
+  async checkout(scope, { existingOnly = false } = {}) {
     const id = this.#namespace(scope);
     const initial = this.#read();
     const snapshot = state => {
@@ -131,6 +131,7 @@ export class WorkflowStore {
         dag: state.workflowVersions[pointer.currentVersion].dag });
     };
     if (initial.workflows[id]) return snapshot(initial);
+    if (existingOnly) return null;
     return this.#transaction(state => {
       if (!state.workflows[id]) {
         const versionId = randomUUID();
@@ -232,16 +233,21 @@ export class WorkflowStore {
           revision: persistence.revision ?? null, versionId: persistence.versionId ?? null } });
       attempt = { runId, receiptStored: true };
     } catch (error) { attempt = { runId, receiptStored: false, code: attemptErrorCode(error) }; }
-    if (this.sync && attempt.receiptStored) {
+    if (this.sync && !input.reviewBatchItem && attempt.receiptStored) {
       try { result.synchronization = await this.synchronize(input); }
       catch (error) { result.synchronization = { status: 'pending', code: error.code ?? 'workflow-sync-failed' }; }
     }
     return { ...result, attempt };
   }
-  async #run({ accountScope, verifyAccount, verificationId, taskSourceHashes, disclosurePolicy, ...options }, accounting) {
+  async #run({ accountScope, verifyAccount, verificationId, taskSourceHashes, disclosurePolicy, reviewBatchItem = null, ...options }, accounting) {
     if (typeof verifyAccount !== 'function' || typeof options.verifyReview !== 'function'
       || !identifier(verificationId) || !hashMapValid(taskSourceHashes)) {
       throw Error('Trusted account and review verifiers are required');
+    }
+    if (reviewBatchItem && (options.mode !== 'reuse' || options.planner || options.learnRepairs !== false
+      || !identifier(reviewBatchItem.versionId) || !identifier(reviewBatchItem.recordId)
+      || typeof reviewBatchItem.verifyRecord !== 'function' || typeof reviewBatchItem.authorizeReadOnlyStep !== 'function')) {
+      fail('batch-review-policy-required', 'Batch requires pinned reuse, no planner or learning, and trusted review policy');
     }
     const frozenTaskSources = structuredClone(taskSourceHashes);
     const fieldGroups = options.fieldGroups ? structuredClone(options.fieldGroups) : null;
@@ -270,19 +276,27 @@ export class WorkflowStore {
     const assertContext = async () => {
       options.signal.throwIfAborted();
       if (await verifyAccount(identity) !== accountScope) fail('workflow-account-mismatch', 'Website account does not match this private workflow scope');
+      if (reviewBatchItem && await reviewBatchItem.verifyRecord({ ...identity, accountScope,
+        expectedRecordId: reviewBatchItem.recordId }) !== true) {
+        fail('batch-record-mismatch', 'The trusted verifier did not confirm the intended review record');
+      }
+      options.signal.throwIfAborted();
     };
     await assertContext();
     let synchronization = { status: 'disabled' };
-    if (this.sync) {
+    if (this.sync && !reviewBatchItem) {
       try { synchronization = await this.synchronize(scope); }
       catch (error) {
         if (!error.offline) throw error;
         synchronization = { status: 'offline', code: error.code };
       }
     }
-    const checkout = await this.checkout(scope);
+    const checkout = await this.checkout(scope, { existingOnly: Boolean(reviewBatchItem) });
+    if (reviewBatchItem && checkout?.versionId !== reviewBatchItem.versionId) {
+      fail('batch-version-mismatch', 'Current recipe version differs from the batch pin');
+    }
     const observedModels = new Set();
-    const planner = { identity: options.planner?.identity, next: async (...args) => {
+    const planner = reviewBatchItem ? null : { identity: options.planner?.identity, next: async (...args) => {
       const proposal = await options.planner.next(...args);
       for (const model of proposal.usage?.models ?? []) observedModels.add(model);
       return proposal;
@@ -300,6 +314,14 @@ export class WorkflowStore {
           : policy.fields.some(field => field.kind === step.kind && field.slot === step.slot
             && canonicalJson(field.locator) === canonicalJson(step.locator)));
         if (!permitted) fail('workflow-disclosure-denied', 'Input slot is not authorized for this field and origin');
+        if (reviewBatchItem) {
+          options.signal.throwIfAborted();
+          if (await reviewBatchItem.authorizeReadOnlyStep({ ...identity, accountScope,
+            expectedRecordId: reviewBatchItem.recordId, step: structuredClone(step) }) !== true) {
+            fail('batch-read-only-step-denied', 'Trusted policy did not authorize the step as review-only');
+          }
+          options.signal.throwIfAborted();
+        }
       },
       publishTrace: async trace => { learned = trace; },
     });

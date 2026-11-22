@@ -15,6 +15,7 @@ import { listArtifacts } from './artifact-memory.js';
 import { REJECTION_CODES } from '../errors.js';
 import { createOwnerSession } from '../workflows/owner-session.js';
 import { sha256Hex } from '../journal.js';
+import { driveReviewBatch, prepareReviewBatch, ReviewBatches } from './review-batch.js';
 
 const CORRECTABLE_PROPOSALS = new Set([
   REJECTION_CODES.INVALID_COMMAND, REJECTION_CODES.UNSUPPORTED_CONDITION,
@@ -52,6 +53,8 @@ export class WorkspaceController {
     this.service = service; this.config = config; this.planner = planner; this.active = new Map(); this.owners = new Map(); this.operations = new Map();
     this.workflowStore = workflowStore;
     this.workflowTasks = new Map(workflowTasks);
+    this.reviewBatches = new ReviewBatches(join(stateDir, 'review-batches'));
+    this.batchRuns = new Map();
     mkdirSync(stateDir, { recursive: true, mode: 0o700 }); chmodSync(stateDir, 0o700);
     this.credentialsPath = join(stateDir, 'client-credentials.json');
     this.credentials = existsSync(this.credentialsPath) ? JSON.parse(readFileSync(this.credentialsPath, 'utf8')) : {};
@@ -77,6 +80,7 @@ export class WorkspaceController {
         for (const grant of prior.grants.filter(value => value.ownerId === 'agent')) {
           await this.service.revokeAuthorization({ ...this.admin(id), grantId: grant.grantId });
         }
+        await this.reviewBatches.finish(id, null, 'interrupted', 'batch-restart-review-required');
         if (interrupted?.status === 'running') this.store.run(id, { ...interrupted,
           status: 'needs-attention', detail: 'Service restarted. Review recorded outcomes before explicitly resuming.' });
       });
@@ -100,7 +104,25 @@ export class WorkspaceController {
     settled.then(() => { if (this.operations.get(id) === settled) this.operations.delete(id); });
     return result;
   }
-  takeOver(id) { return this.exclusive(id, () => this.takeOverNow(id)); }
+  takeOver(id) {
+    return this.exclusive(id, async () => {
+      const pending = this.batchRuns.get(id);
+      if (pending) {
+        await this.reviewBatches.cancel(id);
+        pending.controller.abort(Object.assign(Error('Human took control'), { code: 'batch-cancelled' }));
+      }
+      const result = await this.takeOverNow(id);
+      const blocked = this.reviewBatches.read(id);
+      if (blocked?.status === 'needs-attention') {
+        const inspected = await this.service.inspect(this.admin(id));
+        for (const grant of inspected.grants.filter(value => value.ownerId === 'agent')) {
+          await this.service.revokeAuthorization({ ...this.admin(id), grantId: grant.grantId });
+        }
+        await this.reviewBatches.finish(id, blocked.id, 'interrupted', 'batch-takeover-recovered');
+      }
+      return result;
+    });
+  }
   async takeOverNow(id) {
     this.active.get(id)?.controller.abort(Error('Human took control'));
     const owner = await this.service.assignOwner({ ...this.admin(id), ownerId: 'human' });
@@ -214,8 +236,32 @@ export class WorkspaceController {
         learnRepairs: definition.learnRepairs ?? true, revision, hasLearnedGraph, fields: this.#workflowFields(definition) };
     });
   }
-  runPersonalWorkflow(id, { template, pageId = 'main', inputs, mode } = {}) {
+  // Trusted host API only. No browser, planner or HTTP caller supplies its own policy.
+  async runPersonalWorkflowBatch(id, input) {
+    const policy = this.workflowTasks.get(input?.template)?.reviewBatch;
+    const planned = prepareReviewBatch(input, policy, this.config.maxInputBytes);
     return this.exclusive(id, async () => {
+      this.admin(id);
+      if (!this.workflowStore || this.active.has(id) || this.batchRuns.has(id)) throw Error('Workspace is not ready for a batch');
+      const job = await this.reviewBatches.reserve(id, planned);
+      const controller = new AbortController();
+      const budget = AbortSignal.timeout(Math.max(1, job.deadline - Date.now()));
+      const signal = AbortSignal.any([controller.signal, budget]);
+      const done = driveReviewBatch(this.reviewBatches, job, planned.manifest, signal,
+        item => this.#startPersonalWorkflow(id, { ...item, template: planned.template, mode: 'reuse' },
+          { id: job.id, signal, versionId: job.versionId, recordId: item.recordId, policy: planned.policy }));
+      this.batchRuns.set(id, { controller, done, id: job.id });
+      const release = () => { if (this.batchRuns.get(id)?.id === job.id) this.batchRuns.delete(id); };
+      done.then(release, release);
+      return { batchId: job.id, done };
+    });
+  }
+  reviewBatchStatus(id) { this.admin(id); return this.reviewBatches.read(id); }
+  runPersonalWorkflow(id, input) { return this.#startPersonalWorkflow(id, input); }
+  #startPersonalWorkflow(id, { template, pageId = 'main', inputs, mode } = {}, batch = null) {
+    return this.exclusive(id, async () => {
+      this.reviewBatches.assertAdmission(id, batch?.id ?? null);
+      batch?.signal.throwIfAborted();
       const definition = typeof template === 'string' ? this.workflowTasks.get(template) : null;
       if (!this.workflowStore || !definition || !['learn', 'reuse', 'fresh'].includes(mode)) {
         throw Error('Select an installed personal workflow and explicit mode');
@@ -228,7 +274,7 @@ export class WorkspaceController {
           throw Error(`Provide a string value within budget for workflow slot ${slot}`);
         }
       }
-      const planner = definition.planner ?? this.planner;
+      const planner = batch ? null : definition.planner ?? this.planner;
       if (!planner && mode !== 'reuse') throw Error('Configure BLITZEN_MODEL (or FAWN_MODEL) and the planner API credential before delegating');
       if (this.active.has(id)) throw Error('The prior agent has not settled');
       const before = await this.service.inspect(this.admin(id));
@@ -239,49 +285,86 @@ export class WorkspaceController {
       const { disclosurePolicy, accountScope, verifyAccount, verifyReview, verificationId, taskSourceHashes,
         task, fieldGroups = null, learnRepairs = true } = definition;
       const profile = structuredClone(inputs);
-      await this.service.grantAuthorization({ ...this.admin(id), grantId, ownerId: 'agent',
-        intents: ['personal-workflow'], targetOrigins: [disclosurePolicy.origin],
-        actionKinds: ['fill', 'select', 'click'], pageIds: [pageId], readRegions: null,
-        expiresAt: new Date(Date.now() + this.config.delegationMaxAgeMs).toISOString() });
-      for (const grant of before.grants.filter(value => value.ownerId === 'agent')) {
-        await this.service.revokeAuthorization({ ...this.admin(id), grantId: grant.grantId });
-      }
-      const assigned = await this.service.assignOwner({ ...this.admin(id), ownerId: 'agent' });
-      const owner = createOwnerSession(this.service, { workspaceId: id, ...assigned }).identity;
-      this.owners.set(id, owner);
-      const controller = new AbortController();
-      this.store.activity(id, { event: 'personal-workflow-started', template, mode, grantId });
-      const done = this.workflowStore.run({ template, mode, pageId, inputs: profile,
-        accountScope, verifyAccount, verificationId, taskSourceHashes, disclosurePolicy, fieldGroups, learnRepairs, service: this.service, owner,
-        intent: 'personal-workflow', task, planner, config: this.config, store: this.store,
-        projectId: id, signal: controller.signal,
-        verifyReview: () => verifyReview({ service: this.service, owner, pageId, inputs: profile }),
-      }).then(result => {
-        this.store.activity(id, { event: 'personal-workflow-finished', completed: result.completed,
-          persistence: result.persistence, attempt: result.attempt, modelCalls: result.modelCalls, cacheSteps: result.cacheSteps });
-        return result;
-      }).catch(error => {
-        if (!controller.signal.aborted) {
-          const prior = this.store.get(id).run;
-          this.store.run(id, { id: prior?.id ?? runId, status: 'needs-attention',
-            detail: error.message || 'Personal workflow rejected', turns: prior?.turns ?? 0,
-            usage: prior?.usage ?? [], planner: planner?.identity ?? null });
+      try {
+        batch?.signal.throwIfAborted();
+        await this.service.grantAuthorization({ ...this.admin(id), grantId, ownerId: 'agent',
+          intents: ['personal-workflow'], targetOrigins: [disclosurePolicy.origin],
+          actionKinds: ['fill', 'select', 'click'], pageIds: [pageId], readRegions: null,
+          expiresAt: new Date(Date.now() + this.config.delegationMaxAgeMs).toISOString() });
+        for (const grant of before.grants.filter(value => value.ownerId === 'agent')) {
+          await this.service.revokeAuthorization({ ...this.admin(id), grantId: grant.grantId });
         }
-        this.store.activity(id, { event: 'personal-workflow-rejected', attempt: error.attempt ?? null,
-          code: error.code ?? 'workflow-attempt-failed' });
+        batch?.signal.throwIfAborted();
+        const assigned = await this.service.assignOwner({ ...this.admin(id), ownerId: 'agent' });
+        const owner = createOwnerSession(this.service, { workspaceId: id, ...assigned }).identity;
+        this.owners.set(id, owner);
+        const controller = new AbortController();
+        const signal = batch ? AbortSignal.any([controller.signal, batch.signal]) : controller.signal;
+        const reviewBatchItem = batch ? { versionId: batch.versionId, recordId: batch.recordId,
+          verifyRecord: batch.policy.verifyRecord, authorizeReadOnlyStep: batch.policy.authorizeReadOnlyStep } : null;
+        signal.throwIfAborted();
+        this.store.activity(id, { event: 'personal-workflow-started', template, mode, grantId });
+        let workflowAttempt = null;
+        const done = this.workflowStore.run({ template, mode, pageId, inputs: profile,
+          accountScope, verifyAccount, verificationId, taskSourceHashes, disclosurePolicy, fieldGroups, learnRepairs: batch ? false : learnRepairs, service: this.service, owner,
+          intent: 'personal-workflow', task, planner, config: this.config, store: this.store,
+          projectId: id, signal, reviewBatchItem,
+          verifyReview: () => verifyReview({ service: this.service, owner, pageId, inputs: profile }),
+        }).then(result => {
+          workflowAttempt = result.attempt;
+          this.store.activity(id, { event: 'personal-workflow-finished', completed: result.completed,
+            persistence: result.persistence, attempt: result.attempt, modelCalls: result.modelCalls, cacheSteps: result.cacheSteps });
+          return result;
+        }).catch(error => {
+          workflowAttempt = error.attempt ?? workflowAttempt;
+          if (!controller.signal.aborted) {
+            const prior = this.store.get(id).run;
+            this.store.run(id, { id: prior?.id ?? runId, status: 'needs-attention',
+              detail: error.message || 'Personal workflow rejected', turns: prior?.turns ?? 0,
+              usage: prior?.usage ?? [], planner: planner?.identity ?? null });
+          }
+          this.store.activity(id, { event: 'personal-workflow-rejected', attempt: error.attempt ?? null,
+            code: error.code ?? 'workflow-attempt-failed' });
+          throw error;
+        }).finally(() => this.exclusive(id, async () => {
+          try {
+            await this.#releaseWorkflowGrant(id, grantId,
+              this.owners.get(id)?.ownerGeneration === owner.ownerGeneration);
+          } catch (error) {
+            if (!batch) throw error;
+            throw Object.assign(Error('Grant cleanup did not finish', { cause: error }),
+              { code: 'batch-child-cleanup-failed', attempt: workflowAttempt });
+          }
+        }));
+        this.active.set(id, { id: runId, done, controller });
+        const release = () => { if (this.active.get(id)?.id === runId) this.active.delete(id); };
+        done.then(release, release);
+        return { runId, done };
+      } catch (error) {
+        // Setup may have installed the grant or changed ownership before rejecting.
+        // Fence conservatively even if the assignment's reply was never received.
+        try { await this.#releaseWorkflowGrant(id, grantId, true); }
+        catch (cleanupError) {
+          throw Object.assign(new AggregateError([error, cleanupError], 'Workflow setup and cleanup failed'),
+            { code: 'workflow-setup-cleanup-failed' });
+        }
         throw error;
-      }).finally(() => this.exclusive(id, async () => {
-        await this.service.revokeAuthorization({ ...this.admin(id), grantId });
-        if (this.owners.get(id)?.ownerGeneration === owner.ownerGeneration) await this.takeOverNow(id);
-      }));
-      this.active.set(id, { id: runId, done, controller });
-      const release = () => { if (this.active.get(id)?.id === runId) this.active.delete(id); };
-      done.then(release, release);
-      return { runId, done };
+      }
     });
+  }
+  async #releaseWorkflowGrant(id, grantId, fence) {
+    const errors = [];
+    try { await this.service.revokeAuthorization({ ...this.admin(id), grantId }); }
+    catch (error) { errors.push(error); }
+    if (fence) {
+      try { await this.takeOverNow(id); }
+      catch (error) { errors.push(error); }
+    }
+    if (errors.length) throw new AggregateError(errors, 'Personal workflow grant or ownership cleanup failed');
   }
   delegate(id, input) { return this.exclusive(id, () => this.delegateNow(id, input)); }
   async delegateNow(id, { pageIds, origins, regions = null, actionKinds, task, shareRecords = false, uploadFiles, resume = false, requiredCompletion }) {
+    this.reviewBatches.assertAdmission(id);
     // An omitted contract on resume keeps the trusted prior delegation contract. Explicit null clears it.
     const priorContract = resume ? this.store.get(id).activity.findLast(event => event.event === 'delegated')?.requiredCompletion : null;
     const contract = completionContract(requiredCompletion === undefined ? priorContract ?? null : requiredCompletion);
@@ -449,6 +532,11 @@ export class WorkspaceController {
   revoke(id, { grantId }) {
     return this.exclusive(id, async () => {
       await this.service.revokeAuthorization({ ...this.admin(id), grantId });
+      const pending = this.batchRuns.get(id);
+      if (pending) {
+        await this.reviewBatches.cancel(id);
+        pending.controller.abort(Object.assign(Error('Workflow grant revoked'), { code: 'batch-cancelled' }));
+      }
       return this.takeOverNow(id);
     });
   }
@@ -470,8 +558,14 @@ export class WorkspaceController {
   }
   /** With `release` (the service close), a browser that did not close cleanly is recorded for whoever resumes. */
   async close({ release = null } = {}) {
-    for (const id of this.active.keys()) await this.takeOver(id);
-    await Promise.all([...this.active.values()].map(value => value.done));
+    const ids = new Set([...this.active.keys(), ...(this.batchRuns?.keys() ?? [])]);
+    const settled = Promise.allSettled([...(this.batchRuns?.values() ?? []), ...this.active.values()].map(value => value.done));
+    const errors = [];
+    for (const id of ids) {
+      try { await this.takeOver(id); }
+      catch (error) { errors.push(error); }
+    }
+    for (const result of await settled) if (result.status === 'rejected') errors.push(result.reason);
     try {
       const { releases = [] } = release ? await release() ?? {} : {};
       for (const value of releases) {
@@ -482,6 +576,8 @@ export class WorkspaceController {
         if (value.release !== 'graceful' || earlier) this.store.activity(value.workspaceId, { event: 'browser-released', release: value.release,
           forced: value.release === 'forced', ...(value.survivors ? { survivors: value.survivors } : {}), ...(value.errors ? { errors: value.errors } : {}) });
       }
-    } finally { this.store.close(); }
+    } catch (error) { errors.push(error); }
+    finally { this.store.close(); }
+    if (errors.length) throw new AggregateError(errors, 'Workspace shutdown reported errors');
   }
 }
