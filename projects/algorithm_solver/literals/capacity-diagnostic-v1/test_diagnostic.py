@@ -226,6 +226,36 @@ class DiagnosticTests(unittest.TestCase):
             self.assertTrue(r["construction"]["byteExactVerified"])
             self.assertLessEqual(r["construction"]["dictionarySize"], r["budget"])
 
+    def test_nullspace_kernel_self_overlap_dedup_counterexample_regression(self):
+        # Adversarial referee Bug #1 regression: tok1='AxBBCAxB' overlaps itself inside
+        # tok2='AxBBCAxBBCAxB' with identical S_free mask; dropping tok2 falsely gave LB=8 > OPT=7.
+        progs_w2 = ["AxBBCAxBBCAxBpAABBqx", "AxBBCAxBBCAxBrAABBsx"]
+        r_w2 = diagnose_full_corpus(progs_w2, k=2, budget=7)
+        self.assertEqual(r_w2["status"], "FEASIBLE")
+        self.assertEqual(r_w2["certifiedLowerBound"], 7)
+        self.assertEqual(r_w2["construction"]["dictionarySize"], 7)
+        self.assertTrue(r_w2["construction"]["byteExactVerified"])
+
+        progs_u = ["pAxBBCAxBBCAxB", "qAABB", "rx", "pp", "qq", "rr", "xx"]
+        r_u = diagnose_full_corpus(progs_u, k=1, budget=6)
+        self.assertEqual(r_u["certifiedLowerBound"], 6)
+        self.assertNotEqual(r_u["status"], "IMPOSSIBLE")
+
+    def test_nullspace_kernel_overlap_frontier_continuation_regression(self):
+        # Adversarial referee Bug #2 regression: {'ABC', 'CDBA'} covers all S_free bits (need_mask==0)
+        # via overlap on 'ABCDBABC' with 1 slot still free (limit_t=3); returning early falsely gave LB=8 > OPT=7.
+        progs_w2 = ["ABCDBABCxCDBAyABC", "ABCDBABCzCDBAwABC"]
+        r_w2 = diagnose_full_corpus(progs_w2, k=2, budget=7)
+        self.assertEqual(r_w2["status"], "FEASIBLE")
+        self.assertEqual(r_w2["certifiedLowerBound"], 7)
+        self.assertEqual(r_w2["construction"]["dictionarySize"], 7)
+        self.assertTrue(r_w2["construction"]["byteExactVerified"])
+
+        progs_u = ["pABCDBABC", "qCDBA", "rABC", "pp", "qq", "rr"]
+        r_u = diagnose_full_corpus(progs_u, k=1, budget=6)
+        self.assertEqual(r_u["certifiedLowerBound"], 6)
+        self.assertNotEqual(r_u["status"], "IMPOSSIBLE")
+
 
 if __name__ == "__main__":
     unittest.main()

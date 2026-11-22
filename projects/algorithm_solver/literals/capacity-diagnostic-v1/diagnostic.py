@@ -580,15 +580,28 @@ def nullspace_kernel_certificate(
         if m:
             mask_to_toks[m].append(tok)
 
-    # Exact lossless deduplication: if tok1 is a substring of tok2 and covers the exact same
-    # S_free occurrences in B_free, tok1's flanks in tok2 lie strictly in S_det, so tok1 parses
-    # whenever tok2 does. Keep all inclusion-minimal tokens per mask.
+    # Exact lossless deduplication: if tok1 is a substring of tok2 (tok2 = u + tok1 + v) such that
+    # NEITHER u NOR v contains any character of S_free, then every occurrence of tok2 in any parse
+    # can be replaced in-place by singletons(u) + [tok1] + singletons(v) with zero overlap risk.
+    def _has_sdet_only_flanks(tok1: str, tok2: str) -> bool:
+        start = 0
+        t1_len = len(tok1)
+        while True:
+            idx = tok2.find(tok1, start)
+            if idx == -1:
+                return False
+            if not any(ch in s_free_set for ch in tok2[:idx]) and not any(
+                ch in s_free_set for ch in tok2[idx + t1_len :]
+            ):
+                return True
+            start = idx + 1
+
     items: list[tuple[int, str]] = []
     for m, toks in mask_to_toks.items():
         toks.sort(key=lambda t: (len(t), t))
         kept: list[str] = []
         for t in toks:
-            if not any(prev in t for prev in kept):
+            if not any(_has_sdet_only_flanks(prev, t) for prev in kept):
                 kept.append(t)
         for t in kept:
             items.append((m, t))
@@ -610,8 +623,48 @@ def nullspace_kernel_certificate(
                 return
             if need_mask == 0:
                 cand_dict = s_det_pool + [items[i][1] for i in chosen_idxs]
-                if all(parse_program(b, cand_dict) is not None for b in b_free):
+                bad_block = next((b for b in b_free if parse_program(b, cand_dict) is None), None)
+                if bad_block is None:
                     found = cand_dict
+                    return
+                # Overlap conflict: all S_free bits were covered, yet bad_block failed non-overlapping parse.
+                # Compute DP reachability on bad_block under cand_dict; every valid extension MUST add a
+                # frontier token crossing from reach[a]==True to reach[b]==False (100% sound & complete).
+                if len(chosen_idxs) >= limit_t:
+                    return
+                bn = len(bad_block)
+                reach = [False] * (bn + 1)
+                reach[0] = True
+                by_first_c: dict[str, list[str]] = defaultdict(list)
+                for tok in cand_dict:
+                    if tok:
+                        by_first_c[tok[0]].append(tok)
+                for pos in range(bn):
+                    if not reach[pos]:
+                        continue
+                    for tok in by_first_c.get(bad_block[pos], ()):
+                        end = pos + len(tok)
+                        if end <= bn and not reach[end] and bad_block.startswith(tok, pos):
+                            reach[end] = True
+                chosen_set = set(chosen_idxs)
+                for i, (_m, tok) in enumerate(items):
+                    if i in chosen_set:
+                        continue
+                    tlen = len(tok)
+                    st = 0
+                    crosses_frontier = False
+                    while True:
+                        idx = bad_block.find(tok, st)
+                        if idx == -1:
+                            break
+                        if reach[idx] and not reach[idx + tlen]:
+                            crosses_frontier = True
+                            break
+                        st = idx + 1
+                    if crosses_frontier:
+                        search(0, chosen_idxs + [i])
+                        if found is not None or aborted:
+                            return
                 return
             if len(chosen_idxs) >= limit_t:
                 return
