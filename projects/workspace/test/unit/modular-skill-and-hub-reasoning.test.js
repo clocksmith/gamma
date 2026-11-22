@@ -489,19 +489,17 @@ function el(role, label, tag, inputType, handle, value = '', extra = {}) {
     assert.equal(mPrefill.res.completed, true);
     assert.equal(mPrefill.turns, 0);
 
-    // 2b. Hub reasoning + unavailable-prerequisite write gate:
+    // 2b. Hub reasoning + unavailable-prerequisite write gate (SAFE BY DEFAULT when `requireVerifiedEntryPrerequisites` is omitted):
     // Untaken branch A2 returns `holds: false`, taken branch A1 has one `unavailable` predicate:
-    // - Under `requireVerifiedEntryPrerequisites: true` without live verification: does NOT say `attestation-refuted`,
+    // - By default (`requireVerifiedEntryPrerequisites` omitted -> `true`): does NOT say `attestation-refuted`,
     //   blocks write before dispatch (`0` writes)!
     const gBlocked = await runArm(
       'graph',
       { startScreen: 'hub', attestMode: 'a1-unavailable-a2-false' },
-      { requireVerifiedEntryPrerequisites: true },
     );
     const mBlocked = await runArm(
       'modular',
       { startScreen: 'hub', attestMode: 'a1-unavailable-a2-false' },
-      { requireVerifiedEntryPrerequisites: true },
     );
     assert.equal(gBlocked.res.completed, false);
     assert.notEqual(gBlocked.res.detail, 'Prerequisite attestation refused mid-workflow entry');
@@ -658,6 +656,47 @@ function el(role, label, tag, inputType, handle, value = '', extra = {}) {
     assert.equal(gMultiRes.completed, true);
     assert.equal(gMultiTurns, 0, 'Bellman DP eliminates infeasible B1 branch at Hub in 0 planner turns');
 
+    // Default `attested-modular-skill` (`allowDownstreamLookahead: true`, `maxLookaheadDepth: 6` by default)
+    // eliminates infeasible Track B1 in 0 planner turns (matching Bellman DP on bounded-horizon C3):
+    const mLookaheadSite = createSite({ branchA: 'a1', branchB: 'b2', multiExitHub: true, inputs: partialInputs });
+    let mLookaheadTurns = 0;
+    const mLookaheadSkill = createAttestedSkillPlanner({
+      book: AttestedSkillBook.restore(multiBook.export()),
+      planner: { identity: { model: 'stub' }, next: async (...a) => { mLookaheadTurns += 1; return mLookaheadSite.planner.next(...a); } },
+      allowSafeJumps: true,
+      allowCallableSharedSuffixes: true,
+      attestPrerequisites: mLookaheadSite.attestPrerequisites,
+      recordId: partialInputs.hubLot,
+    });
+    const emLkId = mkProj('emlk');
+    const mLookaheadRes = await runWorkflow({
+      dag: new TraceDag(LIMITS),
+      mode: 'fresh',
+      service: mLookaheadSite.service,
+      owner: OWNER,
+      pageId: emLkId,
+      intent: 'fab-multi',
+      template: 'fab-multi-v1',
+      goal: 'review',
+      accountScope: 'acct-fab',
+      recordId: partialInputs.hubLot,
+      inputs: partialInputs,
+      intermediateClicks,
+      observationLocators,
+      task: 'fab',
+      planner: mLookaheadSkill,
+      config: CONFIG,
+      store,
+      projectId: emLkId,
+      verifyReview: mLookaheadSite.verifyReview,
+      signal: new AbortController().signal,
+      includeFormState: true,
+    });
+    assert.equal(mLookaheadRes.completed, true);
+    assert.equal(mLookaheadTurns, 0, 'Default modular skill with bounded downstream lookahead completes ONLY-B2 in 0 turns');
+    assert.equal(mLookaheadSite.writes().some(w => w.handle === 'h-b1'), false);
+
+    // Myopic ablation (`allowDownstreamLookahead: false`): hands back once at multi-exit Hub:
     const mMultiSite = createSite({ branchA: 'a1', branchB: 'b2', multiExitHub: true, inputs: partialInputs });
     let mMultiTurns = 0;
     const mMultiSkill = createAttestedSkillPlanner({
@@ -665,6 +704,7 @@ function el(role, label, tag, inputType, handle, value = '', extra = {}) {
       planner: { identity: { model: 'stub' }, next: async (...a) => { mMultiTurns += 1; return mMultiSite.planner.next(...a); } },
       allowSafeJumps: true,
       allowCallableSharedSuffixes: true,
+      allowDownstreamLookahead: false,
       attestPrerequisites: mMultiSite.attestPrerequisites,
       recordId: partialInputs.hubLot,
     });
@@ -733,6 +773,44 @@ function el(role, label, tag, inputType, handle, value = '', extra = {}) {
     assert.equal(gB1Res.completed, true);
     assert.equal(gB1Turns, 0, 'Bellman DP eliminates infeasible B2 branch at Hub in 0 planner turns');
 
+    const mB1LookSite = createSite({ branchA: 'a2', branchB: 'b1', multiExitHub: true, inputs: partialInputsB1 });
+    let mB1LookTurns = 0;
+    const mB1LookSkill = createAttestedSkillPlanner({
+      book: AttestedSkillBook.restore(multiBook.export()),
+      planner: { identity: { model: 'stub' }, next: async (...a) => { mB1LookTurns += 1; return mB1LookSite.planner.next(...a); } },
+      allowSafeJumps: true,
+      allowCallableSharedSuffixes: true,
+      attestPrerequisites: mB1LookSite.attestPrerequisites,
+      recordId: partialInputsB1.hubLot,
+    });
+    const emB1LkId = mkProj('emb1lk');
+    const mB1LookRes = await runWorkflow({
+      dag: new TraceDag(LIMITS),
+      mode: 'fresh',
+      service: mB1LookSite.service,
+      owner: OWNER,
+      pageId: emB1LkId,
+      intent: 'fab-multi',
+      template: 'fab-multi-v1',
+      goal: 'review',
+      accountScope: 'acct-fab',
+      recordId: partialInputsB1.hubLot,
+      inputs: partialInputsB1,
+      intermediateClicks,
+      observationLocators,
+      task: 'fab',
+      planner: mB1LookSkill,
+      config: CONFIG,
+      store,
+      projectId: emB1LkId,
+      verifyReview: mB1LookSite.verifyReview,
+      signal: new AbortController().signal,
+      includeFormState: true,
+    });
+    assert.equal(mB1LookRes.completed, true);
+    assert.equal(mB1LookTurns, 0, 'Default modular skill with bounded downstream lookahead completes ONLY-B1 in 0 turns');
+    assert.equal(mB1LookSite.writes().some(w => w.handle === 'h-b2'), false);
+
     const mB1Site = createSite({ branchA: 'a2', branchB: 'b1', multiExitHub: true, inputs: partialInputsB1 });
     let mB1Turns = 0;
     const mB1Skill = createAttestedSkillPlanner({
@@ -740,6 +818,7 @@ function el(role, label, tag, inputType, handle, value = '', extra = {}) {
       planner: { identity: { model: 'stub' }, next: async (...a) => { mB1Turns += 1; return mB1Site.planner.next(...a); } },
       allowSafeJumps: true,
       allowCallableSharedSuffixes: true,
+      allowDownstreamLookahead: false,
       attestPrerequisites: mB1Site.attestPrerequisites,
       recordId: partialInputsB1.hubLot,
     });

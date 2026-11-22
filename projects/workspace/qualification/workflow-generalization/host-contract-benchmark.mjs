@@ -971,6 +971,7 @@ export async function runHostContractBenchmark(outPath = null) {
         attestPrerequisites: attestFn,
         requireConditionalWrite: false,
         requireMultiPredicateWrite: false,
+        requireVerifiedEntryPrerequisites: false,
         effectForStep: stepCompletionAndEffect(ordId),
         task: 'Stage formulary override', config: CLIENT_CONFIG, store, projectId: 's4-partial',
         verifyReview: async () => {

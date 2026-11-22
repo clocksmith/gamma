@@ -148,7 +148,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
   suffixIndex = null, suffixEligibility = false, slotRoles = null, inertFormLocators = [], includeFormState = false,
   assertPrerequisite = null, requirePrerequisiteCheck = false,
   requireConditionalWrite = false, requireMultiPredicateWrite = false,
-  requireVerifiedEntryPrerequisites = false,
+  requireVerifiedEntryPrerequisites = true,
   crossScreenRule = false, attestPrerequisites = null, effectForStep = null }) {
   if (!['learn', 'fresh', 'reuse'].includes(mode)) throw Error('Invalid workflow mode');
   if (typeof learnRepairs !== 'boolean') throw Error('Explicit boolean repair-learning policy required');

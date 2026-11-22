@@ -192,22 +192,29 @@ export function compileCallableSubroutines(rawTrajectories, { minOverlap = 0.60 
         status: s.status ?? [],
         page: s.page ?? [],
       })));
-      if (!proc.implementations.some(impl => impl.signature === sig)) {
-        proc.implementations.push({
+      let matchingImpl = proc.implementations.find(impl => impl.signature === sig);
+      if (!matchingImpl) {
+        matchingImpl = {
           implIdx: proc.implementations.length,
           sourceTrajIdx: tIdx,
           signature: sig,
           accountScope: traj.accountScope ?? null,
           terminalStatus: sIdx === segments.length - 1 ? (traj.terminalStatus ?? null) : null,
+          calleeIds: new Set(),
           steps: seg.steps,
-        });
+        };
+        proc.implementations.push(matchingImpl);
+      } else if (sIdx === segments.length - 1 && traj.terminalStatus && !matchingImpl.terminalStatus) {
+        matchingImpl.terminalStatus = traj.terminalStatus;
       }
+      seg.matchingImpl = matchingImpl;
     }
     for (let sIdx = 0; sIdx < segProcIds.length - 1; sIdx += 1) {
       const caller = procs.get(segProcIds[sIdx]);
       const callee = procs.get(segProcIds[sIdx + 1]);
       caller.callees.add(callee.id);
       callee.callers.add(caller.id);
+      segments[sIdx].matchingImpl?.calleeIds.add(callee.id);
     }
   }
 
@@ -245,6 +252,32 @@ function enumerateCallerChains(procs, targetProcId, maxDepth = 16) {
   };
   dfs(targetProcId, [], new Set([targetProcId]));
   return chains;
+}
+
+function hasFeasibleDownstreamCallPath(procs, procId, implIdx, inputs, maxDepth = 6, visited = new Set()) {
+  const proc = procs.get(procId);
+  const impl = proc?.implementations?.[implIdx];
+  if (!proc || !impl) return false;
+  const missingLocalSlot = impl.steps.some(
+    s => s.kind !== 'click' && typeof inputs?.[s.slot] !== 'string',
+  );
+  if (missingLocalSlot) return false;
+  if (impl.terminalStatus !== null || !impl.calleeIds || impl.calleeIds.size === 0 || maxDepth <= 0) {
+    return true;
+  }
+  const nextVisited = new Set(visited);
+  nextVisited.add(procId);
+  for (const calleeId of impl.calleeIds) {
+    if (nextVisited.has(calleeId)) continue;
+    const calleeProc = procs.get(calleeId);
+    if (!calleeProc) continue;
+    for (let cIdx = 0; cIdx < calleeProc.implementations.length; cIdx += 1) {
+      if (hasFeasibleDownstreamCallPath(procs, calleeId, cIdx, inputs, maxDepth - 1, nextVisited)) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 export class AttestedSkillBook {
@@ -370,12 +403,15 @@ export function createAttestedSkillPlanner({
   planner,
   allowSafeJumps = false,
   allowCallableSharedSuffixes = false,
+  allowDownstreamLookahead = allowCallableSharedSuffixes,
+  maxLookaheadDepth = 6,
   attestPrerequisites = null,
   inertFormLocators = [],
   recordId = null,
 }) {
   if (!(book instanceof AttestedSkillBook)) throw Error('createAttestedSkillPlanner requires an AttestedSkillBook');
   const modularMode = Boolean(allowSafeJumps && allowCallableSharedSuffixes);
+  const downstreamLookahead = Boolean(modularMode && allowDownstreamLookahead && maxLookaheadDepth > 0);
   const modeName = modularMode
     ? 'attested-modular-skill'
     : (allowSafeJumps ? 'attested-checkpointed-skill' : 'attested-linear-skill');
@@ -642,6 +678,10 @@ export function createAttestedSkillPlanner({
       return decision;
     };
 
+    const implDownstreamFeasible = (procId, iIdx) =>
+      !downstreamLookahead
+      || hasFeasibleDownstreamCallPath(procs, procId, iIdx, inputs, maxLookaheadDepth);
+
     // 1a. Entry-subroutine selection at turn 0.
     if (activeProcId === null && carriedSteps.length === 0) {
       const entryMatches = [];
@@ -657,7 +697,7 @@ export function createAttestedSkillPlanner({
           }
           if (!check.terminal) {
             const missingSlot = impl.steps.slice(check.idx).some(s => s.kind !== 'click' && typeof inputs[s.slot] !== 'string');
-            if (missingSlot) {
+            if (missingSlot || !implDownstreamFeasible(proc.id, iIdx)) {
               firstFailure = 'missing-input-slot';
               continue;
             }
@@ -693,9 +733,17 @@ export function createAttestedSkillPlanner({
     } else if (activeProcId !== null && !wasHanded) {
       // 1b. Continue inside current subroutine, or call a shared suffix in `activeProc.callees`.
       const activeProc = procs.get(activeProcId);
+      if (activeProc && !implDownstreamFeasible(activeProcId, activeImplIdx)) {
+        const switchIdx = activeProc.implementations.findIndex((candImpl, sIdx) =>
+          sIdx !== activeImplIdx
+          && at < candImpl.steps.length
+          && candImpl.steps.slice(0, at).every(s => isPrefixStepCarriedOrSettled(s, elements, inputs, carriedKeys))
+          && implDownstreamFeasible(activeProcId, sIdx));
+        if (switchIdx >= 0) activeImplIdx = switchIdx;
+      }
       const activeImpl = activeProc?.implementations?.[activeImplIdx];
       if (activeProc && activeImpl) {
-        if (at < activeImpl.steps.length) {
+        if (at < activeImpl.steps.length && implDownstreamFeasible(activeProcId, activeImplIdx)) {
           const check = evaluateCheckpointOnScreen(activeImpl, at, context, liveStatusJson, allowedClickKeys);
           if (check.ok) {
             if (!check.terminal) {
@@ -704,6 +752,7 @@ export function createAttestedSkillPlanner({
               const curAdded = check.addedCount ?? 0;
               const siblingConflict = activeProc.implementations.some((sibImpl, sIdx) => {
                 if (sIdx === activeImplIdx || at >= sibImpl.steps.length) return false;
+                if (!implDownstreamFeasible(activeProcId, sIdx)) return false;
                 const prefixOk = sibImpl.steps.slice(0, at).every(
                   s => isPrefixStepCarriedOrSettled(s, elements, inputs, carriedKeys),
                 );
@@ -753,7 +802,7 @@ export function createAttestedSkillPlanner({
               }
               if (check.terminal) continue;
               const missingSlot = impl.steps.slice(check.idx).some(s => s.kind !== 'click' && typeof inputs[s.slot] !== 'string');
-              if (missingSlot) {
+              if (missingSlot || !implDownstreamFeasible(calleeId, iIdx)) {
                 calleeFailure = 'missing-input-slot';
                 continue;
               }
@@ -796,7 +845,7 @@ export function createAttestedSkillPlanner({
           if (!check.ok || check.terminal) continue;
           if (candidates.some(c => c.procId === proc.id && c.implIdx === iIdx && c.idx === check.idx)) continue;
           const missingSlot = impl.steps.slice(check.idx).some(s => s.kind !== 'click' && typeof inputs[s.slot] !== 'string');
-          if (missingSlot) continue;
+          if (missingSlot || !implDownstreamFeasible(proc.id, iIdx)) continue;
           const intraOk = impl.steps.slice(0, check.idx).every(s => isPrefixStepCarriedOrSettled(s, elements, inputs, carriedKeys));
           if (!intraOk) continue;
           candidates.push({
