@@ -165,8 +165,9 @@ All three held.
 - The sandbox suite is synthetic snapshots behind an in-memory adapter. The form suite is real
   Chromium on local pages. Neither is a tenant.
 - Four families and two vendors are clustered cases, not independent samples.
-- Zero wrong-field fills over 30 certified rejoins bounds the index matcher's failure rate only
-  below about 10% at 95% confidence, and only on the form suite's cases.
+- No failure rate is estimated. Zero wrong-field fills over 30 certified rejoins would bound the
+  rate below about 10% at 95% confidence only if the rejoins were independent. They are not: they
+  come from two near-identical vendors and a handful of variants.
 - The 21-pair holdout was not rerun.
 
 ### Next

@@ -95,8 +95,9 @@ What this does not show:
   counts, not model calls, cost or time.
 - Two vendors, one holdout each, contact fields only, synthetic faults. The 26 rows are
   two near-identical copies of 13 variants, so four kinds of change account for the gain.
-- Zero wrong-field fills over 30 certified rejoins bounds the failure rate only below
-  about 10% at 95% confidence, before allowing for that clustering.
+- No failure rate is estimated. Zero wrong-field fills over 30 certified rejoins would bound
+  the rate below about 10% at 95% confidence only if the rejoins were independent, and that
+  clustering means they are not.
 - Hidden page state that the observation cannot see is not exercised here.
 
 Raw rows, reports and private graphs stay in local evidence, outside the repository.

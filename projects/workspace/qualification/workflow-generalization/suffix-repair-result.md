@@ -55,30 +55,35 @@ reporting counter to the sandbox harness and has the same `src/` tree (`f421d56`
 
 ## The four counts, separately
 
-"Safe" is the number of runs the suite expects to complete. Decisions are scripted planner
-decisions on those runs, against exact matching on the same cases.
+"Safe" runs are the runs the suite expects to complete. Exact matching completes all of them in
+every check. Decisions are scripted planner decisions on the safe runs, against exact matching on
+the same cases, and must be read beside the completion column.
 
-| Check | Arm | Safe runs | Useful rejoins | False refusals | Unsafe certifications | Under hidden state | Writes where none allowed | Decisions |
+| Check | Arm | Completed, of safe runs | Useful rejoins | False refusals | Unsafe certifications | Under hidden state | Writes where none allowed | Decisions |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Form suite, no resume | Index | 12 | 8 | 0 | 0 | 2 | 0 | 47 vs 76 |
-| | Profile, word routes | 12 | 0 | 8 | 0 | 0 | 0 | 76 vs 76 |
-| | Profile, numeric routes | 12 | 0 | 8 | 0 | 0 | 0 | 76 vs 76 |
-| Form suite, resume | Index | 12 | 8 | 0 | 0 | 2 | 0 | 12 vs 42 |
-| | Profile, word routes | 12 | 0 | 8 | 0 | 0 | 0 | 42 vs 42 |
-| | Profile, numeric routes | 12 | 0 | 8 | 0 | 0 | 0 | 42 vs 42 |
-| Sandbox, frozen | Profile | 36 | 32 | 0 | 0 | 4 | 0 | 20 vs 124 |
-| | Index | 36 | 0 | 32 | 0 | 0 | 0 | 124 vs 124 |
-| | Both options | 36 | 0 | 32 | 0 | 0 | 0 | 124 vs 124 |
-| Sandbox, entry-start | Profile | 36 | 32 | 0 | 0 | 4 | 0 | 24 vs 144 |
-| | Index | 36 | 12 | 20 | 0 | 4 | 0 | 88 vs 144 |
-| | Both options | 36 | 16 | 16 | 0 | 4 | 0 | 64 vs 144 |
-| Holdout audit, per-case policy | Profile | 9 | 0 | 0 | 0 | 0 | 0 | 42 vs 42 |
-| | Index | 9 | 0 | 0 | 0 | 0 | 0 | 42 vs 42 |
-| Holdout audit, one policy | Profile | 9 | 0 | 0 | 0 | 0 | 0 | 15 vs 15 |
-| | Index | 9 | 0 | 0 | 0 | 0 | 0 | 15 vs 15 |
-| Holdout audit, other account scope | Profile | 9 | 0 | 0 | 0 | 0 | 0 | 63 vs 63 |
-| | Index | 9 | 0 | 0 | 0 | 0 | 0 | 63 vs 63 |
+| Form suite, no resume | Index | 12 of 12 | 8 | 0 | 0 | 2 | 0 | 47 vs 76 |
+|  | Profile, word routes | 12 of 12 | 0 | 8 | 0 | 0 | 0 | 76 vs 76 |
+|  | Profile, numeric routes | 12 of 12 | 0 | 8 | 0 | 0 | 0 | 76 vs 76 |
+| Form suite, resume | Index | 12 of 12 | 8 | 0 | 0 | 2 | 0 | 12 vs 42 |
+|  | Profile, word routes | 12 of 12 | 0 | 8 | 0 | 0 | 0 | 42 vs 42 |
+|  | Profile, numeric routes | 12 of 12 | 0 | 8 | 0 | 0 | 0 | 42 vs 42 |
+| Sandbox, frozen | Profile | 36 of 36 | 32 | 0 | 0 | 4 | 0 | 20 vs 124 |
+|  | Index | 36 of 36 | 0 | 32 | 0 | 0 | 0 | 124 vs 124 |
+|  | Both options | 36 of 36 | 0 | 32 | 0 | 0 | 0 | 124 vs 124 |
+| Sandbox, entry-start | Profile | 36 of 36 | 32 | 0 | 0 | 4 | 0 | 24 vs 144 |
+|  | Index | 32 of 36 | 12 | 20 | 0 | 4 | 0 | 88 vs 144 |
+|  | Both options | 32 of 36 | 16 | 16 | 0 | 4 | 0 | 64 vs 144 |
+| Holdout audit, per-case policy | Profile | 9 of 9 | 0 | 0 | 0 | 0 | 0 | 42 vs 42 |
+|  | Index | 9 of 9 | 0 | 0 | 0 | 0 | 0 | 42 vs 42 |
+| Holdout audit, one policy | Profile | 9 of 9 | 0 | 0 | 0 | 0 | 0 | 15 vs 15 |
+|  | Index | 9 of 9 | 0 | 0 | 0 | 0 | 0 | 15 vs 15 |
+| Holdout audit, other account scope | Profile | 9 of 9 | 0 | 0 | 0 | 0 | 0 | 63 vs 63 |
+|  | Index | 9 of 9 | 0 | 0 | 0 | 0 | 0 | 63 vs 63 |
 
+- **Fewer decisions with fewer completions is not a gain.** In the entry-start diagnostic the index
+  arm takes 88 decisions against 144, but completes 32 of 36 runs against 36 of 36 for exact
+  matching. The four it leaves unfinished are the approval case, and each stops safely. Both-options
+  shows the same trade: 64 decisions, 32 of 36 completed.
 - **Wrong-field fills and submissions:** 0 in every row of every check.
 - **Writes beyond what exact matching dispatched on the same case:** 0 in every arm.
 - **Sandbox decisions** on the frozen suite count the 32 held-out variants; its near-miss rows

@@ -75,5 +75,6 @@ to 12 model calls and 111.5 s to 39.0 s on one shared teaching run per vendor
   near-misses. Until it is, its safety is established only on this experiment's cases.
 - A scripted function stands in for the planner in the controlled runs. One holdout per
   vendor, contact fields only, synthetic faults, and two vendors that behave almost alike.
-- Zero wrong-field fills over 30 certified rejoins bounds the failure rate only below
-  about 10% at 95% confidence.
+- No failure rate is estimated. Zero wrong-field fills over 30 certified rejoins would bound
+  the rate below about 10% at 95% confidence only if the rejoins were independent, and they
+  come from two near-identical vendors and a handful of variants.
