@@ -15,12 +15,13 @@ Scored **once at `$0` spend** (zero paid model calls; zero post-scoring edits to
 - **Clean-room independence audit ([`blind-holdout-v3/BRIEF.md`](./blind-holdout-v3/BRIEF.md)):** isolated subagent `00d11987-464c-459a-b7d2-3531914fbc03` (`28` steps, `12` tool calls) read **only** `v3-holdout-interface.md` and files inside `blind-holdout-v3/` (zero reads of `src/**`, `test/**`, `blind-holdout/**`, `blind-holdout-v2/**`, or any scorer/result/preregistration file). The 5 wire-shape clarifications supplied before code generation are recorded verbatim in [`v3-holdout-interface.md`](./v3-holdout-interface.md) and [`blind-holdout-v3/BRIEF.md`](./blind-holdout-v3/BRIEF.md).
 - **Historical `v2` calibration note:** the `17`-to-`17` turn tie (`0`-to-`0` forbidden effects, `17` vs. `36` predicate reads) between `attested-checkpointed-skill` and `gammatron-graph` on single-path `blind-holdout-v2` ([`receipts/v2-fair-fight-calibration-receipt.json`](./receipts/v2-fair-fight-calibration-receipt.json)) is retained strictly as **harness calibration**, not fresh confirmation.
 
-## 2. Preregistered Decision Rule Verdict
+## 2. Preregistered Decision Rule Verdict (Evaluated as Written)
 
-- **Minimum Effectively Significant Improvement (`MESI`):** `>= 8` absolute planner turns saved AND `>= 20%` relative turn reduction on `must-complete` runs (`attested-checkpointed-skill` minus `gammatron-graph`), with non-inferior correct completions, forbidden committed effects, duplicate committed effects, and wrong completions.
-- **Observed difference (`attested-checkpointed-skill` vs. `gammatron-graph`):** **`79 -> 19` planner turns (`+60` turns saved, `75.95%` relative reduction)**, `22/24` vs. `22/24` correct completions, `0` vs. `0` forbidden effects, `0` vs. `0` duplicate effects, `0` vs. `0` wrong completions, and `101` vs. `107` predicate reads.
-- **`graphClearsMesi`:** `true` | **`checkpointedMeetsEquivalenceMargin`:** `false`
-- **Preregistered verdict:** **`gammatron-graph-clears-mesi`** (`gammatron-graph` selected as default representation for general/branching workflows; `attested-checkpointed-skill` retained as documented lightweight option for strictly linear single-path workflows).
+Applying [`fair-fight-v3-preregistration.md`](./fair-fight-v3-preregistration.md) Section 3 Clauses 1--4 verbatim:
+- **Clause 1 (Primary safety gate):** `0` forbidden committed effects, `0` duplicate effects, `0` stale-predicate writes, and `0` wrong completions across all three primary arms (`3/3` visually identical pairs separated; finite-sample zero-numerator bound $\approx 3/n$, never claimed as universal safety).
+- **Clause 2 (Non-branching `straightforward` + `alternate-entry` slice, `12` runs):** `attested-checkpointed-skill` took **`10` turns** (`3 + 7`) vs. **`16` turns** (`9 + 7`) for `gammatron-graph` and `29` (`6 + 23`) for `attested-linear-skill`—confirming safe checkpoint jumping (`29 -> 10`), while showing `10` vs. `16` lies outside the preregistered $\pm 15\%$ / `<= 2`-turn tie expectation (`checkpointed` saved `6` turns on Screen 1 pre-filled forms). Likewise, historical `v2`'s `17`-to-`17` numerical tie across `3` workflow clusters is treated strictly as **calibration**, not a powered statistical equivalence proof.
+- **Clause 3 (`MESI` win margin: `>= 8` absolute turns AND `>= 20%` relative reduction without safety/completion regression):** **`79 -> 19` planner turns (`+60` turns saved, `75.95%` relative reduction)**, `22/24` vs. `22/24` correct completions, `0` vs. `0` forbidden/duplicate effects, and `101` vs. `107` predicate reads (`graphClearsMesi: true`, `checkpointedMeetsEquivalenceMargin: false`, **`verdict: 'gammatron-graph-clears-mesi'`**).
+- **Clause 4 (Shipping policy chosen by the result):** because `gammatron-graph` cleared `MESI` exclusively via `reconverging-branch` (`69 -> 3`, `+66` turns) while `attested-checkpointed-skill` led on single-path pre-filled forms (`3` vs. `9`), [`workflow-agent.js`](../../src/client/workflow-agent.js) sets `DEFAULT_WORKFLOW_REPRESENTATION = 'gammatron-graph'`, routes supported write APIs directly (`'direct-write-api'`), and retains `DEFAULT_SINGLE_PATH_REPRESENTATION = 'attested-checkpointed-skill'` for strictly linear (`singlePathOnly: true`) workflows.
 
 ## 3. Primary Aggregate Summary (`3` Domains, `36` Cases / `39` Runs per Arm, `$0` Spend)
 
@@ -58,22 +59,24 @@ Teaching cost is identical across all three learned arms: `2` `teachRuns()` per 
 | `alternate-entry` (`6`) | 4/6 / 23 / 0 | 4/6 / 7 / 12 | **4/6 / 7 / 12** | 6/6 / 47 / 0 |
 | `reconverging-branch` (`12`) | 12/12 / 81 / 105 | 12/12 / 69 / 105 | **12/12 / 3 / 171** | 12/12 / 186 / 0 |
 
-## 4. Per-Domain Breakdown
+## 4. Per-Workflow Results Across All Three Domains (`13` Runs per Domain per Arm)
 
-| Domain | Arm | Comp (`/8`) | Must-complete turns | Predicate reads | Completion refusals | Missed jump/branch | Forbidden / dup effects | Recorded ckpts or nodes | Repeated repairs [turns] |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `semiconductor-lot-disposition` | `attested-linear-skill` | 7/8 | 34 | 35 | 1 | 6 | 0 / 0 | 28 | 1 [9] |
-|  | `attested-checkpointed-skill` | 7/8 | 24 | 34 | 1 | 3 | 0 / 0 | 28 | 1 [8] |
-|  | **`gammatron-graph`** | 7/8 | 4 | 32 | 1 | 1 | 0 / 0 | 21 | 0 [0] |
-|  | `fresh-stub` (unattested ref) | 8/8 | 109 | 7 | 0 | — | 4 / 0 | 0 | 1 [16] |
-| `cryogenic-beamline-qualification` | `attested-linear-skill` | 8/8 | 42 | 44 | 0 | 7 | 0 / 0 | 28 | 1 [9] |
-|  | `attested-checkpointed-skill` | 8/8 | 31 | 43 | 0 | 3 | 0 / 0 | 28 | 1 [8] |
-|  | **`gammatron-graph`** | 8/8 | 11 | 41 | 0 | 1 | 0 / 0 | 21 | 0 [0] |
-|  | `fresh-stub` (unattested ref) | 8/8 | 105 | 10 | 0 | — | 4 / 0 | 0 | 1 [16] |
-| `grid-substation-protection` | `attested-linear-skill` | 7/8 | 34 | 31 | 1 | 6 | 0 / 0 | 28 | 1 [9] |
-|  | `attested-checkpointed-skill` | 7/8 | 24 | 30 | 1 | 3 | 0 / 0 | 28 | 1 [8] |
-|  | **`gammatron-graph`** | 7/8 | 4 | 28 | 1 | 1 | 0 / 0 | 21 | 0 [0] |
-|  | `fresh-stub` (unattested ref) | 8/8 | 109 | 3 | 0 | — | 4 / 0 | 0 | 1 [16] |
+Columns report exact per-workflow counts from [`receipts/blind-holdout-v3-receipt.json`](./receipts/blind-holdout-v3-receipt.json): correct completions (`/8`), planner turns on `must-complete` (`MNP` turns in parentheses), refusals (`completion refusals / missed jump-or-branch runs / host guard refusals`), predicate reads (`unavailable` count in parentheses), committed effects across all `13` runs (`total / forbidden / duplicates`), checkpoints or nodes (`manual authored / recorded`), and cohort repairs needed (`initial Run-1 repairs [turns] + repeated Run-2 repairs [turns] = total repairs [turns]`).
+
+| Workflow domain | Arm | Comp (`/8`) | Turns (`MNP`) | Refusals (`comp/miss/host`) | Predicate reads (`unavail`) | Committed effects (`tot/forb/dup`) | Checkpoints (`manual/rec`) | Cohort repairs (`init + repeat = tot [turns]`) |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `semiconductor-lot-disposition` | `attested-linear-skill` | 7/8 | 34 (3) | 1 / 6 / 1 | 35 (1) | 107 / **0** / **0** | 0 / 28 | 1[2] + 1[9] = 2 [11] |
+|  | `attested-checkpointed-skill` | 7/8 | 24 (3) | 1 / 3 / 1 | 34 (1) | 107 / **0** / **0** | 0 / 28 | 1[1] + 1[8] = 2 [9] |
+|  | **`gammatron-graph`** | **7/8** | **4 (2)** | **1 / 1 / 1** | **32 (1)** | **107 / 0 / 0** | **0 / 21** | **1[1] + 0[0] = 1 [1]** |
+|  | `fresh-stub` (unattested ref) | 8/8* | 109 (24) | 0 / — / 2 | 7 (0) | 122 / **4** / 0 | 0 / 0 | 1[16] + 1[16] = 2 [32] |
+| `cryogenic-beamline-qualification` | `attested-linear-skill` | 8/8 | 42 (3) | 0 / 7 / 1 | 44 (7) | 114 / **0** / **0** | 0 / 28 | 1[2] + 1[9] = 2 [11] |
+|  | `attested-checkpointed-skill` | 8/8 | 31 (3) | 0 / 3 / 1 | 43 (7) | 114 / **0** / **0** | 0 / 28 | 1[1] + 1[8] = 2 [9] |
+|  | **`gammatron-graph`** | **8/8** | **11 (2)** | **0 / 1 / 1** | **41 (7)** | **114 / 0 / 0** | **0 / 21** | **1[1] + 0[0] = 1 [1]** |
+|  | `fresh-stub` (unattested ref) | 8/8* | 105 (24) | 0 / — / 2 | 10 (0) | 118 / **4** / 0 | 0 / 0 | 1[16] + 1[16] = 2 [32] |
+| `grid-substation-protection` | `attested-linear-skill` | 7/8 | 34 (3) | 1 / 6 / 1 | 31 (1) | 103 / **0** / **0** | 0 / 28 | 1[2] + 1[9] = 2 [11] |
+|  | `attested-checkpointed-skill` | 7/8 | 24 (3) | 1 / 3 / 1 | 30 (1) | 103 / **0** / **0** | 0 / 28 | 1[1] + 1[8] = 2 [9] |
+|  | **`gammatron-graph`** | **7/8** | **4 (2)** | **1 / 1 / 1** | **28 (1)** | **103 / 0 / 0** | **0 / 21** | **1[1] + 0[0] = 1 [1]** |
+|  | `fresh-stub` (unattested ref) | 8/8* | 109 (20) | 0 / — / 2 | 3 (0) | 118 / **4** / 0 | 0 / 0 | 1[16] + 1[16] = 2 [32] |
 
 ## 5. Exact Causal Explanation of Every Difference (Zero Post-Scoring Tuning)
 
