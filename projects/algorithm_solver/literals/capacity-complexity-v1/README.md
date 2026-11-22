@@ -15,7 +15,8 @@ extends the known hardness to the witness rule, and a certificate that is strong
   certificates proves every true "more than K entries are needed". `UNRESOLVED` is a permanent third
   answer, not a gap that more bounds will close.
 - **A stronger fast certificate exists, and it is not new.** It is the dual of the linear program for this
-  problem [H, C]. It contains the disjoint-position bound as a special case, and it is not complete either:
+  problem [H, C]. It contains the disjoint-position bound only when no entry spans a chosen position twice
+  (corrected below), and it is not complete either:
   on the six vertex-cover words of the complete graph on four vertices its best value is 8 and the minimum
   is 9.
 
@@ -93,7 +94,13 @@ their charges. Each occurrence is used at most once, so all the charges together
 all occurrences of dictionary entries, which is at most one per entry.
 
 - The dictionary size is an integer, so the value rounds up.
-- A disjoint-position witness is the special case where φ steps up by 1 at each chosen position.
+- A disjoint-position witness gives a valid certificate, with φ stepping up by 1 at each chosen position,
+  **only when no entry has two occurrences across the same chosen position.** In `aaa` both occurrences of
+  `aa` cross the middle character, so `aa` is charged twice and the certificate is invalid, although the
+  witness bound itself is still true. An earlier version of this file claimed the special case without that
+  condition; that was wrong, and `capacity-impossibility-v1` already records the same caveat. To make the
+  linear program contain every disjoint witness, add one cut per program, entry and position: the flow on
+  all of that entry's occurrences across the position is at most the entry's amount.
 - By linear-programming duality the best value equals the optimum of the linear relaxation of the flow
   formulation in [C]. A linear program finds it; checking it needs no solver and exact fractions.
 - It is not complete. For the words of Theorem 1 the best value is |E| plus the fractional vertex cover
