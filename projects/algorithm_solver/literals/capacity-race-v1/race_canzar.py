@@ -149,7 +149,7 @@ def canzar_decide_query(programs: list[str], k: int, budget: int, timeout_s: flo
     if rem <= 0.05:
         return {"status": "TIMEOUT", "certifiedLowerBound": None, "dictionarySize": None, "phase": "setup-timeout", "elapsedMs": round((time.perf_counter() - t0) * 1000.0, 3)}
 
-    lp_res = linprog(cost, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, bounds=(0, 1), method="highs", options={"time_limit": rem})
+    lp_res = linprog(cost, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, bounds=(0, None), method="highs", options={"time_limit": rem})
     lp_lb: int | None = None
     lp_exact_val: str | None = None
 
