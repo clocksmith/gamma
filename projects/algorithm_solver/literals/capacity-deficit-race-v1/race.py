@@ -284,6 +284,41 @@ def fewest_singles(programs, multi, rule):
     return dictionary
 
 
+def replay_direct(programs, dictionary, cap=160):
+    """The same rule as the capped checker, tested entry by entry instead of by listing every eligible substring,
+    which does not finish on megabytes. Added after the run; see RESULTS.md."""
+    whole = set(programs)
+    if len(set(dictionary)) != len(dictionary):
+        return False
+    for e in dictionary:
+        if e in whole or not e:
+            return False
+        if len(e) > 1:
+            if len(e.encode()) > cap:
+                return False
+            holders = 0
+            for p in programs:
+                if e in p:
+                    holders += 1
+                    if holders == 2:
+                        break
+            if holders < 2:
+                return False
+    table = {}
+    for e in dictionary:
+        table.setdefault(e[0], []).append(e)
+    for p in programs:
+        reach = [True] + [False] * len(p)
+        for i in range(len(p)):
+            if reach[i]:
+                for e in table.get(p[i], ()):
+                    if p.startswith(e, i):
+                        reach[i + len(e)] = True
+        if not reach[len(p)]:
+            return False
+    return True
+
+
 def check():
     evaluate, rule = boundary_tools()
     failures, rows_a = [], []
@@ -362,7 +397,7 @@ def check():
                 row['hierarchy'] = {k: v for k, v in h.items() if k != 'dictionary'}
                 row['hierarchy']['dictionaryEntries'] = None if h.get('dictionary') is None else len(h['dictionary'])
                 if h.get('dictionary') is not None and c['source'] in roots:
-                    replays = rule.dictionary_spells(load_b(key, roots[c['source']]), h['dictionary'])
+                    replays = replay_direct(load_b(key, roots[c['source']]), h['dictionary'])
                     row['hierarchy']['dictionaryReplays'] = replays
                     if not replays:
                         failures.append(f'{key}: the hierarchy dictionary does not replay')
