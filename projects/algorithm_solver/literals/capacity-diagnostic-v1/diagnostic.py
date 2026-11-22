@@ -193,17 +193,15 @@ def in_span(vec: list[int], basis: list[tuple[int, list[int]]], prime: int) -> b
 
 
 def forced_blocks(programs: list[str], k: int, max_bytes: int | None = 160) -> list[str]:
-    """Mandatory blocks for threshold k >= 2: cut whenever adjacent bigram cannot be covered by any eligible token."""
+    """Mandatory blocks for threshold k >= 2: cut whenever no eligible token can cross (i, i+1)."""
     if k < 2:
         return list(programs)
-    whole = set(programs)
     bigram_docs: dict[str, set[int]] = defaultdict(set)
     for idx, s in enumerate(programs):
         for i in range(len(s) - 1):
             bg = s[i : i + 2]
             if max_bytes is None or len(bg.encode("utf-8")) <= max_bytes:
-                if bg not in whole:
-                    bigram_docs[bg].add(idx)
+                bigram_docs[bg].add(idx)
     blocks: list[str] = []
     for s in programs:
         if not s:
@@ -218,20 +216,26 @@ def forced_blocks(programs: list[str], k: int, max_bytes: int | None = 160) -> l
     return sorted(set(blocks))
 
 
-def certified_rank_bound(programs: list[str], k: int, max_bytes: int | None = 160) -> dict:
+def forced_block_components(programs: list[str], k: int, max_bytes: int | None = 160) -> list[list[str]]:
+    """Split a corpus's mandatory blocks (k >= 2) into character-cooccurrence connected components."""
+    blocks = forced_blocks(programs, k, max_bytes=max_bytes)
+    return split_components(blocks)
+
+
+def certified_rank_bound(programs: list[str], k: int, max_bytes: int | None = 160, units: list[str] | None = None) -> dict:
     """Position-weighted rank lower bound (program rank for k=1, mandatory-block rank for k>=2), checked under two primes."""
-    chars = alphabet_index(programs)
-    units = list(programs) if k == 1 else forced_blocks(programs, k, max_bytes=max_bytes)
+    target_units = units if units is not None else (list(programs) if k == 1 else forced_blocks(programs, k, max_bytes=max_bytes))
+    chars = alphabet_index(target_units)
     ranks = []
     for prime, base in PRIMES:
-        basis = rref_basis([pos_vector(u, chars, prime, base) for u in units], prime)
+        basis = rref_basis([pos_vector(u, chars, prime, base) for u in target_units], prime)
         ranks.append({"prime": prime, "base": base, "rank": len(basis)})
     # Every prime gives a sound lower bound on Z-rank / dictionary size; max is sound and agreement checks no mod drop.
     bound = max(r["rank"] for r in ranks)
     return {
         "kind": "program-rank" if k == 1 else "mandatory-block-rank",
         "bound": bound,
-        "distinctBlocks": len(units),
+        "distinctBlocks": len(target_units),
         "primesChecked": ranks,
     }
 
@@ -519,6 +523,8 @@ def diagnose_full_corpus(
 
             rank_cert = certified_rank_bound(comp, k, max_bytes=max_bytes)
             disj_cert = disjoint_position_certificate(comp, k, tokens, max_bytes=max_bytes)
+            block_subreports = []
+            block_split_lb = None
             if disj_cert["bound"] is None:
                 unspellable = True
                 comp_lb = None
@@ -533,7 +539,39 @@ def diagnose_full_corpus(
                 rank_val = tb_lift["certifiedLowerBound"] if tb_lift else rank_cert["bound"]
                 disj_val = disj_cert["bound"]
                 comp_lb = max(rank_val, disj_val)
-                if tb_lift and rank_val >= disj_val:
+
+                # For k >= 2, forced-block character components cannot share any eligible token (no token crosses a forced cut).
+                # Filter corpus-wide eligible tokens per block component (preserving true program doc_freq and whole exclusions).
+                if k >= 2:
+                    fb_comps = forced_block_components(comp, k, max_bytes=max_bytes)
+                    if len(fb_comps) > 1:
+                        fb_sum = 0
+                        fb_ok = True
+                        for fb_idx, fb_units in enumerate(fb_comps):
+                            fb_chars = set("".join(fb_units))
+                            fb_tokens = {t for t in tokens if set(t) <= fb_chars}
+                            fb_rank = certified_rank_bound(comp, k, max_bytes=max_bytes, units=fb_units)
+                            fb_disj = disjoint_position_certificate(fb_units, k, fb_tokens, max_bytes=max_bytes)
+                            if fb_disj["bound"] is None:
+                                fb_ok = False
+                                break
+                            fb_lb = max(fb_rank["bound"], fb_disj["bound"])
+                            fb_sum += fb_lb
+                            block_subreports.append({
+                                "blockComponentIndex": fb_idx,
+                                "blocks": fb_units,
+                                "alphabetSize": len(fb_chars),
+                                "blockRank": fb_rank["bound"],
+                                "disjointBound": fb_disj["bound"],
+                                "lowerBound": fb_lb,
+                            })
+                        if fb_ok and fb_sum > comp_lb:
+                            block_split_lb = fb_sum
+                            comp_lb = fb_sum
+
+                if block_split_lb is not None:
+                    stronger = "forced-block-components"
+                elif tb_lift and rank_val >= disj_val:
                     stronger = "span-parse-obstruction"
                 elif rank_val > disj_val:
                     stronger = rank_cert["kind"]
@@ -550,6 +588,7 @@ def diagnose_full_corpus(
                 "allSingletonsEligible": comp_singletons_ok,
                 "rankCertificate": rank_cert,
                 "disjointCertificate": disj_cert,
+                "forcedBlockSubcomponents": block_subreports,
                 "componentLowerBound": comp_lb,
                 "strongerBound": stronger,
             })
@@ -663,6 +702,8 @@ def run_controls_suite() -> list[dict]:
         ("overlap_non_tiling_W2_K4", ["abcd", "abce", "fbcd"], 2, 4, True),
         ("seven_program_union_W2_K8", ["abd", "abe", "fbd", "pxqy", "qypx", "pyqx", "qxpy"], 2, 8, True),
         ("seven_program_union_W2_K9", ["abd", "abe", "fbd", "pxqy", "qypx", "pyqx", "qxpy"], 2, 9, True),
+        ("connected_bridge_6prog_W2_K7", ["abd", "fbd", "abpxqy", "qypx", "pyqx", "qxpy"], 2, 7, True),
+        ("connected_bridge_6prog_W2_K8", ["abd", "fbd", "abpxqy", "qypx", "pyqx", "qxpy"], 2, 8, True),
         ("unresolved_interval_demo_W2_K2", ["abc", "abab"], 2, 2, False),
     ]
     reports = []
@@ -672,11 +713,63 @@ def run_controls_suite() -> list[dict]:
     return reports
 
 
+def parse_rule_arg(rule_str: str) -> int:
+    text = rule_str.strip().upper()
+    if text in ("U", "K1", "1"):
+        return 1
+    if text.startswith("W") and text[1:].isdigit() and int(text[1:]) >= 2:
+        return int(text[1:])
+    raise ValueError(f"Unsupported rule {rule_str!r}; use U or W2, W3, ...")
+
+
+def format_verdict_line(name: str, v: dict) -> str:
+    lb = "-" if v["certifiedLowerBound"] is None else str(v["certifiedLowerBound"])
+    if v["status"] == "FEASIBLE":
+        detail = f"dict={v['construction']['dictionary']} (byte-exact)"
+    elif v["status"] == "IMPOSSIBLE":
+        reasons = [f"c{c['componentIndex']}:{c['strongerBound']}={c['componentLowerBound']}" for c in v["components"]]
+        detail = "cert=" + "+".join(reasons)
+    else:
+        detail = f"interval={v['interval']} (no construction searched/found)"
+    if v.get("monotoneSaturation"):
+        detail += f" [sat>=W{v['monotoneSaturation']['reusableForAllThresholdsAtLeast']}]"
+    c = v["measuredCost"]
+    return (
+        f"{name:32s} {v['rule']:4s} {v['budget']:2d} {v['componentCount']:4d} {lb:>3s} "
+        f"{v['status']:10s} {c['elapsedMs']:7.2f} {c['peakAllocKiB']:7.1f}  {detail}"
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="BITS Phase 3 tri-state capacity diagnostic")
     parser.add_argument("--controls", action="store_true", help="Run reproducible control suite (human-readable table)")
-    parser.add_argument("--json", action="store_true", help="Emit JSON output for the control suite")
+    parser.add_argument("--corpus", type=str, default=None, help="JSON file containing a list of program strings or {'programs': [...]}")
+    parser.add_argument("--programs", nargs="+", default=None, help="Inline program strings to diagnose")
+    parser.add_argument("--rule", type=str, default="W2", help="Eligibility rule: U or W2, W3, ...")
+    parser.add_argument("--budget", type=int, default=None, help="Slot budget K (required with --corpus or --programs)")
+    parser.add_argument("--no-search", action="store_true", help="Skip exhaustive construction search (still checks singletons and Theorem B span basis)")
+    parser.add_argument("--json", action="store_true", help="Emit machine-readable JSON output")
     args = parser.parse_args()
+
+    if args.corpus is not None or args.programs is not None:
+        if args.budget is None:
+            parser.error("--budget K is required with --corpus or --programs")
+        if args.corpus is not None:
+            raw = json.loads(open(args.corpus, encoding="utf-8").read())
+            progs = raw["programs"] if isinstance(raw, dict) else raw
+            label = args.corpus
+        else:
+            progs = args.programs
+            label = "inline"
+        k = parse_rule_arg(args.rule)
+        verdict = diagnose_full_corpus(progs, k, args.budget, allow_construction_search=not args.no_search)
+        if args.json:
+            print(json.dumps(verdict, indent=2))
+        else:
+            print(f"{'Case':32s} {'Rule':4s} {'K':>2s} {'Comp':>4s} {'LB':>3s} {'Status':10s} {'ms':>7s} {'KiB':>7s}  Detail")
+            print("-" * 110)
+            print(format_verdict_line(label[:32], verdict))
+        return 0
 
     reports = run_controls_suite()
     if args.json:
@@ -686,22 +779,7 @@ def main() -> int:
     print(f"{'Case':32s} {'Rule':4s} {'K':>2s} {'Comp':>4s} {'LB':>3s} {'Status':10s} {'ms':>7s} {'KiB':>7s}  Detail")
     print("-" * 110)
     for item in reports:
-        v = item["verdict"]
-        lb = "-" if v["certifiedLowerBound"] is None else str(v["certifiedLowerBound"])
-        if v["status"] == "FEASIBLE":
-            detail = f"dict={v['construction']['dictionary']} (byte-exact)"
-        elif v["status"] == "IMPOSSIBLE":
-            reasons = [f"c{c['componentIndex']}:{c['strongerBound']}={c['componentLowerBound']}" for c in v["components"]]
-            detail = "cert=" + "+".join(reasons)
-        else:
-            detail = f"interval={v['interval']} (no construction searched/found)"
-        if v.get("monotoneSaturation"):
-            detail += f" [sat>=W{v['monotoneSaturation']['reusableForAllThresholdsAtLeast']}]"
-        c = v["measuredCost"]
-        print(
-            f"{item['name']:32s} {v['rule']:4s} {v['budget']:2d} {v['componentCount']:4d} {lb:>3s} "
-            f"{v['status']:10s} {c['elapsedMs']:7.2f} {c['peakAllocKiB']:7.1f}  {detail}"
-        )
+        print(format_verdict_line(item["name"], item["verdict"]))
     return 0
 
 

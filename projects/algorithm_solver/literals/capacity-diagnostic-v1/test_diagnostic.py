@@ -133,6 +133,14 @@ class DiagnosticTests(unittest.TestCase):
         self.assertEqual(ce["exactOptW2"], 8)
         self.assertTrue(ce["matchesFailureTarget"])
 
+        # Forced-block component decomposition in diagnostic.py closes this single program-connected case to LB = 8
+        d7 = diagnose_full_corpus(["abd", "fbd", "abpxqy", "qypx", "pyqx", "qxpy"], k=2, budget=7)
+        self.assertEqual(d7["status"], "IMPOSSIBLE")
+        self.assertEqual(d7["componentCount"], 1)
+        self.assertEqual(d7["certifiedLowerBound"], 8)
+        self.assertEqual(d7["components"][0]["strongerBound"], "forced-block-components")
+        self.assertIsNotNone(d7["monotoneSaturation"])
+
 
 if __name__ == "__main__":
     unittest.main()
