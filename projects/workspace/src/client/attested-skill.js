@@ -408,9 +408,15 @@ export function createAttestedSkillPlanner({
   attestPrerequisites = null,
   inertFormLocators = [],
   recordId = null,
+  repairBoundaryGate = null,
 }) {
   if (!(book instanceof AttestedSkillBook)) throw Error('createAttestedSkillPlanner requires an AttestedSkillBook');
   const modularMode = Boolean(allowSafeJumps && allowCallableSharedSuffixes);
+  // Opt-in, frozen qualification replay only. The trusted caller must classify
+  // every emitted action; this check never replaces dispatcher/server authority.
+  if (repairBoundaryGate !== null && (!modularMode || typeof repairBoundaryGate !== 'function')) {
+    throw Error('Repair boundary gate requires attested modular skill and a trusted callback');
+  }
   const downstreamLookahead = Boolean(modularMode && allowDownstreamLookahead && maxLookaheadDepth > 0);
   const modeName = modularMode
     ? 'attested-modular-skill'
@@ -472,6 +478,9 @@ export function createAttestedSkillPlanner({
   const handBack = async (reason, context, rest) => {
     stats.handBacks += 1;
     stats.reasons[reason] = (stats.reasons[reason] ?? 0) + 1;
+    if (repairBoundaryGate) {
+      return { tool: 'ask_human', input: { reason: 'Frozen repair replay has no accounted checkpoint' } };
+    }
     handed = true;
     unanchoredHandBacks += 1;
     const decision = await planner.next(context, ...rest);
@@ -659,7 +668,26 @@ export function createAttestedSkillPlanner({
     if (procs.size === 0) return handBack('empty-skill-book', context, rest);
     const carriedKeys = new Set(carriedSteps.map(stepIdentityKey));
 
-    const emitModularAct = (procId, implIdx, stepIdx, step, target) => {
+    const emitModularAct = async (procId, implIdx, stepIdx, step, target) => {
+      if (repairBoundaryGate) {
+        let eligibility;
+        try {
+          eligibility = await repairBoundaryGate({
+            procId,
+            stepIdx,
+            stepKey: stepIdentityKey(step),
+            accountScope: context.accountScope ?? null,
+            recordId: context.recordId ?? recordId ?? null,
+            url: obs.url,
+          });
+        } catch {
+          // Unavailable evidence is not permission to attempt the old route.
+        }
+        if (eligibility?.status !== 'eligible-for-review') {
+          noteGuardRefusal('repair-boundary-abstain');
+          return { tool: 'ask_human', input: { reason: 'Repair boundary not verified' } };
+        }
+      }
       const decision = {
         tool: 'act',
         input: {
@@ -998,6 +1026,7 @@ export function createAttestedSkillPlanner({
     unavailablePredicates: () => structuredClone(unavailablePredicates),
     entryRestsOnUnavailablePrerequisite: () => entryUnavailableActive,
     commitVerifiedRepair(accountScope = null, finalObservation = null, finalInputs = null) {
+      if (repairBoundaryGate) return false;
       if (pendingPlannerStep) {
         recordedRunSteps.push(pendingPlannerStep);
         pendingPlannerStep = null;

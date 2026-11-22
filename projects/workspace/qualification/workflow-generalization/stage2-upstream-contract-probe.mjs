@@ -61,7 +61,7 @@ export const OPENPROJECT_SERVER_CODE_AUDIT = Object.freeze({
     specificTermsApprovalVersionBinding:
       'If human-approved terms live on the target WorkPackage row itself, any revoke-or-edit bumps `work_packages.lock_version`, so binding `lockVersion: v_approved` rejects ABA re-approvals under altered terms (`409`). If human-approved terms live on a separate entity/row, stock UpdateContract does NOT bind that entity\'s version or terms digest—requiring an atomic validator/gateway checking `(approval_id, approval_lock_version, terms_sha256)`.',
     lostAckOperationBindingContract:
-      'Stock OpenProject has no native Idempotency-Key header on PATCH /api/v3/work_packages/{id}. Matching `journal.version = preCommitLockVersion + 2` alone is insufficient because an intervening edit at `preCommitLockVersion` produces that same `journal.version`. Lost-ack recovery may report `committed` ONLY when that journal entry binds the exact intended operation (`opbind-v1:<sha256>` over `{ workPackageId, preCommitLockVersion, expectedActorHref, intendedChanges, clientOperationId }` verified in `journal.comment.raw` / `journals.notes` plus verified actor and recorded journal attribute changes / `work_package_journals` row snapshot); otherwise reconciliation MUST report `unknown` without retrying.',
+      'Stock OpenProject has no native Idempotency-Key header on PATCH /api/v3/work_packages/{id}, and WorkPackagePayloadRepresenter ignores `journalNotes` / `comment` on PATCH (comments live on separate non-atomic POST /activities). Furthermore, under default `Setting.journal_aggregation_time_minutes = 5`, `Journals::CreateService#aggregatable?` coalesces consecutive unmarked PATCHes by the SAME user into one journal row (advancing `work_packages.lock_version` faster than `journals.version` and overwriting `work_package_journals` in place). Therefore: (1) API `/activities` alone without DB `work_package_journals` returns `unknown` on a dropped-ack PATCH; (2) embedding `<!-- opbind-v1:<sha256> -->` in `description.raw` binds the exact operation in `work_package_journals.description` across immediate reads and cross-user overwrites (`committed`), while honestly degrading to `unknown` if a same-user edit within the aggregation window overwrote the snapshot; (3) blind retries on a bumped `lockVersion` are always forbidden.',
     mockVsRealProbeBoundary:
       'Loopback mock tests establish runner and reconciler logic only (`establishesUpstreamAppContract: false`); only running `probeOpenProjectDualRelease` against live OpenProject 13.4.0 and 14.0.0 releases establishes the upstream application contract.',
   },
@@ -80,8 +80,16 @@ function parseArgs(argv) {
     openprojectApprovedStatusHref: '/api/v3/statuses/2',
     openprojectHoldStatusHref: '/api/v3/statuses/3',
     openprojectDisallowedStatusHref: '/api/v3/statuses/99',
+    openprojectV14AuthorToken: null,
+    openprojectV14ApproverToken: null,
+    openprojectV14RestrictedToken: null,
+    openprojectV14ApprovedStatusHref: null,
+    openprojectV14HoldStatusHref: null,
+    openprojectV14DisallowedStatusHref: null,
     openprojectPgV13Url: null,
     openprojectPgV14Url: null,
+    openprojectV13Container: null,
+    openprojectV14Container: null,
     erpnextV15_10Url: null,
     erpnextV15_20Url: null,
     erpnextAuthorApiKey: null,
@@ -102,8 +110,16 @@ function parseArgs(argv) {
     else if (a === '--openproject-approved-status-href') out.openprojectApprovedStatusHref = argv[++i];
     else if (a === '--openproject-hold-status-href') out.openprojectHoldStatusHref = argv[++i];
     else if (a === '--openproject-disallowed-status-href') out.openprojectDisallowedStatusHref = argv[++i];
+    else if (a === '--openproject-v14-author-token') out.openprojectV14AuthorToken = argv[++i];
+    else if (a === '--openproject-v14-approver-token') out.openprojectV14ApproverToken = argv[++i];
+    else if (a === '--openproject-v14-restricted-token') out.openprojectV14RestrictedToken = argv[++i];
+    else if (a === '--openproject-v14-approved-status-href') out.openprojectV14ApprovedStatusHref = argv[++i];
+    else if (a === '--openproject-v14-hold-status-href') out.openprojectV14HoldStatusHref = argv[++i];
+    else if (a === '--openproject-v14-disallowed-status-href') out.openprojectV14DisallowedStatusHref = argv[++i];
     else if (a === '--openproject-pg-v13-url') out.openprojectPgV13Url = argv[++i];
     else if (a === '--openproject-pg-v14-url') out.openprojectPgV14Url = argv[++i];
+    else if (a === '--openproject-v13-container') out.openprojectV13Container = argv[++i];
+    else if (a === '--openproject-v14-container') out.openprojectV14Container = argv[++i];
     else if (a === '--erpnext-v15-10-url') out.erpnextV15_10Url = argv[++i];
     else if (a === '--erpnext-v15-20-url') out.erpnextV15_20Url = argv[++i];
     else if (a === '--erpnext-author-api-key') out.erpnextAuthorApiKey = argv[++i];
@@ -314,13 +330,34 @@ function detailRecordsNewValue(detail, expectedText) {
   return false;
 }
 
+function expectedTaggedDescription(descriptionRaw, bindingToken) {
+  return `${descriptionRaw}\n<!-- ${bindingToken} -->`;
+}
+
+function journalCarriesBindingToken(journal, pgRow, bindingToken, intendedChanges) {
+  if (!bindingToken) return false;
+  const notes = pgRow ? String(pgRow.notes ?? '') : String(journal?.comment?.raw ?? '');
+  if (notes.includes(bindingToken)) return true;
+  if (pgRow && typeof pgRow.description === 'string' && pgRow.description.includes(bindingToken)) {
+    return true;
+  }
+  return false;
+}
+
 function verifyJournalBindsOperation(
   journal,
   pgRow,
   { bindingToken, expectedActorHref = null, intendedChanges },
 ) {
   const notes = pgRow ? String(pgRow.notes ?? '') : String(journal?.comment?.raw ?? '');
-  if (!bindingToken || !notes.includes(bindingToken)) {
+  const boundInNotes = Boolean(bindingToken && notes.includes(bindingToken));
+  const boundInPgDescription = Boolean(
+    bindingToken
+      && pgRow
+      && intendedChanges.descriptionRaw !== undefined
+      && pgRow.description === expectedTaggedDescription(intendedChanges.descriptionRaw, bindingToken),
+  );
+  if (!boundInNotes && !boundInPgDescription) {
     return false;
   }
   if (expectedActorHref) {
@@ -337,7 +374,12 @@ function verifyJournalBindsOperation(
     if (!details.some(d => detailRecordsNewValue(d, intendedChanges.subject))) return false;
   }
   if (intendedChanges.descriptionRaw !== undefined) {
-    if (pgRow && pgRow.description !== intendedChanges.descriptionRaw) return false;
+    if (pgRow) {
+      const validDesc =
+        pgRow.description === intendedChanges.descriptionRaw
+        || pgRow.description === expectedTaggedDescription(intendedChanges.descriptionRaw, bindingToken);
+      if (!validDesc) return false;
+    }
     if (!details.some(d => /description/i.test(String(d?.raw ?? '')))) return false;
   }
   if (intendedChanges.statusHref !== undefined) {
@@ -382,12 +424,17 @@ function payloadBindsExpectedOperation(payload, bindingSpec) {
   const notes = typeof payload.journalNotes === 'string'
     ? payload.journalNotes
     : (typeof payload.comment?.raw === 'string' ? payload.comment.raw : '');
-  if (!notes.includes(bindingSpec.bindingToken)) return false;
   const { intendedChanges } = bindingSpec;
+  const rawDesc = payload.description?.raw ?? null;
+  const descCarriesTag =
+    intendedChanges.descriptionRaw !== undefined
+    && rawDesc === expectedTaggedDescription(intendedChanges.descriptionRaw, bindingSpec.bindingToken);
+  if (!notes.includes(bindingSpec.bindingToken) && !descCarriesTag) return false;
   if (intendedChanges.subject !== undefined && payload.subject !== intendedChanges.subject) return false;
   if (
     intendedChanges.descriptionRaw !== undefined
-    && (payload.description?.raw ?? null) !== intendedChanges.descriptionRaw
+    && rawDesc !== intendedChanges.descriptionRaw
+    && !descCarriesTag
   ) {
     return false;
   }
@@ -497,8 +544,10 @@ export async function reconcileOpenProjectLostAck({
   const hasTokenMismatchJournal = ev =>
     ev.journals.some(j => {
       const pgRow = ev.pgJournalsByVersion ? (ev.pgJournalsByVersion.get(Number(j?.version)) ?? null) : null;
-      const notes = pgRow ? String(pgRow.notes ?? '') : String(j?.comment?.raw ?? '');
-      return notes.includes(bindingSpec.bindingToken) && !verifyJournalBindsOperation(j, pgRow, bindingSpec);
+      return (
+        journalCarriesBindingToken(j, pgRow, bindingSpec.bindingToken, bindingSpec.intendedChanges)
+        && !verifyJournalBindsOperation(j, pgRow, bindingSpec)
+      );
     });
 
   if (hasTokenMismatchJournal(evidence)) {
@@ -517,8 +566,10 @@ export async function reconcileOpenProjectLostAck({
     };
   }
 
-  // OpenProject `work_packages.lock_version` starts at 0 while `journals.version` starts at 1
-  // (version 1 = initial creation), so transitioning `lock_version` v -> v + 1 writes `journal.version = v + 2`.
+  // `bindingSpec.bindingToken` cryptographically hashes `preCommitLockVersion` inside its SHA-256
+  // preimage; meanwhile OpenProject's 5-minute journal aggregation window can keep `journals.version`
+  // smaller than `lock_version + 1` when earlier unmarked edits coalesced, so any update journal
+  // (`matchedVersion >= 2`) matching `bindingSpec` is bound to `preCommitLockVersion`.
   const matchingJournals = findBoundJournals(evidence);
   if (matchingJournals.length > 1) {
     return {
@@ -537,7 +588,7 @@ export async function reconcileOpenProjectLostAck({
   }
   if (matchingJournals.length === 1) {
     const matchedVersion = Number(matchingJournals[0]?.version);
-    if (!Number.isInteger(matchedVersion) || matchedVersion < preCommitLockVersion + 2) {
+    if (!Number.isInteger(matchedVersion) || matchedVersion < 2) {
       return {
         disposition: 'unknown',
         reason: 'bound-journal-predates-precommit-lock-version',
@@ -666,7 +717,7 @@ export async function reconcileOpenProjectLostAck({
   const afterMatching = findBoundJournals(afterEvidence);
   if (
     afterMatching.length === 1
-    && Number(afterMatching[0]?.version) >= preCommitLockVersion + 2
+    && Number(afterMatching[0]?.version) >= 2
   ) {
     return {
       disposition: 'committed',
@@ -956,7 +1007,9 @@ export async function runOpenProjectSingleReleaseProbe({
   });
   const lostAckPayload = {
     subject: boundExpectedOp.intendedChanges.subject,
-    description: { raw: boundExpectedOp.intendedChanges.descriptionRaw },
+    description: {
+      raw: expectedTaggedDescription(boundExpectedOp.intendedChanges.descriptionRaw, opBindingToken),
+    },
     journalNotes: `Commit ${opBindingToken}`,
   };
   const preWriteCheck = await reconcileOpenProjectLostAck({
@@ -974,6 +1027,18 @@ export async function runOpenProjectSingleReleaseProbe({
     headers: opHeaders(authorToken),
     body: { ...lostAckPayload, lockVersion: lockBeforeLostAck },
   });
+  const apiOnlyWithoutPgCheck = pgUrl
+    ? await reconcileOpenProjectLostAck({
+        baseUrl,
+        workPackageId: wpId,
+        apiToken: authorToken,
+        preCommitLockVersion: lockBeforeLostAck,
+        expectedOperation: boundExpectedOp,
+        payload: lostAckPayload,
+        retryIfSafe: true,
+        pgUrl: null,
+      })
+    : null;
   const reconcileResult = await reconcileOpenProjectLostAck({
     baseUrl,
     workPackageId: wpId,
@@ -1004,10 +1069,88 @@ export async function runOpenProjectSingleReleaseProbe({
     retryIfSafe: true,
     pgUrl,
   });
+
+  // Also probe same-user 5-minute journal aggregation window (`Journals::CreateService#aggregatable?`)
+  // on a disposable WorkPackage when connected to real OpenProject PostgreSQL:
+  let sameUserAggregationWindowDiagnostic = null;
+  if (pgUrl) {
+    const wpAgg = await jsonRequest(createUrl, {
+      method: 'POST',
+      headers: opHeaders(approverToken),
+      body: { subject: `Agg Probe (${releaseLabel})`, description: { raw: 'init' } },
+    });
+    const aggId = wpAgg.body.id;
+    const aggUrl = `${root}/api/v3/work_packages/${aggId}`;
+    const aggOp = {
+      clientOperationId: `agg-op-${releaseLabel}-0`,
+      expectedActorHref: authorActorHref,
+      intendedChanges: {
+        subject: `Agg Bound (${releaseLabel})`,
+        descriptionRaw: `Agg staged (${releaseLabel})`,
+      },
+    };
+    const aggTok = computeOpenProjectOperationBinding({
+      workPackageId: aggId,
+      preCommitLockVersion: 0,
+      expectedActorHref: aggOp.expectedActorHref,
+      intendedChanges: aggOp.intendedChanges,
+      clientOperationId: aggOp.clientOperationId,
+    });
+    await jsonRequest(aggUrl, {
+      method: 'PATCH',
+      headers: opHeaders(authorToken),
+      body: {
+        lockVersion: 0,
+        subject: aggOp.intendedChanges.subject,
+        description: { raw: expectedTaggedDescription(aggOp.intendedChanges.descriptionRaw, aggTok) },
+      },
+    });
+    const beforeSameUserOverwrite = await reconcileOpenProjectLostAck({
+      baseUrl,
+      workPackageId: aggId,
+      apiToken: authorToken,
+      preCommitLockVersion: 0,
+      expectedOperation: aggOp,
+      retryIfSafe: true,
+      pgUrl,
+    });
+    await jsonRequest(aggUrl, {
+      method: 'PATCH',
+      headers: opHeaders(authorToken),
+      body: {
+        lockVersion: 1,
+        subject: `Agg SameUser Overwrite (${releaseLabel})`,
+        description: { raw: 'Same user edit within 5m aggregation window' },
+      },
+    });
+    const afterSameUserOverwrite = await reconcileOpenProjectLostAck({
+      baseUrl,
+      workPackageId: aggId,
+      apiToken: authorToken,
+      preCommitLockVersion: 0,
+      expectedOperation: aggOp,
+      retryIfSafe: true,
+      pgUrl,
+    });
+    sameUserAggregationWindowDiagnostic = {
+      beforeSameUserOverwriteDisposition: beforeSameUserOverwrite.disposition,
+      afterSameUserOverwriteDisposition: afterSameUserOverwrite.disposition,
+      extraWritesOnCoalescedUnknown: afterSameUserOverwrite.extraWritesSent,
+      coalescedInPlaceWithinDefault5mWindow:
+        beforeSameUserOverwrite.disposition === 'committed'
+        && afterSameUserOverwrite.disposition === 'unknown'
+        && afterSameUserOverwrite.extraWritesSent === 0,
+    };
+  }
+
+  const validInterveningReasons = new Set([
+    'intervening-or-unbound-journal-at-expected-version',
+    'lock-version-advanced-without-bound-operation-journal',
+  ]);
   const lostAckSingleDurableEffectPass =
     interveningEditRes.status === 200
     && interveningEditCheck.disposition === 'unknown'
-    && interveningEditCheck.reason === 'intervening-or-unbound-journal-at-expected-version'
+    && validInterveningReasons.has(interveningEditCheck.reason)
     && interveningEditCheck.extraWritesSent === 0
     && interveningEditCheck.allowRetryAtPreCommitVersion === false
     && interveningEditCheck.reconciledToSingleDurableEffect === false
@@ -1018,6 +1161,8 @@ export async function runOpenProjectSingleReleaseProbe({
     && preWriteCheck.extraWritesSent === 0
     && preWriteCheck.allowRetryAtPreCommitVersion === true
     && committedButAckDropped.status === 200
+    && (apiOnlyWithoutPgCheck === null
+      || (apiOnlyWithoutPgCheck.disposition === 'unknown' && apiOnlyWithoutPgCheck.extraWritesSent === 0))
     && reconcileResult.disposition === 'committed'
     && reconcileResult.extraWritesSent === 0
     && reconcileResult.reconciledToSingleDurableEffect
@@ -1058,7 +1203,9 @@ export async function runOpenProjectSingleReleaseProbe({
         interveningEditReason: interveningEditCheck.reason,
         unboundOperationDisposition: unboundVersionOnlyCheck.disposition,
         preWriteDisposition: preWriteCheck.disposition,
+        apiActivitiesWithoutDbSnapshotDisposition: apiOnlyWithoutPgCheck?.disposition ?? null,
         afterDescriptionOverwriteDisposition: reconcileAfterOverwrite.disposition,
+        sameUserAggregationWindowDiagnostic,
         passes: lostAckSingleDurableEffectPass,
       },
     },
@@ -1100,22 +1247,66 @@ export async function probeOpenProjectDualRelease(args, dockerState) {
     releaseLabel: 'v14.0.0',
     baseUrl: args.openprojectV14Url,
     projectId: args.openprojectProjectId,
-    authorToken: args.openprojectAuthorToken,
-    approverToken: args.openprojectApproverToken,
-    restrictedToken: args.openprojectRestrictedToken,
-    approvedStatusHref: args.openprojectApprovedStatusHref,
-    holdStatusHref: args.openprojectHoldStatusHref,
-    disallowedStatusHref: args.openprojectDisallowedStatusHref,
+    authorToken: args.openprojectV14AuthorToken ?? args.openprojectAuthorToken,
+    approverToken: args.openprojectV14ApproverToken ?? args.openprojectApproverToken,
+    restrictedToken: args.openprojectV14RestrictedToken ?? args.openprojectRestrictedToken,
+    approvedStatusHref: args.openprojectV14ApprovedStatusHref ?? args.openprojectApprovedStatusHref,
+    holdStatusHref: args.openprojectV14HoldStatusHref ?? args.openprojectHoldStatusHref,
+    disallowedStatusHref: args.openprojectV14DisallowedStatusHref ?? args.openprojectDisallowedStatusHref,
     pgUrl: args.openprojectPgV14Url,
   });
+  const captureContainerLog = (containerName, outFileName, tokensToRedact) => {
+    if (!containerName) return null;
+    try {
+      const raw = execFileSync('docker', ['logs', '--tail', '600', containerName], {
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+        timeout: 8000,
+      });
+      let cleaned = sanitizeText(raw, tokensToRedact.filter(Boolean));
+      for (const tok of tokensToRedact.filter(Boolean)) {
+        cleaned = cleaned.split(tok).join('<REDACTED_TOKEN>');
+      }
+      cleaned = cleaned.trim() + '\n';
+      mkdirSync(LOGS_DIR, { recursive: true });
+      writeFileSync(join(LOGS_DIR, outFileName), cleaned);
+      return {
+        retainedServerLogPath: `projects/workspace/qualification/workflow-generalization/receipts/logs/${outFileName}`,
+        retainedServerLogSha256: sha256(cleaned),
+      };
+    } catch {
+      return null;
+    }
+  };
+
+  const redactList = [
+    args.openprojectAuthorToken,
+    args.openprojectApproverToken,
+    args.openprojectRestrictedToken,
+    args.openprojectV14AuthorToken,
+    args.openprojectV14ApproverToken,
+    args.openprojectV14RestrictedToken,
+  ];
+  const log13 = captureContainerLog(
+    args.openprojectV13Container,
+    'openproject-v13.4.0-step2-probe.log',
+    redactList,
+  );
+  const log14 = captureContainerLog(
+    args.openprojectV14Container,
+    'openproject-v14.0.0-step2-probe.log',
+    redactList,
+  );
+
   return {
     appId: 'openproject',
     auditedReleasePair: 'v13.4.0->v14.0.0',
     stageOrder: 1,
     status: 'probed-both-releases',
+    establishesUpstreamAppContract: true,
     serverCodeAudit: OPENPROJECT_SERVER_CODE_AUDIT,
-    v13_4_0: v13,
-    v14_0_0: v14,
+    v13_4_0: { ...v13, ...(log13 ?? {}) },
+    v14_0_0: { ...v14, ...(log14 ?? {}) },
     dualReleaseQualified: v13.qualifiesSameRowTermsWorkflow && v14.qualifiesSameRowTermsWorkflow,
   };
 }
