@@ -387,7 +387,8 @@ class TraceSession {
     assertContext = async () => {}, authorizeStep = async () => {}, accountScope = null, fieldGroups = null, goal = null,
     suffixIndex = null, executedSteps = [],
     suffixEligibility = false, slotRoles = null, inertFormLocators = [],
-    assertPrerequisite = null, requirePrerequisiteCheck = false }) {
+    assertPrerequisite = null, requirePrerequisiteCheck = false,
+    crossScreenRule = false, attestPrerequisites = null }) {
     if (typeof template !== 'string' || !template || typeof pageId !== 'string' || !pageId
       || typeof intent !== 'string' || !intent) throw Error('Trace requires template, pageId and intent');
     if (goal !== null && (typeof goal !== 'string' || !goal.trim())) throw Error('Invalid trace goal');
@@ -415,11 +416,16 @@ class TraceSession {
     this.inertFormLocators = Array.isArray(inertFormLocators) ? structuredClone(inertFormLocators) : [];
     this.assertPrerequisite = assertPrerequisite;
     this.requirePrerequisiteCheck = Boolean(requirePrerequisiteCheck);
+    // The cross-screen rule (cross-screen-rule.md) is opt-in and applies to the index matcher only.
+    this.crossScreenRule = crossScreenRule === true;
+    this.attestPrerequisites = typeof attestPrerequisites === 'function' ? attestPrerequisites : null;
+    this.clickLocators = new Map(intermediateClicks.map(locator => [dag.hash(['locator', locator]), locator]));
     this.options = { service, owner, pageId, intent, template, inputs, intermediateClicks, signal,
       assertContext, authorizeStep, accountScope, fieldGroups, goal,
       suffixIndex, executedSteps,
       suffixEligibility: this.suffixEligibility, slotRoles: this.slotRolesPolicy, inertFormLocators: this.inertFormLocators,
-      assertPrerequisite: this.assertPrerequisite, requirePrerequisiteCheck: this.requirePrerequisiteCheck };
+      assertPrerequisite: this.assertPrerequisite, requirePrerequisiteCheck: this.requirePrerequisiteCheck,
+      crossScreenRule: this.crossScreenRule, attestPrerequisites: this.attestPrerequisites };
     const roleBinding = resolveRoleBoundInputs({
       inputs,
       slotRoles: this.slotRolesPolicy,
@@ -839,11 +845,39 @@ class TraceSession {
   #suffixEnabled(dp) {
     return Boolean(this.suffixIndex && dp && !this.fieldScope && this.dag.version >= VERSION);
   }
+  /** Ask the host which steps this session did not take already hold for the bound record. Asked
+   * afresh for every frame, in the host's own terms; anything the host cannot be asked about, an
+   * error, or an answer that is not one boolean per step counts as not attested. */
+  async #attestSkipped(before) {
+    if (!this.crossScreenRule || !this.attestPrerequisites) return null;
+    const carried = new Set([...this.priorSteps, ...this.records.map(record => record.step)].map(step => canonicalJson(step)));
+    const asked = new Map();
+    for (const node of this.dag.nodes.values()) {
+      for (const { step } of node.edges ?? []) {
+        const key = canonicalJson(step);
+        if (carried.has(key) || asked.has(key)) continue;
+        const slot = step.kind === 'click' ? null : (this.slotNames.get(step.slot) ?? null);
+        const locator = step.kind === 'click' ? (this.clickLocators.get(step.locator) ?? null) : null;
+        if (step.kind === 'click' ? locator : slot) asked.set(key, { kind: step.kind, slot, locator });
+      }
+    }
+    if (!asked.size) return new Set();
+    let answers;
+    try {
+      answers = await this.attestPrerequisites({ origin: new URL(before.observation.url).origin, url: before.observation.url,
+        skipped: structuredClone([...asked.values()]) });
+    } catch { return new Set(); }
+    if (!Array.isArray(answers) || answers.length !== asked.size || answers.some(answer => typeof answer !== 'boolean')) return new Set();
+    return new Set([...asked.keys()].filter((key, index) => answers[index] === true));
+  }
   /** Ask whether a learned node's remaining local steps hold on this live frame. No effect occurs here. */
-  #certifySuffix(before, dp, expected) {
+  async #certifySuffix(before, dp, expected) {
+    const attested = await this.#attestSkipped(before);
     const outcome = certifySuffix({ dag: this.dag, index: this.suffixIndex, dp, frame: before, restrictTo: expected,
       session: { inputs: this.inputs, clicks: this.clicks, sameOutlineClicks: this.sameOutlineClicks,
         inertFormLocators: this.inertFormLocators,
+        ...(attested ? { isAttested: step => attested.has(canonicalJson(step)) } : {}),
+        settledSuccessors: this.crossScreenRule,
         // Fresh: the frame must be the session's latest observation, never one carried over.
         formStateFresh: before.observation === this.lastObservation,
         executedSteps: [...this.priorSteps, ...this.records.map(record => record.step)],
@@ -853,7 +887,7 @@ class TraceSession {
       atStep: this.depth,
       node: before.id.slice(0, 12),
       ...(outcome.status === 'certified'
-        ? { learnedNode: outcome.nodeId.slice(0, 12) }
+        ? { learnedNode: outcome.nodeId.slice(0, 12), ...(outcome.attested ? { attested: true } : {}) }
         : { reason: outcome.reason, refusals: outcome.refusals }),
     });
     return outcome.status === 'certified' ? outcome : null;
@@ -994,10 +1028,11 @@ class TraceSession {
         let continuedSteps = 0, expected = null;
         for (;;) {
           let lookupId = before.id, node = this.dag.nodes.get(lookupId);
-          if (expected && node && !expected.has(lookupId)) node = undefined;
-          else if (!node) {
-            lookupId = this.#certifySuffix(before, dp, expected)?.nodeId ?? lookupId;
-            node = this.dag.nodes.get(lookupId);
+          if (expected && node && !expected.has(lookupId) && !this.crossScreenRule) node = undefined;
+          else if (!node || (expected && !expected.has(lookupId))) {
+            lookupId = (await this.#certifySuffix(before, dp, expected))?.nodeId ?? null;
+            node = lookupId ? this.dag.nodes.get(lookupId) : undefined;
+            lookupId ??= before.id;
           }
           expected = null;
           if (!node) return { continuedSteps, reason: 'unseen-branch', reachedTerminal: false };
@@ -1151,10 +1186,11 @@ class TraceSession {
         let expected = null;
         for (;;) {
           let lookupId = before.id, node = this.dag.nodes.get(lookupId);
-          if (expected && node && !expected.has(lookupId)) node = undefined;
-          else if (!node) {
-            lookupId = this.#certifySuffix(before, dp, expected)?.nodeId ?? lookupId;
-            node = this.dag.nodes.get(lookupId);
+          if (expected && node && !expected.has(lookupId) && !this.crossScreenRule) node = undefined;
+          else if (!node || (expected && !expected.has(lookupId))) {
+            lookupId = (await this.#certifySuffix(before, dp, expected))?.nodeId ?? null;
+            node = lookupId ? this.dag.nodes.get(lookupId) : undefined;
+            lookupId ??= before.id;
           }
           expected = null;
           if (!node) {

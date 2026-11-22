@@ -97,8 +97,13 @@ function accountedReach(nodes, isAccounted) {
 /**
  * Certify at most one learned node for a live frame that missed the exact hash (SuffixIndex mode).
  * session: { inputs: Map<slotHash,string>, clicks: Set<locatorHash>, executedSteps: step[],
- *            sameOutlineClicks: number, isGoalTerminal(id, node): boolean, formStateFresh?: boolean }
- * Returns { status: 'certified', nodeId, terminal } or { status: 'refused', reason, refusals }.
+ *            sameOutlineClicks: number, isGoalTerminal(id, node): boolean, formStateFresh?: boolean,
+ *            isAttested?: (step) => boolean, settledSuccessors?: boolean }
+ * Returns { status: 'certified', nodeId, terminal, attested } or { status: 'refused', reason, refusals }.
+ * `isAttested` and `settledSuccessors` are the cross-screen rule (cross-screen-rule.md): a step the
+ * session did not take may also be accounted for by the host's attestation, and after a certified
+ * step the next state may be reached from a learned successor through fills settled on the page.
+ * `attested` says whether the certified state is reachable only with an attested step.
  * Refuses with `form-state-unavailable` before considering any candidate unless the frame carries
  * form state for every writable control and is the session's latest observation.
  */
@@ -133,12 +138,26 @@ export function certifySuffix({ dag, index, dp, frame, session, restrictTo = nul
   const executedSlots = new Set(session.executedSteps.filter(step => step.kind !== 'click').map(step => step.slot));
   const executedClicks = new Set(session.executedSteps.filter(step => step.kind === 'click').map(step => step.locator));
   const slotDone = slot => executedSlots.has(slot) || settled(slot);
-  const reach = accountedReach(dag.nodes, step => step.kind === 'click' ? executedClicks.has(step.locator) : slotDone(step.slot));
+  const carriedOrSettled = step => (step.kind === 'click' ? executedClicks.has(step.locator) : slotDone(step.slot));
+  const isAttested = typeof session.isAttested === 'function' ? session.isAttested : () => false;
+  const reachWithoutAttestation = accountedReach(dag.nodes, carriedOrSettled);
+  const reach = accountedReach(dag.nodes, step => carriedOrSettled(step) || isAttested(step) === true);
+  // Clause 4: a state reached from an allowed successor through fills that are settled on the page.
+  let allowed = restrictTo;
+  if (restrictTo && session.settledSuccessors === true) {
+    allowed = new Set(restrictTo);
+    const queue = [...restrictTo];
+    while (queue.length) {
+      for (const edge of dag.nodes.get(queue.pop())?.edges ?? []) {
+        if (edge.step.kind !== 'click' && settled(edge.step.slot) && !allowed.has(edge.next)) { allowed.add(edge.next); queue.push(edge.next); }
+      }
+    }
+  }
 
   const eligible = [];
   for (const [id, meta] of index.nodes) {
     const node = dag.nodes.get(id);
-    if (!node || meta.scope !== frame.meta.scope || (restrictTo && !restrictTo.has(id))) continue;
+    if (!node || meta.scope !== frame.meta.scope || (allowed && !allowed.has(id))) continue;
     const reject = reason => { refusals.set(reason, (refusals.get(reason) ?? 0) + 1); };
     if (!reach.has(id)) { reject('prefix-unaccounted'); continue; }
 
@@ -215,10 +234,10 @@ export function certifySuffix({ dag, index, dp, frame, session, restrictTo = nul
         reject('dirty-untracked-form-field'); continue;
       }
     }
-    eligible.push({ id, terminal });
+    eligible.push({ id, terminal, attested: !reachWithoutAttestation.has(id) });
   }
   if (eligible.length !== 1) return refused(eligible.length ? 'ambiguous-candidates' : 'no-eligible-candidate');
-  return { status: 'certified', nodeId: eligible[0].id, terminal: eligible[0].terminal };
+  return { status: 'certified', nodeId: eligible[0].id, terminal: eligible[0].terminal, attested: eligible[0].attested };
 }
 
 // --- Active-footprint suffixProfiles, per-<form> dirty-field guard, L* refinement & landmarks ---

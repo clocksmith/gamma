@@ -86,7 +86,8 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
   assertContext = async () => {}, authorizeStep = async () => {}, publishTrace = null, accountScope = null, fieldGroups = null,
   learnRepairs = false, observationLocators = null, reconvergeMidRepair = false, goal = null,
   suffixIndex = null, suffixEligibility = false, slotRoles = null, inertFormLocators = [],
-  assertPrerequisite = null, requirePrerequisiteCheck = false }) {
+  assertPrerequisite = null, requirePrerequisiteCheck = false,
+  crossScreenRule = false, attestPrerequisites = null }) {
   if (!['learn', 'fresh', 'reuse'].includes(mode)) throw Error('Invalid workflow mode');
   if (typeof learnRepairs !== 'boolean') throw Error('Explicit boolean repair-learning policy required');
   if (typeof reconvergeMidRepair !== 'boolean') throw Error('Explicit boolean mid-repair reconvergence policy required');
@@ -118,7 +119,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
   const options = { service, owner, pageId, intent, template, inputs, intermediateClicks, signal,
     assertContext: assertWorkflowContext, authorizeStep, accountScope, fieldGroups, goal,
     suffixIndex, suffixEligibility, slotRoles, inertFormLocators,
-    assertPrerequisite, requirePrerequisiteCheck };
+    assertPrerequisite, requirePrerequisiteCheck, crossScreenRule, attestPrerequisites };
   // A replacement session keeps the steps already executed in this run, for suffix eligibility only.
   const carriedSteps = () => suffixIndex ? [...recorder.priorSteps, ...recorder.records.map(record => record.step)] : [];
   // Suffix decisions and certified rejoins made by a session that was later replaced still count in the result.
@@ -135,6 +136,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       for (const [reason, count] of Object.entries(event.refusals ?? {})) refusals[reason] = (refusals[reason] ?? 0) + count;
     }
     return { certified: events.filter(event => event.phase === 'suffix-certified').length,
+      attested: events.filter(event => event.phase === 'suffix-certified' && event.attested).length,
       refused: events.filter(event => event.phase === 'suffix-refused').length,
       replayedSteps: events.filter(event => event.phase === 'certified-suffix-replay').length, refusals };
   };

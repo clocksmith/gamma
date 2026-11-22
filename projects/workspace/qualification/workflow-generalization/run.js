@@ -30,11 +30,11 @@ const client = JSON.parse(readFileSync(join(root, 'projects/workspace/config/faw
 const args = process.argv.slice(2);
 const get = name => args.includes(name) ? args[args.indexOf(name) + 1] : null;
 if (args.includes('--help')) {
-  console.log('run.js --out NEW_DIR [--controlled] [--pair-teaching] [--numeric-routes] [--matcher index|profile] [--arms whole,fresh,script,skill,scoped,suffix,whole-rc,suffix-rc] [--variants frozen,ids]');
+  console.log('run.js --out NEW_DIR [--controlled] [--pair-teaching] [--numeric-routes] [--cross-screen] [--matcher index|profile] [--arms whole,fresh,script,skill,scoped,suffix,whole-rc,suffix-rc] [--variants frozen,ids]');
   process.exit(0);
 }
 for (let i = 0; i < args.length; i++) {
-  if (['--controlled', '--pair-teaching', '--numeric-routes'].includes(args[i])) continue;
+  if (['--controlled', '--pair-teaching', '--numeric-routes', '--cross-screen'].includes(args[i])) continue;
   if (['--out', '--arms', '--variants', '--max-cost-usd', '--matcher'].includes(args[i]) && args[i + 1]) { i++; continue; }
   throw Error('Unknown or incomplete option');
 }
@@ -49,6 +49,10 @@ const pairTeaching = args.includes('--pair-teaching');
 // matchers that bind a learned state to a normalized URL path.
 const numericRoutes = args.includes('--numeric-routes');
 const matcherKind = get('--matcher') ?? 'index';
+// The cross-screen rule (cross-screen-rule.md) for the index matcher. This suite has no host
+// attestation, so only the rule's settled-successor clause can act here.
+const crossScreen = args.includes('--cross-screen');
+if (crossScreen && matcherKind !== 'index') throw Error('--cross-screen applies to the index matcher');
 if (!['index', 'profile'].includes(matcherKind)) throw Error('Unknown matcher kind');
 let routeSerial = 1000;
 const arms = (get('--arms') ?? 'whole,fresh,script').split(',');
@@ -81,7 +85,7 @@ paths.push('projects/workspace/config/fawn-workspace-service.json', 'projects/wo
     'client/cli-planner', 'client/investigation'].map(path => `projects/workspace/src/${path}.js`));
 if (arms.includes('scoped')) paths.push('projects/workspace/src/client/field-group-scope.js');
 const hashes = () => Object.fromEntries(paths.map(path => [path, sha256Hex(readFileSync(join(root, path)))]));
-const frozen = { frozenAt: new Date().toISOString(), testFreeze, policy, arms, variants, controlled, maxTotalCostUsd, pairTeaching, numericRoutes, matcherKind,
+const frozen = { frozenAt: new Date().toISOString(), testFreeze, policy, arms, variants, controlled, maxTotalCostUsd, pairTeaching, numericRoutes, matcherKind, crossScreen,
   sourceCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
   sourceDirty: !!execFileSync('git', ['status', '--porcelain', '--ignore-submodules=all'], { cwd: root, encoding: 'utf8' }).trim(),
   sourceHashes: hashes() };
@@ -207,6 +211,7 @@ async function run({ vendor, variant, arm, learn = false }) {
     armed = true;
     const result = await runWorkflow({ dag, mode: learn ? 'learn' : graph ? 'reuse' : 'fresh',
       suffixIndex, suffixEligibility, reconvergeMidRepair: !learn && arm.endsWith('-rc'),
+      crossScreenRule: crossScreen && Boolean(suffixIndex) && !learn,
       requirePrerequisiteCheck: Boolean(extension?.guarded), assertPrerequisite,
       service: port, owner, pageId: 'main', intent: 'application', template: `${vendor}-contact-projection-v1`,
       inputs: { ...policy.inputs, ...(learn ? { email: 'avery@example.test', firstName: 'Avery', fullName: 'Avery Test' } : {}) },

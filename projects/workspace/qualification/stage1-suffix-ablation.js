@@ -447,7 +447,26 @@ const ARM_DEFS = {
   'suffix-index-v1': { suffixEligibility: false, useIndex: true },
   // Both options on. Replay consults the index first, so this shows whether the two combine.
   'suffix-index-plus-profile': { suffixEligibility: true, useIndex: true },
+  // The cross-screen rule (workflow-generalization/cross-screen-rule.md): the index matcher, plus a
+  // host attestation for steps the run did not take and settled successors after a certified step.
+  'suffix-cross-v1': { suffixEligibility: false, useIndex: true, cross: true },
 };
+// The host's authoritative read for the cross-screen rule: the fixture's server-side state, never
+// the page. An entry step is attested when the server session holds the expected record under the
+// right tenant and is past the entry screens; the approval click when the server records approval.
+const attestFor = (fam, env) => async ({ skipped }) => {
+  const server = env.service.state();
+  const recordBound = !['ENTRY', 'UNSEEN_ENTRY'].includes(server.screen)
+    && server.serverSessionSku === fam.expectedSessionSku && env.service.liveAccount() === fam.tenantId;
+  const same = (first, second) => JSON.stringify(first) === JSON.stringify(second);
+  return skipped.map(step => {
+    if (step.kind !== 'click') return step.slot === 'entryQuery' && recordBound;
+    if (same(step.locator, fam.entryButton)) return recordBound;
+    if (same(step.locator, fam.approvalGateButton)) return server.approved === true;
+    return false;
+  });
+};
+const crossOptions = (arm, fam, env) => (arm.cross ? { crossScreenRule: true, attestPrerequisites: attestFor(fam, env) } : {});
 export const DEFAULT_STAGE1_ARMS = Object.freeze(['exact-hash-v3', 'suffix-eligibility-v4']);
 const suffixCertifications = (arm, res) => arm.useIndex
   ? (res.suffix?.certified ?? 0)
@@ -462,7 +481,7 @@ const suffixReplayedSteps = res => (res.traceEvents ?? []).filter(event =>
 // the run walks the earlier steps itself and a matcher that needs an accounted prefix reaches its
 // certification step. The fixtures are otherwise unchanged; default runs are unaffected.
 const ENTRY_HANDLES = Object.freeze(['entry-field', 'entry-btn']);
-export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_ARMS, startAtEntry = false } = {}) {
+export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_ARMS, startAtEntry = false, matchedPairs = false } = {}) {
   const placed = scenario => (startAtEntry && scenario.startScreen === 'INTERIOR'
     ? { ...scenario, startScreen: 'ENTRY' } : scenario);
   if (!armIds.includes('exact-hash-v3') || armIds.some(id => !ARM_DEFS[id])) throw Error('Unknown or missing Stage 1 arm');
@@ -739,6 +758,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             reconvergeMidRepair: true,
             suffixEligibility: arm.suffixEligibility,
             suffixIndex: frozenIndex(arm),
+            ...crossOptions(arm, fam, env),
             slotRoles: fam.slotRoles,
             assertContext: async () => {
               if (env.service.liveAccount() !== fam.tenantId) throw Error('account-scope-mismatch');
@@ -777,7 +797,8 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             suffixCertifications: suffixCertifications(arm, res),
             suffixReplayedSteps: suffixReplayedSteps(res),
             dispatchedActions: env.service.dispatched.length,
-            ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null, indexNodes: arm.index.nodes.size } : {}),
+            ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null, indexNodes: arm.index.nodes.size,
+              attestedCertifications: res.suffix?.attested ?? 0 } : {}),
             certifiedRejoinK2: certifiedRejoin && plannerStepsUsed <= 2,
             certifiedRejoinK3: certifiedRejoin && plannerStepsUsed <= 3,
           });
@@ -810,6 +831,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             reconvergeMidRepair: true,
             suffixEligibility: arm.suffixEligibility,
             suffixIndex: frozenIndex(arm),
+            ...crossOptions(arm, fam, env),
             slotRoles: fam.slotRoles,
             assertContext: async () => {
               if (env.service.liveAccount() !== fam.tenantId) throw Error('account-scope-mismatch');
@@ -915,14 +937,85 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             dispatchedActions: env.service.dispatched.length,
             candidateRejoinsProposed: certifications,
             suffixReplayedSteps: suffixReplayedSteps(res),
-            ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null } : {}),
+            ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null, attestedCertifications: res.suffix?.attested ?? 0 } : {}),
+            plannerCalls: res.modelCalls,
+            reusedSteps: res.cacheSteps,
             ...(startAtEntry ? {
               handles: env.service.dispatched.map(cmd => cmd.target.handle),
-              plannerCalls: res.modelCalls,
-              reusedSteps: res.cacheSteps,
               detail: res.detail,
             } : {}),
             lstarAction: res.lstarRefinement?.action ?? null,
+          });
+        }
+
+        // Matched pairs for the cross-screen rule, run only when asked for. Each pair shows the
+        // matcher the same controls twice. In one half the skipped prerequisite holds on the server
+        // and the run must complete; in the other it does not and no matcher may certify.
+        const pairs = !matchedPairs ? [] : [
+          { pairId: 'MP1_record', half: 'holds', scenario: { startScreen: 'INTERIOR', extraAuthorizedControl: true } },
+          { pairId: 'MP1_record', half: 'does-not-hold',
+            scenario: { startScreen: 'INTERIOR', extraAuthorizedControl: true, serverSessionSku: 'OTHER-RECORD-SKU' } },
+          { pairId: 'MP2_approval', half: 'holds', scenario: { startScreen: 'INTERIOR', extraAuthorizedControl: true, preApproved: true } },
+          // The approval control is disabled, so the observation policy hides it, while the server holds no approval.
+          { pairId: 'MP2_approval', half: 'does-not-hold', scenario: { startScreen: 'INTERIOR', extraAuthorizedControl: true, disabledGate: true } },
+        ];
+        for (const pair of pairs) {
+          const pairDag = TraceDag.restore(arm.dag.export(), LIMITS);
+          const env = buildSnapshotHarness(fam, pair.scenario);
+          const { planner } = makeControlledPlanner(fam, {}, { requireApprovalBeforeFields: !pair.scenario.preApproved });
+          const projectId = `pair-${fam.familyId}-${arm.armId}-${pair.pairId}-${pair.half}-${++seq}`;
+          invStore.create({ id: projectId, goal: pair.pairId });
+          const res = await runWorkflow({
+            dag: pairDag,
+            mode: 'reuse',
+            goal: `${fam.familyId}-review`,
+            accountScope: fam.tenantId,
+            service: env.service,
+            owner: {},
+            pageId: 'main',
+            intent: `${fam.familyId}:prepare`,
+            template: `${fam.familyId}-template`,
+            inputs: fam.evalInputs,
+            intermediateClicks,
+            observationLocators: allowedLocators,
+            learnRepairs: false,
+            reconvergeMidRepair: true,
+            suffixEligibility: arm.suffixEligibility,
+            suffixIndex: frozenIndex(arm),
+            ...crossOptions(arm, fam, env),
+            slotRoles: fam.slotRoles,
+            assertContext: async () => {
+              if (env.service.liveAccount() !== fam.tenantId) throw Error('account-scope-mismatch');
+            },
+            task: `Pair ${pair.pairId} ${pair.half}`,
+            planner,
+            config: { maxTurns: 14, maxInputBytes: 24000 },
+            store: invStore,
+            projectId,
+            verifyReview: env.verifyReview,
+            signal: new AbortController().signal,
+          });
+          const certifications = suffixCertifications(arm, res), replayed = suffixReplayedSteps(res);
+          if (pair.half === 'holds') check(res.completed === true, `${fam.familyId} ${pair.pairId}: the holding half must complete`);
+          else {
+            check(certifications === 0 && replayed === 0, `${fam.familyId} ${pair.pairId}: must not certify when the prerequisite does not hold`);
+            check(res.completed === false, `${fam.familyId} ${pair.pairId}: must not complete when the prerequisite does not hold`);
+          }
+          caseRows.push({
+            kind: 'matched-pair',
+            familyId: fam.familyId,
+            tenantId: fam.tenantId,
+            armId: arm.armId,
+            caseId: `${pair.pairId}:${pair.half}`,
+            completed: res.completed,
+            dispatchedActions: env.service.dispatched.length,
+            handles: env.service.dispatched.map(cmd => cmd.target.handle),
+            plannerCalls: res.modelCalls,
+            reusedSteps: res.cacheSteps,
+            suffixCertifications: certifications,
+            suffixReplayedSteps: replayed,
+            ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null, attestedCertifications: res.suffix?.attested ?? 0 } : {}),
+            detail: res.detail,
           });
         }
 
@@ -990,6 +1083,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
     return {
       schema: 'gammatron.stage1-offline-suffix-ablation/v1',
       ...(startAtEntry ? { startAtEntry: true } : {}),
+      ...(matchedPairs ? { matchedPairs: true } : {}),
       llmSpendUsd: 0,
       clusteringUnit: 'workflowFamily_x_tenant',
       clusterCount: WORKFLOW_FAMILIES.length,
@@ -1013,9 +1107,12 @@ if (isDirect) {
   const entryAt = cli.indexOf('--entry-start');
   const startAtEntry = entryAt >= 0;
   if (startAtEntry) cli.splice(entryAt, 1);
+  const pairsAt = cli.indexOf('--matched-pairs');
+  const matchedPairs = pairsAt >= 0;
+  if (matchedPairs) cli.splice(pairsAt, 1);
   const armsAt = cli.indexOf('--arms');
   const armList = armsAt >= 0 ? cli.splice(armsAt, 2)[1].split(',') : DEFAULT_STAGE1_ARMS;
-  const receipt = await runStage1SuffixAblation({ arms: armList, startAtEntry });
+  const receipt = await runStage1SuffixAblation({ arms: armList, startAtEntry, matchedPairs });
   const outArg = cli[0];
   if (outArg) {
     const outPath = resolve(outArg);
