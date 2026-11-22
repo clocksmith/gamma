@@ -714,7 +714,8 @@ class WorkspaceService {
       ? { ...begun.action.request, writeVersion: begun.checks.writeVersion }
       : begun.action.request;
     const outcome = await this.#performEffect(workspaceId, effectiveRequest);
-    if (begun.action.request.kind !== 'navigate' && begun.checks?.writeVersion === undefined) {
+    if (begun.action.request.kind !== 'navigate'
+      && (begun.checks?.writeVersion === undefined || this.#adapter.supportsConditionalWrites !== true)) {
       outcome.evidence = { ...outcome.evidence, unconditionalWriteRaceWindow: true };
     }
     return runtime.mutex.run(async () => {
