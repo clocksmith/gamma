@@ -7,6 +7,7 @@ from collections import defaultdict
 import itertools
 import unittest
 
+import replay_verify_receipt as replay
 from impossibility_bound import (
     compute_disjoint_bound_k,
     compute_disjoint_bound_u,
@@ -44,7 +45,86 @@ def brute_force_opt_a(texts: dict[str, str], k: int) -> int:
     return len(alpha)
 
 
+def all_occurrences_dual_by_definition(texts: dict[str, str], k: int, positions: list[tuple[str, int]]) -> int:
+    """The Experiment A dual at the scale = 1 step potential, straight from its definition: every eligible
+    token, every occurrence, no shortcuts. Only for tiny corpora."""
+    whole = set(texts.values())
+    doc_freq: dict[str, set[str]] = defaultdict(set)
+    for pid, s in texts.items():
+        for a in range(len(s)):
+            for b in range(a + 1, len(s) + 1):
+                doc_freq[s[a:b]].add(pid)
+
+    def eligible(token: str) -> bool:
+        if token in whole:
+            return False
+        return k == 1 or len(token) == 1 or len(doc_freq[token]) >= k
+
+    pots = {pid: [sum(1 for q, pos in positions if q == pid and pos >= j) for j in range(len(s) + 1)] for pid, s in texts.items()}
+    rebates: dict[str, int] = defaultdict(int)
+    for pid, s in texts.items():
+        for a in range(len(s)):
+            for b in range(a + 1, len(s) + 1):
+                if eligible(s[a:b]):
+                    rebates[s[a:b]] += max(0, pots[pid][a] - pots[pid][b])
+    return sum(p[0] - p[-1] for p in pots.values()) + sum(min(0, 1 - rebate) for rebate in rebates.values())
+
+
 class ImpossibilityBoundTests(unittest.TestCase):
+    def test_self_overlap_under_u_keeps_the_bound_and_breaks_the_dual_equality(self):
+        # "aa" starts at 0 and at 1, and both occurrences span position 1.
+        texts = {"1": "aaa"}
+        res = verify_impossibility_witness(texts, 1, [], [("1", 1)])
+        self.assertEqual(res["disjoint_bound"], 1)
+        self.assertLessEqual(res["disjoint_bound"], brute_force_opt_a(texts, 1))
+        self.assertEqual(all_occurrences_dual_by_definition(texts, 1, [("1", 1)]), 0)
+        self.assertEqual(res["step_potential_dual"], 0)
+        self.assertEqual(res["tokens_counted_twice"], 1)
+        self.assertFalse(res["dual_equals_disjoint_bound"])
+        # At position 0 only one occurrence of "aa" spans the cut, and the equality holds.
+        ok = verify_impossibility_witness(texts, 1, [], [("1", 0)])
+        self.assertEqual(all_occurrences_dual_by_definition(texts, 1, [("1", 0)]), 1)
+        self.assertEqual((ok["disjoint_bound"], ok["step_potential_dual"], ok["tokens_counted_twice"]), (1, 1, 0))
+        self.assertTrue(ok["dual_equals_disjoint_bound"])
+
+    def test_self_overlap_under_w2_keeps_the_bound_and_breaks_the_dual_equality(self):
+        # "aa" occurs in both programs, so it is eligible at threshold 2, and it spans position 1 of "aaa" twice.
+        texts = {"1": "aaa", "2": "aab"}
+        res = verify_impossibility_witness(texts, 2, [("2", 2)], [("1", 1)])
+        self.assertEqual(res["disjoint_bound"], 2)
+        self.assertEqual(brute_force_opt_a(texts, 2), 2)
+        self.assertEqual(all_occurrences_dual_by_definition(texts, 2, [("2", 2), ("1", 1)]), 1)
+        self.assertEqual(res["step_potential_dual"], 1)
+        self.assertEqual(res["tokens_counted_twice"], 1)
+        self.assertFalse(res["dual_equals_disjoint_bound"])
+        ok = verify_impossibility_witness(texts, 2, [("2", 2)], [("1", 0)])
+        self.assertEqual(all_occurrences_dual_by_definition(texts, 2, [("2", 2), ("1", 0)]), 2)
+        self.assertEqual((ok["disjoint_bound"], ok["step_potential_dual"], ok["tokens_counted_twice"]), (2, 2, 0))
+
+    def test_replay_verifier_counts_every_occurrence(self):
+        # The replay verifier's own dual evaluation and charge count, against the definition.
+        cases = [
+            ({"1": "aaa"}, 1, [("1", 1)]),
+            ({"1": "aaa"}, 1, [("1", 0)]),
+            ({"1": "aaa", "2": "aab"}, 2, [("2", 2), ("1", 1)]),
+            ({"1": "aaa", "2": "aab"}, 2, [("2", 2), ("1", 0)]),
+            ({"1": "abababx", "2": "cdcdcdy"}, 1, [("1", 3), ("2", 2)]),
+            ({"1": "abcabcabc", "2": "abcabd"}, 2, [("2", 5)]),
+        ]
+        for texts, k, positions in cases:
+            whole, alpha, doc_freq, occs, wit = replay.build_shared_index(texts, max_bytes=160)
+            pots = replay.step_potentials(texts, positions)
+            expected = all_occurrences_dual_by_definition(texts, k, positions)
+            self.assertEqual(replay.eval_dual_bound_k(texts, k, 1, pots, whole, alpha, doc_freq, occs, wit=wit), expected, (texts, k, positions))
+            charged = replay.witness_charges(texts, k, positions, whole, alpha, doc_freq, occs, wit)
+            self.assertEqual(len(positions) - sum(len(where) - 1 for where in charged.values()), expected, (texts, k, positions))
+
+    def test_replay_verifier_rejects_a_witness_whose_cover_sets_share_a_token(self):
+        texts = {"1": "abx", "2": "aby"}
+        whole, alpha, doc_freq, occs, wit = replay.build_shared_index(texts, max_bytes=160)
+        with self.assertRaises(ValueError):
+            replay.replay_witness(texts, 2, [("1", 0), ("2", 1)], whole, alpha, doc_freq, occs, wit, "toy")
+
     def test_overlapping_non_tiling_counterexample(self):
         ce = overlapping_non_tiling_counterexample()
         self.assertEqual(ce["every_position_covered_by_4_tokens"], True)
