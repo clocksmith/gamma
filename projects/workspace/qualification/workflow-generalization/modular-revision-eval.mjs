@@ -142,7 +142,7 @@ async function runSingleArmCase({
     ...(overrideAssertPrerequisite
       ? { assertPrerequisite: overrideAssertPrerequisite }
       : (wrapped.assertPrerequisite ? { assertPrerequisite: wrapped.assertPrerequisite } : {})),
-    ...(requireVerifiedEntryPrerequisites ? { requireVerifiedEntryPrerequisites: true } : {}),
+    requireVerifiedEntryPrerequisites,
   };
 
   let res = null;
@@ -716,7 +716,11 @@ async function runModularVsGraphSeparation(store, mkProj) {
         } else {
           const sp = createAttestedSkillPlanner({
             book: armId === 'attested-checkpointed-skill' ? AttestedSkillBook.restore(ckptBook.export()) : AttestedSkillBook.restore(modBook.export()),
-            planner: p, allowSafeJumps: true, allowCallableSharedSuffixes: armId === 'attested-modular-skill', recordId: inp.hub,
+            planner: p,
+            allowSafeJumps: true,
+            allowCallableSharedSuffixes: armId === 'attested-modular-skill',
+            allowDownstreamLookahead: false,
+            recordId: inp.hub,
           });
           res = await runWorkflow({
             dag: new TraceDag(LIMITS), mode: 'fresh', service: s.service, owner: OWNER, pageId: pid,

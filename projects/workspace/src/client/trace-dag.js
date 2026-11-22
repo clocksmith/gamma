@@ -425,7 +425,7 @@ class TraceSession {
     suffixEligibility = false, slotRoles = null, inertFormLocators = [],
     assertPrerequisite = null, requirePrerequisiteCheck = false,
     requireConditionalWrite = false, requireMultiPredicateWrite = false,
-    requireVerifiedEntryPrerequisites = false, entryRestsOnUnavailablePrerequisite = false,
+    requireVerifiedEntryPrerequisites = true, entryRestsOnUnavailablePrerequisite = false,
     crossScreenRule = false, attestPrerequisites = null, effectForStep = null,
     attestedPredicateVersions = [], externalPredicateVersions = null, externalEntryUnavailable = null }) {
     if (typeof template !== 'string' || !template || typeof pageId !== 'string' || !pageId
