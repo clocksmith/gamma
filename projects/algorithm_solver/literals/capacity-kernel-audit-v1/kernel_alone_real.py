@@ -56,7 +56,7 @@ for name, programs in sets.items():
     out[name] = {'alphabet': alphabet, 'blockRank': rank, 'status': c['status'], 'nullity': c['nullity'], 'kFree': c.get('kFree'),
                  'deltaDetStar': c.get('deltaDetStar'), 'kernelLowerBound': c['certifiedLowerBound'],
                  'dictionaryEntries': None if dictionary is None else len(dictionary), 'dictionaryReplays': replays,
-                 'exactMinimumFromRankAndKernel': exact, 'knownMinimum': KNOWN.get(name), 'seconds': round(seconds, 2)}
+                 'exactMinimumFromRankAndKernel': exact, 'knownMinimum': KNOWN.get(name)}     # times are printed, not stored, so reruns are identical
     print(f"{name:18} alphabet {alphabet:3} rank {rank:3} {c['status']:18} bound {c['certifiedLowerBound']:3} "
           f"dictionary {str(out[name]['dictionaryEntries']):>4} replay {str(replays):>5} exact {str(exact):>4} known {str(KNOWN.get(name)):>4} {seconds:6.2f} s")
 with open(os.path.join(HERE, 'kernel-alone-real.json'), 'w') as f:

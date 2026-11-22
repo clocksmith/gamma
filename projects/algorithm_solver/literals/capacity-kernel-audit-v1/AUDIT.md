@@ -69,6 +69,19 @@ can answer for it. 5,733 small corpora in five families, under both rules.
   independently confirmed.
 - Longest run: 3.2 seconds.
 
+## Test 3: a second implementation, on 35 real corpora
+
+`independent_kernel.py` implements the test again from the theorem statement and shares no code with
+`capacity-diagnostic-v1`. Run on the 23 corpora above and the 12 public projects of
+`capacity-lagrangian-race-v1`, it agrees with the first implementation on every one: 22 where rank equals
+the alphabet, 9 where the rank is attained (each with a dictionary of exactly rank entries that replays),
+and 4 where it is ruled out.
+
+This re-derives the decisive outside-code answers independently: the 59-entry dictionary for the GGML
+headers, and the "+1" that puts the Cairo headers at 73 or more. The one query only the baseline settled,
+Cairo at 73 entries, rests on a dictionary rebuilt from the baseline's fragments and replayed by the capped
+checker (`capacity-lagrangian-race-v1/three_arm.py`).
+
 ## What rank alone and rank plus kernel settle, on these 23
 
 | Budget asked | Rank alone | Rank plus kernel |
@@ -84,6 +97,8 @@ Rank alone answers "fits" only when the alphabet already fits. At 64 entries the
 
 - These 23 corpora were already seen by this project. The external three-arm race is the unseen test.
 - The audit checks the lift, not its strength: it is +1 and no more.
+- Two implementations of one argument agree. That guards against coding errors, not against a flaw in the
+  argument that both would share; the line-by-line check above is the guard for that.
 - Eligibility on real corpora (the shared-substring table, the 160-byte cap) is checked here only through
   the replayed dictionaries and the one independently confirmed lift.
 - Whether the theorem is new is not assessed here.
