@@ -24,9 +24,10 @@ export const WORKFLOW_TOOLS = Object.freeze({
 //      paths; `attested-modular-skill` (callable shared suffixes + repair reuse) matches `gammatron-graph`
 //      on screen-factored reconverging branches; `gammatron-graph` (`TraceDag` + Bellman DP) separates
 //      when multi-exit hubs require downstream slot/goal-conditioned routing or intra-screen state merge.
-export const DEFAULT_WORKFLOW_REPRESENTATION = 'gammatron-graph';
+export const DEFAULT_WORKFLOW_REPRESENTATION = 'attested-modular-skill';
 export const DEFAULT_MODULAR_SKILL_REPRESENTATION = 'attested-modular-skill';
 export const DEFAULT_SINGLE_PATH_REPRESENTATION = 'attested-checkpointed-skill';
+export const DEFAULT_GRAPH_REPRESENTATION = 'gammatron-graph';
 
 export function evaluateReplayApplicability({
   hasDirectWriteApi = false,
@@ -59,6 +60,7 @@ export function selectWorkflowRepresentation({
   requiresInBrowserContextGathering = false,
   singlePathOnly = false,
   screenFactoredSharedSuffixesOnly = false,
+  requiresUnboundedBellmanDp = false,
 } = {}) {
   const applicability = evaluateReplayApplicability({
     hasDirectWriteApi,
@@ -67,7 +69,7 @@ export function selectWorkflowRepresentation({
   });
   if (!applicability.worthBuildingReplay) return 'direct-write-api';
   if (singlePathOnly) return DEFAULT_SINGLE_PATH_REPRESENTATION;
-  if (screenFactoredSharedSuffixesOnly) return DEFAULT_MODULAR_SKILL_REPRESENTATION;
+  if (requiresUnboundedBellmanDp && !screenFactoredSharedSuffixesOnly) return DEFAULT_GRAPH_REPRESENTATION;
   return DEFAULT_WORKFLOW_REPRESENTATION;
 }
 export const WORKFLOW_SYSTEM = 'Complete the requested bounded UI task through its named result or review screen, never final submission. '

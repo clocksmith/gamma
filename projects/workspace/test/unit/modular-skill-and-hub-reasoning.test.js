@@ -81,6 +81,8 @@ function el(role, label, tag, inputType, handle, value = '', extra = {}) {
     DEFAULT_MODULAR_SKILL_REPRESENTATION,
   );
   assert.equal(selectWorkflowRepresentation(), DEFAULT_WORKFLOW_REPRESENTATION);
+  assert.equal(DEFAULT_WORKFLOW_REPRESENTATION, 'attested-modular-skill');
+  assert.equal(selectWorkflowRepresentation({ requiresUnboundedBellmanDp: true }), 'gammatron-graph');
 }
 
 // 2. Hub reasoning, unavailable-prerequisite write gate, middle-field prefill, modular shared suffixes,

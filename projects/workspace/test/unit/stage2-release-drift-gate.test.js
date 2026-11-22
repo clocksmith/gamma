@@ -12,6 +12,7 @@ import {
   evaluateThreeWayPaperRule,
   evaluateUnseenRoutesFromFrozenRepair,
   freezeReleaseNArtifacts,
+  hanleyZeroNumeratorUpperBound95,
   repairSharedStepOnceAndFreeze,
   resolveWorkflowArms,
 } from '../../qualification/workflow-generalization/release-drift-runner.mjs';
@@ -303,7 +304,11 @@ const CONFIG = Object.freeze({ maxTurns: 16, maxInputBytes: 60000 });
     const modPhaseC = phaseC.clusters.find(c => c.arm === 'attested-modular-skill');
     assert.equal(modPhaseC.verifiedCompletions, 1);
     assert.equal(modPhaseC.correctRefusals, 1);
+    assert.equal(modPhaseC.unseenRoutesRestoredZeroTurns, 1);
+    assert.equal(modPhaseC.wrongRepairsSpreadCount, 0);
+    assert.equal(modPhaseC.provokedForbiddenTrials, 1);
     assert.equal(modPhaseC.unseenSiblingPlannerTurns, 0);
+    assert.equal(hanleyZeroNumeratorUpperBound95(100), 0.029513);
     assert.deepEqual(phaseC.paperDecision.metricHierarchy, [
       'verifiedCompletions',
       'correctRefusals',

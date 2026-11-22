@@ -84,7 +84,17 @@ export function enforcePaidModelGate({
   return { mode: 'authorized-paid-model', maxTotalUsd: Number(maxTotalUsd), maxRunUsd: Number(maxRunUsd) };
 }
 
-/** Determine active arms for a workflow, adding `direct-write-api` whenever the API suffices. */
+/** Exact 95% upper bound on true event rate when 0 events occur in `provokedTrials` (`1 - 0.05^(1/n)`, ~`3/n`). */
+export function hanleyZeroNumeratorUpperBound95(provokedTrials) {
+  const n = Number(provokedTrials);
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return Number((1 - Math.pow(0.05, 1 / n)).toFixed(6));
+}
+
+/**
+ * Determine active arms for a workflow, adding `direct-write-api` whenever the API suffices
+ * and `conventional-page-object-script` whenever a hand-authored script baseline is supplied.
+ */
 export function resolveWorkflowArms(workflowSpec, requestedUiArms = STAGE2_UI_ARMS) {
   const applicability = evaluateReplayApplicability({
     hasDirectWriteApi: Boolean(workflowSpec?.hasDirectWriteApi),
@@ -93,9 +103,14 @@ export function resolveWorkflowArms(workflowSpec, requestedUiArms = STAGE2_UI_AR
     explicitBusinessPrerequisites: workflowSpec?.explicitBusinessPrerequisites ?? ['domain-prerequisite'],
   });
   const includeDirectApi = !applicability.worthBuildingReplay || typeof workflowSpec?.executeDirectApi === 'function';
+  const includeConventionalScript = typeof workflowSpec?.executeConventionalScript === 'function';
+  const prefix = [
+    ...(includeDirectApi ? ['direct-write-api'] : []),
+    ...(includeConventionalScript ? ['conventional-page-object-script'] : []),
+  ];
   return {
     applicability,
-    arms: includeDirectApi ? ['direct-write-api', ...requestedUiArms] : [...requestedUiArms],
+    arms: [...prefix, ...requestedUiArms],
   };
 }
 
@@ -171,6 +186,11 @@ export function summarizeByWorkflowReleaseCluster(rows) {
         changedRuleCases: 0,
         changedRuleCleanStops: 0,
         unseenSiblingRouteRuns: 0,
+        unseenRoutesRestoredZeroTurns: 0,
+        wrongRepairsSpreadCount: 0,
+        provokedForbiddenTrials: 0,
+        provokedDuplicateTrials: 0,
+        provokedStaleRaceTrials: 0,
         unseenSiblingPlannerTurns: 0,
         unseenSiblingBackendReads: 0,
         unseenSiblingCostUsd: 0,
@@ -214,10 +234,19 @@ export function summarizeByWorkflowReleaseCluster(rows) {
     }
     if (row.isUnseenSiblingRoute) {
       c.unseenSiblingRouteRuns += 1;
+      if (row.expectedComplete && row.completed && row.plannerTurns === 0 && forb === 0 && dup === 0 && unv === 0) {
+        c.unseenRoutesRestoredZeroTurns += 1;
+      }
+      if (forb > 0 || dup > 0 || (row.expectedComplete && !row.completed)) {
+        c.wrongRepairsSpreadCount += 1;
+      }
       c.unseenSiblingPlannerTurns += row.plannerTurns;
       c.unseenSiblingBackendReads += row.backendPredicateReads ?? row.predicateReads ?? 0;
       c.unseenSiblingCostUsd = Number((c.unseenSiblingCostUsd + (row.costUsd ?? 0)).toFixed(6));
     }
+    if (!row.expectedComplete) c.provokedForbiddenTrials += 1;
+    if (row.provokedDuplicateRetry) c.provokedDuplicateTrials += 1;
+    if (row.provokedConcurrentStaleWrite) c.provokedStaleRaceTrials += 1;
     c.plannerTurns += row.plannerTurns;
     c.backendPredicateReads += row.backendPredicateReads ?? row.predicateReads ?? 0;
     c.costUsd = Number((c.costUsd + (row.costUsd ?? 0)).toFixed(6));
@@ -906,10 +935,13 @@ export async function evaluateUnseenRoutesFromFrozenRepair({
   try {
     for (const testCase of unseenCases) {
       for (const arm of arms) {
-        if (arm === 'direct-write-api') {
-          if (typeof workflowSpec.executeDirectApi !== 'function') continue;
+        if (arm === 'direct-write-api' || arm === 'conventional-page-object-script') {
+          const fn = arm === 'direct-write-api'
+            ? workflowSpec.executeDirectApi
+            : workflowSpec.executeConventionalScript;
+          if (typeof fn !== 'function') continue;
           const t0 = performance.now();
-          const apiRes = await workflowSpec.executeDirectApi(testCase);
+          const apiRes = await fn(testCase);
           rows.push({
             appId: phaseB.appId,
             releasePair: `${phaseB.releaseN}->${phaseB.releaseN1}`,
@@ -918,7 +950,9 @@ export async function evaluateUnseenRoutesFromFrozenRepair({
             routeId: testCase.routeId ?? testCase.id,
             caseKind: testCase.caseKind ?? (apiRes.expectedComplete ? 'completable' : 'must-not-proceed'),
             isUnseenSiblingRoute: Boolean(testCase.isUnseenSiblingRoute),
-            arm: 'direct-write-api',
+            provokedDuplicateRetry: Boolean(testCase.provokedDuplicateRetry),
+            provokedConcurrentStaleWrite: Boolean(testCase.provokedConcurrentStaleWrite),
+            arm,
             expectedComplete: Boolean(apiRes.expectedComplete),
             completed: Boolean(apiRes.completed),
             plannerTurns: 0,
