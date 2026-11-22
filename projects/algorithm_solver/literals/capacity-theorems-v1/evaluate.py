@@ -3,6 +3,7 @@
 
     python3 -B evaluate.py --selftest     tests on corpora that are NOT in instances.json
     python3 -B evaluate.py                evaluate every frozen instance and the random family; write results.json
+    python3 -B evaluate.py --round2       evaluate the round-two search family; write results-round2.json
 
 Everything is computed from the definitions in PREREGISTRATION.md:
   minimum entries and coverage by trying every dictionary, smallest first;
@@ -48,7 +49,7 @@ def tiles(s, words):
 
 def minimum_and_curve(programs, tokens):
     """Smallest dictionary spelling every program, and the most programs spelled at each budget up to it."""
-    tokens = sorted(tokens)
+    tokens = sorted(tokens, key=lambda token: (len(token), token))
     curve, k = [0], 0
     while curve[-1] < len(programs):
         k += 1
@@ -222,6 +223,37 @@ def selftest():
     print('selftest: ok (no frozen instance was read)')
 
 
+def search_family(corpora):
+    tally = {'corpora': 0, 'provedClaimFailures': [], 'aStarHolds': 0, 'bStarHolds': 0, 'firstAStarCounterexample': None,
+             'firstBStarCounterexample': None, 'saturated': 0, 'saturatedButDisjointBoundMisses': 0, 'firstSaturationMiss': None,
+             'unrestrictedMinimumAboveRank': 0}
+    for programs in corpora:
+        m = measure(programs)
+        u, w = m['unrestricted'], m['witnessThreshold2']
+        tally['corpora'] += 1
+        failed = proved_claims(programs, m)
+        if failed:
+            tally['provedClaimFailures'].append({'programs': programs, 'claims': failed})
+        if w['minimumEntries'] == max(w['blockRank'], w['disjointBound']):
+            tally['aStarHolds'] += 1
+        elif tally['firstAStarCounterexample'] is None:
+            tally['firstAStarCounterexample'] = {'programs': programs, 'minimum': w['minimumEntries'], 'blockRank': w['blockRank'], 'disjointBound': w['disjointBound']}
+        attained = u['minimumEntries'] == u['programRank']
+        if attained == u['everyProgramHasACuttablePrefix']:
+            tally['bStarHolds'] += 1
+        elif tally['firstBStarCounterexample'] is None:
+            tally['firstBStarCounterexample'] = {'programs': programs, 'minimum': u['minimumEntries'], 'programRank': u['programRank'],
+                                                 'everyProgramHasACuttablePrefix': u['everyProgramHasACuttablePrefix']}
+        tally['unrestrictedMinimumAboveRank'] += not attained
+        if w['minimumEntries'] == m['alphabetSize']:
+            tally['saturated'] += 1
+            if w['disjointBound'] < m['alphabetSize']:
+                tally['saturatedButDisjointBoundMisses'] += 1
+                if tally['firstSaturationMiss'] is None:
+                    tally['firstSaturationMiss'] = {'programs': programs, 'alphabetSize': m['alphabetSize'], 'disjointBound': w['disjointBound'], 'blockRank': w['blockRank']}
+    return tally
+
+
 def main():
     instances = json.load(open(os.path.join(HERE, 'instances.json')))
     predictions = json.load(open(os.path.join(HERE, 'predictions.json')))
@@ -256,33 +288,7 @@ def main():
     results['conjecturesOnFrozenInstances'] = {'A*: W2 minimum equals block rank': {'holdsOn': len(frozen) - len(a_star), 'of': len(frozen), 'fails': a_star},
                                                'B*: U minimum equals rank iff every program cuttable': {'holdsOn': len(frozen) - len(b_star), 'of': len(frozen), 'fails': b_star}}
 
-    tally = {'corpora': 0, 'provedClaimFailures': [], 'aStarHolds': 0, 'bStarHolds': 0, 'firstAStarCounterexample': None,
-             'firstBStarCounterexample': None, 'saturated': 0, 'saturatedButDisjointBoundMisses': 0, 'firstSaturationMiss': None,
-             'unrestrictedMinimumAboveRank': 0}
-    for programs in instances['randomSearchFamily']:
-        m = measure(programs)
-        u, w = m['unrestricted'], m['witnessThreshold2']
-        tally['corpora'] += 1
-        failed = proved_claims(programs, m)
-        if failed:
-            tally['provedClaimFailures'].append({'programs': programs, 'claims': failed})
-        if w['minimumEntries'] == max(w['blockRank'], w['disjointBound']):
-            tally['aStarHolds'] += 1
-        elif tally['firstAStarCounterexample'] is None:
-            tally['firstAStarCounterexample'] = {'programs': programs, 'minimum': w['minimumEntries'], 'blockRank': w['blockRank'], 'disjointBound': w['disjointBound']}
-        attained = u['minimumEntries'] == u['programRank']
-        if attained == u['everyProgramHasACuttablePrefix']:
-            tally['bStarHolds'] += 1
-        elif tally['firstBStarCounterexample'] is None:
-            tally['firstBStarCounterexample'] = {'programs': programs, 'minimum': u['minimumEntries'], 'programRank': u['programRank'],
-                                                 'everyProgramHasACuttablePrefix': u['everyProgramHasACuttablePrefix']}
-        tally['unrestrictedMinimumAboveRank'] += not attained
-        if w['minimumEntries'] == m['alphabetSize']:
-            tally['saturated'] += 1
-            if w['disjointBound'] < m['alphabetSize']:
-                tally['saturatedButDisjointBoundMisses'] += 1
-                if tally['firstSaturationMiss'] is None:
-                    tally['firstSaturationMiss'] = {'programs': programs, 'alphabetSize': m['alphabetSize'], 'disjointBound': w['disjointBound'], 'blockRank': w['blockRank']}
+    tally = search_family(instances['randomSearchFamily'])
     results['random'] = tally
     json.dump(results, open(os.path.join(HERE, 'results.json'), 'w'), indent=1)
     print('frozen instances:', len(frozen), '| predicted numbers that differ:', len(results['misses']), '| proved-claim failures:', len(results['provedClaimFailures']))
@@ -292,5 +298,18 @@ def main():
     print(json.dumps(tally, indent=1))
 
 
+def round_two():
+    corpora = json.load(open(os.path.join(HERE, 'instances-round2.json')))['corpora']
+    tally = search_family(corpora)
+    json.dump({'schema': 'capacity-theorems-results-round2/v1', 'field': {'prime': P, 'base': B}, 'family': tally},
+              open(os.path.join(HERE, 'results-round2.json'), 'w'), indent=1)
+    print(json.dumps(tally, indent=1))
+
+
 if __name__ == '__main__':
-    selftest() if '--selftest' in sys.argv else main()
+    if '--selftest' in sys.argv:
+        selftest()
+    elif '--round2' in sys.argv:
+        round_two()
+    else:
+        main()
