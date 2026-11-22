@@ -140,12 +140,15 @@ def eval_dual_bound_k(
             if is_monotone_unit_drop:
                 if p[0] - p[-1] == 1:
                     # Locate unique drop index `pos` where p[pos] == p[0] and p[pos + 1] == p[0] - 1.
-                    # Any private substring (b > a + wit[pid, a]) occurs ONLY in `pid` and spans `pos`
-                    # once, so its total rebate is 1 == scale (contributing min(0, 1 - 1) = 0).
-                    # Only shared substrings (b <= a + wit[pid, a]) can accumulate rebate >= 2!
+                    # The dual sums over every occurrence, so each occurrence that spans `pos` adds 1 to
+                    # its token's rebate. A token can span `pos` more than once in two ways: it also
+                    # occurs in another program (length <= wit[pid, a]), or it overlaps itself inside
+                    # this program (as "aa" does at position 1 of "aaa"). A substring longer than both
+                    # extents occurs nowhere else that spans `pos`, so its rebate is exactly 1 == scale
+                    # and it contributes min(0, 1 - 1) = 0. Everything shorter is enumerated here.
                     pos = next(i for i in range(n) if p[i] > p[i + 1])
                     for a in range(pos + 1):
-                        hi = min(n, a + max(1, wit[pid, a]))
+                        hi = min(n, a + max(1, wit[pid, a], self_repeat_extent(s, a, pos)))
                         if hi > pos:
                             for b in range(pos + 1, hi + 1):
                                 sub = s[a:b]
@@ -171,6 +174,82 @@ def eval_dual_bound_k(
                     rebates[sub] += p[a] - p[b]
     numer += sum(min(0, scale - reb) for reb in rebates.values())
     return -(-numer // scale)
+
+
+def self_repeat_extent(s: str, a: int, limit: int) -> int:
+    """Longest L such that s[a:a+L] also starts at another index a' <= limit of the same string (0 if none)."""
+
+    def repeats(length: int) -> bool:
+        sub = s[a : a + length]
+        first = s.find(sub)
+        if first != a:
+            return True  # an earlier start, and a <= limit
+        second = s.find(sub, a + 1)
+        return second != -1 and second <= limit
+
+    lo, hi = 0, len(s) - a
+    while lo < hi:
+        mid = (lo + hi + 1) // 2
+        if repeats(mid):
+            lo = mid
+        else:
+            hi = mid - 1
+    return lo
+
+
+def witness_charges(
+    texts: dict[str, str],
+    k: int,
+    positions: list[tuple[str, int]],
+    whole: set[str],
+    alpha: set[str],
+    doc_freq: dict[str, int],
+    occs: list[tuple[str, int, int, str]],
+    wit: dict[tuple[str, int], int],
+) -> dict[str, list[tuple[str, int]]]:
+    """Tokens the all-occurrences dual charges more than once for a scale = 1 step potential.
+
+    Every eligible occurrence that spans a witness position charges its token once for that position.
+    Returns {token: [witness position, ...]} for tokens charged at least twice. Two distinct positions in
+    a list mean the two cover sets share that token (the witness is not disjoint). The same position
+    twice means the token overlaps itself across it: the witness is still disjoint, but the dual value
+    falls below the number of positions."""
+    by_pid: dict[str, list[int]] = defaultdict(list)
+    for pid, pos in positions:
+        by_pid[pid].append(pos)
+    charges: dict[str, list[tuple[str, int]]] = defaultdict(list)
+    if k == 1:
+        for pid, plist in by_pid.items():
+            s = texts[pid]
+            n = len(s)
+            if len(plist) == 1:
+                pos = plist[0]
+                for a in range(pos + 1):
+                    hi = min(n, a + max(1, wit[pid, a], self_repeat_extent(s, a, pos)))
+                    for b in range(pos + 1, hi + 1):
+                        sub = s[a:b]
+                        if sub not in whole:
+                            charges[sub].append((pid, pos))
+            else:
+                for a in range(n):
+                    for b in range(a + 1, n + 1):
+                        inside = [pos for pos in plist if a <= pos < b]
+                        if inside:
+                            sub = s[a:b]
+                            if sub not in whole:
+                                charges[sub].extend((pid, pos) for pos in inside)
+    else:
+        for pid, plist in by_pid.items():
+            for pos in plist:
+                ch = texts[pid][pos]
+                if ch in alpha:
+                    charges[ch].append((pid, pos))
+        for pid, a, b, sub in occs:
+            if doc_freq[sub] >= k and pid in by_pid:
+                for pos in by_pid[pid]:
+                    if a <= pos < b:
+                        charges[sub].append((pid, pos))
+    return {token: where for token, where in charges.items() if len(where) >= 2}
 
 
 def step_potentials(texts: dict[str, str], coords: list[list[int] | tuple[str, int]]) -> dict[str, list[int]]:
@@ -246,7 +325,23 @@ def load_frozen_corpora_for_replay(repo: Path, receipt: dict) -> dict[str, dict[
     return out
 
 
-def verify_all(repo: Path, receipt_path: Path, certs_path: Path) -> int:
+def replay_witness(texts, k, positions, whole, alpha, doc_freq, occs, wit, label) -> tuple[int, int]:
+    """Check that the witness positions have pairwise disjoint cover sets, then evaluate the all-occurrences
+    dual of their scale = 1 step potential. Returns (dual value, number of tokens charged more than once)."""
+    if len(set(positions)) != len(positions):
+        raise ValueError(f"Duplicate witness position on {label} k={k}")
+    charged = witness_charges(texts, k, positions, whole, alpha, doc_freq, occs, wit)
+    shared = sorted(token for token, where in charged.items() if len(set(where)) > 1)
+    if shared:
+        raise ValueError(f"Witness cover sets overlap on {label} k={k}: {shared[:3]}")
+    penalty = sum(len(where) - 1 for where in charged.values())
+    dual = eval_dual_bound_k(texts, k, 1, step_potentials(texts, positions), whole, alpha, doc_freq, occs, wit=wit)
+    if dual != len(positions) - penalty:
+        raise ValueError(f"All-occurrences dual {dual} disagrees with the charge count on {label} k={k}")
+    return dual, len(charged)
+
+
+def verify_all(repo: Path, receipt_path: Path, certs_path: Path, annotate: bool = False) -> int:
     receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
     certs = json.loads(certs_path.read_text(encoding="utf-8"))
     if receipt["pin"] != PIN or certs["pin"] != PIN:
@@ -254,6 +349,7 @@ def verify_all(repo: Path, receipt_path: Path, certs_path: Path) -> int:
 
     corpora = load_frozen_corpora_for_replay(repo, receipt)
     checked_rows = 0
+    unequal: list[tuple[str, int, int, int, int]] = []
 
     for cname, cmeta in receipt["corpora"].items():
         texts = corpora[cname]
@@ -266,22 +362,20 @@ def verify_all(repo: Path, receipt_path: Path, certs_path: Path) -> int:
             crec = certs["certificates"][cname][str(k)]
             ctype = crec["type"]
 
-            # 1. Verify disjoint step-potential certificate at scale = 1!
+            # 1. Verify the disjoint witness, then its all-occurrences dual at scale = 1.
             if ctype in ("shortcut_disjoint_scale1", "disjoint_step_potential_scale1"):
                 f_pos = [(str(p), int(i)) for p, i in crec["forced_positions"]]
                 e_pos = [(str(p), int(i)) for p, i in crec["extra_positions"]]
-                pots = step_potentials(texts, f_pos + e_pos)
-                dual_lb = eval_dual_bound_k(texts, k, 1, pots, whole, alpha, doc_freq, occs, wit=wit)
-                if dual_lb != len(f_pos) + len(e_pos) or dual_lb != row["disjoint_bound"] or dual_lb != row["certified_lower_bound"]:
-                    raise ValueError(f"Scale-1 dual replay mismatch on {cname} k={k}: got {dual_lb}, row={row}")
+                step_lb, twice = replay_witness(texts, k, f_pos + e_pos, whole, alpha, doc_freq, occs, wit, cname)
+                if len(f_pos) + len(e_pos) != row["disjoint_bound"] or row["disjoint_bound"] != row["certified_lower_bound"]:
+                    raise ValueError(f"Disjoint witness size mismatch on {cname} k={k}: row={row}")
                 vocab = crec["feasible_vocabulary"]
             elif ctype == "pinned_59ff0441_dual_plus_disjoint_witness":
                 f_pos = [(str(p), int(i)) for p, i in crec["disjoint_forced_positions"]]
                 e_pos = [(str(p), int(i)) for p, i in crec["disjoint_extra_positions"]]
-                pots_step = step_potentials(texts, f_pos + e_pos)
-                step_lb = eval_dual_bound_k(texts, k, 1, pots_step, whole, alpha, doc_freq, occs, wit=wit)
-                if step_lb != row["disjoint_bound"]:
-                    raise ValueError(f"Disjoint step dual mismatch on {cname} k={k}")
+                step_lb, twice = replay_witness(texts, k, f_pos + e_pos, whole, alpha, doc_freq, occs, wit, cname)
+                if len(f_pos) + len(e_pos) != row["disjoint_bound"]:
+                    raise ValueError(f"Disjoint witness size mismatch on {cname} k={k}")
                 pinned_cert = json.loads(git_cat(repo, f"{PIN}:{crec['pinned_cert_path']}"))
                 pinned_manifest = json.loads(git_cat(repo, f"{PIN}:{crec['pinned_manifest_path']}"))
                 dual_lb = eval_dual_bound_k(
@@ -293,10 +387,9 @@ def verify_all(repo: Path, receipt_path: Path, certs_path: Path) -> int:
             elif ctype == "lp_dual_certificate_plus_disjoint":
                 f_pos = [(str(p), int(i)) for p, i in crec["disjoint_forced_positions"]]
                 e_pos = [(str(p), int(i)) for p, i in crec["disjoint_extra_positions"]]
-                pots_step = step_potentials(texts, f_pos + e_pos)
-                step_lb = eval_dual_bound_k(texts, k, 1, pots_step, whole, alpha, doc_freq, occs, wit=wit)
-                if step_lb != row["disjoint_bound"]:
-                    raise ValueError(f"Disjoint step dual mismatch on {cname} k={k}")
+                step_lb, twice = replay_witness(texts, k, f_pos + e_pos, whole, alpha, doc_freq, occs, wit, cname)
+                if len(f_pos) + len(e_pos) != row["disjoint_bound"]:
+                    raise ValueError(f"Disjoint witness size mismatch on {cname} k={k}")
                 dual_lb = eval_dual_bound_k(
                     texts, k, int(crec["scale"]), crec["potentials"], whole, alpha, doc_freq, occs, wit=wit
                 )
@@ -321,6 +414,17 @@ def verify_all(repo: Path, receipt_path: Path, certs_path: Path) -> int:
             if not all(can_tile(s, vocab) for s in texts.values()):
                 raise ValueError(f"Feasible vocabulary fails to tile {cname} k={k}")
 
+            # 2b. The scale = 1 dual equals the disjoint bound only when no token is charged twice.
+            found = {"all_occurrences_dual": step_lb, "tokens_counted_twice": twice,
+                     "dual_equals_disjoint_bound": twice == 0}
+            if annotate:
+                row.update(found)
+            for field, value in found.items():
+                if field in row and row[field] != value:
+                    raise ValueError(f"Recorded {field} is {row[field]}, replay gives {value} on {cname} k={k}")
+            if twice:
+                unequal.append((cname, k, row["disjoint_bound"], step_lb, twice))
+
             # 3. Verify gap and shortcut flags!
             if row["remaining_gap"] != row["feasible_upper_bound"] - row["certified_lower_bound"] or row["remaining_gap"] < 0:
                 raise ValueError(f"Invalid remaining_gap on {cname} k={k}")
@@ -330,7 +434,13 @@ def verify_all(repo: Path, receipt_path: Path, certs_path: Path) -> int:
                 raise ValueError(f"Shortcut applied yet remaining_gap != 0 on {cname} k={k}")
             checked_rows += 1
 
+    if annotate:
+        receipt_path.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     print(f"PASS: independently replayed and verified {checked_rows} (corpus, k) certificates from {PIN}")
+    print(f"Disjoint witness valid on all {checked_rows} rows. Scale-1 all-occurrences dual equals the disjoint "
+          f"bound on {checked_rows - len(unequal)}; a token is charged twice on {len(unequal)}.")
+    for cname, k, bound, dual, twice in unequal:
+        print(f"  {cname} k={k}: disjoint bound {bound}, all-occurrences dual {dual}, tokens charged twice {twice}")
     return checked_rows
 
 
@@ -340,8 +450,10 @@ def main():
     parser.add_argument("--repo", type=Path, default=here.parents[3])
     parser.add_argument("--receipt", type=Path, default=here / "results.json")
     parser.add_argument("--certs", type=Path, default=here / "certificates.json")
+    parser.add_argument("--annotate", action="store_true",
+                        help="write all_occurrences_dual, tokens_counted_twice and dual_equals_disjoint_bound into each receipt row")
     args = parser.parse_args()
-    verify_all(args.repo, args.receipt, args.certs)
+    verify_all(args.repo, args.receipt, args.certs, annotate=args.annotate)
 
 
 if __name__ == "__main__":

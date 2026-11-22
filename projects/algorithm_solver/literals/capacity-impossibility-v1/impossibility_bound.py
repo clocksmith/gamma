@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Disjoint-Position Cover-Set Impossibility Bound, Scale-1 Dual Shortcut, and 6-Corpus Sweep.
 
-Highlights the alphabet-saturation shortcut:
-  Whenever a pairwise-disjoint position cover-set witness W = F_1(k) cup M(k) reaches |Sigma|,
-  it meets the feasible upper bound supplied by the single-character dictionary Sigma:
-      |F_1(k)| <= B_disj(k) = L_A(pi_W) = OPT_A(k) = |Sigma|   (gap = 0),
-  and the same witness W yields an exact integer Lagrangian dual certificate pi_W at scale = 1
-  with zero LP/MILP solver calls.
+The disjoint-position bound is combinatorial and always sound:
+      |F_1(k)| <= B_disj(k) <= OPT_A(k) <= |Sigma|.
+When a pairwise-disjoint witness W = F_1(k) cup M(k) reaches |Sigma| it meets the single-character
+dictionary, so OPT_A(k) = |Sigma| with no LP or MILP call.
+
+The scale = 1 step potential pi_W is a narrower statement. The Experiment A dual sums over every
+occurrence of a token, so a token that overlaps itself across one witness position is charged twice
+(in "aaa", "aa" spans position 1 from both of its starts). L_A(pi_W) = B_disj(k) holds exactly when no
+eligible token is charged twice. Each receipt row records the dual value and that count.
 """
 
 from __future__ import annotations
@@ -164,6 +167,23 @@ def position_cover_set(
     return out
 
 
+def all_occurrences_dual_fields(texts, k, positions, whole, alpha, doc_freq, occs, wit) -> dict:
+    """Value of the Experiment A dual at the scale = 1 step potential of a disjoint witness.
+
+    The dual charges a token once for every (occurrence, witness position) pair where the occurrence spans
+    the position. With no token charged twice the value is |W|; each extra charge lowers it by one."""
+    from replay_verify_receipt import witness_charges
+
+    positions = [(str(pid), int(pos)) for pid, pos in positions]
+    charged = witness_charges(texts, k, positions, whole, alpha, doc_freq, occs, wit)
+    penalty = sum(len(where) - 1 for where in charged.values())
+    return {
+        "all_occurrences_dual": len(positions) - penalty,
+        "tokens_counted_twice": len(charged),
+        "dual_equals_disjoint_bound": penalty == 0,
+    }
+
+
 def step_potentials_from_witness(
     texts: dict[str, str],
     witness_positions: list[tuple[str, int]],
@@ -290,12 +310,19 @@ def verify_impossibility_witness(
     potentials = step_potentials_from_witness(texts, list(forced_positions) + list(extra_positions))
     telescoping = sum(potentials[pid][0] - potentials[pid][-1] for pid in texts)
     assert telescoping == total_w
+    _whole, alpha_all, doc_freq_all, occs_all, wit_all = shared_substrings(texts, max_bytes=max_bytes)
+    dual = all_occurrences_dual_fields(
+        texts, k, list(forced_positions) + list(extra_positions), whole, alpha_all, doc_freq_all, occs_all, wit_all
+    )
     return {
         "valid": True,
         "forced_singletons": len(forced_positions),
         "disjoint_extra": len(extra_positions),
         "disjoint_bound": total_w,
-        "step_potential_dual": telescoping,
+        # The dual sums over occurrences: it equals the disjoint bound only if no token is charged twice.
+        "step_potential_dual": dual["all_occurrences_dual"],
+        "tokens_counted_twice": dual["tokens_counted_twice"],
+        "dual_equals_disjoint_bound": dual["dual_equals_disjoint_bound"],
         "potentials": potentials,
     }
 
@@ -798,6 +825,7 @@ def evaluate_all(repo: Path, cert_bundle_out: Path | None = None) -> dict:
                     "remaining_gap": feas_ub - cert_lb,
                     "shortcut_applied": shortcut,
                     "impossible_at_64": cert_lb > 64,
+                    **all_occurrences_dual_fields(texts, 1, f_pos + e_pos, whole, alpha, doc_freq, occs, wit),
                 })
                 cert_bundle[cname]["1"] = cert_record
                 continue
@@ -865,6 +893,7 @@ def evaluate_all(repo: Path, cert_bundle_out: Path | None = None) -> dict:
                 "remaining_gap": feas_ub - cert_lb,
                 "shortcut_applied": shortcut,
                 "impossible_at_64": cert_lb > 64,
+                **all_occurrences_dual_fields(texts, k, f_pos + e_pos, whole, alpha, doc_freq, occs, wit),
             })
             cert_bundle[cname][str(k)] = cert_record
 

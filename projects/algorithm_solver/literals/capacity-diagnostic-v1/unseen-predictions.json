@@ -1,0 +1,132 @@
+{
+  "schema": "capacity-diagnostic-unseen-predictions/v1",
+  "note": "Committed BEFORE running evaluate_unseen.py or diagnostic.py on any corpus in unseen-instances.json.",
+  "queries": [
+    {
+      "id": "real_py12_W2_K64",
+      "corpus": "unseen_real_py_tests_12",
+      "rule": "W2",
+      "budget": 64,
+      "predictedStatus": "IMPOSSIBLE",
+      "encodingDecision": "switch-off-plain-6bit"
+    },
+    {
+      "id": "real_py12_W2_K96",
+      "corpus": "unseen_real_py_tests_12",
+      "rule": "W2",
+      "budget": 96,
+      "predictedStatus": "FEASIBLE"
+    },
+    {
+      "id": "real_yaml2_W2_K64",
+      "corpus": "unseen_real_yaml_pair",
+      "rule": "W2",
+      "budget": 64,
+      "predictedStatus": "FEASIBLE",
+      "encodingDecision": "stay-on-plain-6bit"
+    },
+    {
+      "id": "real_yaml2_W2_K32",
+      "corpus": "unseen_real_yaml_pair",
+      "rule": "W2",
+      "budget": 32,
+      "predictedStatus": "IMPOSSIBLE"
+    },
+    {
+      "id": "decision_66_pairable_W2_K64",
+      "corpus": "decision_66char_pairable",
+      "rule": "W2",
+      "budget": 64,
+      "predictedStatus": "FEASIBLE",
+      "predictedLowerBound": 64,
+      "encodingDecision": "stay-on-plain-6bit-despite-66-chars"
+    },
+    {
+      "id": "decision_66_pairable_W2_K63",
+      "corpus": "decision_66char_pairable",
+      "rule": "W2",
+      "budget": 63,
+      "predictedStatus": "IMPOSSIBLE",
+      "predictedLowerBound": 64
+    },
+    {
+      "id": "decision_66_doomed_W2_K64",
+      "corpus": "decision_66char_doomed",
+      "rule": "W2",
+      "budget": 64,
+      "predictedStatus": "IMPOSSIBLE",
+      "predictedLowerBound": 66,
+      "predictedMonotoneSaturationFromK": 2,
+      "encodingDecision": "switch-to-escape-or-7bit"
+    },
+    {
+      "id": "decision_66_doomed_W2_K66",
+      "corpus": "decision_66char_doomed",
+      "rule": "W2",
+      "budget": 66,
+      "predictedStatus": "FEASIBLE",
+      "predictedLowerBound": 66
+    },
+    {
+      "id": "mixed_3comp_W2_K10",
+      "corpus": "unseen_3comp_mixed",
+      "rule": "W2",
+      "budget": 10,
+      "predictedStatus": "IMPOSSIBLE",
+      "predictedComponents": 3,
+      "predictedLowerBound": 11
+    },
+    {
+      "id": "mixed_3comp_W2_K11",
+      "corpus": "unseen_3comp_mixed",
+      "rule": "W2",
+      "budget": 11,
+      "predictedStatus": "FEASIBLE",
+      "predictedComponents": 3,
+      "predictedLowerBound": 11
+    },
+    {
+      "id": "forced_block_split_W2_K7",
+      "corpus": "unseen_forced_block_split",
+      "rule": "W2",
+      "budget": 7,
+      "predictedStatus": "IMPOSSIBLE",
+      "predictedComponents": 1,
+      "predictedLowerBound": 8,
+      "predictedMonotoneSaturationFromK": 2
+    },
+    {
+      "id": "forced_block_split_W2_K8",
+      "corpus": "unseen_forced_block_split",
+      "rule": "W2",
+      "budget": 8,
+      "predictedStatus": "FEASIBLE",
+      "predictedComponents": 1,
+      "predictedLowerBound": 8
+    },
+    {
+      "id": "u_span_obstruction_U_K3",
+      "corpus": "unseen_u_span_obstruction",
+      "rule": "U",
+      "budget": 3,
+      "predictedStatus": "IMPOSSIBLE",
+      "predictedLowerBound": 4
+    },
+    {
+      "id": "u_span_obstruction_U_K4",
+      "corpus": "unseen_u_span_obstruction",
+      "rule": "U",
+      "budget": 4,
+      "predictedStatus": "FEASIBLE",
+      "predictedLowerBound": 4
+    },
+    {
+      "id": "natural_unresolved_W2_K25",
+      "corpus": "unseen_unresolved_interval",
+      "rule": "W2",
+      "budget": 25,
+      "predictedStatus": "UNRESOLVED",
+      "predictedLowerBound": 25
+    }
+  ]
+}

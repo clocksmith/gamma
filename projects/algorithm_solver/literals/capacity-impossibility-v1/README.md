@@ -16,17 +16,19 @@ Any dictionary $D \subseteq \mathcal{E}_k(\mathcal{T})$ that tiles every $T_p \i
 
 1. **Disjoint-position lower bound ($B_{\text{disj}}(k)$):** Let $F_1(k) = \{ c \in \Sigma : \exists u_c \text{ with } C_k(u_c) = \{c\} \}$ be the forced singleton set, and let $M(k)$ be any set of residual positions ($T_p[i] \notin F_1(k)$) whose cover sets $C_k(u)$ are non-empty and pairwise disjoint. Because $F_1(k)$ contains only length-1 tokens and $T_p[i] \notin F_1(k)$ for $u \in M(k)$, the $|F_1(k)| + |M(k)|$ sets $\{C_k(u_c)\}_{c \in F_1(k)} \cup \{C_k(u)\}_{u \in M(k)}$ are pairwise disjoint, forcing
    $$|F_1(k)| \le B_{\text{disj}}(k) := |F_1(k)| + |M(k)| \le \text{OPT}_A(k) \le |\Sigma|.$$
-2. **Exact `scale = 1` Lagrangian dual embedding:** For any disjoint witness $W = \{ (p_1, i_1), \dots, (p_m, i_m) \}$, define integer step potentials at `scale = 1` by
+2. **The `scale = 1` step potential, and when its dual equals the bound:** For any disjoint witness $W = \{ (p_1, i_1), \dots, (p_m, i_m) \}$, define integer step potentials at `scale = 1` by
    $$\pi_{p, j} = |\{ r \in \{1, \dots, m\} : p_r = p \text{ and } i_r \ge j \}|.$$
-   Each occurrence $T_p[a:b]$ of $s \in \mathcal{E}_k(\mathcal{T})$ has $\pi_{p,a} - \pi_{p,b} = |\{ r : p_r = p,\; a \le i_r < b \}|$. Summing over all occurrences of $s$ across $\mathcal{T}$ yields $|\{ r : s \in C_k(p_r, i_r) \}| \le 1$ by pairwise disjointness, so every string rebate term $\min(0,\, 1 - \sum \max(0, \pi_{p,a} - \pi_{p,b}))$ equals $0$, and $L_A(\pi_W) = \sum_p (\pi_{p,0} - \pi_{p,n_p}) = |W| = B_{\text{disj}}(k)$.
+   Each occurrence $T_p[a:b]$ of $s \in \mathcal{E}_k(\mathcal{T})$ has $\pi_{p,a} - \pi_{p,b} = |\{ r : p_r = p,\; a \le i_r < b \}|$. The Experiment A dual sums over **every occurrence** of $s$, so the rebate of $s$ is the number of pairs (occurrence, witness position) in which the occurrence spans the position. Pairwise disjointness limits $s$ to one witness position. It does not limit $s$ to one occurrence there: a token that overlaps itself can span the same position twice. In `aaa` under $U$, `aa` starts at 0 and at 1 and both occurrences span position 1, so its rebate is 2, and $L_A(\pi_W) = 0$ while $B_{\text{disj}} = 1$. In general
+   $$L_A(\pi_W) = |W| - \sum_{s} \max\!\big(0,\ \text{rebate}_s - 1\big) \;\le\; B_{\text{disj}}(k),$$
+   with equality **exactly when no eligible token is charged twice**. The bound in item 1 does not depend on this: it is combinatorial and always sound. A dual that took the maximum over the occurrences spanning each cut would give the equality in general. That is a different formulation, and it is not what this verifier evaluates.
 3. **Alphabet-saturation shortcut:** Because the single-character dictionary $D = \Sigma$ always tiles every program (when $\Sigma$ contains all characters of $\mathcal{T}$), $|\Sigma|$ is a feasible upper bound on $\text{OPT}_A(k)$. Whenever $B_{\text{disj}}(k) = |\Sigma|$, the lower bound meets the single-character upper bound:
-   $$B_{\text{disj}}(k) = L_A(\pi_W) = \text{OPT}_A(k) = |\Sigma| \quad (\text{gap} = 0),$$
-   certifying exact optimality via `scale = 1` integer potentials with zero LP or MILP solver calls.
+   $$B_{\text{disj}}(k) = \text{OPT}_A(k) = |\Sigma| \quad (\text{gap} = 0),$$
+   with zero LP or MILP solver calls. This uses item 1 only. The step potential is in addition an exact `scale = 1` dual certificate, $L_A(\pi_W) = |\Sigma|$, when no token is charged twice. Each row of `results.json` records `all_occurrences_dual`, `tokens_counted_twice` and `dual_equals_disjoint_bound`; on all 42 rows below no token is charged twice.
 4. **Impossibility test, not a sufficiency criterion:** Covering every position individually does not guarantee non-overlapping tiling. On $\mathcal{T} = \{\text{"abcd"}, \text{"abce"}, \text{"fbcd"}\}$ at $k = 2$ ($|\Sigma| = 6$), the 4-token set $\{\text{"abc"}, \text{"bcd"}, \text{"e"}, \text{"f"}\}$ covers every position of all three strings ($B_{\text{disj}}(2) = 4$), yet `"abc"` and `"bcd"` overlap on `"bc"` rather than tiling `"abcd"`; exact tiling requires $5$ entries, certified by the path-flow Lagrangian dual $\lceil L_A(\pi^*) \rceil = 5$ (`overlapping_non_tiling_counterexample()`).
 
 ## 2. Six-Corpus Receipt (`results.json` & `certificates.json`, Independently Replayed)
 
-All 42 `(corpus, k)` rows below are replayed from frozen Git blobs at `59ff0441` without invoking any solver (`replay_verify_receipt.py`):
+All 42 `(corpus, k)` rows below are replayed from frozen Git blobs at `59ff0441` without invoking any solver (`replay_verify_receipt.py`). For each row the replay checks that the witness positions have pairwise disjoint cover sets, then evaluates the all-occurrences dual of the step potential, counting every eligible occurrence that spans a witness position. On all 42 rows the witness is disjoint and the dual equals the disjoint bound.
 
 | Corpus (`N`, bytes) | Threshold / Rule | $\|\Sigma\|$ | Forced singletons $\|F_1\|$ | Disjoint bound $B_{\text{disj}}$ | Certified lower bound | Feasible upper bound | Remaining gap | Shortcut ($B_{\text{disj}} = \|\Sigma\|$) |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | :---: |
@@ -37,7 +39,7 @@ All 42 `(corpus, k)` rows below are replayed from frozen Git blobs at `59ff0441`
 | | `k = 5` (`W`) | 92 | 91 | **92** | **92** | **92** | **0** | **yes** |
 | | `k = 8` (`W`) | 92 | 91 | **92** | **92** | **92** | **0** | **yes** |
 | | `k = 10` (`W`) | 92 | 91 | **92** | **92** | **92** | **0** | **yes** |
-| **`js_matched80_canonical`** (`80`, 40,467 B) | `k = 1` (`U`) | 92 | 0 | 47 | 47 (`scale = 1` step dual) | 79 (`59ff0441` MILP) | 32 | no |
+| **`js_matched80_canonical`** (`80`, 40,467 B) | `k = 1` (`U`) | 92 | 0 | 47 | 47 (disjoint witness) | 79 (stored cover, replayed here) | 32 | no |
 | | `k = 2` (`W`) | 92 | 68 | **92** | **92** | **92** | **0** | **yes** |
 | | `k = 3` (`W`) | 92 | 73 | **92** | **92** | **92** | **0** | **yes** |
 | | `k = 4` (`W`) | 92 | 77 | **92** | **92** | **92** | **0** | **yes** |
@@ -73,10 +75,14 @@ All 42 `(corpus, k)` rows below are replayed from frozen Git blobs at `59ff0441`
 | | `k = 8` (`W`) | 91 | 80 | **91** | **91** | **91** | **0** | **yes** |
 | | `k = 10` (`W`) | 91 | 83 | **91** | **91** | **91** | **0** | **yes** |
 
+**Canonical $U$ is reported in two separate lanes.** The disjoint witness of this folder gives 47, and that is the number in the table. The exact value is 79: the 80 canonical program vectors have rank 79 over a prime field, and a stored 79-entry dictionary rebuilds all 80 programs byte for byte (the rank proof tracked in clocksmith/deco#203). That result comes from a different argument, is not checked by this folder's replay, and is not folded into the 47 row. Entry-count results such as these are also kept apart from the escape-cost certificates in `sixbit-v1`.
+
+**Regressions.** `test_impossibility_bound.py` keeps two cases where the disjoint bound holds and the dual equality fails: `aaa` under $U$, and `aaa` with `aab` under $W_2$. In both, `aa` spans position 1 of `aaa` twice. The tests also compare the verifier's dual with a direct evaluation from the definition, and check that a witness whose cover sets share a token is rejected.
+
 ## 3. Reproduce and Independently Replay
 
 ```sh
-# 1. Unit tests (non-tiling counterexample, scale-1 dual identity, tiny brute-force oracles, negative tests)
+# 1. Unit tests (non-tiling counterexample, scale-1 dual and its two self-overlap regressions, tiny brute-force oracles, negative tests)
 python3 -B -m unittest discover -s projects/algorithm_solver/literals/capacity-impossibility-v1 -v
 
 # 2. Standalone solver-free certificate replay from pinned Git blobs at 59ff0441
