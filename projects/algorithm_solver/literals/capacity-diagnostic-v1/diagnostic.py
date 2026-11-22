@@ -135,6 +135,141 @@ def parse_program(source: str, vocab: list[str] | set[str]) -> list[str] | None:
     return parts
 
 
+def is_token_eligible(
+    entry: str,
+    programs: list[str],
+    k: int,
+    whole: set[str] | None = None,
+    max_bytes: int | None = 160,
+) -> bool:
+    """Exact single-token eligibility check under U (k=1) or W_k (k>=2) without enumerating all substrings."""
+    if not entry:
+        return False
+    w = set(programs) if whole is None else whole
+    if entry in w:
+        return False
+    if k == 1:
+        return any(entry in s for s in programs)
+    if len(entry) == 1:
+        return any(entry in s for s in programs)
+    if max_bytes is not None and len(entry.encode("utf-8")) > max_bytes:
+        return False
+    count = 0
+    for s in programs:
+        if entry in s:
+            count += 1
+            if count >= k:
+                return True
+    return False
+
+
+def suffix_shared_lengths(programs: list[str], k: int, max_bytes: int | None = 160) -> list[list[int]]:
+    """Exact maximum length L (<= max_bytes UTF-8 bytes) starting at each (pidx, i) that appears in >= k distinct programs.
+
+    Uses a bounded-slice suffix array (O(N log N) time, O(N) memory) so long shared docstrings
+    never blow up memory. Exact for all k >= 2.
+    """
+    if k < 2:
+        return [[len(s) - i for i in range(len(s))] for s in programs]
+    cap = None if max_bytes is None else max_bytes
+    items: list[tuple[str, int, int]] = []
+    for pidx, s in enumerate(programs):
+        n = len(s)
+        if cap is None:
+            for i in range(n):
+                items.append((s[i:], pidx, i))
+        else:
+            for i in range(n):
+                items.append((s[i : i + cap], pidx, i))
+    items.sort(key=lambda item: item[0])
+    m = len(items)
+    wit = [[0] * len(s) for s in programs]
+    if m == 0:
+        return wit
+
+    def lcp_len(a: str, b: str) -> int:
+        lim = min(len(a), len(b))
+        j = 0
+        while j < lim and a[j] == b[j]:
+            j += 1
+        return j
+
+    if k == 2:
+        prev_diff = prev_suf = None
+        prev_pid = None
+        for suf, pidx, i in items:
+            if prev_pid is not None and prev_pid != pidx:
+                prev_diff = prev_suf
+            if prev_diff is not None:
+                v = lcp_len(suf, prev_diff)
+                if v > wit[pidx][i]:
+                    wit[pidx][i] = v
+            prev_suf, prev_pid = suf, pidx
+
+        next_diff = next_suf = None
+        next_pid = None
+        for suf, pidx, i in reversed(items):
+            if next_pid is not None and next_pid != pidx:
+                next_diff = next_suf
+            if next_diff is not None:
+                v = lcp_len(suf, next_diff)
+                if v > wit[pidx][i]:
+                    wit[pidx][i] = v
+            next_suf, next_pid = suf, pidx
+    else:
+        # Exact for all k >= 3 via DSU merging adjacent ranks in descending LCP order
+        adj = [(lcp_len(items[j][0], items[j + 1][0]), j) for j in range(m - 1)]
+        adj.sort(reverse=True)
+        parent = list(range(m))
+        p_sets: list[set[int]] = [{items[j][1]} for j in range(m)]
+        unstamped: list[list[int]] = [[j] for j in range(m)]
+
+        def find(x: int) -> int:
+            while parent[x] != x:
+                parent[x] = parent[parent[x]]
+                x = parent[x]
+            return x
+
+        for lcp, j in adj:
+            if lcp == 0:
+                break
+            ra, rb = find(j), find(j + 1)
+            if ra == rb:
+                continue
+            if len(p_sets[ra]) < len(p_sets[rb]):
+                ra, rb = rb, ra
+            parent[rb] = ra
+            p_sets[ra] |= p_sets[rb]
+            p_sets[rb].clear()
+            if unstamped[rb]:
+                unstamped[ra].extend(unstamped[rb])
+                unstamped[rb].clear()
+            if len(p_sets[ra]) >= k and unstamped[ra]:
+                for r in unstamped[ra]:
+                    _, pidx, i = items[r]
+                    wit[pidx][i] = lcp
+                unstamped[ra].clear()
+
+    # Enforce exact UTF-8 byte cap when non-ASCII characters appear
+    if max_bytes is not None:
+        for pidx, s in enumerate(programs):
+            row = wit[pidx]
+            for i, w in enumerate(row):
+                if w > 0:
+                    sub = s[i : i + w]
+                    if len(sub.encode("utf-8")) > max_bytes:
+                        b = 0
+                        new_w = 0
+                        for ch in sub:
+                            cb = len(ch.encode("utf-8"))
+                            if b + cb > max_bytes:
+                                break
+                            b += cb
+                            new_w += 1
+                        row[i] = new_w
+    return wit
+
+
 def verify_construction(
     programs: list[str],
     dictionary: list[str],
@@ -145,9 +280,13 @@ def verify_construction(
     """Independently verify dictionary eligibility and byte-exact reconstruction of every program."""
     if len(dictionary) != len(set(dictionary)):
         raise ValueError("Dictionary contains duplicate entries")
-    elig = eligible_tokens(programs, k, max_bytes=max_bytes) if tokens is None else tokens
+    whole = set(programs)
     for entry in dictionary:
-        if entry not in elig:
+        if tokens is not None:
+            ok = entry in tokens
+        else:
+            ok = is_token_eligible(entry, programs, k, whole=whole, max_bytes=max_bytes)
+        if not ok:
             raise ValueError(f"Ineligible dictionary entry {entry!r} for k={k}")
     parses: list[list[str]] = []
     for s in programs:
@@ -266,6 +405,282 @@ def forced_block_components(programs: list[str], k: int, max_bytes: int | None =
     return split_components(blocks)
 
 
+def _nullspace_basis_and_support(
+    basis: list[tuple[int, list[int]]], num_cols: int, prime: int
+) -> tuple[list[list[int]], set[int]]:
+    pivots = {p for p, _ in basis}
+    free_cols = [j for j in range(num_cols) if j not in pivots]
+    null_vecs: list[list[int]] = []
+    for fc in free_cols:
+        z = [0] * num_cols
+        z[fc] = 1
+        for p, row in basis:
+            z[p] = (-row[fc]) % prime
+        null_vecs.append(z)
+    support = {j for j in range(num_cols) if any(z[j] != 0 for z in null_vecs)}
+    return null_vecs, support
+
+
+def nullspace_kernel_certificate(
+    programs: list[str],
+    k: int,
+    max_bytes: int | None = 160,
+    max_nodes: int = 30000,
+) -> dict:
+    """Exact Nullspace-Kernel Theorem check for rank attainment under U (k=1) or W_k (k>=2).
+
+    Let M_B be the position-weighted forced-block incidence matrix over every rank-attaining
+    field F_p, with rank r = |Sigma| - d, nullspace support S_free = union supp(ker M_B),
+    determined alphabet S_det = Sigma \\ S_free, and k_free = |S_free| - d.
+
+    Theorem:
+      1. (Sufficiency) If all singletons in S_det are eligible and there exists T subset E_span^free
+         of size |T| <= k_free such that S_det U T parses every forced block touching S_free, then
+         D = S_det U T is an exact optimal dictionary of size r = OPT.
+      2. (Necessity) Let B_det* be the forced D_det-segments (maximal runs of forced blocks not
+         covered by any occurrence of E_span^free whose left and right boundaries are block edges
+         or characters of S_free), with rank r_det* and slack Delta_det* = |S_det| - r_det*.
+         Any legal dictionary of size r must contain a subset T subset E_span^free of size
+         <= k_free + Delta_det* such that S_det U T parses B_free. Hence if no such T exists,
+         OPT >= r + 1 is certified IMPOSSIBLE at budget r.
+    """
+    blocks = list(programs) if k == 1 else forced_blocks(programs, k, max_bytes=max_bytes)
+    chars = alphabet_index(programs)
+    idx_to_ch = {i: ch for ch, i in chars.items()}
+    num_cols = len(chars)
+    whole = set(programs)
+    all_singletons_ok = all(ch not in whole for ch in chars)
+
+    field_data = []
+    for prime, base in PRIMES:
+        basis = rref_basis([pos_vector(b, chars, prime, base) for b in blocks], prime)
+        null_vecs, supp = _nullspace_basis_and_support(basis, num_cols, prime)
+        field_data.append((prime, base, basis, null_vecs, supp))
+    max_rank = max(len(b) for _, _, b, _, _ in field_data)
+    attaining = [fd for fd in field_data if len(fd[2]) == max_rank]
+    d = num_cols - max_rank
+    s_free_idx = set().union(*(fd[4] for fd in attaining)) if d > 0 else set()
+    s_free = sorted(idx_to_ch[i] for i in s_free_idx)
+    s_free_set = set(s_free)
+    s_det = sorted(idx_to_ch[i] for i in range(num_cols) if i not in s_free_idx)
+    k_free = len(s_free) - d
+
+    if d == 0:
+        return {
+            "status": "SATURATED",
+            "rank": max_rank,
+            "nullity": 0,
+            "sFree": [],
+            "kFree": 0,
+            "deltaDetStar": 0,
+            "certifiedLowerBound": max_rank,
+            "attainingConstruction": None,
+        }
+
+    wit = (
+        [[len(s) - i for i in range(len(s))] for s in programs]
+        if k == 1
+        else suffix_shared_lengths(programs, k, max_bytes=max_bytes)
+    )
+    seen: set[str] = set()
+    span_free: list[str] = []
+    for pidx, s in enumerate(programs):
+        row = wit[pidx]
+        for a, w in enumerate(row):
+            if w < 2:
+                continue
+            vecs = [[0] * num_cols for _ in attaining]
+            weights = [1] * len(attaining)
+            has_free = False
+            for off in range(w):
+                ch = s[a + off]
+                ci = chars[ch]
+                if ci in s_free_idx:
+                    has_free = True
+                for fi, (prime, base, _, _, _) in enumerate(attaining):
+                    vecs[fi][ci] = (vecs[fi][ci] + weights[fi]) % prime
+                    weights[fi] = (weights[fi] * base) % prime
+                if off >= 1 and has_free:
+                    ok = True
+                    for fi, (prime, _, _, null_vecs, _) in enumerate(attaining):
+                        vf = vecs[fi]
+                        for z in null_vecs:
+                            if sum(vf[j] * z[j] for j in s_free_idx) % prime != 0:
+                                ok = False
+                                break
+                        if not ok:
+                            break
+                    if ok:
+                        sub = s[a : a + off + 1]
+                        if sub not in seen and sub not in whole:
+                            seen.add(sub)
+                            span_free.append(sub)
+
+    # Airtight forced D_det segments B_det*: runs not covered by any occurrence of E_span^free
+    # whose left and right boundaries are block boundaries or characters of S_free.
+    by_first: dict[str, list[str]] = defaultdict(list)
+    for tok in span_free:
+        by_first[tok[0]].append(tok)
+    b_det_star: set[str] = set()
+    for b in blocks:
+        n = len(b)
+        covered = [False] * n
+        for i in range(n):
+            for tok in by_first.get(b[i], ()):
+                tlen = len(tok)
+                if i + tlen <= n and b.startswith(tok, i):
+                    for j in range(i, i + tlen):
+                        covered[j] = True
+        i = 0
+        while i < n:
+            if covered[i]:
+                i += 1
+                continue
+            j = i
+            while j < n and not covered[j]:
+                j += 1
+            left_ok = (i == 0) or (b[i - 1] in s_free_set)
+            right_ok = (j == n) or (b[j] in s_free_set)
+            if left_ok and right_ok:
+                b_det_star.add(b[i:j])
+            i = j
+
+    det_chars = {ch: i for i, ch in enumerate(s_det)}
+    r_det = 0
+    if s_det and b_det_star:
+        for prime, base in PRIMES:
+            vecs = [pos_vector(seg, det_chars, prime, base) for seg in b_det_star if all(ch in det_chars for ch in seg)]
+            r_det = max(r_det, len(rref_basis(vecs, prime)))
+    delta_det = len(s_det) - r_det
+    max_t_for_rank = k_free + delta_det
+
+    b_free = [b for b in blocks if any(ch in s_free_set for ch in b)]
+    occ_id: dict[tuple[int, int], int] = {}
+    for bi, b in enumerate(b_free):
+        for pos, ch in enumerate(b):
+            if ch in s_free_set:
+                occ_id[(bi, pos)] = len(occ_id)
+    full_mask = (1 << len(occ_id)) - 1
+
+    mask_to_toks: dict[int, list[str]] = defaultdict(list)
+    for tok in span_free:
+        m = 0
+        tlen = len(tok)
+        for bi, b in enumerate(b_free):
+            st = 0
+            while True:
+                idx = b.find(tok, st)
+                if idx == -1:
+                    break
+                for pos in range(idx, idx + tlen):
+                    oid = occ_id.get((bi, pos))
+                    if oid is not None:
+                        m |= 1 << oid
+                st = idx + 1
+        if m:
+            mask_to_toks[m].append(tok)
+
+    # Exact lossless deduplication: if tok1 is a substring of tok2 and covers the exact same
+    # S_free occurrences in B_free, tok1's flanks in tok2 lie strictly in S_det, so tok1 parses
+    # whenever tok2 does. Keep all inclusion-minimal tokens per mask.
+    items: list[tuple[int, str]] = []
+    for m, toks in mask_to_toks.items():
+        toks.sort(key=lambda t: (len(t), t))
+        kept: list[str] = []
+        for t in toks:
+            if not any(prev in t for prev in kept):
+                kept.append(t)
+        for t in kept:
+            items.append((m, t))
+    items.sort(key=lambda kv: (-kv[0].bit_count(), len(kv[1]), kv[1]))
+
+    def find_cover(limit_t: int, relax_whole: bool = False) -> tuple[list[str] | None, bool]:
+        found: list[str] | None = None
+        nodes = 0
+        aborted = False
+        s_det_pool = list(s_det) if relax_whole else [ch for ch in s_det if ch not in whole]
+
+        def search(need_mask: int, chosen_idxs: list[int]) -> None:
+            nonlocal found, nodes, aborted
+            if found is not None or aborted:
+                return
+            nodes += 1
+            if nodes > max_nodes:
+                aborted = True
+                return
+            if need_mask == 0:
+                cand_dict = s_det_pool + [items[i][1] for i in chosen_idxs]
+                if all(parse_program(b, cand_dict) is not None for b in b_free):
+                    found = cand_dict
+                return
+            if len(chosen_idxs) >= limit_t:
+                return
+            best_cands: list[int] | None = None
+            tmp = need_mask
+            while tmp:
+                lsb = tmp & -tmp
+                tmp ^= lsb
+                cands = [i for i in range(len(items)) if i not in chosen_idxs and (items[i][0] & lsb)]
+                if best_cands is None or len(cands) < len(best_cands):
+                    best_cands = cands
+                    if len(best_cands) == 0:
+                        return
+            for i in best_cands or ():
+                search(need_mask & ~items[i][0], chosen_idxs + [i])
+                if found is not None or aborted:
+                    return
+
+        search(full_mask, [])
+        return found, aborted
+
+    # 1. Exact sufficiency check for size r: |T| <= k_free with S_det singletons
+    if all(ch not in whole for ch in s_det):
+        found_r, _ = find_cover(k_free, relax_whole=False)
+        if found_r is not None:
+            verified = verify_construction(programs, found_r, k, max_bytes=max_bytes)
+            return {
+                "status": "RANK_ATTAINED",
+                "rank": max_rank,
+                "nullity": d,
+                "sFree": s_free,
+                "kFree": k_free,
+                "deltaDetStar": delta_det,
+                "spanFreeTokenCount": len(span_free),
+                "uniqueMaskCount": len(items),
+                "certifiedLowerBound": max_rank,
+                "attainingConstruction": verified,
+            }
+
+    # 2. Exact necessity check for size r: can ANY |T| <= k_free + delta_det* parse B_free with S_det?
+    found_nec, aborted_nec = find_cover(max_t_for_rank, relax_whole=True)
+    if not aborted_nec and found_nec is None:
+        return {
+            "status": "RANK_UNATTAINABLE",
+            "rank": max_rank,
+            "nullity": d,
+            "sFree": s_free,
+            "kFree": k_free,
+            "deltaDetStar": delta_det,
+            "spanFreeTokenCount": len(span_free),
+            "uniqueMaskCount": len(items),
+            "certifiedLowerBound": max_rank + 1,
+            "attainingConstruction": None,
+        }
+
+    return {
+        "status": "UNRESOLVED",
+        "rank": max_rank,
+        "nullity": d,
+        "sFree": s_free,
+        "kFree": k_free,
+        "deltaDetStar": delta_det,
+        "spanFreeTokenCount": len(span_free),
+        "uniqueMaskCount": len(items),
+        "certifiedLowerBound": max_rank,
+        "attainingConstruction": None,
+    }
+
+
 def certified_rank_bound(programs: list[str], k: int, max_bytes: int | None = 160, units: list[str] | None = None) -> dict:
     """Position-weighted rank lower bound (program rank for k=1, mandatory-block rank for k>=2), checked under two primes."""
     target_units = units if units is not None else (list(programs) if k == 1 else forced_blocks(programs, k, max_bytes=max_bytes))
@@ -341,6 +756,440 @@ def verify_disjoint_witness(
             raise ValueError(f"Witness cover sets share token(s): {sorted(overlap)[:3]}")
         used |= cover
     return True
+
+
+def verify_disjoint_witness_direct(
+    programs: list[str],
+    witness: list[tuple[int, int]],
+    k: int,
+    wit: list[list[int]],
+    whole: set[str],
+    max_bytes: int | None = 160,
+) -> bool:
+    """Independently verify witness cover sets using exact suffix shared lengths `wit` (zero full-corpus token enumeration)."""
+    used: set[str] = set()
+    seen_coords: set[tuple[int, int]] = set()
+    for pidx, pos in witness:
+        if (pidx, pos) in seen_coords:
+            raise ValueError(f"Duplicate witness coordinate {(pidx, pos)}")
+        seen_coords.add((pidx, pos))
+        s = programs[pidx]
+        n = len(s)
+        row = wit[pidx]
+        cover: set[str] = set()
+        if s[pos] not in whole:
+            cover.add(s[pos])
+        lo = 0 if max_bytes is None else max(0, pos - max_bytes + 1)
+        for a in range(lo, pos + 1):
+            w = row[a]
+            if w < 2 or a + w <= pos:
+                continue
+            for b in range(max(a + 2, pos + 1), a + w + 1):
+                sub = s[a:b]
+                if sub not in whole:
+                    cover.add(sub)
+        if not cover:
+            raise ValueError(f"Empty cover set at {(pidx, pos)}")
+        overlap = used & cover
+        if overlap:
+            raise ValueError(f"Witness cover sets share token(s): {sorted(overlap)[:3]}")
+        used |= cover
+    return True
+
+
+def disjoint_position_certificate_fast(
+    programs: list[str],
+    k: int,
+    max_bytes: int | None = 160,
+    max_cover_size: int = 256,
+) -> dict:
+    """Bounded-memory verified disjoint-position lower bound for large k>=2 corpora.
+
+    Computes exact suffix shared lengths O(N log N), skips bloated docstring positions (> max_cover_size
+    covering tokens) as packing candidates (never omits tokens from any verified cover set), and
+    independently verifies pairwise disjointness over ALL eligible tokens <= max_bytes.
+    """
+    whole = set(programs)
+    wit = suffix_shared_lengths(programs, k, max_bytes=max_bytes)
+
+    # First check unspellable positions and compute exact cover-set size upper bound per position via sweep
+    # For each position (pidx, pos), count how many (a, b) with a <= pos < b <= a + wit[pidx][a] (b-a >= 2) cover it.
+    candidates: list[tuple[int, int, int]] = []  # (approx_cover_size, pidx, pos)
+    seen_forced_chars: set[str] = set()
+    for pidx, s in enumerate(programs):
+        n = len(s)
+        row = wit[pidx]
+        # Exact O(n) forced-singleton detection via max_reach
+        max_reach = 0
+        for pos in range(n):
+            w = row[pos]
+            if w >= 2 and pos + w > max_reach:
+                max_reach = pos + w
+            has_multi = max_reach > pos
+            ch = s[pos]
+            if not has_multi:
+                if ch in whole:
+                    return {
+                        "bound": None,
+                        "exact": True,
+                        "unspellablePosition": {"programIndex": pidx, "pos": pos},
+                        "witness": [],
+                    }
+                if ch not in seen_forced_chars:
+                    seen_forced_chars.add(ch)
+                    candidates.append((1, pidx, pos))
+            else:
+                # Compute cheap exact cover count only when local shared span is modest
+                lo = 0 if max_bytes is None else max(0, pos - max_bytes + 1)
+                est = 1 if ch not in whole else 0
+                too_big = False
+                for a in range(lo, pos + 1):
+                    wa = row[a]
+                    if wa >= 2 and a + wa > pos:
+                        est += (a + wa) - max(a + 1, pos)
+                        if est > max_cover_size:
+                            too_big = True
+                            break
+                if not too_big:
+                    candidates.append((est, pidx, pos))
+
+    candidates.sort()
+    chosen: list[tuple[int, int]] = []
+    used_tokens: set[str] = set()
+    for _, pidx, pos in candidates:
+        s = programs[pidx]
+        row = wit[pidx]
+        cover: set[str] = set()
+        if s[pos] not in whole:
+            cover.add(s[pos])
+        lo = 0 if max_bytes is None else max(0, pos - max_bytes + 1)
+        conflict = False
+        if cover and not used_tokens.isdisjoint(cover):
+            continue
+        for a in range(lo, pos + 1):
+            wa = row[a]
+            if wa < 2 or a + wa <= pos:
+                continue
+            for b in range(max(a + 2, pos + 1), a + wa + 1):
+                sub = s[a:b]
+                if sub not in whole:
+                    if sub in used_tokens:
+                        conflict = True
+                        break
+                    cover.add(sub)
+            if conflict:
+                break
+        if not conflict and cover:
+            used_tokens |= cover
+            chosen.append((pidx, pos))
+
+    verify_disjoint_witness_direct(programs, chosen, k, wit, whole, max_bytes=max_bytes)
+    return {"bound": len(chosen), "exact": False, "witness": chosen}
+
+
+def fast_constructive_dictionary(
+    programs: list[str],
+    k: int,
+    budget: int,
+    lb: int,
+    max_bytes: int | None = 160,
+    minimize: bool = False,
+) -> dict | None:
+    """Fast solver-free constructive dictionary search below |Sigma| for k >= 2.
+
+    Identifies exact non-forced characters R = Sigma \\ F_1, extracts compact maximal shared spans
+    covering R, and runs iterative net-gain greedy + closure bundle elimination verified by
+    exact byte-for-byte parsing. Returns a verified construction of size <= budget, or None.
+    """
+    if k < 2:
+        return None
+    whole = set(programs)
+    alpha = sorted(set("".join(programs)))
+    if not all(ch not in whole for ch in alpha):
+        return None
+    if len(alpha) <= budget and not minimize:
+        return verify_construction(programs, alpha, k, max_bytes=max_bytes)
+
+    wit = suffix_shared_lengths(programs, k, max_bytes=max_bytes)
+
+    # 1. Exact forced singletons F_1 and eliminable characters R = Sigma \ F_1
+    forced_chars: set[str] = set()
+    char_occs: dict[str, list[tuple[int, int]]] = defaultdict(list)
+    for pidx, s in enumerate(programs):
+        row = wit[pidx]
+        max_reach = 0
+        for pos, ch in enumerate(s):
+            w = row[pos]
+            if w >= 2 and pos + w > max_reach:
+                max_reach = pos + w
+            if max_reach <= pos:
+                forced_chars.add(ch)
+            char_occs[ch].append((pidx, pos))
+
+    elim_chars = [ch for ch in alpha if ch not in forced_chars]
+    if not elim_chars:
+        return None
+    elim_set = set(elim_chars)
+
+    # 2. Extract compact candidate multi-char eligible tokens covering R-occurrences
+    cand_set: set[str] = set()
+    for pidx, s in enumerate(programs):
+        n = len(s)
+        row = wit[pidx]
+        for a, w in enumerate(row):
+            if w < 2:
+                continue
+            # Keep left-maximal shared spans (or spans starting at an R-char)
+            is_left_max = (a == 0) or (row[a - 1] < w + 1)
+            span = s[a : a + w]
+            r_offsets = [off for off, ch in enumerate(span) if ch in elim_set]
+            if not r_offsets:
+                continue
+            if is_left_max and span not in whole:
+                cand_set.add(span)
+                # Also add tight R-hull inside span (handles overlapping boilerplate headers/guards cleanly)
+                lo_off, hi_off = r_offsets[0], r_offsets[-1]
+                if lo_off == hi_off:
+                    if lo_off > 0:
+                        hull = span[lo_off - 1 : hi_off + 1]
+                        if hull not in whole:
+                            cand_set.add(hull)
+                    if hi_off + 1 < w:
+                        hull = span[lo_off : hi_off + 2]
+                        if hull not in whole:
+                            cand_set.add(hull)
+                else:
+                    hull = span[lo_off : hi_off + 1]
+                    if hull not in whole:
+                        cand_set.add(hull)
+            # For every R-position in this span, add short 2-3 char anchors so overlaps never block elimination
+            for off in r_offsets:
+                pos = a + off
+                if off > 0:
+                    t2 = span[off - 1 : off + 1]
+                    if t2 not in whole:
+                        cand_set.add(t2)
+                if off + 1 < w:
+                    t2 = span[off : off + 2]
+                    if t2 not in whole:
+                        cand_set.add(t2)
+                if off > 0 and off + 1 < w:
+                    t3 = span[off - 1 : off + 2]
+                    if t3 not in whole:
+                        cand_set.add(t3)
+
+    # Filter to genuinely eligible multi-char tokens (doc_freq >= k, <= max_bytes, not whole)
+    candidates: list[str] = []
+    for tok in sorted(cand_set, key=lambda t: (-len(t), t)):
+        if len(tok) >= 2 and is_token_eligible(tok, programs, k, whole=whole, max_bytes=max_bytes):
+            candidates.append(tok)
+    if not candidates:
+        return None
+
+    # 3. Precompute R-occurrence bitmasks per candidate token
+    occ_to_id: dict[tuple[int, int], int] = {}
+    char_mask: dict[str, int] = {}
+    for ch in elim_chars:
+        mask = 0
+        for coord in char_occs[ch]:
+            oid = occ_to_id.setdefault(coord, len(occ_to_id))
+            mask |= 1 << oid
+        char_mask[ch] = mask
+
+    tok_mask: dict[str, int] = {}
+    tok_chars: dict[str, set[str]] = {}
+    char_to_toks: dict[str, list[str]] = defaultdict(list)
+    for tok in candidates:
+        tlen = len(tok)
+        m = 0
+        tch: set[str] = set()
+        for pidx, s in enumerate(programs):
+            start = 0
+            while True:
+                idx = s.find(tok, start)
+                if idx == -1:
+                    break
+                for pos in range(idx, idx + tlen):
+                    coord = (pidx, pos)
+                    oid = occ_to_id.get(coord)
+                    if oid is not None:
+                        m |= 1 << oid
+                        tch.add(s[pos])
+                start = idx + 1
+        if m:
+            tok_mask[tok] = m
+            tok_chars[tok] = tch
+            for ch in tch:
+                char_to_toks[ch].append(tok)
+
+    # Deduplicate tokens with identical R-occurrence mask (prefer shorter token to minimize overlap conflicts,
+    # while keeping the longest one too in case it merges adjacent spans cleanly)
+    mask_groups: dict[int, list[str]] = defaultdict(list)
+    for tok, m in tok_mask.items():
+        mask_groups[m].append(tok)
+    pruned_cands: list[str] = []
+    for m, toks in mask_groups.items():
+        toks.sort(key=lambda t: (len(t), t))
+        pruned_cands.append(toks[0])
+        if len(toks[-1]) != len(toks[0]):
+            pruned_cands.append(toks[-1])
+    pruned_set = set(pruned_cands)
+    char_to_toks = {ch: [t for t in toks if t in pruned_set] for ch, toks in char_to_toks.items()}
+
+    # Helper: exact parse check only on programs containing any of `affected_chars`
+    char_progs: dict[str, list[int]] = {
+        ch: sorted({pidx for pidx, _ in char_occs[ch]}) for ch in elim_chars
+    }
+
+    def parses_for_chars(vocab_list: list[str], chars_dropped: set[str]) -> bool:
+        pidxs: set[int] = set()
+        for ch in chars_dropped:
+            pidxs.update(char_progs[ch])
+        return all(parse_program(programs[pidx], vocab_list) is not None for pidx in pidxs)
+
+    active_singles: set[str] = set(alpha)
+    chosen_multi: list[str] = []
+    chosen_set: set[str] = set()
+    chosen_mask = 0
+
+    # 4. Iterative net-gain elimination (free drops + single-token + greedy closure bundles)
+    while len(active_singles) + len(chosen_multi) > lb:
+        if not minimize and len(active_singles) + len(chosen_multi) <= budget:
+            break
+        rem_r = [ch for ch in elim_chars if ch in active_singles]
+        if not rem_r:
+            break
+
+        # 4a. Free drops: any remaining R-char already 100% covered by chosen_multi
+        dropped_any = False
+        for ch in list(rem_r):
+            if (char_mask[ch] & ~chosen_mask) == 0:
+                trial = sorted(active_singles - {ch}) + chosen_multi
+                if parses_for_chars(trial, {ch}):
+                    active_singles.remove(ch)
+                    dropped_any = True
+        if dropped_any:
+            continue
+
+        # 4b. Build seed bundles: every candidate touching >= 2 remaining R-chars, plus small-degree R-chars
+        rem_r_set = set(rem_r)
+        rem_r_mask = 0
+        for ch in rem_r:
+            rem_r_mask |= char_mask[ch]
+
+        seeds: list[str] = []
+        seen_seed: set[str] = set()
+        # Rank candidates by how many remaining R-chars they touch
+        for tok in pruned_cands:
+            if tok in chosen_set:
+                continue
+            if len(tok_chars[tok] & rem_r_set) >= 2:
+                seeds.append(tok)
+                seen_seed.add(tok)
+        seeds.sort(key=lambda t: (-len(tok_chars[t] & rem_r_set), -(tok_mask[t] & rem_r_mask).bit_count(), len(t), t))
+        seeds = seeds[:160]
+
+        best_bundles: list[tuple[int, int, tuple[str, ...], frozenset[str]]] = []
+        seen_bundle_keys: set[tuple[str, ...]] = set()
+
+        for seed in seeds:
+            bundle = [seed]
+            b_set = {seed}
+            cov = chosen_mask | tok_mask[seed]
+            target_chars = set(tok_chars[seed] & rem_r_set)
+
+            for _ in range(12):
+                done = frozenset(ch for ch in rem_r if (char_mask[ch] & ~cov) == 0)
+                gain = len(done) - len(bundle)
+                if gain >= 1:
+                    b_key = tuple(sorted(bundle))
+                    if b_key not in seen_bundle_keys:
+                        seen_bundle_keys.add(b_key)
+                        best_bundles.append((gain, -len(bundle), b_key, done))
+                # Expand bundle to finish off partially-covered target_chars
+                unfinished = [ch for ch in target_chars if (char_mask[ch] & ~cov) != 0]
+                if not unfinished:
+                    # Also try pulling in one high-overlap neighbor char
+                    break
+                # Pick unfinished char with fewest remaining uncovered occurrences
+                unfinished.sort(key=lambda ch: ((char_mask[ch] & ~cov).bit_count(), ch))
+                focus_ch = unfinished[0]
+                focus_need = char_mask[focus_ch] & ~cov
+                target_need = 0
+                for ch in unfinished:
+                    target_need |= char_mask[ch] & ~cov
+
+                best_next = None
+                best_score = (-1, -1, -1)
+                for cand in char_to_toks.get(focus_ch, ()):
+                    if cand in chosen_set or cand in b_set:
+                        continue
+                    cm = tok_mask[cand]
+                    hit_focus = (cm & focus_need).bit_count()
+                    if hit_focus == 0:
+                        continue
+                    hit_target = (cm & target_need).bit_count()
+                    finishes = sum(1 for ch in rem_r if (char_mask[ch] & ~cov) != 0 and (char_mask[ch] & ~(cov | cm)) == 0)
+                    sc = (finishes, hit_target, hit_focus)
+                    if sc > best_score:
+                        best_score = sc
+                        best_next = cand
+                if best_next is None:
+                    break
+                bundle.append(best_next)
+                b_set.add(best_next)
+                cov |= tok_mask[best_next]
+                target_chars |= (tok_chars[best_next] & rem_r_set)
+
+        if not best_bundles:
+            break
+        best_bundles.sort(reverse=True)
+
+        committed = False
+        for gain, _, b_key, done in best_bundles[:12]:
+            b_list = list(b_key)
+            trial_vocab = sorted(active_singles - set(done)) + chosen_multi + b_list
+            if parses_for_chars(trial_vocab, set(done)):
+                active_singles -= set(done)
+                chosen_multi.extend(b_list)
+                chosen_set.update(b_list)
+                for tok in b_list:
+                    chosen_mask |= tok_mask[tok]
+                committed = True
+                break
+            # Overlap fallback: greedily drop as many chars in `done` as parse cleanly with `b_list`
+            actually_dropped: set[str] = set()
+            cur_singles = set(active_singles)
+            for ch in sorted(done):
+                tv = sorted(cur_singles - {ch}) + chosen_multi + b_list
+                if parses_for_chars(tv, actually_dropped | {ch}):
+                    cur_singles.remove(ch)
+                    actually_dropped.add(ch)
+            if len(actually_dropped) > len(b_list):
+                active_singles = cur_singles
+                chosen_multi.extend(b_list)
+                chosen_set.update(b_list)
+                for tok in b_list:
+                    chosen_mask |= tok_mask[tok]
+                committed = True
+                break
+        if not committed:
+            break
+
+    # 5. Final prune of any redundant multi-char tokens or remaining R-singletons
+    final_dict = sorted(active_singles) + sorted(chosen_multi)
+    for tok in sorted(chosen_multi, key=lambda t: (-len(t), t)):
+        rest = [d for d in final_dict if d != tok]
+        if all(parse_program(s, rest) is not None for s in programs):
+            final_dict = rest
+    for ch in sorted(active_singles & elim_set):
+        rest = [d for d in final_dict if d != ch]
+        if parses_for_chars(rest, {ch}):
+            final_dict = rest
+
+    if len(final_dict) <= budget:
+        return verify_construction(programs, final_dict, k, max_bytes=max_bytes)
+    return None
 
 
 def disjoint_position_certificate(
@@ -471,19 +1320,21 @@ def theorem_b_span_parse_test(programs: list[str], exhaustive_basis_limit: int =
     return result
 
 
-# ---------------------------------------------------------------------- construction search (small components)
+# ---------------------------------------------------------------------- construction search (small + fast real-corpus)
 def find_verified_construction(
     programs: list[str],
     k: int,
     budget: int,
-    tokens: set[str],
+    tokens: set[str] | None,
     max_bytes: int | None = 160,
     exhaustive_token_limit: int = 24,
     exhaustive_budget_limit: int = 9,
+    lb: int = 0,
 ) -> dict | None:
     """Return a byte-verified eligible dictionary of size <= budget if found, else None."""
+    whole = set(programs)
     alpha = sorted(set("".join(programs)))
-    all_singletons_eligible = all(ch in tokens for ch in alpha)
+    all_singletons_eligible = all(ch not in whole for ch in alpha)
     if all_singletons_eligible and len(alpha) <= budget:
         return verify_construction(programs, alpha, k, max_bytes=max_bytes, tokens=tokens)
 
@@ -491,8 +1342,16 @@ def find_verified_construction(
     # the forced blocks themselves form an explicit byte-verified tiling dictionary.
     if k >= 2:
         blocks = forced_blocks(programs, k, max_bytes=max_bytes)
-        if len(blocks) <= budget and all(b in tokens for b in blocks):
+        if len(blocks) <= budget and all(
+            (b in tokens if tokens is not None else is_token_eligible(b, programs, k, whole=whole, max_bytes=max_bytes))
+            for b in blocks
+        ):
             return verify_construction(programs, blocks, k, max_bytes=max_bytes, tokens=tokens)
+        # Fast net-gain constructive dictionary pass below |Sigma| (verified byte-exact)
+        if all_singletons_eligible and budget < len(alpha):
+            fast_found = fast_constructive_dictionary(programs, k, budget, lb=lb, max_bytes=max_bytes)
+            if fast_found is not None:
+                return fast_found
 
     # For k = 1, check Theorem B span-basis construction when budget >= program rank
     if k == 1:
@@ -501,6 +1360,11 @@ def find_verified_construction(
             return tb["attainingConstruction"]
 
     # Exhaustive search on small components (only returns byte-verified dictionaries)
+    if tokens is None:
+        if sum(len(s) for s in programs) <= 500:
+            tokens = eligible_tokens(programs, k, max_bytes=max_bytes)
+        else:
+            return None
     ordered = sorted(tokens, key=lambda t: (len(t), t))
     if len(ordered) <= exhaustive_token_limit and budget <= exhaustive_budget_limit:
         for size in range(1, min(budget, len(ordered)) + 1):
@@ -560,12 +1424,14 @@ def diagnose_full_corpus(
     budget: int,
     max_bytes: int | None = 160,
     allow_construction_search: bool = True,
+    measure_memory: bool = True,
 ) -> dict:
     """Tri-state full-corpus capacity diagnostic: IMPOSSIBLE, FEASIBLE, or UNRESOLVED.
 
     Never reports a rank bound or upper bound as a construction.
     """
-    tracemalloc.start()
+    if measure_memory:
+        tracemalloc.start()
     t0 = time.perf_counter()
     try:
         components = split_components(programs)
@@ -576,43 +1442,94 @@ def diagnose_full_corpus(
         comp_reports = []
         total_lb = 0
         unspellable = False
-        per_comp_tokens: list[set[str]] = []
+        per_comp_tokens: list[set[str] | None] = []
+        per_comp_kernel_constructions: list[dict | None] = []
 
         for idx, comp in enumerate(components):
             comp_alpha = sorted(set("".join(comp)))
             comp_singletons_ok = all(ch not in set(comp) for ch in comp_alpha)
-            tokens = eligible_tokens(comp, k, max_bytes=max_bytes)
-            per_comp_tokens.append(tokens)
-
+            comp_chars = sum(len(s) for s in comp)
             rank_cert = certified_rank_bound(comp, k, max_bytes=max_bytes)
-            disj_cert = disjoint_position_certificate(comp, k, tokens, max_bytes=max_bytes)
+
+            # Fast path for large k>=2 components: compute rank + forced-block rank FIRST without
+            # enumerating all eligible substrings. Then apply Nullspace-Kernel Theorem (Theorem 1)
+            # whenever nullity d > 0 and budget lies in [rank, |Sigma|-1].
+            tokens: set[str] | None = None
             block_subreports = []
             block_split_lb = None
+            rank_val = rank_cert["bound"]
+            tb_lift = None
+            nk_cert: dict | None = None
+            nk_construction: dict | None = None
+
+            if k == 1:
+                tokens = eligible_tokens(comp, k, max_bytes=max_bytes)
+                disj_cert = disjoint_position_certificate(comp, k, tokens, max_bytes=max_bytes)
+                if disj_cert["bound"] is not None:
+                    tb = theorem_b_span_parse_test(comp)
+                    if tb["certifiedLowerBound"] > rank_cert["bound"]:
+                        tb_lift = tb
+                    rank_val = tb_lift["certifiedLowerBound"] if tb_lift else rank_cert["bound"]
+            elif comp_chars <= 500:
+                tokens = eligible_tokens(comp, k, max_bytes=max_bytes)
+                disj_cert = disjoint_position_certificate(comp, k, tokens, max_bytes=max_bytes)
+            else:
+                # Large k >= 2 component: check forced-block rank decomposition first (cheap O(L) + RREF)
+                fb_comps = forced_block_components(comp, k, max_bytes=max_bytes)
+                fb_rank_sum = 0
+                if len(fb_comps) > 1:
+                    for fb_idx, fb_units in enumerate(fb_comps):
+                        fb_rank = certified_rank_bound(comp, k, max_bytes=max_bytes, units=fb_units)
+                        fb_rank_sum += fb_rank["bound"]
+                        block_subreports.append({
+                            "blockComponentIndex": fb_idx,
+                            "blocks": fb_units,
+                            "alphabetSize": len(set("".join(fb_units))),
+                            "blockRank": fb_rank["bound"],
+                            "disjointBound": None,
+                            "lowerBound": fb_rank["bound"],
+                        })
+                    if fb_rank_sum > rank_val:
+                        block_split_lb = fb_rank_sum
+                rank_best = max(rank_val, block_split_lb or 0)
+                if comp_singletons_ok and (
+                    rank_best > budget
+                    or rank_best >= len(comp_alpha)
+                    or (len(components) == 1 and len(comp_alpha) <= budget)
+                ):
+                    disj_cert = {"bound": 0, "exact": False, "skipped": True, "witness": []}
+                else:
+                    # Try Nullspace-Kernel Theorem BEFORE slow disjoint packing
+                    nk_cert = nullspace_kernel_certificate(comp, k, max_bytes=max_bytes)
+                    if nk_cert["status"] == "RANK_ATTAINED":
+                        nk_construction = nk_cert["attainingConstruction"]
+                        disj_cert = {"bound": 0, "exact": False, "skipped": True, "witness": []}
+                    elif nk_cert["status"] == "RANK_UNATTAINABLE" and (
+                        nk_cert["certifiedLowerBound"] > budget or (comp_singletons_ok and nk_cert["certifiedLowerBound"] >= len(comp_alpha))
+                    ):
+                        disj_cert = {"bound": 0, "exact": False, "skipped": True, "witness": []}
+                    else:
+                        disj_cert = disjoint_position_certificate_fast(comp, k, max_bytes=max_bytes)
+
+            per_comp_tokens.append(tokens)
+
             if disj_cert["bound"] is None:
                 unspellable = True
                 comp_lb = None
                 stronger = "unspellable-position"
             else:
-                # For k = 1, also check Theorem B span-token parseability as a sound +1 lift when E_span fails
-                tb_lift = None
-                if k == 1:
-                    tb = theorem_b_span_parse_test(comp)
-                    if tb["certifiedLowerBound"] > rank_cert["bound"]:
-                        tb_lift = tb
-                rank_val = tb_lift["certifiedLowerBound"] if tb_lift else rank_cert["bound"]
                 disj_val = disj_cert["bound"]
-                comp_lb = max(rank_val, disj_val)
+                comp_lb = max(rank_val, disj_val, block_split_lb or 0)
 
-                # For k >= 2, forced-block character components cannot share any eligible token (no token crosses a forced cut).
-                # Filter corpus-wide eligible tokens per block component (preserving true program doc_freq and whole exclusions).
-                if k >= 2:
+                # For small k >= 2 components, run forced-block component decomposition + Nullspace-Kernel Theorem
+                if k >= 2 and comp_chars <= 500:
                     fb_comps = forced_block_components(comp, k, max_bytes=max_bytes)
                     if len(fb_comps) > 1:
                         fb_sum = 0
                         fb_ok = True
                         for fb_idx, fb_units in enumerate(fb_comps):
                             fb_chars = set("".join(fb_units))
-                            fb_tokens = {t for t in tokens if set(t) <= fb_chars}
+                            fb_tokens = {t for t in (tokens or set()) if set(t) <= fb_chars}
                             fb_rank = certified_rank_bound(comp, k, max_bytes=max_bytes, units=fb_units)
                             fb_disj = disjoint_position_certificate(fb_units, k, fb_tokens, max_bytes=max_bytes)
                             if fb_disj["bound"] is None:
@@ -631,8 +1548,19 @@ def diagnose_full_corpus(
                         if fb_ok and fb_sum > comp_lb:
                             block_split_lb = fb_sum
                             comp_lb = fb_sum
+                    if comp_lb < len(comp_alpha) and comp_lb <= budget:
+                        nk_cert = nullspace_kernel_certificate(comp, k, max_bytes=max_bytes)
+                        if nk_cert["status"] == "RANK_ATTAINED":
+                            nk_construction = nk_cert["attainingConstruction"]
 
-                if block_split_lb is not None:
+                nk_lift = False
+                if nk_cert is not None and nk_cert["certifiedLowerBound"] > comp_lb:
+                    comp_lb = nk_cert["certifiedLowerBound"]
+                    nk_lift = True
+
+                if nk_lift:
+                    stronger = "nullspace-kernel-obstruction"
+                elif block_split_lb is not None and block_split_lb >= max(rank_val, disj_val):
                     stronger = "forced-block-components"
                 elif tb_lift and rank_val >= disj_val:
                     stronger = "span-parse-obstruction"
@@ -644,6 +1572,7 @@ def diagnose_full_corpus(
                     stronger = f"tie({rank_cert['kind']},disjoint-position)"
                 total_lb += comp_lb
 
+            per_comp_kernel_constructions.append(nk_construction)
             comp_reports.append({
                 "componentIndex": idx,
                 "programs": comp,
@@ -651,6 +1580,11 @@ def diagnose_full_corpus(
                 "allSingletonsEligible": comp_singletons_ok,
                 "rankCertificate": rank_cert,
                 "disjointCertificate": disj_cert,
+                "nullspaceKernelCertificate": (
+                    {k2: v2 for k2, v2 in nk_cert.items() if k2 != "attainingConstruction"}
+                    if nk_cert is not None
+                    else None
+                ),
                 "forcedBlockSubcomponents": block_subreports,
                 "componentLowerBound": comp_lb,
                 "strongerBound": stronger,
@@ -692,9 +1626,16 @@ def diagnose_full_corpus(
                 comp_dicts: list[list[str]] = []
                 slack = budget - total_lb
                 ok_all = True
-                for comp, report, tokens in zip(components, comp_reports, per_comp_tokens):
+                for comp, report, tokens, nk_found in zip(
+                    components, comp_reports, per_comp_tokens, per_comp_kernel_constructions
+                ):
                     comp_lb = report["componentLowerBound"]
-                    found = find_verified_construction(comp, k, comp_lb + slack, tokens, max_bytes=max_bytes)
+                    if nk_found is not None and nk_found["dictionarySize"] <= comp_lb + slack:
+                        found = nk_found
+                    else:
+                        found = find_verified_construction(
+                            comp, k, comp_lb + slack, tokens, max_bytes=max_bytes, lb=comp_lb
+                        )
                     if found is None:
                         ok_all = False
                         break
@@ -745,11 +1686,16 @@ def diagnose_full_corpus(
                 }
 
         elapsed_ms = round((time.perf_counter() - t0) * 1000.0, 3)
-        _, peak_bytes = tracemalloc.get_traced_memory()
-        verdict["measuredCost"] = {"elapsedMs": elapsed_ms, "peakAllocKiB": round(peak_bytes / 1024.0, 2)}
+        if measure_memory:
+            _, peak_bytes = tracemalloc.get_traced_memory()
+            peak_kib = round(peak_bytes / 1024.0, 2)
+        else:
+            peak_kib = None
+        verdict["measuredCost"] = {"elapsedMs": elapsed_ms, "peakAllocKiB": peak_kib}
         return verdict
     finally:
-        tracemalloc.stop()
+        if measure_memory:
+            tracemalloc.stop()
 
 
 # ---------------------------------------------------------------------- reproducible control suite CLI

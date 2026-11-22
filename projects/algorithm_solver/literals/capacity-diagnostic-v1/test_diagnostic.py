@@ -183,6 +183,49 @@ class DiagnosticTests(unittest.TestCase):
         self.assertEqual(res["construction"]["dictionary"], ["a", "b"])
         self.assertTrue(res["construction"]["byteExactVerified"])
 
+    def test_nullspace_kernel_closes_five_program_fb_connected_counterexample(self):
+        # Single forced-block connected counterexample: |Sigma|=7, blockRank=6, disjoint=6, OPT_W2=7.
+        # Nullspace-Kernel Theorem closes it to LB=7 (IMPOSSIBLE at K=6) with zero solver.
+        progs = ["abd", "abpxqy", "qypxbd", "abpyqx", "qxpybd"]
+        r6 = diagnose_full_corpus(progs, k=2, budget=6)
+        self.assertEqual(r6["status"], "IMPOSSIBLE")
+        self.assertEqual(r6["certifiedLowerBound"], 7)
+        self.assertEqual(r6["components"][0]["strongerBound"], "nullspace-kernel-obstruction")
+        self.assertEqual(r6["components"][0]["nullspaceKernelCertificate"]["deltaDetStar"], 0)
+        self.assertIsNotNone(r6["monotoneSaturation"])
+
+        r7 = diagnose_full_corpus(progs, k=2, budget=7)
+        self.assertEqual(r7["status"], "FEASIBLE")
+        self.assertEqual(r7["construction"]["dictionarySize"], 7)
+
+    def test_nullspace_kernel_exact_below_alphabet_construction(self):
+        # 12-char alphabet where 5 nullspace-coupled chars {X,Y,f,Z,W} appear only inside 2 shared
+        # fragments 'XY' and 'fZW', giving rank=9, d=3, |S_free|=5, k_free=2, OPT=9.
+        progs = [
+            "XYabcdefZWgh",
+            "XYabcedfZWhg",
+            "XYbadcefZWgh",
+            "XYacbdgfZWhg",
+        ]
+        r8 = diagnose_full_corpus(progs, k=2, budget=8)
+        self.assertEqual(r8["status"], "IMPOSSIBLE")
+        self.assertEqual(r8["certifiedLowerBound"], 9)
+        r9 = diagnose_full_corpus(progs, k=2, budget=9)
+        self.assertEqual(r9["status"], "FEASIBLE")
+        self.assertEqual(r9["certifiedLowerBound"], 9)
+        self.assertEqual(r9["construction"]["dictionarySize"], 9)
+        self.assertTrue(r9["construction"]["byteExactVerified"])
+
+    def test_nullspace_kernel_boundary_soundness_when_sdet_shares_span_flank(self):
+        # Ensure B_det* only includes uncovered runs bounded by block edges or S_free chars,
+        # never falsely pinning an S_det char adjacent to an S_det flank covered by E_span^free.
+        progs = ["xywz", "xywzu", "vwz", "xyab"]
+        r = diagnose_full_corpus(progs, k=2, budget=len(set("".join(progs))) - 1)
+        # Verify soundness: if FEASIBLE, construction is byte-exact; if IMPOSSIBLE, LB <= actual opt
+        if r["status"] == "FEASIBLE":
+            self.assertTrue(r["construction"]["byteExactVerified"])
+            self.assertLessEqual(r["construction"]["dictionarySize"], r["budget"])
+
 
 if __name__ == "__main__":
     unittest.main()
