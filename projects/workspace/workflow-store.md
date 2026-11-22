@@ -231,3 +231,39 @@ failed review, unknown effects, account changes and a poisoned mapping before
 its first fill. The browser check uses separate Node/Chromium processes through
 `WorkspaceController`, new inputs and fresh grants; a different account misses
 and falls back. Its oracle is synthetic only, with no live ATS or performance claim.
+
+### Bounded serial review batches (host API)
+
+`WorkspaceController.runPersonalWorkflowBatch(projectId, manifest)` can repeat an
+installed, locally pinned recipe for an explicit list of distinct records. Its
+manifest contains `template`, `versionId`, `budgetMs`, and `items` of
+`{recordId, pageId, inputs}`. Batch is not an HTTP/CLI or model capability. A
+trusted installed task must opt in with `reviewBatch`: fixed item and time
+caps, `verifyRecord` that identifies the real record independently of the
+form's appearance, and `authorizeReadOnlyStep` that returns true only for a
+proven review-only action on that record. For example, a local scratch field
+may be allowed; a lookalike control that persists changes must not be. A
+planner instruction is not a substitute for this policy. No current built-in
+task is opted in.
+
+Batch starts one existing personal workflow at a time and waits for its grant
+cleanup and owner handback. A separate private reservation fences competing
+delegations without holding the controller's queue across a child. Each child
+uses local exact-version checkout, no synchronization, planner, or repair
+publication. A missed replay, inconclusive review or receipt, or expired
+budget stops the batch; no automatic retry. A budget stops subsequent action
+admission but cannot forcibly undo a dispatched action or time out trusted
+cleanup. Takeover fences later starts and aborts the active child. If setup or cleanup
+cannot prove both grant revocation and safe ownership, the reservation remains
+in needs-attention and blocks automation. Explicit takeover must verify a human
+owner and revoke remaining agent grants before releasing that fence. Restart
+also fences ownership, revokes stale grants, and marks interrupted work for
+review; neither path resumes automatically.
+`reviewBatchStatus(projectId)` returns the latest owner-private batch record
+with per-item state and linked attempt IDs, but not slot values. Batch
+accounting does not establish a committed business effect and does not add a
+write, idempotency, or business retry path.
+
+Evidence: `node test/unit/review-batch.test.js` exercises the real controller
+and store against a controlled, no-business-write fixture. It does not qualify
+any third-party tenant or production browser write. See clocksmith/deco#205.
