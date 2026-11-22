@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import {
   normalizeHoldoutElement,
   normalizeHoldoutLocator,
+  normalizeHoldoutPlanner,
   normalizeHoldoutService,
   normalizeHoldoutWorkflow,
   scoreHoldout,
@@ -61,7 +62,16 @@ assert.deepEqual(wf.observationLocators, [
   ['status', 'Review', 'output', ''],
 ]);
 
-// 5. End-to-end scoreHoldout on a synthetic holdout with null inputType in teaching and cases.
+// 4b. Planner wrapper passes normalized 4-tuple intermediateClicks to the holdout planner stub.
+let seenAllowed = null;
+const wrappedPlanner = normalizeHoldoutPlanner({
+  identity: { model: 'stub' },
+  async next(ctx) { seenAllowed = ctx.allowedIntermediateClicks; return { tool: 'finish', input: { summary: 'ok' } }; },
+}, wf.intermediateClicks);
+await wrappedPlanner.next({ allowedIntermediateClicks: ['Continue'] });
+assert.deepEqual(seenAllowed, [['button', 'Continue', 'button', '']]);
+
+// 5. End-to-end scoreHoldout on a synthetic holdout with null inputType and 4-tuple allowedIntermediateClicks.
 const sha = text => createHash('sha256').update(text, 'utf8').digest('hex');
 function makeFixtureSource({ badLabelNull = false } = {}) {
   return `
@@ -95,15 +105,16 @@ function makeHost(inputs, { startStep = 1 } = {}) {
     },
     planner: {
       identity: { model: 'regression-stub' },
-      async next({ observation }) {
+      async next({ observation, allowedIntermediateClicks }) {
         if (observation.elements.some(e => e.role === 'status' && e.label === 'Summary')) {
           return { tool: 'finish', input: { summary: 'done' } };
         }
         const nameEl = observation.elements.find(e => e.label === 'Name');
         if (nameEl && !nameEl.value) return { tool: 'act', input: { kind: 'fill', handle: nameEl.handle, slot: 'name' } };
-        const goEl = observation.elements.find(e => e.label === 'Continue');
+        const allowedKeys = new Set((allowedIntermediateClicks || []).map(t => Array.isArray(t) ? t.join('|') : ''));
+        const goEl = observation.elements.find(e => allowedKeys.has([e.role, e.label, e.tag, e.inputType].join('|')));
         if (goEl) return { tool: 'act', input: { kind: 'click', handle: goEl.handle } };
-        return { tool: 'ask_human', input: { reason: 'stuck' } };
+        return { tool: 'ask_human', input: { reason: 'no-unique-intermediate-button' } };
       },
     },
     verifyReview: async () => ({ completed: screen === 'review' && value === inputs.name }),

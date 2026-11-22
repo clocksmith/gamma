@@ -73,6 +73,21 @@ export function normalizeHoldoutWorkflow(workflow) {
   };
 }
 
+/** Pass the holdout-interface 4-tuple intermediateClicks list to the holdout planner stub uniformly. */
+export function normalizeHoldoutPlanner(planner, intermediateClicks) {
+  if (!planner || typeof planner.next !== 'function' || !Array.isArray(intermediateClicks)) return planner;
+  return {
+    identity: planner.identity,
+    next: (context, ...rest) => planner.next(
+      context && typeof context === 'object' && Array.isArray(context.allowedIntermediateClicks)
+        && context.allowedIntermediateClicks.some(entry => !Array.isArray(entry))
+        ? { ...context, allowedIntermediateClicks: intermediateClicks }
+        : context,
+      ...rest,
+    ),
+  };
+}
+
 /** Pure pass-through observer for host checks: never alters return values, throws, or check presence. */
 function observeHostChecks(host) {
   const refusals = [];
@@ -134,14 +149,16 @@ export async function scoreHoldout(holdoutArg, outArg = null) {
   const rows = [], teaching = [];
   try {
     for (const workflow of workflows) {
+      const normalizedWorkflow = normalizeHoldoutWorkflow(workflow);
       // Teach each arm from a fresh copy of the same taught host with the same planner stub.
       const taught = {};
       for (const [armId, arm] of Object.entries(ARMS)) {
         const host = workflow.teach();
+        const basePlanner = normalizeHoldoutPlanner(host.planner, normalizedWorkflow.intermediateClicks);
         const dag = new TraceDag(LIMITS), index = arm.matcher === 'index' ? new SuffixIndex() : null;
-        const recorder = arm.skill ? skillRecorder(host.planner) : null;
+        const recorder = arm.skill ? skillRecorder(basePlanner) : null;
         const result = await runWorkflow({ ...options(workflow, host, workflow.inputs.teach, {
-          dag, mode: 'learn', reconvergeMidRepair: false, planner: recorder?.planner ?? host.planner,
+          dag, mode: 'learn', reconvergeMidRepair: false, planner: recorder?.planner ?? basePlanner,
           suffixIndex: index, suffixEligibility: arm.matcher === 'profile' }) });
         teaching.push({ workflow: workflow.id, arm: armId, completed: result.completed, detail: result.detail });
         if (!result.completed) throw Error(`Teaching failed for ${workflow.id} / ${armId}: ${result.detail}`);
@@ -151,7 +168,7 @@ export async function scoreHoldout(holdoutArg, outArg = null) {
         for (const [armId, arm] of Object.entries(ARMS)) {
           const host = testCase.build();
           const checks = observeHostChecks(host);
-          const stub = counted(host.planner);
+          const stub = counted(normalizeHoldoutPlanner(host.planner, normalizedWorkflow.intermediateClicks));
           const skillRun = arm.skill ? skillPlanner({ skill: taught[armId].skill, planner: stub.planner }) : null;
           let result, error = null;
           try {
@@ -222,7 +239,10 @@ export async function scoreHoldout(holdoutArg, outArg = null) {
   const receipt = {
     schema: 'workflow-holdout-score/v1',
     note: 'Scripted planner stub from the holdout itself. No model was called.',
-    loaderShim: { field: 'inputType', from: null, to: '', scope: 'locators and observed elements uniformly across teaching and all cases' },
+    loaderShim: {
+      inputType: { from: null, to: '', scope: 'locators and observed elements uniformly across teaching and all cases' },
+      allowedIntermediateClicks: { from: 'label-strings', to: 'normalized-4-tuple-locators', scope: 'holdout planner stub context uniformly across teaching and all cases' },
+    },
     source: { commit: git('rev-parse', 'HEAD'), dirty: Boolean(git('status', '--porcelain', '--ignore-submodules=all')),
       workspaceSrcTree: git('rev-parse', 'HEAD:projects/workspace/src') },
     holdout: { files: Object.fromEntries(pinned.map(([hash, file]) => [file, hash])), workflows: workflows.length,
