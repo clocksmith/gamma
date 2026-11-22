@@ -1,0 +1,162 @@
+{
+  "schema": "capacity-diagnostic-unseen-instances/v1",
+  "pin": "59ff04415ff2afd04ff2ed451340f4f02852bf18",
+  "corpora": {
+    "unseen_real_py_tests_12": {
+      "source": "git-blobs-59ff0441",
+      "files": [
+        {
+          "path": "tests/test_seal_fx2_cmix21_lstm200_disjoint.py",
+          "bytes": 828,
+          "sha256": "fd3f44a3b6af51c7e4254b78543a1f6661debc71129e72d563c0442eaf9d1994"
+        },
+        {
+          "path": "tests/latent_handoff/test_experiment_config.py",
+          "bytes": 836,
+          "sha256": "78b71e87b44e96fa7596c7651d37e36d86dac7e02a7e7041ba2cf56b23aa7729"
+        },
+        {
+          "path": "tests/test_seal_fx2_cmix21_source_package_accounting.py",
+          "bytes": 863,
+          "sha256": "837a109f56e88e49e57979d1b1c2762927a445571d94fac855ad09926853d924"
+        },
+        {
+          "path": "tests/test_seal_fx2_cmix21_lstm200_source_frontier.py",
+          "bytes": 876,
+          "sha256": "f7759efd4cff72f20d1eaf89f73eb25e808ede40d0fcce9bca1583bad388e2b2"
+        },
+        {
+          "path": "tests/latent_handoff/test_no_replay_route.py",
+          "bytes": 878,
+          "sha256": "bacccb3387c0785e64f9ea76abd2509eefd444bbaefe0e2cce78ab37a62a7ffc"
+        },
+        {
+          "path": "tests/test_seal_cmix21_lstm200_fx2lite428_10m_codec_failure.py",
+          "bytes": 899,
+          "sha256": "0155eee4f2c1b11a98c6729cea728e3e004e901b71539afd70dfe1ffbe1b3526"
+        },
+        {
+          "path": "tests/latent_handoff/test_rope_roundtrip.py",
+          "bytes": 944,
+          "sha256": "f44ad8db5fab7ba4b20a5e274d8bce67f65e36096a580bc467c852cf5b81b259"
+        },
+        {
+          "path": "tests/test_mind_meld.py",
+          "bytes": 973,
+          "sha256": "ff2b36c5978d3e69661fab2b70b268fa6fbd4730ad27a413136c18895cef4b42"
+        },
+        {
+          "path": "tests/test_seal_cmix21_lstm200_fx2lite428_ram_recovery.py",
+          "bytes": 990,
+          "sha256": "169389aedd72affe7b3f9ff3aea0281b70e4bb8be4bfa292afc16c6a3abd1491"
+        },
+        {
+          "path": "tests/test_seal_wrt_static_boundary_swap_geometry_title_proxy.py",
+          "bytes": 1002,
+          "sha256": "f660e15f4ef6e210e97bb014b3a9787a4afaabae1898b32db5f9f65a0f45d0a7"
+        },
+        {
+          "path": "tests/test_run_fx2_cmix21_wrapper_proof.py",
+          "bytes": 1006,
+          "sha256": "ae21b88fe466321731a61883430c504fd65bb27d3629333e356ca2d1db2a6a28"
+        },
+        {
+          "path": "tests/test_wikiir_materialize.py",
+          "bytes": 1025,
+          "sha256": "04f4cd17a031535e44a5a66185da696cd756705978a223c6042d30fcc2a34dbe"
+        }
+      ],
+      "programs": [
+        "from importlib.util import module_from_spec, spec_from_file_location\nfrom pathlib import Path\n\n\nTOOL = (\n    Path(__file__).resolve().parents[1]\n    / \"projects/enwiki9/tools/seal_fx2_cmix21_lstm200_disjoint.py\"\n)\n\n\ndef load_tool():\n    spec = spec_from_file_location(\"seal_lstm200_disjoint\", TOOL)\n    module = module_from_spec(spec)\n    assert spec.loader is not None\n    spec.loader.exec_module(module)\n    return module\n\n\ndef test_summarize_uses_counted_required_rate() -> None:\n    tool = load_tool()\n    result = tool.summarize(\n        baseline_archive_bytes=45_612,\n        candidate_archive_bytes=44_800,\n        required_rate=762.424,\n    )\n    assert result[\"gross_saved_bytes\"] == 812\n    assert abs(result[\"margin_over_required_rate_bytes_per_1m\"] - 49.576) < 1e-9\n    assert result[\"clears_required_rate\"] is True\n",
+        "from pathlib import Path\n\nimport pytest\n\nfrom gamma.mind_meld.latent_handoff.contract import ContractError\nfrom gamma.mind_meld.latent_handoff.experiment import load_config\n\n\nCONFIG = Path(\"configs/latent_handoff/qwen3_0_6b_to_1_7b.yaml\")\n\n\ndef test_checked_in_config_has_pinned_policy() -> None:\n    config = load_config(CONFIG, require_materialized=False)\n    assert len(config[\"source\"][\"revision\"]) == 40\n    assert len(config[\"target\"][\"revision\"]) == 40\n    assert config[\"runtime\"][\"attentionImplementation\"] == \"eager\"\n    assert config[\"runtime\"][\"deterministicAlgorithms\"] is True\n    assert config[\"phase1Receipts\"] == {\"source\": None, \"target\": None}\n\n\ndef test_unmaterialized_config_fails_before_model_loading() -> None:\n    with pytest.raises(ContractError, match=\"source.localPath is unset\"):\n        load_config(CONFIG)\n",
+        "from importlib.util import module_from_spec, spec_from_file_location\nfrom pathlib import Path\n\n\nTOOL = (\n    Path(__file__).resolve().parents[1]\n    / \"projects/enwiki9/tools/seal_fx2_cmix21_source_package_accounting.py\"\n)\n\n\ndef load_tool():\n    spec = spec_from_file_location(\"seal_source_package_accounting\", TOOL)\n    module = module_from_spec(spec)\n    assert spec.loader is not None\n    spec.loader.exec_module(module)\n    return module\n\n\ndef test_accounting_metrics_keep_forecast_boundary_explicit() -> None:\n    tool = load_tool()\n    result = tool.accounting_metrics(\n        prior_package_bytes=288_265,\n        replacement_package_bytes=264_646,\n    )\n    assert result[\"source_package_saved_bytes\"] == 23_619\n    assert result[\"replacement_tail_forecast_score_bytes\"] == 109_498_879\n    assert result[\"replacement_tail_forecast_margin_bytes\"] == 1_121\n",
+        "from importlib.util import module_from_spec, spec_from_file_location\nfrom pathlib import Path\n\n\nTOOL = (\n    Path(__file__).resolve().parents[1]\n    / \"projects/enwiki9/tools/seal_fx2_cmix21_lstm200_source_frontier.py\"\n)\n\n\ndef load_tool():\n    spec = spec_from_file_location(\"seal_lstm200_frontier\", TOOL)\n    module = module_from_spec(spec)\n    assert spec.loader is not None\n    spec.loader.exec_module(module)\n    return module\n\n\ndef test_package_economics_charge_every_counted_byte() -> None:\n    tool = load_tool()\n    result = tool.package_economics(264_314)\n    assert result[\"counted_program_bytes\"] == 264_317\n    assert result[\"incremental_program_bytes\"] == 81_309\n    assert result[\"linear_projected_score_bytes\"] == 109_113_424\n    assert result[\"linear_projected_target_margin_bytes\"] == 386_576\n    assert result[\"required_gross_saved_bytes_per_1m\"] == 762.424\n",
+        "import ast\nfrom pathlib import Path\n\n\ndef test_latent_handoff_never_calls_legacy_switch_or_fallback_paths() -> None:\n    root = Path(\"gamma/mind_meld/latent_handoff\")\n    prohibited_attributes = {\n        \"_replay_kv_cache\",\n        \"_transfer_kv_cache\",\n        \"reset_kv_cache\",\n        \"bridge_kv_cache_to\",\n    }\n    for path in root.glob(\"*.py\"):\n        tree = ast.parse(path.read_text(encoding=\"utf-8\"), filename=str(path))\n        used = {node.attr for node in ast.walk(tree) if isinstance(node, ast.Attribute)}\n        assert not (used & prohibited_attributes), f\"{path} references a prohibited route\"\n        for node in ast.walk(tree):\n            if isinstance(node, ast.ImportFrom):\n                assert node.module not in {\n                    \"gamma.mind_meld.core.meld_engine\",\n                    \"gamma.mind_meld.bridges.kv_cache_handler\",\n                }\n",
+        "from projects.enwiki9.tools.seal_cmix21_lstm200_fx2lite428_10m_codec_failure import (\n    last_progress_percent,\n    require_nonmemory_codec_failure,\n)\n\n\ndef test_last_progress_percent_uses_terminal_sample() -> None:\n    assert last_progress_percent(\"progress: 40.48%\\rprogress: 40.49%\") == 40.49\n\n\ndef test_nonmemory_failure_rejects_rss_breach() -> None:\n    guard = {\n        \"status\": \"complete\",\n        \"returncode\": 1,\n        \"limit_mode\": \"tree\",\n        \"rss_guard_exceeded\": False,\n        \"official_decimal_over_limit_kib\": 0,\n        \"max_sampled_tree_rss_kib\": 9_071_128,\n        \"official_decimal_limit_kib\": 9_765_625,\n    }\n    require_nonmemory_codec_failure(guard)\n    try:\n        require_nonmemory_codec_failure({**guard, \"rss_guard_exceeded\": True})\n    except RuntimeError:\n        pass\n    else:\n        raise AssertionError(\"RSS breach was accepted as a codec-only failure\")\n",
+        "import torch\nfrom transformers import Qwen3Config\n\nfrom gamma.mind_meld.latent_handoff.rope import (\n    apply_rope,\n    qwen3_cos_sin,\n    strip_rope,\n)\n\n\ndef test_qwen3_rope_strip_reapply_round_trip() -> None:\n    config = Qwen3Config(\n        vocab_size=64,\n        hidden_size=32,\n        intermediate_size=64,\n        num_hidden_layers=2,\n        num_attention_heads=4,\n        num_key_value_heads=2,\n        head_dim=8,\n        max_position_embeddings=256,\n        rope_theta=1_000_000.0,\n    )\n    keys = torch.randn(2, 1, 2, 17, 8)\n    positions = torch.arange(17).unsqueeze(0)\n    cos, sin = qwen3_cos_sin(config, positions, dtype=keys.dtype, device=keys.device)\n    rotated = apply_rope(keys, cos, sin)\n    content = strip_rope(rotated, cos, sin)\n    recovered = apply_rope(content, cos, sin)\n    torch.testing.assert_close(content, keys, rtol=1e-5, atol=1e-6)\n    torch.testing.assert_close(recovered, rotated, rtol=1e-5, atol=1e-6)\n",
+        "\"\"\"Automated checks for the standalone Mind Meld CLI.\"\"\"\n\nimport subprocess\nimport sys\nimport unittest\n\n\ntry:  # pragma: no cover - runtime dependency detection\n    import numpy  # noqa: F401\n    _NUMPY_AVAILABLE = True\nexcept ModuleNotFoundError:\n    _NUMPY_AVAILABLE = False\n\n\nclass MindMeldCliTests(unittest.TestCase):\n    \"\"\"Basic smoke tests for the Mind Meld CLI entry point.\"\"\"\n\n    def test_help_invocation_succeeds(self) -> None:\n        \"\"\"The CLI should print help text and exit cleanly.\"\"\"\n        if not _NUMPY_AVAILABLE:\n            self.skipTest(\"numpy is required to import the Mind Meld CLI\")\n\n        cmd = [sys.executable, \"tools/run_mind_meld_cli.py\", \"--help\"]\n        result = subprocess.run(cmd, capture_output=True, text=True)\n\n        self.assertEqual(result.returncode, 0)\n        # Help text should mention the CLI name for quick verification\n        self.assertIn(\"Mind Meld CLI\", result.stdout)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+        "from projects.enwiki9.tools.seal_cmix21_lstm200_fx2lite428_ppmd_recovery import (\n    calculate_repaired_economics,\n)\n\n\ndef test_v7_package_restores_original_strict_10m_ceiling() -> None:\n    economics = calculate_repaired_economics(\n        prior_economics={\n            \"candidate_source_package_bytes\": 347_170,\n            \"conservative_required_endpoint_gain_bytes_1g\": 237_179,\n            \"compact_archive_bytes_10m\": 1_637_513,\n            \"projected_endpoint_full_gain_bytes_1g\": 272_000,\n            \"endpoint_holdout_saved_bytes_per_1m\": 260.0,\n        },\n        repaired_package_bytes=347_183,\n    )\n\n    assert economics[\"source_package_increase_bytes\"] == 13\n    assert economics[\"conservative_required_endpoint_gain_bytes_1g\"] == 237_192\n    assert economics[\"conservative_required_endpoint_gain_bytes_10m\"] == 2_372\n    assert economics[\"strict_candidate_archive_ceiling_bytes_10m\"] == 1_635_141\n    assert economics[\"conservative_holdout_forecast_margin_bytes\"] == 22_808\n",
+        "from __future__ import annotations\n\nimport importlib.util\nfrom pathlib import Path\n\n\nTOOL = (\n    Path(__file__).resolve().parents[1]\n    / \"projects\"\n    / \"enwiki9\"\n    / \"tools\"\n    / \"seal_wrt_static_boundary_swap_geometry_title_proxy.py\"\n)\nSPEC = importlib.util.spec_from_file_location(\"boundary_proxy\", TOOL)\nassert SPEC and SPEC.loader\nMODULE = importlib.util.module_from_spec(SPEC)\nSPEC.loader.exec_module(MODULE)\n\n\ndef test_compressed_size_is_deterministic(tmp_path: Path) -> None:\n    payload = tmp_path / \"payload.bin\"\n    payload.write_bytes(b\"abcabcabc\" * 100)\n    first = MODULE.compressed_size([\"gzip\", \"-9n\", \"-c\"], payload)\n    second = MODULE.compressed_size([\"gzip\", \"-9n\", \"-c\"], payload)\n    assert first == second\n    assert first > 0\n\n\ndef test_sha256_reads_file(tmp_path: Path) -> None:\n    payload = tmp_path / \"payload.bin\"\n    payload.write_bytes(b\"abc\")\n    assert MODULE.sha256(payload) == (\n        \"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\"\n    )\n",
+        "from importlib.util import module_from_spec, spec_from_file_location\nfrom pathlib import Path\n\n\nTOOL = (\n    Path(__file__).resolve().parents[1]\n    / \"projects/enwiki9/tools/run_fx2_cmix21_wrapper_proof.py\"\n)\n\n\ndef load_tool():\n    spec = spec_from_file_location(\"run_lstm112_plus80_wrapper_proof\", TOOL)\n    module = module_from_spec(spec)\n    assert spec.loader is not None\n    spec.loader.exec_module(module)\n    return module\n\n\ndef test_framed_payload_identity(tmp_path):\n    tool = load_tool()\n    payload = tmp_path / \"payload\"\n    framed = tmp_path / \"framed\"\n    payload.write_bytes(b\"archive\")\n    framed.write_bytes(b\"Garchive\")\n    assert tool.framed_payload_identical(framed, payload) == (b\"G\", True)\n\n\ndef test_framed_payload_rejects_mismatch(tmp_path):\n    tool = load_tool()\n    payload = tmp_path / \"payload\"\n    framed = tmp_path / \"framed\"\n    payload.write_bytes(b\"archive\")\n    framed.write_bytes(b\"Garchivf\")\n    assert tool.framed_payload_identical(framed, payload) == (b\"G\", False)\n",
+        "from __future__ import annotations\n\nimport importlib.util\nfrom pathlib import Path\n\n\nMODULE_PATH = (\n    Path(__file__).resolve().parents[1]\n    / \"projects/enwiki9/tools/wikiir_materialize.py\"\n)\nSPEC = importlib.util.spec_from_file_location(\"wikiir_materialize\", MODULE_PATH)\nassert SPEC and SPEC.loader\nMODULE = importlib.util.module_from_spec(SPEC)\nSPEC.loader.exec_module(MODULE)\n\n\ndef test_materializes_reversible_deterministic_program(tmp_path: Path) -> None:\n    input_path = tmp_path / \"input\"\n    program_path = tmp_path / \"program.py\"\n    input_path.write_bytes(b\"abcdef\")\n    program_path.write_text(\n        \"def encode_ir(data): return b'X' + data, {'rows': len(data)}\\n\"\n        \"def decode_ir(data): return data[1:] if data.startswith(b'X') else b''\\n\"\n    )\n\n    ir, receipt = MODULE.run(input_path, 6, program_path)\n\n    assert ir == b\"Xabcdef\"\n    assert receipt[\"identity\"] == {\n        \"raw_ir_roundtrip_ok\": True,\n        \"encode_ir_deterministic\": True,\n    }\n    assert receipt[\"stats\"] == {\"rows\": 6}\n"
+      ]
+    },
+    "unseen_real_yaml_pair": {
+      "source": "git-blobs-59ff0441",
+      "files": [
+        {
+          "path": "configs/latent_handoff/qwen3_0_6b_to_1_7b.yaml",
+          "bytes": 1128,
+          "sha256": "efec12f3d7c5c1b42093d3570ae25afe503f81a21b972fe43b69eec690789c2b"
+        },
+        {
+          "path": "configs/latent_handoff/qwen3_1_7b_to_0_6b.yaml",
+          "bytes": 1128,
+          "sha256": "6a665863081aa4afa2c36458f107bf0c9d19bd5e03e832089dd4f8eec7cee546"
+        }
+      ],
+      "programs": [
+        "schema: gamma.latent-handoff-experiment/v1\nmode: completion\nthinking: false\nsource:\n  repository: Qwen/Qwen3-0.6B\n  revision: 9d4bfd9a94aa5f2ab18d77fa457c306da0b8e439\n  localPath: null\n  expectedIdentity:\n    weightsDigest: null\n    configDigest: null\n    tokenizerBundleDigest: null\n    chatTemplateDigest: null\ntarget:\n  repository: Qwen/Qwen3-1.7B\n  revision: 8d4744f9e13072f4920c326350fa81eedb74eae9\n  localPath: null\n  expectedIdentity:\n    weightsDigest: null\n    configDigest: null\n    tokenizerBundleDigest: null\n    chatTemplateDigest: null\nruntime:\n  device: mps\n  dtype: bfloat16\n  attentionImplementation: eager\n  deterministicAlgorithms: true\nmapper:\n  topK: 1\n  ridgeLambda: 0.01\n  featurePolicy: all-source-kv-heads\ncorpora:\n  calibration: null\n  validation: null\n  evaluation: null\n  benchmarks: null\nphase1Receipts:\n  source: null\n  target: null\nevaluation:\n  maxNewTokens: 64\n  completionMode: true\n  fixedVisibleQuery: true\ngates:\n  mappedNativeRecallRatio: 0.70\n  controlAdvantage: 0.20\n  bootstrapSamples: 2000\n  bootstrapConfidence: 0.95\n  wrongCacheFollowsWrongRate: 0.50\n  floorNormalizedRetention: 0.70\n",
+        "schema: gamma.latent-handoff-experiment/v1\nmode: completion\nthinking: false\nsource:\n  repository: Qwen/Qwen3-1.7B\n  revision: 8d4744f9e13072f4920c326350fa81eedb74eae9\n  localPath: null\n  expectedIdentity:\n    weightsDigest: null\n    configDigest: null\n    tokenizerBundleDigest: null\n    chatTemplateDigest: null\ntarget:\n  repository: Qwen/Qwen3-0.6B\n  revision: 9d4bfd9a94aa5f2ab18d77fa457c306da0b8e439\n  localPath: null\n  expectedIdentity:\n    weightsDigest: null\n    configDigest: null\n    tokenizerBundleDigest: null\n    chatTemplateDigest: null\nruntime:\n  device: mps\n  dtype: bfloat16\n  attentionImplementation: eager\n  deterministicAlgorithms: true\nmapper:\n  topK: 1\n  ridgeLambda: 0.01\n  featurePolicy: all-source-kv-heads\ncorpora:\n  calibration: null\n  validation: null\n  evaluation: null\n  benchmarks: null\nphase1Receipts:\n  source: null\n  target: null\nevaluation:\n  maxNewTokens: 64\n  completionMode: true\n  fixedVisibleQuery: true\ngates:\n  mappedNativeRecallRatio: 0.70\n  controlAdvantage: 0.20\n  bootstrapSamples: 2000\n  bootstrapConfidence: 0.95\n  wrongCacheFollowsWrongRate: 0.50\n  floorNormalizedRetention: 0.70\n"
+      ]
+    },
+    "decision_66char_pairable": {
+      "source": "encoding-decision-pair-A",
+      "programs": [
+        "!\"#$%&'()*+,-./_`0123456789:;<=>?ab",
+        "@ABCDEFGHIJKLMN_`OPQRSTUVWXYZ[\\]^ab"
+      ]
+    },
+    "decision_66char_doomed": {
+      "source": "encoding-decision-pair-B",
+      "programs": [
+        "!\"#$%&'()*+,-./_`0123456789:;<=>?ab",
+        "@ABCDEFGHIJKLMN`_`OPQRSTUVWXYZ[\\]^bab"
+      ]
+    },
+    "unseen_3comp_mixed": {
+      "source": "fresh-3-component-mixed",
+      "programs": [
+        "cde",
+        "cdf",
+        "gdf",
+        "hjkl",
+        "klhj",
+        "hlkj",
+        "kjhl",
+        "wxy",
+        "wxwx"
+      ]
+    },
+    "unseen_forced_block_split": {
+      "source": "fresh-forced-block-split",
+      "programs": [
+        "ijk",
+        "ljk",
+        "ijmnop",
+        "opmn",
+        "mpon",
+        "onmp"
+      ]
+    },
+    "unseen_u_span_obstruction": {
+      "source": "fresh-u-span-obstruction",
+      "programs": [
+        "uvwz",
+        "wzuv",
+        "uzwv",
+        "wvuz"
+      ]
+    },
+    "unseen_unresolved_interval": {
+      "source": "fresh-natural-unresolved",
+      "programs": [
+        "abcd",
+        "abce",
+        "fbcd",
+        "ghijklmnopghqrstu",
+        "qrstuvwxyzghghijk"
+      ]
+    }
+  }
+}
