@@ -165,6 +165,24 @@ class DiagnosticTests(unittest.TestCase):
         self.assertEqual(ev["exactOptW2"], 7)
         self.assertTrue(ev["matchesFailureTarget"])
 
+    def test_rank_drop_field_never_filters_span_tokens_regression(self):
+        # Modular rank-drop counterexample: 'aaabbbbbbababbaababaabbaaabaaa' has 'a'-weight == 1_000_000_007 == 0
+        # mod (1_000_000_007, base 2), so field 1 gives rank 1 while field 2 gives rank 2.
+        # Budget K=2 under U MUST be FEASIBLE with {'a', 'b'} (never falsely IMPOSSIBLE).
+        progs = ["aaabbbbbbababbaababaabbaaabaaa", "b" * 30]
+        tb = theorem_b_span_parse_test(progs)
+        self.assertEqual(tb["programRank"], 2)
+        self.assertEqual(len(tb["attainingFields"]), 1)
+        self.assertEqual(tb["attainingFields"][0]["prime"], 998_244_353)
+        self.assertTrue(tb["everyProgramParsesInSpan"])
+        self.assertEqual(tb["certifiedLowerBound"], 2)
+
+        res = diagnose_full_corpus(progs, k=1, budget=2)
+        self.assertEqual(res["status"], "FEASIBLE")
+        self.assertEqual(res["certifiedLowerBound"], 2)
+        self.assertEqual(res["construction"]["dictionary"], ["a", "b"])
+        self.assertTrue(res["construction"]["byteExactVerified"])
+
 
 if __name__ == "__main__":
     unittest.main()

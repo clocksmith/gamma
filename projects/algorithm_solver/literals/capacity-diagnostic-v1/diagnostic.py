@@ -399,24 +399,24 @@ def disjoint_position_certificate(
 def theorem_b_span_parse_test(programs: list[str], exhaustive_basis_limit: int = 24) -> dict:
     """Test whether candidate span-basis tokens admit a complete non-overlapping parse for every source under U.
 
-    Lemma: If a legal dictionary D of size r = rank(M_T) tiles every program in T, then
-    every token t in D must lie in E_span = {t in E_U(T) : v(t) in span(M_T)}, their vectors
-    must form a basis of span(M_T), and every source must admit a contiguous non-overlapping
-    parse over D.
+    Lemma: Let r = max_i rank_{F_{p_i}}(M_T). For any field (p_i, b_i) that attains rank r
+    (len(basis_i) == r), any legal dictionary D of size r tiling every program must satisfy
+    span_{p_i}(D) == span_{p_i}(M_T), so every t in D lies in span_{p_i}(M_T) and {v_{p_i}(t)}
+    is linearly independent. Fields with rank < r are NEVER used to filter span tokens.
     """
     chars = alphabet_index(programs)
     tokens = sorted(eligible_tokens(programs, k=1, max_bytes=None), key=lambda t: (len(t), t))
-    p1, b1 = PRIMES[0]
-    p2, b2 = PRIMES[1]
-    basis1 = rref_basis([pos_vector(s, chars, p1, b1) for s in programs], p1)
-    basis2 = rref_basis([pos_vector(s, chars, p2, b2) for s in programs], p2)
-    rank = max(len(basis1), len(basis2))
+    field_bases = [
+        (prime, base, rref_basis([pos_vector(s, chars, prime, base) for s in programs], prime))
+        for prime, base in PRIMES
+    ]
+    rank = max(len(basis) for _, _, basis in field_bases)
+    attaining = [(prime, base, basis) for prime, base, basis in field_bases if len(basis) == rank]
 
-    # Necessary condition 1: every program has a proper prefix in span(M_T)
+    # Necessary condition 1: every program has a proper prefix in span(M_T) for every rank-attaining field
     prefix_cuttable = all(
         any(
-            in_span(pos_vector(s[:i], chars, p1, b1), basis1, p1)
-            and in_span(pos_vector(s[:i], chars, p2, b2), basis2, p2)
+            all(in_span(pos_vector(s[:i], chars, p, b), basis, p) for p, b, basis in attaining)
             for i in range(1, len(s))
         )
         for s in programs
@@ -425,14 +425,14 @@ def theorem_b_span_parse_test(programs: list[str], exhaustive_basis_limit: int =
     # Necessary condition 2: every program admits a complete non-overlapping parse in E_span
     span_tokens = [
         t for t in tokens
-        if in_span(pos_vector(t, chars, p1, b1), basis1, p1)
-        and in_span(pos_vector(t, chars, p2, b2), basis2, p2)
+        if all(in_span(pos_vector(t, chars, p, b), basis, p) for p, b, basis in attaining)
     ]
     unparseable_in_span = [s for s in programs if parse_program(s, span_tokens) is None]
     parses_in_span = len(unparseable_in_span) == 0
 
     result: dict = {
         "programRank": rank,
+        "attainingFields": [{"prime": p, "base": b, "rank": len(basis)} for p, b, basis in attaining],
         "everyProgramHasACuttablePrefix": prefix_cuttable,
         "spanTokenCount": len(span_tokens),
         "spanTokens": span_tokens if len(span_tokens) <= 40 else span_tokens[:40],
@@ -448,8 +448,11 @@ def theorem_b_span_parse_test(programs: list[str], exhaustive_basis_limit: int =
     # Exact basis-parse attainability check when E_span is small enough for exhaustive basis test
     if len(span_tokens) <= exhaustive_basis_limit and rank <= 10:
         for cand in itertools.combinations(span_tokens, rank):
-            # Must span all programs (linear independence over F_p) and parse every source
-            if len(rref_basis([pos_vector(t, chars, p1, b1) for t in cand], p1)) != rank:
+            # Must be linearly independent in every rank-attaining field and parse every source
+            if not all(
+                len(rref_basis([pos_vector(t, chars, p, b) for t in cand], p)) == rank
+                for p, b, _ in attaining
+            ):
                 continue
             if all(parse_program(s, cand) is not None for s in programs):
                 verified = verify_construction(programs, list(cand), k=1, max_bytes=None, tokens=set(tokens))
