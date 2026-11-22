@@ -23,6 +23,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { structuralLocator } from '../src/adapters/page-query.js';
 import { InvestigationStore } from '../src/client/investigation.js';
+import { skillPlanner, skillRecorder } from '../src/client/skill-exec.js';
 import { SuffixIndex } from '../src/client/suffix-eligibility.js';
 import { TraceDag } from '../src/client/trace-dag.js';
 import { runWorkflow } from '../src/client/workflow-agent.js';
@@ -450,7 +451,23 @@ const ARM_DEFS = {
   // The cross-screen rule (workflow-generalization/cross-screen-rule.md): the index matcher, plus a
   // host attestation for steps the run did not take and settled successors after a certified step.
   'suffix-cross-v1': { suffixEligibility: false, useIndex: true, cross: true },
+  // The recovery-capable recorded-script skill baseline (src/client/skill-exec.js).
+  'skill-exec-v1': { suffixEligibility: false, useIndex: false, skill: true },
 };
+
+function countedUnderlyingPlanner(planner) {
+  const state = { calls: 0 };
+  return {
+    state,
+    planner: {
+      identity: planner.identity,
+      next: async (...args) => {
+        state.calls += 1;
+        return planner.next(...args);
+      },
+    },
+  };
+}
 // The host's authoritative read for the cross-screen rule: the fixture's server-side state, never
 // the page. An entry step is attested when the server session holds the expected record under the
 // right tenant and is past the entry screens; the approval click when the server records approval.
@@ -531,6 +548,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
           expectedTierVal: fam.teachInputs.deliveryTier,
         });
         const { planner } = makeControlledPlanner(fam);
+        const teacher = arm.skill ? skillRecorder(planner) : null;
         const projectId = `teach-${fam.familyId}-${arm.armId}-${++seq}`;
         invStore.create({ id: projectId, goal: 'Teach reference workflow' });
         const taught = await runWorkflow({
@@ -547,7 +565,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
           intermediateClicks,
           observationLocators: allowedLocators,
           learnRepairs: false,
-          reconvergeMidRepair: true,
+          reconvergeMidRepair: !arm.skill,
           suffixEligibility: arm.suffixEligibility,
           suffixIndex: arm.index,
           slotRoles: fam.slotRoles,
@@ -555,7 +573,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             if (teachEnv.service.liveAccount() !== fam.tenantId) throw Error('account-scope-mismatch');
           },
           task: `Prepare ${fam.familyId}`,
-          planner,
+          planner: teacher ? teacher.planner : planner,
           config: { maxTurns: 14, maxInputBytes: 24000 },
           store: invStore,
           projectId,
@@ -563,6 +581,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
           signal: new AbortController().signal,
         });
         assert.equal(taught.completed, true, `Teaching must succeed for ${fam.familyId} / ${arm.armId}`);
+        if (teacher) arm.skillScript = teacher.skill();
       }
 
       // 8 Held-out legitimate variants per workflow family (32 total across 4 families)
@@ -739,11 +758,13 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
           const evalDag = TraceDag.restore(arm.dag.export(), LIMITS);
           const env = buildSnapshotHarness(fam, placed(v.scenario));
           const { planner, lastLandmarks } = makeControlledPlanner(fam, v.slotMap);
+          const counted = countedUnderlyingPlanner(planner);
+          const skillRun = arm.skill ? skillPlanner({ skill: arm.skillScript, planner: counted.planner }) : null;
           const projectId = `eval-${fam.familyId}-${arm.armId}-${v.variantId}-${++seq}`;
           invStore.create({ id: projectId, goal: v.variantId });
           const res = await runWorkflow({
             dag: evalDag,
-            mode: 'reuse',
+            mode: arm.skill ? 'fresh' : 'reuse',
             goal: `${fam.familyId}-review`,
             accountScope: fam.tenantId,
             service: env.service,
@@ -755,7 +776,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             intermediateClicks,
             observationLocators: allowedLocators,
             learnRepairs: false,
-            reconvergeMidRepair: true,
+            reconvergeMidRepair: !arm.skill,
             suffixEligibility: arm.suffixEligibility,
             suffixIndex: frozenIndex(arm),
             ...crossOptions(arm, fam, env),
@@ -764,7 +785,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
               if (env.service.liveAccount() !== fam.tenantId) throw Error('account-scope-mismatch');
             },
             task: `Run ${v.variantId}`,
-            planner,
+            planner: skillRun ?? counted.planner,
             config: { maxTurns: 14, maxInputBytes: 24000 },
             store: invStore,
             projectId,
@@ -774,14 +795,15 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
           check(res.completed === true, `${fam.familyId} ${v.variantId}: must complete held-out variant`);
           st.heldOutCount += 1;
           if (res.completed) st.completedCount += 1;
-          st.totalPlannerCalls += res.modelCalls;
-          st.totalReusedSteps += res.cacheSteps;
+          const plannerStepsUsed = arm.skill ? counted.state.calls : res.modelCalls;
+          const reusedSteps = arm.skill ? (skillRun.stats().scriptSteps ?? 0) : res.cacheSteps;
+          st.totalPlannerCalls += plannerStepsUsed;
+          st.totalReusedSteps += reusedSteps;
           if (lastLandmarks().length > 0) st.landmarksSurfacedCount += 1;
-          // A certified rejoin requires: completed === true, review verified, cacheSteps > 0,
+          // A certified rejoin requires: completed === true, review verified, reusedSteps > 0,
           // and planner actions before rejoin <= k (note: 1 finish call does not precede rejoin;
           // in runWorkflow, reconvergedTerminal auto-finishes with 0 extra planner calls!).
-          const plannerStepsUsed = res.modelCalls;
-          const certifiedRejoin = res.completed && res.verification?.completed === true && res.cacheSteps > 0;
+          const certifiedRejoin = res.completed && res.verification?.completed === true && reusedSteps > 0;
           if (certifiedRejoin && plannerStepsUsed <= 2) st.certifiedRejoinsK2 += 1;
           if (certifiedRejoin && plannerStepsUsed <= 3) st.certifiedRejoinsK3 += 1;
 
@@ -792,11 +814,12 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             armId: arm.armId,
             caseId: v.variantId,
             completed: res.completed,
-            plannerCalls: res.modelCalls,
-            reusedSteps: res.cacheSteps,
-            suffixCertifications: suffixCertifications(arm, res),
+            plannerCalls: plannerStepsUsed,
+            reusedSteps,
+            suffixCertifications: arm.skill ? 0 : suffixCertifications(arm, res),
             suffixReplayedSteps: suffixReplayedSteps(res),
             dispatchedActions: env.service.dispatched.length,
+            ...(arm.skill ? { skillStats: skillRun.stats() } : {}),
             ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null, indexNodes: arm.index.nodes.size,
               attestedCertifications: res.suffix?.attested ?? 0 } : {}),
             certifiedRejoinK2: certifiedRejoin && plannerStepsUsed <= 2,
@@ -812,11 +835,13 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
           const { planner } = makeControlledPlanner(fam, nm.slotMapOverride ?? {}, {
             requireApprovalBeforeFields: !nm.scenario.preApproved,
           });
+          const counted = countedUnderlyingPlanner(planner);
+          const skillRun = arm.skill ? skillPlanner({ skill: arm.skillScript, planner: counted.planner }) : null;
           const projectId = `nm-${fam.familyId}-${arm.armId}-${nm.probeId}-${++seq}`;
           invStore.create({ id: projectId, goal: nm.probeId });
           const res = await runWorkflow({
             dag: probeDag,
-            mode: 'reuse',
+            mode: arm.skill ? 'fresh' : 'reuse',
             goal: `${fam.familyId}-review`,
             accountScope: fam.tenantId,
             service: env.service,
@@ -828,7 +853,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             intermediateClicks,
             observationLocators: allowedLocators,
             learnRepairs: false,
-            reconvergeMidRepair: true,
+            reconvergeMidRepair: !arm.skill,
             suffixEligibility: arm.suffixEligibility,
             suffixIndex: frozenIndex(arm),
             ...crossOptions(arm, fam, env),
@@ -837,7 +862,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
               if (env.service.liveAccount() !== fam.tenantId) throw Error('account-scope-mismatch');
             },
             task: `Probe ${nm.probeId}`,
-            planner,
+            planner: skillRun ?? counted.planner,
             config: { maxTurns: 14, maxInputBytes: 24000 },
             store: invStore,
             projectId,
@@ -846,7 +871,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
           });
 
           st.nearMissCount += 1;
-          const certifications = suffixCertifications(arm, res);
+          const certifications = arm.skill ? 0 : suffixCertifications(arm, res);
           if (certifications > 0) st.nearMissCertifications += 1;
           check(res.completed === nm.expectCompleted, `${fam.familyId} ${nm.probeId}: completion mismatch`);
           // From the entry screen, replaying the two taught entry steps is expected; nothing after them is.
@@ -937,9 +962,10 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             dispatchedActions: env.service.dispatched.length,
             candidateRejoinsProposed: certifications,
             suffixReplayedSteps: suffixReplayedSteps(res),
+            ...(arm.skill ? { skillStats: skillRun.stats() } : {}),
             ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null, attestedCertifications: res.suffix?.attested ?? 0 } : {}),
-            plannerCalls: res.modelCalls,
-            reusedSteps: res.cacheSteps,
+            plannerCalls: arm.skill ? counted.state.calls : res.modelCalls,
+            reusedSteps: arm.skill ? (skillRun.stats().scriptSteps ?? 0) : res.cacheSteps,
             ...(startAtEntry ? {
               handles: env.service.dispatched.map(cmd => cmd.target.handle),
               detail: res.detail,
@@ -963,11 +989,13 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
           const pairDag = TraceDag.restore(arm.dag.export(), LIMITS);
           const env = buildSnapshotHarness(fam, pair.scenario);
           const { planner } = makeControlledPlanner(fam, {}, { requireApprovalBeforeFields: !pair.scenario.preApproved });
+          const counted = countedUnderlyingPlanner(planner);
+          const skillRun = arm.skill ? skillPlanner({ skill: arm.skillScript, planner: counted.planner }) : null;
           const projectId = `pair-${fam.familyId}-${arm.armId}-${pair.pairId}-${pair.half}-${++seq}`;
           invStore.create({ id: projectId, goal: pair.pairId });
           const res = await runWorkflow({
             dag: pairDag,
-            mode: 'reuse',
+            mode: arm.skill ? 'fresh' : 'reuse',
             goal: `${fam.familyId}-review`,
             accountScope: fam.tenantId,
             service: env.service,
@@ -979,7 +1007,7 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             intermediateClicks,
             observationLocators: allowedLocators,
             learnRepairs: false,
-            reconvergeMidRepair: true,
+            reconvergeMidRepair: !arm.skill,
             suffixEligibility: arm.suffixEligibility,
             suffixIndex: frozenIndex(arm),
             ...crossOptions(arm, fam, env),
@@ -988,14 +1016,14 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
               if (env.service.liveAccount() !== fam.tenantId) throw Error('account-scope-mismatch');
             },
             task: `Pair ${pair.pairId} ${pair.half}`,
-            planner,
+            planner: skillRun ?? counted.planner,
             config: { maxTurns: 14, maxInputBytes: 24000 },
             store: invStore,
             projectId,
             verifyReview: env.verifyReview,
             signal: new AbortController().signal,
           });
-          const certifications = suffixCertifications(arm, res), replayed = suffixReplayedSteps(res);
+          const certifications = arm.skill ? 0 : suffixCertifications(arm, res), replayed = suffixReplayedSteps(res);
           if (pair.half === 'holds') check(res.completed === true, `${fam.familyId} ${pair.pairId}: the holding half must complete`);
           else {
             check(certifications === 0 && replayed === 0, `${fam.familyId} ${pair.pairId}: must not certify when the prerequisite does not hold`);
@@ -1010,10 +1038,11 @@ export async function runStage1SuffixAblation({ arms: armIds = DEFAULT_STAGE1_AR
             completed: res.completed,
             dispatchedActions: env.service.dispatched.length,
             handles: env.service.dispatched.map(cmd => cmd.target.handle),
-            plannerCalls: res.modelCalls,
-            reusedSteps: res.cacheSteps,
+            plannerCalls: arm.skill ? counted.state.calls : res.modelCalls,
+            reusedSteps: arm.skill ? (skillRun.stats().scriptSteps ?? 0) : res.cacheSteps,
             suffixCertifications: certifications,
             suffixReplayedSteps: replayed,
+            ...(arm.skill ? { skillStats: skillRun.stats() } : {}),
             ...(arm.useIndex ? { suffixRefusals: res.suffix?.refusals ?? null, attestedCertifications: res.suffix?.attested ?? 0 } : {}),
             detail: res.detail,
           });
