@@ -1,0 +1,347 @@
+{
+ "schema": "capacity-boundary-instances/v1",
+ "seed": "capacity-boundary-v1/2026-11-22",
+ "pins": {
+  "gamma": "59ff04415ff2afd04ff2ed451340f4f02852bf18",
+  "fawn": "a281360ff04321f08e5627c5309503d0259a0e70",
+  "doppler": "bfee8cd4376b0e3da4005cb4b85d53df907faa53",
+  "reploid": "3ced04b91913e6aee2a4bb5a8778291019058663"
+ },
+ "candidateDirectoriesRanked": 2132,
+ "candidateCorporaRead": 1092,
+ "corpora": {
+  "JS-1": {
+   "group": "js",
+   "repo": "doppler",
+   "pin": "bfee8cd4376b0e3da4005cb4b85d53df907faa53",
+   "directory": "src/inference/tokenizers",
+   "order": "005b5cbd761fd023",
+   "files": [
+    {
+     "path": "src/inference/tokenizers/base.d.ts",
+     "bytes": 946,
+     "sha256": "06cb78b58401bf041ea8b08dce1bea6a0fd98c2d962e912dcbb9be70b0df4d84"
+    },
+    {
+     "path": "src/inference/tokenizers/base.js",
+     "bytes": 1876,
+     "sha256": "2aa004d372269ad55bc81859ae3bcf4de3399ecd88399038fc751ded0de3a24a"
+    },
+    {
+     "path": "src/inference/tokenizers/behavior-flags.d.ts",
+     "bytes": 411,
+     "sha256": "267f5804ef18fb4ba670b83364fea1d35b1ac8b56199cbb4e60157be5867b430"
+    },
+    {
+     "path": "src/inference/tokenizers/bpe.d.ts",
+     "bytes": 611,
+     "sha256": "229c91233cb3ff9796e26f91156002e5e1e600b55bbfeb8e09b86e44ab5b8e4a"
+    }
+   ],
+   "bytes": 3844,
+   "alphabet": 69,
+   "programs": [
+    "/**\n * Abstract Base Tokenizer\n *\n * @module inference/tokenizers/base\n */\n\nimport type { TokenizerConfig, SpecialTokens, TokenizerBackend } from './types.js';\n\n/**\n * Abstract base tokenizer interface\n */\nexport declare abstract class BaseTokenizer implements TokenizerBackend {\n  vocabSize: number;\n  specialTokens: SpecialTokens;\n  addBosToken: boolean;\n  addEosToken: boolean;\n\n  constructor(config?: TokenizerConfig);\n\n  /**\n   * Encode text to token IDs\n   */\n  abstract encode(text: string): number[];\n\n  /**\n   * Decode token IDs to text\n   */\n  abstract decode(ids: number[], skipSpecialTokens?: boolean, trim?: boolean): string;\n\n  /**\n   * Get vocabulary size\n   */\n  getVocabSize(): number;\n\n  /**\n   * Get high-priority token IDs for bounded runtime hot caches, or null when unavailable\n   */\n  getHotTokenIds(limit: number): number[] | null;\n\n  /**\n   * Check if token is special\n   */\n  isSpecialToken(tokenId: number): boolean;\n}\n",
+    "\n\nimport { getRuntimeConfig } from '../../config/runtime.js';\n\n\nexport class BaseTokenizer {\n  \n  vocabSize;\n  \n  specialTokens;\n  \n  addBosToken;\n  \n  addEosToken;\n\n  \n  constructor(config = {}) {\n    const runtimeDefaults = getRuntimeConfig().inference.tokenizer;\n    const deferSpecialTokens = config.deferSpecialTokens ?? runtimeDefaults.deferSpecialTokens;\n    const vocabSize = (config.vocabSize == null && deferSpecialTokens) ? 0 : config.vocabSize;\n    if (vocabSize == null) {\n      throw new Error('[Tokenizer] vocabSize is required.');\n    }\n    this.vocabSize = vocabSize;\n\n    const specialTokens = config.specialTokens ?? {};\n    \n    const padToken = specialTokens.pad ?? config.padToken;\n    const bosToken = specialTokens.bos ?? config.bosToken;\n    const eosToken = specialTokens.eos ?? config.eosToken;\n    const unkToken = specialTokens.unk ?? config.unkToken;\n\n    if (!deferSpecialTokens && eosToken == null) {\n      throw new Error('[Tokenizer] eosToken is required.');\n    }\n    if (!deferSpecialTokens && (config.addBosToken ?? runtimeDefaults.addBosToken) && bosToken == null) {\n      throw new Error('[Tokenizer] bosToken is required when addBosToken is enabled.');\n    }\n\n    this.specialTokens = {\n      pad: padToken,\n      bos: bosToken,\n      eos: eosToken,\n      unk: unkToken,\n    };\n    this.addBosToken = config.addBosToken ?? runtimeDefaults.addBosToken;\n    this.addEosToken = config.addEosToken ?? runtimeDefaults.addEosToken;\n  }\n\n  \n  encode(text) {\n    throw new Error('Abstract method not implemented');\n  }\n\n  \n  decode(ids, skipSpecialTokens, trim) {\n    throw new Error('Abstract method not implemented');\n  }\n\n  \n  getVocabSize() {\n    return this.vocabSize;\n  }\n\n  getHotTokenIds(limit) {\n    void limit;\n    return null;\n  }\n\n  \n  isSpecialToken(tokenId) {\n    return Object.values(this.specialTokens).includes(tokenId);\n  }\n}\n",
+    "export interface BundledTokenizerBehaviorFlags {\n  addBosToken: boolean | null;\n  addEosToken: boolean | null;\n}\n\nexport function isBosLikeLabel(value: unknown): boolean;\nexport function isEosLikeLabel(value: unknown): boolean;\n\nexport function inferBundledTokenizerBehaviorFlags(\n  tokenizerJson: unknown,\n  specialTokens?: { bos?: number | null, eos?: number | null } | null\n): BundledTokenizerBehaviorFlags;\n",
+    "/**\n * Simple BPE Tokenizer\n *\n * For models with vocab.json + merges.txt\n *\n * @module inference/tokenizers/bpe\n */\n\nimport { BaseTokenizer } from './base.js';\nimport type { TokenizerConfig } from './types.js';\n\n/**\n * Simple BPE tokenizer\n * For models with vocab.json + merges.txt\n */\nexport declare class BPETokenizer extends BaseTokenizer {\n  constructor(config?: TokenizerConfig);\n\n  /**\n   * Load vocabulary and merges\n   */\n  load(vocab: Record<string, number>, merges: string[]): void;\n\n  encode(text: string): number[];\n\n  decode(ids: number[], skipSpecialTokens?: boolean, trim?: boolean): string;\n}\n"
+   ]
+  },
+  "JS-2": {
+   "group": "js",
+   "repo": "doppler",
+   "pin": "bfee8cd4376b0e3da4005cb4b85d53df907faa53",
+   "directory": "src/config/schema/platform",
+   "order": "0131f6fa5091348c",
+   "files": [
+    {
+     "path": "src/config/schema/platform/gpu-cache.schema.d.ts",
+     "bytes": 830,
+     "sha256": "e8c18e9fb2c7497032378994515e8ffe0664728f5dbd28d0346579e36fe5f827"
+    },
+    {
+     "path": "src/config/schema/platform/gpu-cache.schema.js",
+     "bytes": 316,
+     "sha256": "15d0b7b896394c0ea0ab955f80495ade8352bd6a34f3ad35938635380cf75ce3"
+    },
+    {
+     "path": "src/config/schema/platform/index.d.ts",
+     "bytes": 1681,
+     "sha256": "6ef9c604435f58236833d90f0370b663d109d2a35a1aa9f801326c561dad8ed6"
+    },
+    {
+     "path": "src/config/schema/platform/index.js",
+     "bytes": 619,
+     "sha256": "ddf40bb64266d02f5aaa531157b2b227c715fcea065d56e2f9ab2b4b6b900208"
+    }
+   ],
+   "bytes": 3446,
+   "alphabet": 66,
+   "programs": [
+    "/**\n * GPU Cache Config Schema\n *\n * Configuration for GPU uniform buffer caching.\n * These settings control cache size, entry limits, and expiration policies\n * for the uniform buffer cache that reduces GPU buffer allocations.\n *\n * @module config/schema/gpu-cache\n */\n\n/**\n * Configuration for the uniform buffer cache.\n *\n * The uniform buffer cache stores small GPU buffers by content hash,\n * allowing reuse across kernel dispatches instead of repeated allocations.\n */\nexport interface GpuCacheConfigSchema {\n  /** Maximum number of entries in the uniform buffer cache */\n  uniformCacheMaxEntries: number;\n\n  /** Maximum age in milliseconds before an unused entry becomes stale */\n  uniformCacheMaxAgeMs: number;\n}\n\n/** Default GPU cache configuration */\nexport declare const DEFAULT_GPU_CACHE_CONFIG: GpuCacheConfigSchema;\n",
+    "// =============================================================================\n// Uniform Buffer Cache Config\n// =============================================================================\n\nexport const DEFAULT_GPU_CACHE_CONFIG = {\n  uniformCacheMaxEntries: 4096,\n  uniformCacheMaxAgeMs: 60000, // 60 seconds\n};\n",
+    "// Platform schema contracts.\nexport {\n  // Types\n  type PlatformDetectionPattern,\n  type PlatformDetectionSchema,\n  type MemoryHintsSchema,\n  type PlatformSchema,\n  type RuntimeCapabilities,\n  type ResolvedPlatformConfig,\n  type PlatformRegistrySchema,\n} from \"./platform.schema.js\";\n\nexport {\n  // Types\n  type GpuCacheConfigSchema,\n\n  // Defaults\n  DEFAULT_GPU_CACHE_CONFIG,\n} from \"./gpu-cache.schema.js\";\n\nexport {\n  // Types\n  type HeapTestingConfigSchema,\n  type SegmentTestingConfigSchema,\n  type AddressSpaceConfigSchema,\n  type SegmentAllocationConfigSchema,\n  type EmulatedStorageConfigSchema,\n  type MemoryLimitsConfigSchema,\n\n  // Defaults\n  DEFAULT_HEAP_TESTING_CONFIG,\n  DEFAULT_SEGMENT_TESTING_CONFIG,\n  DEFAULT_ADDRESS_SPACE_CONFIG,\n  DEFAULT_SEGMENT_ALLOCATION_CONFIG,\n  DEFAULT_EMULATED_STORAGE_CONFIG,\n  DEFAULT_MEMORY_LIMITS_CONFIG,\n} from \"./memory-limits.schema.js\";\n\nexport {\n  // Types\n  type EmulatedChipType,\n  type EmulationTimingMode,\n  type EmulatedGPUSpec,\n  type EmulatedCPUSpec,\n  type NVLinkSpec,\n  type NVLinkC2CSpec,\n  type EmulatedClusterTopology,\n  type TensorParallelConfig,\n  type PipelineParallelConfig,\n  type DataParallelConfig,\n  type ExpertParallelConfig,\n  type EmulatedParallelismConfig,\n  type EmulatedTimingScaling,\n  type LocalResourceTier,\n  type LocalResourceMapping,\n  type EmulationConfigSchema,\n  type VirtualGPUStats,\n  type NVLinkStats,\n  type EmulationStats,\n\n  // Defaults\n  DEFAULT_GH200_GPU_SPEC,\n  DEFAULT_GH200_CPU_SPEC,\n  DEFAULT_NVLINK_SPEC,\n  DEFAULT_NVLINK_C2C_SPEC,\n  DEFAULT_PARALLELISM_CONFIG,\n  DEFAULT_EMULATION_CONFIG,\n\n  // Factory\n  createEmulationConfig,\n  getChipProfile,\n} from \"./emulation.schema.js\";\n",
+    "// Platform schema contracts.\nexport {\n  DEFAULT_GPU_CACHE_CONFIG,\n} from \"./gpu-cache.schema.js\";\n\nexport {\n  DEFAULT_HEAP_TESTING_CONFIG,\n  DEFAULT_SEGMENT_TESTING_CONFIG,\n  DEFAULT_ADDRESS_SPACE_CONFIG,\n  DEFAULT_SEGMENT_ALLOCATION_CONFIG,\n  DEFAULT_EMULATED_STORAGE_CONFIG,\n  DEFAULT_MEMORY_LIMITS_CONFIG,\n} from \"./memory-limits.schema.js\";\n\nexport {\n  // Factory\n  createEmulationConfig,\n  getChipProfile,\n\n  // Defaults\n  DEFAULT_GH200_GPU_SPEC,\n  DEFAULT_GH200_CPU_SPEC,\n  DEFAULT_NVLINK_SPEC,\n  DEFAULT_NVLINK_C2C_SPEC,\n  DEFAULT_PARALLELISM_CONFIG,\n  DEFAULT_EMULATION_CONFIG,\n} from \"./emulation.schema.js\";\n"
+   ]
+  },
+  "JS-3": {
+   "group": "js",
+   "repo": "fawn",
+   "pin": "a281360ff04321f08e5627c5309503d0259a0e70",
+   "directory": "bench/external-projects/wgsl-fns",
+   "order": "0c42b07c08bb70bc",
+   "files": [
+    {
+     "path": "bench/external-projects/wgsl-fns/provider-dawn.mjs",
+     "bytes": 577,
+     "sha256": "56514b76816ce8e5d7e97cb344c3109bb3be2ae2e4cbf723c4a2fee13e3cab1b"
+    },
+    {
+     "path": "bench/external-projects/wgsl-fns/provider-doe.mjs",
+     "bytes": 667,
+     "sha256": "e1de665da81c142ad4f3bb7c4a307ac0643b624c813c97211b4410669740bf4c"
+    },
+    {
+     "path": "bench/external-projects/wgsl-fns/provider-loader.mjs",
+     "bytes": 732,
+     "sha256": "190de8addbc487151fb609f3ec9ee45d2b004a5e456d947c992a7ea78946ed1d"
+    },
+    {
+     "path": "bench/external-projects/wgsl-fns/provider-probe.mjs",
+     "bytes": 541,
+     "sha256": "aed00a0a6ff15f58319a0ec7499e7a3dd377567b14ac24ae0ee08608cc0887bf"
+    }
+   ],
+   "bytes": 2517,
+   "alphabet": 70,
+   "programs": [
+    "import { pathToFileURL } from 'node:url';\n\nconst modulePath = process.env.DOE_EXTERNAL_DAWN_MODULE;\nif (!modulePath) throw new Error('DOE_EXTERNAL_DAWN_MODULE is required.');\nconst provider = await import(pathToFileURL(modulePath).href);\nif (typeof provider.create !== 'function' || !provider.globals) {\n  throw new Error(`Dawn module ${modulePath} does not expose create() and globals.`);\n}\n\nexport const create = provider.create;\nexport const globals = provider.globals;\nexport const __doeHarnessProviderIdentity = Object.freeze({\n  id: 'dawn-node-webgpu',\n  modulePath,\n});\n",
+    "import { pathToFileURL } from 'node:url';\n\nconst modulePath = process.env.DOE_EXTERNAL_DOE_MODULE;\nif (!modulePath) throw new Error('DOE_EXTERNAL_DOE_MODULE is required.');\nconst provider = await import(pathToFileURL(modulePath).href);\nif (typeof provider.create !== 'function' || !provider.globals) {\n  throw new Error(`Doe module ${modulePath} does not expose create() and globals.`);\n}\n\nexport const create = provider.create;\nexport const globals = provider.globals;\nexport const __doeHarnessProviderIdentity = Object.freeze({\n  id: 'doe-gpu',\n  modulePath,\n  providerInfo: typeof provider.providerInfo === 'function'\n    ? provider.providerInfo()\n    : null,\n});\n",
+    "const provider = process.env.DOE_EXTERNAL_WEBGPU_PROVIDER;\nconst providerModules = {\n  'dawn-node-webgpu': new URL('./provider-dawn.mjs', import.meta.url).href,\n  'doe-gpu': new URL('./provider-doe.mjs', import.meta.url).href,\n};\n\nexport async function resolve(specifier, context, nextResolve) {\n  if (specifier !== 'webgpu') return nextResolve(specifier, context);\n  if (provider === 'ambient-node-webgpu') return nextResolve(specifier, context);\n  const url = providerModules[provider];\n  if (!url) {\n    throw new Error(\n      `DOE_EXTERNAL_WEBGPU_PROVIDER must be ambient-node-webgpu or one of ${Object.keys(providerModules).join(', ')}; received ${JSON.stringify(provider)}`,\n    );\n  }\n  return { url, shortCircuit: true };\n}\n",
+    "import { create, __doeHarnessProviderIdentity } from 'webgpu';\n\nconst gpu = create([]);\nconst adapter = await gpu.requestAdapter();\nif (!adapter) throw new Error('provider returned no WebGPU adapter');\nconst device = await adapter.requestDevice();\nconst identity = {\n  provider: __doeHarnessProviderIdentity,\n  adapter: adapter.info ?? null,\n  isFallbackAdapter: adapter.isFallbackAdapter ?? null,\n  features: [...(adapter.features ?? [])].sort(),\n};\nconsole.log(`DOE_WGSL_FNS_PROVIDER_PROBE=${JSON.stringify(identity)}`);\ndevice.destroy();\n"
+   ]
+  },
+  "PY-1": {
+   "group": "py",
+   "repo": "fawn",
+   "pin": "a281360ff04321f08e5627c5309503d0259a0e70",
+   "directory": "runtime/c/compiler/independent_tests_m5",
+   "order": "74abf9d016aa5e92",
+   "files": [
+    {
+     "path": "runtime/c/compiler/independent_tests_m5/all_fixtures.py",
+     "bytes": 403,
+     "sha256": "c89636168779612398525abedfb526fc6c9994b9b426da8698425b4868b02f0c"
+    },
+    {
+     "path": "runtime/c/compiler/independent_tests_m5/corpus_semantics_m5.py",
+     "bytes": 1979,
+     "sha256": "8abf33d54f370bb003759b86f32d0d4eeffa47d21f57310b0b7b18b07ee84002"
+    },
+    {
+     "path": "runtime/c/compiler/independent_tests_m5/fixtures.py",
+     "bytes": 329,
+     "sha256": "97d2b9ee20934c9f92621be2c714b6bff4d3681a312f19c0216edadebb9b8558"
+    },
+    {
+     "path": "runtime/c/compiler/independent_tests_m5/retained_equivalence_m5.py",
+     "bytes": 2129,
+     "sha256": "52b031916efe5bd6c5601a22278f2b0d9267526a3d62036652ec187280f16b76"
+    }
+   ],
+   "bytes": 4840,
+   "alphabet": 69,
+   "programs": [
+    "\"\"\"Frozen retained cases plus individually authorized M4 admission lifts.\"\"\"\nfrom __future__ import annotations\nfrom pathlib import Path\nimport fixtures\nimport m4_fixtures\n\ndef admitted(root: Path) -> list:\n    return fixtures.admitted(root)+m4_fixtures.admitted(root)\n\ndef rejected() -> list:\n    return [case for case in fixtures.rejected() if case[0] not in m4_fixtures.LIFTS]+m4_fixtures.rejected()\n",
+    "\"\"\"Execute each actual unchanged consumer output against source-bound independent vectors.\"\"\"\nfrom __future__ import annotations\nimport argparse\nimport hashlib\nimport json\nfrom pathlib import Path\nimport struct\nimport all_fixtures\nimport fixtures_m5\nfrom semantic_checks import run_vectors\nfrom semantic_m5 import execute_vectors\nfrom typed_oracle import Module as StorageModule\nfrom uniform_oracle_m5 import Module as UniformModule\n\ndef main() -> int:\n    p=argparse.ArgumentParser(description=__doc__)\n    for n in ['repo','corpus','evidence']:p.add_argument('--'+n,type=Path,required=True)\n    a=p.parse_args();a.evidence.mkdir(parents=True,exist_ok=False)\n    known={}\n    for name,source,expected in all_fixtures.admitted(a.repo):known[hashlib.sha256(source).hexdigest()]=(False,name,expected)\n    for name,source,expected in fixtures_m5.admitted(a.repo):known[hashlib.sha256(source).hexdigest()]=(True,name,expected)\n    records=[]\n    for row in json.loads(a.corpus.read_text())['records']:\n        if not row['admitted']:continue\n        is_uniform,name,expected=known[row['source_sha256']]\n        raw=Path(row['output']).read_bytes();assert hashlib.sha256(raw).hexdigest()==row['output_sha256']\n        words=list(struct.unpack('<'+'I'*(len(raw)//4),raw));module=(UniformModule if is_uniform else StorageModule)(words);module.interface(expected)\n        trials=(execute_vectors if is_uniform else run_vectors)(module,expected)\n        records.append(dict(source=row['source'],source_sha256=row['source_sha256'],output_sha256=row['output_sha256'],fixture=name,cpu_trials=trials,passed=True,physical_backend='not_run',runtime_adoption='not_run'))\n    report=dict(checks=len(records),passed=len(records),cpu_trials=sum(r['cpu_trials'] for r in records),records=records)\n    (a.evidence/'results.json').write_text(json.dumps(report,indent=2)+'\\n');print(json.dumps({k:v for k,v in report.items() if k!='records'}));return 0\nif __name__=='__main__':raise SystemExit(main())\n",
+    "\"\"\"M2 adapter retaining every M1 positive and explicit still-invalid cases.\"\"\"\nfrom fixtures_m1 import *\nimport fixtures_m1 as m1\nimport m2_fixtures as m2\n\ndef admitted(root):\n    return m1.admitted(root) + m2.admitted(root)\n\ndef rejected():\n    return [case for case in m1.rejected() if case[0] not in m2.LIFTS] + m2.rejected()\n",
+    "\"\"\"Source-bound ABI1 baseline versus ABI2 storage output equivalence.\"\"\"\nfrom __future__ import annotations\nimport argparse\nimport hashlib\nimport json\nimport struct\nfrom pathlib import Path\nfrom api_m5 import Api\nimport all_fixtures\nfrom evaluate import Evaluator\n\ndef main() -> int:\n    p=argparse.ArgumentParser(description=__doc__)\n    for n in ['repo','library','validator','evidence']:p.add_argument('--'+n,type=Path,required=True)\n    p.add_argument('--baseline',type=Path,help='Optional preserved ABI1 shared library; otherwise use source-bound frozen hashes.')\n    a=p.parse_args();a.evidence.mkdir(parents=True,exist_ok=False)\n    old=Evaluator(a.baseline,a.evidence/'unused',a.validator) if a.baseline else None\n    frozen=json.loads(Path(__file__).with_name('storage_baseline_sha256.json').read_text()) if old is None else {}\n    new=Api(a.library);rows=[]\n    for name,source,_ in all_fixtures.admitted(a.repo):\n        ns,nr,nw,ne=new.call(source)\n        errors=list(ne);source_hash=hashlib.sha256(source).hexdigest()\n        output_hash=hashlib.sha256(struct.pack('<'+'I'*len(nw),*nw)).hexdigest()\n        if old is not None:\n            os,orr,ow,oe=old.call(source);errors.extend(oe)\n            if os or ns or ow!=nw:errors.append('retained ABI1 to ABI2 storage binary differs')\n        elif ns or frozen[name] != dict(source_sha256=source_hash,output_sha256=output_hash):\n            errors.append('retained source-bound ABI1 bytes differ')\n        rows.append(dict(case=name,passed=not errors,errors=errors,source_sha256=source_hash,output_sha256=output_hash,word_count=len(nw)))\n    result=dict(checks=len(rows),passed=sum(r['passed'] for r in rows),records=rows)\n    if old is not None:\n        (a.evidence/'storage_baseline_sha256.json').write_text(json.dumps({r['case']:{k:r[k] for k in ['source_sha256','output_sha256']} for r in rows},indent=2)+'\\n')\n    (a.evidence/'results.json').write_text(json.dumps(result,indent=2)+'\\n');new.close();print(json.dumps({k:v for k,v in result.items() if k!='records'}));return int(result['checks']!=result['passed'])\nif __name__=='__main__':raise SystemExit(main())\n"
+   ]
+  },
+  "PY-2": {
+   "group": "py",
+   "repo": "gamma",
+   "pin": "59ff04415ff2afd04ff2ed451340f4f02852bf18",
+   "directory": "tools",
+   "order": "aa425dbfa5b0adca",
+   "files": [
+    {
+     "path": "tools/_path_setup.py",
+     "bytes": 736,
+     "sha256": "a131b912a2c5a91c98be128ef760f2ffd441a288ca079a0c054acd96ae2fcbfb"
+    },
+    {
+     "path": "tools/benchmark_model_speed.py",
+     "bytes": 363,
+     "sha256": "6029526c668a1bf59c189ec93b91a41b75b5b160f9e68578d7f66bfb0f797a7e"
+    },
+    {
+     "path": "tools/download_model.py",
+     "bytes": 2444,
+     "sha256": "535ff078ec5f7b92531d3065159c2fb30d8713883d4c8a2e9e57d47a222da073"
+    },
+    {
+     "path": "tools/engine_selector.py",
+     "bytes": 351,
+     "sha256": "57ecfcd3f4fda9b69af415fe003a8b7efa90e153f2aaa5543da76a2ad48bb1fb"
+    }
+   ],
+   "bytes": 3894,
+   "alphabet": 69,
+   "programs": [
+    "\"\"\"Shared bootstrap for CLI tools that need repo-root imports.\"\"\"\n\nfrom __future__ import annotations\n\nfrom pathlib import Path\nimport sys\n\n\ndef ensure_project_root_on_path() -> str:\n    \"\"\"Insert repository root into ``sys.path`` once and return it.\"\"\"\n    root = Path(__file__).resolve().parent.parent\n    root_str = str(root)\n    if root_str not in sys.path:\n        sys.path.insert(0, root_str)\n    return root_str\n\n\ndef ensure_tools_on_path() -> str:\n    \"\"\"Insert repository ``tools`` directory into ``sys.path`` once and return it.\"\"\"\n    root = Path(ensure_project_root_on_path())\n    tools = root / \"tools\"\n    tools_str = str(tools)\n    if tools_str not in sys.path:\n        sys.path.insert(0, tools_str)\n    return tools_str\n",
+    "#!/usr/bin/env python3\n\"\"\"Compatibility launcher for gamma.commands.benchmark_model_speed.\"\"\"\n\ntry:\n    from tools._path_setup import ensure_project_root_on_path\nexcept ImportError:\n    from _path_setup import ensure_project_root_on_path\n\nensure_project_root_on_path()\n\nfrom gamma.commands.benchmark_model_speed import main\n\nif __name__ == \"__main__\":\n    main()\n",
+    "\"\"\"A script to download GGUF models from the Hugging Face Hub.\"\"\"\n\nimport argparse\nimport os\nfrom huggingface_hub import hf_hub_download\n\ndef download_model(repo_id: str, filename: str, token: str = None) -> None:\n    \"\"\"Downloads a model file from a Hugging Face repository.\n\n    Args:\n        repo_id: The repository ID on Hugging Face (e.g., \"google/gemma-3-27b-it-qat-q4_0-gguf\").\n        filename: The exact name of the file to download from the repo.\n        token: An optional Hugging Face access token for gated models.\n    \"\"\"\n    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\n    local_dir_path = os.path.join(project_root, \"models\")\n    local_file_path = os.path.join(local_dir_path, filename)\n\n    print(f\"--- Model Download Utility ---\")\n    print(f\"Repository: {repo_id}\")\n    print(f\"File:       {filename}\")\n    print(f\"Target Dir: {local_dir_path}\")\n    print(\"------------------------------\")\n\n    if os.path.exists(local_file_path):\n        print(\"Model file already exists locally. Skipping download.\")\n        return\n\n    os.makedirs(local_dir_path, exist_ok=True)\n\n    try:\n        print(\"Starting download...\")\n        downloaded_path = hf_hub_download(\n            repo_id=repo_id,\n            filename=filename,\n            local_dir=local_dir_path,\n            local_dir_use_symlinks=False,\n            token=token,\n        )\n        print(f\"File downloaded successfully to: {downloaded_path}\")\n    except Exception as e:\n        print(f\"An error occurred: {e}\")\n        print(\"\\nPlease check the following:\")\n        print(\"1. You are logged in to Hugging Face (`huggingface-cli login`).\")\n        print(\"2. You have been granted access to this model if it's gated.\")\n        print(\"3. The repository ID and filename are correct.\")\n\n\nif __name__ == \"__main__\":\n    parser = argparse.ArgumentParser(\n        description=\"Download a GGUF model from Hugging Face.\"\n    )\n    parser.add_argument(\n        \"--repo-id\",\n        type=str,\n        required=True,\n        help=\"The repository ID on Hugging Face.\",\n    )\n    parser.add_argument(\n        \"--filename\",\n        type=str,\n        required=True,\n        help=\"The exact filename to download.\",\n    )\n    parser.add_argument(\n        \"--token\",\n        type=str,\n        default=None,\n        help=\"Optional Hugging Face access token.\",\n    )\n\n    args = parser.parse_args()\n    download_model(args.repo_id, args.filename, args.token)\n",
+    "#!/usr/bin/env python3\n\"\"\"Compatibility launcher for gamma.commands.engine_selector.\"\"\"\n\ntry:\n    from tools._path_setup import ensure_project_root_on_path\nexcept ImportError:\n    from _path_setup import ensure_project_root_on_path\n\nensure_project_root_on_path()\n\nfrom gamma.commands.engine_selector import main\n\nif __name__ == \"__main__\":\n    main()\n"
+   ]
+  },
+  "PY-3": {
+   "group": "py",
+   "repo": "fawn",
+   "pin": "a281360ff04321f08e5627c5309503d0259a0e70",
+   "directory": "runtime/c/compiler/independent_tests_m10/postdisclosure",
+   "order": "fb08fe5a41df23e1",
+   "files": [
+    {
+     "path": "runtime/c/compiler/independent_tests_m10/postdisclosure/lookup_acceptance.py",
+     "bytes": 388,
+     "sha256": "57bbeda57b8259fda033aacfcb32913c2c07227578ceb90593983d949872de7d"
+    },
+    {
+     "path": "runtime/c/compiler/independent_tests_m10/postdisclosure/lookup_regressions.py",
+     "bytes": 1744,
+     "sha256": "21d6677f38858216714aa3082bcc4ee0119a6988852196e8ecd9c4b254b3e16c"
+    },
+    {
+     "path": "runtime/c/compiler/independent_tests_m10/postdisclosure/lookup_regressions_modes.py",
+     "bytes": 1925,
+     "sha256": "a2422e6fe412210b582ad2abc7b0ad3974fda531923fe388a713e9f894d00fd1"
+    },
+    {
+     "path": "runtime/c/compiler/independent_tests_m10/postdisclosure/lookup_regressions_publish.py",
+     "bytes": 1835,
+     "sha256": "da7fa8af6b7f4f8e70bd9be3d8263276fd3e4aacff53f95a9a96c33d822bca0e"
+    }
+   ],
+   "bytes": 5892,
+   "alphabet": 68,
+   "programs": [
+    "#!/usr/bin/env python3\n\"\"\"Turn the preserved diagnostic collector into a failing acceptance check.\"\"\"\nfrom pathlib import Path\nimport json,runpy,sys\nrunpy.run_path(str(Path(__file__).with_name('lookup_regressions_final.py')),run_name='__main__')\np=Path(sys.argv[sys.argv.index('--receipt')+1]);r=json.loads(p.read_text())\nassert all(m['passed'] for c in r['cases'] for m in c['modes']),r\n",
+    "#!/usr/bin/env python3\n\"\"\"Postdisclosure precise scope-order probes. No frozen test is changed.\"\"\"\nimport argparse,hashlib,json,sys\nfrom pathlib import Path\nsys.path.insert(0,str(Path(__file__).resolve().parent.parent/'source'))\nfrom abi_m10 import Compiler\np=argparse.ArgumentParser();p.add_argument('--library',required=True);p.add_argument('--receipt',type=Path,required=True);a=p.parse_args()\nCASES=[('nominal_max_wrong_arity','struct max{x:u32}@compute @workgroup_size(1) fn main(){let x=max(1u,2u);}',4),('nominal_max_constructor','struct max{x:u32}@compute @workgroup_size(1) fn main(){let x:max=max(1u);}',0),('nominal_array_constructor','struct array{x:u32}@compute @workgroup_size(1) fn main(){let x:array=array(1u);}',0),('nominal_vec2_constructor','struct vec2{x:u32}@compute @workgroup_size(1) fn main(){let x:vec2=vec2(1u);}',0),('nominal_bitcast_constructor','struct bitcast{x:u32}@compute @workgroup_size(1) fn main(){let x:bitcast=bitcast(1u);}',0)]\nrows=[];c=Compiler(Path(a.library))\nfor name,source,status in CASES:\n modes=[]\n for flags in (1,2,3,5,6,7):\n  actual,r,_=c.call(source,flags);modes.append(dict(flags=flags,status=actual,offset=r.diagnostic.offset,diagnostic=bytes(r.diagnostic.message).decode(),passed=actual==status))\n rows.append(dict(name=name,source=source,source_sha256=hashlib.sha256(source.encode()).hexdigest(),expected_status=status,modes=modes))\nassert not a.receipt.exists();a.receipt.write_text(json.dumps(dict(provenance='Postdisclosure from unchanged M5 max_type_shadow_builtin failure; expected lookup derived from frozen M10 \u00a72 module-before-predeclared rule.',library_sha256=hashlib.sha256(Path(a.library).read_bytes()).hexdigest(),cases=rows),indent=2)+'\\n')\nprint(json.dumps(rows,indent=2))\n",
+    "#!/usr/bin/env python3\n\"\"\"Postdisclosure precise scope-order probes. No frozen test is changed.\"\"\"\nimport argparse,hashlib,json,sys\nfrom pathlib import Path\nsys.path.insert(0,str(Path(__file__).resolve().parent.parent/'source'))\nfrom abi_m10 import Compiler\np=argparse.ArgumentParser();p.add_argument('--library',required=True);p.add_argument('--receipt',type=Path,required=True);a=p.parse_args()\nCASES=[('nominal_max_wrong_arity','struct max{x:u32}@compute @workgroup_size(1) fn main(){let x=max(1u,2u);}',4),('nominal_max_constructor','struct max{x:u32}@compute @workgroup_size(1) fn main(){let x:max=max(1u);}',0),('nominal_array_constructor','struct array{x:u32}@compute @workgroup_size(1) fn main(){let x:array=array(1u);}',0),('nominal_vec2_constructor','struct vec2{x:u32}@compute @workgroup_size(1) fn main(){let x:vec2=vec2(1u);}',0),('nominal_bitcast_constructor','struct bitcast{x:u32}@compute @workgroup_size(1) fn main(){let x:bitcast=bitcast(1u);}',0)]\nrows=[];c=Compiler(Path(a.library))\nfor name,source,status in CASES:\n modes=[]\n for flags in (1,2,3,5,6,7):\n  actual,r,_=c.call(source,flags,dict(words=65536 if flags&1 else 0,types=64 if flags&2 else 0,members=64 if flags&2 else 0,resources=8 if flags&2 else 0,name_bytes=1024 if flags&2 else 0) if not flags&4 else None);modes.append(dict(flags=flags,status=actual,offset=r.diagnostic.offset,diagnostic=bytes(r.diagnostic.message).decode(),passed=actual==status))\n rows.append(dict(name=name,source=source,source_sha256=hashlib.sha256(source.encode()).hexdigest(),expected_status=status,modes=modes))\nassert not a.receipt.exists();a.receipt.write_text(json.dumps(dict(provenance='Postdisclosure from unchanged M5 max_type_shadow_builtin failure; expected lookup derived from frozen M10 \u00a72 module-before-predeclared rule.',library_sha256=hashlib.sha256(Path(a.library).read_bytes()).hexdigest(),cases=rows),indent=2)+'\\n')\nprint(json.dumps(rows,indent=2))\n",
+    "#!/usr/bin/env python3\n\"\"\"Postdisclosure precise scope-order probes. No frozen test is changed.\"\"\"\nimport argparse,hashlib,json,sys\nfrom pathlib import Path\nsys.path.insert(0,str(Path(__file__).resolve().parent.parent/'source'))\nfrom abi_m10 import Compiler\np=argparse.ArgumentParser();p.add_argument('--library',required=True);p.add_argument('--receipt',type=Path,required=True);a=p.parse_args()\nCASES=[('nominal_max_wrong_arity','struct max{x:u32}@compute @workgroup_size(1) fn main(){let x=max(1u,2u);}',4),('nominal_max_constructor','struct max{x:u32}@compute @workgroup_size(1) fn main(){let x:max=max(1u);}',0),('nominal_array_constructor','struct array{x:u32}@compute @workgroup_size(1) fn main(){let x:array=array(1u);}',0),('nominal_vec2_constructor','struct vec2{x:u32}@compute @workgroup_size(1) fn main(){let x:vec2=vec2(1u);}',0),('nominal_bitcast_constructor','struct bitcast{x:u32}@compute @workgroup_size(1) fn main(){let x:bitcast=bitcast(1u);}',0)]\nrows=[];c=Compiler(Path(a.library))\nfor name,source,status in CASES:\n modes=[]\n for flags in (1,2,3,5,6,7):\n  actual,r,_=c.call(source,flags,dict(words=65536,types=64,members=64,resources=8,name_bytes=1024) if not flags&4 else None);modes.append(dict(flags=flags,status=actual,offset=r.diagnostic.offset,diagnostic=bytes(r.diagnostic.message).decode(),passed=actual==status))\n rows.append(dict(name=name,source=source,source_sha256=hashlib.sha256(source.encode()).hexdigest(),expected_status=status,modes=modes))\nassert not a.receipt.exists();a.receipt.write_text(json.dumps(dict(provenance='Postdisclosure from unchanged M5 max_type_shadow_builtin failure; expected lookup derived from frozen M10 \u00a72 module-before-predeclared rule.',library_sha256=hashlib.sha256(Path(a.library).read_bytes()).hexdigest(),cases=rows),indent=2)+'\\n')\nprint(json.dumps(rows,indent=2))\n"
+   ]
+  },
+  "C-1": {
+   "group": "c",
+   "repo": "gamma",
+   "pin": "59ff04415ff2afd04ff2ed451340f4f02852bf18",
+   "directory": "projects/enwiki9/results/fx2_expert_confirm1m_v1/work/P/src/mixer",
+   "order": "01d7d56fb5320093",
+   "files": [
+    {
+     "path": "projects/enwiki9/results/fx2_expert_confirm1m_v1/work/P/src/mixer/byte-mixer.cpp",
+     "bytes": 345,
+     "sha256": "0d12b00f2acecf960b4b943c9feb5cb345ca1292564167cd043c114cff7451e4"
+    },
+    {
+     "path": "projects/enwiki9/results/fx2_expert_confirm1m_v1/work/P/src/mixer/mixer-input.cpp",
+     "bytes": 890,
+     "sha256": "841f8c6c5ea1ac554f99af94cf43185b025248aa5f2532b0ed0843979333e033"
+    },
+    {
+     "path": "projects/enwiki9/results/fx2_expert_confirm1m_v1/work/P/src/mixer/mixer-input.h",
+     "bytes": 911,
+     "sha256": "fa30d2b24b83201da450f68820c6e646e5788dfced505c686cb65916501e843f"
+    },
+    {
+     "path": "projects/enwiki9/results/fx2_expert_confirm1m_v1/work/P/src/mixer/mixer.h",
+     "bytes": 1161,
+     "sha256": "6a32194ad23ace57d66d0cb64b028698d405f0a3b56c53e20cd43f1fb284914e"
+    }
+   ],
+   "bytes": 3307,
+   "alphabet": 69,
+   "programs": [
+    "#include \"byte-mixer.h\"\nByteMixer::ByteMixer(const std::vector<bool>& vocab):ByteModel(vocab){}\nvoid ByteMixer::SetProbs(const float* vocab_probs) {\n  unsigned int k = 0;\n  for (int i = 0; i < 256; ++i) {\n    if (vocab_[i]) {\n      probs_[i] = vocab_probs[k];\n      ++k;\n    } else {\n      probs_[i] = 0;\n    }\n  }\n  ByteModel::ByteUpdate();\n}\n\n",
+    "#include \"mixer-input.h\"\n\nMixerInput::MixerInput(const Sigmoid& sigmoid, float eps) :\n    inputs_(0.5, 1), sigmoid_(sigmoid), min_(eps), max_(1 - eps),\n    stretched_min_(sigmoid.Logit(0)), stretched_max_(sigmoid.Logit(1)) {}\n\nvoid MixerInput::SetNumModels(int num_models) {\n  inputs_.resize(num_models, 0.5);\n}\n\nvoid MixerInput::SetInput(int index, float p) {\n  if (p < min_) p = min_;\n  else if (p > max_) p = max_;\n  inputs_[index] = sigmoid_.Logit(p);\n}\n\nvoid MixerInput::SetStretchedInput(int index, float p) {\n  if (p > stretched_max_) p = stretched_max_;\n  else if (p < stretched_min_) p = stretched_min_;\n  inputs_[index] = p;\n}\nvoid MixerInput::SetZero(int index) {\n  \n  inputs_[index] = 0.0f;\n}\n\nvoid MixerInput::SetExtraInput(size_t index, float p) {\n  if (p > stretched_max_) p = stretched_max_;\n  else if (p < stretched_min_) p = stretched_min_;\n  extra_inputs_[index] = p;\n}\n\n",
+    "#ifndef MIXER_INPUT_H\n#define MIXER_INPUT_H\n\n#include \"sigmoid.h\"\n\n#include <valarray>\n#include <vector>\n\nclass MixerInput {\n public:\n  MixerInput(const Sigmoid& sigmoid, float eps);\n  void SetNumModels(int num_models);\n  void SetInput(int index, float p);\n  void SetStretchedInput(int index, float p);\n  void SetZero(int index);\n  void SetExtraInput(size_t index, float p);\n  void SetExtraInputSize(size_t size) { extra_inputs_.resize(size);};\n  //void ClearExtraInputs() { extra_inputs_.clear(); }\n  const std::valarray<float>& Inputs() const { return inputs_; }\n  //const std::vector<float>& ExtraInputs() const { return extra_inputs_; }\n  const auto& ExtraInputs() const { return extra_inputs_; }\n\n private:\n  std::valarray<float> inputs_;\n  //std::vector<float> extra_inputs_;\n  std::valarray<float> extra_inputs_;\n  const Sigmoid& sigmoid_;\n  float min_, max_, stretched_min_, stretched_max_;\n};\n\n#endif\n\n",
+    "#ifndef MIXER_H\n#define MIXER_H\n\n#include <vector>\n#include <valarray>\n#include \"../ds/emhash_map.hpp\"\n#include <memory>\n\nstruct ContextData {\n  ContextData(unsigned long long input_size,\n      unsigned long long extra_input_size) : /*steps(0), */weights(input_size),\n      extra_weights(extra_input_size) {};\n  ContextData& operator=(const ContextData&) = default;\n  ContextData(const ContextData&) = default;\n  //unsigned long long steps;\n  std::valarray<float> weights, extra_weights;\n  \n};\n\nclass Mixer {\n public:\n  Mixer(const std::valarray<float>& inputs,\n      const std::valarray<float>& extra_inputs, const unsigned long long& context,\n      float learning_rate, unsigned int extra_input_size);\n  float Mix();\n  void Perceive(int bit);\n\n private:\n  ContextData* GetContextData();\n  const std::valarray<float>& inputs_;\n  const std::valarray<float>& extra_inputs_vec_;\n  // std::valarray<float> extra_inputs_;\n  uint16_t extra_inputs_size_;\n  float p_, learning_rate_;\n  const unsigned long long& context_;\n  unsigned long long /*max_steps_,*/ steps_;\n  emhash6::HashMap<unsigned int, ContextData> context_map_;\n  ContextData context_base_;\n};\n\n#endif\n\n"
+   ]
+  },
+  "C-2": {
+   "group": "c",
+   "repo": "gamma",
+   "pin": "59ff04415ff2afd04ff2ed451340f4f02852bf18",
+   "directory": "projects/enwiki9/results/fx2_weight_native_fixture50051_q0_v1/work/source/external/fx2-cmix-transformer-v1/src/coder",
+   "order": "0893b6e62669749f",
+   "files": [
+    {
+     "path": "projects/enwiki9/results/fx2_weight_native_fixture50051_q0_v1/work/source/external/fx2-cmix-transformer-v1/src/coder/decoder.cpp",
+     "bytes": 832,
+     "sha256": "1bae2c108906625fb124f3fc602d1d59d814e5a415d963ab74246bf474e8bae9"
+    },
+    {
+     "path": "projects/enwiki9/results/fx2_weight_native_fixture50051_q0_v1/work/source/external/fx2-cmix-transformer-v1/src/coder/decoder.h",
+     "bytes": 314,
+     "sha256": "5c2e452d5264b83782360711e88c68917159fdf9e0863f4d75cc36d4fe0d9237"
+    },
+    {
+     "path": "projects/enwiki9/results/fx2_weight_native_fixture50051_q0_v1/work/source/external/fx2-cmix-transformer-v1/src/coder/encoder.cpp",
+     "bytes": 914,
+     "sha256": "ecd9a2f4f39553e3864c8e9c96c7b512edca46a6fbb3197beaccaf47b0a8fdce"
+    },
+    {
+     "path": "projects/enwiki9/results/fx2_weight_native_fixture50051_q0_v1/work/source/external/fx2-cmix-transformer-v1/src/coder/encoder.h",
+     "bytes": 440,
+     "sha256": "0697c4231e3d87771adfc96e5689e15337f224e62795085cd0f848c84badf813"
+    }
+   ],
+   "bytes": 2500,
+   "alphabet": 67,
+   "programs": [
+    "#include \"decoder.h\"\n\nDecoder::Decoder(std::ifstream* is, Predictor* p) : is_(is), x1_(0),\n    x2_(0xffffffff), x_(0), p_(p) {\n  for (int i = 0; i < 4; ++i) {\n    x_ = (x_ << 8) + (ReadByte() & 0xff);\n  }\n}\n\nint Decoder::ReadByte() {\n  int byte = (unsigned char)(is_->get());\n  if (!is_->good()) return 0;\n  return byte;\n}\n\nunsigned int Decoder::Discretize(float p) {\n  return 1 + 65534 * p;\n}\n\nint Decoder::Decode() {\n  const unsigned int p = Discretize(p_->Predict());\n  const unsigned int xmid = x1_ + ((x2_ - x1_) >> 16) * p +\n      (((x2_ - x1_) & 0xffff) * p >> 16);\n  int bit = 0;\n  if (x_ <= xmid) {\n    bit = 1;\n    x2_ = xmid;\n  } else {\n    x1_ = xmid + 1;\n  }\n  p_->Perceive(bit);\n\n  while (((x1_^x2_) & 0xff000000) == 0) {\n    x1_ <<= 8;\n    x2_ = (x2_ << 8) + 255;\n    x_ = (x_ << 8) + ReadByte();\n  }\n  return bit;\n}\n",
+    "#ifndef DECODER_H\n#define DECODER_H\n\n#include <fstream>\n\n#include \"../predictor.h\"\n\nclass Decoder {\n public:\n  Decoder(std::ifstream* is, Predictor* p);\n  int Decode();\n\n private:\n  int ReadByte();\n  unsigned int Discretize(float p);\n\n  std::ifstream* is_;\n  unsigned int x1_, x2_, x_;\n  Predictor* p_;\n};\n\n#endif\n",
+    "#include \"encoder.h\"\n\nEncoder::Encoder(std::ofstream* os, Predictor* p) : os_(os), x1_(0),\n    x2_(0xffffffff), p_(p) {}\n\nvoid Encoder::WriteByte(unsigned int byte) {\n  out_.push_back(byte);\n}\n\nunsigned int Encoder::Discretize(float p) {\n  return 1 + 65534 * p;\n}\n\nvoid Encoder::Encode(int bit) {\n  const unsigned int p = Discretize(p_->Predict());\n  const unsigned int xmid = x1_ + ((x2_ - x1_) >> 16) * p +\n      (((x2_ - x1_) & 0xffff) * p >> 16);\n  if (bit) {\n    x2_ = xmid;\n  } else {\n    x1_ = xmid + 1;\n  }\n  p_->Perceive(bit);\n\n  while (((x1_^x2_) & 0xff000000) == 0) {\n    WriteByte(x2_ >> 24);\n    x1_ <<= 8;\n    x2_ = (x2_ << 8) + 255;\n  }\n}\n\nvoid Encoder::Flush() {\n  while (((x1_^x2_) & 0xff000000) == 0) {\n    WriteByte(x2_ >> 24);\n    x1_ <<= 8;\n    x2_ = (x2_ << 8) + 255;\n  }\n  WriteByte(x2_ >> 24);\n\n  auto* data = reinterpret_cast<const char*>(out_.data());\n  os_->write(data, out_.size());\n}\n\n",
+    "#ifndef ENCODER_H\n#define ENCODER_H\n\n#include <fstream>\n#include <vector>\n\n#include \"../predictor.h\"\n\nclass Encoder {\n public:\n  Encoder(std::ofstream* os, Predictor* p);\n  void Encode(int bit);\n  void Flush();\n  size_t OutputSize() { return out_.size();}\n private:\n  void WriteByte(unsigned int byte);\n  unsigned int Discretize(float p);\n\n  std::vector<char> out_;\n  std::ofstream* os_;\n  unsigned int x1_, x2_;\n  Predictor* p_;\n};\n#endif\n"
+   ]
+  },
+  "C-3": {
+   "group": "c",
+   "repo": "fawn",
+   "pin": "a281360ff04321f08e5627c5309503d0259a0e70",
+   "directory": "runtime/c/compiler/targets/metal/tests/host",
+   "order": "86969757e47a9fd5",
+   "files": [
+    {
+     "path": "runtime/c/compiler/targets/metal/tests/host/check_array_length.cpp",
+     "bytes": 726,
+     "sha256": "fc3700cae7303d72cfa9f35da85e9e99dc2153a3d7075cbf6904e731d0b021fc"
+    },
+    {
+     "path": "runtime/c/compiler/targets/metal/tests/host/check_component_math.cpp",
+     "bytes": 1215,
+     "sha256": "f78cd0cf21827c3c14da3200b6089f28c94b3e1fcf8c9f9009887b4fd53fd7fb"
+    },
+    {
+     "path": "runtime/c/compiler/targets/metal/tests/host/check_graphics.cpp",
+     "bytes": 791,
+     "sha256": "128b39939b6074fdb2e40f98766aefe500f86229ca90753738cb6b7deb9436cd"
+    },
+    {
+     "path": "runtime/c/compiler/targets/metal/tests/host/check_layout.cpp",
+     "bytes": 1116,
+     "sha256": "5e1df0b98f52aac05b68927b9f237ce29b604125b208c8b59aa7ee89b9a01f35"
+    }
+   ],
+   "bytes": 3848,
+   "alphabet": 70,
+   "programs": [
+    "/* SPDX-License-Identifier: MIT\n * Execute emitted size arithmetic only, not Metal SDK or a device. */\n#include <cassert>\n#include <cstdio>\n#include \"array_length.metal\"\nint main() {\n    alignas(16) unsigned output[3] = {0,0,0x12345678};\n    uint sizes[31] = {};\n    sizes[1] = 8;\n    const uint bytes[] = {0,12,16,28,32,64,0xffffffffu};\n    const uint expected[] = {0,0,0,0,1,3,268435454};\n    for (unsigned i=0; i<7; ++i) {\n        sizes[0] = bytes[i];\n        doe_entry0(nullptr,reinterpret_cast<uchar*>(output),sizes);\n        assert(output[0]==expected[i] && output[1]==2 && output[2]==0x12345678);\n    }\n    std::puts(\"Metal runtime array length: typed tail prefix, stride, partial elements and size-slot identity.\");\n}\n",
+    "/* SPDX-License-Identifier: MIT\n * Copyright (c) 2026 Doe contributors */\n#include <cassert>\n#include <cstdio>\n#include \"metal_stdlib\"\nnamespace metal {\ninline float rsqrt(float x) { return 1.0f / std::sqrt(x); }\ninline float mix(float x, float y, float a) { return x * (1.0f - a) + y * a; }\ntemplate<unsigned N> host_vector<float, N> mix(const host_vector<float, N>& x,\n        const host_vector<float, N>& y, const host_vector<float, N>& a) {\n    host_vector<float, N> result;\n    for (unsigned i = 0; i < N; ++i) result[i] = mix(x[i], y[i], a[i]);\n    return result;\n}\n}\n#include \"component_math.metal\"\n#include \"../../../tests/component_math_source.h\"\nint main() {\n    alignas(16) uint words[33] = {0xbe800000u};\n    words[32] = 0x12345678u;\n    uint sizes[31] = {128u};\n    doe_entry0(reinterpret_cast<uchar*>(words), sizes);\n    for (unsigned i = 0; i < sizeof(component_math_expected) / sizeof(*component_math_expected); ++i)\n        assert(words[i] == component_math_expected[i]);\n    assert(words[29] == 2u && words[30] == 2u && words[31] == 2u);\n    assert(words[32] == 0x12345678u);\n    std::puts(\"Metal emitted operations: exact rounding, fractional tail, minimum abs and once-only effects passed.\");\n}\n",
+    "/* SPDX-License-Identifier: MIT\n * Attribute-erased emitted-operation control, not Metal compiler validation. */\n#include <cassert>\n#include <cstdio>\n#define vertex\n#define fragment\n#include \"graphics.metal\"\nint main() {\n    DoeStage0_1 input{};\n    input.field0 = 17;\n    input.field1 = 9;\n    auto output = doe_entry0(input, true, 5);\n    assert(output.field4 == 1709 && output.field5 == 5);\n    output = doe_entry0(input, false, 5);\n    assert(output.field4 == 1710 && output.field5 == 0);\n    input.field0 = 0xffffffffu;\n    input.field1 = 31;\n    output = doe_entry0(input, true, 5);\n    assert(output.field4 == (0xffffffffu * 100u + 31u) && output.field5 == 5);\n    std::puts(\"Metal graphics operation control: formal/leaf identity, helper call, branch and return mapping passed.\");\n}\n",
+    "/* SPDX-License-Identifier: MIT\n * Copyright (c) 2026 Doe contributors */\n#include <cassert>\n#include <cstdio>\n#include <cstring>\n#include \"aggregate.metal\"\nint main() {\n    alignas(16) int output[3] = {0, 1, 2345};\n    alignas(16) unsigned char data[32];\n    std::memset(data, 0x5a, sizeof(data));\n    const uint fields[] = {2u, 5u, 7u, 9u, 13u};\n    const unsigned offsets[] = {0u, 4u, 20u, 24u, 28u};\n    for (unsigned i = 0u; i < 5u; ++i) std::memcpy(data + offsets[i], &fields[i], sizeof(uint));\n    uint sizes[31] = {};\n    sizes[0] = 2u * sizeof(int);\n    sizes[1] = sizeof(data);\n    doe_entry0(reinterpret_cast<uchar*>(output), data, sizes);\n    assert(output[0] == 20 && output[1] == 0 && output[2] == 2345);\n    const uint expected[] = {5u, 5u, 7u, 8u, 13u};\n    for (unsigned i = 0u; i < 5u; ++i) {\n        uint value;\n        std::memcpy(&value, data + offsets[i], sizeof(value));\n        assert(value == expected[i]);\n    }\n    for (unsigned i = 8u; i < 20u; ++i) assert(data[i] == 0x5au);\n    std::puts(\"Emitted aggregate host control passed: typed copies, explicit layout, padding preservation.\");\n}\n"
+   ]
+  }
+ }
+}
