@@ -152,6 +152,19 @@ class DiagnosticTests(unittest.TestCase):
         self.assertEqual(res["construction"]["dictionarySize"], 28)
         self.assertTrue(res["construction"]["byteExactVerified"])
 
+    def test_minimal_single_forced_block_connected_counterexample_under_w2(self):
+        from forced_block_connected_search import evaluate_fb_connected
+
+        progs = ["abd", "abpxqy", "qypxbd", "abpyqx", "qxpybd"]
+        ev = evaluate_fb_connected(progs)
+        self.assertEqual(ev["programComponents"], 1)
+        self.assertEqual(ev["forcedBlockComponents"], 1)
+        self.assertEqual(ev["alphabetSize"], 7)
+        self.assertEqual(ev["blockRank"], 6)
+        self.assertEqual(ev["disjointBound"], 6)
+        self.assertEqual(ev["exactOptW2"], 7)
+        self.assertTrue(ev["matchesFailureTarget"])
+
 
 if __name__ == "__main__":
     unittest.main()

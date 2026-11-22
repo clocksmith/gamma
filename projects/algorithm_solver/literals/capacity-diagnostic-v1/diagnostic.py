@@ -46,15 +46,59 @@ def eligible_tokens(programs: list[str], k: int, max_bytes: int | None = 160) ->
         for s in programs:
             every |= substrings(s, max_bytes=None)
         return every - whole
-    # k >= 2: single characters (not whole) + multi-char substrings <= max_bytes in >= k programs
+    # k >= 2: single characters (not whole) + multi-char substrings <= max_bytes in >= k programs.
+    # Use suffix-array adjacent distinct-program LCP to enumerate only actually shared substrings (exact).
     alpha = set().union(*(set(s) for s in programs)) - whole
-    doc_freq: dict[str, int] = defaultdict(int)
-    for s in programs:
-        seen = substrings(s, max_bytes=max_bytes)
-        for sub in seen:
-            if len(sub) >= 2 and sub not in whole:
-                doc_freq[sub] += 1
-    return alpha | {sub for sub, df in doc_freq.items() if df >= k}
+    items = [(s[i:], pidx, i) for pidx, s in enumerate(programs) for i in range(len(s))]
+    items.sort(key=lambda item: item[0])
+
+    def lcp_len(a: str, b: str) -> int:
+        m = min(len(a), len(b))
+        j = 0
+        while j < m and a[j] == b[j]:
+            j += 1
+        return j
+
+    wit: dict[tuple[int, int], int] = {(pidx, i): 0 for _, pidx, i in items}
+    prev_diff = prev_suf = None
+    prev_pid = None
+    for suf, pidx, i in items:
+        if prev_pid is not None and prev_pid != pidx:
+            prev_diff = prev_suf
+        if prev_diff is not None:
+            v = lcp_len(suf, prev_diff)
+            if v > wit[pidx, i]:
+                wit[pidx, i] = v
+        prev_suf, prev_pid = suf, pidx
+
+    next_diff = next_suf = None
+    next_pid = None
+    for suf, pidx, i in reversed(items):
+        if next_pid is not None and next_pid != pidx:
+            next_diff = next_suf
+        if next_diff is not None:
+            v = lcp_len(suf, next_diff)
+            if v > wit[pidx, i]:
+                wit[pidx, i] = v
+        next_suf, next_pid = suf, pidx
+
+    docs: dict[str, set[int]] = defaultdict(set)
+    for pidx, s in enumerate(programs):
+        n = len(s)
+        for a in range(n):
+            w = wit[pidx, a]
+            if w < 2:
+                continue
+            hi = min(n, a + w) if max_bytes is None else min(n, a + w, a + max_bytes)
+            b_bytes = len(s[a : a + 1].encode("utf-8"))
+            for b in range(a + 2, hi + 1):
+                b_bytes += len(s[b - 1 : b].encode("utf-8"))
+                if max_bytes is not None and b_bytes > max_bytes:
+                    break
+                sub = s[a:b]
+                if sub not in whole:
+                    docs[sub].add(pidx)
+    return alpha | {sub for sub, dset in docs.items() if len(dset) >= k}
 
 
 def parse_program(source: str, vocab: list[str] | set[str]) -> list[str] | None:
@@ -242,20 +286,29 @@ def certified_rank_bound(programs: list[str], k: int, max_bytes: int | None = 16
 
 # ---------------------------------------------------------------------- disjoint-position bound
 def position_cover_sets(programs: list[str], tokens: set[str], max_bytes: int | None = 160) -> list[tuple[int, int, frozenset[str]]]:
-    """Return [(prog_idx, pos, C_k(prog_idx, pos))] for every character position."""
+    """Return [(prog_idx, pos, C_k(prog_idx, pos))] for every character position.
+
+    Uses prefix-length index over `tokens` so only actual token matches are visited (exact).
+    """
+    by_first: dict[str, list[str]] = defaultdict(list)
+    for tok in tokens:
+        if tok:
+            by_first[tok[0]].append(tok)
     out: list[tuple[int, int, frozenset[str]]] = []
     for pidx, s in enumerate(programs):
         n = len(s)
+        covers: list[list[str]] = [[] for _ in range(n)]
+        for a in range(n):
+            cands = by_first.get(s[a])
+            if not cands:
+                continue
+            for tok in cands:
+                tlen = len(tok)
+                if a + tlen <= n and s.startswith(tok, a):
+                    for pos in range(a, a + tlen):
+                        covers[pos].append(tok)
         for pos in range(n):
-            lo = 0 if max_bytes is None else max(0, pos - max_bytes + 1)
-            cover = []
-            for a in range(lo, pos + 1):
-                hi = n if max_bytes is None else min(n, a + max_bytes)
-                for b in range(pos + 1, hi + 1):
-                    sub = s[a:b]
-                    if sub in tokens:
-                        cover.append(sub)
-            out.append((pidx, pos, frozenset(cover)))
+            out.append((pidx, pos, frozenset(covers[pos])))
     return out
 
 

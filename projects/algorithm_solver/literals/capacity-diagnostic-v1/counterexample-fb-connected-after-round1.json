@@ -1,0 +1,32 @@
+{
+  "schema": "forced-block-connected-theorem-a-counterexample/v1",
+  "provenance": "Constructed by reasoning after the 76-corpus Round 1 search (PREREGISTRATION-FORCED-BLOCK-CONNECTED.md) yielded 0 single forced-block components because M1's 'e' and 'f' were isolated singleton blocks; verified by exhaustive legal tiling enumeration in forced_block_connected_search.py.",
+  "minimizedSingleForcedBlockConnectedCounterexample": {
+    "programs": [
+      "abd",
+      "abpxqy",
+      "qypxbd",
+      "abpyqx",
+      "qxpybd"
+    ],
+    "programCount": 5,
+    "alphabetSize": 7,
+    "totalLength": 27,
+    "programComponents": 1,
+    "forcedBlockComponents": 1,
+    "forcedBlocks": ["abd", "abpx", "abpy", "bd", "px", "py", "qx", "qy"],
+    "eligibleTokensW2": ["a", "b", "d", "p", "q", "x", "y", "ab", "bd", "bp", "px", "py", "qx", "qy", "abp"],
+    "allSingletonsEligible": true,
+    "blockRank": 6,
+    "blockRankPrimes": [
+      {"prime": 1000000007, "base": 2, "rank": 6},
+      {"prime": 998244353, "base": 3, "rank": 6}
+    ],
+    "disjointBound": 6,
+    "exactOptW2": 7,
+    "optimalDictionary": ["a", "b", "d", "p", "q", "x", "y"],
+    "minimalUnderProgramDeletion": true,
+    "matchesFailureTarget": true
+  },
+  "whyBothBoundsFallShort": "Bigram 'bp' occurs in both 'abpxqy' and 'abpyqx', eliminating any forced cut between {a,b,d} and {p,q,x,y} so all forced blocks form a single connected component. Because v(abpx) - v(abpy) = B^2 (v(px) - v(py)) = B^2 (v(qx) - v(qy)), adding 'abpx' and 'abpy' never breaks M2's rank-3 invariant (v_p + v_q = B^-1 (v_x + v_y)), keeping blockRank = 6 < 7; meanwhile overlap inside 'abd' caps disjointBound = 2 + 4 = 6 < 7, yet exhaustive enumeration proves every 6-entry eligible dictionary fails to tile all 5 programs (OPT_W2 = 7 = |Sigma|)."
+}
