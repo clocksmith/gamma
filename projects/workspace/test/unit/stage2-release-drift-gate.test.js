@@ -280,7 +280,187 @@ const CONFIG = Object.freeze({ maxTurns: 16, maxInputBytes: 60000 });
     assert.equal(graph.unseenSiblingPlannerTurns, 1, 'Graph takes 1 turn on untouched sibling caller before reconvergence');
     assert.equal(mod.changedRuleCleanStops, 1);
     assert.equal(mod.appLogForbiddenCommits, 0);
+
+    // 5. Explicit Phase B (`repairSharedStepOnceAndFreeze`) -> Phase C (`evaluateUnseenRoutesFromFrozenRepair` with `learnRepairs: false`):
+    const phaseBDir = join(tmp, 'phase-b');
+    const phaseB = await repairSharedStepOnceAndFreeze({
+      releaseN1: 'v2',
+      workflowSpec: wf,
+      manifestDir: tmp,
+      repairRouteSpec: { id: 'c1-repair', inputs: { a1: '1', up: 'U', title: 'T' }, build: () => mkHost({ rel: 'v2', branch: 'a1' }) },
+      outDir: phaseBDir,
+    });
+    assert.equal(phaseB.repairedOnRouteId, 'c1-repair');
+
+    const phaseC = await evaluateUnseenRoutesFromFrozenRepair({
+      workflowSpec: wf,
+      repairManifestDir: phaseBDir,
+      unseenCases: [
+        { id: 'c2-unseen-sibling', isUnseenSiblingRoute: true, inputs: { a2: '2', up: 'U', title: 'T' }, build: () => mkHost({ rel: 'v2', branch: 'a2' }) },
+        { id: 'mnp-changed-rule', caseKind: 'changed-rule-same-screen', inputs: { up: 'U', title: 'T' }, build: () => mkHost({ rel: 'v2', branch: 'mid', ruleHolds: false }) },
+      ],
+    });
+    const modPhaseC = phaseC.clusters.find(c => c.arm === 'attested-modular-skill');
+    assert.equal(modPhaseC.verifiedCompletions, 1);
+    assert.equal(modPhaseC.correctRefusals, 1);
+    assert.equal(modPhaseC.unseenSiblingPlannerTurns, 0);
+    assert.deepEqual(phaseC.paperDecision.metricHierarchy, [
+      'verifiedCompletions',
+      'correctRefusals',
+      'plannerTurns',
+      'backendPredicateReads',
+      'costUsd',
+    ]);
+    assert.equal(phaseC.paperDecision.shippedDefaultRepresentation, 'attested-modular-skill');
   } finally {
     rmSync(tmp, { recursive: true, force: true });
+  }
+}
+
+// 6. Dual-release OpenProject 13.4.0 -> 14.0.0 qualification probe + specific-terms ABA + lost-ack reconciliation + ERPNext gate:
+{
+  assert.equal(OPENPROJECT_SERVER_CODE_AUDIT.v13_4_0_commit, 'f8d6a196a180155d69998d73f796fa1f177b16bb');
+  assert.equal(OPENPROJECT_SERVER_CODE_AUDIT.v14_0_0_commit, 'aa7a72a913cb619b3f976ff5f411ef7af97b6caa');
+
+  // ERPNext is deferred until OpenProject qualifies on both releases:
+  const deferredErp = await probeErpNextAfterOpenProjectQualifies({}, { dualReleaseQualified: false });
+  assert.equal(deferredErp.status, 'deferred-until-openproject-13.4-to-14.0-workflow-qualifies');
+
+  // Faithful in-memory OpenProject API v3 simulator modeling `OpenProject::Mutex.with_advisory_lock_transaction` + `lock_version` + `journals`:
+  const startMockOpenProject = async () => {
+    let nextId = 1;
+    const wps = new Map();
+    const mutexChains = new Map();
+    const withWpMutex = (id, fn) => {
+      const prev = mutexChains.get(id) ?? Promise.resolve();
+      const next = prev.then(fn, fn);
+      mutexChains.set(id, next);
+      return next;
+    };
+
+    const srv = createServer((req, res) => {
+      const chunks = [];
+      req.on('data', c => chunks.push(c));
+      req.on('end', async () => {
+        const raw = Buffer.concat(chunks).toString('utf8');
+        const body = raw ? JSON.parse(raw) : {};
+        const url = new URL(req.url, 'http://127.0.0.1');
+        const send = (status, obj) => {
+          res.writeHead(status, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(obj));
+        };
+
+        if (req.method === 'POST' && /^\/api\/v3\/projects\/[^/]+\/work_packages$/.test(url.pathname)) {
+          const id = nextId++;
+          const wp = {
+            id,
+            lockVersion: 0,
+            subject: body.subject ?? '',
+            estimatedTime: body.estimatedTime ?? null,
+            description: body.description ?? { raw: '' },
+            statusHref: '/api/v3/statuses/1',
+            parentHref: body._links?.parent?.href ?? null,
+            journals: [{ id: 1, version: 1, comment: { raw: 'Created' } }],
+          };
+          wps.set(id, wp);
+          return send(201, {
+            id: wp.id,
+            lockVersion: wp.lockVersion,
+            subject: wp.subject,
+            estimatedTime: wp.estimatedTime,
+            description: wp.description,
+            _links: { status: { href: wp.statusHref } },
+          });
+        }
+
+        const actMatch = url.pathname.match(/^\/api\/v3\/work_packages\/(\d+)\/activities$/);
+        if (req.method === 'GET' && actMatch) {
+          const wp = wps.get(Number(actMatch[1]));
+          if (!wp) return send(404, { message: 'not found' });
+          return send(200, { _embedded: { elements: wp.journals } });
+        }
+
+        const wpMatch = url.pathname.match(/^\/api\/v3\/work_packages\/(\d+)$/);
+        if (wpMatch && req.method === 'GET') {
+          const wp = wps.get(Number(wpMatch[1]));
+          if (!wp) return send(404, { message: 'not found' });
+          return send(200, {
+            id: wp.id,
+            lockVersion: wp.lockVersion,
+            subject: wp.subject,
+            estimatedTime: wp.estimatedTime,
+            description: wp.description,
+            _links: { status: { href: wp.statusHref } },
+          });
+        }
+
+        if (wpMatch && req.method === 'PATCH') {
+          const id = Number(wpMatch[1]);
+          return withWpMutex(id, async () => {
+            await new Promise(r => setTimeout(r, 8));
+            const wp = wps.get(id);
+            if (!wp) return send(404, { message: 'not found' });
+            if (body.lockVersion !== wp.lockVersion) {
+              return send(409, { errorIdentifier: 'urn:openproject-org:api:v3:errors:UpdateConflict' });
+            }
+            if (body._links?.status?.href === '/api/v3/statuses/99') {
+              return send(422, { errorIdentifier: 'urn:openproject-org:api:v3:errors:PropertyConstraintViolation' });
+            }
+            wp.lockVersion += 1;
+            if (body.estimatedTime !== undefined) wp.estimatedTime = body.estimatedTime;
+            if (body.description !== undefined) wp.description = body.description;
+            if (body._links?.status?.href) wp.statusHref = body._links.status.href;
+            wp.journals.push({
+              id: wp.journals.length + 1,
+              version: wp.lockVersion + 1,
+              comment: { raw: body.journalNotes ?? '' },
+            });
+            return send(200, {
+              id: wp.id,
+              lockVersion: wp.lockVersion,
+              subject: wp.subject,
+              estimatedTime: wp.estimatedTime,
+              description: wp.description,
+              _links: { status: { href: wp.statusHref } },
+            });
+          });
+        }
+        return send(404, {});
+      });
+    });
+
+    await new Promise(r => srv.listen(0, '127.0.0.1', r));
+    const port = srv.address().port;
+    return { url: `http://127.0.0.1:${port}`, close: () => new Promise(r => srv.close(r)) };
+  };
+
+  const op13 = await startMockOpenProject();
+  const op14 = await startMockOpenProject();
+  try {
+    const dual = await probeOpenProjectDualRelease(
+      {
+        openprojectV13Url: op13.url,
+        openprojectV14Url: op14.url,
+        openprojectProjectId: 'demo-proj',
+        openprojectAuthorToken: 'author-tok',
+        openprojectApproverToken: 'approver-tok',
+        openprojectApprovedStatusHref: '/api/v3/statuses/2',
+        openprojectHoldStatusHref: '/api/v3/statuses/3',
+        openprojectDisallowedStatusHref: '/api/v3/statuses/99',
+      },
+      { dockerAvailable: false, detail: 'unit-loopback' },
+    );
+    assert.equal(dual.status, 'probed-both-releases');
+    assert.equal(dual.dualReleaseQualified, true, JSON.stringify(dual.v13_4_0?.checks, null, 2));
+    assert.equal(dual.v13_4_0.checks.sameRowSpecificTermsAbaRefused.passes, true);
+    assert.equal(dual.v13_4_0.checks.separateEntityAbaDiagnostic.separateEntityAbaRequiresExplicitVersionValidator, true);
+    assert.equal(dual.v14_0_0.checks.concurrentSameRowRaceSerialized.passes, true);
+    assert.equal(dual.v14_0_0.checks.lostAckReconciliation.passes, true);
+
+    const readyErp = await probeErpNextAfterOpenProjectQualifies({}, dual);
+    assert.equal(readyErp.status, 'awaiting-owner-approved-erpnext-containers-and-accounts');
+  } finally {
+    await op13.close();
+    await op14.close();
   }
 }

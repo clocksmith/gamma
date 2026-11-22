@@ -245,9 +245,11 @@ export async function reconcileOpenProjectLostAck({
     body: { ...payload, lockVersion: preCommitLockVersion },
   });
   const evidence = await readOpenProjectJournalEvidence(baseUrl, workPackageId, apiToken, pgUrl);
+  // OpenProject `work_packages.lock_version` starts at 0 while `journals.version` starts at 1
+  // (version 1 = initial creation), so transitioning `lock_version` v -> v + 1 writes `journal.version = v + 2`:
   const matchingJournals = evidence.journals.filter(j =>
     String(j?.comment?.raw ?? '').includes(idempotencyMarker)
-    || (j?.version === preCommitLockVersion + 1 && evidence.descriptionRaw.includes(idempotencyMarker)),
+    || (j?.version === preCommitLockVersion + 2 && evidence.descriptionRaw.includes(idempotencyMarker)),
   );
   const reconciledCommittedOnce =
     (retryAtSameVersion.status === 409 && matchingJournals.length === 1)
