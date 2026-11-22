@@ -388,6 +388,20 @@ async function probeGiteaLocalIsolated(giteaBin) {
     });
     const pr1Index = pr1.body?.number;
 
+    const waitMergeable = async prNum => {
+      for (let attempt = 0; attempt < 40; attempt += 1) {
+        const checkPr = await jsonRequest(
+          `${baseUrl}/api/v1/repos/${authorUser}/${repoName}/pulls/${prNum}`,
+          authorAuth,
+        );
+        if (checkPr.body?.mergeable === true) return;
+        await new Promise(r => setTimeout(r, 120));
+      }
+    };
+
+    // Wait for Gitea's async git conflict-checker queue to settle (`mergeable === true`) before probing:
+    await waitMergeable(pr1Index);
+
     // Grant approval first so ONLY `head_commit_id` is stale on Check 1:
     await jsonRequest(
       `${baseUrl}/api/v1/repos/${authorUser}/${repoName}/pulls/${pr1Index}/reviews`,
@@ -409,10 +423,12 @@ async function probeGiteaLocalIsolated(giteaBin) {
     );
 
     // CHECK 2A: Live-DB-truth anti-revocation (revoking approval via REQUEST_CHANGES blocks merge):
+    await waitMergeable(pr1Index);
     await jsonRequest(
       `${baseUrl}/api/v1/repos/${authorUser}/${repoName}/pulls/${pr1Index}/reviews`,
       { method: 'POST', ...approverAuth, body: { event: 'REQUEST_CHANGES', body: 'Hold: budget frozen' } },
     );
+    await waitMergeable(pr1Index);
     const revokedMerge = await jsonRequest(
       `${baseUrl}/api/v1/repos/${authorUser}/${repoName}/pulls/${pr1Index}/merge`,
       {
@@ -432,6 +448,7 @@ async function probeGiteaLocalIsolated(giteaBin) {
       `${baseUrl}/api/v1/repos/${authorUser}/${repoName}/pulls/${pr1Index}/reviews`,
       { method: 'POST', ...approverAuth, body: { event: 'APPROVED', body: 'Re-approved under modified cap' } },
     );
+    await waitMergeable(pr1Index);
     const firstMergeCommit = await jsonRequest(
       `${baseUrl}/api/v1/repos/${authorUser}/${repoName}/pulls/${pr1Index}/merge`,
       {
@@ -526,7 +543,10 @@ async function probeGiteaLocalIsolated(giteaBin) {
     const staleRefusedPass =
       !staleMerge.ok && staleMerge.status >= 400 && prAfterStale.body?.merged === false;
     const liveDbTruthRevocationPass =
-      !revokedMerge.ok && revokedMerge.status >= 400 && prAfterRevoked.body?.merged === false;
+      !revokedMerge.ok
+      && revokedMerge.status >= 400
+      && !String(revokedMerge.body?.message ?? '').includes('Please try again later')
+      && prAfterRevoked.body?.merged === false;
     const abaCommittedOnStock = firstMergeCommit.ok && firstMergeCommit.status === 200;
     const droppedAckMergeSingleCommitPass =
       firstMergeCommit.status === 200
@@ -550,6 +570,7 @@ async function probeGiteaLocalIsolated(giteaBin) {
         staleVersionWrite: {
           endpoint: `POST /api/v1/repos/${authorUser}/${repoName}/pulls/${pr1Index}/merge`,
           httpStatus: staleMerge.status,
+          responseMessage: staleMerge.body?.message ?? null,
           mergedAfterAttempt: Boolean(prAfterStale.body?.merged),
           appLogCommits: 0,
           passesRule: staleRefusedPass,
@@ -557,6 +578,7 @@ async function probeGiteaLocalIsolated(giteaBin) {
         liveDbTruthRevokedApproval: {
           endpoint: `POST /api/v1/repos/${authorUser}/${repoName}/pulls/${pr1Index}/merge`,
           httpStatus: revokedMerge.status,
+          responseMessage: revokedMerge.body?.message ?? null,
           mergedAfterAttempt: Boolean(prAfterRevoked.body?.merged),
           appLogCommits: 0,
           passesCurrentStateLiveTruthRule: liveDbTruthRevocationPass,
@@ -570,7 +592,9 @@ async function probeGiteaLocalIsolated(giteaBin) {
         droppedAckRetryOnVersionedMerge: {
           endpoint: `POST /api/v1/repos/${authorUser}/${repoName}/pulls/${pr1Index}/merge`,
           firstCallHttpStatus: firstMergeCommit.status,
+          firstCallResponseMessage: firstMergeCommit.body?.message ?? null,
           retryCallHttpStatus: droppedAckMergeRetry.status,
+          retryResponseMessage: droppedAckMergeRetry.body?.message ?? null,
           totalMergeCommitsInAppRepoAndLogs: mergeCommitsOnMain.length,
           duplicateCommits: Math.max(0, mergeCommitsOnMain.length - 1),
           passesRule: droppedAckMergeSingleCommitPass,

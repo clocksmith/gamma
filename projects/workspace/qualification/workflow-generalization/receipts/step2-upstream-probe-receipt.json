@@ -1,0 +1,104 @@
+{
+  "schema": "gammatron-step2-upstream-contract-probe-v1",
+  "spendUsd": 0,
+  "passRuleId": "Stage2-Contract-Pass-v1",
+  "passRuleRecordedBeforeProbeAtUrl": "https://github.com/clocksmith/deco/issues/88#issuecomment-7084324033",
+  "probedAtUtc": "2026-11-22T19:25:27.794Z",
+  "targets": {
+    "openproject": {
+      "appId": "openproject",
+      "auditedReleasePair": "v13.4.0->v14.0.0",
+      "tier": "Tier-A1",
+      "status": "blocked-awaiting-docker-and-owner-approved-container-tags-and-accounts",
+      "dockerAvailable": false,
+      "dockerDetail": "Cannot connect to the Docker daemon at unix://<USER_HOME>/.docker/run/docker.sock. Is the docker daemon running?",
+      "ownerGateRequired": [
+        "Approve OpenProject container tags (`openproject/openproject:13.4.0` -> `14.0.0`) and target UI workflow",
+        "Start local Docker daemon and provision isolated local test accounts"
+      ],
+      "passRulePreDecision": {
+        "prerequisiteCheckMode": "live-db-truth-at-commit",
+        "passesCurrentStateCrossEntitySafety": true,
+        "passesCallerPinnedAbaVersionBinding": false
+      }
+    },
+    "erpnext": {
+      "appId": "erpnext",
+      "auditedReleasePair": "v15.10.0->v15.20.0",
+      "tier": "Tier-A2",
+      "status": "blocked-awaiting-docker-and-owner-approved-container-tags-and-accounts",
+      "dockerAvailable": false,
+      "dockerDetail": "Cannot connect to the Docker daemon at unix://<USER_HOME>/.docker/run/docker.sock. Is the docker daemon running?",
+      "ownerGateRequired": [
+        "Approve Frappe/ERPNext container tags (`frappe/erpnext:v15.10.0` -> `v15.20.0`) and draft-staging (`docstatus=0`) workflow",
+        "Start local Docker daemon and provision isolated local test accounts"
+      ],
+      "passRulePreDecision": {
+        "prerequisiteCheckMode": "live-db-truth-at-commit",
+        "passesCurrentStateCrossEntitySafety": true,
+        "passesCallerPinnedAbaVersionBinding": false
+      }
+    },
+    "gitea": {
+      "appId": "gitea",
+      "auditedReleasePair": "v1.21.11->v1.22.0",
+      "probedBinaryVersion": "Gitea version 1.21.11 built with GNU Make 4.3, go1.21.8 : bindata, sqlite, sqlite_unlock_notify",
+      "tier": "Tier-A3-endpoint-split",
+      "status": "probed-local-isolated-accounts-zero-dollar",
+      "isolatedAccounts": [
+        "probe_author_isolated",
+        "probe_approver_isolated"
+      ],
+      "retainedServerLogPath": "projects/workspace/qualification/workflow-generalization/receipts/logs/gitea-v1.21.11-step2-probe.log",
+      "retainedServerLogSha256": "8da79d49b553abd4b4b68fb70e6875c4bc0256bf45f7bda0274dbea6fe44caa3",
+      "mergeAccessLogLinesCount": 8,
+      "checks": {
+        "staleVersionWrite": {
+          "endpoint": "POST /api/v1/repos/probe_author_isolated/po-release-gate/pulls/1/merge",
+          "httpStatus": 409,
+          "responseMessage": "head out of date",
+          "mergedAfterAttempt": false,
+          "appLogCommits": 0,
+          "passesRule": true
+        },
+        "liveDbTruthRevokedApproval": {
+          "endpoint": "POST /api/v1/repos/probe_author_isolated/po-release-gate/pulls/1/merge",
+          "httpStatus": 405,
+          "responseMessage": "not allowed to merge [reason: Does not have enough approvals]",
+          "mergedAfterAttempt": false,
+          "appLogCommits": 0,
+          "passesCurrentStateLiveTruthRule": true
+        },
+        "abaHistoricalSiblingVersionDrift": {
+          "sequence": "APPROVED(v1) -> REQUEST_CHANGES(v2) -> APPROVED(v3) while caller holds v1 attestation",
+          "httpStatus": 200,
+          "committedOnStockWithoutCallerVersionValidator": true,
+          "passesLiteralCallerPinnedPredicateVersions": false
+        },
+        "droppedAckRetryOnVersionedMerge": {
+          "endpoint": "POST /api/v1/repos/probe_author_isolated/po-release-gate/pulls/1/merge",
+          "firstCallHttpStatus": 200,
+          "firstCallResponseMessage": null,
+          "retryCallHttpStatus": 405,
+          "retryResponseMessage": "",
+          "totalMergeCommitsInAppRepoAndLogs": 1,
+          "duplicateCommits": 0,
+          "passesRule": true
+        },
+        "droppedAckRetryOnUnversionedReviewsEndpointSplit": {
+          "endpoint": "POST /api/v1/repos/probe_author_isolated/po-release-gate/pulls/2/reviews",
+          "firstCallHttpStatus": 200,
+          "retryCallHttpStatus": 200,
+          "totalReviewRecordsCreated": 2,
+          "duplicateCommits": 1,
+          "passesRuleWithoutIdempotencySidecar": false
+        }
+      },
+      "overallVerdictUnderStage2ContractPassV1": {
+        "mergeEndpointPasses": true,
+        "reviewsPostEndpointPassesStock": false,
+        "abaCallerPinnedVersionRequiresCustomValidatorOrSidecar": true
+      }
+    }
+  }
+}
