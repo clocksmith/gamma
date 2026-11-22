@@ -425,8 +425,9 @@ class TraceSession {
     suffixEligibility = false, slotRoles = null, inertFormLocators = [],
     assertPrerequisite = null, requirePrerequisiteCheck = false,
     requireConditionalWrite = false, requireMultiPredicateWrite = false,
+    requireVerifiedEntryPrerequisites = false, entryRestsOnUnavailablePrerequisite = false,
     crossScreenRule = false, attestPrerequisites = null, effectForStep = null,
-    attestedPredicateVersions = [], externalPredicateVersions = null }) {
+    attestedPredicateVersions = [], externalPredicateVersions = null, externalEntryUnavailable = null }) {
     if (typeof template !== 'string' || !template || typeof pageId !== 'string' || !pageId
       || typeof intent !== 'string' || !intent) throw Error('Trace requires template, pageId and intent');
     if (goal !== null && (typeof goal !== 'string' || !goal.trim())) throw Error('Invalid trace goal');
@@ -459,13 +460,17 @@ class TraceSession {
     this.requirePrerequisiteCheck = Boolean(requirePrerequisiteCheck);
     this.requireConditionalWrite = Boolean(requireConditionalWrite);
     this.requireMultiPredicateWrite = Boolean(requireMultiPredicateWrite);
+    this.requireVerifiedEntryPrerequisites = Boolean(requireVerifiedEntryPrerequisites);
     // The cross-screen rule (cross-screen-rule.md) is opt-in and applies to the index matcher only.
     this.crossScreenRule = crossScreenRule === true;
     this.attestPrerequisites = typeof attestPrerequisites === 'function' ? attestPrerequisites : null;
     this.effectForStep = typeof effectForStep === 'function' ? effectForStep : null;
     this.attestedPredicateVersions = Array.isArray(attestedPredicateVersions) ? structuredClone(attestedPredicateVersions) : [];
     this.unavailablePredicates = [];
+    this.entryRestsOnUnavailablePrerequisite = Boolean(entryRestsOnUnavailablePrerequisite);
+    this.unverifiedUnavailablePrerequisiteWrites = 0;
     this.externalPredicateVersions = typeof externalPredicateVersions === 'function' ? externalPredicateVersions : null;
+    this.externalEntryUnavailable = typeof externalEntryUnavailable === 'function' ? externalEntryUnavailable : null;
     this.clickLocators = new Map(intermediateClicks.map(locator => [dag.hash(['locator', locator]), locator]));
     this.options = { service, owner, pageId, intent, template, inputs, intermediateClicks, signal,
       assertContext, authorizeStep, accountScope, recordId, fieldGroups, goal,
@@ -473,8 +478,10 @@ class TraceSession {
       suffixEligibility: this.suffixEligibility, slotRoles: this.slotRolesPolicy, inertFormLocators: this.inertFormLocators,
       assertPrerequisite: this.assertPrerequisite, requirePrerequisiteCheck: this.requirePrerequisiteCheck,
       requireConditionalWrite: this.requireConditionalWrite, requireMultiPredicateWrite: this.requireMultiPredicateWrite,
+      requireVerifiedEntryPrerequisites: this.requireVerifiedEntryPrerequisites,
+      entryRestsOnUnavailablePrerequisite: this.entryRestsOnUnavailablePrerequisite,
       crossScreenRule: this.crossScreenRule, attestPrerequisites: this.attestPrerequisites, effectForStep: this.effectForStep,
-      externalPredicateVersions: this.externalPredicateVersions };
+      externalPredicateVersions: this.externalPredicateVersions, externalEntryUnavailable: this.externalEntryUnavailable };
     const roleBinding = resolveRoleBoundInputs({
       inputs,
       slotRoles: this.slotRolesPolicy,
@@ -684,6 +691,20 @@ class TraceSession {
         throw Object.assign(Error(prereqResult?.reason || 'Server prerequisite check refused action'), {
           code: 'prerequisite-refused',
         });
+      }
+    }
+    const entryUnavailableActive = this.entryRestsOnUnavailablePrerequisite
+      || (this.externalEntryUnavailable ? this.externalEntryUnavailable() === true : false);
+    if (entryUnavailableActive) {
+      const clearedByLiveCheck = prereqResult?.verifiedUnavailable === true;
+      if ((this.requireVerifiedEntryPrerequisites || this.requireMultiPredicateWrite) && !clearedByLiveCheck) {
+        throw Object.assign(
+          Error('Unavailable prerequisite cannot authorize write without explicit live verification'),
+          { code: 'unavailable-prerequisite-blocks-write' },
+        );
+      }
+      if (!clearedByLiveCheck) {
+        this.unverifiedUnavailablePrerequisiteWrites += 1;
       }
     }
     const stepEffect = typeof this.effectForStep === 'function'
@@ -940,6 +961,8 @@ class TraceSession {
     continuation.traceEvents = structuredClone(this.traceEvents);
     continuation.attestedPredicateVersions = structuredClone(this.attestedPredicateVersions);
     continuation.unavailablePredicates = structuredClone(this.unavailablePredicates);
+    continuation.entryRestsOnUnavailablePrerequisite = this.entryRestsOnUnavailablePrerequisite;
+    continuation.unverifiedUnavailablePrerequisiteWrites = this.unverifiedUnavailablePrerequisiteWrites;
     continuation.repairedSession = true;
     const exact = continuation.frame(before.observation);
     if (this.fieldScope) continuation.repairs.push({ id: before.id, depth: this.depth, next: exact.id });
@@ -998,7 +1021,17 @@ class TraceSession {
         if (step.kind === 'click' ? locator : slot) asked.set(key, { kind: step.kind, slot, locator });
       }
     }
-    if (!asked.size) return { attested: new Set(), refutable: new Set(), predicateVersions: [], unavailable: [], valid: true };
+    if (!asked.size) {
+      return {
+        attested: new Set(),
+        refutable: new Set(),
+        explicitlyRefuted: new Set(),
+        unavailableSteps: new Set(),
+        predicateVersions: [],
+        unavailable: [],
+        valid: true,
+      };
+    }
     let answers;
     try {
       answers = await this.attestPrerequisites({
@@ -1006,14 +1039,32 @@ class TraceSession {
         url: before.observation.url,
         skipped: structuredClone([...asked.values()]),
       });
-    } catch { return { attested: new Set(), refutable: new Set(asked.keys()), predicateVersions: [], unavailable: [], valid: false }; }
+    } catch {
+      return {
+        attested: new Set(),
+        refutable: new Set(asked.keys()),
+        explicitlyRefuted: new Set(asked.keys()),
+        unavailableSteps: new Set(),
+        predicateVersions: [],
+        unavailable: [],
+        valid: false,
+      };
+    }
     const parsed = normalizeAttestationAnswers(answers, {
       expectedCount: asked.size,
       accountScope: this.accountScope,
       recordId: this.recordId,
     });
     if (!parsed.valid) {
-      return { attested: new Set(), refutable: new Set(asked.keys()), predicateVersions: [], unavailable: [], valid: false };
+      return {
+        attested: new Set(),
+        refutable: new Set(asked.keys()),
+        explicitlyRefuted: new Set(asked.keys()),
+        unavailableSteps: new Set(),
+        predicateVersions: [],
+        unavailable: [],
+        valid: false,
+      };
     }
     const keys = [...asked.keys()];
     if (parsed.unavailable.length > 0) {
@@ -1022,6 +1073,8 @@ class TraceSession {
     return {
       attested: new Set(keys.filter((_, index) => parsed.holdsByIndex[index] === true)),
       refutable: new Set(keys.filter((_, index) => parsed.refutableByIndex[index] === true)),
+      explicitlyRefuted: new Set(keys.filter((_, index) => parsed.explicitlyRefutedByIndex[index] === true)),
+      unavailableSteps: new Set(keys.filter((_, index) => parsed.unavailableByIndex[index] === true)),
       predicateVersions: parsed.predicateVersions,
       unavailable: parsed.unavailable,
       valid: true,
@@ -1036,8 +1089,13 @@ class TraceSession {
         inertFormLocators: this.inertFormLocators,
         ...(att ? {
           isAttested: step => att.attested.has(canonicalJson(step)),
-          ...(atEntry && att.valid && att.refutable.size > 0
-            ? { atEntry: true, isPotentialAttested: step => att.refutable.has(canonicalJson(step)) }
+          ...(atEntry && att.valid && (att.explicitlyRefuted.size > 0 || att.unavailableSteps.size > 0)
+            ? {
+                atEntry: true,
+                isPotentialAttested: step => att.refutable.has(canonicalJson(step)),
+                isExplicitlyRefutedStep: step => att.explicitlyRefuted.has(canonicalJson(step)),
+                isUnavailableStep: step => att.unavailableSteps.has(canonicalJson(step)),
+              }
             : {}),
         } : {}),
         settledSuccessors: this.crossScreenRule,
@@ -1045,6 +1103,9 @@ class TraceSession {
         formStateFresh: before.observation === this.lastObservation,
         executedSteps: [...this.priorSteps, ...this.records.map(record => record.step)],
         isGoalTerminal: (id, node) => this.#isGoalTerminal(id, node) } });
+    if (atEntry && outcome.entryRestsOnUnavailablePrerequisite) {
+      this.entryRestsOnUnavailablePrerequisite = true;
+    }
     if (outcome.status === 'certified' && att?.predicateVersions?.length) {
       const seen = new Set(this.attestedPredicateVersions.map(p => `${p.account ?? ''}|${p.record}|${p.predicate}`));
       for (const p of att.predicateVersions) {
@@ -1059,7 +1120,8 @@ class TraceSession {
       ...(outcome.status === 'certified'
         ? { learnedNode: outcome.nodeId.slice(0, 12), ...(outcome.attested ? { attested: true } : {}) }
         : { reason: outcome.reason, refusals: outcome.refusals,
-          ...(outcome.attestationRefuted ? { attestationRefuted: true } : {}) }),
+          ...(outcome.attestationRefuted ? { attestationRefuted: true } : {}),
+          ...(outcome.entryRestsOnUnavailablePrerequisite ? { entryRestsOnUnavailablePrerequisite: true } : {}) }),
       ...(att?.unavailable?.length ? { unavailablePredicates: att.unavailable.length } : {}),
     });
     return outcome.status === 'certified' ? outcome : null;

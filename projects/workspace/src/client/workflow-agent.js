@@ -12,15 +12,62 @@ export const WORKFLOW_TOOLS = Object.freeze({
 });
 
 // Selected by the single-pass preregistered decision rule on blind-holdout-v3 (`016a6b701`,
-// `gammatron-graph-clears-mesi`: 79 -> 19 planner turns, -60 turns / -75.95% relative, 22/24 vs.
-// 22/24 completions, 0 vs. 0 forbidden/duplicate effects). When a supported Direct Write-API
-// exists, prefer it over browser replay; on strictly linear single-path workflows (`K = 1`),
-// `attested-checkpointed-skill` ties on v2 calibration (17 vs. 17 turns, 17 vs. 36 predicate reads).
+// `gammatron-graph-clears-mesi`: 79 -> 19 planner turns vs. flat checkpointed skill, 22/24 vs.
+// 22/24 completions, 0 vs. 0 forbidden/duplicate effects), and refined on the post-v3 modular
+// revision:
+//   1. Where a supported Direct Write-API already performs the transition without needing
+//      pre-submit UI review or in-browser context gathering, use the Direct API—do not build UI replay.
+//   2. Generic middleware can standardize optimistic version checks and idempotency journals,
+//      whereas domain business prerequisites (which cross-entity approvals/states authorize a
+//      transition) cannot be inferred from schemas and must stay explicit in both APIs and UI hosts.
+//   3. Where UI replay is warranted: `attested-checkpointed-skill` covers strictly linear (`K = 1`)
+//      paths; `attested-modular-skill` (callable shared suffixes + repair reuse) matches `gammatron-graph`
+//      on screen-factored reconverging branches; `gammatron-graph` (`TraceDag` + Bellman DP) separates
+//      when multi-exit hubs require downstream slot/goal-conditioned routing or intra-screen state merge.
 export const DEFAULT_WORKFLOW_REPRESENTATION = 'gammatron-graph';
+export const DEFAULT_MODULAR_SKILL_REPRESENTATION = 'attested-modular-skill';
 export const DEFAULT_SINGLE_PATH_REPRESENTATION = 'attested-checkpointed-skill';
-export function selectWorkflowRepresentation({ hasDirectWriteApi = false, singlePathOnly = false } = {}) {
-  if (hasDirectWriteApi) return 'direct-write-api';
+
+export function evaluateReplayApplicability({
+  hasDirectWriteApi = false,
+  requiresPreSubmitUiReview = false,
+  requiresInBrowserContextGathering = false,
+  explicitBusinessPrerequisites = [],
+} = {}) {
+  if (!Array.isArray(explicitBusinessPrerequisites)
+    || explicitBusinessPrerequisites.some(rule => typeof rule !== 'string' || !rule.trim())) {
+    throw Error('explicitBusinessPrerequisites must be an array of non-empty domain rule names');
+  }
+  const useDirectApi = Boolean(hasDirectWriteApi && !requiresPreSubmitUiReview && !requiresInBrowserContextGathering);
+  return {
+    worthBuildingReplay: !useDirectApi,
+    recommendedChannel: useDirectApi ? 'direct-write-api' : 'browser-workflow-replay',
+    reason: useDirectApi
+      ? 'supported-write-api-solves-task'
+      : (hasDirectWriteApi ? 'ui-review-or-browser-context-required' : 'no-supported-write-api'),
+    contractResponsibilities: {
+      middlewareStandardizable: ['optimistic-version-check', 'idempotency-journal-deduplication'],
+      explicitDomainBusinessRules: [...explicitBusinessPrerequisites],
+      schemaInferableAuthorization: false,
+    },
+  };
+}
+
+export function selectWorkflowRepresentation({
+  hasDirectWriteApi = false,
+  requiresPreSubmitUiReview = false,
+  requiresInBrowserContextGathering = false,
+  singlePathOnly = false,
+  screenFactoredSharedSuffixesOnly = false,
+} = {}) {
+  const applicability = evaluateReplayApplicability({
+    hasDirectWriteApi,
+    requiresPreSubmitUiReview,
+    requiresInBrowserContextGathering,
+  });
+  if (!applicability.worthBuildingReplay) return 'direct-write-api';
   if (singlePathOnly) return DEFAULT_SINGLE_PATH_REPRESENTATION;
+  if (screenFactoredSharedSuffixesOnly) return DEFAULT_MODULAR_SKILL_REPRESENTATION;
   return DEFAULT_WORKFLOW_REPRESENTATION;
 }
 export const WORKFLOW_SYSTEM = 'Complete the requested bounded UI task through its named result or review screen, never final submission. '
@@ -101,6 +148,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
   suffixIndex = null, suffixEligibility = false, slotRoles = null, inertFormLocators = [], includeFormState = false,
   assertPrerequisite = null, requirePrerequisiteCheck = false,
   requireConditionalWrite = false, requireMultiPredicateWrite = false,
+  requireVerifiedEntryPrerequisites = false,
   crossScreenRule = false, attestPrerequisites = null, effectForStep = null }) {
   if (!['learn', 'fresh', 'reuse'].includes(mode)) throw Error('Invalid workflow mode');
   if (typeof learnRepairs !== 'boolean') throw Error('Explicit boolean repair-learning policy required');
@@ -131,11 +179,15 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
     assertCurrent();
   };
   const externalPredicateVersions = () => (typeof planner?.predicateVersions === 'function' ? planner.predicateVersions() : []);
+  const externalEntryUnavailable = () => (typeof planner?.entryRestsOnUnavailablePrerequisite === 'function'
+    ? planner.entryRestsOnUnavailablePrerequisite() === true
+    : false);
   const options = { service, owner, pageId, intent, template, inputs, intermediateClicks, signal,
     assertContext: assertWorkflowContext, authorizeStep, accountScope, recordId, fieldGroups, goal,
     suffixIndex, suffixEligibility, slotRoles, inertFormLocators, includeFormState,
     assertPrerequisite, requirePrerequisiteCheck, requireConditionalWrite, requireMultiPredicateWrite,
-    crossScreenRule, attestPrerequisites, effectForStep, externalPredicateVersions };
+    requireVerifiedEntryPrerequisites,
+    crossScreenRule, attestPrerequisites, effectForStep, externalPredicateVersions, externalEntryUnavailable };
   // A replacement session keeps the steps already executed in this run across all arms for entry/reconvergence accountability.
   const carriedSteps = () => [...recorder.priorSteps, ...recorder.records.map(record => record.step)];
   // Suffix decisions and certified rejoins made by a session that was later replaced still count in the result.
@@ -143,16 +195,19 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
   const retiredRejoins = [];
   const retiredPredicates = [];
   const retiredUnavailable = [];
+  let retiredUnverifiedUnavailableWrites = 0;
   const replaceRecorder = () => {
     retiredEvents.push(...(recorder.traceEvents ?? []));
     retiredRejoins.push(...(recorder.certifiedSuffixRejoins ?? []));
     retiredPredicates.push(...(recorder.attestedPredicateVersions ?? []));
     retiredUnavailable.push(...(recorder.unavailablePredicates ?? []));
+    retiredUnverifiedUnavailableWrites += recorder.unverifiedUnavailablePrerequisiteWrites ?? 0;
     return dag.session({
       ...options,
       fieldGroups: null,
       executedSteps: carriedSteps(),
       attestedPredicateVersions: structuredClone(recorder.attestedPredicateVersions ?? []),
+      entryRestsOnUnavailablePrerequisite: Boolean(recorder.entryRestsOnUnavailablePrerequisite),
     });
   };
   const suffixSummary = () => {
@@ -178,6 +233,8 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       ...(recorder?.unavailablePredicates ?? []),
       ...(typeof planner?.unavailablePredicates === 'function' ? planner.unavailablePredicates() : []),
     ]);
+    const unverifiedUnavailablePrerequisiteWrites = retiredUnverifiedUnavailableWrites
+      + (recorder?.unverifiedUnavailablePrerequisiteWrites ?? 0);
     return { mode, status: completed ? 'completed' : 'needs-attention', completed, detail, verification,
       modelCalls, cacheSteps, prefixCacheSteps, reconvergedCacheSteps, replayMs, askedForHelp, fallbackReason,
       certifiedSuffixRejoins: structuredClone([...retiredRejoins, ...(recorder?.certifiedSuffixRejoins ?? [])]),
@@ -185,6 +242,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
       stage0Profile: recorder ? structuredClone(recorder.stage0Profile ?? null) : null,
       traceEvents: structuredClone([...retiredEvents, ...(recorder?.traceEvents ?? [])]),
       ...(unavailablePredicates.length ? { unavailablePredicates } : {}),
+      ...(unverifiedUnavailablePrerequisiteWrites > 0 ? { unverifiedUnavailablePrerequisiteWrites } : {}),
       ...(suffixIndex ? { suffix: suffixSummary() } : {}),
       elapsedMs: performance.now() - started, humanInterventions: 0, interventionRequests: completed ? 0 : 1 };
   };

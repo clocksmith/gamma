@@ -153,10 +153,20 @@ export function accountedReach(nodes, isAccounted, roots = null) {
  */
 export function normalizeAttestationAnswers(answers, { expectedCount, accountScope = null, recordId = null } = {}) {
   if (!Array.isArray(answers) || answers.length !== expectedCount) {
-    return { valid: false, holdsByIndex: [], refutableByIndex: [], predicateVersions: [], unavailable: [] };
+    return {
+      valid: false,
+      holdsByIndex: [],
+      refutableByIndex: [],
+      explicitlyRefutedByIndex: [],
+      unavailableByIndex: [],
+      predicateVersions: [],
+      unavailable: [],
+    };
   }
   const holdsByIndex = [];
   const refutableByIndex = [];
+  const explicitlyRefutedByIndex = [];
+  const unavailableByIndex = [];
   const predicateVersions = [];
   const unavailable = [];
   const seenKeys = new Set();
@@ -166,14 +176,26 @@ export function normalizeAttestationAnswers(answers, { expectedCount, accountSco
     if (typeof entry === 'boolean') {
       holdsByIndex.push(entry);
       refutableByIndex.push(true);
+      explicitlyRefutedByIndex.push(!entry);
+      unavailableByIndex.push(false);
       continue;
     }
     if (!entry || typeof entry !== 'object') {
-      return { valid: false, holdsByIndex: [], refutableByIndex: [], predicateVersions: [], unavailable: [] };
+      return {
+        valid: false,
+        holdsByIndex: [],
+        refutableByIndex: [],
+        explicitlyRefutedByIndex: [],
+        unavailableByIndex: [],
+        predicateVersions: [],
+        unavailable: [],
+      };
     }
     if (entry.status === 'unavailable' || entry.unavailable === true) {
       holdsByIndex.push(false);
       refutableByIndex.push(false);
+      explicitlyRefutedByIndex.push(false);
+      unavailableByIndex.push(true);
       unavailable.push({
         index,
         predicate: typeof entry.predicate === 'string' ? entry.predicate : null,
@@ -187,17 +209,29 @@ export function normalizeAttestationAnswers(answers, { expectedCount, accountSco
       || typeof entry.record !== 'string' || !entry.record.length
       || typeof entry.predicate !== 'string' || !entry.predicate.length
       || !validVersion) {
-      return { valid: false, holdsByIndex: [], refutableByIndex: [], predicateVersions: [], unavailable: [] };
+      return {
+        valid: false,
+        holdsByIndex: [],
+        refutableByIndex: [],
+        explicitlyRefutedByIndex: [],
+        unavailableByIndex: [],
+        predicateVersions: [],
+        unavailable: [],
+      };
     }
     const accountOk = accountScope === null || entry.account === accountScope;
     const recordOk = recordId === null || entry.record === recordId;
     if (!accountOk || !recordOk) {
       holdsByIndex.push(false);
       refutableByIndex.push(true);
+      explicitlyRefutedByIndex.push(true);
+      unavailableByIndex.push(false);
       continue;
     }
     holdsByIndex.push(entry.holds);
     refutableByIndex.push(true);
+    explicitlyRefutedByIndex.push(!entry.holds);
+    unavailableByIndex.push(false);
     if (entry.holds) {
       const dedupKey = `${entry.account}|${entry.record}|${entry.predicate}`;
       if (!seenKeys.has(dedupKey)) {
@@ -211,7 +245,15 @@ export function normalizeAttestationAnswers(answers, { expectedCount, accountSco
       }
     }
   }
-  return { valid: true, holdsByIndex, refutableByIndex, predicateVersions, unavailable };
+  return {
+    valid: true,
+    holdsByIndex,
+    refutableByIndex,
+    explicitlyRefutedByIndex,
+    unavailableByIndex,
+    predicateVersions,
+    unavailable,
+  };
 }
 
 /** Shared dirty-untracked-<form>-field predicate used identically across SuffixIndex and AttestedSkill. */
@@ -278,10 +320,27 @@ export function certifySuffix({ dag, index, dp, frame, session, restrictTo = nul
   const slotDone = slot => executedSlots.has(slot) || settled(slot);
   const carriedOrSettled = step => (step.kind === 'click' ? executedClicks.has(step.locator) : slotDone(step.slot));
   const isAttested = typeof session.isAttested === 'function' ? session.isAttested : () => false;
+  const isUnavailableStep = typeof session.isUnavailableStep === 'function' ? session.isUnavailableStep : () => false;
+  const isExplicitlyRefutedStep = typeof session.isExplicitlyRefutedStep === 'function'
+    ? session.isExplicitlyRefutedStep
+    : (typeof session.isPotentialAttested === 'function'
+        ? step => session.isPotentialAttested(step) === true && isAttested(step) !== true
+        : () => false);
   const reachWithoutAttestation = accountedReach(dag.nodes, carriedOrSettled, dag.roots);
   const reach = accountedReach(dag.nodes, step => carriedOrSettled(step) || isAttested(step) === true, dag.roots);
-  const reachIfAllAttested = session.atEntry === true && typeof session.isPotentialAttested === 'function'
-    ? accountedReach(dag.nodes, step => carriedOrSettled(step) || session.isPotentialAttested(step) === true, dag.roots)
+  // Hub reasoning rule: an untaken branch returning `holds: false` does not refute a sibling branch
+  // whose unverified steps returned `{ status: 'unavailable' }`, while `unavailable` never enters `reach`
+  // (and therefore never authorizes an automated suffix write).
+  const reachIfUnrefuted = session.atEntry === true
+    ? accountedReach(dag.nodes, step => carriedOrSettled(step) || isAttested(step) === true || isUnavailableStep(step) === true, dag.roots)
+    : null;
+  const reachIfAllEvaluated = session.atEntry === true
+    && (typeof session.isPotentialAttested === 'function' || typeof session.isExplicitlyRefutedStep === 'function')
+    ? accountedReach(
+        dag.nodes,
+        step => carriedOrSettled(step) || isAttested(step) === true || isUnavailableStep(step) === true || isExplicitlyRefutedStep(step) === true,
+        dag.roots,
+      )
     : null;
   // Clause 4: a state reached from an allowed successor through fills that are settled on the page.
   let allowed = restrictTo;
@@ -297,6 +356,7 @@ export function certifySuffix({ dag, index, dp, frame, session, restrictTo = nul
 
   const liveStatusJson = canonicalJson(frame.meta.status ?? []);
   let anyScreenMatchInReach = false;
+  let anyScreenMatchUnrefutedViaUnavailable = false;
   let anyScreenMatchRefutedByAttestation = false;
 
   const eligible = [];
@@ -310,7 +370,8 @@ export function certifySuffix({ dag, index, dp, frame, session, restrictTo = nul
     const screenMatches = common >= policy.minOverlap * Math.max(meta.bag.length, live.length);
     if (screenMatches) {
       if (reach.has(id)) anyScreenMatchInReach = true;
-      else if (reachIfAllAttested?.has(id)) anyScreenMatchRefutedByAttestation = true;
+      else if (reachIfUnrefuted?.has(id)) anyScreenMatchUnrefutedViaUnavailable = true;
+      else if (reachIfAllEvaluated?.has(id)) anyScreenMatchRefutedByAttestation = true;
     }
     if (!reach.has(id)) { reject('prefix-unaccounted'); continue; }
     if (!screenMatches) { reject('page-mismatch'); continue; }
@@ -353,7 +414,21 @@ export function certifySuffix({ dag, index, dp, frame, session, restrictTo = nul
         break;
       }
       if (typeof session.inputs.get(step.slot) !== 'string') { cannot('missing-input-slot'); break; }
-      if (slotDone(step.slot)) { failure = 'pending-fill-already-done'; break; }
+      if (slotDone(step.slot)) {
+        // Under Clause 4 (`settledSuccessors`), if a later local fill on the same screen already holds
+        // the exact expected input value (`settled` and not yet executed in this session), lookahead
+        // advances past it while still recording its element in `targets` for <form> dirty-field checks.
+        if (stepIndex > 0 && session.settledSuccessors === true && settled(step.slot) && !executedSlots.has(step.slot)) {
+          targets.push(element);
+          const settledOutcomes = current.edges.filter(edge => edge.step.kind === step.kind && edge.step.locator === step.locator
+            && edge.step.slot === step.slot);
+          if (settledOutcomes.length !== 1) break;
+          cursor = settledOutcomes[0].next;
+          continue;
+        }
+        failure = 'pending-fill-already-done';
+        break;
+      }
       targets.push(element);
       const outcomes = current.edges.filter(edge => edge.step.kind === step.kind && edge.step.locator === step.locator
         && edge.step.slot === step.slot);
@@ -387,10 +462,17 @@ export function certifySuffix({ dag, index, dp, frame, session, restrictTo = nul
     eligible.push({ id, terminal, attested: !reachWithoutAttestation.has(id) });
   }
   if (eligible.length !== 1) {
-    const attestationRefuted = eligible.length === 0 && !anyScreenMatchInReach && anyScreenMatchRefutedByAttestation;
+    const attestationRefuted = eligible.length === 0
+      && !anyScreenMatchInReach
+      && !anyScreenMatchUnrefutedViaUnavailable
+      && anyScreenMatchRefutedByAttestation;
+    const entryRestsOnUnavailablePrerequisite = eligible.length === 0
+      && !anyScreenMatchInReach
+      && anyScreenMatchUnrefutedViaUnavailable;
     return {
       ...refused(eligible.length ? 'ambiguous-candidates' : 'no-eligible-candidate'),
       ...(attestationRefuted ? { attestationRefuted: true } : {}),
+      ...(entryRestsOnUnavailablePrerequisite ? { entryRestsOnUnavailablePrerequisite: true } : {}),
     };
   }
   return { status: 'certified', nodeId: eligible[0].id, terminal: eligible[0].terminal, attested: eligible[0].attested };
