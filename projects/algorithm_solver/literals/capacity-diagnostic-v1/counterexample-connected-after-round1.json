@@ -1,0 +1,41 @@
+{
+  "schema": "connected-theorem-a-counterexample/v1",
+  "provenance": "Constructed by reasoning after the 60-corpus frozen Round 1 search (PREREGISTRATION-CONNECTED.md) returned 0/60 hits, then checked by exhaustive legal tiling enumeration in connected_search.py.",
+  "whyRound1Missed": "Single-character identification (B1) and length-2 bridges (B2/B3) inject a forced singleton block e_c into M2, breaking M2's rank-3 invariant v(px)+v(qy)=v(py)+v(qx) and lifting blockRank to full alphabet size. Prepending shared block 'ab' from M1 onto 'pxqy' in M2 connects the program character-cooccurrence graph across a forced cut (b|p) without injecting any singleton into M2.",
+  "sevenProgramBridge": {
+    "programs": ["abd", "abe", "fbd", "abpxqy", "qypx", "pyqx", "qxpy"],
+    "programCount": 7,
+    "alphabetSize": 9,
+    "totalLength": 27,
+    "programConnectedComponents": 1,
+    "forcedBlockConnectedComponents": 2,
+    "allSingletonsEligible": true,
+    "blockRank": 8,
+    "disjointBound": 8,
+    "exactOptW2": 9,
+    "matchesFailureTarget": true
+  },
+  "minimizedConnectedCounterexample": {
+    "programs": ["abd", "fbd", "abpxqy", "qypx", "pyqx", "qxpy"],
+    "programCount": 6,
+    "alphabetSize": 8,
+    "totalLength": 24,
+    "programConnectedComponents": 1,
+    "forcedBlockConnectedComponents": 2,
+    "forcedBlockComponentDecomposition": [
+      {"blocks": ["ab", "abd", "bd", "f"], "alphabetSize": 4, "blockRank": 4, "disjointBound": 3, "stronger": 4},
+      {"blocks": ["px", "py", "qx", "qy"], "alphabetSize": 4, "blockRank": 3, "disjointBound": 4, "stronger": 4}
+    ],
+    "allSingletonsEligible": true,
+    "blockRank": 7,
+    "blockRankPrimes": [
+      {"prime": 1000000007, "base": 2, "rank": 7},
+      {"prime": 998244353, "base": 3, "rank": 7}
+    ],
+    "disjointBound": 7,
+    "exactOptW2": 8,
+    "optimalDictionary": ["a", "b", "d", "f", "p", "q", "x", "y"],
+    "matchesFailureTarget": true
+  },
+  "sharpNextQuestion": "Because forced-block character-cooccurrence decomposition closes the 6-program counterexample (4 + 4 = 8 == OPT), the next sharpened test for Theorem A is whether max(blockRank, disjointBound) < OPT_W2 == |Sigma| can occur on a single FORCED-BLOCK connected component."
+}
