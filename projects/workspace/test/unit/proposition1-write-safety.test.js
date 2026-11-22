@@ -8,7 +8,8 @@ import { join } from 'node:path';
 import { structuralLocator } from '../../src/adapters/page-query.js';
 import { SuffixIndex, certifySuffix } from '../../src/client/suffix-eligibility.js';
 import { TraceDag } from '../../src/client/trace-dag.js';
-import { scopeWorkflowObservation } from '../../src/client/workflow-agent.js';
+import { InvestigationStore } from '../../src/client/investigation.js';
+import { runWorkflow, scopeWorkflowObservation } from '../../src/client/workflow-agent.js';
 import { loadServiceConfig } from '../../src/config.js';
 import { WorkspaceService } from '../../src/service.js';
 import { findElement } from '../../src/workflows/owner-session.js';
@@ -553,6 +554,165 @@ async function expectRejectionCode(promise, expectedCode) {
       })();
       assert.equal(syntheticUnkeyedDomFreshnessRetry, 2,
         'Without server-enforced idempotency deduplication, fresh pre-navigation DOM after a dropped ack yields 2 commits');
+
+      // 4e. End-to-end runWorkflow + effectForStep binding: attaches externalIdempotencyKey on
+      // intermediate external clicks, halts on lost ack, and blocks re-entry while unresolved.
+      let e2eServerCommits = 0;
+      const e2eCommittedKeys = new Set();
+      let e2eDropAck = true;
+      const e2eSubmittedPayloads = [];
+      const e2eStoreRoot = mkdtempSync(join(tmpdir(), 'p4-e2e-store-'));
+      const e2eStore = new InvestigationStore(e2eStoreRoot);
+      try {
+        let stage = 0;
+        let obsVer = 0;
+        const clickLoc = ['button', 'Reserve draft slot', 'button', ''];
+        const e2eService = {
+          outstanding: async () => (e2eDropAck && e2eSubmittedPayloads.length > 0 ? [{ isUncertain: true }] : []),
+          observe: async () => ({
+            url: 'https://portal.example.test/reserve',
+            text: stage === 0 ? 'Reserve' : 'Reserved',
+            observationVersion: ++obsVer,
+            isTruncated: false,
+            elements: stage === 0
+              ? [{
+                  handle: 'reserve-btn',
+                  selector: '#reserve-btn',
+                  digest: 'dig-reserve',
+                  role: 'button',
+                  label: 'Reserve draft slot',
+                  tag: 'button',
+                  inputType: '',
+                  value: null,
+                }]
+              : [],
+          }),
+          submitAction: async (cmd) => {
+            e2eSubmittedPayloads.push(structuredClone(cmd));
+            const idemKey = cmd.effect?.externalIdempotencyKey;
+            assert.equal(cmd.effect?.external, true);
+            assert.equal(cmd.effect?.effectKey, 'reserve-draft-slot');
+            assert.equal(idemKey, 'idem-workflow-step-0');
+            if (!e2eCommittedKeys.has(idemKey)) {
+              e2eCommittedKeys.add(idemKey);
+              e2eServerCommits += 1;
+            }
+            if (e2eDropAck) {
+              return { result: Promise.resolve({ outcome: 'unknown', isUncertain: true }) };
+            }
+            stage = 1;
+            return { result: Promise.resolve({ outcome: 'completed', isUncertain: false }) };
+          },
+        };
+        const wfDag = new TraceDag({ maxNodes: 16, maxEdges: 16, maxSteps: 6 });
+        e2eStore.create({ id: 'p4-e2e-1', goal: 'Reserve draft' });
+        const run1 = await runWorkflow({
+          dag: wfDag,
+          mode: 'fresh',
+          service: e2eService,
+          owner: {},
+          pageId: 'main',
+          intent: 'reserve:draft',
+          template: 'p4-e2e-template',
+          inputs: {},
+          intermediateClicks: [clickLoc],
+          effectForStep: ({ stepIndex }) => ({
+            effect: {
+              external: true,
+              effectKey: 'reserve-draft-slot',
+              externalIdempotencyKey: `idem-workflow-step-${stepIndex}`,
+            },
+            completion: { completedWhen: [{ kind: 'element-present', selector: '#reserved-banner' }] },
+          }),
+          task: 'Reserve draft slot',
+          planner: {
+            identity: { model: 'p4-e2e-planner' },
+            next: async ({ observation }) => (observation.elements.length
+              ? { tool: 'act', input: { kind: 'click', handle: 'reserve-btn' } }
+              : { tool: 'finish', input: { summary: 'Reserved' } }),
+          },
+          config: { maxTurns: 4, maxInputBytes: 16000 },
+          store: e2eStore,
+          projectId: 'p4-e2e-1',
+          verifyReview: async () => ({ completed: stage === 1 }),
+          signal: new AbortController().signal,
+        });
+        assert.equal(run1.completed, false, 'Lost acknowledgment halts workflow without completing');
+        assert.equal(e2eServerCommits, 1);
+
+        // Blind re-entry while action remains unresolved fails closed with 0 extra submissions.
+        e2eStore.create({ id: 'p4-e2e-2', goal: 'Reserve draft retry' });
+        const blockedRun = await runWorkflow({
+          dag: wfDag,
+          mode: 'fresh',
+          service: e2eService,
+          owner: {},
+          pageId: 'main',
+          intent: 'reserve:draft',
+          template: 'p4-e2e-template',
+          inputs: {},
+          intermediateClicks: [clickLoc],
+          effectForStep: ({ stepIndex }) => ({
+            effect: {
+              external: true,
+              effectKey: 'reserve-draft-slot',
+              externalIdempotencyKey: `idem-workflow-step-${stepIndex}`,
+            },
+            completion: { completedWhen: [{ kind: 'element-present', selector: '#reserved-banner' }] },
+          }),
+          task: 'Reserve draft slot',
+          planner: { identity: { model: 'p4-e2e-planner' }, next: async () => ({ tool: 'finish', input: { summary: 'noop' } }) },
+          config: { maxTurns: 4, maxInputBytes: 16000 },
+          store: e2eStore,
+          projectId: 'p4-e2e-2',
+          verifyReview: async () => ({ completed: false }),
+          signal: new AbortController().signal,
+        });
+        assert.equal(blockedRun.completed, false);
+        assert.equal(e2eSubmittedPayloads.length, 1, 'Unresolved uncertain action blocks blind workflow re-entry');
+
+        // After reconciliation clears outstanding uncertainty and re-executes with the same step key,
+        // the idempotent server deduplicates the retry so e2eServerCommits stays 1!
+        e2eDropAck = false;
+        e2eStore.create({ id: 'p4-e2e-3', goal: 'Reserve draft reconciled' });
+        const reconciledRun = await runWorkflow({
+          dag: wfDag,
+          mode: 'fresh',
+          service: e2eService,
+          owner: {},
+          pageId: 'main',
+          intent: 'reserve:draft',
+          template: 'p4-e2e-template',
+          inputs: {},
+          intermediateClicks: [clickLoc],
+          effectForStep: ({ stepIndex }) => ({
+            effect: {
+              external: true,
+              effectKey: 'reserve-draft-slot',
+              externalIdempotencyKey: `idem-workflow-step-${stepIndex}`,
+            },
+            completion: { completedWhen: [{ kind: 'element-present', selector: '#reserved-banner' }] },
+          }),
+          task: 'Reserve draft slot',
+          planner: {
+            identity: { model: 'p4-e2e-planner' },
+            next: async ({ observation }) => (observation.elements.length
+              ? { tool: 'act', input: { kind: 'click', handle: 'reserve-btn' } }
+              : { tool: 'finish', input: { summary: 'Reserved' } }),
+          },
+          config: { maxTurns: 4, maxInputBytes: 16000 },
+          store: e2eStore,
+          projectId: 'p4-e2e-3',
+          verifyReview: async () => ({ completed: stage === 1 }),
+          signal: new AbortController().signal,
+        });
+        assert.equal(reconciledRun.completed, true);
+        assert.equal(e2eSubmittedPayloads.length, 2);
+        assert.equal(e2eServerCommits, 1, 'End-to-end effectForStep idempotency key deduplicates server commit');
+      } finally {
+        e2eStore.close();
+        rmSync(e2eStoreRoot, { recursive: true, force: true });
+      }
     } finally {
       await service.close();
     }

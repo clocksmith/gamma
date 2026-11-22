@@ -87,7 +87,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
   learnRepairs = false, observationLocators = null, reconvergeMidRepair = false, goal = null,
   suffixIndex = null, suffixEligibility = false, slotRoles = null, inertFormLocators = [],
   assertPrerequisite = null, requirePrerequisiteCheck = false,
-  crossScreenRule = false, attestPrerequisites = null }) {
+  crossScreenRule = false, attestPrerequisites = null, effectForStep = null }) {
   if (!['learn', 'fresh', 'reuse'].includes(mode)) throw Error('Invalid workflow mode');
   if (typeof learnRepairs !== 'boolean') throw Error('Explicit boolean repair-learning policy required');
   if (typeof reconvergeMidRepair !== 'boolean') throw Error('Explicit boolean mid-repair reconvergence policy required');
@@ -119,9 +119,9 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
   const options = { service, owner, pageId, intent, template, inputs, intermediateClicks, signal,
     assertContext: assertWorkflowContext, authorizeStep, accountScope, fieldGroups, goal,
     suffixIndex, suffixEligibility, slotRoles, inertFormLocators,
-    assertPrerequisite, requirePrerequisiteCheck, crossScreenRule, attestPrerequisites };
-  // A replacement session keeps the steps already executed in this run, for suffix eligibility only.
-  const carriedSteps = () => suffixIndex ? [...recorder.priorSteps, ...recorder.records.map(record => record.step)] : [];
+    assertPrerequisite, requirePrerequisiteCheck, crossScreenRule, attestPrerequisites, effectForStep };
+  // A replacement session keeps the steps already executed in this run across all arms for entry/reconvergence accountability.
+  const carriedSteps = () => [...recorder.priorSteps, ...recorder.records.map(record => record.step)];
   // Suffix decisions and certified rejoins made by a session that was later replaced still count in the result.
   const retiredEvents = [];
   const retiredRejoins = [];
@@ -137,6 +137,7 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
     }
     return { certified: events.filter(event => event.phase === 'suffix-certified').length,
       attested: events.filter(event => event.phase === 'suffix-certified' && event.attested).length,
+      attestationRefuted: events.filter(event => event.phase === 'suffix-refused' && event.attestationRefuted).length,
       refused: events.filter(event => event.phase === 'suffix-refused').length,
       replayedSteps: events.filter(event => event.phase === 'certified-suffix-replay').length, refusals };
   };
@@ -223,8 +224,16 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
         const verified = await verifyCompletion();
         return finish(verified.completed, verified.completed ? 'Reused verified workflow' : verified.detail);
       }
-      fallbackReason = replanCode(replay, failure) ?? (CACHE_MISSES.has(replay?.reason) ? replay.reason : null);
-      if (!fallbackReason) return finish(false, failure?.message ?? replay?.reason ?? 'Replay stopped');
+      const entryAttestationRefuted = crossScreenRule
+        && (recorder.traceEvents ?? []).some(event => event.phase === 'suffix-refused' && event.atStep === 0 && event.attestationRefuted === true);
+      fallbackReason = entryAttestationRefuted
+        ? null
+        : (replanCode(replay, failure) ?? (CACHE_MISSES.has(replay?.reason) ? replay.reason : null));
+      if (!fallbackReason) {
+        return finish(false, entryAttestationRefuted
+          ? 'Prerequisite attestation refused mid-workflow entry'
+          : (failure?.message ?? replay?.reason ?? 'Replay stopped'));
+      }
       // Only structural misses can teach. Never-dispatched stale actions may replan, but their
       // changed observation cannot silently be stitched into the recorded prefix.
       canPublish = learnRepairs && CACHE_MISSES.has(replay?.reason);

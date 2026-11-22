@@ -220,6 +220,9 @@ export class ManagedRecipeClient {
       throw Error('Served recipe digest mismatch');
     }
     const dag = TraceDag.restore(payload.dag, limits);
+    if (currentOutline && payload.entryLookup?.entryNodeId && dag.nodes.has(payload.entryLookup.entryNodeId)) {
+      dag.roots.add(payload.entryLookup.entryNodeId);
+    }
     return { ...payload, restoredDag: dag };
   }
 

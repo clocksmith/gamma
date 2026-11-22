@@ -13,8 +13,11 @@ import {
   topologicalSort,
 } from './trace-graph-dp.js';
 import {
+  accountedReach,
   certifySuffix,
   computeReachableLandmarks,
+  computeStatusSignatures,
+  defaultEntryRoots,
   evaluateSuffixEligibility,
   mergeSuffixProfiles,
   normalizeRoutePattern,
@@ -59,17 +62,24 @@ export class TraceDag {
     this.limits = Object.freeze({ ...limits });
     this.key = randomBytes(32).toString('hex');
     this.nodes = new Map();
+    this.roots = new Set();
     this.goalTerminals = new Map();
     this.suffixProfiles = new Map();
     this.slotRoles = new Map();
   }
   hash(value) { return createHmac('sha256', this.key).update(canonicalJson(value)).digest('hex'); }
   export() {
+    const defRoots = [...defaultEntryRoots(this.nodes)].sort();
+    const explicitRoots = this.version >= VERSION
+      ? [...this.roots].filter(id => this.nodes.has(id)).sort()
+      : [];
+    const includeEntryRoots = explicitRoots.length > 0 && canonicalJson(explicitRoots) !== canonicalJson(defRoots);
     return structuredClone({
       version: this.version,
       key: this.key,
       limits: this.limits,
       nodes: [...this.nodes],
+      ...(includeEntryRoots ? { entryRoots: explicitRoots } : {}),
       ...(this.goalTerminals.size ? { goalTerminals: [...this.goalTerminals] } : {}),
       ...(this.suffixProfiles.size ? { suffixProfiles: [...this.suffixProfiles] } : {}),
       ...(this.slotRoles.size ? { slotRoles: [...this.slotRoles] } : {}),
@@ -105,12 +115,12 @@ export class TraceDag {
   static restore(state, limits) {
     if (!SUPPORTED_VERSIONS.includes(state?.version)) throw Error('Invalid trace cache');
     const stateKeys = state && typeof state === 'object' ? Object.keys(state).filter(
-      k => state.version < VERSION || !['goalTerminals', 'suffixProfiles', 'slotRoles'].includes(k),
+      k => state.version < VERSION || !['entryRoots', 'goalTerminals', 'suffixProfiles', 'slotRoles'].includes(k),
     ).sort().join() : '';
     const allAllowed = state && typeof state === 'object'
-      && Object.keys(state).every(k => ['version', 'key', 'limits', 'nodes', 'goalTerminals', 'suffixProfiles', 'slotRoles'].includes(k));
+      && Object.keys(state).every(k => ['version', 'key', 'limits', 'nodes', 'entryRoots', 'goalTerminals', 'suffixProfiles', 'slotRoles'].includes(k));
     const validStateKeys = allAllowed && stateKeys === 'key,limits,nodes,version'
-      && (state.version >= VERSION || (state.goalTerminals === undefined && state.suffixProfiles === undefined && state.slotRoles === undefined));
+      && (state.version >= VERSION || (state.entryRoots === undefined && state.goalTerminals === undefined && state.suffixProfiles === undefined && state.slotRoles === undefined));
     const dag = new TraceDag(limits, { version: state.version });
     if (!validStateKeys || !HASH.test(state.key)
       || canonicalJson(state.limits) !== canonicalJson(limits) || !Array.isArray(state.nodes)
@@ -183,8 +193,20 @@ export class TraceDag {
         slotRoles.set(item[0], item[1]);
       }
     }
+    let roots;
+    if (state.entryRoots !== undefined) {
+      if (!Array.isArray(state.entryRoots) || !state.entryRoots.length
+        || state.entryRoots.some(id => !HASH.test(id) || !nodes.has(id))
+        || new Set(state.entryRoots).size !== state.entryRoots.length) {
+        throw Error('Invalid trace entryRoots');
+      }
+      roots = new Set(state.entryRoots);
+    } else {
+      roots = defaultEntryRoots(nodes);
+    }
     dag.key = state.key;
     dag.nodes = nodes;
+    dag.roots = roots;
     dag.goalTerminals = goalTerminals;
     dag.suffixProfiles = suffixProfiles;
     dag.slotRoles = slotRoles;
@@ -224,11 +246,14 @@ export class TraceDag {
       const normGoals = normalizeGoalTerminals(mergedGoals, reduced);
       const mergedProfiles = mergeSuffixProfiles(a.suffixProfiles, b.suffixProfiles, reduced);
       const mergedRoles = new Map([...a.slotRoles, ...b.slotRoles]);
+      const mergedRoots = [...new Set([...a.roots, ...b.roots])].filter(id => reduced.has(id)).sort();
+      const defMergedRoots = [...defaultEntryRoots(reduced)].sort();
       return TraceDag.restore({
         version: VERSION,
         key: a.key,
         limits,
         nodes: [...reduced],
+        ...(mergedRoots.length && canonicalJson(mergedRoots) !== canonicalJson(defMergedRoots) ? { entryRoots: mergedRoots } : {}),
         ...(normGoals.size ? { goalTerminals: [...normGoals] } : {}),
         ...(mergedProfiles.size ? { suffixProfiles: [...mergedProfiles] } : {}),
         ...(mergedRoles.size ? { slotRoles: [...mergedRoles].sort(([x], [y]) => x.localeCompare(y)) } : {}),
@@ -280,11 +305,14 @@ export class TraceDag {
     const normGoals = normalizeGoalTerminals(composedGoals, reduced);
     const composedProfiles = mergeSuffixProfiles(a.suffixProfiles, b.suffixProfiles, reduced);
     const composedRoles = new Map([...a.slotRoles, ...b.slotRoles]);
+    const composedRoots = [...new Set([...a.roots, ...b.roots])].filter(id => reduced.has(id)).sort();
+    const defComposedRoots = [...defaultEntryRoots(reduced)].sort();
     return TraceDag.restore({
       version: VERSION,
       key: a.key,
       limits,
       nodes: [...reduced],
+      ...(composedRoots.length && canonicalJson(composedRoots) !== canonicalJson(defComposedRoots) ? { entryRoots: composedRoots } : {}),
       ...(normGoals.size ? { goalTerminals: [...normGoals] } : {}),
       ...(composedProfiles.size ? { suffixProfiles: [...composedProfiles] } : {}),
       ...(composedRoles.size ? { slotRoles: [...composedRoles].sort(([x], [y]) => x.localeCompare(y)) } : {}),
@@ -362,16 +390,23 @@ export class TraceDag {
       ? slotRoles
       : Array.isArray(slotRoles) ? new Map(slotRoles) : new Map();
     const mergedRoles = new Map([...this.slotRoles, ...incomingRoles]);
+    const candidateRoot = compressed.records[0]?.id ?? term.id;
+    const nextRoots = [...new Set([...this.roots, ...(candidateRoot ? [candidateRoot] : [])])]
+      .filter(id => reduced.has(id))
+      .sort();
+    const defPublishedRoots = [...defaultEntryRoots(reduced)].sort();
     const restored = TraceDag.restore({
       version: VERSION,
       key: this.key,
       limits: this.limits,
       nodes: [...reduced],
+      ...(nextRoots.length && canonicalJson(nextRoots) !== canonicalJson(defPublishedRoots) ? { entryRoots: nextRoots } : {}),
       ...(normGoals.size ? { goalTerminals: [...normGoals] } : {}),
       ...(mergedProfiles.size ? { suffixProfiles: [...mergedProfiles] } : {}),
       ...(mergedRoles.size ? { slotRoles: [...mergedRoles].sort(([x], [y]) => x.localeCompare(y)) } : {}),
     }, this.limits);
     this.nodes = restored.nodes;
+    this.roots = restored.roots;
     this.goalTerminals = restored.goalTerminals;
     this.suffixProfiles = restored.suffixProfiles;
     this.slotRoles = restored.slotRoles;
@@ -388,7 +423,7 @@ class TraceSession {
     suffixIndex = null, executedSteps = [],
     suffixEligibility = false, slotRoles = null, inertFormLocators = [],
     assertPrerequisite = null, requirePrerequisiteCheck = false,
-    crossScreenRule = false, attestPrerequisites = null }) {
+    crossScreenRule = false, attestPrerequisites = null, effectForStep = null }) {
     if (typeof template !== 'string' || !template || typeof pageId !== 'string' || !pageId
       || typeof intent !== 'string' || !intent) throw Error('Trace requires template, pageId and intent');
     if (goal !== null && (typeof goal !== 'string' || !goal.trim())) throw Error('Invalid trace goal');
@@ -419,13 +454,14 @@ class TraceSession {
     // The cross-screen rule (cross-screen-rule.md) is opt-in and applies to the index matcher only.
     this.crossScreenRule = crossScreenRule === true;
     this.attestPrerequisites = typeof attestPrerequisites === 'function' ? attestPrerequisites : null;
+    this.effectForStep = typeof effectForStep === 'function' ? effectForStep : null;
     this.clickLocators = new Map(intermediateClicks.map(locator => [dag.hash(['locator', locator]), locator]));
     this.options = { service, owner, pageId, intent, template, inputs, intermediateClicks, signal,
       assertContext, authorizeStep, accountScope, fieldGroups, goal,
       suffixIndex, executedSteps,
       suffixEligibility: this.suffixEligibility, slotRoles: this.slotRolesPolicy, inertFormLocators: this.inertFormLocators,
       assertPrerequisite: this.assertPrerequisite, requirePrerequisiteCheck: this.requirePrerequisiteCheck,
-      crossScreenRule: this.crossScreenRule, attestPrerequisites: this.attestPrerequisites };
+      crossScreenRule: this.crossScreenRule, attestPrerequisites: this.attestPrerequisites, effectForStep: this.effectForStep };
     const roleBinding = resolveRoleBoundInputs({
       inputs,
       slotRoles: this.slotRolesPolicy,
@@ -516,11 +552,17 @@ class TraceSession {
       const outline = structuralOutlineHash(observation.elements);
       const outlineSlots = stateOverride?.outlineSlots ?? this.outlineSlots;
       const sameOutlineClicks = stateOverride?.sameOutlineClicks ?? this.sameOutlineClicks;
+      const status = computeStatusSignatures(observation.elements, this.inputs, value => this.dag.hash(value));
       const stateKey = observation.elements.length === 0 && this.goalHash !== null
-        ? ['state-v3-goal-leaf', this.goalHash]
-        : ['state-v3', outlineSlots, sameOutlineClicks];
+        ? (status.length ? ['state-v3-goal-leaf-status', this.goalHash, status] : ['state-v3-goal-leaf', this.goalHash])
+        : (status.length ? ['state-v3-status', outlineSlots, sameOutlineClicks, status] : ['state-v3', outlineSlots, sameOutlineClicks]);
       return { observation, id: this.dag.hash([scope, stateKey, outline]), outline,
-        meta: { scope: this.dag.hash(['suffix-scope', scope]), slots: outlineSlots, clicks: sameOutlineClicks } };
+        meta: {
+          scope: this.dag.hash(['suffix-scope', scope]),
+          slots: outlineSlots,
+          clicks: sameOutlineClicks,
+          ...(status.length ? { status } : {}),
+        } };
     };
     if (this.dag.version < VERSION) {
       const scope = [...baseScope];
@@ -612,7 +654,12 @@ class TraceSession {
     const origin = new URL(before.observation.url).origin;
     const locator = structuralLocator(element);
     const slot = this.slotNames.get(step.slot) ?? null;
-    await this.authorizeStep({ origin, kind: step.kind, locator, slot });
+    const auth = await this.authorizeStep({ origin, kind: step.kind, locator, slot });
+    if (auth === false || auth?.ok === false) {
+      throw Object.assign(Error(auth?.reason || 'Step authorization refused action'), {
+        code: 'step-not-authorized',
+      });
+    }
     if (typeof this.assertPrerequisite === 'function') {
       const prereq = await this.assertPrerequisite({
         origin, url: before.observation.url, kind: step.kind, locator, slot, stepIndex: this.depth,
@@ -623,6 +670,11 @@ class TraceSession {
         });
       }
     }
+    const stepEffect = typeof this.effectForStep === 'function'
+      ? await this.effectForStep({
+          origin, url: before.observation.url, kind: step.kind, locator, slot, stepIndex: this.depth,
+        })
+      : null;
     this.signal?.throwIfAborted();
     const useRegionScope = this.supportsRegionDeltas
       && (step.kind === 'fill' || step.kind === 'select')
@@ -631,6 +683,9 @@ class TraceSession {
     const admitted = await this.service.submitAction({ ...this.identity, actionId: randomUUID(),
       authorizedIntent: this.intent, observationVersion: before.observation.observationVersion,
       ...(useRegionScope ? { observationScope: { kind: 'regions', selectors: [element.selector] } } : {}),
+      ...(stepEffect?.effect !== undefined ? { effect: stepEffect.effect } : {}),
+      ...(stepEffect?.completion !== undefined ? { completion: stepEffect.completion } : {}),
+      ...(stepEffect?.preconditions !== undefined ? { preconditions: stepEffect.preconditions } : {}),
       kind: step.kind, target: { handle: element.handle, selector: element.selector, digest: element.digest },
       ...(step.kind === 'click' ? {} : { params: { value: this.inputs.get(step.slot) } }) });
     const result = await admitted.result;
@@ -738,6 +793,7 @@ class TraceSession {
       origin,
       routePattern,
       ...(before.meta?.scope ? { scope: before.meta.scope } : {}),
+      ...(before.meta?.status?.length ? { statusSignatures: [...before.meta.status] } : {}),
       locatorTable: [...locatorTable.entries()].sort(([a], [b]) => a.localeCompare(b)),
       slotLocators: [...slotLocators.entries()].sort(([a], [b]) => a.localeCompare(b)),
       onScreenStepLocators,
@@ -845,6 +901,39 @@ class TraceSession {
   #suffixEnabled(dp) {
     return Boolean(this.suffixIndex && dp && !this.fieldScope && this.dag.version >= VERSION);
   }
+  /** True iff an exact v3 node hit is a zero-action goal terminal or reachable from taught entry roots via carried/settled steps. */
+  #isExactEntryAccounted(nodeId, frame) {
+    if (this.dag.version < VERSION || this.fieldScope) return true;
+    const node = this.dag.nodes.get(nodeId);
+    if (!node) return false;
+    if (this.#isGoalTerminal(nodeId, node)) return true;
+    const live = (frame.observation.elements ?? []).map(element => ({
+      element,
+      locator: this.dag.hash(['locator', structuralLocator(element)]),
+    }));
+    const slotLocators = new Map();
+    for (const node of this.dag.nodes.values()) {
+      for (const { step } of node.edges ?? []) {
+        if (step.kind === 'click') continue;
+        if (!slotLocators.has(step.slot)) slotLocators.set(step.slot, new Set());
+        slotLocators.get(step.slot).add(step.locator);
+      }
+    }
+    const settled = slot => {
+      const value = this.inputs.get(slot), locators = slotLocators.get(slot);
+      if (typeof value !== 'string' || !value.length || !locators) return false;
+      const holders = live.filter(entry => locators.has(entry.locator));
+      return holders.length === 1 && holders[0].element.value === value;
+    };
+    const allExecuted = [...this.priorSteps, ...this.records.map(record => record.step)];
+    const executedSlots = new Set(allExecuted.filter(step => step.kind !== 'click').map(step => step.slot));
+    const executedClicks = new Set(allExecuted.filter(step => step.kind === 'click').map(step => step.locator));
+    const carriedOrSettled = step => (step.kind === 'click'
+      ? executedClicks.has(step.locator)
+      : (executedSlots.has(step.slot) || settled(step.slot)));
+    const reach = accountedReach(this.dag.nodes, carriedOrSettled, this.dag.roots);
+    return reach.has(nodeId);
+  }
   /** Ask the host which steps this session did not take already hold for the bound record. Asked
    * afresh for every frame, in the host's own terms; anything the host cannot be asked about, an
    * error, or an answer that is not one boolean per step counts as not attested. */
@@ -861,22 +950,34 @@ class TraceSession {
         if (step.kind === 'click' ? locator : slot) asked.set(key, { kind: step.kind, slot, locator });
       }
     }
-    if (!asked.size) return new Set();
+    if (!asked.size) return { attested: new Set(), asked: new Set(), valid: true };
     let answers;
     try {
       answers = await this.attestPrerequisites({ origin: new URL(before.observation.url).origin, url: before.observation.url,
         skipped: structuredClone([...asked.values()]) });
-    } catch { return new Set(); }
-    if (!Array.isArray(answers) || answers.length !== asked.size || answers.some(answer => typeof answer !== 'boolean')) return new Set();
-    return new Set([...asked.keys()].filter((key, index) => answers[index] === true));
+    } catch { return { attested: new Set(), asked: new Set(asked.keys()), valid: false }; }
+    if (!Array.isArray(answers) || answers.length !== asked.size || answers.some(answer => typeof answer !== 'boolean')) {
+      return { attested: new Set(), asked: new Set(asked.keys()), valid: false };
+    }
+    return {
+      attested: new Set([...asked.keys()].filter((key, index) => answers[index] === true)),
+      asked: new Set(asked.keys()),
+      valid: true,
+    };
   }
   /** Ask whether a learned node's remaining local steps hold on this live frame. No effect occurs here. */
   async #certifySuffix(before, dp, expected) {
-    const attested = await this.#attestSkipped(before);
+    const att = await this.#attestSkipped(before);
+    const atEntry = this.depth === 0 && this.records.length === 0 && this.priorSteps.length === 0;
     const outcome = certifySuffix({ dag: this.dag, index: this.suffixIndex, dp, frame: before, restrictTo: expected,
       session: { inputs: this.inputs, clicks: this.clicks, sameOutlineClicks: this.sameOutlineClicks,
         inertFormLocators: this.inertFormLocators,
-        ...(attested ? { isAttested: step => attested.has(canonicalJson(step)) } : {}),
+        ...(att ? {
+          isAttested: step => att.attested.has(canonicalJson(step)),
+          ...(atEntry && att.valid && att.asked.size > 0
+            ? { atEntry: true, isPotentialAttested: step => att.asked.has(canonicalJson(step)) }
+            : {}),
+        } : {}),
         settledSuccessors: this.crossScreenRule,
         // Fresh: the frame must be the session's latest observation, never one carried over.
         formStateFresh: before.observation === this.lastObservation,
@@ -888,7 +989,8 @@ class TraceSession {
       node: before.id.slice(0, 12),
       ...(outcome.status === 'certified'
         ? { learnedNode: outcome.nodeId.slice(0, 12), ...(outcome.attested ? { attested: true } : {}) }
-        : { reason: outcome.reason, refusals: outcome.refusals }),
+        : { reason: outcome.reason, refusals: outcome.refusals,
+          ...(outcome.attestationRefuted ? { attestationRefuted: true } : {}) }),
     });
     return outcome.status === 'certified' ? outcome : null;
   }
@@ -1025,17 +1127,20 @@ class TraceSession {
         return { continuedSteps: 0, reason: 'prefix-mismatch', reachedTerminal: false };
       }
       if (this.#suffixEnabled(dp)) {
-        let continuedSteps = 0, expected = null;
+        let continuedSteps = 0, expected = null, admittedInLoop = false;
         for (;;) {
-          let lookupId = before.id, node = this.dag.nodes.get(lookupId);
+          let lookupId = before.id, node = this.dag.nodes.get(lookupId), didCertify = false;
+          const exactAccounted = !node || admittedInLoop || this.#isExactEntryAccounted(lookupId, before);
           if (expected && node && !expected.has(lookupId) && !this.crossScreenRule) node = undefined;
-          else if (!node || (expected && !expected.has(lookupId))) {
+          else if (!node || !exactAccounted || (expected && !expected.has(lookupId))) {
             lookupId = (await this.#certifySuffix(before, dp, expected))?.nodeId ?? null;
             node = lookupId ? this.dag.nodes.get(lookupId) : undefined;
+            didCertify = Boolean(node);
             lookupId ??= before.id;
           }
           expected = null;
           if (!node) return { continuedSteps, reason: 'unseen-branch', reachedTerminal: false };
+          admittedInLoop = true;
           if (this.#isGoalTerminal(lookupId, node)) return { continuedSteps, reason: 'submit-boundary', reachedTerminal: true };
           const decision = dp.policy.get(lookupId);
           if (!decision || decision.kind === 'checkpoint' || decision.kind === 'repair-only'
@@ -1051,7 +1156,7 @@ class TraceSession {
           continuedSteps += 1;
           this.records.push({ id: before.id, depth, step, next: executed.after.id });
           this.traceEvents.push({
-            phase: lookupId === before.id ? 'reconverged-suffix-replay' : 'certified-suffix-replay',
+            phase: (didCertify || lookupId !== before.id) ? 'certified-suffix-replay' : 'reconverged-suffix-replay',
             stepIndex: depth,
             kind: step.kind,
             label: executed.label,
@@ -1069,11 +1174,15 @@ class TraceSession {
         }
       }
       let continuedSteps = 0;
-      let activeNodeId = this.dag.nodes.has(before.id) ? before.id : null;
+      let suffixActive = false;
+      let activeNodeId = (this.dag.nodes.has(before.id) && this.#isExactEntryAccounted(before.id, before))
+        ? before.id
+        : null;
       if (!activeNodeId) {
         const suffixMatch = this.#resolveSuffixNode(before, dp);
         if (suffixMatch) {
           activeNodeId = suffixMatch.nodeId;
+          suffixActive = true;
           this.outlineSlots = [...suffixMatch.profile.requiredSlots];
           this.certifiedSuffixRejoins.push({
             phase: 'mid-repair-suffix-rejoin',
@@ -1115,7 +1224,7 @@ class TraceSession {
           slot: executed.slotName,
           fromNode: activeNodeId.slice(0, 12),
           toNode: executed.after.id.slice(0, 12),
-          acceptedWhy: activeNodeId === before.id
+          acceptedWhy: (!suffixActive && activeNodeId === before.id)
             ? 'reconverged-node-dp-path-to-target-goal-and-live-locator-verified'
             : 'suffix-eligible-footprint-and-dirty-form-guards-verified',
         });
@@ -1123,15 +1232,18 @@ class TraceSession {
         const exactEdges = node.edges.filter(edge => canonicalJson(edge.step) === canonicalJson(step));
         if (exactEdges.some(edge => edge.next === executed.after.id)) {
           activeNodeId = executed.after.id;
+          suffixActive = false;
         } else if (this.suffixEligibility) {
           const terminalEdge = exactEdges.find(edge => this.#isGoalTerminal(edge.next, this.dag.nodes.get(edge.next))
             && executed.after.observation.elements.length === 0);
           if (terminalEdge) {
             activeNodeId = terminalEdge.next;
+            suffixActive = false;
           } else {
             const nextSuffix = this.#resolveSuffixNode(executed.after, dp);
             if (nextSuffix && this.#isVerifiedSuffixTransition(exactEdges, nextSuffix.nodeId, executed.after.observation)) {
               activeNodeId = nextSuffix.nodeId;
+              suffixActive = true;
             } else {
               this.#recordFallback(executed.after, 'unseen-branch');
               return { continuedSteps, reason: 'unseen-branch', reachedTerminal: false };
@@ -1183,13 +1295,15 @@ class TraceSession {
       let before = await this.observe();
       before = this.#inferMidFormEntry(before, dp);
       if (this.#suffixEnabled(dp)) {
-        let expected = null;
+        let expected = null, admittedInLoop = false;
         for (;;) {
-          let lookupId = before.id, node = this.dag.nodes.get(lookupId);
+          let lookupId = before.id, node = this.dag.nodes.get(lookupId), didCertify = false;
+          const exactAccounted = !node || admittedInLoop || this.#isExactEntryAccounted(lookupId, before);
           if (expected && node && !expected.has(lookupId) && !this.crossScreenRule) node = undefined;
-          else if (!node || (expected && !expected.has(lookupId))) {
+          else if (!node || !exactAccounted || (expected && !expected.has(lookupId))) {
             lookupId = (await this.#certifySuffix(before, dp, expected))?.nodeId ?? null;
             node = lookupId ? this.dag.nodes.get(lookupId) : undefined;
+            didCertify = Boolean(node);
             lookupId ??= before.id;
           }
           expected = null;
@@ -1197,6 +1311,7 @@ class TraceSession {
             this.#recordFallback(before, 'unseen-branch');
             return this.stop('unseen-branch');
           }
+          admittedInLoop = true;
           if (this.#isGoalTerminal(lookupId, node)) return this.stop('submit-boundary');
           if (this.fieldScope && node.repairs.length) {
             const exactSlots = this.dag.version >= VERSION ? [...this.groupProgress.filledSlots] : [];
@@ -1232,7 +1347,7 @@ class TraceSession {
           }
           this.records.push({ id: before.id, depth, step, next: executed.after.id });
           this.traceEvents.push({
-            phase: lookupId === before.id ? 'prefix-replay' : 'certified-suffix-replay',
+            phase: (didCertify || lookupId !== before.id) ? 'certified-suffix-replay' : 'prefix-replay',
             stepIndex: depth,
             kind: step.kind,
             label: executed.label,
@@ -1251,11 +1366,15 @@ class TraceSession {
           before = executed.after;
         }
       }
-      let activeNodeId = this.dag.nodes.has(before.id) ? before.id : null;
+      let suffixActive = false;
+      let activeNodeId = (this.dag.nodes.has(before.id) && this.#isExactEntryAccounted(before.id, before))
+        ? before.id
+        : null;
       if (!activeNodeId) {
         const suffixMatch = this.#resolveSuffixNode(before, dp);
         if (suffixMatch) {
           activeNodeId = suffixMatch.nodeId;
+          suffixActive = true;
           this.outlineSlots = [...suffixMatch.profile.requiredSlots];
           this.certifiedSuffixRejoins.push({
             phase: 'initial-suffix-rejoin',
@@ -1323,14 +1442,14 @@ class TraceSession {
         }
         this.records.push({ id: before.id, depth, step, next: executed.after.id });
         this.traceEvents.push({
-          phase: activeNodeId === before.id ? 'prefix-replay' : 'suffix-eligible-replay',
+          phase: (suffixActive || activeNodeId !== before.id) ? 'suffix-eligible-replay' : 'prefix-replay',
           stepIndex: depth,
           kind: step.kind,
           label: executed.label,
           slot: executed.slotName,
           fromNode: activeNodeId.slice(0, 12),
           toNode: executed.after.id.slice(0, 12),
-          acceptedWhy: activeNodeId !== before.id
+          acceptedWhy: (suffixActive || activeNodeId !== before.id)
             ? 'suffix-eligible-footprint-and-dirty-form-guards-verified'
             : hasKnownGoal
               ? 'dp-path-to-target-goal-and-live-locator-verified'
@@ -1340,15 +1459,18 @@ class TraceSession {
         const exactEdges = node.edges.filter(edge => canonicalJson(edge.step) === canonicalJson(step));
         if (exactEdges.some(edge => edge.next === executed.after.id)) {
           activeNodeId = executed.after.id;
+          suffixActive = false;
         } else if (this.suffixEligibility) {
           const terminalEdge = exactEdges.find(edge => this.#isGoalTerminal(edge.next, this.dag.nodes.get(edge.next))
             && executed.after.observation.elements.length === 0);
           if (terminalEdge) {
             activeNodeId = terminalEdge.next;
+            suffixActive = false;
           } else {
             const nextSuffix = this.#resolveSuffixNode(executed.after, dp);
             if (nextSuffix && this.#isVerifiedSuffixTransition(exactEdges, nextSuffix.nodeId, executed.after.observation)) {
               activeNodeId = nextSuffix.nodeId;
+              suffixActive = true;
             } else {
               this.#recordFallback(executed.after, this.lastSuffixRejection?.reason ?? 'unseen-branch');
               return this.stop('unseen-branch');

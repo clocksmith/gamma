@@ -36,6 +36,44 @@ const isAnswered = element => typeof element.value === 'string' && element.value
 // Form state is carried when a control has a default-value flag and a form key; null means "in no form".
 const hasFormState = element => typeof element.isDefaultValue === 'boolean'
   && (element.formKey === null || typeof element.formKey === 'string');
+const isStatusElement = element => Boolean(element) && !isWritable(element)
+  && (element.role === 'status' || (element.tag ?? '').toLowerCase() === 'output')
+  && (!element.actionability || (element.actionability.visible !== false && !element.actionability.inert));
+const escapeRegex = text => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function containsBoundedSlotValue(text, rawValue) {
+  const token = String(rawValue ?? '').replace(/\s+/g, ' ').trim();
+  if (!token.length) return false;
+  if (text === token) return true;
+  return new RegExp(`(?<![\\p{L}\\p{N}])${escapeRegex(token)}(?![\\p{L}\\p{N}])`, 'u').test(text);
+}
+
+/**
+ * Compute sorted, HMAC-hashed signatures for visible read-only [role="status"] / <output> elements.
+ * Pages with no status elements return [], leaving existing hashes and exports unchanged.
+ */
+export function computeStatusSignatures(elements, inputsMap, hashFn) {
+  if (!Array.isArray(elements) || typeof hashFn !== 'function') return [];
+  const signatures = [];
+  for (const element of elements) {
+    if (!isStatusElement(element)) continue;
+    const loc = structuralLocator(element);
+    const text = String(element.text ?? '').replace(/\s+/g, ' ').trim();
+    const matchedSlots = [];
+    if (inputsMap instanceof Map) {
+      for (const [slotHash, value] of inputsMap.entries()) {
+        if (typeof value === 'string' && value.length > 0 && containsBoundedSlotValue(text, value)) {
+          matchedSlots.push(slotHash);
+        }
+      }
+    }
+    matchedSlots.sort();
+    const payload = matchedSlots.length > 0
+      ? ['slot-bound-status', loc, matchedSlots]
+      : ['literal-status', loc, text];
+    signatures.push(hashFn(payload));
+  }
+  return signatures.sort();
+}
 
 /** Two labels compete when one's words are all contained in the other's ("Email" vs "Confirm email"). */
 export function labelsCompete(first, second) {
@@ -59,6 +97,7 @@ export class SuffixIndex {
       slots: [...frame.meta.slots],
       clicks: frame.meta.clicks,
       bag: frame.observation.elements.map(element => dag.hash(['locator', structuralLocator(element)])).sort(),
+      ...(frame.meta.status?.length ? { status: [...frame.meta.status] } : {}),
     });
   }
   export() { return structuredClone({ version: INDEX_VERSION, nodes: [...this.nodes] }); }
@@ -67,24 +106,37 @@ export class SuffixIndex {
     const index = new SuffixIndex();
     for (const entry of state.nodes) {
       const [id, meta] = Array.isArray(entry) && entry.length === 2 ? entry : [];
-      if (!HASH.test(id ?? '') || index.nodes.has(id) || !meta || Object.keys(meta).sort().join() !== 'bag,clicks,scope,slots'
+      const metaKeys = meta && typeof meta === 'object' ? Object.keys(meta).sort().join() : '';
+      const validKeys = metaKeys === 'bag,clicks,scope,slots' || metaKeys === 'bag,clicks,scope,slots,status';
+      if (!HASH.test(id ?? '') || index.nodes.has(id) || !validKeys
         || !HASH.test(meta.scope) || !Number.isSafeInteger(meta.clicks) || meta.clicks < 0
         || !Array.isArray(meta.slots) || meta.slots.some(slot => !HASH.test(slot))
-        || !Array.isArray(meta.bag) || meta.bag.some(locator => !HASH.test(locator))) throw Error('Invalid suffix index node');
+        || !Array.isArray(meta.bag) || meta.bag.some(locator => !HASH.test(locator))
+        || (meta.status !== undefined && (!Array.isArray(meta.status) || meta.status.some(sig => !HASH.test(sig))))) {
+        throw Error('Invalid suffix index node');
+      }
       index.nodes.set(id, structuredClone(meta));
     }
     return index;
   }
 }
 
-/** Nodes reachable from a root along steps the session executed or the live page already shows settled. */
-function accountedReach(nodes, isAccounted) {
+/** Default entry roots of an acyclic graph: nodes with no incoming step or repair edge. */
+export function defaultEntryRoots(nodes) {
   const hasIncoming = new Set();
   for (const node of nodes.values()) {
     for (const edge of node.edges ?? []) hasIncoming.add(edge.next);
     for (const next of node.repairs ?? []) hasIncoming.add(next);
   }
-  const reach = new Set([...nodes.keys()].filter(id => !hasIncoming.has(id)));
+  return new Set([...nodes.keys()].filter(id => !hasIncoming.has(id)));
+}
+
+/** Nodes reachable from taught entry roots along steps the session executed or the live page already shows settled. */
+export function accountedReach(nodes, isAccounted, roots = null) {
+  const startIds = roots instanceof Set && roots.size > 0
+    ? [...roots].filter(id => nodes.has(id))
+    : [...defaultEntryRoots(nodes)];
+  const reach = new Set(startIds);
   const queue = [...reach];
   while (queue.length) {
     const node = nodes.get(queue.pop());
@@ -140,8 +192,11 @@ export function certifySuffix({ dag, index, dp, frame, session, restrictTo = nul
   const slotDone = slot => executedSlots.has(slot) || settled(slot);
   const carriedOrSettled = step => (step.kind === 'click' ? executedClicks.has(step.locator) : slotDone(step.slot));
   const isAttested = typeof session.isAttested === 'function' ? session.isAttested : () => false;
-  const reachWithoutAttestation = accountedReach(dag.nodes, carriedOrSettled);
-  const reach = accountedReach(dag.nodes, step => carriedOrSettled(step) || isAttested(step) === true);
+  const reachWithoutAttestation = accountedReach(dag.nodes, carriedOrSettled, dag.roots);
+  const reach = accountedReach(dag.nodes, step => carriedOrSettled(step) || isAttested(step) === true, dag.roots);
+  const reachIfAllAttested = session.atEntry === true && typeof session.isPotentialAttested === 'function'
+    ? accountedReach(dag.nodes, step => carriedOrSettled(step) || session.isPotentialAttested(step) === true, dag.roots)
+    : null;
   // Clause 4: a state reached from an allowed successor through fills that are settled on the page.
   let allowed = restrictTo;
   if (restrictTo && session.settledSuccessors === true) {
@@ -154,17 +209,26 @@ export function certifySuffix({ dag, index, dp, frame, session, restrictTo = nul
     }
   }
 
+  const liveStatusJson = canonicalJson(frame.meta.status ?? []);
+  let anyScreenMatchInReach = false;
+  let anyScreenMatchRefutedByAttestation = false;
+
   const eligible = [];
   for (const [id, meta] of index.nodes) {
     const node = dag.nodes.get(id);
     if (!node || meta.scope !== frame.meta.scope || (allowed && !allowed.has(id))) continue;
     const reject = reason => { refusals.set(reason, (refusals.get(reason) ?? 0) + 1); };
-    if (!reach.has(id)) { reject('prefix-unaccounted'); continue; }
-
     const learnedCounts = count(meta.bag);
     let common = 0;
     for (const [locator, learned] of learnedCounts) common += Math.min(learned, liveCounts.get(locator) ?? 0);
-    if (common < policy.minOverlap * Math.max(meta.bag.length, live.length)) { reject('page-mismatch'); continue; }
+    const screenMatches = common >= policy.minOverlap * Math.max(meta.bag.length, live.length);
+    if (screenMatches) {
+      if (reach.has(id)) anyScreenMatchInReach = true;
+      else if (reachIfAllAttested?.has(id)) anyScreenMatchRefutedByAttestation = true;
+    }
+    if (!reach.has(id)) { reject('prefix-unaccounted'); continue; }
+    if (!screenMatches) { reject('page-mismatch'); continue; }
+    if (canonicalJson(meta.status ?? []) !== liveStatusJson) { reject('status-changed'); continue; }
     if (meta.slots.some(slot => !slotDone(slot))) { reject('prefix-slot-unaccounted'); continue; }
     if (meta.clicks !== session.sameOutlineClicks) { reject('click-progress-differs'); continue; }
 
@@ -236,7 +300,13 @@ export function certifySuffix({ dag, index, dp, frame, session, restrictTo = nul
     }
     eligible.push({ id, terminal, attested: !reachWithoutAttestation.has(id) });
   }
-  if (eligible.length !== 1) return refused(eligible.length ? 'ambiguous-candidates' : 'no-eligible-candidate');
+  if (eligible.length !== 1) {
+    const attestationRefuted = eligible.length === 0 && !anyScreenMatchInReach && anyScreenMatchRefutedByAttestation;
+    return {
+      ...refused(eligible.length ? 'ambiguous-candidates' : 'no-eligible-candidate'),
+      ...(attestationRefuted ? { attestationRefuted: true } : {}),
+    };
+  }
   return { status: 'certified', nodeId: eligible[0].id, terminal: eligible[0].terminal, attested: eligible[0].attested };
 }
 
@@ -359,6 +429,7 @@ export function validateSuffixProfiles(rawProfiles, nodes) {
     if (typeof profile.origin !== 'string' || !profile.origin
       || typeof profile.routePattern !== 'string' || !profile.routePattern
       || (profile.scope !== undefined && !HASH.test(profile.scope))
+      || (profile.statusSignatures !== undefined && (!Array.isArray(profile.statusSignatures) || profile.statusSignatures.some(s => !HASH.test(s))))
       || !Array.isArray(profile.locatorTable)
       || !Array.isArray(profile.requiredSlots) || profile.requiredSlots.some(s => !HASH.test(s))
       || !Number.isSafeInteger(profile.sameOutlineClicks) || profile.sameOutlineClicks < 0
@@ -403,6 +474,7 @@ export function mergeSuffixProfiles(leftMap, rightMap, nodes) {
       extraGuards: [...guardMap.values()],
       requiresExactPrefix: Boolean(prev.requiresExactPrefix || incoming.requiresExactPrefix),
       ...((incoming.scope ?? prev.scope) ? { scope: incoming.scope ?? prev.scope } : {}),
+      ...((incoming.statusSignatures ?? prev.statusSignatures) ? { statusSignatures: incoming.statusSignatures ?? prev.statusSignatures } : {}),
     });
   }
   return new Map([...merged.entries()].sort(([a], [b]) => a.localeCompare(b)));
@@ -432,6 +504,8 @@ export function evaluateSuffixEligibility({
   const targetTerminals = targetGoalHash !== null
     ? new Set(dag.goalTerminals.get(targetGoalHash) ?? [])
     : null;
+  const boundValueMap = new Map([...(boundInputs?.entries() ?? [])].map(([slotHash, entry]) => [slotHash, entry.value]));
+  const liveStatusJson = canonicalJson(computeStatusSignatures(observation.elements, boundValueMap, value => dag.hash(value)));
 
   const candidates = [];
   for (const [nodeId, profile] of dag.suffixProfiles.entries()) {
@@ -445,6 +519,10 @@ export function evaluateSuffixEligibility({
     if (profile.origin !== origin || profile.routePattern !== routePattern) continue;
     if (!profile.scope || !expectedScope || profile.scope !== expectedScope) {
       rejections.push({ nodeId, reason: 'scope-mismatch' });
+      continue;
+    }
+    if (canonicalJson(profile.statusSignatures ?? []) !== liveStatusJson) {
+      rejections.push({ nodeId, reason: 'status-changed' });
       continue;
     }
     if (profile.requiresExactPrefix) {
