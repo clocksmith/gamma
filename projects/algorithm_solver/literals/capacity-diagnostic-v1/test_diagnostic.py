@@ -141,6 +141,17 @@ class DiagnosticTests(unittest.TestCase):
         self.assertEqual(d7["components"][0]["strongerBound"], "forced-block-components")
         self.assertIsNotNone(d7["monotoneSaturation"])
 
+    def test_forced_block_construction_finds_below_alphabet_tiling_without_exhaustive_search(self):
+        # Synthetic outside-unseen test: 30-char alphabet where 2 non-adjacent pairs always occur together -> 28 forced blocks <= K=28
+        base = [chr(ord("a") + i) for i in range(26)]
+        p1 = "".join(base[:6]) + "01" + "".join(base[6:13]) + "23"
+        p2 = "".join(base[13:19]) + "01" + "".join(base[19:]) + "23"
+        res = diagnose_full_corpus([p1, p2], k=2, budget=28)
+        self.assertEqual(res["alphabetSize"], 30)
+        self.assertEqual(res["status"], "FEASIBLE")
+        self.assertEqual(res["construction"]["dictionarySize"], 28)
+        self.assertTrue(res["construction"]["byteExactVerified"])
+
 
 if __name__ == "__main__":
     unittest.main()

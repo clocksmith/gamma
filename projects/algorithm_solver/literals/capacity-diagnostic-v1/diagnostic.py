@@ -431,6 +431,13 @@ def find_verified_construction(
     if all_singletons_eligible and len(alpha) <= budget:
         return verify_construction(programs, alpha, k, max_bytes=max_bytes, tokens=tokens)
 
+    # For k >= 2, if every forced block is eligible and their count fits the budget,
+    # the forced blocks themselves form an explicit byte-verified tiling dictionary.
+    if k >= 2:
+        blocks = forced_blocks(programs, k, max_bytes=max_bytes)
+        if len(blocks) <= budget and all(b in tokens for b in blocks):
+            return verify_construction(programs, blocks, k, max_bytes=max_bytes, tokens=tokens)
+
     # For k = 1, check Theorem B span-basis construction when budget >= program rank
     if k == 1:
         tb = theorem_b_span_parse_test(programs)
