@@ -33,6 +33,9 @@ const isActionable = element => !element.actionability
   || (element.actionability.visible !== false && !element.actionability.inert && !element.actionability.disabled);
 const isAnswered = element => typeof element.value === 'string' && element.value.length > 0
   && !['checkbox', 'radio'].includes(element.inputType);
+// Form state is carried when a control has a default-value flag and a form key; null means "in no form".
+const hasFormState = element => typeof element.isDefaultValue === 'boolean'
+  && (element.formKey === null || typeof element.formKey === 'string');
 
 /** Two labels compete when one's words are all contained in the other's ("Email" vs "Confirm email"). */
 export function labelsCompete(first, second) {
@@ -94,14 +97,20 @@ function accountedReach(nodes, isAccounted) {
 /**
  * Certify at most one learned node for a live frame that missed the exact hash (SuffixIndex mode).
  * session: { inputs: Map<slotHash,string>, clicks: Set<locatorHash>, executedSteps: step[],
- *            sameOutlineClicks: number, isGoalTerminal(id, node): boolean }
+ *            sameOutlineClicks: number, isGoalTerminal(id, node): boolean, formStateFresh?: boolean }
  * Returns { status: 'certified', nodeId, terminal } or { status: 'refused', reason, refusals }.
+ * Refuses with `form-state-unavailable` before considering any candidate unless the frame carries
+ * form state for every writable control and is the session's latest observation.
  */
 export function certifySuffix({ dag, index, dp, frame, session, restrictTo = null, policy = DEFAULT_SUFFIX_POLICY }) {
   const refusals = new Map();
   const refused = reason => ({ status: 'refused', reason, refusals: Object.fromEntries(refusals) });
   if (!frame?.meta || !index || !dp) return refused('suffix-unavailable');
   const elements = frame.observation.elements;
+  // Where a host policy hides controls from the planner, form state is judged on the unfiltered view.
+  const stateView = frame.observation.unfilteredElements ?? elements;
+  if (session.formStateFresh === false
+    || stateView.some(element => isWritable(element) && !hasFormState(element))) return refused('form-state-unavailable');
   if (elements.some(element => BLOCKING_ROLES.has(element.role))) return refused('blocking-dialog');
   const live = elements.map(element => ({ element, locator: dag.hash(['locator', structuralLocator(element)]) }));
   const liveCounts = count(live.map(entry => entry.locator));

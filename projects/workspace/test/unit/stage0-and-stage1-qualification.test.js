@@ -92,6 +92,10 @@ test('Stage 2 gate (#88 item #3): requirePrerequisiteCheck fails closed on unren
     label, role: 'textbox', tag: 'input', inputType: 'text',
     selector: `#${id}`, handle: id, digest: `digest-${id}`, value: '',
   });
+  // Like the page query, a host returns form state only when the observation asks for it.
+  const withFormState = (els, command) => els.map(el => (command?.includeFormState
+    ? { formKey: 'form:0', isDefaultValue: !el.value, ...structuredClone(el) }
+    : structuredClone(el)));
   const makePage = rawElements => {
     const elements = structuredClone(rawElements);
     let version = 0;
@@ -99,11 +103,11 @@ test('Stage 2 gate (#88 item #3): requirePrerequisiteCheck fails closed on unren
     return {
       calls,
       outstanding: async () => [],
-      observe: async () => ({
+      observe: async command => ({
         url: 'https://fixture.invalid/draft',
         observationVersion: ++version,
         isTruncated: false,
-        elements: structuredClone(elements),
+        elements: withFormState(elements, command),
       }),
       submitAction: async action => {
         calls.push(action);
@@ -307,11 +311,11 @@ test('Stage 2 gate (#88 item #3): requirePrerequisiteCheck fails closed on unren
   let learnStage = 0;
   const learnTwoPage = {
     outstanding: async () => [],
-    observe: async () => ({
+    observe: async command => ({
       url: 'https://fixture.invalid/draft',
       observationVersion: Date.now() + Math.random(),
       isTruncated: false,
-      elements: structuredClone(learnStage ? [cityEl] : [nameEl, nextBtn]),
+      elements: withFormState(learnStage ? [cityEl] : [nameEl, nextBtn], command),
     }),
     submitAction: async action => {
       if (action.kind === 'click') learnStage = 1;
@@ -334,11 +338,11 @@ test('Stage 2 gate (#88 item #3): requirePrerequisiteCheck fails closed on unren
   const evalP2 = [structuredClone(cityEl)];
   const evalTwoPage = {
     outstanding: async () => [],
-    observe: async () => ({
+    observe: async command => ({
       url: 'https://fixture.invalid/draft',
       observationVersion: Date.now() + Math.random(),
       isTruncated: false,
-      elements: structuredClone(evalStage ? evalP2 : evalP1),
+      elements: withFormState(evalStage ? evalP2 : evalP1, command),
     }),
     submitAction: async action => {
       const els = evalStage ? evalP2 : evalP1;

@@ -168,9 +168,9 @@ export async function runWorkflow({ dag, mode, service, owner, pageId, intent, t
           ...identity,
           autoControlRegions: true,
           ...(ifCurrentVersion !== undefined ? { ifCurrentVersion } : {}),
-          ...(suffixEligibility ? { includeFormState: true } : {}),
+          ...(suffixEligibility || suffixIndex ? { includeFormState: true } : {}),
         }
-      : identity;
+      : suffixIndex ? { ...identity, includeFormState: true } : identity;
     observation = await service.observe(obsCmd);
     if (observation.isTruncated !== false) throw Error('Workflow observation is incomplete');
     assertCurrent();

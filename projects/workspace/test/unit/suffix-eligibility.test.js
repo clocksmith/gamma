@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { TraceDag } from '../../src/client/trace-dag.js';
-import { SuffixIndex, labelsCompete } from '../../src/client/suffix-eligibility.js';
+import { SuffixIndex, certifySuffix, labelsCompete } from '../../src/client/suffix-eligibility.js';
+import { scopeWorkflowObservation } from '../../src/client/workflow-agent.js';
 import { structuralLocator } from '../../src/adapters/page-query.js';
 
 const limits = { maxNodes: 32, maxEdges: 32, maxSteps: 8 };
@@ -13,13 +14,22 @@ const inputs = { name: 'PRIVATE_NAME', city: 'PRIVATE_CITY' };
 const base = { owner: { workspaceId: 'test' }, pageId: 'main', intent: 'form', template: 'unit-form', inputs };
 const fill = (element, slot) => ({ kind: 'fill', locator: structuralLocator(element), slot });
 
-/** Stateful page: fills settle their value, so a later observation shows them. */
-function page(elements) {
+/** What a host adds to a control when an observation is requested with form state. */
+const withFormState = (element, command) => (command?.includeFormState ? { ...structuredClone(element),
+  formKey: element.formKey === undefined ? '#form' : element.formKey,
+  isDefaultValue: element.isDefaultValue ?? !element.value } : structuredClone(element));
+
+/** Stateful page: fills settle their value, so a later observation shows them. Form state is
+ * returned only when the command asks for it, unless the host is told never to return it. */
+function page(elements, { formState = true } = {}) {
   let version = 0;
-  const calls = [];
-  return { calls, elements, outstanding: async () => [],
-    observe: async () => ({ url: 'https://fixture.invalid/form', observationVersion: ++version, isTruncated: false,
-      elements: structuredClone(elements) }),
+  const calls = [], commands = [];
+  return { calls, commands, elements, outstanding: async () => [],
+    observe: async command => {
+      commands.push(command);
+      return { url: 'https://fixture.invalid/form', observationVersion: ++version, isTruncated: false,
+        elements: elements.map(element => withFormState(element, formState ? command : null)) };
+    },
     submitAction: async action => {
       calls.push(action);
       const target = elements.find(element => element.handle === action.target.handle);
@@ -127,8 +137,8 @@ async function learnWithClick() {
   let stage = 0;
   const first = [name(), next()], second = [city()];
   const service = { outstanding: async () => [], calls: [],
-    observe: async () => ({ url: 'https://fixture.invalid/form', observationVersion: Date.now() + Math.random(),
-      isTruncated: false, elements: structuredClone(stage ? second : first) }),
+    observe: async command => ({ url: 'https://fixture.invalid/form', observationVersion: Date.now() + Math.random(),
+      isTruncated: false, elements: (stage ? second : first).map(element => withFormState(element, command)) }),
     submitAction: async action => {
       const elements = stage ? second : first;
       if (action.kind === 'click') stage = 1;
@@ -161,6 +171,82 @@ for (const elements of [[name(), city()], [city(), name()]]) {
   await assert.rejects(session.replay(), /stopped/, 'No implicit resume after a refusal');
   assert.equal(session.traceEvents.some(event => event.phase === 'suffix-certified'), elements[0].label === 'City',
     'On the reordered page the suffix matcher had proposed the step');
+}
+
+// Rule 1 (suffix-repair-rules.md). The index matcher asks for form state itself, with the profile
+// matcher off, on every observation it judges.
+const asked = page([city(), name()]);
+assert.equal((await replay(dag, asked, { suffixIndex: index })).reason, 'submit-boundary');
+assert.ok(asked.commands.length > 0 && asked.commands.every(command => command.includeFormState === true),
+  'Every observation of an index session requests form state');
+const plain = page([name(), city()]);
+await replay(dag, plain);
+assert.ok(plain.commands.every(command => command.includeFormState === undefined), 'No matcher, no form-state request');
+
+// A host that returns no form state: the matcher refuses before any candidate, and nothing is dispatched.
+const blind = page([city(), name()], { formState: false });
+const blindSession = dag.session({ ...base, service: blind, suffixIndex: index });
+assert.equal((await blindSession.replay()).reason, 'unseen-branch');
+assert.equal(blind.calls.length, 0, 'No form state, no suffix write');
+const blindRefusal = blindSession.traceEvents.find(event => event.phase === 'suffix-refused');
+assert.equal(blindRefusal.reason, 'form-state-unavailable');
+assert.deepEqual(blindRefusal.refusals, {}, 'Refused before any candidate was considered');
+assert.ok(blindSession.traceEvents.every(event => event.phase !== 'suffix-certified'));
+
+// One writable control without form state is enough to refuse.
+const partial = page([city(), name(), control('Referral code', 'referral', { formKey: undefined, isDefaultValue: undefined })]);
+partial.observe = (inner => async command => {
+  const observation = await inner(command);
+  for (const key of ['formKey', 'isDefaultValue']) delete observation.elements[2][key];
+  return observation;
+})(partial.observe);
+const partialSession = dag.session({ ...base, service: partial, suffixIndex: index });
+assert.equal((await partialSession.replay()).reason, 'unseen-branch');
+assert.equal(partial.calls.length, 0);
+assert.equal(partialSession.traceEvents.find(event => event.phase === 'suffix-refused').reason, 'form-state-unavailable');
+
+// With form state established the dirty-field guard works with the index option alone: an untouched
+// non-default control in the target form refuses, the same control in another form does not.
+const dirty = page([city(), name(), control('Promo code', 'promo', { value: 'VIP99', isDefaultValue: false })]);
+const dirtySession = dag.session({ ...base, service: dirty, suffixIndex: index });
+assert.equal((await dirtySession.replay()).reason, 'unseen-branch');
+assert.equal(dirty.calls.length, 0, 'A dirty untracked field in the target form dispatches nothing');
+assert.ok(dirtySession.traceEvents.some(event => event.refusals?.['dirty-untracked-form-field'] > 0));
+const elsewhere = page([city(), name(), control('Saved search', 'search', { value: 'old', isDefaultValue: false, formKey: '#header' })]);
+assert.equal((await replay(dag, elsewhere, { suffixIndex: index })).reason, 'submit-boundary');
+assert.deepEqual(handles(elsewhere), ['name', 'city']);
+
+// The same guard when a host policy hides the dirty control from the planner: it is judged on the
+// unfiltered view that the observation policy passes through.
+{
+  const hidden = page([city(), name(), control('Promo code', 'promo', { value: 'VIP99', isDefaultValue: false })]);
+  const scoped = scopeWorkflowObservation(hidden, base.template, [structuralLocator(name()), structuralLocator(city())]);
+  const taught = new TraceDag(limits), taughtIndex = new SuffixIndex();
+  const teachPage = scopeWorkflowObservation(page([name(), city()]), base.template,
+    [structuralLocator(name()), structuralLocator(city())]);
+  const teacher = taught.session({ ...base, template: teachPage.template, service: teachPage.service, suffixIndex: taughtIndex });
+  await teacher.record(fill(name(), 'name'));
+  await teacher.record(fill(city(), 'city'));
+  assert.equal((await teacher.finish()).reason, 'recorded-submit-boundary');
+  const session = taught.session({ ...base, template: scoped.template, service: scoped.service,
+    suffixIndex: SuffixIndex.restore(taughtIndex.export()).freeze() });
+  assert.equal((await session.replay()).reason, 'unseen-branch');
+  assert.equal(hidden.calls.length, 0, 'A dirty field the planner cannot see still refuses');
+  assert.ok(session.traceEvents.some(event => event.refusals?.['dirty-untracked-form-field'] > 0));
+}
+
+// Fresh: a frame that is not the session's latest observation is refused.
+{
+  const service = page([city(), name()]);
+  const session = dag.session({ ...base, service, suffixIndex: index });
+  const frame = await session.observe();
+  const args = { dag, index, dp: dag.solve({ inputs }), frame,
+    session: { inputs: session.inputs, clicks: session.clicks, executedSteps: [], sameOutlineClicks: 0,
+      isGoalTerminal: (id, node) => Boolean(node?.terminal) } };
+  assert.equal(certifySuffix({ ...args, session: { ...args.session, formStateFresh: true } }).status, 'certified');
+  const stale = certifySuffix({ ...args, session: { ...args.session, formStateFresh: false } });
+  assert.equal(stale.status, 'refused');
+  assert.equal(stale.reason, 'form-state-unavailable');
 }
 
 // The frozen graph and index never change during reuse.

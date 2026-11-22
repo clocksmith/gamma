@@ -531,6 +531,14 @@ class TraceSession {
     }
     return computeV3();
   }
+  /** The index matcher reads form state on every frame it judges, so the session asks for it
+   * whether or not the profile matcher is on (suffix-repair-rules.md, rule 1). */
+  get wantsFormState() {
+    return this.suffixEligibility || Boolean(this.suffixIndex);
+  }
+  get plainObserveCommand() {
+    return this.suffixIndex ? { ...this.identity, includeFormState: true } : this.identity;
+  }
   async observe({ ifCurrentVersion, sinceVersion } = {}) {
     if (ifCurrentVersion === undefined) {
       await this.assertSettled();
@@ -543,9 +551,9 @@ class TraceSession {
           ...this.identity,
           ...(this.regionSelectors.length ? { regions: this.regionSelectors } : { autoControlRegions: true }),
           ...(ifCurrentVersion !== undefined ? { ifCurrentVersion } : {}),
-          ...(this.suffixEligibility ? { includeFormState: true } : {}),
+          ...(this.wantsFormState ? { includeFormState: true } : {}),
         }
-      : this.identity;
+      : this.plainObserveCommand;
     const obs = await this.service.observe(regionCommand);
     this.stage0Profile.observationCalls += 1;
     if (ifCurrentVersion !== undefined && obs.observationVersion === ifCurrentVersion) {
@@ -563,7 +571,7 @@ class TraceSession {
           view: 'outline',
           sinceVersion,
           ifCurrentVersion: obs.observationVersion,
-          ...(this.suffixEligibility ? { includeFormState: true } : {}),
+          ...(this.wantsFormState ? { includeFormState: true } : {}),
         });
         this.stage0Profile.sinceVersionDeltaChecks += 1;
         for (const entry of Object.values(delta.regions ?? {})) {
@@ -665,7 +673,7 @@ class TraceSession {
       after = this.frame(afterObs);
     } else {
       await this.assertSettled();
-      const afterObs = await this.service.observe(this.identity);
+      const afterObs = await this.service.observe(this.plainObserveCommand);
       if (afterObs.isTruncated !== false || !Array.isArray(afterObs.elements)) {
         throw Error('Trace requires a complete element observation');
       }
@@ -835,6 +843,8 @@ class TraceSession {
     const outcome = certifySuffix({ dag: this.dag, index: this.suffixIndex, dp, frame: before, restrictTo: expected,
       session: { inputs: this.inputs, clicks: this.clicks, sameOutlineClicks: this.sameOutlineClicks,
         inertFormLocators: this.inertFormLocators,
+        // Fresh: the frame must be the session's latest observation, never one carried over.
+        formStateFresh: before.observation === this.lastObservation,
         executedSteps: [...this.priorSteps, ...this.records.map(record => record.step)],
         isGoalTerminal: (id, node) => this.#isGoalTerminal(id, node) } });
     this.traceEvents.push({
