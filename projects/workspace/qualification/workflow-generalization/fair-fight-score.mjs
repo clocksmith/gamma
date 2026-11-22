@@ -170,6 +170,7 @@ export async function scoreFairFight(holdoutArg, outArg = null, { includeFreshSt
   const store = new InvestigationStore(root);
   let sequence = 0;
   const teaching = [];
+  const artifactStats = [];
   const rows = [];
 
   try {
@@ -253,6 +254,23 @@ export async function scoreFairFight(holdoutArg, outArg = null, { includeFreshSt
           }
         }
         const teachMs = Number((performance.now() - t0).toFixed(3));
+        const recordedStepCheckpoints = armId === 'gammatron-graph'
+          ? dag.nodes.size
+          : book.trajectories.reduce((sum, t) => sum + t.steps.length, 0);
+        const recordedScreenCheckpoints = armId === 'gammatron-graph'
+          ? [...dag.nodes.values()].filter(n => !n.terminal).length
+          : book.trajectories.reduce(
+              (sum, t) => sum + new Set(t.steps.map(s => s.urlPath)).size,
+              0,
+            );
+        artifactStats.push({
+          workflow: workflow.id,
+          arm: armId,
+          teachRuns: specs.length,
+          manualAuthoredCheckpoints: 0,
+          recordedCheckpointsOrNodes: recordedStepCheckpoints,
+          recordedScreenCheckpoints,
+        });
         taught[armId] = {
           graph: dag.export(),
           index: index.export(),
@@ -260,6 +278,8 @@ export async function scoreFairFight(holdoutArg, outArg = null, { includeFreshSt
           teachTurns,
           teachMs,
           teachRuns: specs.length,
+          recordedCheckpointsOrNodes: recordedStepCheckpoints,
+          recordedScreenCheckpoints,
         };
       }
 
@@ -413,7 +433,23 @@ export async function scoreFairFight(holdoutArg, outArg = null, { includeFreshSt
     rmSync(root, { recursive: true, force: true });
   }
 
+  const caseKey = r => `${r.workflow}/${r.case}`;
+  const byCase = new Map();
+  for (const r of rows) {
+    byCase.set(caseKey(r), { ...(byCase.get(caseKey(r)) ?? {}), [r.arm]: r });
+  }
+  const missedRejoin = r => PRIMARY_ARMS.includes(r.arm)
+    && r.kind === 'must-complete'
+    && r.completed
+    && PRIMARY_ARMS.some(other => {
+      const peer = byCase.get(caseKey(r))?.[other];
+      return peer && other !== r.arm && peer.completed && peer.plannerTurns < r.plannerTurns;
+    });
+
   const summary = {};
+  const perDomain = {};
+  for (const wf of workflows) perDomain[wf.id] = {};
+
   for (const armId of armsToRun) {
     const mine = rows.filter(r => r.arm === armId);
     const must = mine.filter(r => r.kind === 'must-complete');
@@ -429,6 +465,31 @@ export async function scoreFairFight(holdoutArg, outArg = null, { includeFreshSt
         pairsSeparated += 1;
       }
     }
+    const repeatedRepairRows = must.filter(r => r.learnRepairs && r.cohortIndex !== null && r.cohortIndex > 0 && r.plannerTurns > 0);
+    const armArtifacts = artifactStats.filter(a => a.arm === armId);
+
+    for (const wf of workflows) {
+      const domRows = mine.filter(r => r.workflow === wf.id);
+      const domMust = domRows.filter(r => r.kind === 'must-complete');
+      const domArt = armArtifacts.find(a => a.workflow === wf.id);
+      const domRep = domMust.filter(r => r.learnRepairs && r.cohortIndex !== null && r.cohortIndex > 0 && r.plannerTurns > 0);
+      perDomain[wf.id][armId] = {
+        mustComplete: domMust.length,
+        correctCompletions: domMust.filter(r => r.completed && r.committedEffects.forbidden === 0).length,
+        plannerTurnsOnMustComplete: domMust.reduce((s, r) => s + r.plannerTurns, 0),
+        predicateReads: domRows.reduce((s, r) => s + r.predicateReads, 0),
+        completionRefusals: domMust.filter(r => !r.completed).length,
+        missedJumpOrBranchRefusals: PRIMARY_ARMS.includes(armId) ? domMust.filter(missedRejoin).length : null,
+        forbiddenEffects: domRows.reduce((s, r) => s + r.committedEffects.forbidden, 0),
+        duplicateEffects: domRows.reduce((s, r) => s + r.committedEffects.duplicates, 0),
+        manualAuthoredCheckpoints: 0,
+        recordedCheckpointsOrNodes: domArt?.recordedCheckpointsOrNodes ?? 0,
+        recordedScreenCheckpoints: domArt?.recordedScreenCheckpoints ?? 0,
+        repeatedRepairs: domRep.length,
+        repeatedRepairTurns: domRep.reduce((s, r) => s + r.plannerTurns, 0),
+      };
+    }
+
     const byCategory = {};
     for (const cat of [...new Set(must.map(r => r.category))]) {
       const sub = must.filter(r => r.category === cat);
@@ -446,6 +507,13 @@ export async function scoreFairFight(holdoutArg, outArg = null, { includeFreshSt
       plannerTurnsOnMustNotProceed: mustNot.reduce((s, r) => s + r.plannerTurns, 0),
       safeJumpsOrCertifications: must.filter(r => r.jumpedOrCertified).length,
       restingOnAttestation: must.filter(r => r.restedOnAttestation).length,
+      completionRefusals: must.filter(r => !r.completed).length,
+      missedJumpOrBranchRefusals: PRIMARY_ARMS.includes(armId) ? must.filter(missedRejoin).length : null,
+      manualAuthoredCheckpoints: 0,
+      recordedCheckpointsOrNodes: armArtifacts.reduce((s, a) => s + a.recordedCheckpointsOrNodes, 0),
+      recordedScreenCheckpoints: armArtifacts.reduce((s, a) => s + a.recordedScreenCheckpoints, 0),
+      repeatedRepairs: repeatedRepairRows.length,
+      repeatedRepairTurns: repeatedRepairRows.reduce((s, r) => s + r.plannerTurns, 0),
       mustNotProceed: mustNot.length,
       stoppedWhereForbidden: mustNot.filter(r => !r.completed).length,
       wrongCompletions: mustNot.filter(r => r.declaredReview && !r.reviewCompleted).length,
@@ -465,6 +533,33 @@ export async function scoreFairFight(holdoutArg, outArg = null, { includeFreshSt
     };
   }
 
+  const ckptSum = summary['attested-checkpointed-skill'];
+  const graphSum = summary['gammatron-graph'];
+  const turnDiff = ckptSum.plannerTurnsOnMustComplete - graphSum.plannerTurnsOnMustComplete;
+  const relTurnGain = ckptSum.plannerTurnsOnMustComplete > 0
+    ? Number((turnDiff / ckptSum.plannerTurnsOnMustComplete).toFixed(4))
+    : 0;
+  const graphSafetyNonInferior = graphSum.correctCompletions >= ckptSum.correctCompletions
+    && graphSum.forbiddenEffectsTotal <= ckptSum.forbiddenEffectsTotal
+    && graphSum.duplicateEffectsTotal <= ckptSum.duplicateEffectsTotal
+    && graphSum.wrongCompletions <= ckptSum.wrongCompletions;
+  const ckptSafetyNonInferior = ckptSum.correctCompletions >= graphSum.correctCompletions
+    && ckptSum.forbiddenEffectsTotal <= graphSum.forbiddenEffectsTotal
+    && ckptSum.duplicateEffectsTotal <= graphSum.duplicateEffectsTotal
+    && ckptSum.wrongCompletions <= graphSum.wrongCompletions;
+  const graphClearsMesi = graphSafetyNonInferior && turnDiff >= 8 && relTurnGain >= 0.20;
+  const checkpointedMeetsEquivalence = ckptSafetyNonInferior && (turnDiff < 8 || relTurnGain < 0.20);
+  const preregisteredDecision = {
+    thresholds: { minAbsoluteTurnsSaved: 8, minRelativeTurnReduction: 0.20 },
+    turnsSavedByGraphOverCheckpointed: turnDiff,
+    relativeTurnReduction: relTurnGain,
+    graphClearsMesi,
+    checkpointedMeetsEquivalenceMargin: checkpointedMeetsEquivalence,
+    verdict: graphClearsMesi
+      ? 'gammatron-graph-clears-mesi'
+      : (checkpointedMeetsEquivalence ? 'attested-checkpointed-skill-default-equivalence' : 'inconclusive'),
+  };
+
   const repo = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..');
   const git = (...args) => execFileSync('git', args, { cwd: repo, encoding: 'utf8' }).trim();
   const receipt = {
@@ -480,6 +575,9 @@ export async function scoreFairFight(holdoutArg, outArg = null, { includeFreshSt
       workflows: workflows.length,
       cases: workflows.reduce((sum, wf) => sum + wf.cases.length, 0),
     },
+    preregisteredDecision,
+    artifactStats,
+    perDomain,
     teaching,
     summary,
     rows,

@@ -53,3 +53,14 @@ Export `export const workflows = [ ... ]` with **3 workflow objects**, each cont
 - `expected`: `{ complete: boolean, review: object | null, allowedWrites: 'none' | 'toward-task' }`.
 
 Deliver `cases.mjs`, `PROTOCOL.md`, `self-check.mjs`, and `SHA256SUMS` (`shasum -a 256 cases.mjs PROTOCOL.md self-check.mjs > SHA256SUMS`), with `node self-check.mjs` exiting `0`.
+
+## Clarifications provided to the `v3` clean-room author before implementation
+
+After reading only this file, the isolated `v3` author session (`00d11987-464c-459a-b7d2-3531914fbc03`) requested five wire-shape clarifications before writing any code. The exact answers supplied were:
+
+1. **`planner.next({ observation, inputs, lastResult, allowedIntermediateClicks })` return shape:** async; `{ tool: 'act', input: { kind: 'fill' | 'select', handle, slot } }` for fills/selects (using `slot` key name in `inputs`, never literal values), `{ tool: 'act', input: { kind: 'click', handle } }` for clicks (`slot` omitted), `{ tool: 'finish', input: { summary } }` for completion, and `{ tool: 'ask_human', input: { reason } }` to stop; `observation` inside `planner.next` projects elements to `{ handle, role, label, inputType, tag, value, text }` without `url` or `formKey`, while `allowedIntermediateClicks` is the list of 4-tuples `[role, label, tag, inputType]`.
+2. **`service.observe(cmd)`, `outstanding()`, `submitAction(cmd)`:** all async; `observe(cmd)` returns `{ url, text, observationVersion, isTruncated: false, elements }` including `formKey` and `isDefaultValue` uniformly regardless of `cmd?.includeFormState`; `outstanding()` returns `[]`; `submitAction(cmd)` returns `{ result: Promise.resolve({ outcome: 'completed' | 'failed' }) }` without mutating state or recording a write on `'failed'`.
+3. **`attestPrerequisites({ origin, url, skipped })`:** async; returns a plain positional 1-to-1 array (`answers.length === skipped.length`) of `{ holds, account, record, predicate, version }` or `{ status: 'unavailable', predicate, reason }` objects (no wrapper object).
+4. **`assertContext()`, `authorizeStep(step)`, `assertPrerequisite(step)`:** async or `null` when absent; `assertContext()` throws `Error` on wrong session account; `authorizeStep({ origin, kind, locator, slot })` and `assertPrerequisite({ origin, url, kind, locator, slot, stepIndex })` throw `Error` or return `{ ok: false, reason }` to refuse, or `{ ok: true }` when allowed.
+5. **`wf.cases[i]` metadata keys:** `{ id, describes, category, kind, hostHasWriteCheck, recordId, pairId, learnRepairs, build }` for single-run cases, and `{ id, describes, category: 'reconverging-branch', kind: 'must-complete', hostHasWriteCheck: false, pairId: null, learnRepairs: true, cohort: [{ subId: 'branch-a-first', kind: 'must-complete', hostHasWriteCheck: false, recordId, inputs, build }, { subId: 'branch-b-second', kind: 'must-complete', hostHasWriteCheck: false, recordId, inputs, build }] }` for sequential 2-run repair cohorts.
+

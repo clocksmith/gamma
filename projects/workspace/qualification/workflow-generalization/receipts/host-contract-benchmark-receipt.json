@@ -1,0 +1,80 @@
+{
+  "schema": "host-contract-benchmark/v1",
+  "source": {
+    "commit": "272d9418171773c1b38bb0edeb5b8ba236da5424",
+    "dirty": true
+  },
+  "locAudit": {
+    "hypothesisTested": "20 non-comment LOC",
+    "booleanAttestOnlyLoc": 15,
+    "versionedAttestLoc": 38,
+    "atomicMultiPredicateCommitLoc": 36,
+    "idempotentJournalLoc": 26,
+    "directWriteApiHandlerLoc": 30,
+    "fullUiContractTotalLoc": 100,
+    "directApiWithJournalTotalLoc": 56,
+    "twentyLineHypothesisHoldsForFullContract": false
+  },
+  "scenarios": {
+    "validMidEntryAndDirectApi": {
+      "attested-linear-skill": {
+        "completed": true,
+        "plannerTurns": 4,
+        "latencyMs": 316.26,
+        "sqlPredicateReads": 15,
+        "commits": 1,
+        "forbiddenCommits": 0
+      },
+      "attested-checkpointed-skill": {
+        "completed": true,
+        "plannerTurns": 0,
+        "latencyMs": 299.83,
+        "sqlPredicateReads": 11,
+        "commits": 1,
+        "forbiddenCommits": 0
+      },
+      "gammatron-graph": {
+        "completed": true,
+        "plannerTurns": 0,
+        "latencyMs": 221.67,
+        "sqlPredicateReads": 11,
+        "commits": 1,
+        "forbiddenCommits": 0
+      },
+      "direct-write-api": {
+        "completed": true,
+        "plannerTurns": 0,
+        "latencyMs": 9.62,
+        "sqlPredicateReads": 3,
+        "commits": 1,
+        "forbiddenCommits": 0
+      }
+    },
+    "separateEntityApprovalRevocationRace": {
+      "single-record-etag": {
+        "workflowCompleted": false,
+        "commits": 1,
+        "forbiddenCommits": 1
+      },
+      "atomic-multi-predicate": {
+        "workflowCompleted": false,
+        "commits": 0,
+        "forbiddenCommits": 0
+      }
+    },
+    "lostAckServerJournalDeduplication": {
+      "haltedOnUncertainAck": true,
+      "resolvedViaServerJournal": true,
+      "totalSqliteCommits": 1,
+      "duplicateCommits": 0,
+      "deduplicatedRetries": 1
+    },
+    "partialContractUnavailableAndUnversioned": {
+      "completedViaPlannerFallback": true,
+      "plannerTurns": 4,
+      "automatedCertifications": 0,
+      "unavailablePredicatesReported": 2,
+      "unconditionalWriteRaceWindowActions": 3
+    }
+  }
+}
