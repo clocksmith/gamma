@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
 import { mkdtempSync, realpathSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -9,9 +10,16 @@ import {
   enforcePaidModelGate,
   evaluateReleaseNPlus1,
   evaluateThreeWayPaperRule,
+  evaluateUnseenRoutesFromFrozenRepair,
   freezeReleaseNArtifacts,
+  repairSharedStepOnceAndFreeze,
   resolveWorkflowArms,
 } from '../../qualification/workflow-generalization/release-drift-runner.mjs';
+import {
+  OPENPROJECT_SERVER_CODE_AUDIT,
+  probeErpNextAfterOpenProjectQualifies,
+  probeOpenProjectDualRelease,
+} from '../../qualification/workflow-generalization/stage2-upstream-contract-probe.mjs';
 
 const LIMITS = Object.freeze({ maxNodes: 96, maxEdges: 128, maxSteps: 32 });
 const CONFIG = Object.freeze({ maxTurns: 16, maxInputBytes: 60000 });
