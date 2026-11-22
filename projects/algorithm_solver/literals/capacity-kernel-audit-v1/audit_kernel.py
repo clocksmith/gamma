@@ -80,4 +80,6 @@ for b in bugs:
     if b['kind'] not in shown or len(shown) > 8:
         if sum(1 for x in shown if x == b['kind']) < 1: print(json.dumps(b)[:600])
         shown.add(b['kind'])
-json.dump(bugs, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f'audit-kernel-findings-{seed}.json'), 'w'), indent=1)
+if bugs:                                     # a findings file is written only when there is something in it
+    json.dump(bugs, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f'audit-kernel-findings-{seed}.json'), 'w'), indent=1)
+sys.exit(1 if bugs else 0)
