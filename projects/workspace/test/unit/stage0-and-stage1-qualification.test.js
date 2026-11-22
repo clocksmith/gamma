@@ -8,7 +8,7 @@ import { loadServiceConfig } from '../../src/config.js';
 import { structuralLocator } from '../../src/adapters/page-query.js';
 import { TraceDag } from '../../src/client/trace-dag.js';
 import { SuffixIndex } from '../../src/client/suffix-eligibility.js';
-import { runWorkflow } from '../../src/client/workflow-agent.js';
+import { runWorkflow, scopeWorkflowObservation } from '../../src/client/workflow-agent.js';
 import { FakeAdapter, ORIGIN } from '../support/fake-adapter.js';
 import { runStage1SuffixAblation } from '../../qualification/stage1-suffix-ablation.js';
 
@@ -614,4 +614,35 @@ test('Write-boundary races & scope isolation (#88): post-validation lock/revocat
   assert.equal((await legacySess.replay()).reason, 'unseen-branch');
   assert.equal(legacyPage.calls.length, 0);
   assert.equal(legacySess.lastSuffixRejection?.reason, 'scope-mismatch');
+
+  // A different observation policy is a different template, so the profile is refused the same way
+  // (Rule 2.2). The control shows the same reordered page is rejoined under the taught policy.
+  const taughtPolicy = [structuralLocator(elA), structuralLocator(elB)];
+  const widerPolicy = [...taughtPolicy, ['textbox', 'Referral code', 'input', 'text']];
+  const policyDag = new TraceDag(limits);
+  const session = (policy, page) => {
+    const scoped = scopeWorkflowObservation(page, 'tmpl-v1', policy);
+    return policyDag.session({
+      owner: { workspaceId: 'w' }, pageId: 'main', intent: 'edit', template: scoped.template,
+      accountScope: 'tenant-alpha', inputs: { name: 'Ada', city: 'London' },
+      service: scoped.service, suffixEligibility: true,
+    });
+  };
+  const policyLearn = session(taughtPolicy, mkPage([elA, elB]));
+  await policyLearn.record({ kind: 'fill', locator: structuralLocator(elA), slot: 'name' });
+  await policyLearn.record({ kind: 'fill', locator: structuralLocator(elB), slot: 'city' });
+  assert.equal((await policyLearn.finish()).reason, 'recorded-submit-boundary');
+
+  const samePolicyPage = mkPage([elB, elA]);
+  const samePolicySess = session(taughtPolicy, samePolicyPage);
+  await samePolicySess.replay();
+  assert.equal(samePolicySess.certifiedSuffixRejoins.length, 1, 'Under the taught policy the reordered page is rejoined');
+  assert.ok(samePolicyPage.calls.length > 0);
+
+  const otherPolicyPage = mkPage([elB, elA]);
+  const otherPolicySess = session(widerPolicy, otherPolicyPage);
+  assert.equal((await otherPolicySess.replay()).reason, 'unseen-branch');
+  assert.equal(otherPolicyPage.calls.length, 0, 'A changed observation policy dispatches nothing');
+  assert.equal(otherPolicySess.certifiedSuffixRejoins.length, 0);
+  assert.equal(otherPolicySess.lastSuffixRejection?.reason, 'scope-mismatch');
 });
