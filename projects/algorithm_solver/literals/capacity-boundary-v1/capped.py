@@ -115,6 +115,8 @@ def main():
     corpora = evaluate.load_instances()
     measured = json.load(open(os.path.join(HERE, 'measurements-capped.json')))['corpora']
     rows, failures = {}, []
+    path = os.path.join(HERE, 'external-dictionaries.json')
+    external = json.load(open(path))['corpora'] if os.path.exists(path) else {}
     for key, corpus in corpora.items():
         programs, m = corpus['programs'], measured[key]
         alphabet = len(set(''.join(programs)))
@@ -130,6 +132,13 @@ def main():
         if dictionary is not None and not rule.dictionary_spells(programs, dictionary):
             failures.append(f'{key}: stored dictionary is not legal under the cap or does not spell every file')
             dictionary = None
+        source = 'flow method'
+        if key in external:
+            other = external[key]['dictionary']
+            if not rule.dictionary_spells(programs, other):
+                failures.append(f'{key}: the external dictionary is not legal under the cap or does not spell every file')
+            elif dictionary is None or len(other) < len(dictionary):
+                dictionary, source = other, external[key]['source']
         lower = max(forced, blocks, math.ceil(certificate) if certificate is not None else 0)
         upper = min(alphabet, len(dictionary) if dictionary is not None else alphabet)
         if lower > upper:
@@ -140,6 +149,7 @@ def main():
         rows[key] = {
             'alphabet': alphabet, 'eligibleOccurrences': m['eligibleOccurrences'], 'forcedSingletons': forced, 'blockRank': blocks,
             'certificate': None if certificate is None else str(certificate), 'dictionaryEntries': None if dictionary is None else len(dictionary),
+            'dictionarySource': None if dictionary is None else source,
             'longestEntryBytes': None if dictionary is None else max(len(d.encode()) for d in dictionary),
             'minimumInterval': [lower, upper], 'minimumEstablished': lower == upper,
             'fitsBudget': 'yes' if upper <= BUDGET else 'no' if lower > BUDGET else 'unknown',

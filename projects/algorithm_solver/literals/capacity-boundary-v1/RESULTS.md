@@ -4,8 +4,14 @@ Run on 2026-11-22 (UTC). Pre-registration, runner and checker at Gamma `64b1ea0d
 `7aa9b02c`; the capped rerun is described in `ADDENDUM-CAPPED.md`. Every lower bound below is a recomputed
 rank or a certificate checked in exact fractions. Every dictionary is replayed against the frozen bytes.
 
-**Under the 160-byte entry cap, which is the rule of `sixbit-v1`: none of the nine projects fits 64 entries,
-the shipped diagnostic certifies all eight settled cases, and block rank alone certifies seven.**
+**Under the 160-byte entry cap, which is the rule of `sixbit-v1`: eight of the nine projects do not fit 64
+entries and one does. The shipped diagnostic certifies all eight rejections, and block rank alone certifies
+seven.**
+
+**Correction, same day.** This file first said none of the nine fits. That was wrong: PY-3 was unresolved,
+not rejected. The upgraded diagnostic (Gamma `084f50a8`) then found a 62-entry dictionary for PY-3, which
+`capped.py` replays as legal. PY-3 has 68 characters and fits 64 entries, so the grid decision does change
+on one project of nine. The dictionary is stored in `external-dictionaries.json`.
 
 ## A mistake in the setup
 
@@ -22,19 +28,21 @@ freezing. Both runs are reported. The capped one is the like-for-like comparison
 | JS-3 | 70 | 70 | 70 | 70 | 70 | 70 | no |
 | PY-1 | 69 | 69 | 69 | 69 | 69 | 69 | no |
 | PY-2 | 69 | 68 | 68 | 68 | 68 | 68 | no |
-| PY-3 | 68 | 51 | 57 | not attempted | 66 | 51 to 66 | unknown |
+| PY-3 | 68 | 51 | 57 | not attempted | 62, from the upgraded diagnostic | 51 to 62 | **yes** |
 | C-1 | 69 | 68 | 68 | 68 | 68 | 68 | no |
 | C-2 | 67 | 65 | 65 | 65 | 65 | 65 | no |
 | C-3 | 70 | 66 | 66 | 66 | 66 | 66 | no |
 
-- **The grid decision never changes.** Every project has more than 64 characters and none fits 64 entries.
+- **The grid decision changes on one project of nine.** PY-3 has 68 characters and fits in 62 entries. The
+  other eight have more than 64 characters and do not fit.
 - **Shared fragments save little:** 0, 1, 0, 0, 1, 1, 2 and 4 entries on the eight settled projects.
 - **Block rank is exact on seven of eight.** On JS-2 it is one short, and at 64 entries it cannot reject.
   This is the first real corpus where it falls short.
 - **The shipped diagnostic's bound equals the minimum on all eight** and rejects all eight at 64 entries. Its
   bound on PY-3 (57) is its own and is not re-checked here; the interval above uses only bounds checked here.
-- **PY-3 stays unresolved.** It has 776,363 eligible occurrences under the cap, over the limit set for the
-  linear program. Its dictionary search used entries of at most 40 characters.
+- **PY-3's minimum is still an interval**, 51 to 62, but its answer at 64 entries is settled. The flow
+  method did not settle it: 776,363 eligible occurrences under the cap, over the limit set for the linear
+  program, and its restricted dictionary search reached only 66.
 
 ### Time to the same verified answer
 
@@ -70,12 +78,12 @@ characters; its minimum is 65 either way.
 
 ## What this shows and what it does not
 
-- For the question "does this project fit 64 keys", counting characters gave the right answer on all eight
-  settled projects under the capped rule. Nothing here changed which grid to build.
+- For the question "does this project fit 64 keys", counting characters gave the right answer on eight
+  projects and the wrong one on PY-3.
 - For rejection, the shipped diagnostic reached the verified answer on all eight in 1 to 7 seconds. The flow
   method reached the same answers in 5 to 161 seconds.
-- No method here gives a fast "fits" answer when the alphabet is above 64. That case did not occur under the
-  capped rule, and occurred once without it.
+- Neither method benchmarked here gave a "fits" answer when the alphabet is above 64 under the cap. The one
+  such case, PY-3, was settled afterwards by a constructor in the upgraded diagnostic.
 - Nine projects of four files each, from four repositories of one owner, chosen by a seeded rule written
   by the author of the methods. The flow method is a reimplementation of the published formulation on a
   general solver, not the original authors' software.

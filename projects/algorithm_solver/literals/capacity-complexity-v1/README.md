@@ -101,8 +101,9 @@ all occurrences of dictionary entries, which is at most one per entry.
 
 ## Open
 
-- **Alphabet saturation.** Is it hard to decide whether a corpus needs one entry per character under the
-  witness rule? The reduction above does not answer this.
+- **Alphabet saturation: answered.** Deciding whether a corpus needs one entry per character is
+  co-NP-complete under the witness rule. Theorem 3 in `SATURATION.md`; `check_saturation.py` checks the
+  construction on 20 small instances.
 - **Rank against the certificate.** Whether the rank bound can exceed the rounded certificate value.
 - **Real corpora.** Two small ones were run (`RESULTS-REAL.md`). The certificate added nothing to the
   block-rank bound there; a replayed dictionary met that bound and settled both. How often the certificate
@@ -113,6 +114,7 @@ all occurrences of dictionary entries, which is at most one per entry.
 ```sh
 python3 -B evaluate.py --selftest      # the checker's own tests, on corpora outside the frozen files
 python3 -B evaluate.py                 # every claim, by exhaustive search and exact fractions; no solver
+python3 -B check_saturation.py         # Theorem 3 on 20 small instances; no solver
 python3 -B find_certificates.py        # how the stored certificates were found; needs scipy
 python3 -B evaluate_real.py            # the two real C corpora: certificate and replayed dictionary; no solver
 python3 -B find_real.py                # how those were found; needs scipy, about eight minutes
