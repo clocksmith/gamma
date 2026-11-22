@@ -1,0 +1,55 @@
+{
+  "schema": "gammatron-gate2-openproject-live-observer-receipt/v1",
+  "spendUsd": 0,
+  "probedAtUtc": "2026-11-22T22:48:19.348Z",
+  "browserRuntime": "Google Chrome 158.0.8127.36",
+  "upstreamServer": "openproject/openproject:14.0.0-slim + postgres:15",
+  "frozenBundleSha256": "077f5a1e3fa4c850a5b3bf0d0b5f13d49cad3178fe0bf2161e74194ff3b28315",
+  "naiveSinglePositiveAblation": {
+    "learnedGuard": {
+      "status": "abstain",
+      "reason": "ambiguous-minimum"
+    },
+    "decisionOnRevisedParentValidRoute": "abstain",
+    "reason": "ambiguous-minimum",
+    "finding": "On live OpenProject 14.0.0, UpdateAncestorsService bumps parent.lockVersion to 2 on child link; with only 1 unrevised positive (`PT8H`, `lockVersion = 2`) vs 1 ABA negative (`PT4H`, `lockVersion = 4`), two 1-read literals (`approval:/estimatedTime === \"PT8H\"` and `approval:/lockVersion === 2`) tie at 1 scalar read so `learnRepairBoundary` abstains (`ambiguous-minimum`) rather than guessing. Adding a second disposable positive (`PT16H`, `lockVersion = 4`) breaks both spurious 1-read shortcuts and isolates the unique 2-read relational invariant `approval:/estimatedTime === record:/estimatedTime`."
+  },
+  "learnedGuard": {
+    "status": "learned",
+    "intendedEffect": "opbind-v1:180fd8a7f440db56cd28902b6e20f23e0a1fc2c9517d414e7f890ea52e284167",
+    "guard": [
+      {
+        "kind": "equals-field",
+        "left": "approval:/estimatedTime",
+        "right": "record:/estimatedTime"
+      }
+    ],
+    "trainingReadCount": 2
+  },
+  "liveResults": {
+    "validUnseenSiblingRoutePt20h": {
+      "boundaryDecision": "eligible-for-review",
+      "commitHttpStatus": 200,
+      "pgLockVersionAfter": 1,
+      "pgJournalCountAfter": 2,
+      "verifiedZeroTurnTransfer": true
+    },
+    "unguardedSharedRepairOnSupersededTermsAba": {
+      "commitHttpStatus": 200,
+      "pgLockVersionAfter": 1,
+      "wrongCommitAppliedInPostgres": true
+    },
+    "repairBoundaryOnSupersededTermsAba": {
+      "boundaryDecision": "abstain",
+      "boundaryReason": "guard-mismatch",
+      "pgLockVersionAfter": 0,
+      "pgJournalCountAfter": 1,
+      "wrongCommitPreventedBeforeWrite": true
+    },
+    "changedWriteOnGuardPassingRoute": {
+      "boundaryDecision": "abstain",
+      "rejectedByEffectContract": true,
+      "reason": "changed-write-violates-approved-contract"
+    }
+  }
+}

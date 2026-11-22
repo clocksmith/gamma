@@ -1,104 +1,181 @@
 {
-  "schema": "gammatron-step2-upstream-contract-probe-v1",
+  "schema": "gammatron-step2-upstream-contract-probe-v2",
   "spendUsd": 0,
-  "passRuleId": "Stage2-Contract-Pass-v1",
-  "passRuleRecordedBeforeProbeAtUrl": "https://github.com/clocksmith/deco/issues/88#issuecomment-7084324033",
-  "probedAtUtc": "2026-11-22T19:25:27.794Z",
+  "passRuleId": "Stage2-Contract-Pass-v2",
+  "passRuleRecordedBeforeProbeAtUrl": "https://github.com/clocksmith/deco/issues/88#issuecomment-7085494859",
+  "probedAtUtc": "2026-11-22T22:43:41.897Z",
   "targets": {
     "openproject": {
       "appId": "openproject",
       "auditedReleasePair": "v13.4.0->v14.0.0",
-      "tier": "Tier-A1",
-      "status": "blocked-awaiting-docker-and-owner-approved-container-tags-and-accounts",
-      "dockerAvailable": false,
-      "dockerDetail": "Cannot connect to the Docker daemon at unix://<USER_HOME>/.docker/run/docker.sock. Is the docker daemon running?",
-      "ownerGateRequired": [
-        "Approve OpenProject container tags (`openproject/openproject:13.4.0` -> `14.0.0`) and target UI workflow",
-        "Start local Docker daemon and provision isolated local test accounts"
-      ],
-      "passRulePreDecision": {
-        "prerequisiteCheckMode": "live-db-truth-at-commit",
-        "passesCurrentStateCrossEntitySafety": true,
-        "passesCallerPinnedAbaVersionBinding": false
-      }
+      "stageOrder": 1,
+      "status": "probed-both-releases",
+      "establishesUpstreamAppContract": true,
+      "serverCodeAudit": {
+        "v13_4_0_commit": "f8d6a196a180155d69998d73f796fa1f177b16bb",
+        "v14_0_0_commit": "aa7a72a913cb619b3f976ff5f411ef7af97b6caa",
+        "inspectedFiles": [
+          "lib/api/v3/work_packages/work_packages_api.rb",
+          "app/services/work_packages/update_service.rb",
+          "app/services/base_services/base_contracted.rb",
+          "app/services/base_services/write.rb",
+          "app/services/shared/service_context.rb",
+          "lib/open_project/mutex.rb",
+          "app/contracts/work_packages/update_contract.rb",
+          "app/contracts/work_packages/base_contract.rb"
+        ],
+        "findings": {
+          "sameWorkPackageSerialization": "Shared::ServiceContext#in_mutex_context wraps SetAttributesService (UpdateContract) + WorkPackage#save + Journal write inside OpenProject::Mutex.with_advisory_lock_transaction(model) (`mutex_on_WorkPackage_<id>`) plus ActiveRecord optimistic locking (`WHERE id = $1 AND lock_version = $2`). Concurrent mutations on the SAME WorkPackage row serialize atomically.",
+          "crossEntityReadCommittedGap": "As documented in lib/open_project/mutex.rb, PostgreSQL runs at READ COMMITTED isolation and the advisory lock keys only on `mutex_on_WorkPackage_<id>`. Plain SELECTs in UpdateContract against separate tables (`member_roles`, `workflows`, `versions`, or a separate parent/approval WorkPackage) do NOT lock those rows; concurrent revocations on separate entities between validate and COMMIT are not blocked without explicit row/advisory locking.",
+          "specificTermsApprovalVersionBinding": "If human-approved terms live on the target WorkPackage row itself, any revoke-or-edit bumps `work_packages.lock_version`, so binding `lockVersion: v_approved` rejects ABA re-approvals under altered terms (`409`). If human-approved terms live on a separate entity/row, stock UpdateContract does NOT bind that entity's version or terms digest—requiring an atomic validator/gateway checking `(approval_id, approval_lock_version, terms_sha256)`.",
+          "lostAckOperationBindingContract": "Stock OpenProject has no native Idempotency-Key header on PATCH /api/v3/work_packages/{id}, and WorkPackagePayloadRepresenter ignores `journalNotes` / `comment` on PATCH (comments live on separate non-atomic POST /activities). Furthermore, under default `Setting.journal_aggregation_time_minutes = 5`, `Journals::CreateService#aggregatable?` coalesces consecutive unmarked PATCHes by the SAME user into one journal row (advancing `work_packages.lock_version` faster than `journals.version` and overwriting `work_package_journals` in place). Therefore: (1) API `/activities` alone without DB `work_package_journals` returns `unknown` on a dropped-ack PATCH; (2) embedding `<!-- opbind-v1:<sha256> -->` in `description.raw` binds the exact operation in `work_package_journals.description` across immediate reads and cross-user overwrites (`committed`), while honestly degrading to `unknown` if a same-user edit within the aggregation window overwrote the snapshot; (3) blind retries on a bumped `lockVersion` are always forbidden.",
+          "mockVsRealProbeBoundary": "Loopback mock tests establish runner and reconciler logic only (`establishesUpstreamAppContract: false`); only running `probeOpenProjectDualRelease` against live OpenProject 13.4.0 and 14.0.0 releases establishes the upstream application contract."
+        }
+      },
+      "v13_4_0": {
+        "releaseLabel": "v13.4.0",
+        "status": "probed-with-db-journal-evidence",
+        "journalSource": "postgresql-journals-and-work_package_journals",
+        "checks": {
+          "staleVersionRefused": {
+            "httpStatus": 409,
+            "passes": true
+          },
+          "commitPrerequisiteRefused": {
+            "httpStatus": 422,
+            "passes": true
+          },
+          "sameRowSpecificTermsAbaRefused": {
+            "httpStatus": 409,
+            "passes": true
+          },
+          "separateEntityAbaDiagnostic": {
+            "childHttpStatusOnStock": 200,
+            "separateEntityAbaRequiresExplicitVersionValidator": true
+          },
+          "concurrentSameRowRaceSerialized": {
+            "httpStatuses": [
+              200,
+              409
+            ],
+            "lockVersionDelta": 1,
+            "journalDelta": 1,
+            "passes": true
+          },
+          "lostAckReconciliation": {
+            "disposition": "committed",
+            "reason": "verified-operation-bound-journal-without-retry",
+            "operationBindingToken": "opbind-v1:90b9f6ff5a8bd2c85dc08767d1f17f2ef8b7d2122bc7d4457b2f74bb1502c596",
+            "extraWritesSent": 0,
+            "retryHttpStatus": null,
+            "allowRetryAtPreCommitVersion": false,
+            "forbidBlindRetryOnBumpedVersion": true,
+            "lockVersionAfterReconcile": 8,
+            "matchingJournalVersion": 5,
+            "matchingDurableJournalEffects": 1,
+            "totalJournalCount": 5,
+            "journalSource": "postgresql-journals-and-work_package_journals",
+            "reconciledToSingleDurableEffect": true,
+            "interveningEditAtExpectedVersionDisposition": "unknown",
+            "interveningEditReason": "lock-version-advanced-without-bound-operation-journal",
+            "unboundOperationDisposition": "unknown",
+            "preWriteDisposition": "not_applied_safe_to_retry",
+            "apiActivitiesWithoutDbSnapshotDisposition": "unknown",
+            "afterDescriptionOverwriteDisposition": "committed",
+            "sameUserAggregationWindowDiagnostic": {
+              "beforeSameUserOverwriteDisposition": "committed",
+              "afterSameUserOverwriteDisposition": "unknown",
+              "extraWritesOnCoalescedUnknown": 0,
+              "coalescedInPlaceWithinDefault5mWindow": true
+            },
+            "passes": true
+          }
+        },
+        "qualifiesSameRowTermsWorkflow": true,
+        "qualifiesSeparateEntityTermsWithoutValidator": false,
+        "retainedServerLogPath": "projects/workspace/qualification/workflow-generalization/receipts/logs/openproject-v13.4.0-step2-probe.log",
+        "retainedServerLogSha256": "4b8eb3827a4cc84d129e92058c9327fffd3f03494691d79280f942904e3c597b"
+      },
+      "v14_0_0": {
+        "releaseLabel": "v14.0.0",
+        "status": "probed-with-db-journal-evidence",
+        "journalSource": "postgresql-journals-and-work_package_journals",
+        "checks": {
+          "staleVersionRefused": {
+            "httpStatus": 409,
+            "passes": true
+          },
+          "commitPrerequisiteRefused": {
+            "httpStatus": 422,
+            "passes": true
+          },
+          "sameRowSpecificTermsAbaRefused": {
+            "httpStatus": 409,
+            "passes": true
+          },
+          "separateEntityAbaDiagnostic": {
+            "childHttpStatusOnStock": 200,
+            "separateEntityAbaRequiresExplicitVersionValidator": true
+          },
+          "concurrentSameRowRaceSerialized": {
+            "httpStatuses": [
+              200,
+              409
+            ],
+            "lockVersionDelta": 1,
+            "journalDelta": 1,
+            "passes": true
+          },
+          "lostAckReconciliation": {
+            "disposition": "committed",
+            "reason": "verified-operation-bound-journal-without-retry",
+            "operationBindingToken": "opbind-v1:e3bef74336e11819660114230b45fabf5876fdd13ef68142bbfa7ef645ed42be",
+            "extraWritesSent": 0,
+            "retryHttpStatus": null,
+            "allowRetryAtPreCommitVersion": false,
+            "forbidBlindRetryOnBumpedVersion": true,
+            "lockVersionAfterReconcile": 6,
+            "matchingJournalVersion": 5,
+            "matchingDurableJournalEffects": 1,
+            "totalJournalCount": 5,
+            "journalSource": "postgresql-journals-and-work_package_journals",
+            "reconciledToSingleDurableEffect": true,
+            "interveningEditAtExpectedVersionDisposition": "unknown",
+            "interveningEditReason": "lock-version-advanced-without-bound-operation-journal",
+            "unboundOperationDisposition": "unknown",
+            "preWriteDisposition": "not_applied_safe_to_retry",
+            "apiActivitiesWithoutDbSnapshotDisposition": "unknown",
+            "afterDescriptionOverwriteDisposition": "committed",
+            "sameUserAggregationWindowDiagnostic": {
+              "beforeSameUserOverwriteDisposition": "committed",
+              "afterSameUserOverwriteDisposition": "unknown",
+              "extraWritesOnCoalescedUnknown": 0,
+              "coalescedInPlaceWithinDefault5mWindow": true
+            },
+            "passes": true
+          }
+        },
+        "qualifiesSameRowTermsWorkflow": true,
+        "qualifiesSeparateEntityTermsWithoutValidator": false,
+        "retainedServerLogPath": "projects/workspace/qualification/workflow-generalization/receipts/logs/openproject-v14.0.0-step2-probe.log",
+        "retainedServerLogSha256": "b66e3f20351bc98aac8dfd69bcd1a1ef86930c1c38e0b2d2fc82ff89d7636cca"
+      },
+      "dualReleaseQualified": true
     },
     "erpnext": {
       "appId": "erpnext",
       "auditedReleasePair": "v15.10.0->v15.20.0",
-      "tier": "Tier-A2",
-      "status": "blocked-awaiting-docker-and-owner-approved-container-tags-and-accounts",
-      "dockerAvailable": false,
-      "dockerDetail": "Cannot connect to the Docker daemon at unix://<USER_HOME>/.docker/run/docker.sock. Is the docker daemon running?",
-      "ownerGateRequired": [
-        "Approve Frappe/ERPNext container tags (`frappe/erpnext:v15.10.0` -> `v15.20.0`) and draft-staging (`docstatus=0`) workflow",
-        "Start local Docker daemon and provision isolated local test accounts"
-      ],
-      "passRulePreDecision": {
-        "prerequisiteCheckMode": "live-db-truth-at-commit",
-        "passesCurrentStateCrossEntitySafety": true,
-        "passesCallerPinnedAbaVersionBinding": false
-      }
+      "stageOrder": 2,
+      "status": "awaiting-owner-approved-erpnext-containers-and-accounts",
+      "probeImplementationReady": true
     },
     "gitea": {
       "appId": "gitea",
       "auditedReleasePair": "v1.21.11->v1.22.0",
-      "probedBinaryVersion": "Gitea version 1.21.11 built with GNU Make 4.3, go1.21.8 : bindata, sqlite, sqlite_unlock_notify",
-      "tier": "Tier-A3-endpoint-split",
-      "status": "probed-local-isolated-accounts-zero-dollar",
-      "isolatedAccounts": [
-        "probe_author_isolated",
-        "probe_approver_isolated"
-      ],
-      "retainedServerLogPath": "projects/workspace/qualification/workflow-generalization/receipts/logs/gitea-v1.21.11-step2-probe.log",
-      "retainedServerLogSha256": "8da79d49b553abd4b4b68fb70e6875c4bc0256bf45f7bda0274dbea6fe44caa3",
-      "mergeAccessLogLinesCount": 8,
-      "checks": {
-        "staleVersionWrite": {
-          "endpoint": "POST /api/v1/repos/probe_author_isolated/po-release-gate/pulls/1/merge",
-          "httpStatus": 409,
-          "responseMessage": "head out of date",
-          "mergedAfterAttempt": false,
-          "appLogCommits": 0,
-          "passesRule": true
-        },
-        "liveDbTruthRevokedApproval": {
-          "endpoint": "POST /api/v1/repos/probe_author_isolated/po-release-gate/pulls/1/merge",
-          "httpStatus": 405,
-          "responseMessage": "not allowed to merge [reason: Does not have enough approvals]",
-          "mergedAfterAttempt": false,
-          "appLogCommits": 0,
-          "passesCurrentStateLiveTruthRule": true
-        },
-        "abaHistoricalSiblingVersionDrift": {
-          "sequence": "APPROVED(v1) -> REQUEST_CHANGES(v2) -> APPROVED(v3) while caller holds v1 attestation",
-          "httpStatus": 200,
-          "committedOnStockWithoutCallerVersionValidator": true,
-          "passesLiteralCallerPinnedPredicateVersions": false
-        },
-        "droppedAckRetryOnVersionedMerge": {
-          "endpoint": "POST /api/v1/repos/probe_author_isolated/po-release-gate/pulls/1/merge",
-          "firstCallHttpStatus": 200,
-          "firstCallResponseMessage": null,
-          "retryCallHttpStatus": 405,
-          "retryResponseMessage": "",
-          "totalMergeCommitsInAppRepoAndLogs": 1,
-          "duplicateCommits": 0,
-          "passesRule": true
-        },
-        "droppedAckRetryOnUnversionedReviewsEndpointSplit": {
-          "endpoint": "POST /api/v1/repos/probe_author_isolated/po-release-gate/pulls/2/reviews",
-          "firstCallHttpStatus": 200,
-          "retryCallHttpStatus": 200,
-          "totalReviewRecordsCreated": 2,
-          "duplicateCommits": 1,
-          "passesRuleWithoutIdempotencySidecar": false
-        }
-      },
-      "overallVerdictUnderStage2ContractPassV1": {
-        "mergeEndpointPasses": true,
-        "reviewsPostEndpointPassesStock": false,
-        "abaCallerPinnedVersionRequiresCustomValidatorOrSidecar": true
-      }
+      "evidenceScope": "sequential-endpoint-behavior-only",
+      "establishesTransactionAtomicity": false,
+      "establishesGeneralRetrySafety": false,
+      "status": "binary-not-present-see-retained-log-receipt"
     }
   }
 }
