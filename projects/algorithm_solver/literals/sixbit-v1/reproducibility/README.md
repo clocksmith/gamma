@@ -13,11 +13,15 @@ If the exact commit is absent, fetch it from the authorized Gamma remote first.
 
 The driver never checks out or mutates Gamma. It reads Git blobs from the full
 pinned commit, verifies the 80 exact compact sources against manifest SHA-256s,
-and runs the original amended no-solver checker against the retained receipts,
-vocabularies, dictionaries, packets and certificate potentials. Nothing runs
-the 80 JavaScript programs or reruns optimization. Validation uses a temporary
-directory that is removed on completion.
+checks the 74-singleton elementary witness lower bound, runs the retained
+no-solver checker against the compact A, B, and C (`literal-escape6-v1`) runs,
+and verifies that every `dictionary.ltd` (including decoded escape packets)
+unpacks to the exact `manifest['vocabulary']` checked for rule eligibility.
+Nothing runs the 80 JavaScript programs or reruns optimization. Validation uses
+a temporary directory that is removed on completion.
 
-The compact U/W entry minima use the frozen Mars arms; compact B coverage uses
-the frozen Mars W arm and the Jupiter U supplement on the same compact inputs.
-This is not a check of canonical, escape-mode, or phase-2 optimal token counts.
+The compact A (`U=79`, `W=92`) and C (`c-w-compact=75,925`, implied raw bound
+`65,079`, raw recount `65,236`; `c-u-compact=24,613`, bound `24,166`) checks use
+the frozen Mars `run-v1` arms; compact B (`U=W=64/80`) uses the frozen Mars `W`
+arm and the Jupiter `U` supplement on the same compact inputs. This sidecar does
+not check canonical-source runs or Phase-2 selection optimality.

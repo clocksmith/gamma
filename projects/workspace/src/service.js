@@ -168,10 +168,12 @@ class WorkspaceService {
   #uploads;
   #assertPrerequisite;
   #requirePrerequisiteCheck;
+  #requireConditionalWrite;
   #runtime = new Map();
   #ready = false;
 
-  constructor({ journal, state, config, adapter, hooks, clock, uploads, assertPrerequisite = null, requirePrerequisiteCheck = false }) {
+  constructor({ journal, state, config, adapter, hooks, clock, uploads,
+    assertPrerequisite = null, requirePrerequisiteCheck = false, requireConditionalWrite = false }) {
     this.#journal = journal;
     this.#state = state;
     this.#config = config;
@@ -181,17 +183,22 @@ class WorkspaceService {
     this.#uploads = uploads;
     this.#assertPrerequisite = assertPrerequisite;
     this.#requirePrerequisiteCheck = Boolean(requirePrerequisiteCheck);
+    this.#requireConditionalWrite = Boolean(requireConditionalWrite);
   }
 
   /**
    * Restore durable authority, settle interrupted actions, then accept commands.
    * @param {{stateDir: string, config: object, createAdapter: Function, hooks?: object,
-   *   clock?: () => number, assertPrerequisite?: Function|null, requirePrerequisiteCheck?: boolean}} options
+   *   clock?: () => number, assertPrerequisite?: Function|null, requirePrerequisiteCheck?: boolean,
+   *   requireConditionalWrite?: boolean}} options
    */
   static async open({ stateDir, config, createAdapter, hooks = NO_HOOKS, clock = Date.now,
-    assertPrerequisite = null, requirePrerequisiteCheck = false }) {
+    assertPrerequisite = null, requirePrerequisiteCheck = false, requireConditionalWrite = false }) {
     if (typeof requirePrerequisiteCheck !== 'boolean') {
       throw Error('Explicit boolean prerequisite-check policy required');
+    }
+    if (typeof requireConditionalWrite !== 'boolean') {
+      throw Error('Explicit boolean conditional-write policy required');
     }
     if (requirePrerequisiteCheck && typeof assertPrerequisite !== 'function') {
       throw Object.assign(Error('WorkspaceService write boundary requires an explicit server-side assertPrerequisite check'), {
@@ -212,7 +219,8 @@ class WorkspaceService {
       }));
       const uploads = new UploadStore(join(stateDir, 'uploads'), config.uploads);
       const service = new WorkspaceService({
-        journal, state, config, adapter, hooks, clock, uploads, assertPrerequisite, requirePrerequisiteCheck,
+        journal, state, config, adapter, hooks, clock, uploads,
+        assertPrerequisite, requirePrerequisiteCheck, requireConditionalWrite,
       });
       service.#restore();
       return service;
@@ -626,6 +634,7 @@ class WorkspaceService {
         results: preconditions.results,
       });
     }
+    let writeVersion = request.writeCondition?.version;
     if (request.kind !== 'navigate' && typeof this.#assertPrerequisite === 'function') {
       const prereq = await this.#assertPrerequisite({
         workspaceId,
@@ -643,12 +652,22 @@ class WorkspaceService {
           prereq?.reason || 'server prerequisite unestablished',
         );
       }
+      if (prereq?.writeVersion !== undefined) writeVersion = prereq.writeVersion;
+    }
+    if (request.kind !== 'navigate' && (this.#requireConditionalWrite || request.requireConditionalWrite === true)) {
+      if (writeVersion === undefined || writeVersion === null || this.#adapter.supportsConditionalWrites !== true) {
+        throw workspaceError(
+          REJECTION_CODES.PRECONDITION_UNESTABLISHED,
+          'conditional write version or versioned adapter unavailable',
+        );
+      }
     }
     return {
       targetDigest,
       preconditionResults: preconditions.results,
       observationScope: scope ?? { kind: 'page' },
       liveRegions: regions.length > 0 ? live.regions : null,
+      ...(writeVersion !== undefined && writeVersion !== null ? { writeVersion } : {}),
     };
   }
 
@@ -688,10 +707,16 @@ class WorkspaceService {
       });
       journalMs += performance.now() - startJ0;
       this.#hooks.afterDispatchStarted?.(action.request);
-      return { action };
+      return { action, checks };
     });
     if (begun.settled) return begun.settled;
-    const outcome = await this.#performEffect(workspaceId, begun.action.request);
+    const effectiveRequest = begun.checks?.writeVersion !== undefined
+      ? { ...begun.action.request, writeVersion: begun.checks.writeVersion }
+      : begun.action.request;
+    const outcome = await this.#performEffect(workspaceId, effectiveRequest);
+    if (begun.action.request.kind !== 'navigate' && begun.checks?.writeVersion === undefined) {
+      outcome.evidence = { ...outcome.evidence, unconditionalWriteRaceWindow: true };
+    }
     return runtime.mutex.run(async () => {
       let postObservationVersion = null;
       let postObsJournalMs = 0;

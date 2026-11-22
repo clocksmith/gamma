@@ -723,6 +723,7 @@ class TraceSession {
     this.stagedSuffixProfiles.set(before.id, {
       origin,
       routePattern,
+      ...(before.meta?.scope ? { scope: before.meta.scope } : {}),
       locatorTable: [...locatorTable.entries()].sort(([a], [b]) => a.localeCompare(b)),
       slotLocators: [...slotLocators.entries()].sort(([a], [b]) => a.localeCompare(b)),
       onScreenStepLocators,
@@ -901,6 +902,7 @@ class TraceSession {
       targetGoalHash: this.goalHash,
       sameOutlineClicks: this.sameOutlineClicks,
       inertFormLocators: this.inertFormLocators,
+      expectedScope: before.meta?.scope ?? null,
     });
     if (!elig.eligible) {
       this.lastSuffixRejection = elig;

@@ -378,3 +378,217 @@ test('Stage 2 gate (#88 item #3): requirePrerequisiteCheck fails closed on unren
   assert.ok(partialRes.cacheSteps >= 2, 'Prefix fill and post-repair suffix fill both cached');
   assert.ok(partialRes.traceEvents.some(e => e.phase === 'suffix-certified'), 'traceEvents from replaced initial session must be retained');
 });
+
+test('Write-boundary races & scope isolation (#88): post-validation lock/revocation, conditional write version, and suffixProfiles scope', async () => {
+  // 1. Lock or grant revocation AFTER client-side validation (authorizeStep) BEFORE WorkspaceService.#checkLiveDispatch
+  //    plus post-#checkLiveDispatch race window vs. conditional/versioned writes.
+  const dir = mkdtempSync(join(tmpdir(), 'gammatron-race-unit-'));
+  try {
+    let serverDraft = { locked: false, version: 'v1', committedWrites: 0 };
+    let unversionedExecutions = 0;
+
+    // 1a. requireConditionalWrite=true refuses unversioned adapter before dispatch.
+    const unversionedSvc = await WorkspaceService.open({
+      stateDir: join(dir, 'unversioned-req'),
+      config: loadServiceConfig(),
+      createAdapter: () => new FakeAdapter(join(dir, 'r1.jsonl')),
+      requirePrerequisiteCheck: true,
+      requireConditionalWrite: true,
+      assertPrerequisite: async () => ({ ok: !serverDraft.locked, writeVersion: serverDraft.version }),
+    });
+    try {
+      const admin = { workspaceId: 'w1', ...await unversionedSvc.createWorkspace({ workspaceId: 'w1' }) };
+      await unversionedSvc.grantAuthorization({
+        ...admin, grantId: 'g1', ownerId: 'agent',
+        intents: ['form:fill'], actionKinds: ['navigate', 'fill'], targetOrigins: [ORIGIN],
+      });
+      const owner = { workspaceId: 'w1', ...await unversionedSvc.assignOwner({ ...admin, ownerId: 'agent' }) };
+      const o0 = await unversionedSvc.observe(owner);
+      const nav = await (await unversionedSvc.submitAction({
+        ...owner, actionId: 'nav-1', authorizedIntent: 'form:fill',
+        kind: 'navigate', target: { url: `${ORIGIN}/form` }, observationVersion: o0.observationVersion,
+      })).result;
+      const o1 = await unversionedSvc.observe({ ...owner, ifCurrentVersion: nav.postObservationVersion });
+      const inputEl = o1.elements.find(el => el.tag === 'input');
+      const refused = await (await unversionedSvc.submitAction({
+        ...owner, actionId: 'fill-unver', authorizedIntent: 'form:fill',
+        kind: 'fill', target: { handle: inputEl.handle, selector: inputEl.selector, digest: inputEl.digest },
+        params: { value: 'Ada' }, observationVersion: o1.observationVersion,
+      })).result;
+      assert.equal(refused.dispatchStatus, 'never-dispatched');
+      assert.equal(refused.neverDispatched?.code, 'precondition-unestablished');
+    } finally {
+      await unversionedSvc.close();
+    }
+
+    // 1b. Post-client-validation lock AND grant revocation before #checkLiveDispatch dispatch zero effects;
+    //     post-#checkLiveDispatch lock races on unversioned DOM (flagged unconditionalWriteRaceWindow=true),
+    //     while conditional/versioned write rejects stale writeVersion with 0 committed server writes.
+    let mutateAfterDispatchCheck = false;
+    const versionedSvc = await WorkspaceService.open({
+      stateDir: join(dir, 'versioned'),
+      config: loadServiceConfig(),
+      hooks: {
+        afterDispatchStarted: req => {
+          if (mutateAfterDispatchCheck && req.kind !== 'navigate') {
+            serverDraft = { ...serverDraft, locked: true, version: 'v2' };
+          }
+        },
+      },
+      createAdapter: () => {
+        const inner = new FakeAdapter(join(dir, 'r2.jsonl'));
+        inner.supportsConditionalWrites = true;
+        const origExec = inner.execute.bind(inner);
+        inner.execute = async (wsId, req, files) => {
+          if (req.kind !== 'navigate') {
+            if (req.writeVersion !== undefined) {
+              if (serverDraft.locked || req.writeVersion !== serverDraft.version) {
+                throw Error(`Conditional write conflict: expected ${req.writeVersion}, server at ${serverDraft.version}`);
+              }
+              serverDraft.committedWrites += 1;
+            } else {
+              unversionedExecutions += 1;
+            }
+          }
+          return origExec(wsId, req, files);
+        };
+        return inner;
+      },
+      requirePrerequisiteCheck: true,
+      requireConditionalWrite: true,
+      assertPrerequisite: async () => (
+        serverDraft.locked
+          ? { ok: false, reason: 'locked before #checkLiveDispatch' }
+          : { ok: true, writeVersion: serverDraft.version }
+      ),
+    });
+    try {
+      const admin = { workspaceId: 'w2', ...await versionedSvc.createWorkspace({ workspaceId: 'w2' }) };
+      await versionedSvc.grantAuthorization({
+        ...admin, grantId: 'g2', ownerId: 'agent',
+        intents: ['form:fill'], actionKinds: ['navigate', 'fill'], targetOrigins: [ORIGIN],
+      });
+      const owner = { workspaceId: 'w2', ...await versionedSvc.assignOwner({ ...admin, ownerId: 'agent' }) };
+      const o0 = await versionedSvc.observe(owner);
+      const nav = await (await versionedSvc.submitAction({
+        ...owner, actionId: 'nav-2', authorizedIntent: 'form:fill',
+        kind: 'navigate', target: { url: `${ORIGIN}/form` }, observationVersion: o0.observationVersion,
+      })).result;
+      const o1 = await versionedSvc.observe({ ...owner, ifCurrentVersion: nav.postObservationVersion });
+      const inputEl = o1.elements.find(el => el.tag === 'input');
+
+      // Lock engages AFTER client validation passes, BEFORE #checkLiveDispatch:
+      const clientCheckPassed = !serverDraft.locked;
+      assert.equal(clientCheckPassed, true);
+      serverDraft.locked = true;
+      const caughtPreDispatch = await (await versionedSvc.submitAction({
+        ...owner, actionId: 'fill-prelock', authorizedIntent: 'form:fill',
+        kind: 'fill', target: { handle: inputEl.handle, selector: inputEl.selector, digest: inputEl.digest },
+        params: { value: 'Ada' }, observationVersion: o1.observationVersion,
+      })).result;
+      assert.equal(caughtPreDispatch.dispatchStatus, 'never-dispatched');
+      assert.equal(serverDraft.committedWrites, 0);
+
+      // Unlock, then lock AFTER #checkLiveDispatch (inside afterDispatchStarted) -> versioned write rejects!
+      serverDraft = { locked: false, version: 'v1', committedWrites: 0 };
+      mutateAfterDispatchCheck = true;
+      const caughtAtCommit = await (await versionedSvc.submitAction({
+        ...owner, actionId: 'fill-toctou', authorizedIntent: 'form:fill',
+        kind: 'fill', target: { handle: inputEl.handle, selector: inputEl.selector, digest: inputEl.digest },
+        params: { value: 'Ada' }, observationVersion: o1.observationVersion,
+      })).result;
+      assert.equal(caughtAtCommit.outcome, 'unknown');
+      assert.equal(serverDraft.committedWrites, 0, 'Conditional write version rejected stale mutation');
+      assert.equal(unversionedExecutions, 0);
+    } finally {
+      await versionedSvc.close();
+    }
+
+    // 1c. Unversioned write marks unconditionalWriteRaceWindow: true in evidence.
+    const plainSvc = await WorkspaceService.open({
+      stateDir: join(dir, 'plain'),
+      config: loadServiceConfig(),
+      createAdapter: () => new FakeAdapter(join(dir, 'r3.jsonl')),
+    });
+    try {
+      const admin = { workspaceId: 'w3', ...await plainSvc.createWorkspace({ workspaceId: 'w3' }) };
+      await plainSvc.grantAuthorization({
+        ...admin, grantId: 'g3', ownerId: 'agent',
+        intents: ['form:fill'], actionKinds: ['navigate', 'fill'], targetOrigins: [ORIGIN],
+      });
+      const owner = { workspaceId: 'w3', ...await plainSvc.assignOwner({ ...admin, ownerId: 'agent' }) };
+      const o0 = await plainSvc.observe(owner);
+      const nav = await (await plainSvc.submitAction({
+        ...owner, actionId: 'nav-3', authorizedIntent: 'form:fill',
+        kind: 'navigate', target: { url: `${ORIGIN}/form` }, observationVersion: o0.observationVersion,
+      })).result;
+      const o1 = await plainSvc.observe({ ...owner, ifCurrentVersion: nav.postObservationVersion });
+      const inputEl = o1.elements.find(el => el.tag === 'input');
+      const done = await (await plainSvc.submitAction({
+        ...owner, actionId: 'fill-plain', authorizedIntent: 'form:fill',
+        kind: 'fill', target: { handle: inputEl.handle, selector: inputEl.selector, digest: inputEl.digest },
+        params: { value: 'Ada' }, observationVersion: o1.observationVersion,
+      })).result;
+      assert.equal(done.outcome, 'completed');
+      assert.equal(done.evidence?.unconditionalWriteRaceWindow, true);
+    } finally {
+      await plainSvc.close();
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+
+  // 2. suffixProfiles binds to session scope (template + origin + readScope + accountScope).
+  const limits = { maxNodes: 32, maxEdges: 32, maxSteps: 8 };
+  const dag = new TraceDag(limits);
+  const elA = {
+    label: 'Name', role: 'textbox', tag: 'input', inputType: 'text',
+    selector: '#name', handle: 'name', digest: 'd-name', value: '',
+    actionability: { visible: true, inert: false, disabled: false },
+  };
+  const elB = {
+    label: 'City', role: 'textbox', tag: 'input', inputType: 'text',
+    selector: '#city', handle: 'city', digest: 'd-city', value: '',
+    actionability: { visible: true, inert: false, disabled: false },
+  };
+  const mkPage = raw => {
+    const els = structuredClone(raw);
+    let v = 0;
+    const calls = [];
+    return {
+      calls,
+      outstanding: async () => [],
+      observe: async () => ({
+        url: 'https://fixture.invalid/edit/42',
+        observationVersion: ++v,
+        isTruncated: false,
+        elements: structuredClone(els),
+      }),
+      submitAction: async a => {
+        calls.push(a);
+        const t = els.find(x => x.handle === a.target.handle);
+        if (t && a.kind !== 'click') t.value = a.params.value;
+        return { result: Promise.resolve({ outcome: 'completed' }) };
+      },
+    };
+  };
+  const learnSess = dag.session({
+    owner: { workspaceId: 'w' }, pageId: 'main', intent: 'edit', template: 'tmpl-v1',
+    accountScope: 'tenant-alpha', inputs: { name: 'Ada', city: 'London' },
+    service: mkPage([elA, elB]), suffixEligibility: true,
+  });
+  await learnSess.record({ kind: 'fill', locator: structuralLocator(elA), slot: 'name' });
+  await learnSess.record({ kind: 'fill', locator: structuralLocator(elB), slot: 'city' });
+  assert.equal((await learnSess.finish()).reason, 'recorded-submit-boundary');
+
+  // Reordered page under DIFFERENT accountScope must be refused by suffixProfiles (`scope-mismatch`).
+  const wrongScopePage = mkPage([elB, elA]);
+  const wrongScopeSess = dag.session({
+    owner: { workspaceId: 'w' }, pageId: 'main', intent: 'edit', template: 'tmpl-v1',
+    accountScope: 'tenant-beta', inputs: { name: 'Ada', city: 'London' },
+    service: wrongScopePage, suffixEligibility: true,
+  });
+  assert.equal((await wrongScopeSess.replay()).reason, 'unseen-branch');
+  assert.equal(wrongScopePage.calls.length, 0);
+  assert.equal(wrongScopeSess.certifiedSuffixRejoins.length, 0);
+});
