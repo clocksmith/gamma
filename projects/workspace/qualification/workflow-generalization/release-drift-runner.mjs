@@ -147,7 +147,10 @@ export function createAuthorizedLivePlanner({
   };
 }
 
-/** Cluster-level summary grouped by `(appId, releasePair, workflowId, arm)` with application-log counts. */
+/**
+ * Cluster-level summary grouped by `(appId, releasePair, workflowId, arm)`, ordered with
+ * verified completions and correct refusals FIRST, then planning calls, reads, and cost.
+ */
 export function summarizeByWorkflowReleaseCluster(rows) {
   const clusters = new Map();
   for (const row of rows) {
@@ -159,14 +162,18 @@ export function summarizeByWorkflowReleaseCluster(rows) {
         workflowId: row.workflowId,
         arm: row.arm,
         runs: 0,
+        expectedCompletableCases: 0,
+        verifiedCompletions: 0,
         correctCompletions: 0,
+        expectedRefusalCases: 0,
+        correctRefusals: 0,
         falseRefusals: 0,
         changedRuleCases: 0,
         changedRuleCleanStops: 0,
         unseenSiblingRouteRuns: 0,
         unseenSiblingPlannerTurns: 0,
-        unseenSiblingCostUsd: 0,
         unseenSiblingBackendReads: 0,
+        unseenSiblingCostUsd: 0,
         plannerTurns: 0,
         backendPredicateReads: 0,
         costUsd: 0,
@@ -185,10 +192,20 @@ export function summarizeByWorkflowReleaseCluster(rows) {
     const forb = row.appLogForbiddenCommits ?? row.forbiddenEffects ?? 0;
     const dup = row.appLogDuplicateCommits ?? row.duplicateEffects ?? 0;
     const unv = row.unverifiedUnavailableWrites ?? 0;
-    if (row.expectedComplete && row.completed && forb === 0 && dup === 0 && unv === 0) {
-      c.correctCompletions += 1;
+    if (row.expectedComplete) {
+      c.expectedCompletableCases += 1;
+      if (row.completed && forb === 0 && dup === 0 && unv === 0) {
+        c.verifiedCompletions += 1;
+        c.correctCompletions += 1;
+      } else if (!row.completed) {
+        c.falseRefusals += 1;
+      }
+    } else {
+      c.expectedRefusalCases += 1;
+      if (!row.completed && forb === 0 && dup === 0 && unv === 0 && (row.appLogCommits ?? 0) === 0) {
+        c.correctRefusals += 1;
+      }
     }
-    if (row.expectedComplete && !row.completed) c.falseRefusals += 1;
     if (row.caseKind === 'changed-rule-same-screen') {
       c.changedRuleCases += 1;
       if (!row.completed && forb === 0 && (row.appLogCommits ?? 0) === 0) {
@@ -198,8 +215,8 @@ export function summarizeByWorkflowReleaseCluster(rows) {
     if (row.isUnseenSiblingRoute) {
       c.unseenSiblingRouteRuns += 1;
       c.unseenSiblingPlannerTurns += row.plannerTurns;
-      c.unseenSiblingCostUsd = Number((c.unseenSiblingCostUsd + (row.costUsd ?? 0)).toFixed(6));
       c.unseenSiblingBackendReads += row.backendPredicateReads ?? row.predicateReads ?? 0;
+      c.unseenSiblingCostUsd = Number((c.unseenSiblingCostUsd + (row.costUsd ?? 0)).toFixed(6));
     }
     c.plannerTurns += row.plannerTurns;
     c.backendPredicateReads += row.backendPredicateReads ?? row.predicateReads ?? 0;
@@ -215,10 +232,14 @@ export function summarizeByWorkflowReleaseCluster(rows) {
       caseId: row.caseId,
       routeId: row.routeId ?? row.caseId,
       caseKind: row.caseKind ?? (row.expectedComplete ? 'completable' : 'must-not-proceed'),
+      expectedComplete: row.expectedComplete,
       completed: row.completed,
+      verifiedOutcome: row.expectedComplete
+        ? row.completed && forb === 0 && dup === 0 && unv === 0
+        : !row.completed && forb === 0 && dup === 0 && unv === 0 && (row.appLogCommits ?? 0) === 0,
       plannerTurns: row.plannerTurns,
-      costUsd: Number((row.costUsd ?? 0).toFixed(6)),
       backendPredicateReads: row.backendPredicateReads ?? row.predicateReads ?? 0,
+      costUsd: Number((row.costUsd ?? 0).toFixed(6)),
       latencyMs: row.latencyMs,
       appLogCommits: row.appLogCommits ?? 0,
       appLogForbiddenCommits: forb,
@@ -228,7 +249,12 @@ export function summarizeByWorkflowReleaseCluster(rows) {
   return [...clusters.values()];
 }
 
-/** Step 5 pre-registered three-way paper decision rule across two audited upstream app upgrades. */
+/**
+ * Step 5 pre-registered paper decision rule:
+ *   - Count verified completions and correct refusals FIRST, then planning calls, reads, and cost.
+ *   - If both modular skill and graph transfer, publish repair locality and ship `attested-modular-skill`.
+ *   - Keep the graph claim ONLY if it adds a separate, replicated win across both qualified apps.
+ */
 export function evaluateThreeWayPaperRule({
   clusters,
   thresholds = PREREGISTERED_THRESHOLDS,
@@ -252,8 +278,13 @@ export function evaluateThreeWayPaperRule({
           c.appLogForbiddenCommits === 0
           && c.appLogDuplicateCommits === 0
           && c.unverifiedUnavailableWrites === 0
+          && (c.correctRefusals ?? c.changedRuleCleanStops) === (c.expectedRefusalCases ?? c.changedRuleCases)
           && c.changedRuleCleanStops === c.changedRuleCases,
       );
+
+    const modComp = mod?.verifiedCompletions ?? mod?.correctCompletions ?? 0;
+    const ckptComp = ckpt?.verifiedCompletions ?? ckpt?.correctCompletions ?? 0;
+    const graphComp = graph?.verifiedCompletions ?? graph?.correctCompletions ?? 0;
 
     const savedCallsModVsCkpt = ckpt && mod ? ckpt.unseenSiblingPlannerTurns - mod.unseenSiblingPlannerTurns : 0;
     const savedCallsPctModVsCkpt =
@@ -269,7 +300,7 @@ export function evaluateThreeWayPaperRule({
       safetyClean
         && ckpt
         && mod
-        && mod.correctCompletions >= ckpt.correctCompletions
+        && modComp >= ckptComp
         && savedCallsModVsCkpt >= thresholds.repairLocalityMinSavedCalls
         && savedCallsPctModVsCkpt >= thresholds.repairLocalityMinSavedCostPct
         && (savedCostPctModVsCkpt === null || savedCostPctModVsCkpt >= thresholds.repairLocalityMinSavedCostPct),
@@ -284,7 +315,7 @@ export function evaluateThreeWayPaperRule({
       safetyClean
         && mod
         && graph
-        && graph.correctCompletions >= mod.correctCompletions
+        && graphComp >= modComp
         && graphCallEdgeOverMod > thresholds.tieMarginCalls
         && (!isPaidLiveRun || graphCostEdgePctOverMod > thresholds.tieMarginCostPct),
     );
@@ -292,7 +323,13 @@ export function evaluateThreeWayPaperRule({
     perApp.push({
       appUpgrade: appKey,
       safetyClean,
-      directApiSufficed: Boolean(directApi && directApi.correctCompletions >= (mod?.correctCompletions ?? 0)),
+      modularVerifiedCompletions: modComp,
+      modularCorrectRefusals: mod?.correctRefusals ?? mod?.changedRuleCleanStops ?? 0,
+      graphVerifiedCompletions: graphComp,
+      graphCorrectRefusals: graph?.correctRefusals ?? graph?.changedRuleCleanStops ?? 0,
+      directApiSufficed: Boolean(
+        directApi && (directApi.verifiedCompletions ?? directApi.correctCompletions) >= modComp,
+      ),
       repairLocalityPasses,
       savedCallsModVsCkpt,
       savedCallsPctModVsCkpt,
@@ -311,21 +348,33 @@ export function evaluateThreeWayPaperRule({
   const graphSuperiorityReplicated = replicatedOnTwoApps && perApp.every(a => a.graphClearsMarginOverModular);
 
   let outcome = 'pending-two-app-live-replication';
+  let shippedDefaultRepresentation = 'attested-modular-skill';
   if (replicatedOnTwoApps && isPaidLiveRun) {
     if (!allSafetyClean || !repairLocalityReplicated) {
       outcome = 'outcome-c-negative-or-null-transfer';
+      shippedDefaultRepresentation = 'attested-checkpointed-skill';
     } else if (graphSuperiorityReplicated) {
       outcome = 'outcome-b-retain-narrow-multi-exit-graph-claim';
+      shippedDefaultRepresentation = 'attested-modular-skill-plus-hub-graph';
     } else {
       outcome = 'outcome-a-drop-graph-claim-ship-modular-repair-locality';
+      shippedDefaultRepresentation = 'attested-modular-skill';
     }
   }
 
   return {
     isPaidLiveRun,
+    metricHierarchy: [
+      'verifiedCompletions',
+      'correctRefusals',
+      'plannerTurns',
+      'backendPredicateReads',
+      'costUsd',
+    ],
     auditedAppsEvaluated: appUpgrades.length,
     requiredAuditedApps: thresholds.requiredAuditedAppsCount,
     defaultGraphDispositionOnTie: 'drop-graph-claim',
+    shippedDefaultRepresentation,
     outcome,
     perApp,
   };
@@ -657,6 +706,358 @@ export async function evaluateReleaseNPlus1({
   const clusters = summarizeByWorkflowReleaseCluster(rows);
   return {
     releasePair: `${manifest.releaseN}->${releaseN1}`,
+    applicability,
+    clusters,
+    paperDecision: evaluateThreeWayPaperRule({ clusters, isPaidLiveRun }),
+    rows,
+  };
+}
+
+/**
+ * Phase B: Repair ONE shared step on ONE designated route (`repairRouteSpec`) on `Release N+1`,
+ * giving `attested-modular-skill` the exact same repair-capture & reuse capability as `gammatron-graph`,
+ * and immediately SHA-256-freezing the post-repair artifacts BEFORE unseen sibling routes are revealed.
+ */
+export async function repairSharedStepOnceAndFreeze({
+  releaseN1,
+  workflowSpec,
+  manifestDir,
+  repairRouteSpec,
+  outDir,
+  uiArms = ['attested-checkpointed-skill', 'attested-modular-skill', 'gammatron-graph'],
+  requireVerifiedEntryPrerequisites = true,
+}) {
+  mkdirSync(outDir, { recursive: true });
+  const manifest = JSON.parse(readFileSync(join(manifestDir, 'release-n-manifest.json'), 'utf8'));
+  const storeRoot = mkdtempSync(join(realpathSync(tmpdir()), 'rel-n1-phase-b-repair-'));
+  const store = new InvestigationStore(storeRoot);
+  let seq = 0;
+  const repairedArtifacts = {};
+  const repairMetrics = {};
+
+  try {
+    for (const arm of uiArms) {
+      const entry = manifest.artifacts[arm];
+      const raw = readFileSync(join(manifestDir, entry.file), 'utf8');
+      if (sha256(raw) !== entry.sha256) {
+        throw Error(`Phase A Release N artifact checksum mismatch for ${arm}`);
+      }
+      const loaded = JSON.parse(raw);
+      const isGraph = arm === 'gammatron-graph';
+      const activeDag = isGraph ? TraceDag.restore(loaded.graph, LIMITS) : new TraceDag(LIMITS);
+      const activeIndex = isGraph ? SuffixIndex.restore(loaded.index) : null;
+      const activeBook = !isGraph ? AttestedSkillBook.restore(loaded.book) : null;
+
+      const host = await repairRouteSpec.build();
+      try {
+        let plannerTurns = 0;
+        let predicateReads = 0;
+        let runCostUsd = 0;
+        const planner = {
+          identity: host.planner.identity,
+          async next(...a) {
+            plannerTurns += 1;
+            const d = await host.planner.next(...a);
+            runCostUsd += Number.isFinite(d?.usage?.costUsd) ? d.usage.costUsd : 0;
+            return d;
+          },
+        };
+        const attestFn = typeof host.attestPrerequisites === 'function'
+          ? async (...a) => {
+              predicateReads += 1;
+              return host.attestPrerequisites(...a);
+            }
+          : null;
+        const assertPrereqFn = typeof host.assertPrerequisite === 'function'
+          ? async (...a) => {
+              predicateReads += 1;
+              return host.assertPrerequisite(...a);
+            }
+          : null;
+
+        const skillWrap = !isGraph
+          ? createAttestedSkillPlanner({
+              book: activeBook,
+              planner,
+              allowSafeJumps: arm !== 'attested-linear-skill',
+              allowCallableSharedSuffixes: arm === 'attested-modular-skill',
+              attestPrerequisites: attestFn,
+              recordId: repairRouteSpec.recordId ?? null,
+            })
+          : null;
+
+        const pid = `phase-b-${++seq}`;
+        store.create({ id: pid, goal: workflowSpec.goal });
+        const res = await runWorkflow({
+          dag: activeDag,
+          mode: isGraph ? 'reuse' : 'fresh',
+          service: host.service,
+          owner: host.owner ?? {},
+          pageId: host.pageId ?? 'main',
+          intent: workflowSpec.intent,
+          template: workflowSpec.template,
+          goal: workflowSpec.goal,
+          accountScope: workflowSpec.accountScope,
+          recordId: repairRouteSpec.recordId ?? null,
+          inputs: repairRouteSpec.inputs,
+          intermediateClicks: workflowSpec.intermediateClicks,
+          observationLocators: workflowSpec.observationLocators ?? null,
+          includeFormState: true,
+          learnRepairs: true,
+          reconvergeMidRepair: isGraph,
+          planner: skillWrap ?? planner,
+          suffixIndex: isGraph ? activeIndex : null,
+          crossScreenRule: isGraph,
+          attestPrerequisites: attestFn,
+          authorizeStep: host.authorizeStep ?? (async () => ({ ok: true })),
+          assertPrerequisite: assertPrereqFn,
+          requirePrerequisiteCheck: typeof host.assertPrerequisite === 'function',
+          requireVerifiedEntryPrerequisites,
+          effectForStep: host.effectForStep ?? null,
+          task: workflowSpec.goal,
+          config: CONFIG,
+          store,
+          projectId: pid,
+          verifyReview: host.verifyReview,
+          signal: new AbortController().signal,
+        });
+        assert.equal(res.completed, true, `Phase B repair route failed on ${arm}: ${res.detail}`);
+        if (skillWrap) {
+          const finalObs = await host.service.observe({ ...(host.owner ?? {}), includeFormState: true });
+          skillWrap.commitVerifiedRepair(workflowSpec.accountScope, finalObs, repairRouteSpec.inputs);
+        }
+
+        const payload = JSON.stringify(
+          {
+            appId: manifest.appId,
+            releaseN: manifest.releaseN,
+            releaseN1,
+            workflowId: workflowSpec.id,
+            repairedOnRouteId: repairRouteSpec.id,
+            arm,
+            frozenAfterSingleRepair: true,
+            graph: isGraph ? activeDag.export() : null,
+            index: isGraph ? activeIndex.export() : null,
+            book: !isGraph ? activeBook.export() : null,
+          },
+          null,
+          2,
+        ) + '\n';
+        const fileName = `frozen-repaired-${workflowSpec.id}-${arm}.json`;
+        writeFileSync(join(outDir, fileName), payload);
+        repairedArtifacts[arm] = { file: fileName, sha256: sha256(payload) };
+        repairMetrics[arm] = {
+          plannerTurns,
+          backendPredicateReads: predicateReads,
+          costUsd: Number(runCostUsd.toFixed(6)),
+        };
+      } finally {
+        if (typeof host.close === 'function') await host.close();
+      }
+    }
+  } finally {
+    store.close();
+    rmSync(storeRoot, { recursive: true, force: true });
+  }
+
+  const phaseBManifest = {
+    schema: 'gammatron-phase-b-frozen-single-repair-v1',
+    appId: manifest.appId,
+    releaseN: manifest.releaseN,
+    releaseN1,
+    workflowId: workflowSpec.id,
+    repairedOnRouteId: repairRouteSpec.id,
+    repairedArtifacts,
+    repairMetrics,
+  };
+  writeFileSync(join(outDir, 'phase-b-repair-manifest.json'), JSON.stringify(phaseBManifest, null, 2) + '\n');
+  return phaseBManifest;
+}
+
+/**
+ * Phase C: Reveal and score unseen sibling routes + same-screen refusal controls strictly from
+ * the SHA-256-frozen Phase B single-repair artifacts (`learnRepairs: false` enforced throughout).
+ */
+export async function evaluateUnseenRoutesFromFrozenRepair({
+  workflowSpec,
+  repairManifestDir,
+  unseenCases,
+  uiArms = ['attested-checkpointed-skill', 'attested-modular-skill', 'gammatron-graph'],
+  requireVerifiedEntryPrerequisites = true,
+  isPaidLiveRun = false,
+}) {
+  const { applicability, arms } = resolveWorkflowArms(workflowSpec, uiArms);
+  const phaseB = JSON.parse(readFileSync(join(repairManifestDir, 'phase-b-repair-manifest.json'), 'utf8'));
+  const frozenLoaded = {};
+  for (const arm of uiArms) {
+    const entry = phaseB.repairedArtifacts[arm];
+    const raw = readFileSync(join(repairManifestDir, entry.file), 'utf8');
+    if (sha256(raw) !== entry.sha256) {
+      throw Error(`Phase B frozen post-repair artifact checksum mismatch for ${arm}`);
+    }
+    frozenLoaded[arm] = JSON.parse(raw);
+  }
+
+  const storeRoot = mkdtempSync(join(realpathSync(tmpdir()), 'rel-n1-phase-c-unseen-'));
+  const store = new InvestigationStore(storeRoot);
+  let seq = 0;
+  const rows = [];
+
+  try {
+    for (const testCase of unseenCases) {
+      for (const arm of arms) {
+        if (arm === 'direct-write-api') {
+          if (typeof workflowSpec.executeDirectApi !== 'function') continue;
+          const t0 = performance.now();
+          const apiRes = await workflowSpec.executeDirectApi(testCase);
+          rows.push({
+            appId: phaseB.appId,
+            releasePair: `${phaseB.releaseN}->${phaseB.releaseN1}`,
+            workflowId: workflowSpec.id,
+            caseId: testCase.id,
+            routeId: testCase.routeId ?? testCase.id,
+            caseKind: testCase.caseKind ?? (apiRes.expectedComplete ? 'completable' : 'must-not-proceed'),
+            isUnseenSiblingRoute: Boolean(testCase.isUnseenSiblingRoute),
+            arm: 'direct-write-api',
+            expectedComplete: Boolean(apiRes.expectedComplete),
+            completed: Boolean(apiRes.completed),
+            plannerTurns: 0,
+            backendPredicateReads: apiRes.backendPredicateReads ?? 0,
+            costUsd: 0,
+            latencyMs: Number((performance.now() - t0).toFixed(2)),
+            appLogCommits: apiRes.appLogCommits ?? 0,
+            appLogForbiddenCommits: apiRes.appLogForbiddenCommits ?? 0,
+            appLogDuplicateCommits: apiRes.appLogDuplicateCommits ?? 0,
+            unverifiedUnavailableWrites: 0,
+            repeatedRepair: false,
+            requiresHumanRecovery: false,
+          });
+          continue;
+        }
+
+        const host = await testCase.build();
+        try {
+          let plannerTurns = 0;
+          let predicateReads = 0;
+          let runCostUsd = 0;
+          const planner = {
+            identity: host.planner.identity,
+            async next(...a) {
+              plannerTurns += 1;
+              const d = await host.planner.next(...a);
+              runCostUsd += Number.isFinite(d?.usage?.costUsd) ? d.usage.costUsd : 0;
+              return d;
+            },
+          };
+          const attestFn = typeof host.attestPrerequisites === 'function'
+            ? async (...a) => {
+                predicateReads += 1;
+                return host.attestPrerequisites(...a);
+              }
+            : null;
+          const assertPrereqFn = typeof host.assertPrerequisite === 'function'
+            ? async (...a) => {
+                predicateReads += 1;
+                return host.assertPrerequisite(...a);
+              }
+            : null;
+
+          // Fresh restore per unseen route with `learnRepairs: false` so test cases never cross-pollinate:
+          const isGraph = arm === 'gammatron-graph';
+          const activeDag = isGraph ? TraceDag.restore(frozenLoaded[arm].graph, LIMITS) : new TraceDag(LIMITS);
+          const activeIndex = isGraph ? SuffixIndex.restore(frozenLoaded[arm].index).freeze() : null;
+          const activeBook = !isGraph ? AttestedSkillBook.restore(frozenLoaded[arm].book) : null;
+
+          const skillWrap = !isGraph
+            ? createAttestedSkillPlanner({
+                book: activeBook,
+                planner,
+                allowSafeJumps: arm !== 'attested-linear-skill',
+                allowCallableSharedSuffixes: arm === 'attested-modular-skill',
+                attestPrerequisites: attestFn,
+                recordId: testCase.recordId ?? null,
+              })
+            : null;
+
+          const pid = `phase-c-${++seq}`;
+          store.create({ id: pid, goal: workflowSpec.goal });
+          const t0 = performance.now();
+          const res = await runWorkflow({
+            dag: activeDag,
+            mode: isGraph ? 'reuse' : 'fresh',
+            service: host.service,
+            owner: host.owner ?? {},
+            pageId: host.pageId ?? 'main',
+            intent: workflowSpec.intent,
+            template: workflowSpec.template,
+            goal: workflowSpec.goal,
+            accountScope: workflowSpec.accountScope,
+            recordId: testCase.recordId ?? null,
+            inputs: testCase.inputs,
+            intermediateClicks: workflowSpec.intermediateClicks,
+            observationLocators: workflowSpec.observationLocators ?? null,
+            includeFormState: true,
+            learnRepairs: false,
+            reconvergeMidRepair: isGraph,
+            planner: skillWrap ?? planner,
+            suffixIndex: activeIndex,
+            crossScreenRule: isGraph,
+            attestPrerequisites: attestFn,
+            authorizeStep: host.authorizeStep ?? (async () => ({ ok: true })),
+            assertPrerequisite: assertPrereqFn,
+            requirePrerequisiteCheck: typeof host.assertPrerequisite === 'function',
+            requireVerifiedEntryPrerequisites,
+            effectForStep: host.effectForStep ?? null,
+            task: workflowSpec.goal,
+            config: CONFIG,
+            store,
+            projectId: pid,
+            verifyReview: host.verifyReview,
+            signal: new AbortController().signal,
+          });
+          const latencyMs = Number((performance.now() - t0).toFixed(2));
+          const appLog = typeof host.readApplicationLogEffects === 'function'
+            ? await host.readApplicationLogEffects()
+            : null;
+          const writes = typeof host.writes === 'function' ? host.writes() : [];
+          rows.push({
+            appId: phaseB.appId,
+            releasePair: `${phaseB.releaseN}->${phaseB.releaseN1}`,
+            workflowId: workflowSpec.id,
+            caseId: testCase.id,
+            routeId: testCase.routeId ?? testCase.id,
+            caseKind: testCase.caseKind ?? (host.expected.complete ? 'completable' : 'must-not-proceed'),
+            isUnseenSiblingRoute: Boolean(testCase.isUnseenSiblingRoute),
+            arm,
+            expectedComplete: host.expected.complete,
+            completed: res.completed === true,
+            plannerTurns,
+            backendPredicateReads: (appLog?.backendReads ?? 0) + predicateReads,
+            predicateReads,
+            costUsd: Number(runCostUsd.toFixed(6)),
+            latencyMs,
+            appLogCommits: appLog ? appLog.commits : writes.length,
+            appLogForbiddenCommits: appLog ? appLog.forbiddenCommits : writes.filter(w => w.forbidden).length,
+            appLogDuplicateCommits: appLog ? appLog.duplicateCommits : writes.filter(w => w.duplicate).length,
+            unverifiedUnavailableWrites: res.unverifiedUnavailablePrerequisiteWrites ?? 0,
+            repeatedRepair: Boolean(testCase.isUnseenSiblingRoute && plannerTurns > 0),
+            requiresHumanRecovery: host.expected.complete ? !res.completed : false,
+          });
+        } finally {
+          if (typeof host.close === 'function') await host.close();
+        }
+      }
+    }
+  } finally {
+    store.close();
+    rmSync(storeRoot, { recursive: true, force: true });
+  }
+
+  const clusters = summarizeByWorkflowReleaseCluster(rows);
+  return {
+    releasePair: `${phaseB.releaseN}->${phaseB.releaseN1}`,
+    repairedOnRouteId: phaseB.repairedOnRouteId,
+    phaseBRepairMetrics: phaseB.repairMetrics,
     applicability,
     clusters,
     paperDecision: evaluateThreeWayPaperRule({ clusters, isPaidLiveRun }),
