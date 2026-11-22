@@ -13,6 +13,7 @@ import { SuffixIndex } from '../../src/client/suffix-eligibility.js';
 import { InvestigationStore } from '../../src/client/investigation.js';
 import { createCliPlanner } from '../../src/client/cli-planner.js';
 import { runWorkflow, WORKFLOW_SYSTEM, WORKFLOW_TOOLS } from '../../src/client/workflow-agent.js';
+import { skillPlanner, skillRecorder } from '../../src/client/skill-exec.js';
 import { canonicalJson, sha256Hex } from '../../src/journal.js';
 import { structuralLocator, structuralOutlineHash } from '../../src/adapters/page-query.js';
 import { createFixture } from './fixture.js';
@@ -29,7 +30,7 @@ const client = JSON.parse(readFileSync(join(root, 'projects/workspace/config/faw
 const args = process.argv.slice(2);
 const get = name => args.includes(name) ? args[args.indexOf(name) + 1] : null;
 if (args.includes('--help')) {
-  console.log('run.js --out NEW_DIR [--controlled] [--pair-teaching] [--numeric-routes] [--matcher index|profile] [--arms whole,fresh,script,scoped,suffix,whole-rc,suffix-rc] [--variants frozen,ids]');
+  console.log('run.js --out NEW_DIR [--controlled] [--pair-teaching] [--numeric-routes] [--matcher index|profile] [--arms whole,fresh,script,skill,scoped,suffix,whole-rc,suffix-rc] [--variants frozen,ids]');
   process.exit(0);
 }
 for (let i = 0; i < args.length; i++) {
@@ -63,9 +64,11 @@ const extensions = {
   'hidden-prerequisite-reordered-unguarded': { page: 'reordered', guarded: false },
 };
 // suffix = whole-page graph plus opt-in suffix eligibility; -rc also resumes replay after planner steps.
+// skill = the teaching run's actions as a script with planner recovery (src/client/skill-exec.js). It
+// keeps no graph, runs in fresh mode and so passes the same guards and journal as every planner action.
 const graphOf = arm => ({ whole: pairTeaching ? 'suffix' : 'whole', 'whole-rc': pairTeaching ? 'suffix' : 'whole',
   scoped: 'scoped', suffix: 'suffix', 'suffix-rc': 'suffix' })[arm] ?? null;
-if (arms.some(arm => !['whole', 'fresh', 'script', 'scoped', 'suffix', 'whole-rc', 'suffix-rc'].includes(arm))
+if (arms.some(arm => !['whole', 'fresh', 'script', 'skill', 'scoped', 'suffix', 'whole-rc', 'suffix-rc'].includes(arm))
   || variants.some(variant => !policy.variants.includes(variant) && !extensions[variant])) throw Error('Unfrozen arm or variant');
 if (existsSync(out)) throw Error('Choose a new output directory; failed evidence cannot be overwritten');
 mkdirSync(out, { recursive: true, mode: 0o700 });
@@ -74,7 +77,7 @@ const paths = ['forms.json', 'oracle.json', 'policy.json', 'contracts.js', 'fixt
 paths.push('projects/workspace/config/fawn-workspace-service.json', 'projects/workspace/config/fawn-workspace-client.json',
   ...['service', 'state', 'admission', 'conditions', 'journal', 'adapters/page-query',
     'adapters/playwright-adapter', 'client/trace-dag', 'client/trace-graph-dp', 'client/suffix-eligibility',
-    'client/workflow-agent', 'client/agent',
+    'client/workflow-agent', 'client/skill-exec', 'client/agent',
     'client/cli-planner', 'client/investigation'].map(path => `projects/workspace/src/${path}.js`));
 if (arms.includes('scoped')) paths.push('projects/workspace/src/client/field-group-scope.js');
 const hashes = () => Object.fromEntries(paths.map(path => [path, sha256Hex(readFileSync(join(root, path)))]));
@@ -83,7 +86,7 @@ const frozen = { frozenAt: new Date().toISOString(), testFreeze, policy, arms, v
   sourceDirty: !!execFileSync('git', ['status', '--porcelain', '--ignore-submodules=all'], { cwd: root, encoding: 'utf8' }).trim(),
   sourceHashes: hashes() };
 writeFileSync(join(out, 'frozen.json'), JSON.stringify(frozen, null, 2));
-const fixture = await createFixture(), learned = new Map(), learnedIndex = new Map(), learnedOutline = new Map(), rows = [], calls = [];
+const fixture = await createFixture(), learned = new Map(), learnedIndex = new Map(), learnedOutline = new Map(), skills = new Map(), rows = [], calls = [];
 const serviceConfig = loadServiceConfig(undefined, { browserChannel: 'chrome', headless: true });
 const config = { ...client, maxTurns: policy.maxTurnsPerRun, cliMaxBudgetUsd: policy.maxTurnCostUsd };
 let costUpperBoundUsd = 0;
@@ -197,13 +200,17 @@ async function run({ vendor, variant, arm, learn = false }) {
         }
       }
     };
+    // Every teaching run also yields the skill arm's script; the skill arm wraps the same planner.
+    const basePlanner = provider(name, vendor, arm === 'script');
+    const teacher = learn ? skillRecorder(basePlanner) : null;
+    const skillRun = !learn && arm === 'skill' ? skillPlanner({ skill: skills.get(vendor), planner: basePlanner }) : null;
     armed = true;
     const result = await runWorkflow({ dag, mode: learn ? 'learn' : graph ? 'reuse' : 'fresh',
       suffixIndex, suffixEligibility, reconvergeMidRepair: !learn && arm.endsWith('-rc'),
       requirePrerequisiteCheck: Boolean(extension?.guarded), assertPrerequisite,
       service: port, owner, pageId: 'main', intent: 'application', template: `${vendor}-contact-projection-v1`,
       inputs: { ...policy.inputs, ...(learn ? { email: 'avery@example.test', firstName: 'Avery', fullName: 'Avery Test' } : {}) },
-      intermediateClicks, task, planner: provider(name, vendor, arm === 'script'), config, store, projectId: name,
+      intermediateClicks, task, planner: teacher?.planner ?? skillRun ?? basePlanner, config, store, projectId: name,
       verifyReview: () => fixture.verify(caseId, page, { ...policy.inputs,
         ...(learn ? { email: 'avery@example.test', firstName: 'Avery', fullName: 'Avery Test' } : {}) }),
       assertContext, authorizeStep, accountScope: variant === 'account-difference' ? 'account-b' : 'account-a',
@@ -217,7 +224,9 @@ async function run({ vendor, variant, arm, learn = false }) {
     const afterFault = fault ? { executions: executions - fault.executions, decisions: countCalls() - fault.calls } : null;
     const callsForRun = calls.filter(call => call.run === name);
     row = { name, vendor, variant, arm, learning: learn, ...result,
-      plannerDecisions: result.modelCalls, modelCalls: callsForRun.filter(call => call.real).length,
+      // For the skill arm a decision is a turn handed to the planner; script steps cost none.
+      plannerDecisions: skillRun ? callsForRun.length : result.modelCalls, modelCalls: callsForRun.filter(call => call.real).length,
+      skill: skillRun?.stats() ?? null,
       preparationMs, completeTaskMs: performance.now() - started, oracle,
       plannerMs: callsForRun.reduce((sum, call) => sum + (call.elapsedMs ?? 0), 0),
       costUsd: callsForRun.reduce((sum, call) => sum + (call.usage?.costUsd ?? 0), 0),
@@ -242,6 +251,10 @@ async function run({ vendor, variant, arm, learn = false }) {
         && (variant !== 'unknown-outcome' || (unknown === 1 && afterFault?.executions === 0 && afterFault?.decisions === 0)),
       browserVersion: page.context().browser()?.version() ?? null };
     if (learn && result.completed && oracle.completed) {
+      if (!skills.has(vendor)) {
+        skills.set(vendor, teacher.skill());
+        writeFileSync(join(out, `${vendor}-skill.private.json`), JSON.stringify(teacher.skill()), { mode: 0o600 });
+      }
       learnedOutline.set(vendor, firstOutline);
       learned.set(key, dag.export());
       writeFileSync(join(out, `${key}.private.json`), JSON.stringify(dag.export()), { mode: 0o600 });
@@ -263,7 +276,9 @@ async function run({ vendor, variant, arm, learn = false }) {
 
 try {
   for (const vendor of ['greenhouse', 'lever']) {
-    for (const arm of [...new Set(arms.map(graphOf).filter(Boolean))]) {
+    // The skill arm needs a teaching run even when no graph arm is requested.
+    const teachingGraph = arm => (arm === 'skill' ? (pairTeaching ? 'suffix' : 'whole') : graphOf(arm));
+    for (const arm of [...new Set(arms.map(teachingGraph).filter(Boolean))]) {
       const row = await run({ vendor, variant: 'heldout', arm, learn: true });
       if (!row.expectedBehaviorPassed) throw Error(`Learning failed: ${row.name}`);
     }
