@@ -1,0 +1,64 @@
+{
+  "schema": "gammatron-step1-preflight-freeze-v1",
+  "spendUsd": 0,
+  "nodeVersion": "v22.20.0",
+  "chromeRevision": "Google Chrome 158.0.8127.36",
+  "gammaCommit": "195be76ad1122dde984f35fe85bab070bde58ea1",
+  "gammaDirty": false,
+  "workspaceSrcTree": "7d9bdfe3eff736c2b099427ee098059b4521146b",
+  "fawnCommit": "a281360ff04321f08e5627c5309503d0259a0e70",
+  "fawnDonorImportCommit": "9234bc55953c43af7d53c7335d8fe24282e59dc6",
+  "preflightCommand": "node projects/workspace/qualification/workflow-generalization/preflight-freeze.mjs",
+  "blindHoldoutV3FrozenCommit": "b4627512111e2662fdc7fcb767b3af6bd2859464",
+  "blindHoldoutV3FilesVerified": [
+    {
+      "file": "cases.mjs",
+      "sha256": "fd15da2565673e34f5b2350f4fd793b593534a3d43da87af3b06ecfbc1908b8b",
+      "verified": true
+    },
+    {
+      "file": "PROTOCOL.md",
+      "sha256": "653b4e218f58a1660763728de9f822e6edb1fec15df986afc1861b672f30a190",
+      "verified": true
+    },
+    {
+      "file": "self-check.mjs",
+      "sha256": "f8c44de22695d6df5c39ea37d7dc8ef7ed4b7f7d9c182236069abb042190f2e2",
+      "verified": true
+    }
+  ],
+  "retainedReceipts": [
+    {
+      "id": "blind-holdout-v3-frozen-score",
+      "classification": "frozen-single-pass-blind-score",
+      "frozenAtCommit": "b4627512111e2662fdc7fcb767b3af6bd2859464",
+      "path": "projects/workspace/qualification/workflow-generalization/receipts/blind-holdout-v3-receipt.json",
+      "sha256": "b7d4842a3446e3b5db40febdb242520155abec5e6ef8c04aa219ec4a7d5eda13",
+      "exactReplayCommand": "node projects/workspace/qualification/workflow-generalization/replay-verify-v3-receipt.mjs"
+    },
+    {
+      "id": "blind-holdout-v3-independent-replay",
+      "classification": "independent-detached-worktree-replay-verification",
+      "frozenAtCommit": "8f41cac9de7c68fb468f254f74b47e256108294d",
+      "path": "projects/workspace/qualification/workflow-generalization/receipts/v3-independent-replay-verification.json",
+      "sha256": "86c1f0f371e16fe667b5f094307a8c015d476121c7eb311dceb0309173a36712",
+      "exactReplayCommand": "node projects/workspace/qualification/workflow-generalization/replay-verify-v3-receipt.mjs"
+    },
+    {
+      "id": "post-v3-modular-revision-diagnostic",
+      "classification": "post-v3-diagnostic-not-blind-score",
+      "frozenAtCommit": "34ae03d5b864162c6704e0580259296422645873",
+      "path": "projects/workspace/qualification/workflow-generalization/receipts/post-v3-modular-revision-receipt.json",
+      "sha256": "cd3c0b9d83be06d506c258bdfb6abaebc5511ddbe01c3fe7bea29ade7a2239f3",
+      "exactReplayCommand": "node projects/workspace/qualification/workflow-generalization/modular-revision-eval.mjs"
+    },
+    {
+      "id": "host-contract-chrome-sqlite-rest-benchmark",
+      "classification": "contract-and-integration-cost-benchmark",
+      "frozenAtCommit": "0569aaa84066a979504e599465b12361a7e24259",
+      "path": "projects/workspace/qualification/workflow-generalization/receipts/host-contract-benchmark-receipt.json",
+      "sha256": "5a205cb87bd6c7982feef62353263f2d92b2c1aa1dd829d7c1a4116439f70e97",
+      "exactReplayCommand": "node projects/workspace/qualification/workflow-generalization/host-contract-benchmark.mjs"
+    }
+  ]
+}

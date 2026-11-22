@@ -692,6 +692,19 @@ class TraceSession {
           code: 'prerequisite-refused',
         });
       }
+      if (prereqResult?.status === 'unavailable') {
+        this.unavailablePredicates.push({
+          predicate: typeof prereqResult.predicate === 'string' ? prereqResult.predicate : 'unknown-prerequisite',
+          reason: typeof prereqResult.reason === 'string' ? prereqResult.reason : 'unavailable',
+        });
+        if (this.requireVerifiedEntryPrerequisites || this.requireMultiPredicateWrite || this.requirePrerequisiteCheck) {
+          throw Object.assign(
+            Error(prereqResult.reason || 'Unavailable prerequisite cannot authorize write'),
+            { code: 'unavailable-prerequisite-blocks-write' },
+          );
+        }
+        this.unverifiedUnavailablePrerequisiteWrites += 1;
+      }
     }
     const entryUnavailableActive = this.entryRestsOnUnavailablePrerequisite
       || (this.externalEntryUnavailable ? this.externalEntryUnavailable() === true : false);

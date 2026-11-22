@@ -21,6 +21,7 @@ import {
   hasDirtyUntrackedFormControl,
   labelsCompete,
   normalizeAttestationAnswers,
+  normalizeRoutePattern,
 } from './suffix-eligibility.js';
 
 const BOOK_VERSION = 1;
@@ -56,9 +57,28 @@ function buildInputsMap(inputs, hashFn) {
   return map;
 }
 
+function normalizeSkillRoutePath(rawUrlOrPath) {
+  let parsed;
+  try {
+    parsed = rawUrlOrPath instanceof URL
+      ? rawUrlOrPath
+      : new URL(rawUrlOrPath.startsWith('http') ? rawUrlOrPath : `https://route.invalid${rawUrlOrPath.startsWith('/') ? '' : '/'}${rawUrlOrPath}`);
+  } catch {
+    return String(rawUrlOrPath ?? '/');
+  }
+  const basePattern = normalizeRoutePattern(parsed.href).routePattern;
+  if (typeof parsed.hash === 'string' && parsed.hash.startsWith('#/')) {
+    const hashPathOnly = parsed.hash.slice(1).split('?')[0];
+    const hashPattern = normalizeRoutePattern(`https://route.invalid${hashPathOnly}`).routePattern;
+    return `${basePattern.replace(/\/$/, '')}#${hashPattern}`;
+  }
+  return basePattern;
+}
+
 function prepareStep(step) {
   return {
     ...step,
+    urlPath: normalizeSkillRoutePath(step.urlPath ?? '/'),
     key: canonicalJson(step.locator),
     taught: new Set(step.page ?? []),
   };
@@ -290,7 +310,7 @@ function captureStepFromContext(context, decision, hashFn) {
     locator: structuralLocator(element),
     ...(decision.input.slot === undefined ? {} : { slot: decision.input.slot }),
     urlOrigin: parsedUrl.origin,
-    urlPath: parsedUrl.pathname,
+    urlPath: normalizeSkillRoutePath(parsedUrl),
     page: [...new Set(elements.filter(isWritable).map(keyOf))].sort(),
     learnedCounts: elements.map(keyOf),
     status: computeStatusSignatures(elements, inputsMap, hashFn),

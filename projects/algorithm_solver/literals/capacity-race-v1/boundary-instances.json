@@ -1,0 +1,587 @@
+{
+  "schema": "bits-boundary-race-instances/v1",
+  "selectorSubagentId": "a7d22714-d5ae-4c23-8949-8780036cd6e6",
+  "rule": "W2",
+  "maxBytes": 160,
+  "wholeProgramExcluded": true,
+  "corpora": {
+    "B01": {
+      "id": "B01",
+      "name": "enwiki9-endpoint428-seal-tests",
+      "language": "Python",
+      "repo": "gamma",
+      "commit": "fbe798f63",
+      "description": "Unit tests verifying archive byte-budget economics and packaging guards for enwiki9 endpoint-428 layer-0 sealing tools.",
+      "alphabetSize": 58,
+      "totalBytes": 3657,
+      "files": [
+        {
+          "path": "projects/enwiki9/tests/test_seal_endpoint428_pair_layer0_10m.py",
+          "bytes": 1054,
+          "sha256": "106e32155b0f11d46c1b0a24af034697f67ccef78efe1b5e344b90430ae878b6"
+        },
+        {
+          "path": "projects/enwiki9/tests/test_seal_endpoint428_pair_layer0_lzma_package.py",
+          "bytes": 1693,
+          "sha256": "f074eff42cab9f02119fe9eaff744251cb252141ec8d8c6f1e9c12b8f28302ab"
+        },
+        {
+          "path": "projects/enwiki9/tests/test_seal_endpoint428_pair_layer0_native.py",
+          "bytes": 910,
+          "sha256": "1f0a1723abf4cf0be79db39236525977c8efdf5e1313a2d9c04e9813b61a834b"
+        }
+      ],
+      "programs": [
+        "from projects.enwiki9.tools.seal_endpoint428_pair_layer0_10m import (\n    calculate_economics,\n)\n\n\ndef economics(candidate_archive_bytes: int) -> dict[str, object]:\n    return calculate_economics(\n        base_archive_bytes=1_635_695,\n        candidate_archive_bytes=candidate_archive_bytes,\n        base_forecast_score_bytes=109_557_404,\n        incremental_program_bytes=1_747,\n        calibration_factor=66.955334,\n        required_gain_bytes=884,\n        archive_ceiling_bytes=1_634_811,\n    )\n\n\ndef test_exact_ceiling_passes_with_conservative_projection() -> None:\n    result = economics(1_634_811)\n    assert result[\"saved_bytes_10m\"] == 884\n    assert result[\"economics_pass\"] is True\n    assert result[\"conservative_provisional_score_bytes\"] == 109_499_963\n    assert result[\"provisional_target_margin_bytes\"] == 37\n\n\ndef test_one_byte_above_ceiling_fails() -> None:\n    result = economics(1_634_812)\n    assert result[\"saved_bytes_10m\"] == 883\n    assert result[\"economics_pass\"] is False\n    assert result[\"archive_ceiling_margin_bytes\"] == -1\n",
+        "import json\n\nimport pytest\n\nfrom projects.enwiki9.tools.seal_endpoint428_pair_layer0_lzma_package import (\n    economics,\n    require_clean_guard,\n)\n\n\ndef test_lzma_package_clears_counted_projection() -> None:\n    result = economics(package_bytes=278_825)\n    assert result[\"package_saved_bytes_vs_prior\"] == 72_117\n    assert result[\"incremental_program_bytes_vs_base\"] == -70_370\n    assert result[\"conservative_provisional_score_bytes\"] == 109_452_151\n    assert result[\"provisional_target_margin_bytes\"] == 47_849\n    assert result[\"economics_pass\"] is True\n\n\ndef test_require_clean_guard_accepts_terminal_decimal_compliant_guard(tmp_path) -> None:\n    path = tmp_path / \"guard.json\"\n    path.write_text(\n        json.dumps(\n            {\n                \"status\": \"complete\",\n                \"returncode\": 0,\n                \"rss_guard_exceeded\": False,\n                \"official_decimal_over_limit_kib\": 0,\n                \"official_decimal_limit_kib\": 9_765_625,\n                \"max_sampled_single_rss_kib\": 9_077_648,\n            }\n        )\n    )\n    assert require_clean_guard(path)[\"status\"] == \"complete\"\n\n\ndef test_require_clean_guard_rejects_decimal_overage(tmp_path) -> None:\n    path = tmp_path / \"guard.json\"\n    path.write_text(\n        json.dumps(\n            {\n                \"status\": \"complete\",\n                \"returncode\": 0,\n                \"rss_guard_exceeded\": False,\n                \"official_decimal_over_limit_kib\": 1,\n                \"official_decimal_limit_kib\": 9_765_625,\n                \"max_sampled_single_rss_kib\": 9_765_626,\n            }\n        )\n    )\n    with pytest.raises(ValueError, match=\"decimal-compliant\"):\n        require_clean_guard(path)\n",
+        "from projects.enwiki9.tools.seal_endpoint428_pair_layer0_native import (\n    add_disjoint_economics,\n    calculate_economics,\n)\n\n\ndef test_calculate_economics_uses_counted_source_delta() -> None:\n    economics = calculate_economics(\n        base_program_bytes=349_195,\n        candidate_program_bytes=350_942,\n        prefix_gain_bytes=67,\n    )\n\n    assert economics[\"incremental_program_bytes\"] == 1_747\n    assert economics[\"provisional_prefix_forecast_score_bytes\"] == 109_492_151\n    assert economics[\"provisional_prefix_forecast_margin_bytes\"] == 7_849\n    assert economics[\"required_exact_10m_gain_bytes\"] == 884\n    assert economics[\"maximum_exact_10m_archive_bytes\"] == 1_634_811\n\n    add_disjoint_economics(economics, disjoint_gain_bytes=89)\n    assert economics[\"provisional_disjoint_forecast_score_bytes\"] == 109_470_151\n    assert economics[\"provisional_disjoint_forecast_margin_bytes\"] == 29_849\n"
+      ]
+    },
+    "B02": {
+      "id": "B02",
+      "name": "zig-runtime-app-orchestration",
+      "language": "Zig",
+      "repo": "fawn",
+      "commit": "a281360ff0",
+      "description": "Hexagonal Zig runtime application layer defining request contracts, preparation, and synchronous execution orchestration.",
+      "alphabetSize": 59,
+      "totalBytes": 3664,
+      "files": [
+        {
+          "path": "runtime/zig/src/app/mod.zig",
+          "bytes": 790,
+          "sha256": "6671d7e9be0c0cdf0bdfb3e2ef5a0c1bd926d9c15d16a9905fa2f18a91800411"
+        },
+        {
+          "path": "runtime/zig/src/app/prepare.zig",
+          "bytes": 1060,
+          "sha256": "5d629d7087e3458a8daf34dd47020e79d897593b8f0900a46499799fd8437cb4"
+        },
+        {
+          "path": "runtime/zig/src/app/request.zig",
+          "bytes": 559,
+          "sha256": "1cca15c3fc6fcf9a50e787b286debac79496f9b88bea51100cbd7903b38b5ae1"
+        },
+        {
+          "path": "runtime/zig/src/app/runner.zig",
+          "bytes": 1255,
+          "sha256": "976a5cf512024d9cd6ee36ed994d2086b5bdf6442e030a5c5d9c35a750833005"
+        }
+      ],
+      "programs": [
+        "//! Application orchestration layer for the Hexagonal runtime core.\n\npub const request = @import(\"request.zig\");\npub const prepare = @import(\"prepare.zig\");\npub const runner = @import(\"runner.zig\");\n\npub const ApplicationRequest = request.ApplicationRequest;\npub const ComputeRequest = request.ComputeRequest;\npub const TransferRequest = request.TransferRequest;\npub const WorkgroupCount = request.WorkgroupCount;\n\npub const prepareCompute = prepare.prepareCompute;\npub const prepareComputeFromCommand = prepare.prepareComputeFromCommand;\npub const prepareTransfer = prepare.prepareTransfer;\npub const prepareCommand = prepare.prepareCommand;\n\npub const executePrepared = runner.execute;\npub const executeCompute = runner.executeCompute;\npub const executeTransfer = runner.executeTransfer;\n",
+        "//! Prepares requests into read-only PreparedOperations for synchronous execution.\n\nconst request = @import(\"request.zig\");\nconst command_contract = @import(\"../contracts/command.zig\");\nconst prepared = @import(\"../contracts/prepared_operation.zig\");\nconst model_compute = @import(\"../contracts/model/model_compute_types.zig\");\n\npub fn prepareCompute(req: request.ComputeRequest, operation_id: u64) prepared.PreparedComputeOperation {\n    return prepareComputeFromCommand(req.toCommand(), operation_id);\n}\n\npub fn prepareComputeFromCommand(cmd: model_compute.KernelDispatchCommand, operation_id: u64) prepared.PreparedComputeOperation {\n    return prepareCommand(.{ .kernel_dispatch = cmd }, operation_id).compute;\n}\n\npub fn prepareTransfer(req: request.TransferRequest, operation_id: u64) prepared.PreparedTransferOperation {\n    return prepared.directBufferWrite(req, operation_id).transfer;\n}\n\npub fn prepareCommand(command: command_contract.Command, operation_id: u64) prepared.PreparedOperation {\n    return prepared.fromCommand(command, operation_id);\n}\n",
+        "//! Application request contracts for the Hexagonal core.\n//!\n//! Represents incoming application intent before normalization and preparation.\n\nconst compute_contract = @import(\"../contracts/compute.zig\");\nconst prepared = @import(\"../contracts/prepared_operation.zig\");\n\npub const WorkgroupCount = compute_contract.WorkgroupCount;\n\npub const ComputeRequest = compute_contract.DispatchRequest;\npub const TransferRequest = prepared.DirectBufferWrite;\n\npub const ApplicationRequest = union(enum) {\n    compute: ComputeRequest,\n    transfer: TransferRequest,\n};\n",
+        "//! Application runner driving prepared operations through narrow outbound ports.\n\nconst prepared = @import(\"../contracts/prepared_operation.zig\");\nconst report = @import(\"../contracts/execution_report.zig\");\nconst port_factory = @import(\"../backend/ports/factory.zig\");\nconst compute_port = @import(\"../backend/ports/compute.zig\");\nconst transfer_port = @import(\"../backend/ports/transfer.zig\");\n\npub fn execute(ports: port_factory.PortBundle, op: prepared.PreparedOperation) !report.ExecutionReport {\n    return switch (op) {\n        .compute => |value| ports.compute.execute(value),\n        .transfer => |value| ports.transfer.execute(value),\n        .render => |value| ports.render.execute(value),\n        .resource => |value| ports.resource.execute(value),\n        .surface => |value| ports.surface.execute(value),\n        .lifecycle => |value| ports.lifecycle.execute(value),\n        .spatial => |value| ports.spatial.execute(value),\n    };\n}\n\npub fn executeCompute(port: compute_port.ComputePort, op: prepared.PreparedComputeOperation) !report.ExecutionReport {\n    return port.execute(op);\n}\n\npub fn executeTransfer(port: transfer_port.TransferPort, op: prepared.PreparedTransferOperation) !report.ExecutionReport {\n    return port.execute(op);\n}\n"
+      ]
+    },
+    "B03": {
+      "id": "B03",
+      "name": "wgsl-dot-product-variants",
+      "language": "WGSL",
+      "repo": "fawn",
+      "commit": "a281360ff0",
+      "description": "Compute shader variants implementing forward, pairwise, and reverse-order f32 dot-product reductions.",
+      "alphabetSize": 64,
+      "totalBytes": 2237,
+      "files": [
+        {
+          "path": "bench/inference-pipeline/kernels/dot_product_forward_f32.wgsl",
+          "bytes": 591,
+          "sha256": "c177724439e1041b66f302e7e5399b1ac4cc85170c990616539a5fc639a925cc"
+        },
+        {
+          "path": "bench/inference-pipeline/kernels/dot_product_pairwise_f32.wgsl",
+          "bytes": 995,
+          "sha256": "b658ba7a54fd2345758d64b855da20b198d4c4e07a4f5e74d8301d664266811d"
+        },
+        {
+          "path": "bench/inference-pipeline/kernels/dot_product_reverse_f32.wgsl",
+          "bytes": 651,
+          "sha256": "95a309042cf65345e32adb33fc685e8f987cc98f174b41fdfb3c5cd68cc12d7a"
+        }
+      ],
+      "programs": [
+        "struct Params {\n  length: u32,\n  _pad0: u32,\n  _pad1: u32,\n  _pad2: u32,\n};\n\n@group(0) @binding(0) var<uniform> params: Params;\n@group(0) @binding(1) var<storage, read> lhs: array<f32>;\n@group(0) @binding(2) var<storage, read> rhs: array<f32>;\n@group(0) @binding(3) var<storage, read_write> output: array<f32>;\n\n@compute @workgroup_size(1)\nfn main(@builtin(global_invocation_id) gid: vec3u) {\n  if (gid.x != 0u) {\n    return;\n  }\n  var sum: f32 = 0.0;\n  for (var index: u32 = 0u; index < params.length; index = index + 1u) {\n    sum = sum + lhs[index] * rhs[index];\n  }\n  output[0] = sum;\n}\n",
+        "struct Params {\n  length: u32,\n  _pad0: u32,\n  _pad1: u32,\n  _pad2: u32,\n};\n\nconst WORKGROUP_WIDTH: u32 = 8u;\n\n@group(0) @binding(0) var<uniform> params: Params;\n@group(0) @binding(1) var<storage, read> lhs: array<f32>;\n@group(0) @binding(2) var<storage, read> rhs: array<f32>;\n@group(0) @binding(3) var<storage, read_write> output: array<f32>;\n\nvar<workgroup> partial: array<f32, WORKGROUP_WIDTH>;\n\n@compute @workgroup_size(8)\nfn main(@builtin(local_invocation_id) lid: vec3u) {\n  let tid = lid.x;\n  var term: f32 = 0.0;\n  if (tid < params.length) {\n    term = lhs[tid] * rhs[tid];\n  }\n  partial[tid] = term;\n  workgroupBarrier();\n\n  var stride: u32 = 1u;\n  loop {\n    if (stride >= WORKGROUP_WIDTH) {\n      break;\n    }\n    if ((tid % (stride * 2u)) == 0u && (tid + stride) < WORKGROUP_WIDTH) {\n      partial[tid] = partial[tid] + partial[tid + stride];\n    }\n    workgroupBarrier();\n    continuing {\n      stride = stride * 2u;\n    }\n  }\n\n  if (tid == 0u) {\n    output[0] = partial[0];\n  }\n}\n",
+        "struct Params {\n  length: u32,\n  _pad0: u32,\n  _pad1: u32,\n  _pad2: u32,\n};\n\n@group(0) @binding(0) var<uniform> params: Params;\n@group(0) @binding(1) var<storage, read> lhs: array<f32>;\n@group(0) @binding(2) var<storage, read> rhs: array<f32>;\n@group(0) @binding(3) var<storage, read_write> output: array<f32>;\n\n@compute @workgroup_size(1)\nfn main(@builtin(global_invocation_id) gid: vec3u) {\n  if (gid.x != 0u) {\n    return;\n  }\n  var sum: f32 = 0.0;\n  var remaining: u32 = params.length;\n  loop {\n    if (remaining == 0u) {\n      break;\n    }\n    remaining = remaining - 1u;\n    sum = sum + lhs[remaining] * rhs[remaining];\n  }\n  output[0] = sum;\n}\n"
+      ]
+    },
+    "B04": {
+      "id": "B04",
+      "name": "wgsl-linear-attention-kernels",
+      "language": "WGSL",
+      "repo": "doppler",
+      "commit": "bfee8cd43",
+      "description": "WebGPU WGSL kernels for linear-attention state summary and application across f32 and f16 precision lanes.",
+      "alphabetSize": 65,
+      "totalBytes": 5976,
+      "files": [
+        {
+          "path": "src/gpu/kernels/linear_attention_apply.wgsl",
+          "bytes": 1384,
+          "sha256": "5428ca0f5ab6c77a045fc819dfc07a00b3acd4f4785b5f3780df724f7b133986"
+        },
+        {
+          "path": "src/gpu/kernels/linear_attention_apply_f16.wgsl",
+          "bytes": 1458,
+          "sha256": "880e513e265c0f274c9035dfeeb79f1b027ce9bcedb83df7626ae5a268e3a63c"
+        },
+        {
+          "path": "src/gpu/kernels/linear_attention_summary.wgsl",
+          "bytes": 1553,
+          "sha256": "68bbd5bb1cb4fb1f6d0be0e76248a70a3e0e2445a975c32972c32902101238d1"
+        },
+        {
+          "path": "src/gpu/kernels/linear_attention_summary_f16.wgsl",
+          "bytes": 1581,
+          "sha256": "9a066dd8f5ee3d04992f06bba14cfa6a946a0ff0643bfed32ff5cf1a80366112"
+        }
+      ],
+      "programs": [
+        "override WORKGROUP_SIZE: u32 = 256u;\n\nstruct Uniforms {\n    num_heads: u32,\n    head_dim: u32,\n    num_tokens: u32,\n    hidden_size: u32,\n    eps: f32,\n    _pad0: u32,\n    _pad1: u32,\n    _pad2: u32,\n}\n\n@group(0) @binding(0) var<uniform> u: Uniforms;\n@group(0) @binding(1) var<storage, read> query: array<f32>;\n@group(0) @binding(2) var<storage, read> summary: array<f32>;\n@group(0) @binding(3) var<storage, read_write> output: array<f32>;\n\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n    let hidden = gid.x;\n    let token = gid.y;\n    if (token >= u.num_tokens || hidden >= u.hidden_size) {\n        return;\n    }\n\n    let idx = token * u.hidden_size + hidden;\n    let head = hidden / u.head_dim;\n    let dim = hidden - head * u.head_dim;\n    let rows_per_head = u.head_dim + 1u;\n    let head_offset = head * rows_per_head * u.head_dim;\n    let hidden_base = head * u.head_dim;\n\n    var numerator: f32 = 0.0;\n    var denominator: f32 = 0.0;\n    for (var i: u32 = 0u; i < u.head_dim; i = i + 1u) {\n        let q_value = max(query[token * u.hidden_size + hidden_base + i], 0.0);\n        numerator = numerator + summary[head_offset + dim * u.head_dim + i] * q_value;\n        denominator = denominator + summary[head_offset + u.head_dim * u.head_dim + i] * q_value;\n    }\n\n    output[idx] = numerator / (denominator + u.eps);\n}\n",
+        "enable f16;\n\noverride WORKGROUP_SIZE: u32 = 256u;\n\nstruct Uniforms {\n    num_heads: u32,\n    head_dim: u32,\n    num_tokens: u32,\n    hidden_size: u32,\n    eps: f32,\n    _pad0: u32,\n    _pad1: u32,\n    _pad2: u32,\n}\n\n@group(0) @binding(0) var<uniform> u: Uniforms;\n@group(0) @binding(1) var<storage, read> query: array<f16>;\n@group(0) @binding(2) var<storage, read> summary: array<f32>;\n@group(0) @binding(3) var<storage, read_write> output: array<f16>;\n\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n    let hidden = gid.x;\n    let token = gid.y;\n    if (token >= u.num_tokens || hidden >= u.hidden_size) {\n        return;\n    }\n\n    let idx = token * u.hidden_size + hidden;\n    let head = hidden / u.head_dim;\n    let dim = hidden - head * u.head_dim;\n    let rows_per_head = u.head_dim + 1u;\n    let head_offset = head * rows_per_head * u.head_dim;\n    let hidden_base = head * u.head_dim;\n\n    var numerator: f32 = 0.0;\n    var denominator: f32 = 0.0;\n    for (var i: u32 = 0u; i < u.head_dim; i = i + 1u) {\n        let q_value = max(f32(query[token * u.hidden_size + hidden_base + i]), 0.0);\n        numerator = numerator + summary[head_offset + dim * u.head_dim + i] * q_value;\n        denominator = denominator + summary[head_offset + u.head_dim * u.head_dim + i] * q_value;\n    }\n\n    let result = numerator / (denominator + u.eps);\n    output[idx] = f16(clamp(result, -65504.0, 65504.0));\n}\n",
+        "override WORKGROUP_SIZE: u32 = 256u;\n\nstruct Uniforms {\n    num_heads: u32,\n    head_dim: u32,\n    num_tokens: u32,\n    hidden_size: u32,\n    _pad0: u32,\n    _pad1: u32,\n}\n\n@group(0) @binding(0) var<uniform> u: Uniforms;\n@group(0) @binding(1) var<storage, read> query: array<f32>;\n@group(0) @binding(2) var<storage, read> key: array<f32>;\n@group(0) @binding(3) var<storage, read> value: array<f32>;\n@group(0) @binding(4) var<storage, read_write> summary: array<f32>;\n\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n    let idx = gid.x;\n    let rows_per_head = u.head_dim + 1u;\n    let head_span = rows_per_head * u.head_dim;\n    let total = u.num_heads * head_span;\n    if (idx >= total) {\n        return;\n    }\n\n    let head = idx / head_span;\n    let rem = idx - head * head_span;\n    let row = rem / u.head_dim;\n    let col = rem - row * u.head_dim;\n    let hidden_base = head * u.head_dim;\n\n    var acc: f32 = 0.0;\n    for (var token: u32 = 0u; token < u.num_tokens; token = token + 1u) {\n        let query_value = query[token * u.hidden_size + hidden_base + col];\n        let key_idx = token * u.hidden_size + hidden_base + col;\n        let key_value = max(key[key_idx], 0.0);\n        let value_value = select(\n            value[token * u.hidden_size + hidden_base + row],\n            1.0,\n            row == u.head_dim\n        );\n        if (u.hidden_size == 0u) {\n            acc = acc + query_value;\n        }\n        acc = acc + value_value * key_value;\n    }\n\n    summary[idx] = acc;\n}\n",
+        "enable f16;\n\noverride WORKGROUP_SIZE: u32 = 256u;\n\nstruct Uniforms {\n    num_heads: u32,\n    head_dim: u32,\n    num_tokens: u32,\n    hidden_size: u32,\n    _pad0: u32,\n    _pad1: u32,\n}\n\n@group(0) @binding(0) var<uniform> u: Uniforms;\n@group(0) @binding(1) var<storage, read> query: array<f16>;\n@group(0) @binding(2) var<storage, read> key: array<f16>;\n@group(0) @binding(3) var<storage, read> value: array<f16>;\n@group(0) @binding(4) var<storage, read_write> summary: array<f32>;\n\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n    let idx = gid.x;\n    let rows_per_head = u.head_dim + 1u;\n    let head_span = rows_per_head * u.head_dim;\n    let total = u.num_heads * head_span;\n    if (idx >= total) {\n        return;\n    }\n\n    let head = idx / head_span;\n    let rem = idx - head * head_span;\n    let row = rem / u.head_dim;\n    let col = rem - row * u.head_dim;\n    let hidden_base = head * u.head_dim;\n\n    var acc: f32 = 0.0;\n    for (var token: u32 = 0u; token < u.num_tokens; token = token + 1u) {\n        let query_value = f32(query[token * u.hidden_size + hidden_base + col]);\n        let key_idx = token * u.hidden_size + hidden_base + col;\n        let key_value = max(f32(key[key_idx]), 0.0);\n        let value_value = select(\n            f32(value[token * u.hidden_size + hidden_base + row]),\n            1.0,\n            row == u.head_dim\n        );\n        if (u.hidden_size == 0u) {\n            acc = acc + query_value;\n        }\n        acc = acc + value_value * key_value;\n    }\n\n    summary[idx] = acc;\n}\n"
+      ]
+    },
+    "B05": {
+      "id": "B05",
+      "name": "js-json-format-helpers",
+      "language": "JavaScript",
+      "repo": "doppler",
+      "commit": "bfee8cd43",
+      "description": "Shared JSON serialization utilities for deep cloning, cross-runtime loading, and deterministic key-sorted hashing.",
+      "alphabetSize": 66,
+      "totalBytes": 1797,
+      "files": [
+        {
+          "path": "src/formats/clone-json.js",
+          "bytes": 207,
+          "sha256": "c185ee208e39d52c8d123eaac4f2695cdf6e55fc4719d54359d0a16c22c0520c"
+        },
+        {
+          "path": "src/formats/load-json.js",
+          "bytes": 1158,
+          "sha256": "71761a83b6d7a0e89962592f6d3181f9524eb6784bafb1879dcd4316b936ed5f"
+        },
+        {
+          "path": "src/formats/sorted-json.js",
+          "bytes": 432,
+          "sha256": "33174ec71afabefd198adac030272fae7ee9ba18170364fc9004356fcf64e26b"
+        }
+      ],
+      "programs": [
+        "export function cloneJsonValue(value) {\n  if (value == null) return value;\n  if (typeof structuredClone === 'function') {\n    return structuredClone(value);\n  }\n  return JSON.parse(JSON.stringify(value));\n}\n",
+        "const isNodeRuntime = typeof process !== 'undefined'\n  && typeof process.versions === 'object'\n  && typeof process.versions.node === 'string';\n\nfunction nodeModule(specifier) {\n  return `node:${specifier}`;\n}\n\nexport async function loadJson(resourcePath, baseUrl = import.meta.url, errorPrefix = 'Failed to load JSON') {\n  const resolved = new URL(resourcePath, baseUrl);\n  if (isNodeRuntime && resolved.protocol === 'file:') {\n    const fs = await import(nodeModule('fs/promises'));\n    const { fileURLToPath } = await import(nodeModule('url'));\n    const filePath = fileURLToPath(resolved);\n    const raw = await fs.readFile(filePath, 'utf-8');\n    try {\n      return JSON.parse(raw);\n    } catch (parseError) {\n      throw new Error(`${errorPrefix}: JSON parse error in \"${filePath}\": ${parseError.message}`);\n    }\n  }\n\n  const response = await fetch(resolved);\n  if (!response.ok) {\n    throw new Error(`${errorPrefix}: ${resourcePath}`);\n  }\n  const text = await response.text();\n  try {\n    return JSON.parse(text);\n  } catch (parseError) {\n    throw new Error(`${errorPrefix}: JSON parse error from \"${resolved.href}\": ${parseError.message}`);\n  }\n}\n",
+        "import { stableSortObject } from './stable-sort-object.js';\nimport { sha256Hex } from './sha256.js';\n\n// Preserve the existing sorted-object JSON encoding, including JSON.stringify's\n// integer-key ordering and coercions. It is distinct from canonicalizeJson.\n/** @type {import('./sorted-json.js').hashSortedJson} */\nexport function hashSortedJson(value) {\n  return `sha256:${sha256Hex(JSON.stringify(stableSortObject(value)))}`;\n}\n"
+      ]
+    },
+    "B06": {
+      "id": "B06",
+      "name": "py-gamma-core-engine",
+      "language": "Python",
+      "repo": "gamma",
+      "commit": "fbe798f63",
+      "description": "Abstract inference-engine base interface, configuration dataclass, and backend registration factory for gamma-core.",
+      "alphabetSize": 67,
+      "totalBytes": 8255,
+      "files": [
+        {
+          "path": "gamma-core/src/engine/__init__.py",
+          "bytes": 205,
+          "sha256": "ec7e7d6fccda93c8d40a5ad7343b9c9890e95e6a30c5c31f28e4a7050d651f9a"
+        },
+        {
+          "path": "gamma-core/src/engine/base.py",
+          "bytes": 6518,
+          "sha256": "7777c05fba8efe8f3f378c7f09f5f5d3bd8da821ab3cd1ecc328ba1cffb87eb6"
+        },
+        {
+          "path": "gamma-core/src/engine/factory.py",
+          "bytes": 1532,
+          "sha256": "c16a4c064ef1924d519d3bc9fc1b8ae2cca1a39c279a46e3dd316aebf61c4a37"
+        }
+      ],
+      "programs": [
+        "\"\"\"Engine system - Abstract interfaces for ML model backends.\"\"\"\n\nfrom .base import ModelEngine, EngineConfig\nfrom .factory import EngineFactory\n\n__all__ = [\"ModelEngine\", \"EngineConfig\", \"EngineFactory\"]\n",
+        "\"\"\"\nAbstract base class for all model inference engines.\n\nThis provides a framework-agnostic interface that can be implemented\nfor different ML frameworks (PyTorch, JAX, TensorFlow, MLX, etc.) and\ndifferent model types (transformers, diffusion models, etc.).\n\"\"\"\n\nfrom abc import ABC, abstractmethod\nfrom typing import Any, Dict, Optional, Tuple\nfrom dataclasses import dataclass, field\nimport logging\n\nimport numpy as np\nimport numpy.typing as npt\n\nlogger = logging.getLogger(__name__)\n\n\n@dataclass\nclass EngineConfig:\n    \"\"\"Configuration for model engines.\"\"\"\n\n    model_name: str\n    trust_remote_code: bool = False\n    hf_token: Optional[str] = None\n    verbose: bool = False\n    seed: Optional[int] = None\n    device_map: str = \"auto\"\n    low_cpu_mem_usage: bool = True\n    use_cache: bool = True\n\n    # Additional engine-specific config\n    extra: Dict[str, Any] = field(default_factory=dict)\n\n    def get(self, key: str, default: Any = None) -> Any:\n        \"\"\"Get configuration value.\"\"\"\n        if hasattr(self, key):\n            return getattr(self, key)\n        return self.extra.get(key, default)\n\n\nclass ModelEngine(ABC):\n    \"\"\"\n    Abstract base class for all ML model engines.\n\n    Provides a unified interface for:\n    - Model loading/unloading\n    - Inference\n    - Configuration management\n    - Device management\n    - Caching\n\n    Subclasses must implement model-specific inference logic.\n    \"\"\"\n\n    def __init__(self, config: EngineConfig):\n        self.config = config\n        self.model: Any = None\n        self._cache: Any = None\n        self._device: Optional[str] = None\n\n    # ========================================================================\n    # Core Abstract Methods - Must be implemented by subclasses\n    # ========================================================================\n\n    @abstractmethod\n    def load(self) -> None:\n        \"\"\"Load the model into memory.\"\"\"\n        pass\n\n    @abstractmethod\n    def unload(self) -> None:\n        \"\"\"Unload the model from memory.\"\"\"\n        pass\n\n    @abstractmethod\n    def predict(self, inputs: Any, **kwargs) -> Dict[str, Any]:\n        \"\"\"\n        Run inference on inputs.\n\n        Args:\n            inputs: Model-specific input format\n            **kwargs: Additional inference parameters\n\n        Returns:\n            Dictionary containing prediction results\n        \"\"\"\n        pass\n\n    @abstractmethod\n    def get_device(self) -> str:\n        \"\"\"Get device type (cpu, cuda, mps, etc).\"\"\"\n        pass\n\n    # ========================================================================\n    # Common Helper Methods\n    # ========================================================================\n\n    def is_loaded(self) -> bool:\n        \"\"\"Check if model is loaded.\"\"\"\n        return self.model is not None\n\n    def _ensure_model_loaded(self):\n        \"\"\"Ensure model is loaded, raise error if not.\"\"\"\n        if not self.is_loaded():\n            raise RuntimeError(\n                f\"{self.__class__.__name__}: Model not loaded. Call load() first.\"\n            )\n\n    def _error_model_not_loaded(self) -> RuntimeError:\n        \"\"\"Create standardized 'model not loaded' error.\"\"\"\n        return RuntimeError(\n            f\"{self.__class__.__name__}: Model not loaded. Call load() first.\"\n        )\n\n    # ========================================================================\n    # Tensor Operations - Optional overrides for framework-specific behavior\n    # ========================================================================\n\n    def convert_to_numpy(self, tensor: Any) -> np.ndarray:\n        \"\"\"\n        Convert framework-specific tensor to numpy array.\n\n        Default implementation handles common cases.\n        Override for framework-specific optimizations.\n        \"\"\"\n        if isinstance(tensor, np.ndarray):\n            return tensor\n\n        # Handle PyTorch\n        if hasattr(tensor, 'cpu') and hasattr(tensor, 'numpy'):\n            return tensor.cpu().numpy()\n\n        # Handle JAX\n        if hasattr(tensor, '__array__'):\n            return np.asarray(tensor)\n\n        # Fallback\n        return np.array(tensor)\n\n    def convert_from_numpy(self, array: np.ndarray) -> Any:\n        \"\"\"\n        Convert numpy array to framework-specific tensor.\n\n        Override in subclasses for framework-specific conversion.\n        \"\"\"\n        return array\n\n    # ========================================================================\n    # Cache Management\n    # ========================================================================\n\n    def has_cache(self) -> bool:\n        \"\"\"Check if cache exists.\"\"\"\n        return self._cache is not None\n\n    def get_cache(self) -> Any:\n        \"\"\"Get current cache.\"\"\"\n        return self._cache\n\n    def set_cache(self, cache: Any):\n        \"\"\"Set cache.\"\"\"\n        self._cache = cache\n\n    def reset_cache(self) -> None:\n        \"\"\"Reset the cache to force full recomputation.\"\"\"\n        self._cache = None\n\n    # ========================================================================\n    # Configuration Helpers\n    # ========================================================================\n\n    def get_config_summary(self) -> Dict[str, Any]:\n        \"\"\"Get engine configuration summary for display.\"\"\"\n        return {\n            \"engine_class\": self.__class__.__name__,\n            \"model_name\": self.config.model_name,\n            \"device\": self.get_device() if self.is_loaded() else \"not loaded\",\n            **self.get_engine_specific_config()\n        }\n\n    def get_engine_specific_config(self) -> Dict[str, Any]:\n        \"\"\"Override in subclasses to provide engine-specific configuration.\"\"\"\n        return {}\n\n    # ========================================================================\n    # Logging and Debugging\n    # ========================================================================\n\n    def log_info(self, message: str):\n        \"\"\"Log info message with engine prefix.\"\"\"\n        logger.info(f\"[{self.__class__.__name__}] {message}\")\n\n    def log_debug(self, message: str):\n        \"\"\"Log debug message with engine prefix.\"\"\"\n        if self.config.verbose:\n            logger.debug(f\"[{self.__class__.__name__}] {message}\")\n\n    def log_warning(self, message: str):\n        \"\"\"Log warning message with engine prefix.\"\"\"\n        logger.warning(f\"[{self.__class__.__name__}] {message}\")\n\n    def log_error(self, message: str):\n        \"\"\"Log error message with engine prefix.\"\"\"\n        logger.error(f\"[{self.__class__.__name__}] {message}\")\n",
+        "\"\"\"\nEngine factory for creating engine instances.\n\nHandles engine registration, discovery, and instantiation.\n\"\"\"\n\nfrom typing import Dict, Type, Optional, List\nfrom .base import ModelEngine, EngineConfig\nimport logging\n\nlogger = logging.getLogger(__name__)\n\n\nclass EngineFactory:\n    \"\"\"Factory for creating and managing engine instances.\"\"\"\n\n    _engines: Dict[str, Type[ModelEngine]] = {}\n\n    @classmethod\n    def register(cls, name: str, engine_class: Type[ModelEngine]):\n        \"\"\"Register an engine class with a name.\"\"\"\n        cls._engines[name] = engine_class\n        logger.debug(f\"Registered engine: {name} -> {engine_class.__name__}\")\n\n    @classmethod\n    def create(cls, name: str, config: EngineConfig) -> ModelEngine:\n        \"\"\"Create an engine instance by name.\"\"\"\n        if name not in cls._engines:\n            available = \", \".join(cls._engines.keys())\n            raise ValueError(\n                f\"Unknown engine '{name}'. Available engines: {available}\"\n            )\n\n        engine_class = cls._engines[name]\n        return engine_class(config)\n\n    @classmethod\n    def list_engines(cls) -> List[str]:\n        \"\"\"List all registered engines.\"\"\"\n        return list(cls._engines.keys())\n\n    @classmethod\n    def has_engine(cls, name: str) -> bool:\n        \"\"\"Check if an engine is registered.\"\"\"\n        return name in cls._engines\n\n    @classmethod\n    def get_engine_class(cls, name: str) -> Optional[Type[ModelEngine]]:\n        \"\"\"Get engine class by name.\"\"\"\n        return cls._engines.get(name)\n"
+      ]
+    },
+    "B07": {
+      "id": "B07",
+      "name": "c-dxil-source-native-headers",
+      "language": "C",
+      "repo": "fawn",
+      "commit": "a281360ff0",
+      "description": "Internal C headers for Doe DXIL native source projection covering function state, bounds clamping, opt, and packed ops.",
+      "alphabetSize": 68,
+      "totalBytes": 3308,
+      "files": [
+        {
+          "path": "runtime/c/compiler/src/dxil/dxil_source_native_bounds.h",
+          "bytes": 497,
+          "sha256": "b042c67ac6b55f29cb05e977ff9ae50386fe0819e3be01d935b7d27570c0e879"
+        },
+        {
+          "path": "runtime/c/compiler/src/dxil/dxil_source_native_internal.h",
+          "bytes": 1982,
+          "sha256": "b650387a1b4c044e339717355fa12bae69c351a8aa51256f8122ed30db77666f"
+        },
+        {
+          "path": "runtime/c/compiler/src/dxil/dxil_source_native_opt.h",
+          "bytes": 504,
+          "sha256": "edcc61d78d056675d93fb2e4a215f0b74bf170aca2d024639e5a355045c67373"
+        },
+        {
+          "path": "runtime/c/compiler/src/dxil/dxil_source_native_packed.h",
+          "bytes": 325,
+          "sha256": "e6d80a9f2accf422652a53a529293ac9596bd22d6d410e2ce07fee8726a4b4b8"
+        }
+      ],
+      "programs": [
+        "/* SPDX-License-Identifier: MIT\n * Copyright (c) 2026 Doe contributors */\n#ifndef DOE_DXIL_SOURCE_NATIVE_BOUNDS_H\n#define DOE_DXIL_SOURCE_NATIVE_BOUNDS_H\n#include \"dxil_source_native_internal.h\"\n\n/* Project the baseline native clamp graph using canonical typed extents and\n * known constants. Does not claim optional proof/dispatch-derived elision. */\nuint32_t dxil_source_native_bound_index(DxilSourceBridge *, DxilSourceFunction *,\n    uint32_t index_expression, uint32_t source_index);\n\n#endif\n",
+        "/* SPDX-License-Identifier: MIT\n * Copyright (c) 2026 Doe contributors */\n#ifndef DOE_DXIL_SOURCE_NATIVE_INTERNAL_H\n#define DOE_DXIL_SOURCE_NATIVE_INTERNAL_H\n#include \"dxil_analyze.h\"\n#include \"../compile_internal.h\"\n#include \"../override.h\"\n\ntypedef struct DxilSourceFunction {\n    DxilIrFunction *view;\n    const FunctionRecord *syntax;\n    NameSpan local_names[DXIL_IR_MAX_LOCALS];\n    LocalBinding bindings[DXIL_IR_MAX_LOCALS];\n    uint32_t scope[DXIL_IR_MAX_LOCALS];\n    uint32_t scope_count;\n} DxilSourceFunction;\n\ntypedef struct DxilSourceBridge {\n    Source source;\n    CompilerWorkspace *compiler;\n    DxilIrModule *module;\n    char *names;\n    size_t names_count, names_capacity;\n    DxilStatus status;\n    uint32_t source_statement;\n} DxilSourceBridge;\n\nbool dxil_source_native_fail(DxilSourceBridge *, uint32_t offset,\n    DxilStatus, const char *message);\nconst char *dxil_source_native_name(DxilSourceBridge *, NameSpan);\nconst char *dxil_source_native_text(DxilSourceBridge *, const char *);\nDxilIrTypeId dxil_source_native_type(DxilSourceBridge *, TypeId);\nuint32_t dxil_source_native_push_expr(DxilSourceBridge *, DxilSourceFunction *, DxilIrExpr);\nuint32_t dxil_source_native_root(DxilSourceBridge *, DxilSourceFunction *, NameSpan, bool reference);\nuint32_t dxil_source_native_expr(DxilSourceBridge *, DxilSourceFunction *, uint32_t, bool reference, unsigned depth);\nbool dxil_source_native_types(DxilSourceBridge *);\nbool dxil_source_native_globals(DxilSourceBridge *);\nbool dxil_source_native_function(DxilSourceBridge *, uint32_t);\nbool dxil_source_native_io(DxilSourceBridge *, uint32_t owner, uint32_t index, DxilIrIoAttr *);\nbool dxil_source_native_value(DxilSourceBridge *, DxilSourceFunction *, uint32_t, ExpressionValue *);\nbool dxil_source_native_constant(DxilSourceBridge *, DxilSourceFunction *, uint32_t, ConstantValue *);\nbool dxil_source_native_constant_if_known(DxilSourceBridge *, DxilSourceFunction *, uint32_t, ConstantValue *, bool *);\n#endif\n",
+        "/* SPDX-License-Identifier: MIT\n * Copyright (c) 2026 Doe contributors */\n#ifndef DOE_DXIL_SOURCE_NATIVE_OPT_H\n#define DOE_DXIL_SOURCE_NATIVE_OPT_H\n#include \"dxil_source_native_internal.h\"\n\n/* Rewrite an already typed, fully projected function. Borrows all storage and\n * allocates nothing. Alias discovery follows immutable declarations only;\n * numeric evaluation remains owned by the shared scalar numeric helpers. */\nbool dxil_source_native_optimize(DxilSourceBridge *, DxilSourceFunction *);\n#endif\n",
+        "/* SPDX-License-Identifier: MIT\n * Copyright (c) 2026 Doe contributors */\n#ifndef DOE_DXIL_SOURCE_NATIVE_PACKED_H\n#define DOE_DXIL_SOURCE_NATIVE_PACKED_H\n#include \"dxil_source_native_internal.h\"\n\nuint32_t dxil_source_native_packed(DxilSourceBridge *, DxilSourceFunction *,\n    NumericBuiltinKind, const DxilIrExpr *);\n#endif\n"
+      ]
+    },
+    "B08": {
+      "id": "B08",
+      "name": "py-privacy-concrete-prepare",
+      "language": "Python",
+      "repo": "doppler",
+      "commit": "bfee8cd43",
+      "description": "CLI preparation scripts provisioning pinned public tokenizer files, embedding shards, and fixtures.",
+      "alphabetSize": 69,
+      "totalBytes": 5248,
+      "files": [
+        {
+          "path": "tools/privacy-concrete/prepare.py",
+          "bytes": 2595,
+          "sha256": "40d14aa4e0918ceedbf569b7726ee236cdc08a7aa6807046027a668ea48b4038"
+        },
+        {
+          "path": "tools/privacy-concrete/prepare_flash_embedding.py",
+          "bytes": 1504,
+          "sha256": "68f0aa20ab7122b215687697a37559543b457938cbe71252979f04fded9d8336"
+        },
+        {
+          "path": "tools/privacy-concrete/prepare_flash_tokenizer.py",
+          "bytes": 1149,
+          "sha256": "7ae608fe48797747b4eb5a3ccb7488d2001d4158dbc785802780a4f250f428f7"
+        }
+      ],
+      "programs": [
+        "\"\"\"Explicit public test-fixture preparation; inference itself never downloads model files.\"\"\"\nimport argparse\nfrom importlib.metadata import version\nfrom pathlib import Path\nfrom protocol import POLICY, digest\nfrom profiles import load_profile\n\n\ndef prepare(destination, profile_name='tiny'):\n    profile = load_profile(profile_name)\n    if profile_name == 'tiny':\n        for dependency in ('torch', 'transformers'):\n            if version(dependency) != POLICY['dependencies'][dependency]:\n                raise ValueError('Pinned preparation dependencies required')\n    destination = Path(destination)\n    if destination.exists():\n        raise ValueError('Use a new fixture directory')\n    if profile_name != 'tiny':\n        import hashlib\n        import shutil\n        from huggingface_hub import snapshot_download\n        specification = profile.specification()\n        source = specification['source']\n        downloaded = Path(snapshot_download(repo_id=source['repository'], revision=source['revision'], allow_patterns=list(source['files'])))\n        for name, identity in source['files'].items():\n            with (downloaded / name).open('rb') as handle:\n                if hashlib.file_digest(handle, 'sha256').hexdigest() != identity:\n                    raise ValueError('Prepared real-model artifact differs from its pinned identity')\n        destination.mkdir()\n        for name in source['files']:\n            shutil.copyfile(downloaded / name, destination / name)\n        return\n    from transformers import AutoModelForCausalLM, AutoTokenizer\n    source = POLICY['source']\n    model = AutoModelForCausalLM.from_pretrained(source['repository'], revision=source['revision'], trust_remote_code=False)\n    model.save_pretrained(destination, safe_serialization=True)\n    if (digest((destination / 'model.safetensors').read_bytes()) != source['safetensorsSha256']\n            or digest((destination / 'config.json').read_bytes()) != source['configSha256']):\n        raise ValueError('Prepared fixture differs from the pinned artifact')\n    tokenizer = AutoTokenizer.from_pretrained(source['repository'], revision=source['revision'], trust_remote_code=False)\n    tokenizer.save_pretrained(destination)\n    (destination / 'revision.txt').write_text(source['revision'] + '\\n')\n\n\nif __name__ == '__main__':\n    parser = argparse.ArgumentParser()\n    parser.add_argument('--destination', required=True)\n    parser.add_argument('--profile', default='tiny', choices=['tiny', 'qwen05b-k-projection'])\n    arguments = parser.parse_args()\n    prepare(arguments.destination, arguments.profile)\n",
+        "\"\"\"Explicit whole public input-embedding shard acquisition; no row-fetch service or private input.\"\"\"\nimport argparse\nimport json\nfrom pathlib import Path\nimport shutil\nfrom local_token_rows import installed_inventory\nfrom flash_weights import fetch_blob\nfrom flash_source_scopes import TEXT\n\n\ndef provision(directory,local_storage_limit_bytes):\n    spec=installed_inventory()\n    if type(local_storage_limit_bytes) is not int or local_storage_limit_bytes<spec['wholeShardBytes']:raise ValueError('Explicit sufficient complete-file embedding budget required')\n    directory=Path(directory);directory.mkdir(parents=True,exist_ok=True)\n    missing=sum(v['bytes'] for name,v in spec['shards'].items() if not (directory/name).exists())\n    if shutil.disk_usage(directory).free<missing:raise ValueError('Insufficient storage for complete embedding object')\n    base='https://huggingface.co/'+TEXT['repository']+'/resolve/'+TEXT['revision']+'/'\n    for name,value in spec['shards'].items():fetch_blob(base+name+'?download=true',directory/name,value)\n    return spec\n\n\nif __name__=='__main__':\n    parser=argparse.ArgumentParser();parser.add_argument('--destination',required=True);parser.add_argument('--local-storage-limit-bytes',type=int,required=True);args=parser.parse_args()\n    spec=provision(args.destination,args.local_storage_limit_bytes)\n    print(json.dumps(dict(schema=spec['schema'],wholeShardBytes=spec['wholeShardBytes'],verified=True,fullModelExecuted=False,productionBackendAvailable=False)))\n",
+        "\"\"\"Provision only whole pinned public tokenizer/configuration files; no model weights or source installation.\"\"\"\nimport argparse\nimport json\nfrom pathlib import Path\nimport shutil\nfrom flash_tokenizer import SOURCE\nfrom flash_weights import fetch_blob\n\n\ndef provision(directory):\n    directory=Path(directory);directory.mkdir(parents=True,exist_ok=True)\n    missing=sum(value['bytes'] for name,value in SOURCE['files'].items() if not (directory/name).exists())\n    if shutil.disk_usage(directory).free<missing:raise ValueError('Insufficient storage for complete public tokenizer artifacts')\n    origin='https://huggingface.co/'+SOURCE['repository']+'/resolve/'+SOURCE['revision']+'/'\n    for name,record in SOURCE['files'].items():fetch_blob(origin+name+'?download=true',directory/name,record)\n\n\nif __name__=='__main__':\n    parser=argparse.ArgumentParser();parser.add_argument('--destination',required=True);args=parser.parse_args();provision(args.destination)\n    print(json.dumps(dict(schema=SOURCE['schema'],repository=SOURCE['repository'],revision=SOURCE['revision'],verified=True,modelWeightsAcquired=False,productionBackendAvailable=False)))\n"
+      ]
+    },
+    "B09": {
+      "id": "B09",
+      "name": "js-poolday-work-providers",
+      "language": "JavaScript",
+      "repo": "reploid",
+      "commit": "7c335e2cf",
+      "description": "Poolday work-provider module wiring device lifetimes, resident execution, placement, and completion adapters.",
+      "alphabetSize": 70,
+      "totalBytes": 5204,
+      "files": [
+        {
+          "path": "apps/poolday/providers/work-adapter.js",
+          "bytes": 265,
+          "sha256": "9cd40af33eaf226979b808090c363ec6d7b8f0f4ea0e668ff19e827f4cb76956"
+        },
+        {
+          "path": "apps/poolday/providers/work-device.js",
+          "bytes": 220,
+          "sha256": "25ed96092fef89d0565012e2dc552933a2b46ca8ff59b05881e16a3eaf63c6dd"
+        },
+        {
+          "path": "apps/poolday/providers/work-generation-completion.js",
+          "bytes": 247,
+          "sha256": "bc4b055cc5b66fec2b010141fe4737d1acbb1c6f226a4246b4348500414c0aca"
+        },
+        {
+          "path": "apps/poolday/providers/work-network-provider.js",
+          "bytes": 3061,
+          "sha256": "f9b9505893bb74c6fd3c7fa87659e8a885748d31f480fdf1f346406485b6fdd0"
+        },
+        {
+          "path": "apps/poolday/providers/work-provider.js",
+          "bytes": 926,
+          "sha256": "0e95bfbd959f2adc7b6fe25ea90ca671baec6139c039cc072a1e76d333397650"
+        },
+        {
+          "path": "apps/poolday/providers/work-resident-provider.js",
+          "bytes": 485,
+          "sha256": "53882704e3586efbcfd101da88003f0b4cfe8c8e6e7188cc34f2c74f96227fc3"
+        }
+      ],
+      "programs": [
+        "/** Product compatibility names forward to the shared adapter contract. */\nexport { selectModelAdapters as selectWorkAdapters, createModelAdapterResolver as createWorkAdapterResolver,\n  fetchAdapterFile } from '../../../shared/vendor/reploid/adapters/resident.js';\n",
+        "/** Browser and native hosts use the library's single device-lifetime owner. */\nexport { withDevice as withWorkDevice, getDeviceQueue as getWorkDeviceQueue }\n  from '../../../shared/vendor/reploid/adapters/resident.js';\n",
+        "/** Compatibility exports for product consumers of the shared completion contract. */\nexport { consumeWorkGenerationStream, readWorkGenerationCompletion, readWorkGenerationTiming }\n  from '../../../shared/infrastructure/generation-completion.js';\n",
+        "/** Place whole text requests without changing model identity or disclosure grants. */\nimport { assertAvailableExecutionPolicy } from '../../../shared/vendor/reploid/chat/execution-policy.js';\nimport { retainModelStorage } from '../infrastructure/model-storage-lock.js';\nimport { openWorkProvider } from './work-provider.js';\n\nimport { withWorkDevice } from './work-device.js';\nexport { withWorkDevice } from './work-device.js';\n\nexport function createWorkNetworkProvider(options) {\n  const { model, service, scope, signal, swarm, controls, onProgress } = options;\n  const privacy = options.privacy ? assertAvailableExecutionPolicy(options.privacy) : null;\n  if (privacy && model.provider !== 'doppler') throw Error('This provider has no qualified complete privacy route');\n  return Object.freeze({\n    async generate(messages, onUpdate, { signal: stepSignal, contextId } = {}) {\n      const combined = AbortSignal.any([signal, ...(stepSignal ? [stepSignal] : [])]);\n      combined.throwIfAborted();\n      // Cloud adapters can be injected by other hosts, never selected by this workspace.\n      if (model.provider !== 'doppler') {\n        const provider = await openWorkProvider({ ...options, signal: combined });\n        return provider.generate(messages, onUpdate, { signal: combined });\n      }\n      if (swarm?.generate && privacy?.placement === 'network-allowed' && privacy.recipients.kind !== 'none') {\n        await swarm.connect({ automatic: true });\n        combined.throwIfAborted();\n        onProgress?.(swarm.hasProvider(model.id) ? 'Awaiting peer approval' : 'Waiting for a ready contributor');\n        // Once a peer is selected, refusal or failure cannot trigger an undisclosed retry.\n        const result = await swarm.generate(messages, { ...controls, modelId: model.id, modelIdentity: model.identity,\n          adapterIdentities: (model.adapters || []).map(adapter => adapter.identity),\n          signal: combined, onPartial: onUpdate, contextId, privacy });\n        if (result.model !== model.id || result.provider !== 'doppler') throw new Error('Peer returned an incompatible model identity');\n        if (JSON.stringify(result.adapterIdentities || []) !== JSON.stringify((model.adapters || []).map(adapter => adapter.identity))) {\n          throw new Error('Peer returned an incompatible adapter identity');\n        }\n        return result;\n      }\n      if (typeof service.isSupported === 'function' && !service.isSupported({ models: [model] })) {\n        throw new Error('This device cannot execute this model');\n      }\n      return withWorkDevice(service, combined, async () => {\n        const releaseStorage = await retainModelStorage({ signal: combined });\n        onProgress?.('Executing on this device');\n        try {\n          const provider = await openWorkProvider({ ...options, signal: combined });\n          const result = await provider.generate(messages, onUpdate, { signal: combined });\n          return result;\n        } finally { await service.close(scope); await releaseStorage(); }\n      }, onProgress);\n    }\n  });\n}\n",
+        "/** Product-selected provider defaults; runtime lifetime belongs to shared infrastructure. */\nimport profile from '../config/work-profile.json' with { type: 'json' };\nimport { openScopedModelProvider } from '../../../shared/infrastructure/scoped-model-provider.js';\nconst requireValue = (condition, message) => { if (!condition) throw new Error(message); };\n\nexport function selectWorkModel({ models, modelId, defaultModelId }) {\n  const id = modelId === undefined || modelId === null || modelId === '' ? defaultModelId : modelId;\n  const model = models.find(item => item.id === id);\n  requireValue(model, `Unknown application model: ${String(id)}`);\n  requireValue(['doppler', 'gemini'].includes(model.provider), 'Model requires an explicit supported provider');\n  return Object.freeze({ ...model });\n}\n\nexport function openWorkProvider(options) {\n  return openScopedModelProvider({ ...options, providerPolicy: profile });\n}\n",
+        "/** Browser host composes runtime construction and origin-wide storage leases. */\nimport { createResidentExecution } from '../../../shared/vendor/reploid/adapters/resident.js';\nimport { openWorkProvider } from './work-provider.js';\nimport { retainModelStorage } from '../infrastructure/model-storage-lock.js';\n\nexport function createWorkResidentProvider(options) {\n  return createResidentExecution({ ...options, openProvider: openWorkProvider, acquireStorage: retainModelStorage });\n}\n"
+      ]
+    },
+    "B10": {
+      "id": "B10",
+      "name": "c-tsir-internal-headers",
+      "language": "C",
+      "repo": "fawn",
+      "commit": "a281360ff0",
+      "description": "Internal C compiler headers defining frontend lowering, semantic IR, reference helpers, and extended matching for TSIR.",
+      "alphabetSize": 71,
+      "totalBytes": 6434,
+      "files": [
+        {
+          "path": "runtime/c/compiler/src/tsir/tsir_extended_internal.h",
+          "bytes": 1600,
+          "sha256": "22624f14b8e30dac863756ba6ba7b4cbaa66cca49fbb4a58492be8dd717359eb"
+        },
+        {
+          "path": "runtime/c/compiler/src/tsir/tsir_frontend_internal.h",
+          "bytes": 973,
+          "sha256": "05455b334196cdf667213c789b1e041332f32bf00338c90db4938a55532d305b"
+        },
+        {
+          "path": "runtime/c/compiler/src/tsir/tsir_reference_internal.h",
+          "bytes": 2307,
+          "sha256": "5fac2b8de208f7c7d20cff8611f00079cf233bdf2f9d6652d9ac85576ed59bfb"
+        },
+        {
+          "path": "runtime/c/compiler/src/tsir/tsir_source_internal.h",
+          "bytes": 1554,
+          "sha256": "5970315c68d902923872c34a1ddf23c9e6b4dec30b5e57e278602c99b0534115"
+        }
+      ],
+      "programs": [
+        "/* SPDX-License-Identifier: MIT\n * Copyright (c) 2026 Doe contributors */\n#ifndef DOE_TSIR_EXTENDED_INTERNAL_H\n#define DOE_TSIR_EXTENDED_INTERNAL_H\n\n#include \"tsir_reference.h\"\n\nbool tsir_ext_one_function(const TsirSemantic *semantic,\n    const TsirSemanticFunction **func_out);\nbool tsir_ext_get_input(const TsirSemanticFunction *func,\n    const TsirInputBuffer *inputs, size_t input_count,\n    uint32_t binding_index, const uint8_t **data_out,\n    size_t *len_out);\nbool tsir_ext_read_f32(const uint8_t *bytes, size_t len, size_t index,\n    float *out);\nbool tsir_ext_write_f32(uint8_t *bytes, size_t len, size_t index,\n    float value);\nbool tsir_ext_expected_bytes(const TsirBufferBinding *binding,\n    uint64_t *out);\nbool tsir_ext_find_role_once(const TsirSemanticBody *body,\n    TsirSemanticBindingRole role, uint32_t *out);\nbool tsir_ext_roles_exact(const TsirSemanticBody *body,\n    const TsirSemanticBindingRole *roles, size_t count);\nint tsir_try_attention(const TsirSemantic *semantic,\n    const TsirInputBuffer *inputs, size_t input_count,\n    TsirReferenceResult *result, TsirStatus *err_out);\nint tsir_try_l2(const TsirSemantic *semantic,\n    const TsirInputBuffer *inputs, size_t input_count,\n    TsirReferenceResult *result, TsirStatus *err_out);\nint tsir_try_conv(const TsirSemantic *semantic,\n    const TsirInputBuffer *inputs, size_t input_count,\n    TsirReferenceResult *result, TsirStatus *err_out);\nint tsir_try_linear_attention(const TsirSemantic *semantic,\n    const TsirInputBuffer *inputs, size_t input_count,\n    TsirReferenceResult *result, TsirStatus *err_out);\n\n#endif\n",
+        "/* SPDX-License-Identifier: MIT\n * Copyright (c) 2026 Doe contributors */\n#ifndef DOE_TSIR_FRONTEND_INTERNAL_H\n#define DOE_TSIR_FRONTEND_INTERNAL_H\n\n#include \"tsir_frontend.h\"\n\n/* Shared by tsir_frontend.c and tsir_frontend_lower.c; not part of\n * the public frontend API. */\nchar *tsir_frontend_dup_str(const char *text);\nvoid tsir_frontend_free_function_contents(TsirSemanticFunction *func);\nTsirStatus tsir_frontend_extract_bindings(\n    const TsirWgslModule *module, const TsirIrFunction *func,\n    uint32_t func_index, TsirBindingList *out,\n    TsirRejectionList *rejections);\nTsirStatus tsir_frontend_recover_axes(const TsirWgslModule *module,\n    const TsirIrFunction *func, TsirAxisList *axes);\nTsirStatus tsir_frontend_recover_reductions(\n    const TsirWgslModule *module, const TsirIrFunction *func,\n    uint32_t func_index, TsirReductionList *reductions,\n    TsirRejectionList *rejections, const uint32_t *global_indices,\n    size_t global_index_count);\n\n#endif\n",
+        "/* SPDX-License-Identifier: MIT\n * Copyright (c) 2026 Doe contributors */\n#ifndef DOE_TSIR_REFERENCE_INTERNAL_H\n#define DOE_TSIR_REFERENCE_INTERNAL_H\n\n#include \"tsir_reference.h\"\n\n/* Shared helpers between tsir_reference.c (dispatch, empty kernel,\n * simple reduction) and tsir_reference_bodies.c (GEMV, RMSNorm,\n * gather). Internal to this library; not part of the public API.\n * Try outcomes: TRY_MATCH fills the result, TRY_NOMATCH means the\n * shape did not match (fall through), a negative return means the\n * TsirStatus in *err_out must be propagated immediately. */\n#define TRY_MATCH 1\n#define TRY_NOMATCH 0\n\nTsirStatus finish_result(TsirReferenceResult *result,\n    uint8_t *single_output, size_t single_len);\nbool find_read_write_pair(const TsirSemanticFunction *func,\n    size_t *read_index, size_t *write_index);\nint effective_tree_shape(const TsirSemanticFunction *func,\n    const TsirRealization *realization,\n    const TsirReductionRegion *reduction,\n    TsirReductionTreeShape *out_shape);\nTsirStatus fold_values(TsirReductionOp op,\n    TsirReductionTreeShape shape, const float *vals, size_t count,\n    float *out);\nbool find_body_role(const TsirSemanticBody *body,\n    TsirSemanticBindingRole role, uint32_t *out_index);\nbool find_axis_role(const TsirSemanticBody *body,\n    TsirSemanticAxisRole role, uint32_t *out_index);\nint try_fused_gemv(const TsirSemantic *semantic,\n    const TsirRealization *realization, const TsirInputBuffer *inputs,\n    size_t input_count, TsirReferenceResult *result,\n    TsirStatus *err_out);\nint try_rms_norm(const TsirSemantic *semantic,\n    const TsirInputBuffer *inputs, size_t input_count,\n    TsirReferenceResult *result, TsirStatus *err_out);\nint try_gather(const TsirSemantic *semantic,\n    const TsirInputBuffer *inputs, size_t input_count,\n    TsirReferenceResult *result, TsirStatus *err_out);\n\n/* Extended ops (tsir_extended.c): identity, residual_add, gated,\n * attention_scores, l2_normalize, conv1d_depthwise,\n * linear_attention (the last always falls through, see\n * tsir_extended.h). Same TRY_MATCH / TRY_NOMATCH / negative\n * contract as the try_* helpers above. */\nint tsir_try_extended_ops(const TsirSemantic *semantic,\n    const TsirInputBuffer *inputs, size_t input_count,\n    TsirReferenceResult *result, TsirStatus *err_out);\n\n#endif\n",
+        "/* SPDX-License-Identifier: MIT\n * Copyright (c) 2026 Doe contributors */\n#ifndef DOE_TSIR_SOURCE_INTERNAL_H\n#define DOE_TSIR_SOURCE_INTERNAL_H\n#include \"tsir_source.h\"\n#include \"../compile_internal.h\"\n#include \"../override.h\"\n\ntypedef struct TsirSourceFunction {\n    TsirIrFunction view;\n    TsirIrParam *params;\n    TsirIrLocal *locals;\n    TsirIrExpr *exprs;\n    TsirIrStmt *stmts;\n    uint32_t *args, *children, *scope;\n    size_t expr_cap, stmt_cap, local_cap, scope_count;\n    NameSpan *local_names;\n    const FunctionRecord *syntax;\n} TsirSourceFunction;\n\ntypedef struct TsirSourceBridge {\n    Source source;\n    CompilerWorkspace *compiler;\n    TsirWgslModule module;\n    TsirIrType *types;\n    TsirIrStructDef *structs;\n    TsirIrStructField *fields;\n    TsirIrGlobal *globals;\n    TsirIrFunction *functions;\n    TsirSourceFunction *owned_functions;\n    char *names;\n    size_t names_count, names_cap, type_cap;\n    TsirStatus status;\n} TsirSourceBridge;\nconst char *tsir_source_name(TsirSourceBridge *, NameSpan);\nbool tsir_source_fail(TsirSourceBridge *, uint32_t, const char *);\nuint32_t tsir_source_expr(TsirSourceBridge *, TsirSourceFunction *, uint32_t, bool, unsigned);\nuint32_t tsir_source_push_expr(TsirSourceBridge *, TsirSourceFunction *, TsirIrExpr);\nuint32_t tsir_source_root(TsirSourceBridge *, TsirSourceFunction *, NameSpan, bool);\nuint32_t tsir_source_packed(TsirSourceBridge *, TsirSourceFunction *, NumericBuiltinKind, const TsirIrExpr *);\nbool tsir_source_function(TsirSourceBridge *, TsirSourceFunction *, uint32_t);\n#endif\n"
+      ]
+    },
+    "B11": {
+      "id": "B11",
+      "name": "wgsl-qwen-gqa-backward",
+      "language": "WGSL",
+      "repo": "doppler",
+      "commit": "bfee8cd43",
+      "description": "Backward-pass WGSL compute shaders implementing grouped-query attention gradient propagation and softmax recomputation.",
+      "alphabetSize": 73,
+      "totalBytes": 9186,
+      "files": [
+        {
+          "path": "src/gpu/kernels/backward/qwen_gqa_attention_backward.wgsl",
+          "bytes": 3633,
+          "sha256": "039736ea1fbce8a638b75bf866d1113ad316d216e7c0d3953764513f902f38af"
+        },
+        {
+          "path": "src/gpu/kernels/backward/qwen_gqa_softmax_backward_scores.wgsl",
+          "bytes": 2428,
+          "sha256": "3afd9be80d806c26b988b14fcb429e9fd621ae396e91a54dd94469fcbcc7b4ca"
+        },
+        {
+          "path": "src/gpu/kernels/backward/qwen_gqa_softmax_recompute.wgsl",
+          "bytes": 3125,
+          "sha256": "631bb01c42c410ca62541465248ddf8c4e3a8ddc8a802fcbd521bb94f4fb3735"
+        }
+      ],
+      "programs": [
+        "override WORKGROUP_SIZE: u32 = 256u;\n\nstruct Uniforms {\n    seq_len: u32,\n    num_heads: u32,\n    num_kv_heads: u32,\n    head_dim: u32,\n    scale: f32,\n    causal: u32,\n    _pad0: u32,\n    _pad1: u32,\n}\n\n@group(0) @binding(0) var<uniform> u: Uniforms;\n@group(0) @binding(1) var<storage, read> query: array<f32>;\n@group(0) @binding(2) var<storage, read> key: array<f32>;\n@group(0) @binding(3) var<storage, read> softmax: array<f32>;\n@group(0) @binding(4) var<storage, read> grad_scores: array<f32>;\n@group(0) @binding(5) var<storage, read> grad_output: array<f32>;\n@group(0) @binding(6) var<storage, read_write> grad_query: array<f32>;\n@group(0) @binding(7) var<storage, read_write> grad_key: array<f32>;\n@group(0) @binding(8) var<storage, read_write> grad_value: array<f32>;\n\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(@builtin(global_invocation_id) gid: vec3<u32>) {\n    let query_elements = u.seq_len * u.num_heads * u.head_dim;\n    let kv_elements = u.seq_len * u.num_kv_heads * u.head_dim;\n    let element = gid.x;\n    let heads_per_kv = u.num_heads / u.num_kv_heads;\n    if (element < query_elements) {\n        let dim = element % u.head_dim;\n        let row = element / u.head_dim;\n        let head = row % u.num_heads;\n        let query_token = row / u.num_heads;\n        let kv_head = head / heads_per_kv;\n        var result = 0.0;\n        let score_base = (query_token * u.num_heads + head) * u.seq_len;\n        for (var key_token = 0u; key_token < u.seq_len; key_token = key_token + 1u) {\n            let key_index = (key_token * u.num_kv_heads + kv_head) * u.head_dim + dim;\n            result = result + grad_scores[score_base + key_token] * key[key_index] * u.scale;\n        }\n        grad_query[element] = result;\n        return;\n    }\n    let kv_element = element - query_elements;\n    if (kv_element < kv_elements) {\n        let dim = kv_element % u.head_dim;\n        let row = kv_element / u.head_dim;\n        let kv_head = row % u.num_kv_heads;\n        let key_token = row / u.num_kv_heads;\n        var result = 0.0;\n        let first_head = kv_head * heads_per_kv;\n        for (var head_offset = 0u; head_offset < heads_per_kv; head_offset = head_offset + 1u) {\n            let head = first_head + head_offset;\n            for (var query_token = 0u; query_token < u.seq_len; query_token = query_token + 1u) {\n                let query_index = (query_token * u.num_heads + head) * u.head_dim + dim;\n                let score_index = (query_token * u.num_heads + head) * u.seq_len + key_token;\n                result = result + grad_scores[score_index] * query[query_index] * u.scale;\n            }\n        }\n        grad_key[kv_element] = result;\n        return;\n    }\n    let value_element = kv_element - kv_elements;\n    if (value_element < kv_elements) {\n        let dim = value_element % u.head_dim;\n        let row = value_element / u.head_dim;\n        let kv_head = row % u.num_kv_heads;\n        let key_token = row / u.num_kv_heads;\n        var result = 0.0;\n        let first_head = kv_head * heads_per_kv;\n        for (var head_offset = 0u; head_offset < heads_per_kv; head_offset = head_offset + 1u) {\n            let head = first_head + head_offset;\n            for (var query_token = 0u; query_token < u.seq_len; query_token = query_token + 1u) {\n                let score_index = (query_token * u.num_heads + head) * u.seq_len + key_token;\n                let output_index = (query_token * u.num_heads + head) * u.head_dim + dim;\n                result = result + softmax[score_index] * grad_output[output_index];\n            }\n        }\n        grad_value[value_element] = result;\n    }\n}\n",
+        "override WORKGROUP_SIZE: u32 = 256u;\nconst MAX_WORKGROUP_SIZE: u32 = 256u;\n\nstruct Uniforms {\n    seq_len: u32,\n    num_heads: u32,\n    num_kv_heads: u32,\n    head_dim: u32,\n    scale: f32,\n    causal: u32,\n    _pad0: u32,\n    _pad1: u32,\n}\n\n@group(0) @binding(0) var<uniform> u: Uniforms;\n@group(0) @binding(1) var<storage, read> value: array<f32>;\n@group(0) @binding(2) var<storage, read> grad_output: array<f32>;\n@group(0) @binding(3) var<storage, read> softmax: array<f32>;\n@group(0) @binding(4) var<storage, read_write> grad_scores: array<f32>;\n\nvar<workgroup> shared_reduce: array<f32, MAX_WORKGROUP_SIZE>;\n\nfn output_value_dot(query_token: u32, head: u32, key_token: u32) -> f32 {\n    let heads_per_kv = u.num_heads / u.num_kv_heads;\n    let kv_head = head / heads_per_kv;\n    let output_base = (query_token * u.num_heads + head) * u.head_dim;\n    let value_base = (key_token * u.num_kv_heads + kv_head) * u.head_dim;\n    var result = 0.0;\n    for (var dim = 0u; dim < u.head_dim; dim = dim + 1u) {\n        result = result + grad_output[output_base + dim] * value[value_base + dim];\n    }\n    return result;\n}\n\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(\n    @builtin(workgroup_id) wid: vec3<u32>,\n    @builtin(local_invocation_id) lid: vec3<u32>\n) {\n    let row = wid.x;\n    let lane = lid.x;\n    let query_token = row / u.num_heads;\n    let head = row % u.num_heads;\n    if (query_token >= u.seq_len) {\n        return;\n    }\n    let row_base = row * u.seq_len;\n    var local_dot = 0.0;\n    for (var key_token = lane; key_token < u.seq_len; key_token = key_token + WORKGROUP_SIZE) {\n        local_dot = local_dot\n            + softmax[row_base + key_token]\n            * output_value_dot(query_token, head, key_token);\n    }\n    shared_reduce[lane] = local_dot;\n    workgroupBarrier();\n    var stride = WORKGROUP_SIZE / 2u;\n    loop {\n        if (stride == 0u) {\n            break;\n        }\n        if (lane < stride) {\n            shared_reduce[lane] = shared_reduce[lane] + shared_reduce[lane + stride];\n        }\n        workgroupBarrier();\n        stride = stride / 2u;\n    }\n    let row_dot = shared_reduce[0];\n    for (var key_token = lane; key_token < u.seq_len; key_token = key_token + WORKGROUP_SIZE) {\n        let probability = softmax[row_base + key_token];\n        grad_scores[row_base + key_token] = probability\n            * (output_value_dot(query_token, head, key_token) - row_dot);\n    }\n}\n",
+        "override WORKGROUP_SIZE: u32 = 256u;\nconst MAX_WORKGROUP_SIZE: u32 = 256u;\n\nstruct Uniforms {\n    seq_len: u32,\n    num_heads: u32,\n    num_kv_heads: u32,\n    head_dim: u32,\n    scale: f32,\n    causal: u32,\n    _pad0: u32,\n    _pad1: u32,\n}\n\n@group(0) @binding(0) var<uniform> u: Uniforms;\n@group(0) @binding(1) var<storage, read> query: array<f32>;\n@group(0) @binding(2) var<storage, read> key: array<f32>;\n@group(0) @binding(3) var<storage, read_write> softmax: array<f32>;\n\nvar<workgroup> shared_reduce: array<f32, MAX_WORKGROUP_SIZE>;\n\nfn score(query_token: u32, head: u32, key_token: u32) -> f32 {\n    let heads_per_kv = u.num_heads / u.num_kv_heads;\n    let kv_head = head / heads_per_kv;\n    let query_base = (query_token * u.num_heads + head) * u.head_dim;\n    let key_base = (key_token * u.num_kv_heads + kv_head) * u.head_dim;\n    var result = 0.0;\n    for (var dim = 0u; dim < u.head_dim; dim = dim + 1u) {\n        result = result + query[query_base + dim] * key[key_base + dim];\n    }\n    return result * u.scale;\n}\n\n@compute @workgroup_size(WORKGROUP_SIZE, 1, 1)\nfn main(\n    @builtin(workgroup_id) wid: vec3<u32>,\n    @builtin(local_invocation_id) lid: vec3<u32>\n) {\n    let row = wid.x;\n    let lane = lid.x;\n    let query_token = row / u.num_heads;\n    let head = row % u.num_heads;\n    if (query_token >= u.seq_len) {\n        return;\n    }\n    var local_max = -3.402823466e+38;\n    for (var key_token = lane; key_token < u.seq_len; key_token = key_token + WORKGROUP_SIZE) {\n        if (u.causal != 0u && key_token > query_token) {\n            continue;\n        }\n        local_max = max(local_max, score(query_token, head, key_token));\n    }\n    shared_reduce[lane] = local_max;\n    workgroupBarrier();\n    var stride = WORKGROUP_SIZE / 2u;\n    loop {\n        if (stride == 0u) {\n            break;\n        }\n        if (lane < stride) {\n            shared_reduce[lane] = max(shared_reduce[lane], shared_reduce[lane + stride]);\n        }\n        workgroupBarrier();\n        stride = stride / 2u;\n    }\n    let row_max = shared_reduce[0];\n    workgroupBarrier();\n    var local_sum = 0.0;\n    for (var key_token = lane; key_token < u.seq_len; key_token = key_token + WORKGROUP_SIZE) {\n        if (u.causal != 0u && key_token > query_token) {\n            continue;\n        }\n        local_sum = local_sum + exp(score(query_token, head, key_token) - row_max);\n    }\n    shared_reduce[lane] = local_sum;\n    workgroupBarrier();\n    stride = WORKGROUP_SIZE / 2u;\n    loop {\n        if (stride == 0u) {\n            break;\n        }\n        if (lane < stride) {\n            shared_reduce[lane] = shared_reduce[lane] + shared_reduce[lane + stride];\n        }\n        workgroupBarrier();\n        stride = stride / 2u;\n    }\n    let inverse_sum = 1.0 / shared_reduce[0];\n    let row_base = row * u.seq_len;\n    for (var key_token = lane; key_token < u.seq_len; key_token = key_token + WORKGROUP_SIZE) {\n        softmax[row_base + key_token] = select(\n            exp(score(query_token, head, key_token) - row_max) * inverse_sum,\n            0.0,\n            u.causal != 0u && key_token > query_token\n        );\n    }\n}\n"
+      ]
+    },
+    "B12": {
+      "id": "B12",
+      "name": "js-reploid-core-primitives",
+      "language": "JavaScript",
+      "repo": "reploid",
+      "commit": "7c335e2cf",
+      "description": "Core Reploid package primitives for abort-signal cancellation racing, SHA-256 hashing, observation, and exports.",
+      "alphabetSize": 74,
+      "totalBytes": 4167,
+      "files": [
+        {
+          "path": "packages/reploid/src/cancellation.js",
+          "bytes": 1895,
+          "sha256": "770b8e17e5321e905243b25df64eab21668383024fdf71d134ddf19bbc93f889"
+        },
+        {
+          "path": "packages/reploid/src/hashing.js",
+          "bytes": 1351,
+          "sha256": "0cf5fe45851242b29ea696e1b39799327f35287d758f04f301f1b7c4b737e8b4"
+        },
+        {
+          "path": "packages/reploid/src/index.js",
+          "bytes": 187,
+          "sha256": "565faddca9230b2abb1861d3b5ec56815253507b92363cf6959ccb7cc82fedf1"
+        },
+        {
+          "path": "packages/reploid/src/observation.js",
+          "bytes": 734,
+          "sha256": "9d6258544ffe8b59ec6c6cf271cea987cbd1a91c808ea85cd27d81cca1741617"
+        }
+      ],
+      "programs": [
+        "/**\n * The library's one abort race. Agent execution, transport, custody, retrieval\n * and hosts stop awaiting borrowed work when its signal aborts; the borrowed\n * work itself may keep running until its owner settles it.\n */\n\n/** @template T @param {() => T | Promise<T>} operation @param {AbortSignal} signal @returns {Promise<T>} */\nexport function abortable(operation, signal) {\n  if (signal.aborted) return Promise.reject(signal.reason);\n  return new Promise((resolve, reject) => {\n    const abort = () => {\n      signal.removeEventListener('abort', abort);\n      reject(signal.reason);\n    };\n    signal.addEventListener('abort', abort, { once: true });\n    Promise.resolve().then(() => {\n      signal.throwIfAborted();\n      return operation();\n    }).then(resolve, reject).finally(() => signal.removeEventListener('abort', abort));\n  });\n}\n\n/**\n * abortable() that also stops waiting at `deadline` (epoch milliseconds),\n * rejecting with `expired()`; the operation itself is not cancelled.\n * @template T @param {() => T | Promise<T>} operation @param {AbortSignal} signal\n * @param {{ deadline: number, expired: () => unknown }} limit @returns {Promise<T>}\n */\nexport function abortableBefore(operation, signal, { deadline, expired }) {\n  const timeout = new AbortController();\n  const timer = setTimeout(() => timeout.abort(expired()), Math.max(0, deadline - Date.now()));\n  return abortable(operation, AbortSignal.any([signal, timeout.signal])).finally(() => clearTimeout(timer));\n}\n\n/**\n * Awaits work that has already started unless `signal` aborts first. A failure\n * the work reports after the abort stays handled.\n * @template T @param {T | Promise<T>} pending @param {AbortSignal} signal @returns {Promise<T>}\n */\nexport function untilAborted(pending, signal) {\n  const started = Promise.resolve(pending);\n  started.catch(() => {});\n  return abortable(() => started, signal);\n}\n",
+        "/**\n * @fileoverview The library's one browser SHA-256 over Web Crypto. It lives at the library\n * root, outside artifacts/, so modules any surface ships (including the Zero source\n * image, which never exports artifacts paths) can import it.\n */\nconst textEncoder = new TextEncoder();\nconst bytesToHex = (bytes) => Array.from(bytes)\n  .map((byte) => byte.toString(16).padStart(2, '0'))\n  .join('');\n\n/**\n * The library's one SHA-256 over Web Crypto, as the raw ArrayBuffer digest: a\n * Uint8Array is hashed as is, any other value as the UTF-8 bytes of\n * String(value). Hosted services use their node:crypto twin, server/hashing.js.\n */\nexport async function sha256Bytes(value, cryptoApi = globalThis.crypto) {\n  const subtle = (cryptoApi || globalThis.crypto)?.subtle;\n  if (!subtle) throw new Error('WebCrypto unavailable');\n  return subtle.digest('SHA-256', value instanceof Uint8Array ? value : textEncoder.encode(String(value)));\n}\n\n/** Lowercase hex form of sha256Bytes, with no prefix. */\nexport async function sha256HexUnprefixed(value, cryptoApi = globalThis.crypto) {\n  return bytesToHex(new Uint8Array(await sha256Bytes(value, cryptoApi)));\n}\n\n/** `sha256:`-prefixed form of sha256HexUnprefixed. */\nexport async function sha256Hex(value, cryptoApi = globalThis.crypto) {\n  return `sha256:${await sha256HexUnprefixed(value, cryptoApi)}`;\n}\n",
+        "export * from './agent/index.js';\n// Compatibility entry. New consumers can import reploid/agent without lab strategy code.\nexport { default as AgentLoop } from './agent/legacy-loop.js';\n",
+        "/** Observers never control execution or settlement. Report synchronous and async\n * failures without preventing later observers from receiving independent snapshots. */\nexport function reportObserverError(error) {\n  console.error('[Reploid] observer failed', error);\n}\nexport function notifyObservers(listeners, snapshot, onError = reportObserverError) {\n  const report = error => {\n    try {\n      Promise.resolve(onError(error)).catch(reportObserverError);\n    } catch (reportingError) { reportObserverError(reportingError); }\n  };\n  for (const listener of listeners) {\n    try {\n      const result = listener(snapshot());\n      if (result?.then) Promise.resolve(result).catch(report);\n    } catch (error) { report(error); }\n  }\n}\n"
+      ]
+    }
+  },
+  "queries": [
+    {
+      "corpusId": "B01",
+      "rule": "W2",
+      "budget": 64,
+      "kind": "64-slot-cliff"
+    },
+    {
+      "corpusId": "B01",
+      "rule": "W2",
+      "budget": 57,
+      "kind": "below-alphabet"
+    },
+    {
+      "corpusId": "B02",
+      "rule": "W2",
+      "budget": 64,
+      "kind": "64-slot-cliff"
+    },
+    {
+      "corpusId": "B02",
+      "rule": "W2",
+      "budget": 58,
+      "kind": "below-alphabet"
+    },
+    {
+      "corpusId": "B03",
+      "rule": "W2",
+      "budget": 64,
+      "kind": "64-slot-cliff"
+    },
+    {
+      "corpusId": "B03",
+      "rule": "W2",
+      "budget": 62,
+      "kind": "below-alphabet"
+    },
+    {
+      "corpusId": "B04",
+      "rule": "W2",
+      "budget": 64,
+      "kind": "64-slot-cliff"
+    },
+    {
+      "corpusId": "B04",
+      "rule": "W2",
+      "budget": 63,
+      "kind": "below-alphabet"
+    },
+    {
+      "corpusId": "B05",
+      "rule": "W2",
+      "budget": 64,
+      "kind": "64-slot-cliff"
+    },
+    {
+      "corpusId": "B05",
+      "rule": "W2",
+      "budget": 64,
+      "kind": "below-alphabet"
+    },
+    {
+      "corpusId": "B06",
+      "rule": "W2",
+      "budget": 64,
+      "kind": "64-slot-cliff"
+    },
+    {
+      "corpusId": "B06",
+      "rule": "W2",
+      "budget": 65,
+      "kind": "below-alphabet"
+    },
+    {
+      "corpusId": "B07",
+      "rule": "W2",
+      "budget": 64,
+      "kind": "64-slot-cliff"
+    },
+    {
+      "corpusId": "B07",
+      "rule": "W2",
+      "budget": 66,
+      "kind": "below-alphabet"
+    },
+    {
+      "corpusId": "B08",
+      "rule": "W2",
+      "budget": 64,
+      "kind": "64-slot-cliff"
+    },
+    {
+      "corpusId": "B08",
+      "rule": "W2",
+      "budget": 67,
+      "kind": "below-alphabet"
+    },
+    {
+      "corpusId": "B09",
+      "rule": "W2",
+      "budget": 64,
+      "kind": "64-slot-cliff"
+    },
+    {
+      "corpusId": "B09",
+      "rule": "W2",
+      "budget": 68,
+      "kind": "below-alphabet"
+    },
+    {
+      "corpusId": "B10",
+      "rule": "W2",
+      "budget": 64,
+      "kind": "64-slot-cliff"
+    },
+    {
+      "corpusId": "B10",
+      "rule": "W2",
+      "budget": 69,
+      "kind": "below-alphabet"
+    },
+    {
+      "corpusId": "B11",
+      "rule": "W2",
+      "budget": 64,
+      "kind": "64-slot-cliff"
+    },
+    {
+      "corpusId": "B11",
+      "rule": "W2",
+      "budget": 71,
+      "kind": "below-alphabet"
+    },
+    {
+      "corpusId": "B12",
+      "rule": "W2",
+      "budget": 64,
+      "kind": "64-slot-cliff"
+    },
+    {
+      "corpusId": "B12",
+      "rule": "W2",
+      "budget": 72,
+      "kind": "below-alphabet"
+    }
+  ]
+}
