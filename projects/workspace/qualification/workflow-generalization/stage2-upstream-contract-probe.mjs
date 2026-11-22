@@ -60,6 +60,10 @@ export const OPENPROJECT_SERVER_CODE_AUDIT = Object.freeze({
       'As documented in lib/open_project/mutex.rb, PostgreSQL runs at READ COMMITTED isolation and the advisory lock keys only on `mutex_on_WorkPackage_<id>`. Plain SELECTs in UpdateContract against separate tables (`member_roles`, `workflows`, `versions`, or a separate parent/approval WorkPackage) do NOT lock those rows; concurrent revocations on separate entities between validate and COMMIT are not blocked without explicit row/advisory locking.',
     specificTermsApprovalVersionBinding:
       'If human-approved terms live on the target WorkPackage row itself, any revoke-or-edit bumps `work_packages.lock_version`, so binding `lockVersion: v_approved` rejects ABA re-approvals under altered terms (`409`). If human-approved terms live on a separate entity/row, stock UpdateContract does NOT bind that entity\'s version or terms digest—requiring an atomic validator/gateway checking `(approval_id, approval_lock_version, terms_sha256)`.',
+    lostAckOperationBindingContract:
+      'Stock OpenProject has no native Idempotency-Key header on PATCH /api/v3/work_packages/{id}. Matching `journal.version = preCommitLockVersion + 2` alone is insufficient because an intervening edit at `preCommitLockVersion` produces that same `journal.version`. Lost-ack recovery may report `committed` ONLY when that journal entry binds the exact intended operation (`opbind-v1:<sha256>` over `{ workPackageId, preCommitLockVersion, expectedActorHref, intendedChanges, clientOperationId }` verified in `journal.comment.raw` / `journals.notes` plus verified actor and recorded journal attribute changes / `work_package_journals` row snapshot); otherwise reconciliation MUST report `unknown` without retrying.',
+    mockVsRealProbeBoundary:
+      'Loopback mock tests establish runner and reconciler logic only (`establishesUpstreamAppContract: false`); only running `probeOpenProjectDualRelease` against live OpenProject 13.4.0 and 14.0.0 releases establishes the upstream application contract.',
   },
 });
 
@@ -188,18 +192,21 @@ function opHeaders(apiToken) {
   return { Authorization: `Basic ${Buffer.from(`apikey:${apiToken}`).toString('base64')}` };
 }
 
-function queryPostgresJournalCount(pgUrl, workPackageId) {
+function queryPostgresJournalSnapshots(pgUrl, workPackageId) {
   if (!pgUrl) return null;
-  const out = execFileSync(
-    'psql',
-    [
-      pgUrl,
-      '-Atc',
-      `SELECT COUNT(*) FROM journals WHERE journable_type = 'WorkPackage' AND journable_id = ${Number(workPackageId)};`,
-    ],
-    { encoding: 'utf8', timeout: 5000 },
-  ).trim();
-  return Number(out);
+  const sql = [
+    "SELECT COALESCE(json_agg(row_to_json(t) ORDER BY t.version), '[]'::json)::text",
+    'FROM (',
+    '  SELECT j.id, j.version, j.user_id, COALESCE(j.notes, \'\') AS notes,',
+    '         wpj.subject, COALESCE(wpj.description, \'\') AS description,',
+    '         wpj.status_id, wpj.estimated_hours',
+    '  FROM journals j',
+    "  LEFT JOIN work_package_journals wpj ON j.data_type = 'Journal::WorkPackageJournal' AND j.data_id = wpj.id",
+    `  WHERE j.journable_type = 'WorkPackage' AND j.journable_id = ${Number(workPackageId)}`,
+    ') t;',
+  ].join(' ');
+  const out = execFileSync('psql', [pgUrl, '-Atc', sql], { encoding: 'utf8', timeout: 5000 }).trim();
+  return out ? JSON.parse(out) : [];
 }
 
 async function readOpenProjectJournalEvidence(baseUrl, wpId, token, pgUrl = null) {
@@ -208,59 +215,494 @@ async function readOpenProjectJournalEvidence(baseUrl, wpId, token, pgUrl = null
     jsonRequest(`${root}/api/v3/work_packages/${wpId}`, { headers: opHeaders(token) }),
     jsonRequest(`${root}/api/v3/work_packages/${wpId}/activities`, { headers: opHeaders(token) }),
   ]);
-  const elements = actRes.body?._embedded?.elements ?? [];
-  const pgCount = queryPostgresJournalCount(pgUrl, wpId);
+  const elements = actRes.body?._embedded?.elements;
+  if (!wpRes.ok || !actRes.ok || typeof wpRes.body?.lockVersion !== 'number' || !Array.isArray(elements)) {
+    return {
+      readOk: false,
+      wpStatus: wpRes.status,
+      activitiesStatus: actRes.status,
+      lockVersion: null,
+      journalCount: null,
+      journalSource: null,
+      journals: [],
+      pgJournalsByVersion: null,
+    };
+  }
+  const pgRows = queryPostgresJournalSnapshots(pgUrl, wpId);
+  const pgJournalsByVersion = Array.isArray(pgRows)
+    ? new Map(pgRows.map(r => [Number(r.version), r]))
+    : null;
   return {
-    lockVersion: wpRes.body?.lockVersion,
+    readOk: true,
+    lockVersion: wpRes.body.lockVersion,
     subject: wpRes.body?.subject,
     estimatedTime: wpRes.body?.estimatedTime ?? null,
-    descriptionRaw: wpRes.body?.description?.raw ?? '',
     statusHref: wpRes.body?._links?.status?.href ?? null,
-    journalCount: pgCount ?? elements.length,
-    journalSource: pgCount !== null ? 'postgresql-journals-table' : 'api-v3-activities-journals',
+    journalCount: pgRows !== null ? pgRows.length : elements.length,
+    journalSource: pgRows !== null ? 'postgresql-journals-and-work_package_journals' : 'api-v3-activities-journals',
     journals: elements,
+    pgJournalsByVersion,
   };
+}
+
+function canonicalizeValue(val) {
+  if (val === null || typeof val !== 'object') return val;
+  if (Array.isArray(val)) return val.map(canonicalizeValue);
+  const out = {};
+  for (const k of Object.keys(val).sort()) {
+    if (val[k] !== undefined) out[k] = canonicalizeValue(val[k]);
+  }
+  return out;
+}
+
+/**
+ * Compute a deterministic cryptographic operation-binding token (`opbind-v1:<sha256>`) over the
+ * exact intended OpenProject mutation (`workPackageId`, `preCommitLockVersion`, `expectedActorHref`,
+ * `intendedChanges`, `clientOperationId`). Because `journal.version = preCommitLockVersion + 2`
+ * alone can be produced by an intervening edit, lost-ack reconciliation requires the committed
+ * journal entry to bind this exact operation rather than trusting version number alone.
+ */
+export function computeOpenProjectOperationBinding({
+  workPackageId,
+  preCommitLockVersion,
+  expectedActorHref = null,
+  intendedChanges,
+  clientOperationId,
+}) {
+  if (
+    workPackageId === undefined
+    || workPackageId === null
+    || !Number.isInteger(preCommitLockVersion)
+    || preCommitLockVersion < 0
+    || !intendedChanges
+    || typeof intendedChanges !== 'object'
+    || Object.keys(intendedChanges).length === 0
+    || typeof clientOperationId !== 'string'
+    || clientOperationId.trim().length === 0
+  ) {
+    throw Error(
+      'computeOpenProjectOperationBinding requires workPackageId, preCommitLockVersion, non-empty intendedChanges, and clientOperationId',
+    );
+  }
+  const canonical = JSON.stringify(
+    canonicalizeValue({
+      schema: 'openproject-op-binding/v1',
+      workPackageId: String(workPackageId),
+      preCommitLockVersion,
+      expectedActorHref: expectedActorHref ?? null,
+      intendedChanges,
+      clientOperationId: clientOperationId.trim(),
+    }),
+  );
+  return `opbind-v1:${sha256(canonical)}`;
+}
+
+function detailRecordsNewValue(detail, expectedText) {
+  const raw = typeof detail?.raw === 'string' ? detail.raw : '';
+  if (raw) {
+    if (/\bdeleted\s*\(.*\)\s*$/s.test(raw)) return false;
+    const changedMatch = raw.match(/\bchanged from .* to (.*)$/s);
+    if (changedMatch) {
+      return changedMatch[1].includes(expectedText);
+    }
+    if (raw.includes(expectedText)) return true;
+  }
+  const html = typeof detail?.html === 'string' ? detail.html : '';
+  if (html && !raw) {
+    return html.includes(expectedText);
+  }
+  return false;
+}
+
+function verifyJournalBindsOperation(
+  journal,
+  pgRow,
+  { bindingToken, expectedActorHref = null, intendedChanges },
+) {
+  const notes = pgRow ? String(pgRow.notes ?? '') : String(journal?.comment?.raw ?? '');
+  if (!bindingToken || !notes.includes(bindingToken)) {
+    return false;
+  }
+  if (expectedActorHref) {
+    const apiActor = journal?._links?.user?.href ?? null;
+    if (apiActor !== expectedActorHref) return false;
+    const userIdMatch = expectedActorHref.match(/\/users\/(\d+)$/);
+    if (pgRow && userIdMatch && Number(pgRow.user_id) !== Number(userIdMatch[1])) {
+      return false;
+    }
+  }
+  const details = Array.isArray(journal?.details) ? journal.details : [];
+  if (intendedChanges.subject !== undefined) {
+    if (pgRow && pgRow.subject !== intendedChanges.subject) return false;
+    if (!details.some(d => detailRecordsNewValue(d, intendedChanges.subject))) return false;
+  }
+  if (intendedChanges.descriptionRaw !== undefined) {
+    if (pgRow && pgRow.description !== intendedChanges.descriptionRaw) return false;
+    if (!details.some(d => /description/i.test(String(d?.raw ?? '')))) return false;
+  }
+  if (intendedChanges.statusHref !== undefined) {
+    const statusIdMatch = String(intendedChanges.statusHref).match(/\/statuses\/(\d+)$/);
+    if (pgRow && statusIdMatch && Number(pgRow.status_id) !== Number(statusIdMatch[1])) return false;
+    if (!details.some(d => /status/i.test(String(d?.raw ?? '')))) return false;
+  }
+  if (intendedChanges.estimatedTime !== undefined) {
+    if (!details.some(d => /estimated time/i.test(String(d?.raw ?? '')))) return false;
+  }
+  return true;
+}
+
+function resolveBindingSpec({ workPackageId, preCommitLockVersion, expectedOperation }) {
+  if (
+    !expectedOperation
+    || typeof expectedOperation !== 'object'
+    || typeof expectedOperation.clientOperationId !== 'string'
+    || expectedOperation.clientOperationId.trim().length === 0
+    || !expectedOperation.intendedChanges
+    || typeof expectedOperation.intendedChanges !== 'object'
+    || Object.keys(expectedOperation.intendedChanges).length === 0
+  ) {
+    return null;
+  }
+  const bindingToken = computeOpenProjectOperationBinding({
+    workPackageId,
+    preCommitLockVersion,
+    expectedActorHref: expectedOperation.expectedActorHref ?? null,
+    intendedChanges: expectedOperation.intendedChanges,
+    clientOperationId: expectedOperation.clientOperationId,
+  });
+  return {
+    bindingToken,
+    expectedActorHref: expectedOperation.expectedActorHref ?? null,
+    intendedChanges: expectedOperation.intendedChanges,
+  };
+}
+
+function payloadBindsExpectedOperation(payload, bindingSpec) {
+  if (!payload || typeof payload !== 'object' || !bindingSpec) return false;
+  const notes = typeof payload.journalNotes === 'string'
+    ? payload.journalNotes
+    : (typeof payload.comment?.raw === 'string' ? payload.comment.raw : '');
+  if (!notes.includes(bindingSpec.bindingToken)) return false;
+  const { intendedChanges } = bindingSpec;
+  if (intendedChanges.subject !== undefined && payload.subject !== intendedChanges.subject) return false;
+  if (
+    intendedChanges.descriptionRaw !== undefined
+    && (payload.description?.raw ?? null) !== intendedChanges.descriptionRaw
+  ) {
+    return false;
+  }
+  if (
+    intendedChanges.statusHref !== undefined
+    && (payload._links?.status?.href ?? null) !== intendedChanges.statusHref
+  ) {
+    return false;
+  }
+  if (
+    intendedChanges.estimatedTime !== undefined
+    && payload.estimatedTime !== intendedChanges.estimatedTime
+  ) {
+    return false;
+  }
+  return true;
 }
 
 /**
  * Reconcile a dropped post-commit acknowledgment on OpenProject `PATCH /api/v3/work_packages/{id}`
- * to exactly one durable effect using `(preCommitLockVersion, idempotencyMarker)` against DB journals,
- * without blindly re-applying the mutation on top of a newer version.
+ * to an explicit 3-way `disposition: 'committed' | 'not_applied_safe_to_retry' | 'unknown'`:
+ *   1. Reads `work_package` + `activities` (`journals`, plus `work_package_journals` when `pgUrl` is set)
+ *      FIRST (`extraWritesSent: 0`).
+ *   2. Never treats `journal.version = preCommitLockVersion + 2` alone as proof of commit (an intervening
+ *      edit at `preCommitLockVersion` produces that same `journal.version`). Reports `disposition: 'committed'`
+ *      ONLY when a journal entry (`version >= preCommitLockVersion + 2`) binds the exact `expectedOperation`
+ *      (`opbind-v1:<sha256>` in `journal.comment.raw` / `journals.notes` + verified actor + recorded
+ *      attribute changes / `work_package_journals` snapshot).
+ *   3. When `expectedOperation` is absent/unbound, when `lockVersion` has moved without an operation-bound
+ *      journal (including an intervening edit at `journal.version = preCommitLockVersion + 2`), or when an
+ *      opt-in retry errors/times out without bound journal confirmation, reports `disposition: 'unknown'`
+ *      without retrying (`allowRetryAtPreCommitVersion: false`).
  */
 export async function reconcileOpenProjectLostAck({
   baseUrl,
   workPackageId,
   apiToken,
   preCommitLockVersion,
-  idempotencyMarker,
-  payload,
+  expectedOperation = null,
+  payload = null,
+  retryIfSafe = false,
   pgUrl = null,
 }) {
+  if (!Number.isInteger(preCommitLockVersion) || preCommitLockVersion < 0) {
+    return {
+      disposition: 'unknown',
+      reason: 'invalid-precommit-lock-version',
+      extraWritesSent: 0,
+      retryHttpStatus: null,
+      allowRetryAtPreCommitVersion: false,
+      forbidBlindRetryOnBumpedVersion: true,
+      lockVersionAfterReconcile: null,
+      matchingDurableJournalEffects: 0,
+      totalJournalCount: null,
+      journalSource: null,
+      reconciledToSingleDurableEffect: false,
+    };
+  }
+
+  const bindingSpec = resolveBindingSpec({ workPackageId, preCommitLockVersion, expectedOperation });
+  if (!bindingSpec) {
+    return {
+      disposition: 'unknown',
+      reason: 'missing-exact-operation-binding',
+      extraWritesSent: 0,
+      retryHttpStatus: null,
+      allowRetryAtPreCommitVersion: false,
+      forbidBlindRetryOnBumpedVersion: true,
+      lockVersionAfterReconcile: null,
+      matchingDurableJournalEffects: 0,
+      totalJournalCount: null,
+      journalSource: null,
+      reconciledToSingleDurableEffect: false,
+    };
+  }
+
+  let evidence;
+  try {
+    evidence = await readOpenProjectJournalEvidence(baseUrl, workPackageId, apiToken, pgUrl);
+  } catch {
+    evidence = { readOk: false };
+  }
+  if (!evidence.readOk) {
+    return {
+      disposition: 'unknown',
+      reason: 'journal-evidence-read-failed',
+      extraWritesSent: 0,
+      retryHttpStatus: null,
+      allowRetryAtPreCommitVersion: false,
+      forbidBlindRetryOnBumpedVersion: true,
+      lockVersionAfterReconcile: null,
+      matchingDurableJournalEffects: 0,
+      totalJournalCount: null,
+      journalSource: null,
+      reconciledToSingleDurableEffect: false,
+    };
+  }
+
+  const findBoundJournals = ev =>
+    ev.journals.filter(j => {
+      const pgRow = ev.pgJournalsByVersion ? (ev.pgJournalsByVersion.get(Number(j?.version)) ?? null) : null;
+      return verifyJournalBindsOperation(j, pgRow, bindingSpec);
+    });
+
+  // Also detect any journal carrying the binding token whose recorded fields/actor DO NOT match
+  // `expectedOperation` (tampered or partial/mismatched write -> `unknown`):
+  const hasTokenMismatchJournal = ev =>
+    ev.journals.some(j => {
+      const pgRow = ev.pgJournalsByVersion ? (ev.pgJournalsByVersion.get(Number(j?.version)) ?? null) : null;
+      const notes = pgRow ? String(pgRow.notes ?? '') : String(j?.comment?.raw ?? '');
+      return notes.includes(bindingSpec.bindingToken) && !verifyJournalBindsOperation(j, pgRow, bindingSpec);
+    });
+
+  if (hasTokenMismatchJournal(evidence)) {
+    return {
+      disposition: 'unknown',
+      reason: 'journal-token-present-but-operation-fields-or-actor-mismatch',
+      extraWritesSent: 0,
+      retryHttpStatus: null,
+      allowRetryAtPreCommitVersion: false,
+      forbidBlindRetryOnBumpedVersion: true,
+      lockVersionAfterReconcile: evidence.lockVersion,
+      matchingDurableJournalEffects: 0,
+      totalJournalCount: evidence.journalCount,
+      journalSource: evidence.journalSource,
+      reconciledToSingleDurableEffect: false,
+    };
+  }
+
+  // OpenProject `work_packages.lock_version` starts at 0 while `journals.version` starts at 1
+  // (version 1 = initial creation), so transitioning `lock_version` v -> v + 1 writes `journal.version = v + 2`.
+  const matchingJournals = findBoundJournals(evidence);
+  if (matchingJournals.length > 1) {
+    return {
+      disposition: 'unknown',
+      reason: 'multiple-journals-matched-operation-binding',
+      extraWritesSent: 0,
+      retryHttpStatus: null,
+      allowRetryAtPreCommitVersion: false,
+      forbidBlindRetryOnBumpedVersion: true,
+      lockVersionAfterReconcile: evidence.lockVersion,
+      matchingDurableJournalEffects: matchingJournals.length,
+      totalJournalCount: evidence.journalCount,
+      journalSource: evidence.journalSource,
+      reconciledToSingleDurableEffect: false,
+    };
+  }
+  if (matchingJournals.length === 1) {
+    const matchedVersion = Number(matchingJournals[0]?.version);
+    if (!Number.isInteger(matchedVersion) || matchedVersion < preCommitLockVersion + 2) {
+      return {
+        disposition: 'unknown',
+        reason: 'bound-journal-predates-precommit-lock-version',
+        extraWritesSent: 0,
+        retryHttpStatus: null,
+        allowRetryAtPreCommitVersion: false,
+        forbidBlindRetryOnBumpedVersion: true,
+        lockVersionAfterReconcile: evidence.lockVersion,
+        matchingDurableJournalEffects: 1,
+        totalJournalCount: evidence.journalCount,
+        journalSource: evidence.journalSource,
+        reconciledToSingleDurableEffect: false,
+      };
+    }
+    return {
+      disposition: 'committed',
+      reason: 'verified-operation-bound-journal-without-retry',
+      operationBindingToken: bindingSpec.bindingToken,
+      extraWritesSent: 0,
+      retryHttpStatus: null,
+      allowRetryAtPreCommitVersion: false,
+      forbidBlindRetryOnBumpedVersion: true,
+      lockVersionAfterReconcile: evidence.lockVersion,
+      matchingJournalVersion: matchedVersion,
+      matchingDurableJournalEffects: 1,
+      totalJournalCount: evidence.journalCount,
+      journalSource: evidence.journalSource,
+      reconciledToSingleDurableEffect: true,
+    };
+  }
+
+  // If `lockVersion` has moved (including when `journal.version = preCommitLockVersion + 2` exists from
+  // an intervening edit or an unbound mutation), refuse to mistake it for success and forbid retry:
+  if (evidence.lockVersion !== preCommitLockVersion) {
+    const hasUnboundNextJournal = evidence.journals.some(
+      j => Number(j?.version) === preCommitLockVersion + 2,
+    );
+    return {
+      disposition: 'unknown',
+      reason: hasUnboundNextJournal
+        ? 'intervening-or-unbound-journal-at-expected-version'
+        : 'lock-version-advanced-without-bound-operation-journal',
+      extraWritesSent: 0,
+      retryHttpStatus: null,
+      allowRetryAtPreCommitVersion: false,
+      forbidBlindRetryOnBumpedVersion: true,
+      lockVersionAfterReconcile: evidence.lockVersion,
+      matchingDurableJournalEffects: 0,
+      totalJournalCount: evidence.journalCount,
+      journalSource: evidence.journalSource,
+      reconciledToSingleDurableEffect: false,
+    };
+  }
+
+  if (!retryIfSafe) {
+    return {
+      disposition: 'not_applied_safe_to_retry',
+      reason: 'lock-version-unchanged-and-operation-absent',
+      operationBindingToken: bindingSpec.bindingToken,
+      extraWritesSent: 0,
+      retryHttpStatus: null,
+      allowRetryAtPreCommitVersion: true,
+      forbidBlindRetryOnBumpedVersion: true,
+      lockVersionAfterReconcile: evidence.lockVersion,
+      matchingDurableJournalEffects: 0,
+      totalJournalCount: evidence.journalCount,
+      journalSource: evidence.journalSource,
+      reconciledToSingleDurableEffect: false,
+    };
+  }
+
+  if (!payloadBindsExpectedOperation(payload, bindingSpec)) {
+    return {
+      disposition: 'unknown',
+      reason: 'retry-payload-does-not-bind-expected-operation',
+      extraWritesSent: 0,
+      retryHttpStatus: null,
+      allowRetryAtPreCommitVersion: false,
+      forbidBlindRetryOnBumpedVersion: true,
+      lockVersionAfterReconcile: evidence.lockVersion,
+      matchingDurableJournalEffects: 0,
+      totalJournalCount: evidence.journalCount,
+      journalSource: evidence.journalSource,
+      reconciledToSingleDurableEffect: false,
+    };
+  }
+
   const root = baseUrl.replace(/\/$/, '');
   const wpUrl = `${root}/api/v3/work_packages/${workPackageId}`;
-  // Attempt keyed/versioned retry at the EXACT pre-commit `lockVersion`:
-  const retryAtSameVersion = await jsonRequest(wpUrl, {
-    method: 'PATCH',
-    headers: opHeaders(apiToken),
-    body: { ...payload, lockVersion: preCommitLockVersion },
-  });
-  const evidence = await readOpenProjectJournalEvidence(baseUrl, workPackageId, apiToken, pgUrl);
-  // OpenProject `work_packages.lock_version` starts at 0 while `journals.version` starts at 1
-  // (version 1 = initial creation), so transitioning `lock_version` v -> v + 1 writes `journal.version = v + 2`:
-  const matchingJournals = evidence.journals.filter(j =>
-    String(j?.comment?.raw ?? '').includes(idempotencyMarker)
-    || (j?.version === preCommitLockVersion + 2 && evidence.descriptionRaw.includes(idempotencyMarker)),
-  );
-  const reconciledCommittedOnce =
-    (retryAtSameVersion.status === 409 && matchingJournals.length === 1)
-    || (retryAtSameVersion.status === 200 && matchingJournals.length === 1);
+  let retryRes = null;
+  let retryTransportError = false;
+  try {
+    retryRes = await jsonRequest(wpUrl, {
+      method: 'PATCH',
+      headers: opHeaders(apiToken),
+      body: { ...payload, lockVersion: preCommitLockVersion },
+    });
+  } catch {
+    retryTransportError = true;
+  }
+
+  let afterEvidence;
+  try {
+    afterEvidence = await readOpenProjectJournalEvidence(baseUrl, workPackageId, apiToken, pgUrl);
+  } catch {
+    afterEvidence = { readOk: false };
+  }
+  if (!afterEvidence.readOk || hasTokenMismatchJournal(afterEvidence)) {
+    return {
+      disposition: 'unknown',
+      reason: !afterEvidence.readOk
+        ? 'post-retry-journal-evidence-read-failed'
+        : 'post-retry-journal-operation-mismatch',
+      extraWritesSent: 1,
+      retryHttpStatus: retryRes?.status ?? null,
+      allowRetryAtPreCommitVersion: false,
+      forbidBlindRetryOnBumpedVersion: true,
+      lockVersionAfterReconcile: afterEvidence.lockVersion ?? null,
+      matchingDurableJournalEffects: 0,
+      totalJournalCount: afterEvidence.journalCount ?? null,
+      journalSource: afterEvidence.journalSource ?? null,
+      reconciledToSingleDurableEffect: false,
+    };
+  }
+
+  const afterMatching = findBoundJournals(afterEvidence);
+  if (
+    afterMatching.length === 1
+    && Number(afterMatching[0]?.version) >= preCommitLockVersion + 2
+  ) {
+    return {
+      disposition: 'committed',
+      reason: retryTransportError
+        ? 'committed-despite-retry-ack-loss'
+        : retryRes?.status === 409
+          ? 'prior-in-flight-commit-verified-in-journal'
+          : 'committed-via-versioned-retry',
+      operationBindingToken: bindingSpec.bindingToken,
+      extraWritesSent: 1,
+      retryHttpStatus: retryRes?.status ?? null,
+      allowRetryAtPreCommitVersion: false,
+      forbidBlindRetryOnBumpedVersion: true,
+      lockVersionAfterReconcile: afterEvidence.lockVersion,
+      matchingJournalVersion: Number(afterMatching[0].version),
+      matchingDurableJournalEffects: 1,
+      totalJournalCount: afterEvidence.journalCount,
+      journalSource: afterEvidence.journalSource,
+      reconciledToSingleDurableEffect: true,
+    };
+  }
+
   return {
-    retryHttpStatus: retryAtSameVersion.status,
-    lockVersionAfterReconcile: evidence.lockVersion,
-    matchingDurableJournalEffects: matchingJournals.length,
-    totalJournalCount: evidence.journalCount,
-    journalSource: evidence.journalSource,
-    reconciledToSingleDurableEffect: reconciledCommittedOnce,
+    disposition: 'unknown',
+    reason: retryTransportError
+      ? 'retry-patch-transport-error'
+      : 'retry-patch-failed-without-bound-operation-journal',
+    extraWritesSent: 1,
+    retryHttpStatus: retryRes?.status ?? null,
+    allowRetryAtPreCommitVersion: false,
+    forbidBlindRetryOnBumpedVersion: true,
+    lockVersionAfterReconcile: afterEvidence.lockVersion,
+    matchingDurableJournalEffects: afterMatching.length,
+    totalJournalCount: afterEvidence.journalCount,
+    journalSource: afterEvidence.journalSource,
+    reconciledToSingleDurableEffect: false,
   };
 }
 
@@ -448,14 +890,85 @@ export async function runOpenProjectSingleReleaseProbe({
     && evAfterRace.lockVersion === lockBeforeRace + 1
     && evAfterRace.journalCount === journalsBeforeRace + 1;
 
-  // CHECK 5: Lost-acknowledgment reconciliation (`reconcileOpenProjectLostAck`) to 1 durable effect:
-  const lockBeforeLostAck = evAfterRace.lockVersion;
-  const journalsBeforeLostAck = evAfterRace.journalCount;
-  const idemMarker = `idem-${releaseLabel}-${lockBeforeLostAck}`;
-  const lostAckPayload = {
-    description: { raw: `Final staged review (${idemMarker})` },
-    journalNotes: `Commit ${idemMarker}`,
+  // CHECK 5: Exact-operation-bound lost-ack reconciliation (`reconcileOpenProjectLostAck`):
+  //   (5a) Intervening edit landing at `journal.version = preCommitLockVersion + 2` MUST NOT be
+  //        mistaken for success -> `disposition: 'unknown'`, `extraWritesSent: 0`, no retry;
+  //   (5b) Unbound mutation without `expectedOperation` -> `disposition: 'unknown'`, `extraWritesSent: 0`, no retry;
+  //   (5c) Operation-bound mutation (`opbind-v1:<sha256>` + actor + intendedChanges):
+  //        before write -> `not_applied_safe_to_retry` (`extraWritesSent: 0`);
+  //        after commit with dropped ack -> read-first `committed` (`extraWritesSent: 0`), including
+  //        after a subsequent edit overwrites `description.raw` and `subject`.
+  const authorActorHref = createdMain.body?._links?.author?.href ?? null;
+  const lockAtIntervening = evAfterRace.lockVersion;
+  const unappliedExpectedOp = {
+    clientOperationId: `unapplied-op-${releaseLabel}-${lockAtIntervening}`,
+    expectedActorHref: authorActorHref,
+    intendedChanges: {
+      subject: `Intended Final Review (${releaseLabel})`,
+      descriptionRaw: 'Intended staged body that never reached server',
+    },
   };
+  const interveningEditRes = await jsonRequest(wpUrl, {
+    method: 'PATCH',
+    headers: opHeaders(approverToken),
+    body: {
+      lockVersion: lockAtIntervening,
+      description: { raw: 'Intervening coworker edit at preCommitLockVersion + 2' },
+      journalNotes: 'Coworker intervening comment',
+    },
+  });
+  const interveningEditCheck = await reconcileOpenProjectLostAck({
+    baseUrl,
+    workPackageId: wpId,
+    apiToken: authorToken,
+    preCommitLockVersion: lockAtIntervening,
+    expectedOperation: unappliedExpectedOp,
+    retryIfSafe: true,
+    pgUrl,
+  });
+  const unboundVersionOnlyCheck = await reconcileOpenProjectLostAck({
+    baseUrl,
+    workPackageId: wpId,
+    apiToken: authorToken,
+    preCommitLockVersion: lockAtIntervening,
+    expectedOperation: null,
+    retryIfSafe: true,
+    pgUrl,
+  });
+
+  const evAfterIntervening = await readOpenProjectJournalEvidence(baseUrl, wpId, authorToken, pgUrl);
+  const lockBeforeLostAck = evAfterIntervening.lockVersion;
+  const journalsBeforeLostAck = evAfterIntervening.journalCount;
+  const boundExpectedOp = {
+    clientOperationId: `idem-op-${releaseLabel}-${lockBeforeLostAck}`,
+    expectedActorHref: authorActorHref,
+    intendedChanges: {
+      subject: `Final Staged Subject (${releaseLabel})`,
+      descriptionRaw: `Final staged review (${releaseLabel}, lock=${lockBeforeLostAck})`,
+    },
+  };
+  const opBindingToken = computeOpenProjectOperationBinding({
+    workPackageId: wpId,
+    preCommitLockVersion: lockBeforeLostAck,
+    expectedActorHref: boundExpectedOp.expectedActorHref,
+    intendedChanges: boundExpectedOp.intendedChanges,
+    clientOperationId: boundExpectedOp.clientOperationId,
+  });
+  const lostAckPayload = {
+    subject: boundExpectedOp.intendedChanges.subject,
+    description: { raw: boundExpectedOp.intendedChanges.descriptionRaw },
+    journalNotes: `Commit ${opBindingToken}`,
+  };
+  const preWriteCheck = await reconcileOpenProjectLostAck({
+    baseUrl,
+    workPackageId: wpId,
+    apiToken: authorToken,
+    preCommitLockVersion: lockBeforeLostAck,
+    expectedOperation: boundExpectedOp,
+    payload: lostAckPayload,
+    retryIfSafe: false,
+    pgUrl,
+  });
   const committedButAckDropped = await jsonRequest(wpUrl, {
     method: 'PATCH',
     headers: opHeaders(authorToken),
@@ -466,14 +979,53 @@ export async function runOpenProjectSingleReleaseProbe({
     workPackageId: wpId,
     apiToken: authorToken,
     preCommitLockVersion: lockBeforeLostAck,
-    idempotencyMarker: idemMarker,
+    expectedOperation: boundExpectedOp,
     payload: lostAckPayload,
+    retryIfSafe: true,
+    pgUrl,
+  });
+  const overwriteDescriptionRes = await jsonRequest(wpUrl, {
+    method: 'PATCH',
+    headers: opHeaders(approverToken),
+    body: {
+      lockVersion: reconcileResult.lockVersionAfterReconcile,
+      subject: `Post-Review Subject (${releaseLabel})`,
+      description: { raw: 'Follow-up note completely replacing previous descriptionRaw' },
+      journalNotes: 'Follow-up note without prior operation binding',
+    },
+  });
+  const reconcileAfterOverwrite = await reconcileOpenProjectLostAck({
+    baseUrl,
+    workPackageId: wpId,
+    apiToken: authorToken,
+    preCommitLockVersion: lockBeforeLostAck,
+    expectedOperation: boundExpectedOp,
+    payload: lostAckPayload,
+    retryIfSafe: true,
     pgUrl,
   });
   const lostAckSingleDurableEffectPass =
-    committedButAckDropped.status === 200
+    interveningEditRes.status === 200
+    && interveningEditCheck.disposition === 'unknown'
+    && interveningEditCheck.reason === 'intervening-or-unbound-journal-at-expected-version'
+    && interveningEditCheck.extraWritesSent === 0
+    && interveningEditCheck.allowRetryAtPreCommitVersion === false
+    && interveningEditCheck.reconciledToSingleDurableEffect === false
+    && unboundVersionOnlyCheck.disposition === 'unknown'
+    && unboundVersionOnlyCheck.extraWritesSent === 0
+    && unboundVersionOnlyCheck.allowRetryAtPreCommitVersion === false
+    && preWriteCheck.disposition === 'not_applied_safe_to_retry'
+    && preWriteCheck.extraWritesSent === 0
+    && preWriteCheck.allowRetryAtPreCommitVersion === true
+    && committedButAckDropped.status === 200
+    && reconcileResult.disposition === 'committed'
+    && reconcileResult.extraWritesSent === 0
     && reconcileResult.reconciledToSingleDurableEffect
-    && reconcileResult.totalJournalCount === journalsBeforeLostAck + 1;
+    && reconcileResult.totalJournalCount === journalsBeforeLostAck + 1
+    && overwriteDescriptionRes.status === 200
+    && reconcileAfterOverwrite.disposition === 'committed'
+    && reconcileAfterOverwrite.extraWritesSent === 0
+    && reconcileAfterOverwrite.reconciledToSingleDurableEffect;
 
   const releaseQualifiesForSameRowTermsWorkflow =
     staleVersionRefusedPass
@@ -502,6 +1054,11 @@ export async function runOpenProjectSingleReleaseProbe({
       },
       lostAckReconciliation: {
         ...reconcileResult,
+        interveningEditAtExpectedVersionDisposition: interveningEditCheck.disposition,
+        interveningEditReason: interveningEditCheck.reason,
+        unboundOperationDisposition: unboundVersionOnlyCheck.disposition,
+        preWriteDisposition: preWriteCheck.disposition,
+        afterDescriptionOverwriteDisposition: reconcileAfterOverwrite.disposition,
         passes: lostAckSingleDurableEffectPass,
       },
     },
