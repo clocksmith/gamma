@@ -1,5 +1,6 @@
-# Head-to-Head Boundary Race: BITS Nullspace-Kernel vs. Canzar et al. (2012) Flow Solver
+# Head-to-Head Boundary Race: BITS Nullspace-Kernel vs. HiGHS Explicit Flow Baseline (`Canzar et al. 2012` formulation)
 
+- **Baseline scope (important precision note):** BITS settled `21/21` nontrivial queries versus `16/21` for a HiGHS implementation of the explicit flow formulation (`scipy.optimize.linprog` / `milp` on deduplicated `forced_blocks`). The `39.2x` median speedup covers the `15` shared `IMPOSSIBLE` cases; the `13.2x` feasibility speedup is `1` shared case (`B07 K=66`). This is strong evidence against the explicit HiGHS flow formulation, **not yet** a benchmark against Canzar et al.'s (2012) shortest-path Lagrangian relaxation.
 - **Rule:** `W2` (`max_bytes = 160`, whole programs excluded), per-query timeout `60 s`.
 - **Verification bar:** both sides timed to the exact same independently verified artifact (`IMPOSSIBLE` lower-bound certificate with zero floating-point trust, or `FEASIBLE` legal dictionary + byte-exact parse).
 - **Soundness contradictions:** `0` across `24` queries (`21` non-trivial queries with `K < |Sigma|`).
