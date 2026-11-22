@@ -619,6 +619,14 @@ const DONE = { completedWhen: [{ kind: 'element-present', selector: '#receipt' }
     assert.equal(gBranch2.plannerCalls, 0, 'Graph transfers downstream D repair across upstream branch 2 in 0 turns');
     assert.ok(cBranch1.plannerCalls > 0);
     assert.ok(cBranch2.plannerCalls > 0, 'Checkpointed skill must repair downstream D again on branch 2');
+
+    // 3f. Default representation policy chosen by preregistered blind-holdout-v3 verdict:
+    const wfMod = await import('../../src/client/workflow-agent.js');
+    assert.equal(wfMod.DEFAULT_WORKFLOW_REPRESENTATION, 'gammatron-graph');
+    assert.equal(wfMod.DEFAULT_SINGLE_PATH_REPRESENTATION, 'attested-checkpointed-skill');
+    assert.equal(wfMod.selectWorkflowRepresentation({ hasDirectWriteApi: true }), 'direct-write-api');
+    assert.equal(wfMod.selectWorkflowRepresentation({ singlePathOnly: true }), 'attested-checkpointed-skill');
+    assert.equal(wfMod.selectWorkflowRepresentation(), 'gammatron-graph');
   } finally {
     store.close();
     rmSync(root, { recursive: true, force: true });
