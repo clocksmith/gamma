@@ -339,6 +339,7 @@ export function validateSuffixProfiles(rawProfiles, nodes) {
     if (!nodes.has(nodeId)) continue;
     if (typeof profile.origin !== 'string' || !profile.origin
       || typeof profile.routePattern !== 'string' || !profile.routePattern
+      || (profile.scope !== undefined && !HASH.test(profile.scope))
       || !Array.isArray(profile.locatorTable)
       || !Array.isArray(profile.requiredSlots) || profile.requiredSlots.some(s => !HASH.test(s))
       || !Number.isSafeInteger(profile.sameOutlineClicks) || profile.sameOutlineClicks < 0
@@ -382,6 +383,7 @@ export function mergeSuffixProfiles(leftMap, rightMap, nodes) {
       referenceControls: prev.referenceControls ?? incoming.referenceControls ?? [],
       extraGuards: [...guardMap.values()],
       requiresExactPrefix: Boolean(prev.requiresExactPrefix || incoming.requiresExactPrefix),
+      ...((incoming.scope ?? prev.scope) ? { scope: incoming.scope ?? prev.scope } : {}),
     });
   }
   return new Map([...merged.entries()].sort(([a], [b]) => a.localeCompare(b)));
@@ -396,6 +398,7 @@ export function evaluateSuffixEligibility({
   targetGoalHash = null,
   sameOutlineClicks = 0,
   inertFormLocators = [],
+  expectedScope = null,
 }) {
   const rejections = [];
   if (observation?.isTruncated !== false || !Array.isArray(observation?.elements)) {
@@ -421,6 +424,10 @@ export function evaluateSuffixEligibility({
     if (decision.kind !== 'step') continue;
 
     if (profile.origin !== origin || profile.routePattern !== routePattern) continue;
+    if (!profile.scope || !expectedScope || profile.scope !== expectedScope) {
+      rejections.push({ nodeId, reason: 'scope-mismatch' });
+      continue;
+    }
     if (profile.requiresExactPrefix) {
       rejections.push({ nodeId, reason: 'demoted-to-exact-prefix-by-hidden-state' });
       continue;
