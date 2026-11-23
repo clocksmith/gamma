@@ -1,0 +1,195 @@
+{
+  "note": "Format example and public dry-run family for ERPNext. Policy: confirm an order only while the supplier quotation it was raised from is submitted and is for the same total quantity. Not a sealed family.",
+  "recipes": [
+    {
+      "routeId": "example-valid",
+      "familyId": "example-quotation-covers-order",
+      "entryBranch": "direct",
+      "setup": [
+        {
+          "as": "approver",
+          "method": "POST",
+          "path": "/api/resource/Supplier%20Quotation",
+          "body": {
+            "company": "Stage2 Qual Corp",
+            "supplier": "Stage2 Approved Vendor",
+            "transaction_date": "2026-02-01",
+            "items": [
+              {
+                "item_code": "STAGE2-UNIT",
+                "qty": 10,
+                "rate": 100
+              }
+            ]
+          },
+          "save": {
+            "quotation": "data.name",
+            "quotationDoc": "data"
+          }
+        },
+        {
+          "as": "approver",
+          "method": "POST",
+          "path": "/api/method/frappe.client.submit",
+          "body": {
+            "doc": "{quotationDoc}"
+          }
+        },
+        {
+          "as": "author",
+          "method": "POST",
+          "path": "/api/resource/Purchase%20Order",
+          "body": {
+            "company": "Stage2 Qual Corp",
+            "supplier": "Stage2 Approved Vendor",
+            "transaction_date": "2026-02-01",
+            "schedule_date": "2026-02-15",
+            "items": [
+              {
+                "item_code": "STAGE2-UNIT",
+                "qty": 10,
+                "rate": 100,
+                "schedule_date": "2026-02-15",
+                "supplier_quotation": "{quotation}"
+              }
+            ]
+          },
+          "save": {
+            "order": "data.name"
+          }
+        }
+      ],
+      "target": {
+        "doctype": "Purchase Order",
+        "name": "{order}"
+      },
+      "write": {
+        "reference": "CONF-1001"
+      }
+    },
+    {
+      "routeId": "example-quotation-draft",
+      "familyId": "example-quotation-covers-order",
+      "entryBranch": "order-list",
+      "setup": [
+        {
+          "as": "approver",
+          "method": "POST",
+          "path": "/api/resource/Supplier%20Quotation",
+          "body": {
+            "company": "Stage2 Qual Corp",
+            "supplier": "Stage2 Approved Vendor",
+            "transaction_date": "2026-02-01",
+            "items": [
+              {
+                "item_code": "STAGE2-UNIT",
+                "qty": 10,
+                "rate": 100
+              }
+            ]
+          },
+          "save": {
+            "quotation": "data.name",
+            "quotationDoc": "data"
+          }
+        },
+        {
+          "as": "author",
+          "method": "POST",
+          "path": "/api/resource/Purchase%20Order",
+          "body": {
+            "company": "Stage2 Qual Corp",
+            "supplier": "Stage2 Approved Vendor",
+            "transaction_date": "2026-02-01",
+            "schedule_date": "2026-02-15",
+            "items": [
+              {
+                "item_code": "STAGE2-UNIT",
+                "qty": 10,
+                "rate": 100,
+                "schedule_date": "2026-02-15",
+                "supplier_quotation": "{quotation}"
+              }
+            ]
+          },
+          "save": {
+            "order": "data.name"
+          }
+        }
+      ],
+      "target": {
+        "doctype": "Purchase Order",
+        "name": "{order}"
+      },
+      "write": {
+        "reference": "CONF-1002"
+      }
+    },
+    {
+      "routeId": "example-other-quantity",
+      "familyId": "example-quotation-covers-order",
+      "entryBranch": "more-info-tab",
+      "setup": [
+        {
+          "as": "approver",
+          "method": "POST",
+          "path": "/api/resource/Supplier%20Quotation",
+          "body": {
+            "company": "Stage2 Qual Corp",
+            "supplier": "Stage2 Approved Vendor",
+            "transaction_date": "2026-02-01",
+            "items": [
+              {
+                "item_code": "STAGE2-UNIT",
+                "qty": 6,
+                "rate": 100
+              }
+            ]
+          },
+          "save": {
+            "quotation": "data.name",
+            "quotationDoc": "data"
+          }
+        },
+        {
+          "as": "approver",
+          "method": "POST",
+          "path": "/api/method/frappe.client.submit",
+          "body": {
+            "doc": "{quotationDoc}"
+          }
+        },
+        {
+          "as": "author",
+          "method": "POST",
+          "path": "/api/resource/Purchase%20Order",
+          "body": {
+            "company": "Stage2 Qual Corp",
+            "supplier": "Stage2 Approved Vendor",
+            "transaction_date": "2026-02-01",
+            "schedule_date": "2026-02-15",
+            "items": [
+              {
+                "item_code": "STAGE2-UNIT",
+                "qty": 10,
+                "rate": 100,
+                "schedule_date": "2026-02-15",
+                "supplier_quotation": "{quotation}"
+              }
+            ]
+          },
+          "save": {
+            "order": "data.name"
+          }
+        }
+      ],
+      "target": {
+        "doctype": "Purchase Order",
+        "name": "{order}"
+      },
+      "write": {
+        "reference": "CONF-1003"
+      }
+    }
+  ]
+}
