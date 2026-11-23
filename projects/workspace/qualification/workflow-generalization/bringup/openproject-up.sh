@@ -42,32 +42,36 @@ umask 077
 mkdir -p "$STATE_DIR"
 
 docker network inspect "$NET" >/dev/null 2>&1 || docker network create "$NET" >/dev/null
-docker run -d --name "$PG" --network "$NET" -p "127.0.0.1:$PG_PORT:5432" \
-  -e POSTGRES_USER=opqual -e POSTGRES_PASSWORD="$PG_PASSWORD" -e POSTGRES_DB=postgres \
-  postgres:15 >/dev/null
+# Secrets reach the containers through env files, never as command-line arguments,
+# which any process on the machine can list.
+PG_ENV="$STATE_DIR/gammatron-op-pg.env"
+printf 'POSTGRES_USER=opqual\nPOSTGRES_PASSWORD=%s\nPOSTGRES_DB=postgres\n' "$PG_PASSWORD" >"$PG_ENV"
+docker run -d --name "$PG" --network "$NET" -p "127.0.0.1:$PG_PORT:5432" --env-file "$PG_ENV" postgres:15 >/dev/null
 for _ in $(seq 1 60); do
   docker exec "$PG" pg_isready -U opqual >/dev/null 2>&1 && break
   sleep 0.5
 done
 docker exec "$PG" psql -q -U opqual -d postgres -c "CREATE DATABASE op_old_qual;" -c "CREATE DATABASE op_new_qual;"
 
-app_env() { # <db> <secret> <host port>
-  printf '%s\n' -e RAILS_ENV=production \
-    -e "DATABASE_URL=postgres://opqual:$PG_PASSWORD@$PG:5432/$1" \
-    -e "SECRET_KEY_BASE=$2" -e OPENPROJECT_HTTPS=false \
-    -e "OPENPROJECT_HOST__NAME=127.0.0.1:$3" \
-    -e "STAGE2_USER_PASSWORD=$USER_PASSWORD"
+app_env_file() { # <container> <db> <secret> <host port> -> path of the env file
+  local file="$STATE_DIR/$1.env"
+  printf '%s\n' RAILS_ENV=production \
+    "DATABASE_URL=postgres://opqual:$PG_PASSWORD@$PG:5432/$2" \
+    "SECRET_KEY_BASE=$3" OPENPROJECT_HTTPS=false \
+    "OPENPROJECT_HOST__NAME=127.0.0.1:$4" \
+    "STAGE2_USER_PASSWORD=$USER_PASSWORD" >"$file"
+  echo "$file"
 }
 
 start_release() { # <container> <tag> <db> <secret> <host port>
-  local name="$1" tag="$2" db="$3" secret="$4" port="$5" env=()
-  while IFS= read -r line; do env+=("$line"); done < <(app_env "$db" "$secret" "$port")
+  local name="$1" tag="$2" db="$3" secret="$4" port="$5" env_file
+  env_file="$(app_env_file "$name" "$db" "$secret" "$port")"
   echo "[$name] migrating $db on openproject/openproject:$tag"
-  docker run --rm --network "$NET" "${env[@]}" "openproject/openproject:$tag" \
+  docker run --rm --network "$NET" --env-file "$env_file" "openproject/openproject:$tag" \
     bash -c 'bundle exec rake db:migrate' >"$STATE_DIR/$name-migrate.log" 2>&1
   docker run -d --name "$name" --network "$NET" -p "127.0.0.1:$port:8080" \
     -v "$HERE/seed_openproject_qual.rb:/tmp/seed_openproject_qual.rb:ro" \
-    "${env[@]}" "openproject/openproject:$tag" >/dev/null
+    --env-file "$env_file" "openproject/openproject:$tag" >/dev/null
 }
 
 seed_release() { # <container> <host port> -> prints the seeder's JSON
@@ -111,5 +115,6 @@ with open(sys.argv[1], "w") as f:
     json.dump(state, f, indent=2)
 PY
 chmod 600 "$STATE_FILE"
+rm -f "$STATE_DIR"/gammatron-op-*.env
 echo "OpenProject $OLD_TAG on :$OLD_PORT and $NEW_TAG on :$NEW_PORT are seeded."
 echo "State (tokens, passwords, status hrefs): $STATE_FILE"
