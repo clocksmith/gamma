@@ -5,10 +5,11 @@
 //
 //   agent-written-guard, discovery   app_request, try_guard
 //   repair-boundary, discovery       app_request, set_read_plan, add_example, learn
+//   either, maintenance              the same as discovery, starting from the work already frozen
 //   always-replan, decision          app_get
 //
 // Started by the model CLI through --mcp-config; configured by GAMMATRON_ARM_SERVER (JSON).
-import { appendFileSync, writeFileSync } from 'node:fs';
+import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createAppSurface, createToolHandler, DEFAULT_LIMITS, serveStdio, TOOL_DEFINITIONS } from './app-surface.mjs';
@@ -65,7 +66,7 @@ const routeFrom = input => {
 
 /** Builds the tool set for one arm and phase. `request` reaches the instance; `log` receives every call. */
 export function createArmTools({ arm, phase, request, log = () => {}, trace = () => {}, limits = DEFAULT_LIMITS, workDir, familyIds = [],
-  saveArtifact = () => {}, guardRunner = runGuard }) {
+  saveArtifact = () => {}, restore = null, guardRunner = runGuard }) {
   const reader = () => createAppSurface({ mode: 'decision', request, log, limits }).tools.app_get;
   const note = (tool, detail) => log({ at: new Date().toISOString(), tool, ...detail });
   if (phase === 'decision') {
@@ -73,7 +74,7 @@ export function createArmTools({ arm, phase, request, log = () => {}, trace = ()
     const surface = createAppSurface({ mode: 'decision', request, log, limits });
     return { tools: surface.tools, definitions: [TOOL_DEFINITIONS.app_get] };
   }
-  if (phase !== 'discovery') throw Error('phase must be discovery or decision');
+  if (!['discovery', 'maintenance'].includes(phase)) throw Error('phase must be discovery, maintenance or decision');
   const surface = createAppSurface({ mode: 'discovery', request, log, trace, limits });
   const tools = { ...surface.tools };
   const definitions = [TOOL_DEFINITIONS.app_request];
@@ -86,7 +87,7 @@ export function createArmTools({ arm, phase, request, log = () => {}, trace = ()
     };
     definitions.push(ARM_TOOL_DEFINITIONS.try_guard);
   } else if (arm === 'repair-boundary') {
-    const teacher = createTeacher(familyIds);
+    const teacher = createTeacher(familyIds, restore);
     const save = () => saveArtifact(teacher.freeze().text);
     save();
     tools.set_read_plan = async input => {
@@ -110,7 +111,7 @@ export function createArmTools({ arm, phase, request, log = () => {}, trace = ()
     };
     definitions.push(ARM_TOOL_DEFINITIONS.set_read_plan, ARM_TOOL_DEFINITIONS.add_example, ARM_TOOL_DEFINITIONS.learn);
   } else {
-    throw Error('always-replan has no discovery phase');
+    throw Error('always-replan has no discovery or maintenance phase');
   }
   return { tools, definitions };
 }
@@ -121,6 +122,7 @@ async function main() {
   const state = readState(config.stateFile);
   const set = createArmTools({
     arm: config.arm, phase: config.phase, workDir: config.workDir, familyIds: config.familyIds ?? [],
+    restore: config.restoreArtifact ? JSON.parse(readFileSync(config.restoreArtifact, 'utf8')) : null,
     request: openProjectRequester(state[config.side ?? 'new']),
     limits: { ...DEFAULT_LIMITS, ...(config.limits ?? {}) },
     log: entry => appendFileSync(config.surfaceLog, JSON.stringify({ arm: config.arm, ...entry }) + '\n', { mode: 0o600 }),

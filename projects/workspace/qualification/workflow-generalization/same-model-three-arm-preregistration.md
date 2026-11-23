@@ -256,6 +256,11 @@ run first and reported before B is asked for.
   families existed, but what it cost to write is not measured here, and the
   learner can see nothing the adapter does not pass on. The arm's instructions
   also tell the model what kinds of fact the learner can see.
+- The `repair-boundary` instructions carry the learner's manual, including the
+  advice to give at least two valid examples that differ. That advice was
+  added after the builder saw, in a test with no model and no sealed family,
+  the learner tie a guard to a single example's hours. It is disclosed here
+  because it was learned from the tool's behaviour, not known in advance.
 - No arm session has yet been run by a real model. Until the preflight, the
   confinement of a session is shown only by tests with a stand-in for the model
   CLI.

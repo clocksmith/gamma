@@ -67,7 +67,23 @@ const build = async (hours, status) => {
   return order.body.id;
 };
 
-if (tools.includes('try_guard')) {
+const upgraded = prompt.startsWith('The application has been upgraded');
+const keptLines = [...prompt.matchAll(/Family "([^"]+)": number (\d+) in project "([^"]+)", saving Work as (\d+) hours\. You expected (write|stop)/g)]
+  .map(m => ({ familyId: m[1], workPackageId: Number(m[2]), project: m[3], workHours: Number(m[4]), expect: m[5] }));
+
+if (upgraded && tools.includes('try_guard')) {
+  // The statuses were renumbered: read the approved one from the disclosed example instead of assuming 16.
+  const repaired = GUARD.replace("String(approval.body?._links?.status?.href ?? '').endsWith('/16')",
+    "String(approval.body?._links?.status?.href ?? '').endsWith('/26')");
+  emitUse('Edit', { file_path: join(process.cwd(), 'guard.mjs'), old_string: "'/16'", new_string: "'/26'" });
+  writeFileSync(join(process.cwd(), 'guard.mjs'), repaired);
+  await call('try_guard', { familyId, ...numbers[0] });
+} else if (upgraded && tools.includes('learn')) {
+  await call('set_read_plan', { familyId, reads: [{ role: 'record', path: '/api/v3/work_packages/{target}' }, { role: 'approval', follow: { role: 'record', link: 'parent' } }] });
+  for (const kept of keptLines) await call('add_example', { familyId: kept.familyId, label: kept.expect === 'write' ? 'valid' : 'invalid',
+    project: kept.project, workPackageId: kept.workPackageId, workHours: kept.workHours });
+  await call('learn', { familyId });
+} else if (tools.includes('try_guard')) {
   const file = join(process.cwd(), 'guard.mjs');
   emitUse('Write', { file_path: file, content: GUARD });
   writeFileSync(file, GUARD);

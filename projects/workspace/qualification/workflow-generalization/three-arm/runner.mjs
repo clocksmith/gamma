@@ -6,6 +6,7 @@
 //   node runner.mjs discovery --arm A --families F --run-dir D --approve-paid
 //   node runner.mjs blind --arm A --families F --recipes R --run-dir D [--approve-paid]
 //   node runner.mjs regress --arm A --families F --run-dir D           # rebuild and rerun kept cases; no cost
+//   node runner.mjs maintenance --arm A --families F --run-dir D2 --from-run D --upgrade X->Y --tags older,newer --approve-paid
 //
 // `discovery` and `blind` start a fresh instance for each arm, so no arm sees
 // records another arm made. The runner never reads an answer key and writes no
@@ -59,7 +60,8 @@ export function hashDirectory(dir) {
 /** The files whose bytes fix how the arms are instructed, confined, run and recorded. */
 export function frozenFileSet() {
   const files = [
-    ...listFiles(HERE).filter(f => !f.endsWith('example-recipes.json')),
+    // The scorer belongs to the evaluator and is frozen and hashed on its own.
+    ...listFiles(HERE).filter(f => !f.endsWith('example-recipes.json') && !relative(HERE, f).startsWith('scorer')),
     ...listFiles(join(QUALIFICATION, 'bringup')),
     join(QUALIFICATION, 'same-model-three-arm-preregistration.md'),
     join(QUALIFICATION, 'repair-boundary-qualification.mjs'),
@@ -97,14 +99,14 @@ function ledger(runDir, capUsd) {
 const newWorkDir = prefix => realpathSync(mkdtempSync(join(tmpdir(), prefix)));
 const appendRecord = (runDir, name, record) => appendFileSync(join(runDir, name), JSON.stringify(record) + '\n');
 
-function serverFor({ arm, phase, runDir, workDir, familyIds, label, stateFile }) {
+function serverFor({ arm, phase, runDir, workDir, familyIds, label, stateFile, restoreArtifact = null }) {
   const surfaceLog = join(runDir, 'logs', `${label}.surface.jsonl`);
   const artifactFile = arm === 'repair-boundary' ? join(runDir, 'artifacts', 'repair-boundary.json') : null;
-  const traceFile = phase === 'discovery' ? join(runDir, 'artifacts', `${arm}.trace.jsonl`) : null;
+  const traceFile = phase !== 'decision' ? join(runDir, 'artifacts', `${arm}.trace.jsonl`) : null;
   return {
     surfaceLog, artifactFile, traceFile,
     server: { command: process.execPath, args: [join(HERE, 'arm-server.mjs')],
-      env: { GAMMATRON_ARM_SERVER: JSON.stringify({ arm, phase, workDir, familyIds, surfaceLog, artifactFile, traceFile, stateFile, limits: CONFIG.limits }) } },
+      env: { GAMMATRON_ARM_SERVER: JSON.stringify({ arm, phase, workDir, familyIds, surfaceLog, artifactFile, traceFile, stateFile, restoreArtifact, limits: CONFIG.limits }) } },
   };
 }
 
@@ -113,9 +115,10 @@ function defaultDeps() {
   return {
     executable: process.env.GAMMATRON_CLAUDE_BIN ?? 'claude',
     stateFile: undefined,
-    freshInstance() {
+    // `tags` is [] for the default pair, or [older, newer] image tags for a later upgrade.
+    freshInstance(tags = []) {
       execFileSync(join(bringup, 'openproject-down.sh'), { stdio: 'ignore' });
-      execFileSync(join(bringup, 'openproject-up.sh'), { stdio: 'inherit', timeout: 15 * 60 * 1000 });
+      execFileSync(join(bringup, 'openproject-up.sh'), tags, { stdio: 'inherit', timeout: 15 * 60 * 1000 });
     },
     stopInstance() { execFileSync(join(bringup, 'openproject-down.sh'), { stdio: 'ignore' }); },
     async openWriter(state) {
@@ -162,9 +165,9 @@ function prepare(runDir) {
   for (const sub of ['logs', 'artifacts', 'work']) mkdirSync(join(runDir, sub), { recursive: true, mode: 0o700 });
 }
 
-async function modelSession({ deps, runDir, label, arm, phase, workDir, familyIds, systemPrompt, prompt, budget, mcpTools, fileTools, jsonSchema, spend }) {
+async function modelSession({ deps, runDir, label, arm, phase, workDir, familyIds, systemPrompt, prompt, budget, mcpTools, fileTools, jsonSchema, spend, restoreArtifact }) {
   spend.reserve(label, budget.budgetUsd);
-  const { server, surfaceLog, artifactFile, traceFile } = serverFor({ arm, phase, runDir, workDir, familyIds, label, stateFile: deps.stateFile });
+  const { server, surfaceLog, artifactFile, traceFile } = serverFor({ arm, phase, runDir, workDir, familyIds, label, stateFile: deps.stateFile, restoreArtifact });
   const { args, allowedTools } = sessionArgs({ model: CONFIG.model, budgetUsd: budget.budgetUsd, systemPrompt, server, mcpTools, fileTools, jsonSchema });
   const sessionLog = join(runDir, 'logs', `${label}.session.jsonl`);
   const session = await runSession({ executable: deps.executable, args, cwd: workDir, prompt, logFile: sessionLog, timeoutMs: budget.timeoutMs });
@@ -175,11 +178,11 @@ async function modelSession({ deps, runDir, label, arm, phase, workDir, familyId
 }
 
 /** Phase 1 for one arm: a fresh instance, the disclosed examples, one session, then the freeze. */
-export async function discovery({ arm, familiesFile, runDir, approvePaid = false, deps = defaultDeps() }) {
+export async function discovery({ arm, familiesFile, runDir, approvePaid = false, upgrade = CONFIG.upgrade, tags = [], deps = defaultDeps() }) {
   if (!ARMS.includes(arm)) throw Error(`arm must be one of ${ARMS.join(', ')}`);
   prepare(runDir);
   const families = loadFamilies(familiesFile);
-  const base = { runId: runIdOf(runDir), application: CONFIG.application, upgrade: CONFIG.upgrade, arm, phase: 'discovery' };
+  const base = { runId: runIdOf(runDir), application: CONFIG.application, upgrade, arm, phase: 'discovery' };
   if (arm === 'always-replan') {
     const at = new Date().toISOString();
     const record = { schema: 'gammatron-three-arm-phase-record/v1', ...base, startedAt: at, endedAt: at, wallMs: 0, modelCalls: 0, modelTurns: 0,
@@ -191,7 +194,7 @@ export async function discovery({ arm, familiesFile, runDir, approvePaid = false
   if (!approvePaid) throw Error('discovery makes model calls: pass --approve-paid once the owner has approved the stage');
   const spend = ledger(runDir, CONFIG.stageCapUsd);
   spend.reserve(`discovery-${arm}`, CONFIG.discovery.budgetUsd);
-  deps.freshInstance();
+  deps.freshInstance(tags);
   try {
     const state = readState(deps.stateFile);
     const disclosed = await discloseFamilies(families, state, `d-${arm}`);
@@ -292,8 +295,85 @@ export async function regress({ arm, familiesFile, runDir, deps = defaultDeps() 
   }
 }
 
+/**
+ * The second upgrade for one arm: a fresh instance of the newer release, the arm's
+ * kept cases rebuilt and rerun, one session that starts from the frozen work and
+ * is told how those cases came out, then a new freeze. `fromRunDir` is the run
+ * that holds the work frozen at the first upgrade; this run gets its own directory.
+ */
+export async function maintenance({ arm, familiesFile, runDir, fromRunDir, upgrade, tags = [], approvePaid = false, deps = defaultDeps() }) {
+  if (!ARMS.includes(arm)) throw Error(`arm must be one of ${ARMS.join(', ')}`);
+  if (typeof upgrade !== 'string' || !upgrade.includes('->')) throw Error('maintenance needs --upgrade, for example 14.0.0->15.0.0');
+  prepare(runDir);
+  const families = loadFamilies(familiesFile);
+  const base = { runId: runIdOf(runDir), application: CONFIG.application, upgrade, arm, phase: 'maintenance' };
+  if (arm === 'always-replan') {
+    const at = new Date().toISOString();
+    const record = { schema: 'gammatron-three-arm-phase-record/v1', ...base, startedAt: at, endedAt: at, wallMs: 0, modelCalls: 0, modelTurns: 0,
+      costUsd: 0, budgetUsd: 0, recordsCreated: 0, outOfSurfaceCalls: 0,
+      artifactSha256: sha256(instructions.ALWAYS_REPLAN + JSON.stringify(instructions.DECISION_SCHEMA)), completed: true };
+    appendRecord(runDir, 'phase-records.jsonl', record);
+    return record;
+  }
+  if (!approvePaid) throw Error('maintenance makes model calls: pass --approve-paid once the owner has approved the stage');
+  const guardArm = arm === 'agent-written-guard';
+  const kept = JSON.parse(readFileSync(join(fromRunDir, 'artifacts', `${arm}.regression.json`), 'utf8'));
+  const spend = ledger(runDir, CONFIG.stageCapUsd);
+  spend.reserve(`maintenance-${arm}`, CONFIG.discovery.budgetUsd);
+  // The clock for "time to recover" starts when the upgraded application is asked for.
+  const startedAt = new Date();
+  deps.freshInstance(tags);
+  try {
+    const state = readState(deps.stateFile);
+    const request = openProjectRequester(state.new);
+    let disclosed = [];
+    let outcome;
+    try {
+      disclosed = await discloseFamilies(families, state, `m-${arm}`);
+      const ids = new Map(kept.disclosed.map(then => [then.example.workPackageId, disclosed.find(f => f.familyId === then.familyId)?.example.workPackageId])
+        .filter(([, id]) => id !== undefined));
+      outcome = await rerunKeptCases({ cases: kept.cases, trace: kept.trace, request, ids, decideCase: caseDecider({ arm, runDir: fromRunDir, deps, request }) });
+    } catch (error) {
+      outcome = { rebuilt: false, reason: String(error?.message ?? error).slice(0, 300), results: [], passed: 0, total: kept.cases.length,
+        failedFamilies: [...new Set(kept.cases.map(c => c.familyId))] };
+    }
+    writeFileSync(join(runDir, 'logs', `regress-${arm}.json`), JSON.stringify({ arm, releaseThen: kept.release, releaseNow: state.new.tag ?? null, ...outcome }, null, 2));
+    const workDir = newWorkDir(`three-arm-${arm}-`);
+    if (guardArm) cpSync(join(fromRunDir, 'artifacts', 'agent-written-guard'), workDir, { recursive: true });
+    const { session, audit, surface, artifactFile } = await modelSession({
+      deps, runDir, label: `maintenance-${arm}`, arm, phase: 'maintenance', workDir, familyIds: families.map(f => f.familyId),
+      systemPrompt: guardArm ? instructions.AGENT_WRITTEN_GUARD : instructions.REPAIR_BOUNDARY,
+      prompt: instructions.maintenanceBrief(disclosed, outcome, arm), budget: CONFIG.discovery, spend,
+      mcpTools: guardArm ? ['app_request', 'try_guard'] : ['app_request', 'set_read_plan', 'add_example', 'learn'],
+      fileTools: FILE_TOOLS, restoreArtifact: guardArm ? null : join(fromRunDir, 'artifacts', 'repair-boundary.json'),
+    });
+    let artifactSha256 = null;
+    if (guardArm) {
+      const keptDir = join(runDir, 'artifacts', 'agent-written-guard');
+      cpSync(workDir, keptDir, { recursive: true });
+      if (existsSync(join(keptDir, 'guard.mjs'))) artifactSha256 = hashDirectory(keptDir);
+    } else if (artifactFile && existsSync(artifactFile)) {
+      artifactSha256 = sha256(readFileSync(artifactFile));
+    }
+    const endedAt = new Date();
+    const record = { schema: 'gammatron-three-arm-phase-record/v1', ...base,
+      startedAt: startedAt.toISOString(), endedAt: endedAt.toISOString(), wallMs: endedAt - startedAt,
+      modelCalls: session.modelCalls, modelTurns: session.modelTurns, costUsd: session.costUsd ?? CONFIG.discovery.budgetUsd,
+      budgetUsd: CONFIG.discovery.budgetUsd,
+      recordsCreated: surface.filter(e => e.method === 'POST' && e.status === 201 && /work_packages\/?(\?|$)/.test(e.path ?? '')).length,
+      outOfSurfaceCalls: audit.outOfSurface.length, artifactSha256, completed: artifactSha256 !== null };
+    appendRecord(runDir, 'phase-records.jsonl', record);
+    writeFileSync(join(runDir, 'logs', `maintenance-${arm}.summary.json`), JSON.stringify({ record, audit,
+      keptCases: { total: outcome.total, passedAfterUpgrade: outcome.passed, rebuilt: outcome.rebuilt, familiesCaught: outcome.failedFamilies },
+      session: { exitCode: session.exitCode, subtype: session.subtype, timedOut: session.timedOut, models: session.models, sessionWallMs: session.wallMs } }, null, 2));
+    return record;
+  } finally {
+    deps.stopInstance();
+  }
+}
+
 /** Phase 2 for one arm: a fresh instance, every unseen route built once, the arm asked, the write made if told to. */
-export async function blind({ arm, familiesFile, recipesFile, runDir, approvePaid = false, deps = defaultDeps() }) {
+export async function blind({ arm, familiesFile, recipesFile, runDir, approvePaid = false, upgrade = CONFIG.upgrade, tags = [], deps = defaultDeps() }) {
   if (!ARMS.includes(arm)) throw Error(`arm must be one of ${ARMS.join(', ')}`);
   prepare(runDir);
   const families = loadFamilies(familiesFile);
@@ -301,12 +381,12 @@ export async function blind({ arm, familiesFile, recipesFile, runDir, approvePai
   const problems = validateRecipeFile(document);
   if (problems.length) throw Error(`recipes file: ${problems.join('; ')}`);
   const frozen = readFileSync(join(runDir, 'phase-records.jsonl'), 'utf8').trim().split('\n').map(l => JSON.parse(l))
-    .findLast(r => r.arm === arm && r.phase === 'discovery');
-  if (!frozen?.completed) throw Error(`${arm} has no frozen discovery artifact in this run`);
+    .findLast(r => r.arm === arm && ['discovery', 'maintenance'].includes(r.phase));
+  if (!frozen?.completed) throw Error(`${arm} has no frozen artifact in this run`);
   const replans = arm === 'always-replan';
   if (replans && !approvePaid) throw Error('always-replan makes a model call per route: pass --approve-paid');
   const spend = ledger(runDir, CONFIG.stageCapUsd);
-  const base = { runId: runIdOf(runDir), application: CONFIG.application, upgrade: CONFIG.upgrade, arm };
+  const base = { runId: runIdOf(runDir), application: CONFIG.application, upgrade, arm };
   const guardDir = join(runDir, 'artifacts', 'agent-written-guard');
   if (arm === 'agent-written-guard' && hashDirectory(guardDir) !== frozen.artifactSha256) throw Error('the guard changed after it was frozen');
   const boundaryText = arm === 'repair-boundary' ? readFileSync(join(runDir, 'artifacts', 'repair-boundary.json'), 'utf8') : null;
@@ -316,7 +396,7 @@ export async function blind({ arm, familiesFile, recipesFile, runDir, approvePai
   let modelCalls = 0;
   let modelTurns = 0;
   let outOfSurfaceCalls = 0;
-  deps.freshInstance();
+  deps.freshInstance(tags);
   let writer = null;
   try {
     const state = readState(deps.stateFile);
@@ -433,17 +513,20 @@ async function main(argv) {
     return;
   }
   const runDir = option('--run-dir');
-  if (!runDir || !['preflight', 'discovery', 'blind', 'regress'].includes(command)) {
+  if (!runDir || !['preflight', 'discovery', 'blind', 'regress', 'maintenance'].includes(command)) {
     console.error('usage: runner.mjs hash | preflight --run-dir D | discovery --arm A --families F --run-dir D | blind --arm A --families F --recipes R --run-dir D | regress --arm A --families F --run-dir D  [--approve-paid]');
     process.exit(2);
   }
   mkdirSync(runDir, { recursive: true, mode: 0o700 });
   if (!statSync(runDir).isDirectory()) throw Error('run-dir is not a directory');
   const common = { runDir: resolve(runDir), approvePaid: flag('--approve-paid') };
+  // A later upgrade names its release pair: --upgrade 14.0.0->15.0.0 --tags 14.0.0-slim,15.0.0-slim
+  const later = option('--upgrade') ? { upgrade: option('--upgrade'), tags: (option('--tags') ?? '').split(',').filter(Boolean) } : {};
   const result = command === 'preflight' ? await preflight(common)
-    : command === 'discovery' ? await discovery({ ...common, arm: option('--arm'), familiesFile: option('--families') })
+    : command === 'discovery' ? await discovery({ ...common, ...later, arm: option('--arm'), familiesFile: option('--families') })
       : command === 'regress' ? await regress({ runDir: common.runDir, arm: option('--arm'), familiesFile: option('--families') })
-      : await blind({ ...common, arm: option('--arm'), familiesFile: option('--families'), recipesFile: option('--recipes') });
+      : command === 'maintenance' ? await maintenance({ ...common, ...later, arm: option('--arm'), familiesFile: option('--families'), fromRunDir: resolve(option('--from-run') ?? '') })
+      : await blind({ ...common, ...later, arm: option('--arm'), familiesFile: option('--families'), recipesFile: option('--recipes') });
   console.log(JSON.stringify(result, null, 2));
 }
 

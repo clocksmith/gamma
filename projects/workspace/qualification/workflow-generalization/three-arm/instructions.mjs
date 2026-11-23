@@ -81,3 +81,29 @@ export function routeBrief(family, route) {
     `Decide this one: work package number ${route.workPackageId} in project "${route.project}". The write would save Work as ${route.workHours} hours.`,
   ].join('\n');
 }
+
+/**
+ * The first message of a maintenance session after an upgrade: the same families,
+ * the disclosed examples as rebuilt, and how the arm's frozen work decided its own
+ * kept cases on the new release. `kept` is the outcome of rerunning them.
+ */
+export function maintenanceBrief(families, kept, arm) {
+  const inPlace = arm === 'agent-written-guard'
+    ? 'Your guard.mjs and tests.json are in your working directory as you left them.'
+    : 'Your read plans, examples and guards are loaded as you left them. The examples hold the facts observed on the old release.';
+  const cases = !kept.rebuilt
+    ? [`The work packages behind your kept cases could not be rebuilt on this release: ${kept.reason}`]
+    : kept.results.length === 0 ? ['You kept no cases.']
+      : kept.results.map(r => `  Family "${r.familyId}": number ${r.workPackageId} in project "${r.project}", saving Work as ${r.workHours} hours. `
+        + `You expected ${r.expect}; your frozen work now says ${r.got ?? 'nothing, it was not rebuilt'}.`);
+  return [
+    'The application has been upgraded to a newer release. The policies have not changed.',
+    `${inPlace} The work packages from before no longer exist; the ones behind your kept cases were built again and have new numbers.`,
+    '',
+    discoveryBrief(families),
+    'Your kept cases on this release:',
+    ...cases,
+    '',
+    'Check that your work still does what the policies require on this release, and repair it where it does not. The tools and limits are the same as before.',
+  ].join('\n');
+}

@@ -9,7 +9,7 @@ Nothing here calls a model.
 | `task-contract-openproject.md` | the family author | The whole brief for writing policies, routes and the answer key |
 | `provision.mjs`, `example-recipes.json` | the family author and the runner | The route-recipe format and the tool that checks and builds recipes |
 | `route-record.md`, `route-record.schema.json` | the scorer | The records the runner emits, and what the scorer computes from them |
-| `runner.mjs` | the operator | `hash`, `preflight`, `discovery`, `blind` and `regress`; the spend ledger and the stage cap |
+| `runner.mjs` | the operator | `hash`, `preflight`, `discovery`, `blind`, `regress` and `maintenance`; the spend ledger and the stage cap |
 | `instructions.mjs` | the operator | What each arm's model session is told |
 | `session.mjs` | the runner | Starts one model session with no shell, no web tool and one MCP server, and keeps its event log |
 | `arm-server.mjs`, `app-surface.mjs` | the runner | The one MCP server a session talks to: API calls on the instance under test, plus the arm's own tools; the audit of a session's tool calls |
@@ -20,9 +20,15 @@ Nothing here calls a model.
 
 ## State
 
-Built and tested without a model. **No model session has run.** Step 0 of the
-freezing order (the preflight) needs the owner's approval, and so does Stage A.
-Maintenance at a second upgrade (Stage B) and ERPNext are not built.
+Built and tested without a model. **No model session has run.** The owner has
+authorised no paid run, including the preflight (step 0 of the freezing order).
+
+The second upgrade is built for OpenProject as far as it can be without
+choosing the release: `maintenance` starts a session from the frozen work,
+tells it how its kept cases came out on the newer release, and freezes again
+into a new run directory. Still open for Stage B: the `$0` probe that picks
+the release, and a frozen repair of the write step if that release changes the
+page. ERPNext arms are not built.
 
 ```text
 node three-arm/runner.mjs hash                 # the hash for step 1, no cost
@@ -66,3 +72,8 @@ Checked so far, all against a local OpenProject `14.0.0` started by
   record numbers differed, and every case came out as labelled. With statuses
   renumbered, as a later release might do, both arms' families were caught;
   with a call refused, the rebuild stopped and said which call.
+- Maintenance: with the stand-in application renumbering its statuses, as a
+  later release might, both arms' kept cases caught the break, each arm's
+  maintenance session repaired its work, and the routes on the newer release
+  were then decided correctly. The work frozen at the first upgrade was left
+  unchanged.

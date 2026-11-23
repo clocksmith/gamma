@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, before, test } from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { blind, CONFIG, discovery, frozenFileSet, hashDirectory, regress } from '../../qualification/workflow-generalization/three-arm/runner.mjs';
+import { blind, CONFIG, discovery, frozenFileSet, hashDirectory, maintenance, regress } from '../../qualification/workflow-generalization/three-arm/runner.mjs';
 
 // A stand-in OpenProject: work packages with hours, a status and a parent, and the two accounts.
 const store = new Map();
@@ -108,7 +108,7 @@ test('the frozen file set is stable and covers the arms, the learner and the pla
   for (const needed of ['qualification/workflow-generalization/three-arm/instructions.mjs', 'qualification/workflow-generalization/three-arm/runner.mjs',
     'qualification/workflow-generalization/three-arm/arm-server.mjs', 'src/client/repair-boundary.js',
     'qualification/workflow-generalization/same-model-three-arm-preregistration.md']) assert.ok(files.includes(needed), needed);
-  assert.ok(!files.some(f => f.endsWith('example-recipes.json')));
+  assert.ok(!files.some(f => f.endsWith('example-recipes.json') || f.includes('/scorer/')));
 });
 
 test('a paid phase refuses to start without approval', async () => {
@@ -201,6 +201,38 @@ test('kept cases are rebuilt on a new database and rerun; a release that breaks 
     assert.deepEqual(refused.failedFamilies, ['fam']);
   } finally { upgrade.refuseParents = false; }
   await assert.rejects(regress({ ...common, arm: 'always-replan' }), /keep cases/);
+});
+
+test('after an upgrade that renumbers statuses, each arm repairs its frozen work and decides the new routes correctly', async () => {
+  const fromRunDir = join(dir, 'run');
+  const runDir = join(dir, 'run-upgrade-2');
+  const common = { familiesFile: join(dir, 'families.json'), runDir, approvePaid: true, upgrade: '14.0.0->15.0.0', deps };
+  upgrade.statusShift = 10;
+  try {
+    for (const arm of ['agent-written-guard', 'repair-boundary', 'always-replan']) {
+      const phase = await maintenance({ ...common, arm, fromRunDir });
+      assert.equal(phase.phase, 'maintenance');
+      assert.equal(phase.upgrade, '14.0.0->15.0.0');
+      assert.equal(phase.completed, true, arm);
+      assert.equal(phase.outOfSurfaceCalls, 0, arm);
+    }
+    for (const arm of ['agent-written-guard', 'repair-boundary']) {
+      const summary = JSON.parse(readFileSync(join(runDir, 'logs', `maintenance-${arm}.summary.json`), 'utf8'));
+      assert.deepEqual(summary.keptCases.familiesCaught, ['fam'], arm);
+      assert.ok(summary.keptCases.passedAfterUpgrade < summary.keptCases.total, arm);
+      await blind({ ...common, arm, recipesFile: join(dir, 'blind.json') });
+    }
+    const routes = readFileSync(join(runDir, 'route-records.jsonl'), 'utf8').trim().split('\n').map(l => JSON.parse(l));
+    for (const arm of ['agent-written-guard', 'repair-boundary']) {
+      assert.deepEqual(routes.filter(r => r.arm === arm).map(r => [r.routeId, r.decision, r.committed]),
+        [['r-1', 'write', true], ['r-2', 'stop', false], ['r-3', 'stop', false]], arm);
+    }
+    assert.ok(routes.every(r => r.upgrade === '14.0.0->15.0.0'));
+    // The work frozen at the first upgrade is left as it was.
+    const first = JSON.parse(readFileSync(join(fromRunDir, 'phase-records.jsonl'), 'utf8').split('\n')[0]);
+    assert.equal(hashDirectory(join(fromRunDir, 'artifacts', 'agent-written-guard')), first.artifactSha256);
+  } finally { upgrade.statusShift = 0; }
+  await assert.rejects(maintenance({ ...common, arm: 'repair-boundary', fromRunDir, approvePaid: false }), /--approve-paid/);
 });
 
 test('a session that calls a tool outside its surface is counted, and a changed artifact is refused', async () => {

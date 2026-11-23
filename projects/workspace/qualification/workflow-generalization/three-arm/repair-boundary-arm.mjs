@@ -80,8 +80,14 @@ export async function observe({ plan, route, get }) {
 }
 
 /** Holds one family's plan and examples while the model teaches; `freeze` returns the artifact. */
-export function createTeacher(familyIds) {
-  const families = new Map(familyIds.map(id => [id, { plan: null, positive: [], negative: [], boundary: null }]));
+export function createTeacher(familyIds, restore = null) {
+  // `restore` is an earlier artifact: maintenance after an upgrade starts from the work already frozen.
+  const families = new Map(familyIds.map(id => {
+    const kept = restore?.families?.[id];
+    return [id, kept ? structuredClone({ plan: kept.plan, positive: kept.positive ?? [], negative: kept.negative ?? [],
+      boundary: kept.boundary?.status === 'learned' ? kept.boundary : null })
+      : { plan: null, positive: [], negative: [], boundary: null }];
+  }));
   const family = id => {
     if (!families.has(id)) throw Error(`unknown family ${String(id).slice(0, 64)}`);
     return families.get(id);
