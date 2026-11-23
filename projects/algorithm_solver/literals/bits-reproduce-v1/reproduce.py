@@ -5,8 +5,8 @@
     python3 -B reproduce.py --full     also the slow ones: the exhaustive audit, the three-arm replay, verify_bits
 
 Every checker recomputes its answers from frozen inputs: ranks, exhaustive minimums on small corpora,
-certificates in exact fractions, and dictionaries replayed against the stored bytes. Nothing here calls a
-linear-programming or integer-programming solver. Times and solver-found objects are not reproduced; see
+certificates in exact fractions, defect-tree certificates, and dictionaries replayed against the stored bytes.
+Nothing here calls a linear-programming or integer-programming solver. Three steps need numpy. Times and solver-found objects are not reproduced; see
 MANIFEST.md for what each step covers and what it does not.
 """
 import os
@@ -23,6 +23,8 @@ CHECKSUMS = [
     ('witness-coverage-v1', 'SHA256SUMS'), ('capacity-theorems-v1', 'SHA256SUMS'), ('capacity-complexity-v1', 'SHA256SUMS'),
     ('capacity-boundary-v1', 'SHA256SUMS'), ('capacity-kernel-audit-v1', 'SHA256SUMS'),
     ('capacity-lagrangian-race-v1', 'SHA256SUMS-PUBLIC'), ('capacity-lagrangian-race-v1', 'SHA256SUMS-THREE-ARM'),
+    ('capacity-deficit-v1', 'SHA256SUMS'), ('capacity-deficit-race-v1', 'SHA256SUMS-RESULTS'), ('capacity-ladder-v1', 'SHA256SUMS'),
+    ('witness-coverage-addendum-v1', 'SHA256SUMS'),
 ]
 # (what it shows, folder, command, slow)
 STEPS = [
@@ -41,6 +43,11 @@ STEPS = [
     ('the kernel test against exhaustive search, 11,466 checks', 'capacity-kernel-audit-v1', PY + ['audit_kernel.py', '1'], True),
     ('three-arm race on 12 public projects, answers re-derived', 'capacity-lagrangian-race-v1', PY + ['three_arm.py'], True),
     ('matched80 press certificates (verify_bits)', os.path.join('sixbit-v1', 'reproducibility'), PY + ['verify_bits.py', REPO], True),
+    ('ladder: 59 real corpora from stored dictionaries and defect-tree certificates; tampering rejected', 'capacity-ladder-v1', PY + ['verify_stored.py'], False),
+    ('coverage addendum: 32 exact budgets (numpy)', 'witness-coverage-addendum-v1', PY + ['check_addendum.py', REPO], False),
+    ('unseen race: set A answers re-derived from the measurements', 'capacity-deficit-race-v1', PY + ['race.py', '--verify'], True),
+    ('ladder against exhaustive search with certificate checks, 6,878 checks (numpy)', 'capacity-ladder-v1', PY + ['audit_ladder.py', '1', '3'], True),
+    ('level-1 method against exhaustive search, 8,736 checks', 'capacity-deficit-v1', PY + ['audit_deficit.py', '1'], True),
 ]
 
 

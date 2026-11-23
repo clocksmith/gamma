@@ -92,4 +92,6 @@ rank alone shows it. The other eight:
    42. The frozen file is at Gamma `0e8f7b2e` and in `SHA256SUMS-FROZEN`; the run phases are unchanged.
 2. **The machine was not idle during set B.** One to four other processes of mine ran on its eight cores.
    The set B claims are coarse (finished or did not within 420 seconds), and set A had finished before that.
-3. Nothing else: instances, arms, limits and scoring are as registered.
+3. A `--verify` mode was added to `race.py` later, for the reproduction bundle: it re-derives set A and compares
+   it with `results.json` without rewriting that file.
+4. Nothing else: instances, arms, limits and scoring are as registered.

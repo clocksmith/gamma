@@ -7,6 +7,8 @@ unseen sets. Python 3.10+; set B needs numpy and the pinned packages on disk.
     python3 -B race.py [--source ID=PATH ...]       re-derives every answer from the measurements, replays every
                                                     dictionary; with sources it also recomputes the set B ranks.
                                                     Writes results.json
+    python3 -B race.py --verify                     the same re-derivation for set A, compared with results.json, which
+                                                    is left as it is (added after the run, for the reproduction bundle)
     python3 -B race.py --one ...                    one child call, printed as JSON (used by the runs)
 
 Witness rule, threshold 2, entries of at most 160 bytes, no whole file. Every arm call is its own process.
@@ -417,9 +419,18 @@ def check():
         'medianBaselineOverHierarchySeconds': None if not ratios else round(ratios[len(ratios) // 2] if len(ratios) % 2 else (ratios[len(ratios) // 2 - 1] + ratios[len(ratios) // 2]) / 2, 2),
         'directoriesSaturated': sum(1 for r in rows_b if r['blockRank'] is not None and r['blockRank'] == r['alphabet']), 'directories': len(rows_b),
     }
-    with open(os.path.join(HERE, 'results.json'), 'w') as f:
-        json.dump({'schema': 'capacity-deficit-race-results/v1', 'summary': summary, 'setA': rows_a, 'setB': rows_b, 'failures': failures}, f, indent=1)
-        f.write('\n')
+    if '--verify' in sys.argv:                 # compare with the stored results instead of rewriting them
+        kept = json.load(open(os.path.join(HERE, 'results.json')))
+        if json.loads(json.dumps(rows_a)) != kept['setA']:
+            failures.append('set A re-derived from the measurements differs from results.json')
+        if any(summary[k] != kept['summary'][k] for k in summary if k not in ('directoriesSaturated', 'directories')):
+            failures.append('the set A summary differs from results.json')
+        if kept['failures']:
+            failures.append('results.json records failures')
+    else:
+        with open(os.path.join(HERE, 'results.json'), 'w') as f:
+            json.dump({'schema': 'capacity-deficit-race-results/v1', 'summary': summary, 'setA': rows_a, 'setB': rows_b, 'failures': failures}, f, indent=1)
+            f.write('\n')
     for r in rows_a:
         if r['nullity'] == 0:
             print(f"{r['corpus']} {r['source']:14} alphabet {r['alphabet']:3} rank {r['blockRank']:3}  saturated")
