@@ -92,11 +92,13 @@
  "round4": {
   "what": "80 more first writes after a cold start on 14.0.0 through the frozen executeWorkWrite, to make 100 in all",
   "expectedWrittenBeforeAnyResult": {
-   "writtenAt": "2026-11-23T17:55:00Z",
+   "writtenAt": "2026-11-23T17:47:00Z",
    "anomalies": "0 of 80: every write lands with the hours asked",
    "ifAnyAnomaly": "the write step is hardened and the runner re-frozen before Stage A",
-   "ifNone": "0 of 100 bounds the rate below about 3 percent (one-sided 95 percent); the frozen step stays"
+   "ifNone": "0 of 100 bounds the rate below about 3 percent (one-sided 95 percent); the frozen step stays",
+   "clockNote": "An earlier version said 17:55:00Z, a time typed by hand that was ahead of the commit that carried it (722c2fbbd, 17:47 UTC). The commit time is the record."
   },
   "results": null
- }
+ },
+ "clockNote": "Times typed into receipts by hand on 2026-11-23 were approximate. Where a time and its commit disagree, the commit time is the record."
 }

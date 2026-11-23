@@ -171,8 +171,9 @@ the routes on which two arms differ.
   - valid completion is reported twice: as recorded, and with that route
     removed for every arm. If the two readings differ in which arm completed
     more, completion is inconclusive for the stage.
-  Added 2026-11-23 17:55 UTC at the coordinator's ruling, before any Stage A
-  number exists.
+  Added 2026-11-23 at the coordinator's ruling, before any Stage A number
+  exists (commit `722c2fbbd`, 17:47 UTC; an earlier wording gave a later time
+  typed by hand).
 
 ## 5. Results
 
