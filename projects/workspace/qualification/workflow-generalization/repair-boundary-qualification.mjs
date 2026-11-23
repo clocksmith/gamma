@@ -57,6 +57,11 @@ export function projectOpenProjectHalScalars(rawJson) {
     const m = statusHref.match(/\/api\/v3\/statuses\/(\d+)$/);
     if (m) out.statusCode = Number(m[1]);
   }
+  const projectHref = rawJson?._links?.project?.href;
+  if (typeof projectHref === 'string') {
+    const pm = projectHref.match(/\/api\/v3\/projects\/(\d+)$/);
+    if (pm) out.projectCode = Number(pm[1]);
+  }
   const elements = rawJson?._embedded?.elements;
   if (Array.isArray(elements) && elements.length > 0) {
     out.entryCount = elements.length;

@@ -1,0 +1,104 @@
+{
+  "schema": "gammatron-gate3-preregistered-openproject-suite/v1",
+  "issue": "clocksmith/deco#88",
+  "pinnedModel": "claude-sonnet-4-6",
+  "hardSpendCapUsd": 5.0,
+  "perCallCapUsd": 0.35,
+  "maxReadEndpointsPerRoute": 3,
+  "upstreamUpgrade": {
+    "appId": "openproject",
+    "fromImage": "openproject/openproject:13.4.0-slim@sha256:aed4dec9c5cbe08548a243cd1ffd14fb877af9263d9c3fce76f50447aee0f621",
+    "toImage": "openproject/openproject:14.0.0-slim@sha256:bac61228734ac44fb2b607a88064967ea52037200fadbe00dd09a71225772b2c",
+    "database": "postgres:15 (work_packages + journals + work_package_journals ground-truth oracle)",
+    "realUiBreakingChange": {
+      "v13_4_0": "Inline <input type='number' class='inline-edit--field op-input' id='wp-{id}-inline-edit--field-estimatedTime'> opened directly when clicking Work",
+      "v14_0_0": "Primer Work & Progress modal (<input id='work_package_estimated_hours' name='work_package[estimated_hours]'> + <button type='submit' class='Button--primary'>Save</button>)"
+    }
+  },
+  "arms": [
+    "conventional-page-object-script",
+    "always-replan",
+    "unguarded-shared-repair",
+    "hand-written-guard",
+    "RepairBoundary"
+  ],
+  "replicationRule": {
+    "erpnextGate": "Replicate on ERPNext 15.10 -> 15.20 ONLY if RepairBoundary achieves 0 wrong DB commits at lower total effort (LLM spend + authoring minutes + integration LOC) than hand-written-guard; otherwise publish hand-written-guard's win honestly."
+  },
+  "families": [
+    {
+      "familyId": "F1-cross-entity-terms-equality",
+      "description": "Child WorkPackage Work confirmation requires parent Approval Packet estimatedTime to match child estimatedTime (stock OpenProject commits cross-entity ABA mismatches HTTP 200).",
+      "teaching": {
+        "positives": [
+          { "id": "F1-T-POS1", "projectSlug": "stage2-qual-proj", "parentInitialHours": 8, "parentFinalHours": 8, "parentFinalStatus": "approved", "childInitialHours": 4, "targetWorkHours": 8 },
+          { "id": "F1-T-POS2", "projectSlug": "stage2-qual-proj", "parentInitialHours": 12, "parentFinalHours": 16, "parentFinalStatus": "approved", "childInitialHours": 4, "targetWorkHours": 16 }
+        ],
+        "counterexamples": [
+          { "id": "F1-T-NEG1", "projectSlug": "stage2-qual-proj", "parentInitialHours": 16, "parentFinalHours": 4, "parentFinalStatus": "approved", "childInitialHours": 4, "targetWorkHours": 16 }
+        ]
+      },
+      "heldOutUnseenRoutes": [
+        { "routeId": "F1-U1", "entryBranch": "relations-tab-to-activity", "projectSlug": "stage2-qual-proj", "parentInitialHours": 10, "parentFinalHours": 20, "parentFinalStatus": "approved", "childInitialHours": 4, "targetWorkHours": 20, "expectedValidCommit": true },
+        { "routeId": "F1-U2", "entryBranch": "project-table-to-activity", "projectSlug": "stage2-qual-proj", "parentInitialHours": 6, "parentFinalHours": 6, "parentFinalStatus": "approved", "childInitialHours": 2, "targetWorkHours": 6, "expectedValidCommit": true },
+        { "routeId": "F1-U3", "entryBranch": "overview-to-activity", "projectSlug": "stage2-qual-proj", "parentInitialHours": 12, "parentFinalHours": 2, "parentFinalStatus": "approved", "childInitialHours": 4, "targetWorkHours": 12, "expectedValidCommit": false },
+        { "routeId": "F1-U4", "entryBranch": "direct-activity", "projectSlug": "stage2-qual-proj", "parentInitialHours": 8, "parentFinalHours": 8, "parentFinalStatus": "approved", "childInitialHours": 4, "targetWorkHours": 18, "expectedValidCommit": false }
+      ]
+    },
+    {
+      "familyId": "F2-parent-status-revocation",
+      "description": "Estimated hours match on every route, but parent Approval Packet must remain in Stage2Approved (statusCode=16) rather than revoked to Stage2Hold (17) or unapproved Stage2New (15).",
+      "teaching": {
+        "positives": [
+          { "id": "F2-T-POS1", "projectSlug": "stage2-qual-proj", "parentInitialHours": 8, "parentFinalHours": 8, "parentFinalStatus": "approved", "childInitialHours": 4, "targetWorkHours": 8 },
+          { "id": "F2-T-POS2", "projectSlug": "stage2-qual-proj", "parentInitialHours": 10, "parentFinalHours": 14, "parentFinalStatus": "approved", "childInitialHours": 4, "targetWorkHours": 14 }
+        ],
+        "counterexamples": [
+          { "id": "F2-T-NEG1", "projectSlug": "stage2-qual-proj", "parentInitialHours": 8, "parentFinalHours": 8, "parentFinalStatus": "hold", "childInitialHours": 4, "targetWorkHours": 8 }
+        ]
+      },
+      "heldOutUnseenRoutes": [
+        { "routeId": "F2-U1", "entryBranch": "relations-tab-to-activity", "projectSlug": "stage2-qual-proj", "parentInitialHours": 10, "parentFinalHours": 10, "parentFinalStatus": "approved", "childInitialHours": 3, "targetWorkHours": 10, "expectedValidCommit": true },
+        { "routeId": "F2-U2", "entryBranch": "project-table-to-activity", "projectSlug": "stage2-qual-proj", "parentInitialHours": 6, "parentFinalHours": 12, "parentFinalStatus": "approved", "childInitialHours": 3, "targetWorkHours": 12, "expectedValidCommit": true },
+        { "routeId": "F2-U3", "entryBranch": "overview-to-activity", "projectSlug": "stage2-qual-proj", "parentInitialHours": 10, "parentFinalHours": 10, "parentFinalStatus": "hold", "childInitialHours": 3, "targetWorkHours": 10, "expectedValidCommit": false },
+        { "routeId": "F2-U4", "entryBranch": "direct-activity", "projectSlug": "stage2-qual-proj", "parentInitialHours": 12, "parentFinalHours": 12, "parentFinalStatus": "new", "childInitialHours": 3, "targetWorkHours": 12, "expectedValidCommit": false }
+      ]
+    },
+    {
+      "familyId": "F3-project-and-status-conjunction",
+      "description": "Two-clause conjunctive invariant: parent Approval Packet must belong to the same OpenProject project as the child WorkPackage AND hold Stage2Approved status.",
+      "teaching": {
+        "positives": [
+          { "id": "F3-T-POS1", "projectSlug": "stage2-qual-proj", "parentProjectSlug": "stage2-qual-proj", "parentInitialHours": 8, "parentFinalHours": 8, "parentFinalStatus": "approved", "childInitialHours": 4, "targetWorkHours": 8 },
+          { "id": "F3-T-POS2", "projectSlug": "stage2-partner-proj", "parentProjectSlug": "stage2-partner-proj", "parentInitialHours": 10, "parentFinalHours": 16, "parentFinalStatus": "approved", "childInitialHours": 4, "targetWorkHours": 16 }
+        ],
+        "counterexamples": [
+          { "id": "F3-T-NEG1", "projectSlug": "stage2-qual-proj", "parentProjectSlug": "stage2-quarantine-proj", "parentInitialHours": 8, "parentFinalHours": 8, "parentFinalStatus": "approved", "childInitialHours": 4, "targetWorkHours": 8 },
+          { "id": "F3-T-NEG2", "projectSlug": "stage2-qual-proj", "parentProjectSlug": "stage2-qual-proj", "parentInitialHours": 8, "parentFinalHours": 8, "parentFinalStatus": "hold", "childInitialHours": 4, "targetWorkHours": 8 }
+        ]
+      },
+      "heldOutUnseenRoutes": [
+        { "routeId": "F3-U1", "entryBranch": "relations-tab-to-activity", "projectSlug": "stage2-qual-proj", "parentProjectSlug": "stage2-qual-proj", "parentInitialHours": 14, "parentFinalHours": 14, "parentFinalStatus": "approved", "childInitialHours": 4, "targetWorkHours": 14, "expectedValidCommit": true },
+        { "routeId": "F3-U2", "entryBranch": "project-table-to-activity", "projectSlug": "stage2-partner-proj", "parentProjectSlug": "stage2-partner-proj", "parentInitialHours": 6, "parentFinalHours": 10, "parentFinalStatus": "approved", "childInitialHours": 2, "targetWorkHours": 10, "expectedValidCommit": true },
+        { "routeId": "F3-U3", "entryBranch": "overview-to-activity", "projectSlug": "stage2-qual-proj", "parentProjectSlug": "stage2-quarantine-proj", "parentInitialHours": 14, "parentFinalHours": 14, "parentFinalStatus": "approved", "childInitialHours": 4, "targetWorkHours": 14, "expectedValidCommit": false },
+        { "routeId": "F3-U4", "entryBranch": "direct-activity", "projectSlug": "stage2-partner-proj", "parentProjectSlug": "stage2-partner-proj", "parentInitialHours": 10, "parentFinalHours": 10, "parentFinalStatus": "hold", "childInitialHours": 2, "targetWorkHours": 10, "expectedValidCommit": false }
+      ]
+    },
+    {
+      "familyId": "F4-inseparable-unexposed-near-miss",
+      "description": "Abstention stress test: compliance hold exists ONLY inside free-text parent description (stripped by collectObservedFacts data minimizer). Scalar HAL facts are identical on pos and neg; RepairBoundary MUST abstain (`no-separating-guard`) with 0 wrong commits.",
+      "teaching": {
+        "positives": [
+          { "id": "F4-T-POS1", "projectSlug": "stage2-qual-proj", "parentInitialHours": 8, "parentFinalHours": 8, "parentFinalStatus": "approved", "parentFreeTextHold": false, "childInitialHours": 4, "targetWorkHours": 8 }
+        ],
+        "counterexamples": [
+          { "id": "F4-T-NEG1", "projectSlug": "stage2-qual-proj", "parentInitialHours": 8, "parentFinalHours": 8, "parentFinalStatus": "approved", "parentFreeTextHold": true, "childInitialHours": 4, "targetWorkHours": 8 }
+        ]
+      },
+      "heldOutUnseenRoutes": [
+        { "routeId": "F4-U1", "entryBranch": "relations-tab-to-activity", "projectSlug": "stage2-qual-proj", "parentInitialHours": 8, "parentFinalHours": 8, "parentFinalStatus": "approved", "parentFreeTextHold": false, "childInitialHours": 4, "targetWorkHours": 8, "expectedValidCommit": true },
+        { "routeId": "F4-U2", "entryBranch": "direct-activity", "projectSlug": "stage2-qual-proj", "parentInitialHours": 8, "parentFinalHours": 8, "parentFinalStatus": "approved", "parentFreeTextHold": true, "childInitialHours": 4, "targetWorkHours": 8, "expectedValidCommit": false }
+      ]
+    }
+  ]
+}
