@@ -73,6 +73,40 @@ export function projectOpenProjectHalScalars(rawJson) {
   return out;
 }
 
+const FRAPPE_COMPANY_CODES = Object.freeze({
+  'Stage2 Qual Corp': 101,
+  'Stage2 Partner Corp': 102,
+  'Stage2 Quarantine Corp': 103,
+});
+
+/**
+ * Mechanical scalar projection for Frappe / ERPNext `/api/resource/{DocType}/{name}` and
+ * `/api/resource/Version` JSON payloads so `collectObservedFacts` receives safe integers
+ * without document IDs (`name`), timestamps (`modified`), free text (`terms`), or task predicates.
+ */
+export function projectFrappeResourceScalars(rawJson) {
+  if (!rawJson || typeof rawJson !== 'object' || Array.isArray(rawJson)) return {};
+  const out = {};
+  const data = rawJson.data;
+  if (Array.isArray(data)) {
+    out.entryCount = data.length;
+    return out;
+  }
+  if (data && typeof data === 'object') {
+    if (Number.isSafeInteger(data.docstatus)) out.docstatus = data.docstatus;
+    if (typeof data.total_qty === 'number' && Number.isFinite(data.total_qty)) {
+      out.totalQty = Math.round(data.total_qty);
+    }
+    if (typeof data.company === 'string' && Object.hasOwn(FRAPPE_COMPANY_CODES, data.company)) {
+      out.companyCode = FRAPPE_COMPANY_CODES[data.company];
+    }
+    if (Array.isArray(data.items)) {
+      out.lineCount = data.items.length;
+    }
+  }
+  return out;
+}
+
 /**
  * Attach a passive, trusted same-origin `GET` (`fetch`/`xhr`) observer to a Playwright-compatible
  * `page` (`on('response', fn)` / `off('response', fn)`), mapping matched endpoints to stable
