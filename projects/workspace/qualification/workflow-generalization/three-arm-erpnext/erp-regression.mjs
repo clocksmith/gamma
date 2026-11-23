@@ -36,10 +36,31 @@ const rewrite = (value, names) => {
   return value;
 };
 
+/**
+ * A recorded body can hold a whole document as it was when the arm sent it,
+ * including its modified time. ERPNext refuses a submit or an update whose
+ * modified time is not the stored one, and on a rebuilt database it never is.
+ * So a replayed submit sends the document as it is now, and a replayed update
+ * drops the recorded modified time. Found on the first second-release probe,
+ * where every replayed submit was refused with 417.
+ */
+async function freshen(call, path, body, request) {
+  if (call.method === 'POST' && path.endsWith('/api/method/frappe.client.submit') && typeof body?.doc?.doctype === 'string' && typeof body.doc.name === 'string') {
+    const now = await request(call.as, 'GET', `/api/resource/${encodeURIComponent(body.doc.doctype)}/${encodeURIComponent(body.doc.name)}`);
+    if (now.status === 200 && now.body?.data) return { ...body, doc: now.body.data };
+  }
+  if (call.method === 'PUT' && body && typeof body === 'object' && 'modified' in body) {
+    const { modified, ...rest } = body;
+    return rest;
+  }
+  return body;
+}
+
 export async function rebuildRecords({ trace, request, names = new Map() }) {
   for (const [index, call] of trace.entries()) {
     const path = rewrite(call.path, names);
-    const response = await request(call.as, call.method, path, call.body === null ? undefined : rewrite(call.body, names));
+    const body = call.body === null ? undefined : await freshen(call, path, rewrite(call.body, names), request);
+    const response = await request(call.as, call.method, path, body);
     if (response.status !== call.status) {
       return { rebuilt: false, names, failedAt: index, reason: `${call.method} ${path} answered ${response.status}, was ${call.status}` };
     }

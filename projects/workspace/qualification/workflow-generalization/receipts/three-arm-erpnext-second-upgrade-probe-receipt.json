@@ -9,10 +9,247 @@
  "expectedWrittenBeforeAnyResult": {
   "writtenAt": "2026-11-23T13:21:00Z",
   "release": "v15.30.0",
-  "keptCasesPassing": { "agent-written-guard": "2 of 2", "repair-boundary": "4 of 4" },
+  "keptCasesPassing": {
+   "agent-written-guard": "2 of 2",
+   "repair-boundary": "4 of 4"
+  },
   "maintenanceCompleted": "3 of 3 arms",
   "decisionsCorrect": "9 of 9: each arm writes the valid route and stops both look-alikes",
   "whatWouldCountAsAMiss": "any kept case not rebuilt or not as labelled; any step that fails because the seeder, the page write or the API behaves differently on v15.30.0; any write recorded as sent and not committed"
  },
- "releases": []
+ "releases": [
+  {
+   "release": "v15.30.0",
+   "attempt": 1,
+   "upgrade": "15.20.0->15.30.0",
+   "at": "2026-11-23T13:20:24.482Z",
+   "againstExpectation": {
+    "keptCasesPassing": {
+     "agent-written-guard": "2 of 2, as expected",
+     "repair-boundary": "0 of 4; expected 4 of 4: MISS"
+    },
+    "maintenanceCompleted": "3 of 3 arms completed, but the repair-boundary session had no rebuilt cases to work from",
+    "decisionsCorrect": "7 of 9; expected 9 of 9: MISS. agent-written-guard 3 of 3, always-replan 3 of 3, repair-boundary 1 of 3 (it stopped on the valid route, having no guard)"
+   },
+   "cause": "A fault in the runner's kept-case rebuild, not a change in v15.30.0. The repair-boundary arm's recorded calls include frappe.client.submit with the whole document as it was when the arm sent it, modified time included. Replayed on a rebuilt database that time is stale and ERPNext refuses the submit with 417. It would have failed the same way on v15.20.0; the dry run did not exercise the rebuild on the real application. The guard arm's recorded calls hold no submit, which is why it passed.",
+   "steps": [
+    {
+     "name": "regress agent-written-guard",
+     "ok": true,
+     "result": {
+      "rebuilt": true,
+      "reason": null,
+      "passed": 2,
+      "total": 2,
+      "failedFamilies": [],
+      "cases": [
+       {
+        "name": "PUR-ORD-2026-00001",
+        "expect": "write",
+        "got": "write",
+        "pass": true
+       },
+       {
+        "name": "PUR-ORD-2026-00002",
+        "expect": "stop",
+        "got": "stop",
+        "pass": true
+       }
+      ]
+     }
+    },
+    {
+     "name": "regress repair-boundary",
+     "ok": true,
+     "result": {
+      "rebuilt": false,
+      "reason": "POST /api/method/frappe.client.submit answered 417, was 200",
+      "passed": 0,
+      "total": 4,
+      "failedFamilies": [
+       "example-quotation-covers-order"
+      ],
+      "cases": []
+     }
+    },
+    {
+     "name": "maintenance agent-written-guard",
+     "ok": true,
+     "result": {
+      "completed": true,
+      "outOfSurfaceCalls": 0,
+      "wallMs": 135823,
+      "keptCases": {
+       "total": 2,
+       "passedAfterUpgrade": 2,
+       "rebuilt": true,
+       "familiesCaught": []
+      }
+     }
+    },
+    {
+     "name": "maintenance repair-boundary",
+     "ok": true,
+     "result": {
+      "completed": true,
+      "outOfSurfaceCalls": 0,
+      "wallMs": 132383,
+      "keptCases": {
+       "total": 4,
+       "passedAfterUpgrade": 0,
+       "rebuilt": false,
+       "familiesCaught": [
+        "example-quotation-covers-order"
+       ]
+      }
+     }
+    },
+    {
+     "name": "maintenance always-replan",
+     "ok": true,
+     "result": {
+      "completed": true,
+      "outOfSurfaceCalls": 0,
+      "wallMs": 0,
+      "keptCases": null
+     }
+    },
+    {
+     "name": "routes agent-written-guard",
+     "ok": true,
+     "result": [
+      {
+       "routeId": "dry-valid",
+       "decision": "write",
+       "writeSent": true,
+       "httpStatus": 200,
+       "committed": true,
+       "referenceStored": [
+        false,
+        true
+       ],
+       "error": null,
+       "stopReason": null
+      },
+      {
+       "routeId": "dry-lookalike-draft",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "referenceStored": [
+        false,
+        false
+       ],
+       "error": null,
+       "stopReason": "quotation does not cover this order"
+      },
+      {
+       "routeId": "dry-lookalike-quantity",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "referenceStored": [
+        false,
+        false
+       ],
+       "error": null,
+       "stopReason": "quotation does not cover this order"
+      }
+     ]
+    },
+    {
+     "name": "routes repair-boundary",
+     "ok": true,
+     "result": [
+      {
+       "routeId": "dry-valid",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "referenceStored": [
+        false,
+        false
+       ],
+       "error": null,
+       "stopReason": "no learned guard for this family (invalid-examples)"
+      },
+      {
+       "routeId": "dry-lookalike-draft",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "referenceStored": [
+        false,
+        false
+       ],
+       "error": null,
+       "stopReason": "no learned guard for this family (invalid-examples)"
+      },
+      {
+       "routeId": "dry-lookalike-quantity",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "referenceStored": [
+        false,
+        false
+       ],
+       "error": null,
+       "stopReason": "no learned guard for this family (invalid-examples)"
+      }
+     ]
+    },
+    {
+     "name": "routes always-replan",
+     "ok": true,
+     "result": [
+      {
+       "routeId": "dry-valid",
+       "decision": "write",
+       "writeSent": true,
+       "httpStatus": 200,
+       "committed": true,
+       "referenceStored": [
+        false,
+        true
+       ],
+       "error": null,
+       "stopReason": null
+      },
+      {
+       "routeId": "dry-lookalike-draft",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "referenceStored": [
+        false,
+        false
+       ],
+       "error": null,
+       "stopReason": "quotation does not cover this order"
+      },
+      {
+       "routeId": "dry-lookalike-quantity",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "referenceStored": [
+        false,
+        false
+       ],
+       "error": null,
+       "stopReason": "quotation does not cover this order"
+      }
+     ]
+    }
+   ]
+  }
+ ]
 }

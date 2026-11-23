@@ -31,14 +31,17 @@ const http = createServer(async (req, res) => {
     counters[kind] += 1;
     const name = `${kind === 'order' ? 'PUR-ORD' : 'PUR-SQTN'}-2026-${String(counters[kind]).padStart(5, '0')}`;
     const doc = { doctype: made[1], name, docstatus: 0, company: body.company, items: body.items, total_qty: body.items.reduce((n, i) => n + i.qty, 0),
-      terms: '', modified: `2026-02-01 00:00:${String(store.size).padStart(2, '0')}.000000`, versions: 0 };
+      terms: '', modified: `2026-02-01 00:00:${String(store.size).padStart(2, '0')}.${String(instances).padStart(6, '0')}`, versions: 0 };
     store.set(name, doc);
     return send(200, { data: view(doc) });
   }
   if (req.method === 'POST' && url === '/api/method/frappe.client.submit') {
     const doc = store.get(body.doc?.name);
     if (!doc) return send(404, { exception: 'DoesNotExistError' });
+    // As the real application does: a document sent with a stale modified time is refused.
+    if (body.doc.modified !== doc.modified) return send(417, { exception: 'frappe.exceptions.TimestampMismatchError' });
     doc.docstatus = 1;
+    doc.modified = `${doc.modified}s`;
     return send(200, { message: view(doc) });
   }
   const one = url.match(/^\/api\/resource\/(Supplier Quotation|Purchase Order)\/(.+)$/);
