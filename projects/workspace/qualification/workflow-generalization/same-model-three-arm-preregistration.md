@@ -7,7 +7,10 @@ families, the answer key and the scorer moved to people who do not build or run
 the arms; wrong attempts are counted apart from wrong commits; time is
 measured. Revision 3 (2026-11-23): both arms keep the labelled cases they built
 as regression tests, rerun before their work is reused on another release
-(Sections 2 and 7).
+(Sections 2 and 7). Revision 4 (2026-11-23): the runner's page write was
+hardened after it stored a wrong value on `14.0.0` in a no-model test, and the
+bring-up waits for the final database server; two runner hashes posted
+earlier are void (Section 11).
 
 ## 1. Question
 
@@ -292,6 +295,24 @@ run first and reported before B is asked for.
   removed; the final reading is what is recorded, and a row that cannot be
   read then is marked. The runner hash first posted as step 1 was withdrawn
   for this before it was used.
+- The page write itself was then found to be at fault. In the first write
+  after the application had started, the save could go out before the
+  dialog's own form check was answered. On later OpenProject releases that
+  produced a save answered 200 that changed nothing; on `14.0.0`, in the
+  31st such write tried, the hours typed were joined to the value the field
+  already held and 856 hours were stored for 56 asked. No model and no sealed
+  case was involved. The runner now waits for the form check's answer, reads
+  the field back after typing, and does not press Save unless the field holds
+  exactly the hours asked. With that step, 100 of 100 first writes after a
+  cold start on `14.0.0` landed with the hours asked
+  (`receipts/write-step-first-write-investigation.json`). That bounds the
+  rate of such a miss below about 3 percent; it does not make it zero, and
+  `stage-a-notes.md` says beforehand how a miss is reported if one happens.
+  The second runner hash posted as step 1 (`8e7361e2`) is void for this.
+- The bring-up script waits for the final database server before creating
+  its databases, and the teardown removes leftover volumes. Neither changes
+  what is seeded. The sealed cases were built and checked with the bring-up
+  as it was before these two changes, on the same seed and release.
 - No arm session has yet been run by a real model. Until the preflight, the
   confinement of a session is shown only by tests with a stand-in for the model
   CLI.
