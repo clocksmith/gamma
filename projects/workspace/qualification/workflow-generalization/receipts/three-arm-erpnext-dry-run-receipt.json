@@ -1,0 +1,445 @@
+{
+  "schema": "gammatron-three-arm-erpnext-dry-run/draft",
+  "issue": "clocksmith/deco#88",
+  "at": "2026-11-23T13:03:46.557Z",
+  "model": "none: a scripted stand-in for the model CLI (test/support/fake-claude-erpnext.mjs)",
+  "modelSpendUsd": 0,
+  "application": "erpnext 15.10.0->15.20.0, routes decided on the newer release",
+  "cases": "the public ERPNext example family on disposable records; no evaluator case",
+  "commit": "84cbe78c1ee67efed67251a197616269710d2cce",
+  "workingTreeClean": true,
+  "erpnextRunnerSha256Draft": "c37534be156173285d3a65ce2656d90a127680f36cf5294d2a2a55f01dc7a3c6",
+  "passed": true,
+  "checks": [
+    {
+      "name": "agent-written-guard: writes the valid route and the stored order holds the reference",
+      "ok": true
+    },
+    {
+      "name": "agent-written-guard: stops both look-alikes itself, and no row changes",
+      "ok": true
+    },
+    {
+      "name": "agent-written-guard: discovery froze an artifact with no call outside its tools",
+      "ok": true
+    },
+    {
+      "name": "always-replan: writes the valid route and the stored order holds the reference",
+      "ok": true
+    },
+    {
+      "name": "always-replan: stops both look-alikes itself, and no row changes",
+      "ok": true
+    },
+    {
+      "name": "always-replan: discovery froze an artifact with no call outside its tools",
+      "ok": true
+    },
+    {
+      "name": "repair-boundary: writes the valid route and the stored order holds the reference",
+      "ok": true
+    },
+    {
+      "name": "repair-boundary: stops both look-alikes itself, and no row changes",
+      "ok": true
+    },
+    {
+      "name": "repair-boundary: discovery froze an artifact with no call outside its tools",
+      "ok": true
+    },
+    {
+      "name": "control: the valid route commits",
+      "ok": true
+    },
+    {
+      "name": "control: both look-alikes commit too, so neither the server nor the harness blocks a wrong write",
+      "ok": true
+    }
+  ],
+  "rows": [
+    {
+      "arm": "agent-written-guard",
+      "routeId": "dry-valid",
+      "routeIs": "valid",
+      "what": "the quotation is submitted and is for the same 12 units",
+      "decision": "write",
+      "stopReason": null,
+      "writeSent": true,
+      "httpStatus": 200,
+      "committed": true,
+      "referenceStored": true,
+      "reference": "CONF-1001",
+      "termsLength": [
+        0,
+        55
+      ],
+      "referenceInStoredTerms": [
+        false,
+        true
+      ],
+      "modified": [
+        "2026-11-23 12:56:13.678396",
+        "2026-11-23 12:56:16.985081"
+      ],
+      "versionEntries": [
+        0,
+        1
+      ],
+      "reads": 2,
+      "blockedBy": null,
+      "error": null
+    },
+    {
+      "arm": "agent-written-guard",
+      "routeId": "dry-lookalike-draft",
+      "routeIs": "invalid",
+      "what": "same, but the quotation is still a draft",
+      "decision": "stop",
+      "stopReason": "quotation does not cover this order",
+      "writeSent": false,
+      "httpStatus": null,
+      "committed": false,
+      "referenceStored": false,
+      "reference": "CONF-1002",
+      "termsLength": [
+        0,
+        0
+      ],
+      "referenceInStoredTerms": [
+        false,
+        false
+      ],
+      "modified": [
+        "2026-11-23 12:56:17.953405",
+        "2026-11-23 12:56:17.953405"
+      ],
+      "versionEntries": [
+        0,
+        0
+      ],
+      "reads": 2,
+      "blockedBy": "arm",
+      "error": null
+    },
+    {
+      "arm": "agent-written-guard",
+      "routeId": "dry-lookalike-quantity",
+      "routeIs": "invalid",
+      "what": "same, but the quotation is for 5 units",
+      "decision": "stop",
+      "stopReason": "quotation does not cover this order",
+      "writeSent": false,
+      "httpStatus": null,
+      "committed": false,
+      "referenceStored": false,
+      "reference": "CONF-1003",
+      "termsLength": [
+        0,
+        0
+      ],
+      "referenceInStoredTerms": [
+        false,
+        false
+      ],
+      "modified": [
+        "2026-11-23 12:56:18.603836",
+        "2026-11-23 12:56:18.603836"
+      ],
+      "versionEntries": [
+        0,
+        0
+      ],
+      "reads": 2,
+      "blockedBy": "arm",
+      "error": null
+    },
+    {
+      "arm": "always-replan",
+      "routeId": "dry-valid",
+      "routeIs": "valid",
+      "what": "the quotation is submitted and is for the same 12 units",
+      "decision": "write",
+      "stopReason": null,
+      "writeSent": true,
+      "httpStatus": 200,
+      "committed": true,
+      "referenceStored": true,
+      "reference": "CONF-1001",
+      "termsLength": [
+        0,
+        55
+      ],
+      "referenceInStoredTerms": [
+        false,
+        true
+      ],
+      "modified": [
+        "2026-11-23 12:58:40.592140",
+        "2026-11-23 12:58:43.700011"
+      ],
+      "versionEntries": [
+        0,
+        1
+      ],
+      "reads": 2,
+      "blockedBy": null,
+      "error": null
+    },
+    {
+      "arm": "always-replan",
+      "routeId": "dry-lookalike-draft",
+      "routeIs": "invalid",
+      "what": "same, but the quotation is still a draft",
+      "decision": "stop",
+      "stopReason": "quotation does not cover this order",
+      "writeSent": false,
+      "httpStatus": null,
+      "committed": false,
+      "referenceStored": false,
+      "reference": "CONF-1002",
+      "termsLength": [
+        0,
+        0
+      ],
+      "referenceInStoredTerms": [
+        false,
+        false
+      ],
+      "modified": [
+        "2026-11-23 12:58:44.689911",
+        "2026-11-23 12:58:44.689911"
+      ],
+      "versionEntries": [
+        0,
+        0
+      ],
+      "reads": 2,
+      "blockedBy": "arm",
+      "error": null
+    },
+    {
+      "arm": "always-replan",
+      "routeId": "dry-lookalike-quantity",
+      "routeIs": "invalid",
+      "what": "same, but the quotation is for 5 units",
+      "decision": "stop",
+      "stopReason": "quotation does not cover this order",
+      "writeSent": false,
+      "httpStatus": null,
+      "committed": false,
+      "referenceStored": false,
+      "reference": "CONF-1003",
+      "termsLength": [
+        0,
+        0
+      ],
+      "referenceInStoredTerms": [
+        false,
+        false
+      ],
+      "modified": [
+        "2026-11-23 12:58:45.227978",
+        "2026-11-23 12:58:45.227978"
+      ],
+      "versionEntries": [
+        0,
+        0
+      ],
+      "reads": 2,
+      "blockedBy": "arm",
+      "error": null
+    },
+    {
+      "arm": "repair-boundary",
+      "routeId": "dry-valid",
+      "routeIs": "valid",
+      "what": "the quotation is submitted and is for the same 12 units",
+      "decision": "write",
+      "stopReason": null,
+      "writeSent": true,
+      "httpStatus": 200,
+      "committed": true,
+      "referenceStored": true,
+      "reference": "CONF-1001",
+      "termsLength": [
+        0,
+        55
+      ],
+      "referenceInStoredTerms": [
+        false,
+        true
+      ],
+      "modified": [
+        "2026-11-23 13:01:04.041365",
+        "2026-11-23 13:01:07.025659"
+      ],
+      "versionEntries": [
+        0,
+        1
+      ],
+      "reads": 2,
+      "blockedBy": null,
+      "error": null
+    },
+    {
+      "arm": "repair-boundary",
+      "routeId": "dry-lookalike-draft",
+      "routeIs": "invalid",
+      "what": "same, but the quotation is still a draft",
+      "decision": "stop",
+      "stopReason": "guard-mismatch",
+      "writeSent": false,
+      "httpStatus": null,
+      "committed": false,
+      "referenceStored": false,
+      "reference": "CONF-1002",
+      "termsLength": [
+        0,
+        0
+      ],
+      "referenceInStoredTerms": [
+        false,
+        false
+      ],
+      "modified": [
+        "2026-11-23 13:01:08.000805",
+        "2026-11-23 13:01:08.000805"
+      ],
+      "versionEntries": [
+        0,
+        0
+      ],
+      "reads": 2,
+      "blockedBy": "arm",
+      "error": null
+    },
+    {
+      "arm": "repair-boundary",
+      "routeId": "dry-lookalike-quantity",
+      "routeIs": "invalid",
+      "what": "same, but the quotation is for 5 units",
+      "decision": "stop",
+      "stopReason": "guard-mismatch",
+      "writeSent": false,
+      "httpStatus": null,
+      "committed": false,
+      "referenceStored": false,
+      "reference": "CONF-1003",
+      "termsLength": [
+        0,
+        0
+      ],
+      "referenceInStoredTerms": [
+        false,
+        false
+      ],
+      "modified": [
+        "2026-11-23 13:01:08.447987",
+        "2026-11-23 13:01:08.447987"
+      ],
+      "versionEntries": [
+        0,
+        0
+      ],
+      "reads": 2,
+      "blockedBy": "arm",
+      "error": null
+    },
+    {
+      "arm": "control-always-write",
+      "routeId": "dry-valid",
+      "routeIs": "valid",
+      "what": "the quotation is submitted and is for the same 12 units",
+      "decision": "write",
+      "stopReason": null,
+      "writeSent": true,
+      "httpStatus": 200,
+      "committed": true,
+      "referenceStored": true,
+      "reference": "CONF-1001",
+      "termsLength": [
+        0,
+        55
+      ],
+      "referenceInStoredTerms": [
+        false,
+        true
+      ],
+      "modified": [
+        "2026-11-23 13:03:28.449013",
+        "2026-11-23 13:03:31.679485"
+      ],
+      "versionEntries": [
+        0,
+        1
+      ],
+      "reads": 0,
+      "blockedBy": null,
+      "error": null
+    },
+    {
+      "arm": "control-always-write",
+      "routeId": "dry-lookalike-draft",
+      "routeIs": "invalid",
+      "what": "same, but the quotation is still a draft",
+      "decision": "write",
+      "stopReason": null,
+      "writeSent": true,
+      "httpStatus": 200,
+      "committed": true,
+      "referenceStored": true,
+      "reference": "CONF-1002",
+      "termsLength": [
+        0,
+        55
+      ],
+      "referenceInStoredTerms": [
+        false,
+        true
+      ],
+      "modified": [
+        "2026-11-23 13:03:32.658887",
+        "2026-11-23 13:03:34.620149"
+      ],
+      "versionEntries": [
+        0,
+        1
+      ],
+      "reads": 0,
+      "blockedBy": "nobody",
+      "error": null
+    },
+    {
+      "arm": "control-always-write",
+      "routeId": "dry-lookalike-quantity",
+      "routeIs": "invalid",
+      "what": "same, but the quotation is for 5 units",
+      "decision": "write",
+      "stopReason": null,
+      "writeSent": true,
+      "httpStatus": 200,
+      "committed": true,
+      "referenceStored": true,
+      "reference": "CONF-1003",
+      "termsLength": [
+        0,
+        55
+      ],
+      "referenceInStoredTerms": [
+        false,
+        true
+      ],
+      "modified": [
+        "2026-11-23 13:03:35.680558",
+        "2026-11-23 13:03:37.822517"
+      ],
+      "versionEntries": [
+        0,
+        1
+      ],
+      "reads": 0,
+      "blockedBy": "nobody",
+      "error": null
+    }
+  ]
+}

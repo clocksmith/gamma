@@ -67,4 +67,12 @@ application-neutral runner when a later stage is frozen.
   put through `erp-write-step.mjs` twice. 6 of 6 built, 6 of 6 committed with
   the row read from MariaDB, 0 saves that did not move within the wait.
 - Feasibility on both releases: `../receipts/three-arm-erpnext-feasibility-receipt.json`.
-- The dry run on the real application has not been run yet.
+- Dry run on the real `v15.10.0 -> v15.20.0` with the stand-in for the model
+  and the public example family (2026-11-23, no model call), receipt
+  `../receipts/three-arm-erpnext-dry-run-receipt.json`: 9 of 9 decisions
+  recorded correctly. Each arm wrote the valid route (the server answered 200,
+  the row's modified time moved, one version entry was added and the stored
+  terms hold the reference) and stopped both look-alikes itself with no write
+  sent. The control guard that always writes got all three committed, both
+  wrong ones included. As on OpenProject, the stand-in applies the correct
+  rule: this qualifies the harness, not any model.
