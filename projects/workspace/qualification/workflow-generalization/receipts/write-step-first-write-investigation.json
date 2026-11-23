@@ -82,6 +82,7 @@
   }
  ],
  "findings": [
+  "UPDATE after round 5: with the hardened step, 100 of 100 first writes after a cold start on 14.0.0 landed with the hours asked, and no save went out before the dialog's form check was answered.",
   "UPDATE after round 4: the fault does happen on 14.0.0. In the 10th of the further cold-start writes the field ended up holding 856 and the server stored 856 hours. The statement below that 14.0.0 showed no anomaly was true of the first 20 only.",
   "On 14.0.0, the release Stage A decides routes on: no anomaly in 20 writes made as the first action after a cold start, which is the condition that matters, since every anomaly seen came right after the application started and each arm's unseen-route phase starts that way. The 50 clean warm writes on 14.0.0 do not bear on it.",
   "On 16.6.0 after a cold start: 2 anomalies in 20. In one, the save was sent with the right hours while the form check was still unanswered, both were answered 200, and the row never changed. In the other, the hours typed were joined to the text the dialog already showed (8h and 56 became 8h56) and the row was changed to 8.93 hours: a write with the wrong value.",
@@ -134,7 +135,32 @@
    "anomalies": "0 of 100: every write lands with the hours asked, or, if the field cannot be made to hold them, Save is not pressed and the record says so (counted separately as 'not attempted', expected 0)",
    "ifAnyWrongValueOrUnchangedRow": "the hardening is not good enough; it is reworked before any freeze"
   },
-  "results": null,
+  "results": {
+   "recordedAt": "2026-11-23T18:38:05Z",
+   "writes": 100,
+   "landedWithTheHoursAsked": 100,
+   "rowUnchangedAfterASave": 0,
+   "wrongValueStored": 0,
+   "saveNotPressed": 0,
+   "otherErrors": 0,
+   "savesSentBeforeTheFormCheckWasAnswered": 0,
+   "hoursCarriedByTheSaves": "56 in 100 of 100",
+   "wallMsPerWrite": {
+    "min": 1445,
+    "median": 1652,
+    "max": 1889
+   },
+   "ranOn": {
+    "writeStepCommit": "e20dc73a2",
+    "headAtStart": "6870c7f8c",
+    "headAtEnd": "85651b7c3",
+    "workingTreeCleanAtStart": true,
+    "workingTreeCleanAtEnd": true,
+    "note": "commits made while it ran touched only the Stage A notes; no file the run reads changed"
+   },
+   "againstExpectation": "as expected: 0 anomalies of 100, Save not pressed 0 of 100",
+   "bound": "0 of 100 bounds the rate of an anomaly below about 3 percent (one-sided 95 percent). It does not prove zero."
+  },
   "runsOn": {
    "commit": "e20dc73a2",
    "note": "the hardened step as committed; a first start of this round on uncommitted bytes was stopped after 2 clean writes at the evaluator's request and is not counted",
