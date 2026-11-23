@@ -480,12 +480,17 @@ export async function blind({ arm, familiesFile, recipesFile, runDir, approvePai
     // Every row is read once more before the instance goes away. A write that landed after its
     // first reading must not be recorded as not committed, least of all a wrong one.
     for (const { workPackageId, record } of held) {
-      const final = writer.readRow(workPackageId);
-      if (final.lockVersion !== record.after.lockVersion || Number(final.estimatedHours) !== Number(record.after.estimatedHours)) {
-        record.after = final;
-        record.committed = final.lockVersion !== record.before.lockVersion;
-        record.effectMatches = Number(final.estimatedHours) === Number(record.workHours);
-        record.error = record.error ?? 'the row changed after its first reading; the final reading is recorded';
+      try {
+        const final = writer.readRow(workPackageId);
+        if (final.lockVersion !== record.after.lockVersion || Number(final.estimatedHours) !== Number(record.after.estimatedHours)) {
+          record.after = final;
+          record.committed = final.lockVersion !== record.before.lockVersion;
+          record.effectMatches = Number(final.estimatedHours) === Number(record.workHours);
+          record.error = [record.error, 'the row changed after its first reading; the final reading is recorded'].filter(Boolean).join('; ');
+        }
+      } catch (error) {
+        // Without a final reading the route cannot be scored; say so instead of letting the first reading stand unmarked.
+        record.error = [record.error, `final reading failed: ${String(error?.message ?? error).slice(0, 160)}`].filter(Boolean).join('; ');
       }
       appendRecord(runDir, 'route-records.jsonl', record);
     }

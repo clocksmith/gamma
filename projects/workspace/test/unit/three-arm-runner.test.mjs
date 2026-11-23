@@ -243,33 +243,45 @@ test('after an upgrade that renumbers statuses, each arm repairs its frozen work
   await assert.rejects(maintenance({ ...common, arm: 'repair-boundary', fromRunDir, approvePaid: false }), /--approve-paid/);
 });
 
-test('a write that lands after its first reading is still recorded as committed', async () => {
+test('a write that lands after its first reading is recorded as committed, a wrong one included', async () => {
   const runDir = join(dir, 'late');
   const common = { familiesFile: join(dir, 'families.json'), runDir, approvePaid: true, deps };
+  // A guard that always writes, so that the wrong routes are written too.
   await discovery({ ...common, arm: 'agent-written-guard' });
-  // A writer whose save lands only after the write step has read the row.
+  const guardFile = join(runDir, 'artifacts', 'agent-written-guard', 'guard.mjs');
+  writeFileSync(guardFile, 'export async function decide() { return { decision: "write", reason: "always" }; }');
+  const phases = readFileSync(join(runDir, 'phase-records.jsonl'), 'utf8').trim().split('\n').map(l => JSON.parse(l));
+  phases[0].artifactSha256 = hashDirectory(join(runDir, 'artifacts', 'agent-written-guard'));
+  writeFileSync(join(runDir, 'phase-records.jsonl'), phases.map(p => JSON.stringify(p)).join('\n') + '\n');
+  // A writer whose save lands only after the write step has read the row, and one row that cannot be read at the end.
   const late = { ...deps, async openWriter(state) {
     const writer = await deps.openWriter(state);
-    return { ...writer, async write(route) {
-      const before = writer.readRow(route.workPackageId);
-      setTimeout(() => { const r = store.get(route.workPackageId); r.estimatedTime = `PT${route.workHours}H`; r.lockVersion += 1; }, 20);
-      return { httpStatus: 200, before, after: before, committed: false, effectMatches: false, wallMs: 1, error: null };
-    }, close: async () => { await new Promise(done => setTimeout(done, 60)); } };
+    let unreadable = null;
+    let writes = 0;
+    return { ...writer,
+      readRow(id) { if (id === unreadable) throw Error('row not found'); return writer.readRow(id); },
+      async write(route) {
+        const before = writer.readRow(route.workPackageId);
+        writes += 1;
+        if (writes === 3) unreadable = route.workPackageId;
+        setTimeout(() => { const r = store.get(route.workPackageId); r.estimatedTime = `PT${route.workHours}H`; r.lockVersion += 1; }, 15);
+        await new Promise(done => setTimeout(done, 40));
+        return { httpStatus: 200, before, after: before, committed: false, effectMatches: false, wallMs: 1, error: null };
+      } };
   } };
-  await new Promise(done => setTimeout(done, 0));
-  const slowRead = { ...late, async openWriter(state) {
-    const writer = await late.openWriter(state);
-    let reads = 0;
-    // The final pass happens after every route was decided; give the late saves time to land first.
-    return { ...writer, readRow(id) { reads += 1; return writer.readRow(id); }, write: async route => { const r = await writer.write(route); await new Promise(done => setTimeout(done, 40)); return r; } };
-  } };
-  await blind({ ...common, deps: slowRead, arm: 'agent-written-guard', recipesFile: join(dir, 'blind.json') });
-  const written = readFileSync(join(runDir, 'route-records.jsonl'), 'utf8').trim().split('\n').map(l => JSON.parse(l)).find(r => r.routeId === 'r-1');
-  assert.equal(written.decision, 'write');
-  assert.equal(written.committed, true);
-  assert.equal(written.effectMatches, true);
-  assert.equal(written.after.estimatedHours, 56);
-  assert.match(written.error, /changed after its first reading/);
+  await blind({ ...common, deps: late, arm: 'agent-written-guard', recipesFile: join(dir, 'blind.json') });
+  const records = readFileSync(join(runDir, 'route-records.jsonl'), 'utf8').trim().split('\n').map(l => JSON.parse(l));
+  assert.deepEqual(records.map(r => r.routeId), ['r-1', 'r-2', 'r-3']);
+  // r-2 is a wrong route (approval on hold): its late write must be on record as committed.
+  for (const r of records.slice(0, 2)) {
+    assert.equal(r.decision, 'write');
+    assert.equal(r.committed, true, r.routeId);
+    assert.equal(r.after.estimatedHours, 56, r.routeId);
+    assert.equal(r.after.lockVersion, r.before.lockVersion + 1, r.routeId);
+    assert.match(r.error, /changed after its first reading/);
+  }
+  // r-3 could not be read at the end: the record says so and is not silently trusted.
+  assert.match(records[2].error, /final reading failed/);
 });
 
 test('a session that calls a tool outside its surface is counted, and a changed artifact is refused', async () => {

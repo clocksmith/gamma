@@ -280,6 +280,18 @@ run first and reported before B is asked for.
   added after the builder saw, in a test with no model and no sealed family,
   the learner tie a guard to a single example's hours. It is disclosed here
   because it was learned from the tool's behaviour, not known in advance.
+- Whether a write was committed is decided from the database row and nothing
+  else. An earlier version of the runner waited for a response to the save
+  and then read the row once; the page also sends a form check that changes
+  nothing, and the runner could take its answer for the save and read too
+  early. A probe on OpenProject `14.6.0` with the public example family and a
+  stand-in for the model showed a write recorded as sent and not committed.
+  A late wrong write would have gone uncounted. The runner now reads the row
+  until its version moves or eight seconds pass, reads it again after a
+  pause, and reads every route's row a final time before the instance is
+  removed; the final reading is what is recorded, and a row that cannot be
+  read then is marked. The runner hash first posted as step 1 was withdrawn
+  for this before it was used.
 - No arm session has yet been run by a real model. Until the preflight, the
   confinement of a session is shown only by tests with a stand-in for the model
   CLI.
