@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -97,7 +97,12 @@ before(async () => {
     },
   };
 });
-after(() => { http.close(); rmSync(dir, { recursive: true, force: true }); });
+after(() => {
+  http.close();
+  // Set THREE_ARM_KEEP to a directory to keep the stand-in run's records, for trying them against the scorer.
+  if (process.env.THREE_ARM_KEEP) cpSync(dir, process.env.THREE_ARM_KEEP, { recursive: true });
+  rmSync(dir, { recursive: true, force: true });
+});
 
 const records = name => readFileSync(join(dir, 'run', name), 'utf8').trim().split('\n').map(l => JSON.parse(l));
 
