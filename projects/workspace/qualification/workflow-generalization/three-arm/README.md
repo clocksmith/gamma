@@ -77,3 +77,13 @@ Checked so far, all against a local OpenProject `14.0.0` started by
   maintenance session repaired its work, and the routes on the newer release
   were then decided correctly. The work frozen at the first upgrade was left
   unchanged.
+- Whole pipeline against the real OpenProject `14.0.0`, real Chrome and the
+  real guard sandbox, with the stand-in for the model and the public example
+  family (2026-11-23, no model call). First run: every arm stopped on every
+  route, valid ones included, because OpenProject returns 24 hours as `P1D`
+  and 40 as `P1DT16H`. The stand-in guard compared text, which was the
+  stand-in's fault; the `repair-boundary` arm's fact for the requested hours
+  was written `PT40H`, which was the runner's fault and would have made that
+  arm stop on any route of a day or more. Fixed in `repair-boundary-arm.mjs`;
+  the stand-in application in the tests now answers as the real one does.
+  The rerun is pending.

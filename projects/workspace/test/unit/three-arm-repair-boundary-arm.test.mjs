@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  createTeacher, decide, intendedEffect, observe, validateReadPlan,
+  createTeacher, decide, intendedEffect, observe, openProjectDuration, validateReadPlan,
 } from '../../qualification/workflow-generalization/three-arm/repair-boundary-arm.mjs';
 
 const PLAN = [
@@ -16,7 +16,7 @@ function app(records) {
     const id = Number(path.split('/').pop());
     const r = records[id];
     if (!r) return { ok: true, status: 404, body: { message: 'not found' } };
-    return { ok: true, status: 200, body: { id, lockVersion: 1, estimatedTime: `PT${r.hours}H`, subject: 'free text is never a fact',
+    return { ok: true, status: 200, body: { id, lockVersion: 1, estimatedTime: openProjectDuration(r.hours), subject: 'free text is never a fact',
       _links: { status: { href: `/api/v3/statuses/${r.status}` }, project: { href: '/api/v3/projects/1' },
         ...(r.parent ? { parent: { href: `/api/v3/work_packages/${r.parent}` } } : {}) } } };
   };
@@ -52,8 +52,8 @@ test('an observation holds the request and projected scalars, never free text or
   assert.equal(reads, 2);
   assert.deepEqual(rolesRead, ['record', 'approval']);
   assert.deepEqual(calls, ['/api/v3/work_packages/2', '/api/v3/work_packages/1']);
-  assert.equal(observation.facts['intent:/estimatedTime'], 'PT24H');
-  assert.equal(observation.facts['approval:/estimatedTime'], 'PT24H');
+  assert.equal(observation.facts['intent:/estimatedTime'], 'P1D');
+  assert.equal(observation.facts['approval:/estimatedTime'], 'P1D');
   assert.equal(observation.facts['approval:/statusCode'], APPROVED);
   assert.ok(Object.keys(observation.facts).every(k => !/subject|href|links/i.test(k)));
 });
@@ -70,7 +70,7 @@ test('teaching, freezing and deciding: the learned guard transfers to routes it 
   // One valid example is not enough: the cheapest guard that fits it pins the hours to 24.
   const narrow = teacher.learn('fam');
   assert.equal(narrow.status, 'learned');
-  assert.ok(narrow.guard.some(term => term.kind === 'equals-literal' && term.value === 'PT24H'));
+  assert.ok(narrow.guard.some(term => term.kind === 'equals-literal' && term.value === 'P1D'));
   await teacher.addExample('fam', 'valid', route(8, 40), get);
   const boundary = teacher.learn('fam');
   assert.equal(boundary.status, 'learned');
@@ -100,4 +100,9 @@ test('a family that was never taught, or cannot be separated, stops on every rou
   assert.equal(artifact.families.untaught.boundary.reason, 'never-learned');
   assert.equal((await decide(artifact, route(2, 24), get)).decision, 'stop');
   assert.equal((await decide(artifact, { ...route(2, 24), familyId: 'untaught' }, get)).decision, 'stop');
+});
+
+test('the requested hours are written as the application writes durations', () => {
+  // Observed on OpenProject 14.0.0: 8 hours is PT8H, 16 is PT16H, 24 is P1D, 40 is P1DT16H.
+  assert.deepEqual([8, 16, 24, 40, 48, 56, 1].map(openProjectDuration), ['PT8H', 'PT16H', 'P1D', 'P1DT16H', 'P2D', 'P2DT8H', 'PT1H']);
 });

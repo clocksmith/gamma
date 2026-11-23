@@ -47,13 +47,14 @@ const numbers = [...prompt.matchAll(/number (\d+) in project "([^"]+)"[^\n]*?(\d
 const familyId = prompt.match(/Family "([^"]+)"/)?.[1] ?? null;
 let structured = null;
 
-const GUARD = `export async function decide({ workPackageId, workHours, get }) {
+const GUARD = `const hours = d => { const m = String(d ?? '').match(/^P(?:(\\d+)D)?(?:T(?:(\\d+)H)?)?$/); return m ? Number(m[1] ?? 0) * 24 + Number(m[2] ?? 0) : null; };
+export async function decide({ workPackageId, workHours, get }) {
   const record = await get('/api/v3/work_packages/' + workPackageId);
   const parent = record.body?._links?.parent?.href;
   if (!parent) return { decision: 'stop', reason: 'no approval above it' };
   const approval = await get(parent);
   const approved = String(approval.body?._links?.status?.href ?? '').endsWith('/16');
-  const same = approval.body?.estimatedTime === 'PT' + workHours + 'H';
+  const same = hours(approval.body?.estimatedTime) === workHours;
   return approved && same ? { decision: 'write', reason: 'approved for these hours' } : { decision: 'stop', reason: 'approval does not cover this' };
 }
 `;
@@ -105,7 +106,8 @@ if (upgraded && tools.includes('try_guard')) {
   const record = await call('app_get', { path: `/api/v3/work_packages/${target.workPackageId}` });
   const parent = record.body?._links?.parent?.href;
   const approval = parent ? await call('app_get', { path: parent }) : null;
-  const ok = String(approval?.body?._links?.status?.href ?? '').endsWith('/16') && approval?.body?.estimatedTime === `PT${target.workHours}H`;
+  const asHours = d => { const m = String(d ?? '').match(/^P(?:(\d+)D)?(?:T(?:(\d+)H)?)?$/); return m ? Number(m[1] ?? 0) * 24 + Number(m[2] ?? 0) : null; };
+  const ok = String(approval?.body?._links?.status?.href ?? '').endsWith('/16') && asHours(approval?.body?.estimatedTime) === target.workHours;
   structured = { decision: ok ? 'write' : 'stop', reason: ok ? 'approved for these hours' : 'approval does not cover this' };
 }
 if (process.env.FAKE_CLAUDE_MISBEHAVE === '1') emitUse('Bash', { command: 'cat /etc/passwd' });

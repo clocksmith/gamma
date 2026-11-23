@@ -60,8 +60,10 @@ export function hashDirectory(dir) {
 /** The files whose bytes fix how the arms are instructed, confined, run and recorded. */
 export function frozenFileSet() {
   const files = [
-    // The scorer belongs to the evaluator and is frozen and hashed on its own.
-    ...listFiles(HERE).filter(f => !f.endsWith('example-recipes.json') && !relative(HERE, f).startsWith('scorer')),
+    // Left out: the scorer (the evaluator freezes it on its own), and the author's brief, the
+    // example recipes and the README, none of which an arm or the runner reads.
+    ...listFiles(HERE).filter(f => !relative(HERE, f).startsWith('scorer')
+      && !['example-recipes.json', 'task-contract-openproject.md', 'README.md'].includes(relative(HERE, f))),
     ...listFiles(join(QUALIFICATION, 'bringup')),
     join(QUALIFICATION, 'same-model-three-arm-preregistration.md'),
     join(QUALIFICATION, 'repair-boundary-qualification.mjs'),

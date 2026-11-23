@@ -12,7 +12,10 @@ const store = new Map();
 let nextId = 1;
 // Two ways a later release could break what an arm learned: statuses renumbered, or a call refused.
 const upgrade = { statusShift: 0, refuseParents: false };
-const view = r => ({ id: r.id, lockVersion: r.lockVersion, estimatedTime: r.estimatedTime, subject: r.subject,
+// Durations come back the way OpenProject writes them: 24 hours is P1D, 56 hours is P2DT8H.
+const toHours = d => { const m = String(d ?? '').match(/^P(?:(\d+)D)?(?:T(?:(\d+)H)?)?$/); return m ? Number(m[1] ?? 0) * 24 + Number(m[2] ?? 0) : null; };
+const fromHours = h => (h === null ? null : `P${Math.floor(h / 24) ? `${Math.floor(h / 24)}D` : ''}${h % 24 || !Math.floor(h / 24) ? `T${h % 24}H` : ''}`);
+const view = r => ({ id: r.id, lockVersion: r.lockVersion, estimatedTime: fromHours(toHours(r.estimatedTime)), subject: r.subject,
   _links: { status: { href: `/api/v3/statuses/${r.status}` }, project: { href: '/api/v3/projects/1' }, ...(r.parent ? { parent: { href: r.parent } } : {}) } });
 const http = createServer(async (req, res) => {
   let text = '';
@@ -71,7 +74,7 @@ before(async () => {
     recipe('r-2', 56, '{status.hold}', 56, 'direct'),
     recipe('r-3', 32, '{status.approved}', 56, 'relations-tab'),
   ] }));
-  const row = id => { const r = store.get(id); return { lockVersion: r.lockVersion, estimatedHours: r.estimatedTime ? Number(r.estimatedTime.slice(2, -1)) : null, remainingHours: null, statusId: r.status, journalCount: r.lockVersion + 1 }; };
+  const row = id => { const r = store.get(id); return { lockVersion: r.lockVersion, estimatedHours: toHours(r.estimatedTime), remainingHours: null, statusId: r.status, journalCount: r.lockVersion + 1 }; };
   deps = {
     executable: fileURLToPath(new URL('../support/fake-claude.mjs', import.meta.url)),
     stateFile: join(dir, 'state.json'),
@@ -113,7 +116,7 @@ test('the frozen file set is stable and covers the arms, the learner and the pla
   for (const needed of ['qualification/workflow-generalization/three-arm/instructions.mjs', 'qualification/workflow-generalization/three-arm/runner.mjs',
     'qualification/workflow-generalization/three-arm/arm-server.mjs', 'src/client/repair-boundary.js',
     'qualification/workflow-generalization/same-model-three-arm-preregistration.md']) assert.ok(files.includes(needed), needed);
-  assert.ok(!files.some(f => f.endsWith('example-recipes.json') || f.includes('/scorer/')));
+  assert.ok(!files.some(f => /example-recipes\.json$|task-contract|three-arm\/README\.md$|\/scorer\//.test(f)));
 });
 
 test('a paid phase refuses to start without approval', async () => {

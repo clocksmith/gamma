@@ -256,6 +256,14 @@ run first and reported before B is asked for.
   families existed, but what it cost to write is not measured here, and the
   learner can see nothing the adapter does not pass on. The arm's instructions
   also tell the model what kinds of fact the learner can see.
+- The `repair-boundary` arm is also given one fact for the hours a route asks
+  to write, in the form OpenProject itself writes a duration (24 hours is
+  `P1D`). The builder supplied that form after a run of the whole pipeline
+  against the real application with a stand-in for the model, on the public
+  example family, in which every arm stopped: written as `PT24H` the fact
+  could never equal what the application returns. No sealed family was
+  involved. The guard-writing arm is told nothing about durations and has to
+  find this out through the application.
 - The `repair-boundary` instructions carry the learner's manual, including the
   advice to give at least two valid examples that differ. That advice was
   added after the builder saw, in a test with no model and no sealed family,
