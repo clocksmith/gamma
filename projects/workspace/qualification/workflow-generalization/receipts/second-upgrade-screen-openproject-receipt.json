@@ -2134,7 +2134,13 @@
   "notScreenedThroughCheck1": [
    "17.9.0"
   ],
-  "againstExpectation": "as expected on every screened release: check 4 met, check 1 not met",
-  "reading": "From 14.1.0 to 17.8.0 the page write recorded for 14.0.0 still commits on a valid route, three times out of three, on every release. No stock OpenProject release in that range is a second upgrade that bites for the public family. From 16.4.0 the frozen seeder cannot create its projects, so those releases were screened with the approved screening seeder and are marked so."
+  "againstExpectation": "check 4 met and check 1 not met on every screened release, as expected. Not as expected: on three releases the old write committed 2 of 3, not 3 of 3.",
+  "reading": "From 14.1.0 to 17.8.0 the page write recorded for 14.0.0 still commits on a valid route: three times out of three on 25 releases, and two out of three on 15.3.0, 16.5.0 and 16.6.0. Check 1 needs none of three, so it is not met anywhere, and no stock OpenProject release in that range is a second upgrade that bites for the public family. On those three releases it was the first write of the browser session that answered 200 and changed no row within the wait, with no error. That is a fault in the page write step or in how it meets the page, not a release that broke the workflow, and it is being looked into separately because the same step is used in Stage A. From 16.4.0 the frozen seeder cannot create its projects, so those releases were screened with the approved screening seeder and are marked so.",
+  "oldWriteCommitted2of3": [
+   "15.3.0",
+   "16.5.0",
+   "16.6.0"
+  ],
+  "correction": "An earlier version of this summary, committed at c97987b61, said three out of three on every release. That was wrong for the three releases named here."
  }
 }
