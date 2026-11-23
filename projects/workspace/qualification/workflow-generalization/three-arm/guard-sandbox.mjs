@@ -14,7 +14,7 @@ export const GUARD_IMAGE = 'node:22-alpine';
 
 /**
  * `guardDir` holds guard.mjs, which exports `async decide({ familyId, project,
- * workPackageId, workHours, get })` and resolves to { decision: 'write' | 'stop', reason }.
+ * workPackageId, workHours, workDuration, get })` and resolves to { decision: 'write' | 'stop', reason }.
  * `get(path)` resolves to what the decision surface returned.
  */
 export function runGuard({ guardDir, route, get, timeoutMs = 20000, image = GUARD_IMAGE, spawnProcess = spawn }) {

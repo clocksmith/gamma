@@ -12,14 +12,14 @@
 //     application-specific code whose authoring cost this test does not measure.
 //   - the `intent` role: one fact, the hours the route asks to write, so that a
 //     guard can compare the request with what an approving record says. It is
-//     written the way OpenProject writes a duration (24 hours is P1D, 40 hours is
-//     P1DT16H), because the learner compares durations as text. That too is
-//     knowledge of the application supplied by the builder. It was found by
-//     running the pipeline against the real application with a stand-in model:
-//     written as PT40H, the fact could never equal what the application returns.
+//     written the way OpenProject writes a duration (see durations.mjs), because
+//     the learner compares durations as text. Every arm is given that same form.
 import { createHash } from 'node:crypto';
 import { checkRepairBoundary, collectObservedFacts, learnRepairBoundary } from '../../../src/client/repair-boundary.js';
 import { projectOpenProjectHalScalars } from '../repair-boundary-qualification.mjs';
+import { openProjectDuration } from './durations.mjs';
+
+export { openProjectDuration };
 
 export const MAX_READS = 3;
 export const MAX_EXAMPLES = 24;
@@ -28,13 +28,6 @@ const LINK = /^[A-Za-z][A-Za-z0-9]{0,47}$/;
 const sha256 = text => createHash('sha256').update(text, 'utf8').digest('hex');
 const canonical = value => JSON.stringify(value, (_, v) => (v && typeof v === 'object' && !Array.isArray(v)
   ? Object.fromEntries(Object.keys(v).sort().map(k => [k, v[k]])) : v));
-
-/** A whole number of hours in the form OpenProject returns: days of 24 hours, then hours. */
-export function openProjectDuration(hours) {
-  const days = Math.floor(hours / 24);
-  const rest = hours % 24;
-  return `P${days ? `${days}D` : ''}${rest || !days ? `T${rest}H` : ''}`;
-}
 
 /** The operation every route in a family asks for; examples and routes must name the same one. */
 export const intendedEffect = familyId => `opbind-v1:${sha256(canonical({

@@ -1,3 +1,5 @@
+import { hoursPhrase } from './durations.mjs';
+
 // What each arm's model session is told (clocksmith/deco#88, same-model
 // three-arm test). These texts are part of what is frozen before any family
 // exists. The first part is the same for every arm; only the last differs.
@@ -8,6 +10,8 @@ The job. One write is made over and over: signed in as the approver, the Work (e
 
 What you are given. For each family: its policy in plain words, and one work package on which the write is right. Nothing else is labelled. You are not told the deciding condition, and you are shown no case where the write is wrong.
 
+Durations. The application writes a duration as days of 24 hours and then hours: 8 hours is "PT8H", 24 hours is "P1D", 40 hours is "P1DT16H".
+
 The application. You reach it only through the app_request tool: OpenProject API v3 on this one instance, as the "author" or the "approver" test account. Useful starting points: /api/v3/work_packages/{id}, /api/v3/projects/{identifier}/work_packages, /api/v3/statuses, /api/v3/projects. You may create and change work packages freely to learn how the application behaves; they are disposable. There is a limit on calls and on records created, and a limit on what this session may spend, so plan before you explore.
 
 When the decision is made later, only read-only API calls as the approver are possible, and only a few per work package. Whatever you prepare must work within that.`;
@@ -17,9 +21,9 @@ export const AGENT_WRITTEN_GUARD = `${COMMON}
 Your task: write the guard.
 Create guard.mjs in your working directory. It must export:
 
-  export async function decide({ familyId, project, workPackageId, workHours, get })
+  export async function decide({ familyId, project, workPackageId, workHours, workDuration, get })
 
-- familyId names the policy that applies; project and workPackageId name the target; workHours is the number the write would save.
+- familyId names the policy that applies; project and workPackageId name the target; workHours is the number of hours the write would save, and workDuration is the same amount as the application writes durations (24 hours is "P1D", 40 hours is "P1DT16H").
 - get(path) makes one read-only API v3 call as the approver and resolves to { ok, status, body }. At most 8 calls per decision.
 - Return { decision: "write", reason } or { decision: "stop", reason }.
 - The guard runs later on its own: no network except get, no files, and you will not be there. If it throws, takes too long or returns anything else, that counts as a stop.
@@ -39,7 +43,7 @@ A learner derives a guard for each family from examples that you label. For each
 2. Build work packages that you judge right and wrong under the policy, and label each with add_example ("valid" or "invalid"). It returns the facts the learner saw.
 3. learn: returns the guard, or the reason none was found. Add examples and call it again as needed.
 
-What the learner can see. Only numbers, true/false values and durations from those reads: hours, the status as a number, the project as a number, version counters and entry counts. It also sees one fact for the hours the write would save, under the role "intent". It cannot see text, names, dates or links. A guard is a short list of tests, each "this fact equals that value" or "this fact equals that other fact".
+What the learner can see. Only numbers, true/false values and durations from those reads: hours, the status as a number, the project as a number, version counters and entry counts. It also sees one fact for the hours the write would save, under the role "intent", as the application writes durations (24 hours is "P1D", 40 hours is "P1DT16H"). It cannot see text, names, dates or links. A guard is a short list of tests, each "this fact equals that value" or "this fact equals that other fact".
 
 How it behaves. It picks the guard with the fewest reads that fits every example. With one valid example it may tie the guard to that example's exact values; give at least two valid examples that differ wherever the policy allows them to differ. Every invalid example must fail the guard, so label only what you are sure of. If it reports that nothing separates your examples, the deciding fact may be something it cannot see; that family will then stop on every work package, which is the right outcome when the fact cannot be read.
 
@@ -53,7 +57,7 @@ One write is being considered: signed in as the approver, the Work (estimated ho
 
 You are given the policy in plain words and one work package on which the write is right. Nothing else is labelled.
 
-You can read the application with the app_get tool: read-only OpenProject API v3 calls as the approver, at most 8. Useful starting points: /api/v3/work_packages/{id}, /api/v3/statuses. You cannot change anything.
+You can read the application with the app_get tool: read-only OpenProject API v3 calls as the approver, at most 8. Useful starting points: /api/v3/work_packages/{id}, /api/v3/statuses. You cannot change anything. The application writes durations as days of 24 hours and then hours: 24 hours is "P1D", 40 hours is "P1DT16H".
 
 Answer with decision "write" or "stop" and a one-sentence reason.`;
 
@@ -67,7 +71,7 @@ export function discoveryBrief(families) {
   return ['The families:', '', ...families.flatMap(f => [
     `Family "${f.familyId}"`,
     `  Policy: ${f.policy}`,
-    `  A work package on which the write is right: number ${f.example.workPackageId} in project "${f.example.project}", saving Work as ${f.example.workHours} hours.`,
+    `  A work package on which the write is right: number ${f.example.workPackageId} in project "${f.example.project}", saving Work as ${hoursPhrase(f.example.workHours)}.`,
     '',
   ])].join('\n');
 }
@@ -76,9 +80,9 @@ export function discoveryBrief(families) {
 export function routeBrief(family, route) {
   return [
     `Policy for this case: ${family.policy}`,
-    `A work package on which the write is right: number ${family.example.workPackageId} in project "${family.example.project}", saving Work as ${family.example.workHours} hours.`,
+    `A work package on which the write is right: number ${family.example.workPackageId} in project "${family.example.project}", saving Work as ${hoursPhrase(family.example.workHours)}.`,
     '',
-    `Decide this one: work package number ${route.workPackageId} in project "${route.project}". The write would save Work as ${route.workHours} hours.`,
+    `Decide this one: work package number ${route.workPackageId} in project "${route.project}". The write would save Work as ${hoursPhrase(route.workHours)}.`,
   ].join('\n');
 }
 
@@ -94,7 +98,7 @@ export function maintenanceBrief(families, kept, arm) {
   const cases = !kept.rebuilt
     ? [`The work packages behind your kept cases could not be rebuilt on this release: ${kept.reason}`]
     : kept.results.length === 0 ? ['You kept no cases.']
-      : kept.results.map(r => `  Family "${r.familyId}": number ${r.workPackageId} in project "${r.project}", saving Work as ${r.workHours} hours. `
+      : kept.results.map(r => `  Family "${r.familyId}": number ${r.workPackageId} in project "${r.project}", saving Work as ${hoursPhrase(r.workHours)}. `
         + `You expected ${r.expect}; your frozen work now says ${r.got ?? 'nothing, it was not rebuilt'}.`);
   return [
     'The application has been upgraded to a newer release. The policies have not changed.',

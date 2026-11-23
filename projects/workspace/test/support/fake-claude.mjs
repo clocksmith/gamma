@@ -69,7 +69,7 @@ const build = async (hours, status) => {
 };
 
 const upgraded = prompt.startsWith('The application has been upgraded');
-const keptLines = [...prompt.matchAll(/Family "([^"]+)": number (\d+) in project "([^"]+)", saving Work as (\d+) hours\. You expected (write|stop)/g)]
+const keptLines = [...prompt.matchAll(/Family "([^"]+)": number (\d+) in project "([^"]+)", saving Work as (\d+) hours[^\n]*?You expected (write|stop)/g)]
   .map(m => ({ familyId: m[1], workPackageId: Number(m[2]), project: m[3], workHours: Number(m[4]), expect: m[5] }));
 
 if (upgraded && tools.includes('try_guard')) {

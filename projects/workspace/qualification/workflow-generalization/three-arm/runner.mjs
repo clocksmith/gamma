@@ -21,6 +21,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { auditSessionLog, createAppSurface, DEFAULT_LIMITS } from './app-surface.mjs';
+import { withDuration } from './durations.mjs';
 import { runGuard } from './guard-sandbox.mjs';
 import * as instructions from './instructions.mjs';
 import { openProjectRequester, provisionRecipe, readState, validateRecipe, validateRecipeFile } from './provision.mjs';
@@ -112,7 +113,7 @@ function serverFor({ arm, phase, runDir, workDir, familyIds, label, stateFile, r
   };
 }
 
-function defaultDeps() {
+export function defaultDeps() {
   const bringup = join(QUALIFICATION, 'bringup');
   return {
     executable: process.env.GAMMATRON_CLAUDE_BIN ?? 'claude',
@@ -260,7 +261,7 @@ function caseDecider({ arm, runDir, deps, request }) {
   const get = () => { const read = createAppSurface({ mode: 'decision', request, limits: CONFIG.limits }).tools.app_get; return path => read({ path }); };
   if (arm === 'agent-written-guard') {
     const guardDir = join(runDir, 'artifacts', 'agent-written-guard');
-    return kept => deps.guardRunner({ guardDir, route: kept, get: get() });
+    return kept => deps.guardRunner({ guardDir, route: withDuration(kept), get: get() });
   }
   const artifact = JSON.parse(readFileSync(join(runDir, 'artifacts', 'repair-boundary.json'), 'utf8'));
   return kept => decideWithBoundary(artifact, kept, get());
@@ -416,7 +417,7 @@ export async function blind({ arm, familiesFile, recipesFile, runDir, approvePai
           log: entry => appendFileSync(surfaceLog, JSON.stringify({ arm, routeId: route.routeId, ...entry }) + '\n') }).tools.app_get;
         if (arm === 'agent-written-guard') {
           const get = reader();
-          const result = await deps.guardRunner({ guardDir, route, get: path => get({ path }) });
+          const result = await deps.guardRunner({ guardDir, route: withDuration(route), get: path => get({ path }) });
           answer = { ...answer, decision: result.decision, reason: result.reason, reads: result.reads, error: result.error };
         } else if (arm === 'repair-boundary') {
           const get = reader();

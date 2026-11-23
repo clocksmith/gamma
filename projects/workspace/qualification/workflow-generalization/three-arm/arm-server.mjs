@@ -13,6 +13,7 @@ import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createAppSurface, createToolHandler, DEFAULT_LIMITS, serveStdio, TOOL_DEFINITIONS } from './app-surface.mjs';
+import { withDuration } from './durations.mjs';
 import { runGuard } from './guard-sandbox.mjs';
 import { openProjectRequester, readState } from './provision.mjs';
 import { createTeacher } from './repair-boundary-arm.mjs';
@@ -81,7 +82,7 @@ export function createArmTools({ arm, phase, request, log = () => {}, trace = ()
   if (arm === 'agent-written-guard') {
     tools.try_guard = async input => {
       const route = routeFrom(input);
-      const result = await guardRunner({ guardDir: workDir, route, get: path => reader()({ path }) });
+      const result = await guardRunner({ guardDir: workDir, route: withDuration(route), get: path => reader()({ path }) });
       note('try_guard', { workPackageId: route.workPackageId, decision: result.decision, reads: result.reads });
       return { ok: true, decision: result.decision, reason: result.reason, error: result.error, reads: result.reads };
     };
