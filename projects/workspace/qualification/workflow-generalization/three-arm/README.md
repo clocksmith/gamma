@@ -9,13 +9,24 @@ Nothing here calls a model.
 | `task-contract-openproject.md` | the family author | The whole brief for writing policies, routes and the answer key |
 | `provision.mjs`, `example-recipes.json` | the family author and the runner | The route-recipe format and the tool that checks and builds recipes |
 | `route-record.md`, `route-record.schema.json` | the scorer | The records the runner emits, and what the scorer computes from them |
-| `app-surface.mjs` | the runner | The one tool an arm session reaches the application through, its call log, and the audit of a session's tool calls |
+| `runner.mjs` | the operator | `hash`, `preflight`, `discovery` and `blind`; the spend ledger and the stage cap |
+| `instructions.mjs` | the operator | What each arm's model session is told |
+| `session.mjs` | the runner | Starts one model session with no shell, no web tool and one MCP server, and keeps its event log |
+| `arm-server.mjs`, `app-surface.mjs` | the runner | The one MCP server a session talks to: API calls on the instance under test, plus the arm's own tools; the audit of a session's tool calls |
+| `guard-sandbox.mjs`, `guard-host.mjs` | the runner | Runs a model-written guard in a container with no network |
+| `repair-boundary-arm.mjs` | the runner | Read plans, labelled examples, the unchanged learner, and deciding a route from the frozen guard |
 | `write-step.mjs` | the runner | The one write every arm shares, made through the page, and the database read before and after |
 
-Not built yet: the runner itself (discovery, freezing, building routes per arm,
-asking each arm), the sandbox a model-written guard runs in, and the arms'
-instructions. Until those are committed and their hash is posted on the issue,
-step 1 of the freezing order has not happened.
+## State
+
+Built and tested without a model. **No model session has run.** Step 0 of the
+freezing order (the preflight) needs the owner's approval, and so does Stage A.
+Maintenance at a second upgrade (Stage B) and ERPNext are not built.
+
+```text
+node three-arm/runner.mjs hash                 # the hash for step 1, no cost
+node --test test/unit/three-arm-*.test.mjs     # from projects/workspace
+```
 
 Checked so far, all against a local OpenProject `14.0.0` started by
 `../bringup/openproject-up.sh`:
@@ -34,5 +45,18 @@ Checked so far, all against a local OpenProject `14.0.0` started by
   tool off the allowed list and any file tool aimed outside the working
   directory. None of this has been exercised by a model session yet: that
   first happens in a paid run, where the audit is the check.
-- Unit tests, from `projects/workspace`:
-  `node --test test/unit/three-arm-provision.test.mjs test/unit/three-arm-app-surface.test.mjs`
+- `guard-sandbox.mjs`, with real containers: a guard that tries the network,
+  writes a file, never answers, returns the wrong shape or forges an answer
+  line ends as a stop.
+- `repair-boundary-arm.mjs`: a learned guard transfers to work packages it was
+  not taught on. With a single valid example the learner ties the guard to
+  that example's hours; a second valid example with different hours fixes it.
+  The arm's instructions say so.
+- `runner.mjs`, end to end with a stand-in for the model CLI and a stand-in
+  application: all three arms go through discovery, freezing, three unseen
+  routes and records. The records carry no label and match the published
+  schema. A tool call outside the surface is counted. A guard changed after
+  its freeze is refused. A paid phase refuses to start without
+  `--approve-paid`. This test found one real fault before any spend: the
+  working directory has to be given as its real path, or the audit flags the
+  session's own files.

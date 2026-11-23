@@ -101,7 +101,7 @@ export function createAppSurface({ mode, request, log = () => {}, limits = DEFAU
   return Object.freeze({ mode, tools, counts: () => ({ ...counts }) });
 }
 
-const TOOL_DEFINITIONS = Object.freeze({
+export const TOOL_DEFINITIONS = Object.freeze({
   app_request: {
     name: 'app_request',
     description: 'Make one OpenProject API v3 call on the instance under test, as the author or the approver test account. '
@@ -123,10 +123,12 @@ const TOOL_DEFINITIONS = Object.freeze({
   },
 });
 
-/** Minimal MCP server over newline-delimited JSON-RPC: initialize, ping, tools/list, tools/call. */
-export function createMcpHandler(surface, write) {
+/**
+ * Minimal MCP server over newline-delimited JSON-RPC: initialize, ping, tools/list, tools/call.
+ * `tools` maps a name to an async function returning an object with `ok`; `definitions` lists what the model is shown.
+ */
+export function createToolHandler({ tools, definitions }, write) {
   const versions = ['2025-06-18', '2025-03-26', '2024-11-05'];
-  const tools = Object.keys(surface.tools).map(name => TOOL_DEFINITIONS[name]);
   return async message => {
     const id = message?.id;
     const reply = result => { if (id !== undefined) write({ jsonrpc: '2.0', id, result }); };
@@ -140,11 +142,16 @@ export function createMcpHandler(surface, write) {
           capabilities: { tools: { listChanged: false } }, serverInfo: { name: 'gammatron-arm-app', version: '1.0.0' } });
       }
       if (method === 'ping') return reply({});
-      if (method === 'tools/list') return reply({ tools });
+      if (method === 'tools/list') return reply({ tools: definitions });
       if (method === 'tools/call') {
-        const tool = Object.hasOwn(surface.tools, params.name) ? surface.tools[params.name] : null;
-        const result = tool ? await tool(params.arguments ?? {}) : { ok: false, refused: `no such tool: ${String(params.name).slice(0, 64)}` };
-        return reply({ content: [{ type: 'text', text: JSON.stringify(result) }], ...(result.ok ? {} : { isError: true }) });
+        const tool = Object.hasOwn(tools, params.name) ? tools[params.name] : null;
+        let result;
+        try {
+          result = tool ? await tool(params.arguments ?? {}) : { ok: false, refused: `no such tool: ${String(params.name).slice(0, 64)}` };
+        } catch (error) {
+          result = { ok: false, error: String(error?.message ?? error).slice(0, 300) };
+        }
+        return reply({ content: [{ type: 'text', text: JSON.stringify(result) }], ...(result?.ok ? {} : { isError: true }) });
       }
       if (method.startsWith('notifications/')) return undefined;
       return fail(-32601, `Method not found: ${method}`);
@@ -152,6 +159,24 @@ export function createMcpHandler(surface, write) {
       return fail(-32603, String(error?.message ?? error).slice(0, 300));
     }
   };
+}
+
+export function createMcpHandler(surface, write) {
+  return createToolHandler({ tools: surface.tools, definitions: Object.keys(surface.tools).map(name => TOOL_DEFINITIONS[name]) }, write);
+}
+
+/** Reads JSON-RPC lines from stdin and answers on stdout, one message at a time. */
+export function serveStdio(handle) {
+  let chain = Promise.resolve();
+  readline.createInterface({ input: process.stdin, crlfDelay: Infinity }).on('line', line => {
+    if (!line.trim()) return;
+    let message;
+    try { message = JSON.parse(line); } catch {
+      process.stdout.write(JSON.stringify({ jsonrpc: '2.0', id: null, error: { code: -32700, message: 'Parse error' } }) + '\n');
+      return;
+    }
+    chain = chain.then(() => handle(message));
+  });
 }
 
 /**
@@ -197,17 +222,7 @@ async function main() {
     limits: { ...DEFAULT_LIMITS, ...(config.limits ?? {}) },
     log: entry => appendFileSync(config.logFile, JSON.stringify({ arm: config.arm ?? null, ...entry }) + '\n', { mode: 0o600 }),
   });
-  const handle = createMcpHandler(surface, message => process.stdout.write(JSON.stringify(message) + '\n'));
-  let chain = Promise.resolve();
-  readline.createInterface({ input: process.stdin, crlfDelay: Infinity }).on('line', line => {
-    if (!line.trim()) return;
-    let message;
-    try { message = JSON.parse(line); } catch {
-      process.stdout.write(JSON.stringify({ jsonrpc: '2.0', id: null, error: { code: -32700, message: 'Parse error' } }) + '\n');
-      return;
-    }
-    chain = chain.then(() => handle(message));
-  });
+  serveStdio(createMcpHandler(surface, message => process.stdout.write(JSON.stringify(message) + '\n')));
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await main();

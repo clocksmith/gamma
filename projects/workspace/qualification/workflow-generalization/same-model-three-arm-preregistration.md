@@ -86,8 +86,11 @@ Written by the family author under the task contract, not by the operator.
   routes, two valid and two invalid. That is 16 unseen routes per application
   per upgrade, 8 valid and 8 invalid, reached by four different ways of
   arriving at the target.
-- A route is a recipe of API calls. Each arm gets its own fresh build of every
-  route, so one arm's write cannot change what another sees.
+- A route is a recipe of API calls. Each arm gets its own fresh instance of
+  the application for discovery and another for the unseen routes, and its own
+  build of every route, so no arm can see a record another arm made or wrote.
+- Each route names its family, and an arm deciding a route is told which
+  policy applies.
 - Recipes carry no label. The answer key is a separate file that the operator
   never receives.
 
@@ -95,8 +98,15 @@ Written by the family author under the task contract, not by the operator.
 
 Each step is posted on the issue with a SHA-256 before the next begins.
 
+0. **Preflight.** Two short model sessions, at most `$0.05` each, that touch no
+   family: one with the tools of a discovery session and one with the tools of
+   a deciding session. They prove that the model CLI gives a session exactly
+   the tools listed in Section 3 and nothing else. This is the only step that
+   may change the runner after a model has been called, and it happens before
+   any family exists. It needs the owner's approval like any other spend.
 1. **Runner frozen.** The operator posts the commit of the runner, the arms'
-   instructions and tool definitions, this document and the record format.
+   instructions and tool definitions, this document and the record format, and
+   the single hash that `three-arm/runner.mjs hash` prints over all of them.
 2. **Evaluation frozen.** The custodian posts the hashes of `families.json`,
    both unseen-route files, the answer key and the scorer, and of the pass rule
    in Section 9 at the commit from step 1.
@@ -194,8 +204,20 @@ decides nothing on its own.
 | B | OpenProject second upgrade and all of ERPNext, primary model | `$8` to `$15` | needs a new cap |
 | C | Check model, both applications, both upgrades | `$10` to `$20` | needs a new cap |
 
+Limits for Stage A, the same for every arm that uses them and fixed in
+`three-arm/runner.mjs`:
+
+| Limit | Value |
+| --- | --- |
+| Discovery session, per arm | `$0.60` of model spend, 20 minutes, 400 application calls, 60 records created |
+| Deciding one route with a model session (`always-replan` only) | `$0.08`, 3 minutes |
+| Reads to decide one route, any arm | 8; the `repair-boundary` read plan is at most 3 |
+| A model-written guard deciding one route | 20 seconds, no network, read-only file system |
+| Stage A in total, enforced by the runner | `$3.00` |
+
 Every session has its own budget limit, and the runner stops before a call that
-could cross the stage cap. No stage starts until steps 1 and 2 of Section 6 are
+could cross the stage cap. A session that reports no cost is charged its whole
+budget. No stage starts until steps 1 and 2 of Section 6 are
 posted and the owner has approved that stage in words on the issue. Stage A is
 run first and reported before B is asked for.
 
@@ -207,5 +229,14 @@ run first and reported before B is asked for.
   large difference, not a small one.
 - One run per arm per stage. Model sessions vary from run to run, and this
   design does not measure that variation.
+- The `repair-boundary` arm includes application-specific code that a person
+  wrote for Gates 3 and 4: an adapter that turns OpenProject status and project
+  links into numbers the learner can compare. It was fixed before these
+  families existed, but what it cost to write is not measured here, and the
+  learner can see nothing the adapter does not pass on. The arm's instructions
+  also tell the model what kinds of fact the learner can see.
+- No arm session has yet been run by a real model. Until the preflight, the
+  confinement of a session is shown only by tests with a stand-in for the model
+  CLI.
 - No person takes part. A human trial is optional and answers a different
   question: what it costs a person, not whether the learner beats the model.
