@@ -89,3 +89,10 @@ test('a write that would change nothing is refused', async () => {
   const { request } = fakeServer({ storedHours: 'PT24H' });
   await assert.rejects(provisionRecipe(examples.recipes[0], { request, seed }), /already holds 24 hours/);
 });
+
+test('the Work field must hold exactly the hours asked before Save is pressed', async () => {
+  const { fieldHoldsHours } = await import('../../qualification/workflow-generalization/three-arm/write-step.mjs');
+  for (const ok of ['56', ' 56 ', '56h', '56.0']) assert.equal(fieldHoldsHours(ok, 56), true, ok);
+  // 856 and 8h56 are what the page was seen to end up with when the hours typed were joined to the old value.
+  for (const bad of ['856', '8h56', '8', '8h', '', null, '56 56', '5.6', '56m']) assert.equal(fieldHoldsHours(bad, 56), false, String(bad));
+});
