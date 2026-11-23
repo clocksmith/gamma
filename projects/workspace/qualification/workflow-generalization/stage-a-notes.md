@@ -136,6 +136,18 @@ the routes on which two arms differ.
   stop with an `error`. The number of such routes per arm is reported beside
   the arm's stops, because they are not the arm's decision.
 
+- A limit that matters from the second upgrade on, not in Stage A itself: when
+  an arm's kept cases are rebuilt on another release, the OpenProject rebuild
+  replays the arm's recorded calls, and a recorded change carries the lock
+  version the arm sent. That has only been exercised in the recorded order on
+  a fresh database (on `14.0.0`, `14.6.0` and `15.0.0`, with the public
+  family). On ERPNext the same kind of replay failed once, on a stale modified
+  time, and was fixed there. The frozen OpenProject file is unchanged; if a
+  rebuild fails for this reason at the second upgrade it is reported as a
+  rebuild failure of the runner, not as a regression the arm's cases caught.
+  Added 2026-11-23 14:05 UTC at the coordinator's request, still before any
+  Stage A number exists.
+
 ## 5. Results
 
 Empty until the stage has run.
