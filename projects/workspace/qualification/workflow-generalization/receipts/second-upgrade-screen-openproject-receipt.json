@@ -2040,7 +2040,14 @@
     "attempt 2: failed after the candidate release was reached; Command failed: ./screening/openproject-up.sh 14.0.0-slim 17.9.0-slim"
    ],
    "stopAndAsk": true,
-   "endedAt": "2026-11-23T16:53:15.116Z"
+   "endedAt": "2026-11-23T16:53:15.116Z",
+   "furtherAdaptationTried": {
+    "at": "2026-11-23T17:50:00Z",
+    "allowedBy": "the evaluator, one further adaptation under amendment 2, diff first",
+    "what": "on a throwaway database, off the leased ports, the screening seeder was changed to choose the work package type without the is_default column",
+    "result": "it got one step further and failed on 'column workflows.type_id does not exist': 17.9.0 also restructured its workflow table, which the seeder uses to say who may move a work package between statuses",
+    "outcome": "stopped, as the evaluator's condition required: that is more than choosing the type. The approved screening seeder was restored byte for byte and nothing of the attempt was committed. 17.9.0 is not screened."
+   }
   }
  ],
  "releasesInOrder": [
@@ -2132,7 +2139,7 @@
   "oldWriteCommitted3of3": 25,
   "releasesThatBite": [],
   "notScreenedThroughCheck1": [
-   "17.9.0"
+   "17.9.0: neither seeder can seed it, and the one further adaptation allowed was not enough"
   ],
   "againstExpectation": "check 4 met and check 1 not met on every screened release, as expected. Not as expected: on three releases the old write committed 2 of 3, not 3 of 3.",
   "reading": "From 14.1.0 to 17.8.0 the page write recorded for 14.0.0 still commits on a valid route: three times out of three on 25 releases, and two out of three on 15.3.0, 16.5.0 and 16.6.0. Check 1 needs none of three, so it is not met anywhere, and no stock OpenProject release in that range is a second upgrade that bites for the public family. On those three releases it was the first write of the browser session that answered 200 and changed no row within the wait, with no error. That is a fault in the page write step or in how it meets the page, not a release that broke the workflow, and it is being looked into separately because the same step is used in Stage A. From 16.4.0 the frozen seeder cannot create its projects, so those releases were screened with the approved screening seeder and are marked so.",
