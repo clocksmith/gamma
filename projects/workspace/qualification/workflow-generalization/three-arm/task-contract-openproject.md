@@ -140,7 +140,8 @@ to a work package needs no lock version from you; the tool supplies it.
 | `blind-recipes-upgrade-1.json`, `blind-recipes-upgrade-2.json` | `{ "recipes": [ <recipe>, ... ] }`, 16 each, in an order that does not group valid with valid | The operator, one upgrade at a time, only after every approver's work for that upgrade is frozen |
 | `answer-key.json` | `{ "routes": { "<routeId>": { "valid": true or false, "why": "one sentence" } } }` for all 32 | The scorer only. Never the operator. |
 
-Route identifiers must not hint at the label or the family.
+Route identifiers must not hint at the label. Each route names its family, and
+an approver deciding a route is told which family's policy applies.
 
 Give all files to the coordinator, who keeps them and posts their SHA-256
 hashes on the issue before any approver runs. Do not put them in this
