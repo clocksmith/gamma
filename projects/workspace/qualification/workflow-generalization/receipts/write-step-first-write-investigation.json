@@ -1,0 +1,92 @@
+{
+ "schema": "gammatron-write-step-investigation/v1",
+ "issue": "clocksmith/deco#88",
+ "at": "2026-11-23T17:45:00Z",
+ "model": "none",
+ "modelSpendUsd": 0,
+ "question": "In the release screen the old page write answered 200 and changed no row on the first of three writes on 15.3.0, 16.5.0 and 16.6.0 (and once on 14.6.0 in the morning's probe). Is that a fault of the frozen write step, and can it happen on 14.0.0, which Stage A uses?",
+ "cases": "the public example family on disposable records; the frozen three-arm/write-step.mjs unchanged",
+ "rounds": [
+  {
+   "round": 1,
+   "what": "one write per fresh sign-in on a warm instance, the dialog's field and the request logged",
+   "results": {
+    "14.0.0": "misses 0 of 10",
+    "16.6.0": "misses 0 of 10"
+   },
+   "seen": "the field held the hours typed before Save; the form check was sent, then one save carrying the hours typed; the row changed within about 0.3 s"
+  },
+  {
+   "round": 2,
+   "what": "the frozen executeWorkWrite itself on a warm instance, a new browser per write",
+   "results": {
+    "16.6.0": "misses 0 of 40",
+    "14.0.0": "misses 0 of 40"
+   }
+  },
+  {
+   "round": 3,
+   "what": "the frozen executeWorkWrite as the first page action after the release's container was restarted and had answered five API calls in a row; every request and answer on the work package timed",
+   "results": {
+    "16.6.0": {
+     "writes": 20,
+     "rowUnchanged": 1,
+     "wrongValueWritten": 1,
+     "asIntended": 18
+    },
+    "14.0.0": {
+     "writes": 20,
+     "rowUnchanged": 0,
+     "wrongValueWritten": 0,
+     "asIntended": 20
+    }
+   },
+   "anomalies": [
+    {
+     "release": "16.6.0",
+     "trial": 2,
+     "committed": false,
+     "hoursSent": "56",
+     "rowHours": [
+      8,
+      8
+     ],
+     "saveStatus": 200,
+     "order": [
+      "form-check sent",
+      "save sent",
+      "form-check answered",
+      "save answered"
+     ],
+     "wallMs": 9819
+    },
+    {
+     "release": "16.6.0",
+     "trial": 4,
+     "committed": true,
+     "hoursSent": "8h56",
+     "rowHours": [
+      8,
+      8.93
+     ],
+     "saveStatus": 200,
+     "order": [
+      "form-check sent",
+      "form-check answered",
+      "save sent",
+      "save answered"
+     ],
+     "wallMs": 1624
+    }
+   ]
+  }
+ ],
+ "findings": [
+  "On 14.0.0, the release Stage A decides routes on: no anomaly in 70 instrumented writes (50 warm, 20 as the first action after a cold start), besides about eight earlier first writes on fresh instances in the dry runs.",
+  "On 16.6.0 after a cold start: 2 anomalies in 20. In one, the save was sent with the right hours while the form check was still unanswered, both were answered 200, and the row never changed. In the other, the hours typed were joined to the text the dialog already showed (8h and 56 became 8h56) and the row was changed to 8.93 hours: a write with the wrong value.",
+  "'First write of a browser session' is not the trigger: 0 anomalies in 100 such writes on warm instances. All anomalies seen so far, here and in the screen, were on releases later than 14.0.0 and came right after the application had started.",
+  "On those later releases the dialog formats the field as text (8h) and reacts while it is being filled. The frozen write step was recorded for 14.0.0 and does not wait for that. A second upgrade to such a release needs a write step made for it, with the field checked before Save and the stored value checked after, as part of that stage's own freeze."
+ ],
+ "whatThisDoesNotShow": "that the fault cannot happen on 14.0.0. Seventy clean writes bound a rate; they do not prove zero. With 0 of 70 the true rate is below about 4.2 percent (one-sided 95 percent).",
+ "releaseScreenUnaffected": "check 1 needs the old write to commit in 0 of 3; 2 of 3 is still not met, so no screening result changes."
+}
