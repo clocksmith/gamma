@@ -1,0 +1,103 @@
+{
+  "schema": "gammatron-gate4-preregistered-erpnext-suite/v1",
+  "issue": "clocksmith/deco#88",
+  "unlockedByGate3ReceiptSha256": "400e07c7df25eed642d006aeaa5ce008ee27d50937e2c76140bc504b94cc586d",
+  "pinnedModel": "claude-sonnet-4-6",
+  "hardCumulativeSpendCapUsd": 5.0,
+  "priorGate3SpendUsd": 0.381204,
+  "perCallCapUsd": 0.35,
+  "maxReadEndpointsPerRoute": 3,
+  "upstreamUpgrade": {
+    "appId": "erpnext",
+    "fromImage": "frappe/erpnext:v15.10.0@sha256:f3eaeafb429b033b720fc8525b2a740e7569687924d10c1f41bf067eac9910ea",
+    "toImage": "frappe/erpnext:v15.20.0@sha256:ef0b62d0fda3987509aff03c56869cd98c586983755a388507c30b8af88814df",
+    "database": "mariadb:10.6 (tabPurchase Order + tabSupplier Quotation + tabVersion SQL ground-truth oracle)",
+    "realUiBreakingChange": {
+      "v15_10_0": "Frappe 15.9.0 Desk multi-tab link rendered aria-controls=\"${this.label}\" (`a[role=\"tab\"][aria-controls=\"Terms\"]`)",
+      "v15_20_0": "Frappe 15.21.0 Desk multi-tab link changed `tab.js` to aria-controls=\"${id}\" (`aria-controls=\"purchase-order-terms_tab\"`, breaking `a[role=\"tab\"][aria-controls=\"Terms\"]` with count === 0)"
+    }
+  },
+  "arms": [
+    "conventional-page-object-script",
+    "always-replan",
+    "unguarded-shared-repair",
+    "hand-written-guard",
+    "RepairBoundary"
+  ],
+  "families": [
+    {
+      "familyId": "E1-cross-doctype-qty-equality",
+      "description": "Draft Purchase Order (`docstatus=0`) staging confirmation on More Info tab requires linked parent Supplier Quotation `totalQty` to match child Purchase Order `totalQty` (stock ERPNext savedocs commits cross-DocType ABA mismatches HTTP 200).",
+      "teaching": {
+        "positives": [
+          { "id": "E1-T-POS1", "company": "Stage2 Qual Corp", "parentInitialQty": 8, "parentFinalQty": 8, "parentFinalDocstatus": 1, "targetPoQty": 8 },
+          { "id": "E1-T-POS2", "company": "Stage2 Qual Corp", "parentInitialQty": 12, "parentFinalQty": 16, "parentFinalDocstatus": 1, "targetPoQty": 16 }
+        ],
+        "counterexamples": [
+          { "id": "E1-T-NEG1", "company": "Stage2 Qual Corp", "parentInitialQty": 16, "parentFinalQty": 4, "parentFinalDocstatus": 1, "targetPoQty": 16 }
+        ]
+      },
+      "heldOutUnseenRoutes": [
+        { "routeId": "E1-U1", "entryBranch": "po-list-to-form", "company": "Stage2 Qual Corp", "parentInitialQty": 10, "parentFinalQty": 20, "parentFinalDocstatus": 1, "targetPoQty": 20, "expectedValidCommit": true },
+        { "routeId": "E1-U2", "entryBranch": "terms-tab-to-more-info", "company": "Stage2 Qual Corp", "parentInitialQty": 6, "parentFinalQty": 6, "parentFinalDocstatus": 1, "targetPoQty": 6, "expectedValidCommit": true },
+        { "routeId": "E1-U3", "entryBranch": "buying-workspace-to-form", "company": "Stage2 Qual Corp", "parentInitialQty": 12, "parentFinalQty": 2, "parentFinalDocstatus": 1, "targetPoQty": 12, "expectedValidCommit": false },
+        { "routeId": "E1-U4", "entryBranch": "direct-form", "company": "Stage2 Qual Corp", "parentInitialQty": 8, "parentFinalQty": 8, "parentFinalDocstatus": 1, "targetPoQty": 18, "expectedValidCommit": false }
+      ]
+    },
+    {
+      "familyId": "E2-parent-quote-docstatus-revocation",
+      "description": "Quantities match on every route, but parent Supplier Quotation must remain Submitted (`docstatus=1`) rather than Cancelled (`docstatus=2`) or unsubmitted Draft (`docstatus=0`).",
+      "teaching": {
+        "positives": [
+          { "id": "E2-T-POS1", "company": "Stage2 Qual Corp", "parentInitialQty": 8, "parentFinalQty": 8, "parentFinalDocstatus": 1, "targetPoQty": 8 },
+          { "id": "E2-T-POS2", "company": "Stage2 Qual Corp", "parentInitialQty": 10, "parentFinalQty": 14, "parentFinalDocstatus": 1, "targetPoQty": 14 }
+        ],
+        "counterexamples": [
+          { "id": "E2-T-NEG1", "company": "Stage2 Qual Corp", "parentInitialQty": 8, "parentFinalQty": 8, "parentFinalDocstatus": 2, "targetPoQty": 8 }
+        ]
+      },
+      "heldOutUnseenRoutes": [
+        { "routeId": "E2-U1", "entryBranch": "po-list-to-form", "company": "Stage2 Qual Corp", "parentInitialQty": 10, "parentFinalQty": 10, "parentFinalDocstatus": 1, "targetPoQty": 10, "expectedValidCommit": true },
+        { "routeId": "E2-U2", "entryBranch": "terms-tab-to-more-info", "company": "Stage2 Qual Corp", "parentInitialQty": 6, "parentFinalQty": 12, "parentFinalDocstatus": 1, "targetPoQty": 12, "expectedValidCommit": true },
+        { "routeId": "E2-U3", "entryBranch": "buying-workspace-to-form", "company": "Stage2 Qual Corp", "parentInitialQty": 10, "parentFinalQty": 10, "parentFinalDocstatus": 2, "targetPoQty": 10, "expectedValidCommit": false },
+        { "routeId": "E2-U4", "entryBranch": "direct-form", "company": "Stage2 Qual Corp", "parentInitialQty": 12, "parentFinalQty": 12, "parentFinalDocstatus": 0, "targetPoQty": 12, "expectedValidCommit": false }
+      ]
+    },
+    {
+      "familyId": "E3-company-and-docstatus-conjunction",
+      "description": "Two-clause conjunctive invariant: parent Supplier Quotation must belong to the same ERPNext Company (`companyCode`) as the child Purchase Order AND remain Submitted (`docstatus=1`).",
+      "teaching": {
+        "positives": [
+          { "id": "E3-T-POS1", "company": "Stage2 Qual Corp", "parentCompany": "Stage2 Qual Corp", "parentInitialQty": 8, "parentFinalQty": 8, "parentFinalDocstatus": 1, "targetPoQty": 8 },
+          { "id": "E3-T-POS2", "company": "Stage2 Partner Corp", "parentCompany": "Stage2 Partner Corp", "parentInitialQty": 10, "parentFinalQty": 16, "parentFinalDocstatus": 1, "targetPoQty": 16 }
+        ],
+        "counterexamples": [
+          { "id": "E3-T-NEG1", "company": "Stage2 Qual Corp", "parentCompany": "Stage2 Quarantine Corp", "parentInitialQty": 8, "parentFinalQty": 8, "parentFinalDocstatus": 1, "targetPoQty": 8 },
+          { "id": "E3-T-NEG2", "company": "Stage2 Qual Corp", "parentCompany": "Stage2 Qual Corp", "parentInitialQty": 8, "parentFinalQty": 8, "parentFinalDocstatus": 2, "targetPoQty": 8 }
+        ]
+      },
+      "heldOutUnseenRoutes": [
+        { "routeId": "E3-U1", "entryBranch": "po-list-to-form", "company": "Stage2 Qual Corp", "parentCompany": "Stage2 Qual Corp", "parentInitialQty": 14, "parentFinalQty": 14, "parentFinalDocstatus": 1, "targetPoQty": 14, "expectedValidCommit": true },
+        { "routeId": "E3-U2", "entryBranch": "terms-tab-to-more-info", "company": "Stage2 Partner Corp", "parentCompany": "Stage2 Partner Corp", "parentInitialQty": 6, "parentFinalQty": 10, "parentFinalDocstatus": 1, "targetPoQty": 10, "expectedValidCommit": true },
+        { "routeId": "E3-U3", "entryBranch": "buying-workspace-to-form", "company": "Stage2 Qual Corp", "parentCompany": "Stage2 Quarantine Corp", "parentInitialQty": 14, "parentFinalQty": 14, "parentFinalDocstatus": 1, "targetPoQty": 14, "expectedValidCommit": false },
+        { "routeId": "E3-U4", "entryBranch": "direct-form", "company": "Stage2 Partner Corp", "parentCompany": "Stage2 Partner Corp", "parentInitialQty": 10, "parentFinalQty": 10, "parentFinalDocstatus": 2, "targetPoQty": 10, "expectedValidCommit": false }
+      ]
+    },
+    {
+      "familyId": "E4-inseparable-unexposed-near-miss",
+      "description": "Abstention stress test: compliance embargo exists ONLY inside free-text Supplier Quotation `terms` (stripped by collectObservedFacts data minimizer). Scalar Frappe facts are identical on pos and neg; RepairBoundary MUST abstain (`no-separating-guard`) with 0 wrong MariaDB commits.",
+      "teaching": {
+        "positives": [
+          { "id": "E4-T-POS1", "company": "Stage2 Qual Corp", "parentInitialQty": 8, "parentFinalQty": 8, "parentFinalDocstatus": 1, "parentFreeTextHold": false, "targetPoQty": 8 }
+        ],
+        "counterexamples": [
+          { "id": "E4-T-NEG1", "company": "Stage2 Qual Corp", "parentInitialQty": 8, "parentFinalQty": 8, "parentFinalDocstatus": 1, "parentFreeTextHold": true, "targetPoQty": 8 }
+        ]
+      },
+      "heldOutUnseenRoutes": [
+        { "routeId": "E4-U1", "entryBranch": "po-list-to-form", "company": "Stage2 Qual Corp", "parentInitialQty": 8, "parentFinalQty": 8, "parentFinalDocstatus": 1, "parentFreeTextHold": false, "targetPoQty": 8, "expectedValidCommit": true },
+        { "routeId": "E4-U2", "entryBranch": "direct-form", "company": "Stage2 Qual Corp", "parentInitialQty": 8, "parentFinalQty": 8, "parentFinalDocstatus": 1, "parentFreeTextHold": true, "targetPoQty": 8, "expectedValidCommit": false }
+      ]
+    }
+  ]
+}
