@@ -1,0 +1,12 @@
+0a1,7
+> # SCREENING SEEDER. Not the seeder frozen for Stage A (../bringup/seed_openproject_qual.rb, unchanged).
+> # Used only to screen later releases for a second upgrade, under amendment 2 of
+> # second-upgrade-drift-rule.md. It differs from the frozen seeder in one thing: from
+> # OpenProject 16.4.0 a project must have a workspace type, so the four projects are
+> # created as ordinary projects where the release has that field. No record is added or
+> # removed and no value an arm or a label depends on is changed.
+> #
+79a87
+>   p.workspace_type = 'project' if p.respond_to?(:workspace_type=)
+118a127
+> restricted.workspace_type = 'project' if restricted.respond_to?(:workspace_type=)

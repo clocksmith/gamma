@@ -52,6 +52,9 @@ const option = name => (args.includes(name) ? args[args.indexOf(name) + 1] : und
 const receiptFile = resolve(option('--receipt') ?? '');
 const releases = (option('--releases') ?? '').split(',').filter(Boolean);
 const reference = option('--reference') ? JSON.parse(option('--reference')) : null;
+// Amendment 2: a separate screening seeder may be used where the frozen one cannot build the records.
+// The folder holds a byte-identical copy of the frozen bring-up script beside the screening seeder.
+const screeningBringUp = option('--screening-bringup') ? resolve(option('--screening-bringup')) : null;
 if (!option('--receipt') || !releases.length) { console.error('usage: second-upgrade-screen.mjs --receipt FILE --releases tag,tag,...'); process.exit(2); }
 
 const sh = (file, argv = [], options = {}) => execFileSync(file, argv, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...options });
@@ -76,23 +79,43 @@ async function screen(tag) {
     entry.image = sh('docker', ['inspect', '--format', '{{index .RepoDigests 0}}', `openproject/openproject:${tag}`]).trim();
   } catch (error) { entry.note = `image could not be pulled: ${short(error)}`; return entry; }
   // The frozen bring-up can lose a race with PostgreSQL's first start (it asks for the databases while the
-  // server is restarting after its own initialisation). That says nothing about the release, so the bring-up is
-  // tried up to three times and every failure is kept with its reason.
-  const bringUpFailures = [];
-  for (let attempt = 1; attempt <= 3; attempt += 1) {
-    try {
-      sh(join(HERE, 'bringup', 'openproject-down.sh'));
-      sh(join(HERE, 'bringup', 'openproject-up.sh'), [FIRST_UPGRADE_TARGET, tag], { timeout: 20 * 60 * 1000 });
-      break;
-    } catch (error) {
-      bringUpFailures.push(`attempt ${attempt}: ${short(error)} ${String(error?.stdout ?? '').trim().split('\n').slice(-1)[0].replaceAll(HERE, '.').slice(0, 200)}`);
+  // server is restarting after its own initialisation). That says nothing about the release, so a failure that
+  // never reached the candidate is retried; one that reached the candidate is tried twice in all.
+  const bringUp = dir => {
+    const failures = [];
+    let reachedCandidate = 0;
+    for (let attempt = 1; attempt <= 4 && reachedCandidate < 2; attempt += 1) {
+      try {
+        sh(join(HERE, 'bringup', 'openproject-down.sh'));
+        sh(join(dir, 'openproject-up.sh'), [FIRST_UPGRADE_TARGET, tag], { timeout: 20 * 60 * 1000 });
+        return { ok: true, failures };
+      } catch (error) {
+        const out = String(error?.stdout ?? '');
+        const atCandidate = out.includes('[gammatron-op-new] migrating');
+        if (atCandidate) reachedCandidate += 1;
+        failures.push(`attempt ${attempt}: ${atCandidate ? 'failed after the candidate release was reached' : 'failed before the candidate release was reached'}; ${short(error)}`);
+      }
     }
-  }
-  if (bringUpFailures.length) entry.bringUpFailures = bringUpFailures;
-  if (bringUpFailures.length === 3) {
-    entry.checks.casesStillMeanWhatTheySay = { met: false, detail: 'the frozen bring-up or seeder failed on this release three times' };
-    entry.note = 'checks 1 to 3 not run: no seeded instance';
-    return entry;
+    return { ok: false, failures };
+  };
+  const frozen = bringUp(join(HERE, 'bringup'));
+  if (frozen.failures.length) entry.bringUpFailuresWithFrozenSeeder = frozen.failures;
+  if (!frozen.ok) {
+    entry.withFrozenSeeder = { casesStillMeanWhatTheySay: { met: false, detail: 'the frozen bring-up or seeder failed on this release' } };
+    if (!screeningBringUp) {
+      entry.checks.casesStillMeanWhatTheySay = entry.withFrozenSeeder.casesStillMeanWhatTheySay;
+      entry.note = 'checks 1 to 3 not run: no seeded instance';
+      return entry;
+    }
+    const adapted = bringUp(screeningBringUp);
+    if (adapted.failures.length) entry.bringUpFailuresWithScreeningSeeder = adapted.failures;
+    if (!adapted.ok) {
+      entry.checks.casesStillMeanWhatTheySay = { met: false, detail: 'the screening seeder also failed on this release' };
+      entry.note = 'a further set-up change would be needed on this release: stopped to ask, as amendment 2 requires';
+      entry.stopAndAsk = true;
+      return entry;
+    }
+    entry.screenedWithScreeningSeeder = true;
   }
   const state = readState();
   const rel = state.new;
@@ -165,21 +188,25 @@ async function screen(tag) {
   } finally { await browser.close(); }
 
   entry.bites = ['casesStillMeanWhatTheySay', 'oldWorkflowFailsOnAValidCase', 'taskStillPossible', 'lookAlikeStillNeedsTheArmToStop'].every(k => entry.checks[k]?.met === true);
+  // A release that qualifies only with the screening seeder is named so; it needs its own freeze.
+  if (entry.bites && entry.screenedWithScreeningSeeder) entry.bitesHow = 'bites with adapted set-up';
   return entry;
 }
 
 for (const tag of releases) {
   const earlier = receipt.screened.find(e => e.tag === tag);
-  if (earlier && !(earlier.pendingReferenceRoute && reference)) { console.log(`${tag}: already screened`); continue; }
+  const redo = earlier && ((earlier.pendingReferenceRoute && reference) || (screeningBringUp && earlier.checks?.casesStillMeanWhatTheySay?.met === false && !earlier.screenedWithScreeningSeeder));
+  if (earlier && !redo) { console.log(`${tag}: already screened`); continue; }
   let entry;
   try { entry = await screen(tag); } catch (error) { entry = { release: tag.replace('-slim', ''), tag, application: 'openproject', checks: {}, bites: false, note: `screening failed: ${short(error)}` }; }
   entry.endedAt = new Date().toISOString();
   cleanUp(tag);
-  if (earlier) { entry.supersedes = 'the entry for this release that was waiting for a reference route'; receipt.screened.splice(receipt.screened.indexOf(earlier), 1, entry); } else receipt.screened.push(entry);
+  if (earlier) { entry.supersedes = earlier.pendingReferenceRoute ? 'the entry for this release that was waiting for a reference route' : 'the entry for this release made with the frozen seeder only'; receipt.screened.splice(receipt.screened.indexOf(earlier), 1, entry); } else receipt.screened.push(entry);
   save();
   const mark = key => (entry.checks[key] ? (entry.checks[key].met === null ? 'not needed' : entry.checks[key].met ? 'met' : 'NOT met') : 'not run');
-  console.log(`${tag}: old write fails ${mark('oldWorkflowFailsOnAValidCase')} | task possible ${mark('taskStillPossible')} | look-alike commits ${mark('lookAlikeStillNeedsTheArmToStop')} | cases mean ${mark('casesStillMeanWhatTheySay')}${entry.bites ? ' => BITES' : ''}${entry.note ? ` (${entry.note})` : ''}`);
+  console.log(`${tag}${entry.screenedWithScreeningSeeder ? ' [screening seeder; frozen seeder: check 4 not met]' : ''}: old write fails ${mark('oldWorkflowFailsOnAValidCase')} | task possible ${mark('taskStillPossible')} | look-alike commits ${mark('lookAlikeStillNeedsTheArmToStop')} | cases mean ${mark('casesStillMeanWhatTheySay')}${entry.bites ? ' => BITES' : ''}${entry.note ? ` (${entry.note})` : ''}`);
   if (entry.bites) { receipt.firstReleaseThatBites = entry.release; save(); console.log(`first release that bites: ${entry.release}`); break; }
+  if (entry.stopAndAsk) { console.log(`stopped at ${entry.release}: the screening seeder failed too; a ruling is needed`); break; }
   if (entry.pendingReferenceRoute) { console.log(`stopped at ${entry.release}: check 1 is met; a reference page route is needed before checks 2 and 3`); break; }
 }
 console.log('SCREEN_DONE');
