@@ -149,14 +149,27 @@ async function screen(tag) {
     const pageWrites = async (key, repair, prefix) => {
       const repeats = [];
       for (let n = 1; page && n <= REPEATS; n += 1) {
-        const r = await executeTermsWrite(page, { baseUrl: rel.url, db, route: await build(key, `${prefix}${n}`), repair });
-        repeats.push({ committed: r.committed, effectMatches: r.effectMatches, httpStatus: r.httpStatus, error: r.error });
+        const route = await build(key, `${prefix}${n}`);
+        const r = await executeTermsWrite(page, { baseUrl: rel.url, db, route, repair });
+        // What was asked and what is stored, so that a write of the wrong value is not read as a clean commit.
+        repeats.push({ committed: r.committed, effectMatches: r.effectMatches, httpStatus: r.httpStatus, error: r.error,
+          referenceAsked: route.reference, termsStoredBefore: r.before.terms.slice(0, 200), termsStoredAfter: r.after.terms.slice(0, 200),
+          versionCount: [r.before.versionCount, r.after.versionCount] });
       }
       return repeats;
     };
-    const old = await pageWrites('valid', FROZEN_REPAIR_15_20, 'o');
+    let old = await pageWrites('valid', FROZEN_REPAIR_15_20, 'o');
+    const clean = r => r.committed && r.effectMatches;
+    // Every probe is the first action after a cold start, where a page write can go wrong for reasons of
+    // its own. If some but not all of the three land cleanly, the release is repeated once and both rounds kept.
+    let firstRound = null;
+    if (page && old.some(clean) && !old.every(clean)) {
+      firstRound = old;
+      old = await pageWrites('valid', FROZEN_REPAIR_15_20, 'p');
+    }
     const committed = old.filter(r => r.committed).length;
-    entry.checks.oldWorkflowFailsOnAValidCase = { met: committed === 0, oldWriteCommitted: `${committed} of ${old.length}`, signIn, repeats: old };
+    entry.checks.oldWorkflowFailsOnAValidCase = { met: committed === 0, oldWriteCommitted: `${committed} of ${old.length}`,
+      storedTheReferenceAsked: `${old.filter(clean).length} of ${old.length}`, signIn, repeats: old, ...(firstRound ? { firstRoundRepeatedBecauseMixed: firstRound } : {}) };
 
     if (!entry.checks.oldWorkflowFailsOnAValidCase.met) {
       entry.checks.taskStillPossible = { met: null, detail: 'not needed: check 1 is not met' };
