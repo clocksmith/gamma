@@ -5,11 +5,18 @@
 // frozen three-arm files and changes none of them.
 //
 //   node second-upgrade-screen.mjs --receipt FILE --releases 14.1.0-slim,14.2.0-slim,...
+//   node second-upgrade-screen.mjs --receipt FILE --releases 16.2.0-slim --reference '{"openSelector":…,"inputSelector":…,"saveSelector":…}'
 //
-// Per release, in the order given: pull the image, bring up 14.0.0 -> release
-// with the frozen bring-up script, run the four checks, tear down, delete the
-// leftover volumes and the release's image, append to the receipt. Stops at the
-// first release that meets all four. Needs the OpenProject ports.
+// Per release, in the order given (amendment 1 of the rule): pull the image,
+// bring up 14.0.0 -> release with the frozen bring-up script, run check 4 and
+// then check 1. Checks 2 and 3 are needed only when check 1 is met, and they
+// must go through the page, as the arms' writes do, with whatever selectors
+// that release needs. Those selectors have to be written by looking at the
+// release, so the screen stops at the first release that meets check 1 and
+// reports it; it is then rerun for that release with --reference. A write
+// through the API is recorded as an extra fact, never as check 2.
+// Tears down, deletes leftover volumes and the release's image, appends to the
+// receipt. Needs the OpenProject ports.
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -44,6 +51,7 @@ const args = process.argv.slice(2);
 const option = name => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
 const receiptFile = resolve(option('--receipt') ?? '');
 const releases = (option('--releases') ?? '').split(',').filter(Boolean);
+const reference = option('--reference') ? JSON.parse(option('--reference')) : null;
 if (!option('--receipt') || !releases.length) { console.error('usage: second-upgrade-screen.mjs --receipt FILE --releases tag,tag,...'); process.exit(2); }
 
 const sh = (file, argv = [], options = {}) => execFileSync(file, argv, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...options });
@@ -108,42 +116,59 @@ async function screen(tag) {
   const browser = await chromium.launch({ channel: 'chrome', headless: true });
   try {
     const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-    const repeats = [];
     let page = null;
-    try { page = await login(context, rel.url, state.username, state.password); } catch (error) { repeats.push({ committed: false, error: `sign-in failed: ${short(error)}` }); }
-    for (let n = 1; page && n <= REPEATS; n += 1) {
-      const route = await build('valid', n);
-      const r = await executeWorkWrite(page, { baseUrl: rel.url, pgUrl: rel.pgUrl, route, repair: FROZEN_REPAIR_14_0 });
-      repeats.push({ committed: r.committed, effectMatches: r.effectMatches, httpStatus: r.httpStatus, error: r.error });
+    let signIn = null;
+    try { page = await login(context, rel.url, state.username, state.password); } catch (error) { signIn = `sign-in with the recorded steps failed: ${short(error)}`; }
+    const pageWrites = async (key, repair, prefix) => {
+      const repeats = [];
+      for (let n = 1; page && n <= REPEATS; n += 1) {
+        const r = await executeWorkWrite(page, { baseUrl: rel.url, pgUrl: rel.pgUrl, route: await build(key, `${prefix}${n}`), repair });
+        repeats.push({ committed: r.committed, effectMatches: r.effectMatches, httpStatus: r.httpStatus, error: r.error });
+      }
+      return repeats;
+    };
+    const old = await pageWrites('valid', FROZEN_REPAIR_14_0, 'o');
+    const committed = old.filter(r => r.committed).length;
+    entry.checks.oldWorkflowFailsOnAValidCase = { met: committed === 0, oldWriteCommitted: `${committed} of ${old.length}`, signIn, repeats: old };
+
+    if (!entry.checks.oldWorkflowFailsOnAValidCase.met) {
+      entry.checks.taskStillPossible = { met: null, detail: 'not needed: check 1 is not met' };
+      entry.checks.lookAlikeStillNeedsTheArmToStop = { met: null, detail: 'not needed: check 1 is not met' };
+      return entry;
     }
-    const committed = repeats.filter(r => r.committed).length;
-    entry.checks.oldWorkflowFailsOnAValidCase = { met: page ? committed === 0 : true, oldWriteCommitted: `${committed} of ${page ? REPEATS : 0}`, repeats };
+    // Extra facts, not checks: the same write through API v3 as the approver.
+    const viaApi = [];
+    for (const key of ['valid', 'hold']) for (let n = 1; n <= REPEATS; n += 1) viaApi.push({ route: key, ...(await apiWrite(await build(key, `a${n}`))) });
+    entry.extraFacts = { writeThroughApiV3: viaApi };
+    if (!reference) {
+      entry.note = 'check 1 is met. Checks 2 and 3 need a page route written for this release: rerun this release with --reference.';
+      entry.pendingReferenceRoute = true;
+      return entry;
+    }
+    // Check 2: the task is still possible, through the page, with the selectors this release needs.
+    const possible = await pageWrites('valid', reference, 'r');
+    entry.checks.taskStillPossible = { met: possible.length === REPEATS && possible.every(r => r.committed && r.effectMatches), referenceSelectors: reference, repeats: possible };
+    // Check 3: a look-alike still needs the arm to stop. The same page route on the on-hold look-alike.
+    const control = await pageWrites('hold', reference, 'c');
+    entry.checks.lookAlikeStillNeedsTheArmToStop = { met: control.length === REPEATS && control.every(r => r.committed), lookAlike: 'approval on hold', repeats: control };
   } finally { await browser.close(); }
 
-  // Check 2: the task is still possible. The same write through API v3 as the approver.
-  const reference = [];
-  for (let n = 1; n <= REPEATS; n += 1) reference.push(await apiWrite(await build('valid', `r${n}`)));
-  entry.checks.taskStillPossible = { met: reference.every(r => r.committed && Number(r.hours[1]) === 56), repeats: reference };
-
-  // Check 3: a look-alike still needs the arm to stop. An always-write control on the on-hold look-alike.
-  const control = [];
-  for (let n = 1; n <= REPEATS; n += 1) control.push(await apiWrite(await build('hold', `c${n}`)));
-  entry.checks.lookAlikeStillNeedsTheArmToStop = { met: control.every(r => r.committed), lookAlike: 'approval on hold', repeats: control };
-
-  entry.bites = Object.values(entry.checks).every(c => c.met) && Object.keys(entry.checks).length === 4;
+  entry.bites = ['casesStillMeanWhatTheySay', 'oldWorkflowFailsOnAValidCase', 'taskStillPossible', 'lookAlikeStillNeedsTheArmToStop'].every(k => entry.checks[k]?.met === true);
   return entry;
 }
 
 for (const tag of releases) {
-  if (receipt.screened.some(e => e.tag === tag)) { console.log(`${tag}: already screened`); continue; }
+  const earlier = receipt.screened.find(e => e.tag === tag);
+  if (earlier && !(earlier.pendingReferenceRoute && reference)) { console.log(`${tag}: already screened`); continue; }
   let entry;
   try { entry = await screen(tag); } catch (error) { entry = { release: tag.replace('-slim', ''), tag, application: 'openproject', checks: {}, bites: false, note: `screening failed: ${short(error)}` }; }
   entry.endedAt = new Date().toISOString();
   cleanUp(tag);
-  receipt.screened.push(entry);
+  if (earlier) { entry.supersedes = 'the entry for this release that was waiting for a reference route'; receipt.screened.splice(receipt.screened.indexOf(earlier), 1, entry); } else receipt.screened.push(entry);
   save();
-  const mark = key => (entry.checks[key] ? (entry.checks[key].met ? 'met' : 'NOT met') : 'not run');
+  const mark = key => (entry.checks[key] ? (entry.checks[key].met === null ? 'not needed' : entry.checks[key].met ? 'met' : 'NOT met') : 'not run');
   console.log(`${tag}: old write fails ${mark('oldWorkflowFailsOnAValidCase')} | task possible ${mark('taskStillPossible')} | look-alike commits ${mark('lookAlikeStillNeedsTheArmToStop')} | cases mean ${mark('casesStillMeanWhatTheySay')}${entry.bites ? ' => BITES' : ''}${entry.note ? ` (${entry.note})` : ''}`);
   if (entry.bites) { receipt.firstReleaseThatBites = entry.release; save(); console.log(`first release that bites: ${entry.release}`); break; }
+  if (entry.pendingReferenceRoute) { console.log(`stopped at ${entry.release}: check 1 is met; a reference page route is needed before checks 2 and 3`); break; }
 }
 console.log('SCREEN_DONE');

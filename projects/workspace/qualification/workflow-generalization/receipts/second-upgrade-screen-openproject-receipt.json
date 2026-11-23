@@ -1,27 +1,62 @@
 {
  "schema": "gammatron-second-upgrade-screen/v1",
  "issue": "clocksmith/deco#88",
- "rule": "second-upgrade-drift-rule.md at clocksmith/gamma@a9a074881, sha256 8ed6a47d1fe5407ff642992e8166b255c1412048b6ceffafcd58db1ef856a888",
+ "rule": "second-upgrade-drift-rule.md with amendment 1 at clocksmith/gamma@8e7e84d57",
  "application": "openproject",
  "firstUpgradeTarget": "14.0.0",
  "model": "none: scripted probes only (second-upgrade-screen.mjs)",
  "modelSpendUsd": 0,
  "cases": "the public example family on disposable records; no evaluator case",
  "howEachCheckIsProbed": {
+  "order": "check 4, then check 1, on every candidate; checks 2 and 3 only when check 1 is met, otherwise recorded as not needed (amendment 1)",
+  "casesStillMeanWhatTheySay": "the frozen seeder runs, the three public routes build, and each route's label equals the live state read as the approver",
   "oldWorkflowFailsOnAValidCase": "the page write with the selectors frozen for 14.0.0, on a fresh valid route, 3 times; met only if it commits in 0 of 3, judged from the row",
-  "taskStillPossible": "the same write sent through API v3 as the approver on a fresh valid route, 3 times; met if the row changes to the hours asked in 3 of 3",
-  "lookAlikeStillNeedsTheArmToStop": "the same API write on the look-alike whose approval is on hold, 3 times; met if the row changes in 3 of 3",
-  "casesStillMeanWhatTheySay": "the frozen seeder runs, the three public routes build, and each route's label equals the live state read as the approver"
+  "taskStillPossible": "a page write, as the arms' writes are, with the selectors the candidate needs, on a fresh valid route, 3 times; met if the row changes to the hours asked in 3 of 3. The selectors are written by looking at the candidate after check 1 is met.",
+  "lookAlikeStillNeedsTheArmToStop": "that same page route on the look-alike whose approval is on hold, 3 times; met if the row changes in 3 of 3",
+  "extraFact": "a write through API v3 as the approver is recorded when check 1 is met; it is not check 2"
  },
  "expectedWrittenBeforeAnyProbe": {
-  "writtenAt": "2026-11-23T15:20:00Z",
-  "forEveryCandidateUntilARelaseShowsOtherwise": {
+  "writtenAt": "2026-11-23T15:22:00Z",
+  "amended": "before the first probe, after amendment 1 moved check 2 to the page",
+  "forEveryCandidateUntilAReleaseShowsOtherwise": {
+   "casesStillMeanWhatTheySay": "met",
    "oldWorkflowFailsOnAValidCase": "NOT met: the old write still commits, 3 of 3",
-   "taskStillPossible": "met",
-   "lookAlikeStillNeedsTheArmToStop": "met",
-   "casesStillMeanWhatTheySay": "met"
+   "taskStillPossible": "not needed",
+   "lookAlikeStillNeedsTheArmToStop": "not needed"
   },
   "basis": "14.6.0 and 15.0.0 already ran the whole stand-in pipeline with the old write committing; nothing is known about the others"
  },
- "screened": []
+ "screened": [],
+ "releasesInOrder": [
+  "14.1.0",
+  "14.2.0",
+  "14.3.0",
+  "14.4.0",
+  "14.5.0",
+  "14.6.0",
+  "15.0.0",
+  "15.1.0",
+  "15.2.0",
+  "15.3.0",
+  "15.4.0",
+  "15.5.0",
+  "16.0.0",
+  "16.1.0",
+  "16.2.0",
+  "16.3.0",
+  "16.4.0",
+  "16.5.0",
+  "16.6.0",
+  "17.0.0",
+  "17.1.0",
+  "17.2.0",
+  "17.3.0",
+  "17.4.0",
+  "17.5.0",
+  "17.6.0",
+  "17.7.0",
+  "17.8.0",
+  "17.9.0"
+ ],
+ "granularity": "x.y.0 releases only, no patch releases (amendment 1)"
 }
