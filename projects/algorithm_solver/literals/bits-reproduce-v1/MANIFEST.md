@@ -6,7 +6,7 @@ One command re-checks every capacity result without a solver:
 
 ```sh
 python3 -B reproduce.py            # checksums and the quick checkers, about four minutes
-python3 -B reproduce.py --full     # adds the slow ones, about half an hour
+python3 -B reproduce.py --full     # adds the slow ones, about twenty minutes
 ```
 
 Needs Python 3.10 or later and Git, run from a clone of `clocksmith/gamma` that contains commit
