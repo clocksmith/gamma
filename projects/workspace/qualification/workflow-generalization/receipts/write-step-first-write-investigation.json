@@ -82,6 +82,7 @@
   }
  ],
  "findings": [
+  "UPDATE after round 4: the fault does happen on 14.0.0. In the 10th of the further cold-start writes the field ended up holding 856 and the server stored 856 hours. The statement below that 14.0.0 showed no anomaly was true of the first 20 only.",
   "On 14.0.0, the release Stage A decides routes on: no anomaly in 20 writes made as the first action after a cold start, which is the condition that matters, since every anomaly seen came right after the application started and each arm's unseen-route phase starts that way. The 50 clean warm writes on 14.0.0 do not bear on it.",
   "On 16.6.0 after a cold start: 2 anomalies in 20. In one, the save was sent with the right hours while the form check was still unanswered, both were answered 200, and the row never changed. In the other, the hours typed were joined to the text the dialog already showed (8h and 56 became 8h56) and the row was changed to 8.93 hours: a write with the wrong value.",
   "'First write of a browser session' is not the trigger: 0 anomalies in 100 such writes on warm instances. All anomalies seen so far, here and in the screen, were on releases later than 14.0.0 and came right after the application had started.",
@@ -98,7 +99,41 @@
    "ifNone": "0 of 100 bounds the rate below about 3 percent (one-sided 95 percent); the frozen step stays",
    "clockNote": "An earlier version said 17:55:00Z, a time typed by hand that was ahead of the commit that carried it (722c2fbbd, 17:47 UTC). The commit time is the record."
   },
-  "results": null
+  "results": {
+   "recordedAt": "2026-11-23T17:54:11Z",
+   "stoppedAtTheFirstAnomaly": true,
+   "writesMade": 11,
+   "anomalies": 1,
+   "anomaly": {
+    "release": "14.0.0",
+    "write": 10,
+    "hoursAsked": 56,
+    "hoursSent": "856",
+    "rowHours": [
+     8,
+     856
+    ],
+    "saveStatus": 200,
+    "order": [
+     "form-check sent (460 ms)",
+     "save sent (574 ms)",
+     "form-check answered (638 ms)",
+     "save answered (638 ms)"
+    ],
+    "what": "the hours typed were joined to the value the field already held (8 and 56 became 856) and the server stored 856 hours: a write with the wrong value, on the release Stage A uses"
+   },
+   "againstExpectation": "MISS: expected 0 of 80; 1 anomaly at the 10th write. On 14.0.0, first writes after a cold start now stand at 1 anomaly in 31.",
+   "consequence": "as ruled beforehand: the write step is hardened and the runner re-frozen before Stage A"
+  }
  },
- "clockNote": "Times typed into receipts by hand on 2026-11-23 were approximate. Where a time and its commit disagree, the commit time is the record."
+ "clockNote": "Times typed into receipts by hand on 2026-11-23 were approximate. Where a time and its commit disagree, the commit time is the record.",
+ "round5": {
+  "what": "the hardened write step (waits for the form check's answer, reads the field back, does not press Save unless it holds exactly the hours asked), 100 first writes after a cold start on 14.0.0",
+  "expectedWrittenBeforeAnyResult": {
+   "writtenAt": "2026-11-23T17:54:24Z",
+   "anomalies": "0 of 100: every write lands with the hours asked, or, if the field cannot be made to hold them, Save is not pressed and the record says so (counted separately as 'not attempted', expected 0)",
+   "ifAnyWrongValueOrUnchangedRow": "the hardening is not good enough; it is reworked before any freeze"
+  },
+  "results": null
+ }
 }
