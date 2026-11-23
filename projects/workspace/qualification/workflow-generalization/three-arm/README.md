@@ -16,6 +16,8 @@ Nothing here calls a model.
 | `guard-sandbox.mjs`, `guard-host.mjs` | the runner | Runs a model-written guard in a container with no network |
 | `repair-boundary-arm.mjs` | the runner | Read plans, labelled examples, the unchanged learner, and deciding a route from the frozen guard |
 | `regression.mjs` | the runner | Rebuilds the records behind an arm's kept cases on a new database and reruns the cases with its frozen work |
+| `durations.mjs` | the runner | The hours of a route in the two forms every arm is given |
+| `dry-run.mjs` | the operator | The whole pipeline on the real application with a stand-in model: a valid route and two look-alikes per arm, and an always-write control |
 | `write-step.mjs` | the runner | The one write every arm shares, made through the page, and the database read before and after |
 
 ## State

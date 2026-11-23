@@ -57,7 +57,10 @@ Every arm gets the same things:
 4. The same limit on model spend, on clock time and on disposable records for
    discovery, and again for maintenance.
 5. On an unseen route: the target, the hours to write, and read-only API access
-   as the approver, at most 8 reads. An arm answers `write` or `stop`. It never
+   as the approver, at most 8 reads. The hours are given to every arm in the
+   same two forms: the number, and the text the application itself uses for
+   that duration (OpenProject writes 24 hours as `P1D` and 40 as `P1DT16H`).
+   Every arm is told that convention in the same words. An arm answers `write` or `stop`. It never
    performs the write.
 6. The same write, made by the runner through the page with the control repair
    frozen in the Gate 3 receipt, and the same server protections.
@@ -108,6 +111,13 @@ Written by the family author under the task contract, not by the operator.
 
 Each step is posted on the issue with a SHA-256 before the next begins.
 
+0. **Dry run.** The whole pipeline is run on the real application with a
+   scripted stand-in for the model, on the public example family and
+   disposable records, at no cost (`three-arm/dry-run.mjs`). It has to show
+   that every arm completes a valid route with the row changed in the
+   database, that every arm stops a look-alike itself, and that a control
+   guard which always writes gets the look-alikes committed, so that a count
+   of zero wrong commits cannot be the harness holding writes back.
 0. **Preflight.** Two short model sessions, at most `$0.05` each, that touch no
    family: one with the tools of a discovery session and one with the tools of
    a deciding session. They prove that the model CLI gives a session exactly
@@ -256,14 +266,14 @@ run first and reported before B is asked for.
   families existed, but what it cost to write is not measured here, and the
   learner can see nothing the adapter does not pass on. The arm's instructions
   also tell the model what kinds of fact the learner can see.
-- The `repair-boundary` arm is also given one fact for the hours a route asks
-  to write, in the form OpenProject itself writes a duration (24 hours is
-  `P1D`). The builder supplied that form after a run of the whole pipeline
-  against the real application with a stand-in for the model, on the public
-  example family, in which every arm stopped: written as `PT24H` the fact
-  could never equal what the application returns. No sealed family was
-  involved. The guard-writing arm is told nothing about durations and has to
-  find this out through the application.
+- How the application writes durations is told to every arm, by the builder.
+  It was found in a run of the whole pipeline against the real application
+  with a stand-in for the model, on the public example family, in which every
+  arm stopped: OpenProject returns 24 hours as `P1D`, and a comparison with
+  `PT24H` fails. The learner compares durations as text and could not have
+  coped; a model writing a guard might have found it alone. Telling all arms
+  removes that difference, and with it one way the arms could have differed.
+  No sealed family was involved.
 - The `repair-boundary` instructions carry the learner's manual, including the
   advice to give at least two valid examples that differ. That advice was
   added after the builder saw, in a test with no model and no sealed family,
