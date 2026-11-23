@@ -1088,24 +1088,959 @@
    "tag": "16.4.0-slim",
    "application": "openproject",
    "pair": "14.0.0->16.4.0",
-   "startedAt": "2026-11-23T15:56:56.192Z",
+   "startedAt": "2026-11-23T16:05:30.125Z",
    "image": "openproject/openproject@sha256:cbbaae861ace850ea5ebf3de2141e07314c651c49c9f592f40cc93aba7715851",
    "checks": {
     "casesStillMeanWhatTheySay": {
+     "met": true,
+     "labels": [
+      {
+       "route": "valid",
+       "intended": true,
+       "live": true
+      },
+      {
+       "route": "hold",
+       "intended": false,
+       "live": false
+      },
+      {
+       "route": "hours",
+       "intended": false,
+       "live": false
+      }
+     ]
+    },
+    "oldWorkflowFailsOnAValidCase": {
      "met": false,
-     "detail": "the frozen seeder fails on this release, three bring-ups out of three",
-     "cause": "reproduced on a separate throwaway database: the database migration succeeds, then the seeder stops at its first project with 'Validation failed: Workspace type is not set to one of the allowed values'. From 16.4.0 a project needs a workspace type; the seeder was written for 13.4.0 and 14.0.0 and does not set one.",
-     "reading": "this is the test's own set-up tool failing on a newer data model, not evidence about what the cases mean on this release. By the letter of check 4 it is not met. Whether a seeder that sets the new field may be used for screening is the evaluator's ruling."
+     "oldWriteCommitted": "3 of 3",
+     "signIn": null,
+     "repeats": [
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      }
+     ]
+    },
+    "taskStillPossible": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    },
+    "lookAlikeStillNeedsTheArmToStop": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
     }
    },
    "bites": false,
-   "note": "checks 1 to 3 not run: no seeded instance. The screen was stopped here to ask for a ruling; 16.5.0 onward are not screened.",
-   "bringUpFailures": [
-    "attempt 1: Command failed: ./bringup/openproject-up.sh 14.0.0-slim 16.4.0-slim [gammatron-op-new] migrating op_new_qual on openproject/openproject:16.4.0-slim",
-    "attempt 2: Command failed: ./bringup/openproject-up.sh 14.0.0-slim 16.4.0-slim [gammatron-op-new] migrating op_new_qual on openproject/openproject:16.4.0-slim",
-    "attempt 3: Command failed: ./bringup/openproject-up.sh 14.0.0-slim 16.4.0-slim [gammatron-op-new] migrating op_new_qual on openproject/openproject:16.4.0-slim"
+   "note": null,
+   "bringUpFailuresWithFrozenSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 16.4.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 16.4.0-slim"
    ],
-   "endedAt": "2026-11-23T16:00:10.547Z"
+   "withFrozenSeeder": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "the frozen bring-up or seeder failed on this release"
+    }
+   },
+   "screenedWithScreeningSeeder": true,
+   "endedAt": "2026-11-23T16:08:20.196Z",
+   "supersedes": "the entry for this release made with the frozen seeder only"
+  },
+  {
+   "release": "16.5.0",
+   "tag": "16.5.0-slim",
+   "application": "openproject",
+   "pair": "14.0.0->16.5.0",
+   "startedAt": "2026-11-23T16:08:21.745Z",
+   "image": "openproject/openproject@sha256:c9b2cefa01178cb57611b64c11bbf0cb5cad1f26bfb628a663866afe0f134e7c",
+   "checks": {
+    "casesStillMeanWhatTheySay": {
+     "met": true,
+     "labels": [
+      {
+       "route": "valid",
+       "intended": true,
+       "live": true
+      },
+      {
+       "route": "hold",
+       "intended": false,
+       "live": false
+      },
+      {
+       "route": "hours",
+       "intended": false,
+       "live": false
+      }
+     ]
+    },
+    "oldWorkflowFailsOnAValidCase": {
+     "met": false,
+     "oldWriteCommitted": "2 of 3",
+     "signIn": null,
+     "repeats": [
+      {
+       "committed": false,
+       "effectMatches": false,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      }
+     ]
+    },
+    "taskStillPossible": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    },
+    "lookAlikeStillNeedsTheArmToStop": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    }
+   },
+   "bites": false,
+   "note": null,
+   "bringUpFailuresWithFrozenSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 16.5.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 16.5.0-slim"
+   ],
+   "withFrozenSeeder": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "the frozen bring-up or seeder failed on this release"
+    }
+   },
+   "screenedWithScreeningSeeder": true,
+   "endedAt": "2026-11-23T16:12:12.665Z"
+  },
+  {
+   "release": "16.6.0",
+   "tag": "16.6.0-slim",
+   "application": "openproject",
+   "pair": "14.0.0->16.6.0",
+   "startedAt": "2026-11-23T16:12:14.321Z",
+   "image": "openproject/openproject@sha256:13de53c5113936e016648e6638f5125de221e5ffbb9f1f2d7b1d69b2408a1d12",
+   "checks": {
+    "casesStillMeanWhatTheySay": {
+     "met": true,
+     "labels": [
+      {
+       "route": "valid",
+       "intended": true,
+       "live": true
+      },
+      {
+       "route": "hold",
+       "intended": false,
+       "live": false
+      },
+      {
+       "route": "hours",
+       "intended": false,
+       "live": false
+      }
+     ]
+    },
+    "oldWorkflowFailsOnAValidCase": {
+     "met": false,
+     "oldWriteCommitted": "2 of 3",
+     "signIn": null,
+     "repeats": [
+      {
+       "committed": false,
+       "effectMatches": false,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      }
+     ]
+    },
+    "taskStillPossible": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    },
+    "lookAlikeStillNeedsTheArmToStop": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    }
+   },
+   "bites": false,
+   "note": null,
+   "bringUpFailuresWithFrozenSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 16.6.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 16.6.0-slim"
+   ],
+   "withFrozenSeeder": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "the frozen bring-up or seeder failed on this release"
+    }
+   },
+   "screenedWithScreeningSeeder": true,
+   "endedAt": "2026-11-23T16:16:09.434Z"
+  },
+  {
+   "release": "17.0.0",
+   "tag": "17.0.0-slim",
+   "application": "openproject",
+   "pair": "14.0.0->17.0.0",
+   "startedAt": "2026-11-23T16:16:11.130Z",
+   "image": "openproject/openproject@sha256:dc5c73c525040950629a1dd5c8e3d7d65d64ab7128582b2337383fe771413824",
+   "checks": {
+    "casesStillMeanWhatTheySay": {
+     "met": true,
+     "labels": [
+      {
+       "route": "valid",
+       "intended": true,
+       "live": true
+      },
+      {
+       "route": "hold",
+       "intended": false,
+       "live": false
+      },
+      {
+       "route": "hours",
+       "intended": false,
+       "live": false
+      }
+     ]
+    },
+    "oldWorkflowFailsOnAValidCase": {
+     "met": false,
+     "oldWriteCommitted": "3 of 3",
+     "signIn": null,
+     "repeats": [
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      }
+     ]
+    },
+    "taskStillPossible": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    },
+    "lookAlikeStillNeedsTheArmToStop": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    }
+   },
+   "bites": false,
+   "note": null,
+   "bringUpFailuresWithFrozenSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.0.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.0.0-slim"
+   ],
+   "withFrozenSeeder": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "the frozen bring-up or seeder failed on this release"
+    }
+   },
+   "screenedWithScreeningSeeder": true,
+   "endedAt": "2026-11-23T16:20:05.275Z"
+  },
+  {
+   "release": "17.1.0",
+   "tag": "17.1.0-slim",
+   "application": "openproject",
+   "pair": "14.0.0->17.1.0",
+   "startedAt": "2026-11-23T16:20:06.845Z",
+   "image": "openproject/openproject@sha256:20757b003a9e593cd9dd735b515d96fd62e4003abf1020e06e02890a8c3f3395",
+   "checks": {
+    "casesStillMeanWhatTheySay": {
+     "met": true,
+     "labels": [
+      {
+       "route": "valid",
+       "intended": true,
+       "live": true
+      },
+      {
+       "route": "hold",
+       "intended": false,
+       "live": false
+      },
+      {
+       "route": "hours",
+       "intended": false,
+       "live": false
+      }
+     ]
+    },
+    "oldWorkflowFailsOnAValidCase": {
+     "met": false,
+     "oldWriteCommitted": "3 of 3",
+     "signIn": null,
+     "repeats": [
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      }
+     ]
+    },
+    "taskStillPossible": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    },
+    "lookAlikeStillNeedsTheArmToStop": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    }
+   },
+   "bites": false,
+   "note": null,
+   "bringUpFailuresWithFrozenSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.1.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.1.0-slim"
+   ],
+   "withFrozenSeeder": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "the frozen bring-up or seeder failed on this release"
+    }
+   },
+   "screenedWithScreeningSeeder": true,
+   "endedAt": "2026-11-23T16:24:00.394Z"
+  },
+  {
+   "release": "17.2.0",
+   "tag": "17.2.0-slim",
+   "application": "openproject",
+   "pair": "14.0.0->17.2.0",
+   "startedAt": "2026-11-23T16:24:01.991Z",
+   "image": "openproject/openproject@sha256:496353a9e984db74a693e3260350d0124b47b9637cccef5ae06557a0435035be",
+   "checks": {
+    "casesStillMeanWhatTheySay": {
+     "met": true,
+     "labels": [
+      {
+       "route": "valid",
+       "intended": true,
+       "live": true
+      },
+      {
+       "route": "hold",
+       "intended": false,
+       "live": false
+      },
+      {
+       "route": "hours",
+       "intended": false,
+       "live": false
+      }
+     ]
+    },
+    "oldWorkflowFailsOnAValidCase": {
+     "met": false,
+     "oldWriteCommitted": "3 of 3",
+     "signIn": null,
+     "repeats": [
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      }
+     ]
+    },
+    "taskStillPossible": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    },
+    "lookAlikeStillNeedsTheArmToStop": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    }
+   },
+   "bites": false,
+   "note": null,
+   "bringUpFailuresWithFrozenSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.2.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.2.0-slim"
+   ],
+   "withFrozenSeeder": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "the frozen bring-up or seeder failed on this release"
+    }
+   },
+   "screenedWithScreeningSeeder": true,
+   "endedAt": "2026-11-23T16:27:35.786Z"
+  },
+  {
+   "release": "17.3.0",
+   "tag": "17.3.0-slim",
+   "application": "openproject",
+   "pair": "14.0.0->17.3.0",
+   "startedAt": "2026-11-23T16:27:37.265Z",
+   "image": "openproject/openproject@sha256:2e55ea9c9016443302feee27bc79df23786055733591c351e123a7e695d8656f",
+   "checks": {
+    "casesStillMeanWhatTheySay": {
+     "met": true,
+     "labels": [
+      {
+       "route": "valid",
+       "intended": true,
+       "live": true
+      },
+      {
+       "route": "hold",
+       "intended": false,
+       "live": false
+      },
+      {
+       "route": "hours",
+       "intended": false,
+       "live": false
+      }
+     ]
+    },
+    "oldWorkflowFailsOnAValidCase": {
+     "met": false,
+     "oldWriteCommitted": "3 of 3",
+     "signIn": null,
+     "repeats": [
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      }
+     ]
+    },
+    "taskStillPossible": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    },
+    "lookAlikeStillNeedsTheArmToStop": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    }
+   },
+   "bites": false,
+   "note": null,
+   "bringUpFailuresWithFrozenSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.3.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.3.0-slim"
+   ],
+   "withFrozenSeeder": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "the frozen bring-up or seeder failed on this release"
+    }
+   },
+   "screenedWithScreeningSeeder": true,
+   "endedAt": "2026-11-23T16:31:07.343Z"
+  },
+  {
+   "release": "17.4.0",
+   "tag": "17.4.0-slim",
+   "application": "openproject",
+   "pair": "14.0.0->17.4.0",
+   "startedAt": "2026-11-23T16:31:08.838Z",
+   "image": "openproject/openproject@sha256:097565697ea9d9b3cd28ae0a23e50fe7daed9a955520f561bfd004674bc43279",
+   "checks": {
+    "casesStillMeanWhatTheySay": {
+     "met": true,
+     "labels": [
+      {
+       "route": "valid",
+       "intended": true,
+       "live": true
+      },
+      {
+       "route": "hold",
+       "intended": false,
+       "live": false
+      },
+      {
+       "route": "hours",
+       "intended": false,
+       "live": false
+      }
+     ]
+    },
+    "oldWorkflowFailsOnAValidCase": {
+     "met": false,
+     "oldWriteCommitted": "3 of 3",
+     "signIn": null,
+     "repeats": [
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      }
+     ]
+    },
+    "taskStillPossible": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    },
+    "lookAlikeStillNeedsTheArmToStop": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    }
+   },
+   "bites": false,
+   "note": null,
+   "bringUpFailuresWithFrozenSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.4.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.4.0-slim"
+   ],
+   "withFrozenSeeder": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "the frozen bring-up or seeder failed on this release"
+    }
+   },
+   "screenedWithScreeningSeeder": true,
+   "endedAt": "2026-11-23T16:34:36.570Z"
+  },
+  {
+   "release": "17.5.0",
+   "tag": "17.5.0-slim",
+   "application": "openproject",
+   "pair": "14.0.0->17.5.0",
+   "startedAt": "2026-11-23T16:34:37.842Z",
+   "image": "openproject/openproject@sha256:ac798ee8d09c3f70c3d1c99d07a9889d0ca7af447bce61e9bfdc1a7a1599a972",
+   "checks": {
+    "casesStillMeanWhatTheySay": {
+     "met": true,
+     "labels": [
+      {
+       "route": "valid",
+       "intended": true,
+       "live": true
+      },
+      {
+       "route": "hold",
+       "intended": false,
+       "live": false
+      },
+      {
+       "route": "hours",
+       "intended": false,
+       "live": false
+      }
+     ]
+    },
+    "oldWorkflowFailsOnAValidCase": {
+     "met": false,
+     "oldWriteCommitted": "3 of 3",
+     "signIn": null,
+     "repeats": [
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      }
+     ]
+    },
+    "taskStillPossible": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    },
+    "lookAlikeStillNeedsTheArmToStop": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    }
+   },
+   "bites": false,
+   "note": null,
+   "bringUpFailuresWithFrozenSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.5.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.5.0-slim"
+   ],
+   "withFrozenSeeder": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "the frozen bring-up or seeder failed on this release"
+    }
+   },
+   "screenedWithScreeningSeeder": true,
+   "endedAt": "2026-11-23T16:38:05.122Z"
+  },
+  {
+   "release": "17.6.0",
+   "tag": "17.6.0-slim",
+   "application": "openproject",
+   "pair": "14.0.0->17.6.0",
+   "startedAt": "2026-11-23T16:38:06.399Z",
+   "image": "openproject/openproject@sha256:5b899fdc90111a1e5e2016066c7771632683f435659712383c3be31976d56537",
+   "checks": {
+    "casesStillMeanWhatTheySay": {
+     "met": true,
+     "labels": [
+      {
+       "route": "valid",
+       "intended": true,
+       "live": true
+      },
+      {
+       "route": "hold",
+       "intended": false,
+       "live": false
+      },
+      {
+       "route": "hours",
+       "intended": false,
+       "live": false
+      }
+     ]
+    },
+    "oldWorkflowFailsOnAValidCase": {
+     "met": false,
+     "oldWriteCommitted": "3 of 3",
+     "signIn": null,
+     "repeats": [
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      }
+     ]
+    },
+    "taskStillPossible": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    },
+    "lookAlikeStillNeedsTheArmToStop": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    }
+   },
+   "bites": false,
+   "note": null,
+   "bringUpFailuresWithFrozenSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.6.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.6.0-slim"
+   ],
+   "withFrozenSeeder": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "the frozen bring-up or seeder failed on this release"
+    }
+   },
+   "screenedWithScreeningSeeder": true,
+   "endedAt": "2026-11-23T16:41:36.666Z"
+  },
+  {
+   "release": "17.7.0",
+   "tag": "17.7.0-slim",
+   "application": "openproject",
+   "pair": "14.0.0->17.7.0",
+   "startedAt": "2026-11-23T16:41:37.976Z",
+   "image": "openproject/openproject@sha256:c59d3dbbf411657f4aa8481313587c76f5bba0aa89cd1c4c18dee135f470f729",
+   "checks": {
+    "casesStillMeanWhatTheySay": {
+     "met": true,
+     "labels": [
+      {
+       "route": "valid",
+       "intended": true,
+       "live": true
+      },
+      {
+       "route": "hold",
+       "intended": false,
+       "live": false
+      },
+      {
+       "route": "hours",
+       "intended": false,
+       "live": false
+      }
+     ]
+    },
+    "oldWorkflowFailsOnAValidCase": {
+     "met": false,
+     "oldWriteCommitted": "3 of 3",
+     "signIn": null,
+     "repeats": [
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      }
+     ]
+    },
+    "taskStillPossible": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    },
+    "lookAlikeStillNeedsTheArmToStop": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    }
+   },
+   "bites": false,
+   "note": null,
+   "bringUpFailuresWithFrozenSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.7.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.7.0-slim"
+   ],
+   "withFrozenSeeder": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "the frozen bring-up or seeder failed on this release"
+    }
+   },
+   "screenedWithScreeningSeeder": true,
+   "endedAt": "2026-11-23T16:45:16.166Z"
+  },
+  {
+   "release": "17.8.0",
+   "tag": "17.8.0-slim",
+   "application": "openproject",
+   "pair": "14.0.0->17.8.0",
+   "startedAt": "2026-11-23T16:45:17.693Z",
+   "image": "openproject/openproject@sha256:48952034215d2a8ecf07086db86be55c74819cc76aa26af61f8da9ce5f06eda2",
+   "checks": {
+    "casesStillMeanWhatTheySay": {
+     "met": true,
+     "labels": [
+      {
+       "route": "valid",
+       "intended": true,
+       "live": true
+      },
+      {
+       "route": "hold",
+       "intended": false,
+       "live": false
+      },
+      {
+       "route": "hours",
+       "intended": false,
+       "live": false
+      }
+     ]
+    },
+    "oldWorkflowFailsOnAValidCase": {
+     "met": false,
+     "oldWriteCommitted": "3 of 3",
+     "signIn": null,
+     "repeats": [
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null
+      }
+     ]
+    },
+    "taskStillPossible": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    },
+    "lookAlikeStillNeedsTheArmToStop": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    }
+   },
+   "bites": false,
+   "note": null,
+   "bringUpFailuresWithFrozenSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.8.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.8.0-slim"
+   ],
+   "withFrozenSeeder": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "the frozen bring-up or seeder failed on this release"
+    }
+   },
+   "screenedWithScreeningSeeder": true,
+   "endedAt": "2026-11-23T16:48:54.509Z"
+  },
+  {
+   "release": "17.9.0",
+   "tag": "17.9.0-slim",
+   "application": "openproject",
+   "pair": "14.0.0->17.9.0",
+   "startedAt": "2026-11-23T16:48:55.819Z",
+   "image": "openproject/openproject@sha256:a264df2ddcf78ce5445976c31ce6128187952102951c860750cdffe4d0b7132b",
+   "checks": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "neither the frozen seeder nor the screening seeder can seed this release, two bring-ups out of two each",
+     "cause": "reproduced on a separate throwaway database: the database migration succeeds, then the screening seeder stops where it looks up the default work package type, with 'column types.is_default does not exist'. On 17.9.0 that column is gone.",
+     "reading": "again the test's set-up tool failing on a newer data model, not evidence about the cases or the workflow. A further set-up change would be needed; under amendment 2 that means stop and ask."
+    }
+   },
+   "bites": false,
+   "note": "a further set-up change would be needed on this release: stopped to ask, as amendment 2 requires",
+   "bringUpFailuresWithFrozenSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.9.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./bringup/openproject-up.sh 14.0.0-slim 17.9.0-slim"
+   ],
+   "withFrozenSeeder": {
+    "casesStillMeanWhatTheySay": {
+     "met": false,
+     "detail": "the frozen bring-up or seeder failed on this release"
+    }
+   },
+   "bringUpFailuresWithScreeningSeeder": [
+    "attempt 1: failed after the candidate release was reached; Command failed: ./screening/openproject-up.sh 14.0.0-slim 17.9.0-slim",
+    "attempt 2: failed after the candidate release was reached; Command failed: ./screening/openproject-up.sh 14.0.0-slim 17.9.0-slim"
+   ],
+   "stopAndAsk": true,
+   "endedAt": "2026-11-23T16:53:15.116Z"
   }
  ],
  "releasesInOrder": [
@@ -1156,11 +2091,30 @@
    "handling": "these two entries are not screening results. The screen now tries the bring-up up to three times and keeps every failure with its reason; both releases are screened again."
   }
  ],
- "stoppedAt": {
-  "release": "16.4.0",
-  "at": "2026-11-23T16:05:00Z",
-  "why": "the frozen seeder cannot build a project on 16.4.0; waiting for the evaluator's ruling before going on",
-  "notScreened": [
+ "summary": {
+  "writtenAt": "2026-11-23T17:10:00Z",
+  "releasesInTheList": 29,
+  "screenedThroughCheck1": 28,
+  "withTheFrozenSeeder": [
+   "14.1.0",
+   "14.2.0",
+   "14.3.0",
+   "14.4.0",
+   "14.5.0",
+   "14.6.0",
+   "15.0.0",
+   "15.1.0",
+   "15.2.0",
+   "15.3.0",
+   "15.4.0",
+   "15.5.0",
+   "16.0.0",
+   "16.1.0",
+   "16.2.0",
+   "16.3.0"
+  ],
+  "withTheScreeningSeeder": [
+   "16.4.0",
    "16.5.0",
    "16.6.0",
    "17.0.0",
@@ -1171,8 +2125,16 @@
    "17.5.0",
    "17.6.0",
    "17.7.0",
-   "17.8.0",
+   "17.8.0"
+  ],
+  "check4Met": 28,
+  "check1Met": 0,
+  "oldWriteCommitted3of3": 25,
+  "releasesThatBite": [],
+  "notScreenedThroughCheck1": [
    "17.9.0"
-  ]
+  ],
+  "againstExpectation": "as expected on every screened release: check 4 met, check 1 not met",
+  "reading": "From 14.1.0 to 17.8.0 the page write recorded for 14.0.0 still commits on a valid route, three times out of three, on every release. No stock OpenProject release in that range is a second upgrade that bites for the public family. From 16.4.0 the frozen seeder cannot create its projects, so those releases were screened with the approved screening seeder and are marked so."
  }
 }
