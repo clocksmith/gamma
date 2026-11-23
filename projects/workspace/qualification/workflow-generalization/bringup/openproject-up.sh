@@ -51,6 +51,20 @@ for _ in $(seq 1 60); do
   docker exec "$PG" pg_isready -U opqual >/dev/null 2>&1 && break
   sleep 0.5
 done
+# pg_isready also answers while PostgreSQL runs its own first initialisation, after which the
+# server restarts; asking for the databases in that gap fails. Only the final server listens
+# on TCP, so wait for two answers to SELECT 1 over TCP, a second apart.
+pg_streak=0
+for _ in $(seq 1 120); do
+  if docker exec "$PG" sh -c 'PGPASSWORD="$POSTGRES_PASSWORD" psql -h 127.0.0.1 -U opqual -d postgres -Atc "SELECT 1"' >/dev/null 2>&1; then
+    pg_streak=$((pg_streak + 1))
+  else
+    pg_streak=0
+  fi
+  [ "$pg_streak" -ge 2 ] && break
+  sleep 1
+done
+[ "$pg_streak" -ge 2 ] || { echo "PostgreSQL did not become ready" >&2; exit 1; }
 docker exec "$PG" psql -q -U opqual -d postgres -c "CREATE DATABASE op_old_qual;" -c "CREATE DATABASE op_new_qual;"
 
 app_env_file() { # <container> <db> <secret> <host port> -> path of the env file
