@@ -24,14 +24,17 @@ export function readOrderRow({ mariadbContainer, database }, name) {
   const safe = String(name);
   if (!/^[A-Za-z0-9_-]{1,64}$/.test(safe)) throw Error('order name holds a character that is not allowed');
   const sql = `SELECT JSON_OBJECT('modified', DATE_FORMAT(modified, '%Y-%m-%d %H:%i:%s.%f'), 'docstatus', docstatus, `
-    + `'totalQty', total_qty, 'termsLength', CHAR_LENGTH(IFNULL(terms, '')), `
+    + `'totalQty', total_qty, 'termsLength', CHAR_LENGTH(IFNULL(terms, '')), 'termsBase64', TO_BASE64(LEFT(IFNULL(terms, ''), 4000)), `
     + `'versionCount', (SELECT COUNT(*) FROM tabVersion WHERE ref_doctype='Purchase Order' AND docname='${safe}')) `
     + `FROM \`tabPurchase Order\` WHERE name='${safe}';`;
   const out = execFileSync('docker', ['exec', '-e', `SQL=${sql}`, '-e', `DBNAME=${database}`, mariadbContainer, 'sh', '-c',
     'mariadb -uroot -p"$MARIADB_ROOT_PASSWORD" "$DBNAME" -Nre "$SQL"'], { encoding: 'utf8', timeout: 10000 }).trim();
   if (!out) throw Error(`order ${safe} not found`);
   const row = JSON.parse(out);
-  return { modified: row.modified, docstatus: Number(row.docstatus), totalQty: Number(row.totalQty), termsLength: Number(row.termsLength), versionCount: Number(row.versionCount) };
+  // The stored terms themselves, so that a scorer can see whether the reference is there instead of trusting a flag.
+  const terms = Buffer.from(String(row.termsBase64 ?? '').replace(/\s+/g, ''), 'base64').toString('utf8');
+  return { modified: row.modified, docstatus: Number(row.docstatus), totalQty: Number(row.totalQty), termsLength: Number(row.termsLength),
+    terms, versionCount: Number(row.versionCount) };
 }
 
 /** Whether the order's Terms hold the reference, read from the database. */

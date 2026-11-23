@@ -33,8 +33,10 @@ application-neutral runner when a later stage is frozen.
 ## What differs from OpenProject, and what is still open
 
 - **Record format.** ERPNext route records carry the order's row (`modified`,
-  `docstatus`, `totalQty`, `termsLength`, `versionCount`) and the `reference`
-  the write adds, and are labelled `gammatron-three-arm-erpnext-route-record/draft`. The scorer's
+  `docstatus`, `totalQty`, `termsLength`, `terms`, `versionCount`) and the
+  `reference` the write adds. The stored terms are included at the
+  coordinator's request, so that a scorer can check for the reference itself.
+  Records are labelled `gammatron-three-arm-erpnext-route-record/draft`. The scorer's
   schema is OpenProject's; the fields have to be agreed with the coordinator
   before any ERPNext stage is frozen.
 - **The learner's adapter.** `projectFrappeResourceScalars`, hand-written for

@@ -71,7 +71,7 @@ before(async () => {
     recipe('r-2', 12, false, 12, 'direct', 'CONF-1002'),
     recipe('r-3', 5, true, 12, 'more-info-tab', 'CONF-1003'),
   ] }));
-  const row = name => { const d = store.get(name); return { modified: d.modified, docstatus: d.docstatus, totalQty: d.total_qty, termsLength: d.terms.length, versionCount: d.versions }; };
+  const row = name => { const d = store.get(name); return { modified: d.modified, docstatus: d.docstatus, totalQty: d.total_qty, termsLength: d.terms.length, terms: d.terms, versionCount: d.versions }; };
   deps = {
     executable: fileURLToPath(new URL('../support/fake-claude-erpnext.mjs', import.meta.url)),
     stateFile: join(dir, 'state.json'),
@@ -131,6 +131,8 @@ test('ERPNext: discovery freezes each arm, then three routes are decided, writte
   }
   assert.ok(routes.every(r => !('valid' in r) && !('label' in r) && r.application === 'erpnext' && typeof r.reference === 'string'));
   assert.ok(routes.every(r => r.reads >= 1 && r.reads <= 8));
+  // The stored terms are on the record, so the reference can be checked without trusting a flag.
+  for (const r of routes) assert.equal(r.after.terms.includes(r.reference) && !r.before.terms.includes(r.reference), r.committed, `${r.arm} ${r.routeId}`);
 });
 
 test('ERPNext: kept cases are rebuilt under new names and rerun; a release that moves a field is caught', async () => {

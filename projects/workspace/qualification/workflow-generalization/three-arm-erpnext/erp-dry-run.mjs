@@ -86,6 +86,7 @@ const row = (r, armLabel) => {
   return { arm: armLabel, routeId: r.routeId, routeIs: route.valid ? 'valid' : 'invalid', what: route.what,
     decision: r.decision, stopReason: r.stopReason, writeSent: r.writeAttempted, httpStatus: r.httpStatus, committed: r.committed,
     referenceStored: r.effectMatches, reference: r.reference, termsLength: [r.before.termsLength, r.after.termsLength],
+    referenceInStoredTerms: [r.before.terms.includes(r.reference), r.after.terms.includes(r.reference)],
     modified: [r.before.modified, r.after.modified], versionEntries: [r.before.versionCount, r.after.versionCount],
     reads: r.reads, blockedBy, error: r.error };
 };
@@ -98,6 +99,7 @@ for (const arm of ARMS) {
   const valid = mine.find(r => r.routeIs === 'valid');
   check(`${arm}: writes the valid route and the stored order holds the reference`,
     valid?.decision === 'write' && valid.httpStatus === 200 && valid.committed && valid.referenceStored === true
+    && valid.referenceInStoredTerms[0] === false && valid.referenceInStoredTerms[1] === true
     && valid.modified[1] !== valid.modified[0] && valid.versionEntries[1] === valid.versionEntries[0] + 1);
   check(`${arm}: stops both look-alikes itself, and no row changes`,
     mine.filter(r => r.routeIs === 'invalid').length === 2
