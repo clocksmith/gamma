@@ -81,11 +81,23 @@ Checked so far, all against a local OpenProject `14.0.0` started by
   unchanged.
 - Whole pipeline against the real OpenProject `14.0.0`, real Chrome and the
   real guard sandbox, with the stand-in for the model and the public example
-  family (2026-11-23, no model call). First run: every arm stopped on every
-  route, valid ones included, because OpenProject returns 24 hours as `P1D`
-  and 40 as `P1DT16H`. The stand-in guard compared text, which was the
-  stand-in's fault; the `repair-boundary` arm's fact for the requested hours
-  was written `PT40H`, which was the runner's fault and would have made that
-  arm stop on any route of a day or more. Fixed in `repair-boundary-arm.mjs`;
-  the stand-in application in the tests now answers as the real one does.
-  The rerun is pending.
+  family (2026-11-23, no model call, `dry-run.mjs`). Receipt:
+  `../receipts/three-arm-dry-run-receipt.json`.
+  - First attempt: every arm stopped on every route, valid ones included.
+    OpenProject returns 24 hours as `P1D` and 40 as `P1DT16H`. The stand-in
+    guard and the stand-in planner compared text, which was the stand-in's
+    fault; the `repair-boundary` arm's fact for the requested hours was
+    written `PT40H`, which was the runner's fault. Every arm is now given the
+    hours in both forms (`durations.mjs`).
+  - Second attempt: stopped before deciding anything, on a connection reset
+    by a release that had only just come up. It did not reproduce. The
+    bring-up now waits for five answers in a row and the runner retries its
+    own failed connections.
+  - Third attempt, passed: each arm wrote the valid route (HTTP 200, hours 8
+    to 56, row version and journal each up by one in PostgreSQL) and stopped
+    both look-alikes itself with no write sent. The control guard that always
+    writes got all three committed, the two look-alikes included: neither the
+    server nor the harness blocks a wrong write, so an arm's zero is its own.
+- Known and not fixed: `bringup/erpnext-up.sh` still passes its generated
+  passwords on the command line. The OpenProject script was fixed; the
+  ERPNext one is not used before Stage B and will be fixed with that freeze.

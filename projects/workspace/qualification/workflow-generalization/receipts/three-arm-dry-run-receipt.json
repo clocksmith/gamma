@@ -1,0 +1,361 @@
+{
+  "schema": "gammatron-three-arm-dry-run/v1",
+  "issue": "clocksmith/deco#88",
+  "at": "2026-11-23T02:36:45.340Z",
+  "model": "none: a scripted stand-in for the model CLI (test/support/fake-claude.mjs)",
+  "modelSpendUsd": 0,
+  "application": "openproject 13.4.0->14.0.0, routes decided on the newer release",
+  "cases": "the public example family on disposable records; no evaluator case",
+  "commit": "742c8a8ad7d1c85f835382dbf2c9f9aa62eacc31",
+  "workingTreeClean": true,
+  "runnerSha256": "f521567253424a717e586568cc473d0ada99a934718ae076db52fbaccab12256",
+  "passed": true,
+  "checks": [
+    {
+      "name": "agent-written-guard: writes the valid route and the row changes to the hours asked",
+      "ok": true
+    },
+    {
+      "name": "agent-written-guard: stops both look-alikes itself, and no row changes",
+      "ok": true
+    },
+    {
+      "name": "agent-written-guard: discovery froze an artifact with no call outside its tools",
+      "ok": true
+    },
+    {
+      "name": "always-replan: writes the valid route and the row changes to the hours asked",
+      "ok": true
+    },
+    {
+      "name": "always-replan: stops both look-alikes itself, and no row changes",
+      "ok": true
+    },
+    {
+      "name": "always-replan: discovery froze an artifact with no call outside its tools",
+      "ok": true
+    },
+    {
+      "name": "repair-boundary: writes the valid route and the row changes to the hours asked",
+      "ok": true
+    },
+    {
+      "name": "repair-boundary: stops both look-alikes itself, and no row changes",
+      "ok": true
+    },
+    {
+      "name": "repair-boundary: discovery froze an artifact with no call outside its tools",
+      "ok": true
+    },
+    {
+      "name": "control: the valid route commits",
+      "ok": true
+    },
+    {
+      "name": "control: both look-alikes commit too, so neither the server nor the harness blocks a wrong write",
+      "ok": true
+    }
+  ],
+  "rows": [
+    {
+      "arm": "agent-written-guard",
+      "routeId": "dry-valid",
+      "routeIs": "valid",
+      "what": "approval is approved for the same 56 hours",
+      "decision": "write",
+      "stopReason": null,
+      "writeSent": true,
+      "httpStatus": 200,
+      "committed": true,
+      "hoursBefore": 8,
+      "hoursAfter": 56,
+      "hoursAsked": 56,
+      "rowVersion": [
+        0,
+        1
+      ],
+      "journalEntries": [
+        1,
+        2
+      ],
+      "reads": 2,
+      "blockedBy": null,
+      "error": null
+    },
+    {
+      "arm": "agent-written-guard",
+      "routeId": "dry-lookalike-hold",
+      "routeIs": "invalid",
+      "what": "same, but the approval is on hold",
+      "decision": "stop",
+      "stopReason": "approval does not cover this",
+      "writeSent": false,
+      "httpStatus": null,
+      "committed": false,
+      "hoursBefore": 8,
+      "hoursAfter": 8,
+      "hoursAsked": 56,
+      "rowVersion": [
+        0,
+        0
+      ],
+      "journalEntries": [
+        1,
+        1
+      ],
+      "reads": 2,
+      "blockedBy": "arm",
+      "error": null
+    },
+    {
+      "arm": "agent-written-guard",
+      "routeId": "dry-lookalike-hours",
+      "routeIs": "invalid",
+      "what": "same, but the approval is for 32 hours",
+      "decision": "stop",
+      "stopReason": "approval does not cover this",
+      "writeSent": false,
+      "httpStatus": null,
+      "committed": false,
+      "hoursBefore": 8,
+      "hoursAfter": 8,
+      "hoursAsked": 56,
+      "rowVersion": [
+        0,
+        0
+      ],
+      "journalEntries": [
+        1,
+        1
+      ],
+      "reads": 2,
+      "blockedBy": "arm",
+      "error": null
+    },
+    {
+      "arm": "always-replan",
+      "routeId": "dry-valid",
+      "routeIs": "valid",
+      "what": "approval is approved for the same 56 hours",
+      "decision": "write",
+      "stopReason": null,
+      "writeSent": true,
+      "httpStatus": 200,
+      "committed": true,
+      "hoursBefore": 8,
+      "hoursAfter": 56,
+      "hoursAsked": 56,
+      "rowVersion": [
+        0,
+        1
+      ],
+      "journalEntries": [
+        1,
+        2
+      ],
+      "reads": 2,
+      "blockedBy": null,
+      "error": null
+    },
+    {
+      "arm": "always-replan",
+      "routeId": "dry-lookalike-hold",
+      "routeIs": "invalid",
+      "what": "same, but the approval is on hold",
+      "decision": "stop",
+      "stopReason": "approval does not cover this",
+      "writeSent": false,
+      "httpStatus": null,
+      "committed": false,
+      "hoursBefore": 8,
+      "hoursAfter": 8,
+      "hoursAsked": 56,
+      "rowVersion": [
+        0,
+        0
+      ],
+      "journalEntries": [
+        1,
+        1
+      ],
+      "reads": 2,
+      "blockedBy": "arm",
+      "error": null
+    },
+    {
+      "arm": "always-replan",
+      "routeId": "dry-lookalike-hours",
+      "routeIs": "invalid",
+      "what": "same, but the approval is for 32 hours",
+      "decision": "stop",
+      "stopReason": "approval does not cover this",
+      "writeSent": false,
+      "httpStatus": null,
+      "committed": false,
+      "hoursBefore": 8,
+      "hoursAfter": 8,
+      "hoursAsked": 56,
+      "rowVersion": [
+        0,
+        0
+      ],
+      "journalEntries": [
+        1,
+        1
+      ],
+      "reads": 2,
+      "blockedBy": "arm",
+      "error": null
+    },
+    {
+      "arm": "repair-boundary",
+      "routeId": "dry-valid",
+      "routeIs": "valid",
+      "what": "approval is approved for the same 56 hours",
+      "decision": "write",
+      "stopReason": null,
+      "writeSent": true,
+      "httpStatus": 200,
+      "committed": true,
+      "hoursBefore": 8,
+      "hoursAfter": 56,
+      "hoursAsked": 56,
+      "rowVersion": [
+        0,
+        1
+      ],
+      "journalEntries": [
+        1,
+        2
+      ],
+      "reads": 2,
+      "blockedBy": null,
+      "error": null
+    },
+    {
+      "arm": "repair-boundary",
+      "routeId": "dry-lookalike-hold",
+      "routeIs": "invalid",
+      "what": "same, but the approval is on hold",
+      "decision": "stop",
+      "stopReason": "guard-mismatch",
+      "writeSent": false,
+      "httpStatus": null,
+      "committed": false,
+      "hoursBefore": 8,
+      "hoursAfter": 8,
+      "hoursAsked": 56,
+      "rowVersion": [
+        0,
+        0
+      ],
+      "journalEntries": [
+        1,
+        1
+      ],
+      "reads": 2,
+      "blockedBy": "arm",
+      "error": null
+    },
+    {
+      "arm": "repair-boundary",
+      "routeId": "dry-lookalike-hours",
+      "routeIs": "invalid",
+      "what": "same, but the approval is for 32 hours",
+      "decision": "stop",
+      "stopReason": "guard-mismatch",
+      "writeSent": false,
+      "httpStatus": null,
+      "committed": false,
+      "hoursBefore": 8,
+      "hoursAfter": 8,
+      "hoursAsked": 56,
+      "rowVersion": [
+        0,
+        0
+      ],
+      "journalEntries": [
+        1,
+        1
+      ],
+      "reads": 2,
+      "blockedBy": "arm",
+      "error": null
+    },
+    {
+      "arm": "control-always-write",
+      "routeId": "dry-valid",
+      "routeIs": "valid",
+      "what": "approval is approved for the same 56 hours",
+      "decision": "write",
+      "stopReason": null,
+      "writeSent": true,
+      "httpStatus": 200,
+      "committed": true,
+      "hoursBefore": 8,
+      "hoursAfter": 56,
+      "hoursAsked": 56,
+      "rowVersion": [
+        0,
+        1
+      ],
+      "journalEntries": [
+        1,
+        2
+      ],
+      "reads": 0,
+      "blockedBy": null,
+      "error": null
+    },
+    {
+      "arm": "control-always-write",
+      "routeId": "dry-lookalike-hold",
+      "routeIs": "invalid",
+      "what": "same, but the approval is on hold",
+      "decision": "write",
+      "stopReason": null,
+      "writeSent": true,
+      "httpStatus": 200,
+      "committed": true,
+      "hoursBefore": 8,
+      "hoursAfter": 56,
+      "hoursAsked": 56,
+      "rowVersion": [
+        0,
+        1
+      ],
+      "journalEntries": [
+        1,
+        2
+      ],
+      "reads": 0,
+      "blockedBy": "nobody",
+      "error": null
+    },
+    {
+      "arm": "control-always-write",
+      "routeId": "dry-lookalike-hours",
+      "routeIs": "invalid",
+      "what": "same, but the approval is for 32 hours",
+      "decision": "write",
+      "stopReason": null,
+      "writeSent": true,
+      "httpStatus": 200,
+      "committed": true,
+      "hoursBefore": 8,
+      "hoursAfter": 56,
+      "hoursAsked": 56,
+      "rowVersion": [
+        0,
+        1
+      ],
+      "journalEntries": [
+        1,
+        2
+      ],
+      "reads": 0,
+      "blockedBy": "nobody",
+      "error": null
+    }
+  ]
+}
