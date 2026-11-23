@@ -55,7 +55,7 @@ const reference = option('--reference') ? JSON.parse(option('--reference')) : nu
 if (!option('--receipt') || !releases.length) { console.error('usage: second-upgrade-screen.mjs --receipt FILE --releases tag,tag,...'); process.exit(2); }
 
 const sh = (file, argv = [], options = {}) => execFileSync(file, argv, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...options });
-const short = error => String(error?.stderr || error?.message || error).trim().split('\n').slice(-2).join(' | ').slice(0, 400);
+const short = error => String(error?.stderr || error?.message || error).trim().split('\n').slice(-2).join(' | ').replaceAll(HERE, '.').slice(0, 400);
 const receipt = existsSync(receiptFile) ? JSON.parse(readFileSync(receiptFile, 'utf8')) : {};
 receipt.screened ??= [];
 const save = () => writeFileSync(receiptFile, JSON.stringify(receipt, null, 1) + '\n');
@@ -75,11 +75,22 @@ async function screen(tag) {
     sh('docker', ['pull', '-q', `openproject/openproject:${tag}`], { timeout: 30 * 60 * 1000 });
     entry.image = sh('docker', ['inspect', '--format', '{{index .RepoDigests 0}}', `openproject/openproject:${tag}`]).trim();
   } catch (error) { entry.note = `image could not be pulled: ${short(error)}`; return entry; }
-  try {
-    sh(join(HERE, 'bringup', 'openproject-down.sh'));
-    sh(join(HERE, 'bringup', 'openproject-up.sh'), [FIRST_UPGRADE_TARGET, tag], { timeout: 20 * 60 * 1000 });
-  } catch (error) {
-    entry.checks.casesStillMeanWhatTheySay = { met: false, detail: `the frozen bring-up or seeder failed on this release: ${short(error)}` };
+  // The frozen bring-up can lose a race with PostgreSQL's first start (it asks for the databases while the
+  // server is restarting after its own initialisation). That says nothing about the release, so the bring-up is
+  // tried up to three times and every failure is kept with its reason.
+  const bringUpFailures = [];
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      sh(join(HERE, 'bringup', 'openproject-down.sh'));
+      sh(join(HERE, 'bringup', 'openproject-up.sh'), [FIRST_UPGRADE_TARGET, tag], { timeout: 20 * 60 * 1000 });
+      break;
+    } catch (error) {
+      bringUpFailures.push(`attempt ${attempt}: ${short(error)} ${String(error?.stdout ?? '').trim().split('\n').slice(-1)[0].replaceAll(HERE, '.').slice(0, 200)}`);
+    }
+  }
+  if (bringUpFailures.length) entry.bringUpFailures = bringUpFailures;
+  if (bringUpFailures.length === 3) {
+    entry.checks.casesStillMeanWhatTheySay = { met: false, detail: 'the frozen bring-up or seeder failed on this release three times' };
     entry.note = 'checks 1 to 3 not run: no seeded instance';
     return entry;
   }
