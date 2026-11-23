@@ -168,3 +168,28 @@ was written after six ERPNext results, one of them possibly a break, and not
 after five clean ones as its heading says. Its content stands: the search stays
 bounded at the 17 points, and a release that meets check 1 is followed up
 inside its interval as amendment 1 requires.
+
+## Amendment 4 (2026-11-23, after ERPNext v15.80.0 was examined)
+
+This amendment is **not** blind. It was written after the evaluator saw that
+v15.80.0 fails the old page write 3 of 3 because the Terms tab changed from
+`<a>` to `<button>` (receipt at gamma a2cabb292). No arm has produced a result
+on any second upgrade. The evaluator confirmed in `three-arm-erpnext/` that the
+arms have only `erp_request` and `erp_get`, and that the runner performs the
+write through `erp-write-step.mjs`.
+
+- **Check 1 tested a layer the arms do not own.** A break in the runner's page
+  write fails every arm alike and cannot show which arm repairs better.
+- **For ERPNext, check 1 now reads:** on the three labelled cases, a scripted
+  run of the REST reads the frozen work depends on reaches the wrong decision,
+  on 3 of 3 repeats. No model, and no page write.
+- **v15.80.0 is recorded as "breaks the shared write only".** It does not bite
+  on this evidence unless the new check 1 is met. The same label applies to any
+  release that breaks only the page write.
+- **The runner's write step is not changed.** The no-change control, v15.40.0,
+  predates the tab change and needs no selector fix.
+- **The ascending search inside v15.70.0 to v15.80.0 is dropped**, because it
+  was locating a page-only change. The bound stays at the 17 stride points:
+  each one, including those already screened, gets the new check 1 once.
+- If none meets it, the ERPNext second upgrade is the no-change control, as
+  amendment 3 says.
