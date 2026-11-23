@@ -82,11 +82,21 @@
   }
  ],
  "findings": [
-  "On 14.0.0, the release Stage A decides routes on: no anomaly in 70 instrumented writes (50 warm, 20 as the first action after a cold start), besides about eight earlier first writes on fresh instances in the dry runs.",
+  "On 14.0.0, the release Stage A decides routes on: no anomaly in 20 writes made as the first action after a cold start, which is the condition that matters, since every anomaly seen came right after the application started and each arm's unseen-route phase starts that way. The 50 clean warm writes on 14.0.0 do not bear on it.",
   "On 16.6.0 after a cold start: 2 anomalies in 20. In one, the save was sent with the right hours while the form check was still unanswered, both were answered 200, and the row never changed. In the other, the hours typed were joined to the text the dialog already showed (8h and 56 became 8h56) and the row was changed to 8.93 hours: a write with the wrong value.",
   "'First write of a browser session' is not the trigger: 0 anomalies in 100 such writes on warm instances. All anomalies seen so far, here and in the screen, were on releases later than 14.0.0 and came right after the application had started.",
   "On those later releases the dialog formats the field as text (8h) and reacts while it is being filled. The frozen write step was recorded for 14.0.0 and does not wait for that. A second upgrade to such a release needs a write step made for it, with the field checked before Save and the stored value checked after, as part of that stage's own freeze."
  ],
- "whatThisDoesNotShow": "that the fault cannot happen on 14.0.0. Seventy clean writes bound a rate; they do not prove zero. With 0 of 70 the true rate is below about 4.2 percent (one-sided 95 percent).",
- "releaseScreenUnaffected": "check 1 needs the old write to commit in 0 of 3; 2 of 3 is still not met, so no screening result changes."
+ "whatThisDoesNotShow": "that the fault cannot happen on 14.0.0. 0 of 20 cold-start writes bounds the rate below 13.9 percent (one-sided 95 percent), which is too weak. An earlier version of this receipt quoted 4.2 percent from 0 of 70; that mixed in warm writes, which are not the triggering condition. Corrected at the evaluator's review.",
+ "releaseScreenUnaffected": "check 1 needs the old write to commit in 0 of 3; 2 of 3 is still not met, so no screening result changes.",
+ "round4": {
+  "what": "80 more first writes after a cold start on 14.0.0 through the frozen executeWorkWrite, to make 100 in all",
+  "expectedWrittenBeforeAnyResult": {
+   "writtenAt": "2026-11-23T17:55:00Z",
+   "anomalies": "0 of 80: every write lands with the hours asked",
+   "ifAnyAnomaly": "the write step is hardened and the runner re-frozen before Stage A",
+   "ifNone": "0 of 100 bounds the rate below about 3 percent (one-sided 95 percent); the frozen step stays"
+  },
+  "results": null
+ }
 }

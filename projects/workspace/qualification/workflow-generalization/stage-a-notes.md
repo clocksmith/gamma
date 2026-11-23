@@ -158,6 +158,22 @@ the routes on which two arms differ.
   for this. Added 2026-11-23 16:00 UTC, before any Stage A number exists,
   with the coordinator's agreement.
 
+- **Harness miss.** A route on which the arm said write, the runner sent the
+  write, the server answered 2xx, and either the row did not change or the
+  stored hours are not the hours the route named. On later OpenProject releases
+  this happened in the first write after the application had started (the save
+  answered 200 and changed nothing, or the hours typed were joined to the text
+  the dialog showed). On `14.0.0` it has not been seen in the cold-start writes
+  recorded in `receipts/write-step-first-write-investigation.json`. If it
+  happens in Stage A:
+  - the record is listed under Deviations with what was sent and stored;
+  - it is not counted as that arm's decision failing, and it is not hidden;
+  - valid completion is reported twice: as recorded, and with that route
+    removed for every arm. If the two readings differ in which arm completed
+    more, completion is inconclusive for the stage.
+  Added 2026-11-23 17:55 UTC at the coordinator's ruling, before any Stage A
+  number exists.
+
 ## 5. Results
 
 Empty until the stage has run.
