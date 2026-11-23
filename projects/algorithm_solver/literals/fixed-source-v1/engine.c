@@ -6,6 +6,8 @@
 // Chain file, one line per dictionary entry in the order added:
 //   E <entries> <stored bytes> <total emissions, or -1 if not all spelled>
 //     <files spelled> <hex of the entry>
+// BPE chains also carry M <left hex> <right hex> before each merge, so the
+// checker can replay the ordinary segmentation.
 // The checker (verify.py) shares no code with this file.
 #define _GNU_SOURCE
 #include <stdint.h>
@@ -433,6 +435,11 @@ static int run_bpe(FILE *out, int strict, int L, int kmax, double limit) {
     memcpy(joined, pool + strs[a].off, la);
     memcpy(joined + la, pool + strs[b].off, lb);
     int merged = str_id(joined, la + lb, &created);
+    fprintf(out, "M ");
+    for (int i = 0; i < la; i++) fprintf(out, "%02x", joined[i]);
+    fputc(' ', out);
+    for (int i = la; i < la + lb; i++) fprintf(out, "%02x", joined[i]);
+    fputc('\n', out);
     for (int d = 0; d < ndocs; d++) {
       int *t = tok + tok_at[d], n = tok_n[d], out_n = 0;
       for (int i = 0; i < n;) {
@@ -545,9 +552,179 @@ static int run_cover(FILE *out, int singles, int L, int kmax, double limit) {
   return 0;
 }
 
+// Local search within the same rules: start from a greedy dictionary of K
+// entries, drop a few of the entries that matter least, refill greedily, and
+// keep the result only if total emissions fall. A fixed seed makes it repeatable.
+static u64 rng_state = 0x9E3779B97F4A7C15ULL;
+static u64 rng(void) {
+  rng_state ^= rng_state << 13;
+  rng_state ^= rng_state >> 7;
+  rng_state ^= rng_state << 17;
+  return rng_state;
+}
+
+static void remove_entry(const Cand *c) {
+  u64 bit = 1ULL << (c->len - 1);
+  for (int i = 0; i < c->nocc;) {
+    int d = docof[occ[c->off + i]], j = i;
+    while (j < c->nocc && docof[occ[c->off + j]] == d) mask[occ[c->off + j++]] &= ~bit;
+    int next = doc_cost(d);
+    emissions += next - cost[d];
+    cost[d] = next;
+    i = j;
+  }
+}
+
+static int loss_of(const Cand *c) {
+  u64 bit = 1ULL << (c->len - 1);
+  int loss = 0;
+  for (int i = 0; i < c->nocc;) {
+    int d = docof[occ[c->off + i]], j = i;
+    while (j < c->nocc && docof[occ[c->off + j]] == d) mask[occ[c->off + j++]] &= ~bit;
+    loss += doc_cost(d) - cost[d];
+    for (int k = i; k < j; k++) mask[occ[c->off + k]] |= bit;
+    i = j;
+  }
+  return loss;
+}
+
+static int find_candidate(const unsigned char *s, int l) {
+  // Candidates are stored by length, then in hash order, so scan that length.
+  static int first[66], ready = 0;
+  if (!ready) {
+    for (int i = 0; i < 66; i++) first[i] = -1;
+    for (int c = ncand - 1; c >= 0; c--) first[cands[c].len] = c;
+    ready = 1;
+  }
+  if (first[l] < 0) return -1;
+  for (int c = first[l]; c < ncand && cands[c].len == l; c++)
+    if (!memcmp(text + occ[cands[c].off], s, l)) return c;
+  return -1;
+}
+
+static int run_polish(FILE *out, int K, double limit, const char *seed) {
+  int k = 0;
+  long bytes = 0;
+  FILE *null_out = fopen("/dev/null", "w");
+  add_alphabet(null_out, &k, &bytes);
+  fclose(null_out);
+  int alphabet = k;
+  if (K <= alphabet) return 0;
+  int *inside = xmalloc((K + 1) * sizeof(int)), n = 0;
+  unsigned char *member = calloc(ncand, 1);
+  FILE *f = fopen(seed, "r");
+  if (!f) { perror(seed); exit(2); }
+  char line[512];
+  unsigned char raw[70];
+  while (fgets(line, sizeof line, f) && n < K - alphabet) {
+    int ke, sp;
+    long st, to;
+    char hex[200];
+    if (line[0] != 'E' || sscanf(line, "E %d %ld %ld %d %199s", &ke, &st, &to, &sp, hex) != 5) continue;
+    int l = (int)strlen(hex) / 2;
+    if (l < 2) continue;
+    for (int i = 0; i < l; i++) { unsigned v; sscanf(hex + 2 * i, "%2x", &v); raw[i] = (unsigned char)v; }
+    int c = find_candidate(raw, l);
+    if (c < 0) { fprintf(stderr, "seed entry is not a candidate\n"); exit(5); }
+    member[c] = 1;
+    inside[n++] = c;
+    accept(&cands[c]);
+  }
+  fclose(f);
+  double start = now();
+  int *saved = xmalloc(ndocs * sizeof(int));
+  int *old_inside = xmalloc((K + 1) * sizeof(int));
+  int *cached = xmalloc(ncand * sizeof(int));
+  for (int c = 0; c < ncand; c++) cached[c] = cands[c].ub;
+  heap = xmalloc((ncand + 1) * sizeof(Node));
+  long best = emissions;
+  long rounds = 0, improved = 0;
+  while (now() - start < limit && n > 0) {
+    rounds++;
+    memcpy(saved, cost, ndocs * sizeof(int));
+    memcpy(old_inside, inside, n * sizeof(int));
+    int old_n = n;
+    long before = emissions;
+    int drop = 1 + (int)(rng() % (unsigned)(n / 12 + 2));
+    if (drop > n) drop = n;
+    for (int t = 0; t < drop && n > 0; t++) {
+      int pick = -1, low = INF;
+      for (int tries = 0; tries < 6; tries++) {
+        int i = (int)(rng() % (unsigned)n);
+        int loss = loss_of(&cands[inside[i]]);
+        if (loss < low) { low = loss; pick = i; }
+      }
+      int c = inside[pick];
+      inside[pick] = inside[--n];
+      member[c] = 0;
+      remove_entry(&cands[c]);
+      cached[c] = low;
+    }
+    heap_n = 0;
+    for (int c = 0; c < ncand; c++)
+      if (!member[c] && cached[c] > 0) heap_push((Node){(double)cached[c], c, -1, 0});
+    int step = 0;
+    while (n < K - alphabet && heap_n) {
+      Node top = heap_pop();
+      if (top.stamp != step) {
+        top.gain = gain_of(&cands[top.c]);
+        cached[top.c] = top.gain;
+        top.key = top.gain;
+        top.stamp = step;
+        if (heap_n && above(&heap[0], &top)) { heap_push(top); continue; }
+      }
+      if (top.gain <= 0) break;
+      accept(&cands[top.c]);
+      member[top.c] = 1;
+      inside[n++] = top.c;
+      step++;
+    }
+    if (emissions < before) {
+      improved++;
+      best = emissions;
+    } else {
+      for (int i = 0; i < n; i++) {
+        const Cand *c = &cands[inside[i]];
+        u64 bit = 1ULL << (c->len - 1);
+        for (int j = 0; j < c->nocc; j++) mask[occ[c->off + j]] &= ~bit;
+        member[inside[i]] = 0;
+      }
+      n = old_n;
+      memcpy(inside, old_inside, n * sizeof(int));
+      for (int i = 0; i < n; i++) {
+        const Cand *c = &cands[inside[i]];
+        u64 bit = 1ULL << (c->len - 1);
+        for (int j = 0; j < c->nocc; j++) mask[occ[c->off + j]] |= bit;
+        member[inside[i]] = 1;
+      }
+      memcpy(cost, saved, ndocs * sizeof(int));
+      emissions = before;
+    }
+  }
+  int kk = 0;
+  long bb = 0;
+  for (int ch = 0; ch < 256; ch++)
+    if (present[ch]) {
+      kk++;
+      bb += 2;
+      unsigned char one = (unsigned char)ch;
+      write_entry(out, kk, bb, -1, 0, &one, 1);
+    }
+  for (int i = 0; i < n; i++) {
+    const Cand *c = &cands[inside[i]];
+    kk++;
+    bb += 1 + c->len;
+    write_entry(out, kk, bb, i == n - 1 ? best : -1, i == n - 1 ? ndocs : 0,
+                text + occ[c->off], c->len);
+  }
+  fprintf(out, "P rounds=%ld improved=%ld\n", rounds, improved);
+  return 0;
+}
+
+#ifndef ENGINE_NO_MAIN
 int main(int argc, char **argv) {
-  if (argc != 7) {
-    fprintf(stderr, "usage: engine MODE L KMAX LIMIT_SECONDS LIST OUT\n");
+  if (argc != 7 && !(argc == 8 && !strcmp(argv[1], "polish"))) {
+    fprintf(stderr, "usage: engine MODE L KMAX LIMIT_SECONDS LIST OUT [SEED_CHAIN]\n");
     return 2;
   }
   const char *mode = argv[1];
@@ -568,9 +745,11 @@ int main(int argc, char **argv) {
   else if (!strcmp(mode, "bpe-free")) stopped = run_bpe(out, 0, L, kmax, limit);
   else if (!strcmp(mode, "cover-mixed")) stopped = run_cover(out, 1, L, kmax, limit);
   else if (!strcmp(mode, "cover-nosingle")) stopped = run_cover(out, 0, L, kmax, limit);
+  else if (!strcmp(mode, "polish")) stopped = run_polish(out, kmax, limit, argv[7]);
   else { fprintf(stderr, "unknown mode\n"); return 2; }
   fprintf(out, "D %s L=%d candidates=%d occurrences=%ld stopped=%d seconds=%.1f\n",
           mode, L, ncand, nocc, stopped, now() - t0);
   fclose(out);
   return 0;
 }
+#endif
