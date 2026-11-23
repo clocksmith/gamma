@@ -564,8 +564,8 @@
     }
    },
    "bites": false,
-   "note": "check 1 is met. Checks 2 and 3 need a page route written for this release: rerun this release with --reference.",
-   "pendingReferenceRoute": true,
+   "note": "The old page write fails 3 of 3 because the Terms tab became a button. By amendment 4 this does not bite unless the new read check is met. No reference route was written.",
+   "pendingReferenceRoute": false,
    "endedAt": "2026-11-23T19:16:16.927Z",
    "causeExamined": {
     "recordedAt": "2026-11-23T19:24:51Z",
@@ -636,7 +636,96 @@
     },
     "reading": "a real change in the release, not a harness or cold-start fault: check 1 stands as met for the recorded page write.",
     "limitOfThatReading": "The break is in the page write that the runner performs for every arm. Arms reach the application only through the REST tools, answer write or stop, and never see or change the selectors (pre-registration Section 3, items 3, 5 and 6). So this break cannot separate the arms: unrepaired it fails every arm alike, and repaired by the runner it leaves the arms nothing to repair. Whether it can count as a second upgrade that bites is for the evaluator to rule."
-   }
+   },
+   "recordedAs": "breaks the shared write only (amendment 4, gamma 63d87d974)"
+  },
+  {
+   "release": "v15.73.0",
+   "tag": "v15.73.0",
+   "application": "erpnext",
+   "pair": "v15.20.0->v15.73.0",
+   "startedAt": "2026-11-23T19:24:58.998Z",
+   "image": "frappe/erpnext@sha256:c64b713526698a5b514c6841d55ccb1f461ab99de7106c460dfd9494aa4de131",
+   "checks": {
+    "casesStillMeanWhatTheySay": {
+     "met": true,
+     "labels": [
+      {
+       "route": "valid",
+       "intended": true,
+       "live": true
+      },
+      {
+       "route": "draft",
+       "intended": false,
+       "live": false
+      },
+      {
+       "route": "quantity",
+       "intended": false,
+       "live": false
+      }
+     ]
+    },
+    "oldWorkflowFailsOnAValidCase": {
+     "met": false,
+     "oldWriteCommitted": "3 of 3",
+     "storedTheReferenceAsked": "3 of 3",
+     "signIn": null,
+     "repeats": [
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null,
+       "referenceAsked": "SCRN-0004",
+       "termsStoredBefore": "",
+       "termsStoredAfter": "<div class=\"ql-editor read-mode\"><p>SCRN-0004</p></div>",
+       "versionCount": [
+        0,
+        1
+       ]
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null,
+       "referenceAsked": "SCRN-0005",
+       "termsStoredBefore": "",
+       "termsStoredAfter": "<div class=\"ql-editor read-mode\"><p>SCRN-0005</p></div>",
+       "versionCount": [
+        0,
+        1
+       ]
+      },
+      {
+       "committed": true,
+       "effectMatches": true,
+       "httpStatus": 200,
+       "error": null,
+       "referenceAsked": "SCRN-0006",
+       "termsStoredBefore": "",
+       "termsStoredAfter": "<div class=\"ql-editor read-mode\"><p>SCRN-0006</p></div>",
+       "versionCount": [
+        0,
+        1
+       ]
+      }
+     ]
+    },
+    "taskStillPossible": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    },
+    "lookAlikeStillNeedsTheArmToStop": {
+     "met": null,
+     "detail": "not needed: check 1 is not met"
+    }
+   },
+   "bites": false,
+   "note": null,
+   "endedAt": "2026-11-23T19:28:38.989Z"
   }
  ],
  "intervalBeforeV15_80": {
@@ -658,6 +747,9 @@
    "casesStillMeanWhatTheySay": "met on every release",
    "oldWorkflowFailsOnAValidCase": "not met up to the release before the tab became a button, met from that release on; which release that is is not known",
    "taskStillPossibleAndLookAlike": "not run: no reference route is written until the evaluator has ruled"
-  }
- }
+  },
+  "droppedAt": "2026-11-23T19:29:27Z",
+  "outcome": "Dropped by amendment 4 after v15.73.0, the release then running, because the search was locating a page-only change. v15.73.0 still commits 3 of 3. v15.74.0 to v15.79.0 were not screened, so the release that introduced the button is not identified."
+ },
+ "superseded": "The check 1 recorded in this receipt is the page-write form. Amendment 4 replaces it for ERPNext with the read check in receipts/second-upgrade-read-check-erpnext-receipt.json."
 }

@@ -1,0 +1,103 @@
+{
+ "schema": "gammatron-second-upgrade-read-check/v1",
+ "issue": "clocksmith/deco#88",
+ "rule": "second-upgrade-drift-rule.md, amendment 4 (gamma 63d87d974, sha256 f31945b69af7c77680def691d44956de8f6a46a9ec5fcbe56e3cbaf5b0d75d13)",
+ "application": "erpnext",
+ "firstUpgradeTarget": "v15.20.0",
+ "model": "none: scripted REST reads only (second-upgrade-read-check-erpnext.mjs)",
+ "modelSpendUsd": 0,
+ "cases": "the public ERPNext example family on disposable records: one valid case and two look-alikes (quotation still a draft; quotation for another quantity). No evaluator case.",
+ "strideInOrder": [
+  "v15.30.0",
+  "v15.40.0",
+  "v15.50.0",
+  "v15.60.0",
+  "v15.70.0",
+  "v15.80.0",
+  "v15.90.0",
+  "v15.100.0",
+  "v15.110.0",
+  "v15.120.0",
+  "v15.126.0",
+  "v16.0.0",
+  "v16.10.0",
+  "v16.20.0",
+  "v16.30.0",
+  "v16.50.0",
+  "v16.60.0"
+ ],
+ "whatIsMeasured": {
+  "frozenWork": "two kinds, both frozen on v15.20.0: a hand-written guard reading raw REST fields, and the real learner with its real adapter, taught two valid examples and two look-alikes",
+  "labels": "from how each case was built, never from a live read",
+  "check1Met": "for either kind of frozen work, at least one of the three cases is decided wrong on 3 of 3 repeats, each repeat on freshly built records",
+  "mixed": "a case wrong on 1 or 2 of 3 repeats: the release's round is repeated once, both rounds are kept, and the second stands",
+  "baseline": "the same frozen work must decide every case right on v15.20.0 in the same bring-up, or the entry is invalid",
+  "stops": "a release whose cases cannot be built or read, or that cannot be set up, stops the run for a ruling; no seeder is adapted"
+ },
+ "expectedWrittenBeforeAnyStrideRun": {
+  "writtenAt": "2026-11-23T19:29:27Z",
+  "check1": "not met on all 17; every decision right",
+  "basis": "Not blind for six releases: the page-write screen already read docstatus, total_qty and the quotation link on v15.30.0 to v15.80.0 through the same REST paths, and the labels agreed. Nothing is known about v15.90.0 to v16.60.0."
+ },
+ "limits": [
+  "One public family and one hand-written guard. A model-written guard or a sealed family may read fields this probe does not.",
+  "Reads only: a change in what a write does is not measured here.",
+  "If none meets check 1, the ERPNext second upgrade is the no-change control v15.40.0 (amendment 3)."
+ ],
+ "checked": [],
+ "probeSelfCheck": {
+  "at": "2026-11-23T19:33:30.217Z",
+  "pair": "v15.20.0->v15.20.0",
+  "boundarySha256": "31c0deba6c1e7a7169115ab071e7a2575c5443ec4fe70468df98c096fcf4a252",
+  "note": "Not a stride point. The two altered runs change REST answers inside this process to show the check can fire. They are not injected drift and say nothing about any release.",
+  "plainRunShouldNotMeet": {
+   "met": false,
+   "allCorrect": true,
+   "wrongOfThreeByCase": {
+    "written": {
+     "valid": 0,
+     "draft": 0,
+     "quantity": 0
+    },
+    "learned": {
+     "valid": 0,
+     "draft": 0,
+     "quantity": 0
+    }
+   }
+  },
+  "answerLosesTheQuotationLinkShouldMeet": {
+   "met": true,
+   "allCorrect": false,
+   "wrongOfThreeByCase": {
+    "written": {
+     "valid": 3,
+     "draft": 0,
+     "quantity": 0
+    },
+    "learned": {
+     "valid": 3,
+     "draft": 0,
+     "quantity": 0
+    }
+   }
+  },
+  "everyQuotationReadsSubmittedShouldMeet": {
+   "met": true,
+   "allCorrect": false,
+   "wrongOfThreeByCase": {
+    "written": {
+     "valid": 0,
+     "draft": 3,
+     "quantity": 0
+    },
+    "learned": {
+     "valid": 0,
+     "draft": 3,
+     "quantity": 0
+    }
+   }
+  },
+  "passed": true
+ }
+}
