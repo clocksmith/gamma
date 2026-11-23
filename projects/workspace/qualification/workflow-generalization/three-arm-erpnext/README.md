@@ -53,7 +53,7 @@ application-neutral runner when a later stage is frozen.
 - **The bring-up script** still passes its generated passwords on the command
   line. It is part of the frozen set and is left alone until that set is
   refrozen.
-- **Second release:** `v15.30.0` has been tried with the public family (below); `v15.40.0` has not.
+- **Second release:** `v15.30.0` and `v15.40.0` have each been tried with the public family (below).
 
 ## Checked so far
 
@@ -89,3 +89,9 @@ application-neutral runner when a later stage is frozen.
     labelled, maintenance completed for all three arms, 9 of 9 decisions.
     On `v15.30.0` nothing this family or the write step touches behaved
     differently from `v15.20.0`.
+- `v15.20.0 -> v15.40.0`, same probe, expected numbers committed first: met
+  on the first attempt. Kept cases 2 of 2 and 4 of 4, maintenance for all
+  three arms, 9 of 9 decisions. Neither `v15.30.0` nor `v15.40.0` changes
+  anything this family or the write step touches, so on this evidence a
+  second ERPNext upgrade to either would measure an upgrade that needs no
+  maintenance. That says nothing yet about families an author would write.
