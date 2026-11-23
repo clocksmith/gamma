@@ -158,13 +158,16 @@ the routes on which two arms differ.
   for this. Added 2026-11-23 16:00 UTC, before any Stage A number exists,
   with the coordinator's agreement.
 
-- **Harness miss.** A route on which the arm said write, the runner sent the
-  write, the server answered 2xx, and either the row did not change or the
-  stored hours are not the hours the route named. On later OpenProject releases
-  this happened in the first write after the application had started (the save
-  answered 200 and changed nothing, or the hours typed were joined to the text
-  the dialog showed). On `14.0.0` it has not been seen in the cold-start writes
-  recorded in `receipts/write-step-first-write-investigation.json`. If it
+- **Harness miss.** A route on which the arm said write and one of these
+  happened: the runner sent the write, the server answered 2xx, and the row
+  did not change; or the stored hours are not the hours the route named; or
+  the hardened write step did not press Save, because the Work field could
+  not be made to hold exactly the hours named, so nothing was sent.
+  The first two were seen in the first write after the application had
+  started: on later OpenProject releases, and once on `14.0.0` (856 hours
+  stored for 56 asked), after which the write step was hardened and the runner
+  frozen again. The evidence is in
+  `receipts/write-step-first-write-investigation.json`. If any of the three
   happens in Stage A:
   - the record is listed under Deviations with what was sent and stored;
   - it is not counted as that arm's decision failing, and it is not hidden;
@@ -172,8 +175,8 @@ the routes on which two arms differ.
     removed for every arm. If the two readings differ in which arm completed
     more, completion is inconclusive for the stage.
   Added 2026-11-23 at the coordinator's ruling, before any Stage A number
-  exists (commit `722c2fbbd`, 17:47 UTC; an earlier wording gave a later time
-  typed by hand).
+  exists (commit `722c2fbbd`), and widened the same day to cover the 14.0.0
+  anomaly and "Save not pressed".
 
 ## 5. Results
 
