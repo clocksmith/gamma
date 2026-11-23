@@ -103,8 +103,10 @@ after(() => { http.close(); rmSync(dir, { recursive: true, force: true }); });
 const lines = (run, name) => readFileSync(join(dir, run, name), 'utf8').trim().split('\n').map(l => JSON.parse(l));
 const ARMS = ['agent-written-guard', 'repair-boundary', 'always-replan'];
 
-test('building the ERPNext runner left the frozen OpenProject runner untouched', () => {
-  assert.equal(openProjectFrozenSet().sha256, '8e7361e2521fcd95d025e50646a33a412ff15dc75d512fa10fa4578d4583c890');
+// The OpenProject runner's hash as of the hardened write step (clocksmith/gamma e20dc73a2). The hash posted
+// earlier as step 1, 8e7361e2…, is void. This pins the current bytes; it is not a freeze until step 1 is posted again.
+test('the ERPNext work does not change the OpenProject runner', () => {
+  assert.equal(openProjectFrozenSet().sha256, 'a084cc453a43e855d25bde702412f50a6a9d1d4827092589abadffcfd327484b');
 });
 
 test('ERPNext: discovery freezes each arm, then three routes are decided, written and recorded without labels', async () => {
