@@ -109,15 +109,16 @@ Written by the family author under the task contract, not by the operator.
 
 ## 6. Order of freezing
 
+**Before step 0, a dry run.** The whole pipeline is run on the real application with a
+scripted stand-in for the model, on the public example family and disposable
+records, at no cost (`three-arm/dry-run.mjs`). It has to show that every arm
+completes a valid route with the row changed in the database, that every arm
+stops a look-alike itself, and that a control guard which always writes gets
+the look-alikes committed, so that a count of zero wrong commits cannot be the
+harness holding writes back.
+
 Each step is posted on the issue with a SHA-256 before the next begins.
 
-0. **Dry run.** The whole pipeline is run on the real application with a
-   scripted stand-in for the model, on the public example family and
-   disposable records, at no cost (`three-arm/dry-run.mjs`). It has to show
-   that every arm completes a valid route with the row changed in the
-   database, that every arm stops a look-alike itself, and that a control
-   guard which always writes gets the look-alikes committed, so that a count
-   of zero wrong commits cannot be the harness holding writes back.
 0. **Preflight.** Two short model sessions, at most `$0.05` each, that touch no
    family: one with the tools of a discovery session and one with the tools of
    a deciding session. They prove that the model CLI gives a session exactly
