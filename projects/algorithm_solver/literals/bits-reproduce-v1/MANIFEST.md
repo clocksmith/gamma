@@ -44,8 +44,9 @@ Needs Python 3.10 or later and Git, run from a clone of `clocksmith/gamma` that 
 - **`capacity-impossibility-v1` and `capacity-diagnostic-v1`.** They have their own tests.
 - **The megabyte directories.** They are stored as file lists with SHA-256 values. Their ranks and dictionaries
   are rechecked by `race.py --source ID=PATH ...` in `capacity-deficit-race-v1` once the pinned packages are on disk.
-- **The ladder's own search.** `verify_stored.py` checks what was stored. One certificate (4,141 nodes) is stored
-  only as a hash, so that corpus is rechecked at its rank; `real_corpora.py` regenerates it.
+- **The ladder's own search.** `verify_stored.py` checks what was stored. One certificate (4,141 nodes, 8.9 MB) is
+  stored compressed. The quick command compares only its hash, which verifies nothing, and scores that corpus at its
+  rank; `--full` runs `verify_stored.py --deep`, which verifies it and takes more than ten minutes.
 - **numpy.** `audit_ladder.py`, `check_addendum.py` and the megabyte recheck need it. No solver is used anywhere.
 
 ## Pins

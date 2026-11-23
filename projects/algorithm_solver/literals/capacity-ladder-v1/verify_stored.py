@@ -3,13 +3,19 @@
 
 For each of the 59 corpora it recomputes the block rank with capacity-boundary-v1, replays the stored dictionary
 with the capped checker, verifies the stored defect-tree certificate with check_certificate.py, and compares the
-interval these give with the stored one. A lower bound whose certificate is not stored is reported as not
-re-verified and the rank is used in its place. It then damages one certificate four ways and requires each
-damaged copy to be rejected.
+interval these give with the stored one. It then damages one certificate four ways and requires each damaged
+copy to be rejected.
 
-    python3 -B verify_stored.py        exits 1 on any failure
+One certificate (4,141 nodes, 8.9 MB) is stored compressed as certificates/<name>.json.gz. Without --deep only its
+SHA-256 is compared with the one recorded when it was made, which shows it is the same file and verifies nothing;
+that corpus is then scored at its rank. With --deep it is verified in full.
+
+    python3 -B verify_stored.py            about a minute; exits 1 on any failure
+    python3 -B verify_stored.py --deep     also verifies the compressed certificate, about a quarter of an hour
 """
 import copy
+import gzip
+import hashlib
 import json
 import os
 import sys
@@ -46,8 +52,20 @@ for name, programs in sets.items():
         except ValueError as problem:
             failures.append(f'{name}: certificate rejected: {problem}')
     elif row['lowerBound'] > rank:
-        not_reverified.append(f"{name}: bound {row['lowerBound']} (certificate of {row['certificateNodes']} nodes not stored); rank {rank} used")
-    expected = [row['lowerBound'] if row['certificateStored'] or row['lowerBound'] == rank else rank, row['minimumInterval'][1]]
+        verified = False
+        if os.path.exists(path + '.gz'):
+            text = gzip.decompress(open(path + '.gz', 'rb').read())
+            if hashlib.sha256(text).hexdigest() != row['certificateSha256']:
+                failures.append(f'{name}: the compressed certificate is not the recorded one')
+            elif '--deep' in sys.argv:
+                try:
+                    lower = max(lower, check_certificate.check(programs, json.loads(text)))
+                    verified = True
+                except ValueError as problem:
+                    failures.append(f'{name}: certificate rejected: {problem}')
+        if not verified:
+            not_reverified.append(f"{name}: bound {row['lowerBound']} (certificate of {row['certificateNodes']} nodes; use --deep); rank {rank} used")
+    expected = [row['lowerBound'] if row['certificateStored'] or row['lowerBound'] == rank or lower == row['lowerBound'] else rank, row['minimumInterval'][1]]
     if [lower, upper] != expected:
         failures.append(f'{name}: interval re-derived {lower}..{upper}, stored {expected[0]}..{expected[1]}')
     exact += lower == upper

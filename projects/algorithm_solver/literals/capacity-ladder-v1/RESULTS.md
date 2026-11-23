@@ -46,7 +46,7 @@ The three open ones:
 | Corpus | Rank | Level-1 method | Ladder | Certificate | Other evidence |
 | --- | ---: | --- | --- | --- | --- |
 | A08 (three.js, 6 files) | 67 | 69 to 73 | **71 to 72** | 12 nodes, 12 KB, checked in 2 s | The Lagrangian baseline also stops at 69 |
-| PY-3 | 51 | 53 to 68 | **55** to 68 | 4,141 nodes, checked; too large to store, its SHA-256 is in `real-corpora.json` | A 62-entry dictionary from another method replays, so 55 to 62 |
+| PY-3 | 51 | 53 to 68 | **55** to 68 | 4,141 nodes, checked; stored compressed, verify with `verify_stored.py --deep` | A 62-entry dictionary from another method replays, so 55 to 62 |
 | B04 | 22 | 23 to 65 | **25** to 65 | 86 nodes, 121 KB, checked | The baseline's bound is 30 and a 60-entry dictionary is known |
 
 - **A08** is the clearest gain. Levels 0 to 3 are refuted by a tree of 12 nodes with no search at all, and a

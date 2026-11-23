@@ -48,6 +48,7 @@ STEPS = [
     ('unseen race: set A answers re-derived from the measurements', 'capacity-deficit-race-v1', PY + ['race.py', '--verify'], True),
     ('ladder against exhaustive search with certificate checks, 6,878 checks (numpy)', 'capacity-ladder-v1', PY + ['audit_ladder.py', '1', '3'], True),
     ('level-1 method against exhaustive search, 8,736 checks', 'capacity-deficit-v1', PY + ['audit_deficit.py', '1'], True),
+    ('ladder: the 4,141-node certificate verified in full', 'capacity-ladder-v1', PY + ['verify_stored.py', '--deep'], True),
 ]
 
 
