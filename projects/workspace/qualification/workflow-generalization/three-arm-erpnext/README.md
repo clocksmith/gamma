@@ -53,7 +53,7 @@ application-neutral runner when a later stage is frozen.
 - **The bring-up script** still passes its generated passwords on the command
   line. It is part of the frozen set and is left alone until that set is
   refrozen.
-- **Not built:** a second ERPNext release has not been tried.
+- **Second release:** `v15.30.0` has been tried with the public family (below); `v15.40.0` has not.
 
 ## Checked so far
 
@@ -76,3 +76,16 @@ application-neutral runner when a later stage is frozen.
   sent. The control guard that always writes got all three committed, both
   wrong ones included. As on OpenProject, the stand-in applies the correct
   rule: this qualifies the harness, not any model.
+- Second release, `v15.20.0 -> v15.30.0`, same stand-in and public family,
+  receipt `../receipts/three-arm-erpnext-second-upgrade-probe-receipt.json`.
+  The expected numbers were committed before the run.
+  - Attempt 1 missed them: the learner arm's kept cases were not rebuilt (0
+    of 4) and it stopped on the valid route (7 of 9 decisions). The cause was
+    the rebuild, not the release: a recorded submit carried the document's
+    old modified time, which ERPNext refuses. `erp-regression.mjs` now sends
+    the document as it is at replay time, and the stand-in application in the
+    tests refuses a stale submit.
+  - Attempt 2 met them: kept cases 2 of 2 and 4 of 4 rebuilt and as
+    labelled, maintenance completed for all three arms, 9 of 9 decisions.
+    On `v15.30.0` nothing this family or the write step touches behaved
+    differently from `v15.20.0`.

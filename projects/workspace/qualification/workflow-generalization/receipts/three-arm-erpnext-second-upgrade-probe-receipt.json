@@ -250,6 +250,261 @@
      ]
     }
    ]
+  },
+  {
+   "release": "v15.30.0",
+   "attempt": 2,
+   "upgrade": "15.20.0->15.30.0",
+   "at": "2026-11-23T13:38:24.946Z",
+   "ranOnCommit": "98ab61c14 (rebuild fixed after attempt 1)",
+   "againstExpectation": {
+    "keptCasesPassing": {
+     "agent-written-guard": "2 of 2, as expected",
+     "repair-boundary": "4 of 4, as expected"
+    },
+    "maintenanceCompleted": "3 of 3 arms, as expected",
+    "decisionsCorrect": "9 of 9, as expected"
+   },
+   "observed": "On v15.30.0 the seeder, the document calls, the page write with the selectors recorded for v15.20.0 and the database read all behaved as on v15.20.0 for this family. No late-reading correction and no runner error.",
+   "steps": [
+    {
+     "name": "regress agent-written-guard",
+     "ok": true,
+     "result": {
+      "rebuilt": true,
+      "reason": null,
+      "passed": 2,
+      "total": 2,
+      "failedFamilies": [],
+      "cases": [
+       {
+        "name": "PUR-ORD-2026-00001",
+        "expect": "write",
+        "got": "write",
+        "pass": true
+       },
+       {
+        "name": "PUR-ORD-2026-00002",
+        "expect": "stop",
+        "got": "stop",
+        "pass": true
+       }
+      ]
+     }
+    },
+    {
+     "name": "regress repair-boundary",
+     "ok": true,
+     "result": {
+      "rebuilt": true,
+      "reason": null,
+      "passed": 4,
+      "total": 4,
+      "failedFamilies": [],
+      "cases": [
+       {
+        "name": "PUR-ORD-2026-00001",
+        "expect": "write",
+        "got": "write",
+        "pass": true
+       },
+       {
+        "name": "PUR-ORD-2026-00002",
+        "expect": "write",
+        "got": "write",
+        "pass": true
+       },
+       {
+        "name": "PUR-ORD-2026-00003",
+        "expect": "stop",
+        "got": "stop",
+        "pass": true
+       },
+       {
+        "name": "PUR-ORD-2026-00004",
+        "expect": "stop",
+        "got": "stop",
+        "pass": true
+       }
+      ]
+     }
+    },
+    {
+     "name": "maintenance agent-written-guard",
+     "ok": true,
+     "result": {
+      "completed": true,
+      "outOfSurfaceCalls": 0,
+      "wallMs": 208059,
+      "keptCases": {
+       "total": 2,
+       "passedAfterUpgrade": 2,
+       "rebuilt": true,
+       "familiesCaught": []
+      }
+     }
+    },
+    {
+     "name": "maintenance repair-boundary",
+     "ok": true,
+     "result": {
+      "completed": true,
+      "outOfSurfaceCalls": 0,
+      "wallMs": 302991,
+      "keptCases": {
+       "total": 4,
+       "passedAfterUpgrade": 4,
+       "rebuilt": true,
+       "familiesCaught": []
+      }
+     }
+    },
+    {
+     "name": "maintenance always-replan",
+     "ok": true,
+     "result": {
+      "completed": true,
+      "outOfSurfaceCalls": 0,
+      "wallMs": 0,
+      "keptCases": null
+     }
+    },
+    {
+     "name": "routes agent-written-guard",
+     "ok": true,
+     "result": [
+      {
+       "routeId": "dry-valid",
+       "decision": "write",
+       "writeSent": true,
+       "httpStatus": 200,
+       "committed": true,
+       "referenceStored": [
+        false,
+        true
+       ],
+       "error": null,
+       "stopReason": null
+      },
+      {
+       "routeId": "dry-lookalike-draft",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "referenceStored": [
+        false,
+        false
+       ],
+       "error": null,
+       "stopReason": "quotation does not cover this order"
+      },
+      {
+       "routeId": "dry-lookalike-quantity",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "referenceStored": [
+        false,
+        false
+       ],
+       "error": null,
+       "stopReason": "quotation does not cover this order"
+      }
+     ]
+    },
+    {
+     "name": "routes repair-boundary",
+     "ok": true,
+     "result": [
+      {
+       "routeId": "dry-valid",
+       "decision": "write",
+       "writeSent": true,
+       "httpStatus": 200,
+       "committed": true,
+       "referenceStored": [
+        false,
+        true
+       ],
+       "error": null,
+       "stopReason": null
+      },
+      {
+       "routeId": "dry-lookalike-draft",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "referenceStored": [
+        false,
+        false
+       ],
+       "error": null,
+       "stopReason": "guard-mismatch"
+      },
+      {
+       "routeId": "dry-lookalike-quantity",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "referenceStored": [
+        false,
+        false
+       ],
+       "error": null,
+       "stopReason": "guard-mismatch"
+      }
+     ]
+    },
+    {
+     "name": "routes always-replan",
+     "ok": true,
+     "result": [
+      {
+       "routeId": "dry-valid",
+       "decision": "write",
+       "writeSent": true,
+       "httpStatus": 200,
+       "committed": true,
+       "referenceStored": [
+        false,
+        true
+       ],
+       "error": null,
+       "stopReason": null
+      },
+      {
+       "routeId": "dry-lookalike-draft",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "referenceStored": [
+        false,
+        false
+       ],
+       "error": null,
+       "stopReason": "quotation does not cover this order"
+      },
+      {
+       "routeId": "dry-lookalike-quantity",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "referenceStored": [
+        false,
+        false
+       ],
+       "error": null,
+       "stopReason": "quotation does not cover this order"
+      }
+     ]
+    }
+   ]
   }
  ]
 }
