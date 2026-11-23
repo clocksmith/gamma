@@ -5,9 +5,16 @@ For `clocksmith/deco#88`, same-model three-arm test, Stage A: OpenProject
 
 **Status when this was written (2026-11-23, about 05:45 UTC):** no arm has run
 with a real model. No family, route or label has reached the operator. The
-runner is frozen (`runner.mjs hash` `8e7361e2521fcd95d025e50646a33a412ff15dc75d512fa10fa4578d4583c890`
-at `clocksmith/gamma@d9711fc19`); the sealed cases and the scorer are frozen on
-the coordinator's side. Stage A has not been approved.
+sealed cases and the scorer are frozen on the coordinator's side. Stage A has
+not been approved.
+
+**The runner hash.** These notes first named the runner hash `8e7361e2`. That
+freeze is void: later the same day a no-model test showed the runner's page
+write storing a wrong value on `14.0.0`, the write step was hardened, and the
+runner was frozen again. The hash for Stage A is
+`306e617102d8cb4b73e2bdc937fce06ecfac6baaa1ac5594e368ae59bfe47214`, at
+`clocksmith/gamma@bc6bb0091`. Still no arm has run with a real model and
+nothing sealed has reached the operator.
 
 The purpose of this file is that nothing below the heading "Results" is
 interpreted after the fact. Sections 1 to 4 say in advance what the numbers can

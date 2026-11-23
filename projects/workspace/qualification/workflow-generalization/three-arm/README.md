@@ -22,8 +22,9 @@ Nothing here calls a model.
 
 ## State
 
-Built and tested without a model. **No model session has run.** The owner has
-authorised no paid run, including the preflight (step 0 of the freezing order).
+Built and tested without a model, apart from the two preflight sessions. The
+runner is frozen for Stage A at `clocksmith/gamma@bc6bb0091`, hash
+`306e6171...47214`; two earlier hashes are void. Stage A is on hold by the owner.
 
 The second upgrade is built for OpenProject as far as it can be without
 choosing the release: `maintenance` starts a session from the frozen work,
@@ -115,3 +116,12 @@ Checked so far, all against a local OpenProject `14.0.0` started by
 - Known and not fixed: `bringup/erpnext-up.sh` still passes its generated
   passwords on the command line. The OpenProject script was fixed; the
   ERPNext one is not used before Stage B and will be fixed with that freeze.
+- The page write was found at fault on 2026-11-23 and hardened
+  (`../receipts/write-step-first-write-investigation.json`). As the first
+  action after a cold start it could send the save before the dialog's form
+  check was answered: on later releases a save answered 200 changed nothing,
+  and on `14.0.0` the 31st such write stored 856 hours for 56 asked. The step
+  now waits for that answer, reads the field back, and does not press Save
+  unless the field holds exactly the hours asked. With it, 100 of 100
+  cold-start writes on `14.0.0` landed with the hours asked, and the dry run
+  passed again on the frozen tree.
