@@ -73,6 +73,10 @@ if (tools.includes('try_guard')) {
   writeFileSync(file, GUARD);
   await call('app_request', { as: 'approver', method: 'GET', path: `/api/v3/work_packages/${numbers[0].workPackageId}` });
   await call('try_guard', { familyId, ...numbers[0] });
+  const tests = [{ familyId, ...numbers[0], expect: 'write' },
+    { familyId, project: 'stage2-qual-proj', workPackageId: await build(40, 17), workHours: 40, expect: 'stop' }];
+  emitUse('Write', { file_path: join(process.cwd(), 'tests.json'), content: JSON.stringify(tests) });
+  writeFileSync(join(process.cwd(), 'tests.json'), JSON.stringify(tests));
 } else if (tools.includes('learn')) {
   await call('set_read_plan', { familyId, reads: [{ role: 'record', path: '/api/v3/work_packages/{target}' }, { role: 'approval', follow: { role: 'record', link: 'parent' } }] });
   await call('add_example', { familyId, label: 'valid', ...numbers[0] });

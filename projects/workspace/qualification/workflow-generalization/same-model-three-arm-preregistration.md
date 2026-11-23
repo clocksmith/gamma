@@ -5,7 +5,9 @@ frozen when the hashes named in Section 6 are posted on the issue. No model
 call or record for this experiment exists yet. Revision 2 (2026-11-23): the
 families, the answer key and the scorer moved to people who do not build or run
 the arms; wrong attempts are counted apart from wrong commits; time is
-measured.
+measured. Revision 3 (2026-11-23): both arms keep the labelled cases they built
+as regression tests, rerun before their work is reused on another release
+(Sections 2 and 7).
 
 ## 1. Question
 
@@ -30,6 +32,14 @@ Every arm in a run uses the same pinned model. No arm uses a second model.
 | `agent-written-guard` | One coding-agent session. It reads the application, creates and changes disposable records, writes a guard in code with its own tests, and revises it. | The guard source and tests, by SHA-256. | None. The guard runs as code. |
 | `always-replan` | Decides each route from scratch. | Only the prompt template. | One session per route. |
 | `repair-boundary` | Builds labelled teaching cases on disposable records, valid and invalid, from the policy statement, and chooses which records to read. `learnRepairBoundary` derives the guard from them. | The read plan, the teaching observations and the learned guard, by SHA-256. | None. |
+
+**Kept cases.** Both of the arms that freeze work also keep, beside it, the
+labelled cases they built while preparing: for `repair-boundary` every example
+the model labelled valid or invalid, for `agent-written-guard` the cases the
+model lists with the outcome it expects; at most 24 per family in either
+arm. The runner keeps the arm's own write calls with them, so that
+the records behind the cases can be built again on a new database. The
+allowance, the instructions and the mechanism are the same for both arms.
 
 The model-written guard is reusable work. Its discovery cost is counted once,
 not once per route. The decision in Section 9 is between `agent-written-guard`
@@ -149,6 +159,17 @@ the second upgrade measures an upgrade that needed no maintenance. At the
 second upgrade each arm gets its own frozen work back, the upgraded
 application, and the same limits; what it changes is frozen before the second
 set of unseen routes is opened.
+
+**Before frozen work is reused on the second upgrade, its kept cases are
+rerun.** The records behind them are rebuilt on the upgraded release by
+replaying the arm's own write calls, and each case is decided again by the
+frozen work, with no model call. A family whose cases cannot be rebuilt, or no
+longer come out as labelled, is reported as a caught regression and is not
+reused as it stands: the result is given to that arm's maintenance session,
+which works within the same limits as before. Per arm and upgrade the report
+gives cases kept, cases passing at the freeze, cases passing after the upgrade
+and families caught. A regression that the kept cases miss shows up as a wrong
+result on the unseen routes, which is what Section 9 decides on.
 
 The applications are started by the scripts in [`bringup/`](bringup/README.md).
 

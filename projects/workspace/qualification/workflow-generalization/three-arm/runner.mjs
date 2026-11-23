@@ -5,6 +5,7 @@
 //   node runner.mjs preflight --run-dir D --approve-paid              # proves the session flags work, a few cents
 //   node runner.mjs discovery --arm A --families F --run-dir D --approve-paid
 //   node runner.mjs blind --arm A --families F --recipes R --run-dir D [--approve-paid]
+//   node runner.mjs regress --arm A --families F --run-dir D           # rebuild and rerun kept cases; no cost
 //
 // `discovery` and `blind` start a fresh instance for each arm, so no arm sees
 // records another arm made. The runner never reads an answer key and writes no
@@ -22,7 +23,8 @@ import { auditSessionLog, createAppSurface, DEFAULT_LIMITS } from './app-surface
 import { runGuard } from './guard-sandbox.mjs';
 import * as instructions from './instructions.mjs';
 import { openProjectRequester, provisionRecipe, readState, validateRecipe, validateRecipeFile } from './provision.mjs';
-import { decide as decideWithBoundary } from './repair-boundary-arm.mjs';
+import { readGuardCases, rerunKeptCases } from './regression.mjs';
+import { decide as decideWithBoundary, keptCases } from './repair-boundary-arm.mjs';
 import { FILE_TOOLS, runSession, sessionArgs } from './session.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -98,10 +100,11 @@ const appendRecord = (runDir, name, record) => appendFileSync(join(runDir, name)
 function serverFor({ arm, phase, runDir, workDir, familyIds, label, stateFile }) {
   const surfaceLog = join(runDir, 'logs', `${label}.surface.jsonl`);
   const artifactFile = arm === 'repair-boundary' ? join(runDir, 'artifacts', 'repair-boundary.json') : null;
+  const traceFile = phase === 'discovery' ? join(runDir, 'artifacts', `${arm}.trace.jsonl`) : null;
   return {
-    surfaceLog, artifactFile,
+    surfaceLog, artifactFile, traceFile,
     server: { command: process.execPath, args: [join(HERE, 'arm-server.mjs')],
-      env: { GAMMATRON_ARM_SERVER: JSON.stringify({ arm, phase, workDir, familyIds, surfaceLog, artifactFile, stateFile, limits: CONFIG.limits }) } },
+      env: { GAMMATRON_ARM_SERVER: JSON.stringify({ arm, phase, workDir, familyIds, surfaceLog, artifactFile, traceFile, stateFile, limits: CONFIG.limits }) } },
   };
 }
 
@@ -161,14 +164,14 @@ function prepare(runDir) {
 
 async function modelSession({ deps, runDir, label, arm, phase, workDir, familyIds, systemPrompt, prompt, budget, mcpTools, fileTools, jsonSchema, spend }) {
   spend.reserve(label, budget.budgetUsd);
-  const { server, surfaceLog, artifactFile } = serverFor({ arm, phase, runDir, workDir, familyIds, label, stateFile: deps.stateFile });
+  const { server, surfaceLog, artifactFile, traceFile } = serverFor({ arm, phase, runDir, workDir, familyIds, label, stateFile: deps.stateFile });
   const { args, allowedTools } = sessionArgs({ model: CONFIG.model, budgetUsd: budget.budgetUsd, systemPrompt, server, mcpTools, fileTools, jsonSchema });
   const sessionLog = join(runDir, 'logs', `${label}.session.jsonl`);
   const session = await runSession({ executable: deps.executable, args, cwd: workDir, prompt, logFile: sessionLog, timeoutMs: budget.timeoutMs });
   spend.record(label, session.costUsd, budget.budgetUsd);
   const audit = auditSessionLog(session.lines, { allowedTools, workDir });
   const surface = existsSync(surfaceLog) ? readFileSync(surfaceLog, 'utf8').trim().split('\n').filter(Boolean).map(l => JSON.parse(l)) : [];
-  return { session, audit, surface, artifactFile };
+  return { session, audit, surface, artifactFile, traceFile };
 }
 
 /** Phase 1 for one arm: a fresh instance, the disclosed examples, one session, then the freeze. */
@@ -194,7 +197,7 @@ export async function discovery({ arm, familiesFile, runDir, approvePaid = false
     const disclosed = await discloseFamilies(families, state, `d-${arm}`);
     const workDir = newWorkDir(`three-arm-${arm}-`);
     const guardArm = arm === 'agent-written-guard';
-    const { session, audit, surface, artifactFile } = await modelSession({
+    const { session, audit, surface, artifactFile, traceFile } = await modelSession({
       deps, runDir, label: `discovery-${arm}`, arm, phase: 'discovery', workDir, familyIds: families.map(f => f.familyId),
       systemPrompt: guardArm ? instructions.AGENT_WRITTEN_GUARD : instructions.REPAIR_BOUNDARY,
       prompt: instructions.discoveryBrief(disclosed), budget: CONFIG.discovery, spend,
@@ -209,6 +212,29 @@ export async function discovery({ arm, familiesFile, runDir, approvePaid = false
     } else if (artifactFile && existsSync(artifactFile)) {
       artifactSha256 = sha256(readFileSync(artifactFile));
     }
+    // Kept cases: what the arm said should happen on records it built, with the calls that built them.
+    const regressionFile = join(runDir, 'artifacts', `${arm}.regression.json`);
+    let keptSummary = { cases: 0, passingAtFreeze: 0, problems: [], sha256: null };
+    if (artifactSha256 !== null) {
+      const testsFile = join(runDir, 'artifacts', 'agent-written-guard', 'tests.json');
+      let cases = [];
+      let caseProblems = [];
+      if (guardArm) {
+        if (existsSync(testsFile)) {
+          try { ({ cases, problems: caseProblems } = readGuardCases(JSON.parse(readFileSync(testsFile, 'utf8')))); }
+          catch { caseProblems = ['tests.json is not valid JSON']; }
+        }
+      } else {
+        cases = keptCases(JSON.parse(readFileSync(artifactFile, 'utf8')));
+      }
+      const decideCase = caseDecider({ arm, runDir, deps, request: openProjectRequester(state.new) });
+      let passingAtFreeze = 0;
+      for (const kept of cases) if ((await decideCase(kept)).decision === kept.expect) passingAtFreeze += 1;
+      const text = JSON.stringify({ schema: 'three-arm-kept-cases/v1', arm, release: state.new.tag ?? null, disclosed, cases,
+        trace: traceFile && existsSync(traceFile) ? readFileSync(traceFile, 'utf8').trim().split('\n').filter(Boolean).map(l => JSON.parse(l)) : [] }, null, 2);
+      writeFileSync(regressionFile, text, { mode: 0o600 });
+      keptSummary = { cases: cases.length, passingAtFreeze, problems: caseProblems, sha256: sha256(text) };
+    }
     const record = { schema: 'gammatron-three-arm-phase-record/v1', ...base,
       startedAt: session.startedAt, endedAt: session.endedAt, wallMs: session.wallMs,
       modelCalls: session.modelCalls, modelTurns: session.modelTurns, costUsd: session.costUsd ?? CONFIG.discovery.budgetUsd,
@@ -216,9 +242,51 @@ export async function discovery({ arm, familiesFile, runDir, approvePaid = false
       recordsCreated: surface.filter(e => e.method === 'POST' && e.status === 201 && /work_packages\/?(\?|$)/.test(e.path ?? '')).length,
       outOfSurfaceCalls: audit.outOfSurface.length, artifactSha256, completed: artifactSha256 !== null };
     appendRecord(runDir, 'phase-records.jsonl', record);
-    writeFileSync(join(runDir, 'logs', `discovery-${arm}.summary.json`), JSON.stringify({ record, audit,
+    writeFileSync(join(runDir, 'logs', `discovery-${arm}.summary.json`), JSON.stringify({ record, audit, keptCases: keptSummary,
       session: { exitCode: session.exitCode, subtype: session.subtype, timedOut: session.timedOut, models: session.models }, workDir }, null, 2));
     return record;
+  } finally {
+    deps.stopInstance();
+  }
+}
+
+/** Decides one kept case with an arm's frozen work, through the same read-only door an unseen route gets. */
+function caseDecider({ arm, runDir, deps, request }) {
+  const get = () => { const read = createAppSurface({ mode: 'decision', request, limits: CONFIG.limits }).tools.app_get; return path => read({ path }); };
+  if (arm === 'agent-written-guard') {
+    const guardDir = join(runDir, 'artifacts', 'agent-written-guard');
+    return kept => deps.guardRunner({ guardDir, route: kept, get: get() });
+  }
+  const artifact = JSON.parse(readFileSync(join(runDir, 'artifacts', 'repair-boundary.json'), 'utf8'));
+  return kept => decideWithBoundary(artifact, kept, get());
+}
+
+/**
+ * Rebuilds an arm's kept cases on a fresh instance and reruns them with its frozen
+ * work. No model call. Used before frozen work is reused on another release.
+ */
+export async function regress({ arm, familiesFile, runDir, deps = defaultDeps() }) {
+  if (!['agent-written-guard', 'repair-boundary'].includes(arm)) throw Error('only the two arms that freeze work keep cases');
+  const kept = JSON.parse(readFileSync(join(runDir, 'artifacts', `${arm}.regression.json`), 'utf8'));
+  const families = loadFamilies(familiesFile);
+  deps.freshInstance();
+  try {
+    const state = readState(deps.stateFile);
+    const request = openProjectRequester(state.new);
+    let outcome;
+    try {
+      const now = await discloseFamilies(families, state, `g-${arm}`);
+      const ids = new Map(kept.disclosed.map(then => [then.example.workPackageId, now.find(f => f.familyId === then.familyId)?.example.workPackageId])
+        .filter(([, id]) => id !== undefined));
+      outcome = await rerunKeptCases({ cases: kept.cases, trace: kept.trace, request, ids, decideCase: caseDecider({ arm, runDir, deps, request }) });
+    } catch (error) {
+      // The disclosed example itself no longer builds on this release: nothing kept can be trusted here.
+      outcome = { rebuilt: false, reason: String(error?.message ?? error).slice(0, 300), results: [], passed: 0, total: kept.cases.length,
+        failedFamilies: [...new Set(kept.cases.map(c => c.familyId))] };
+    }
+    const result = { arm, releaseThen: kept.release, releaseNow: state.new.tag ?? null, ...outcome };
+    writeFileSync(join(runDir, 'logs', `regress-${arm}.json`), JSON.stringify(result, null, 2));
+    return result;
   } finally {
     deps.stopInstance();
   }
@@ -365,8 +433,8 @@ async function main(argv) {
     return;
   }
   const runDir = option('--run-dir');
-  if (!runDir || !['preflight', 'discovery', 'blind'].includes(command)) {
-    console.error('usage: runner.mjs hash | preflight --run-dir D | discovery --arm A --families F --run-dir D | blind --arm A --families F --recipes R --run-dir D  [--approve-paid]');
+  if (!runDir || !['preflight', 'discovery', 'blind', 'regress'].includes(command)) {
+    console.error('usage: runner.mjs hash | preflight --run-dir D | discovery --arm A --families F --run-dir D | blind --arm A --families F --recipes R --run-dir D | regress --arm A --families F --run-dir D  [--approve-paid]');
     process.exit(2);
   }
   mkdirSync(runDir, { recursive: true, mode: 0o700 });
@@ -374,6 +442,7 @@ async function main(argv) {
   const common = { runDir: resolve(runDir), approvePaid: flag('--approve-paid') };
   const result = command === 'preflight' ? await preflight(common)
     : command === 'discovery' ? await discovery({ ...common, arm: option('--arm'), familiesFile: option('--families') })
+      : command === 'regress' ? await regress({ runDir: common.runDir, arm: option('--arm'), familiesFile: option('--families') })
       : await blind({ ...common, arm: option('--arm'), familiesFile: option('--families'), recipesFile: option('--recipes') });
   console.log(JSON.stringify(result, null, 2));
 }

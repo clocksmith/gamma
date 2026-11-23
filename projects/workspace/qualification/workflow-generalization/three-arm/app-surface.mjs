@@ -48,9 +48,10 @@ export function refusePath(path, limit = DEFAULT_LIMITS.pathChars) {
 
 /**
  * `request(account, method, path, body)` performs the call. `log(entry)` receives
- * one entry per call, including refused ones. Throws nothing: a refusal is a result.
+ * one entry per call, including refused ones. `trace(entry)` receives each write
+ * that was sent, with its body. Throws nothing: a refusal is a result.
  */
-export function createAppSurface({ mode, request, log = () => {}, limits = DEFAULT_LIMITS, now = () => new Date().toISOString() }) {
+export function createAppSurface({ mode, request, log = () => {}, trace = () => {}, limits = DEFAULT_LIMITS, now = () => new Date().toISOString() }) {
   if (!['discovery', 'decision'].includes(mode)) throw Error('mode must be discovery or decision');
   const counts = { requests: 0, reads: 0, recordsCreated: 0, refused: 0 };
   const refuse = (entry, reason) => {
@@ -64,6 +65,9 @@ export function createAppSurface({ mode, request, log = () => {}, limits = DEFAU
     const truncated = text.length > limits.responseChars;
     if (truncated) text = text.slice(0, limits.responseChars);
     log({ at: now(), mode, as: account, method, path, status: response.status });
+    // Writes are kept whole, so the records an arm built can be rebuilt on another release.
+    if (method !== 'GET') trace({ as: account, method, path, body: body ?? null, status: response.status,
+      id: Number.isSafeInteger(response.body?.id) ? response.body.id : null });
     return { ok: true, status: response.status, body: truncated ? undefined : response.body,
       ...(truncated ? { bodyText: text, truncated: true } : {}) };
   };

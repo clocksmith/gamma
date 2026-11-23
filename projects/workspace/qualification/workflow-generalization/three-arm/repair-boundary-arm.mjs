@@ -100,7 +100,9 @@ export function createTeacher(familyIds) {
       if (f.positive.length + f.negative.length >= MAX_EXAMPLES) return { ok: false, problems: [`at most ${MAX_EXAMPLES} examples per family`] };
       const { observation, reads, rolesRead } = await observe({ plan: f.plan, route, get });
       if (observation.status !== 'observed') return { ok: false, problems: [`nothing usable was observed: ${observation.reason}`] };
-      (label === 'valid' ? f.positive : f.negative).push({ status: 'observed', facts: { ...observation.facts } });
+      // The work package is kept with the facts, so the example can be rerun after an upgrade.
+      (label === 'valid' ? f.positive : f.negative).push({ status: 'observed', facts: { ...observation.facts },
+        route: { project: route.project, workPackageId: route.workPackageId, workHours: route.workHours } });
       f.boundary = null;
       return { ok: true, reads, rolesRead, facts: observation.facts, valid: f.positive.length, invalid: f.negative.length };
     },
@@ -119,6 +121,14 @@ export function createTeacher(familyIds) {
       return { artifact, text, sha256: sha256(text) };
     },
   };
+}
+
+/** The labelled examples kept in an artifact, as cases to rerun: what the guard must still say about each. */
+export function keptCases(artifact) {
+  return Object.entries(artifact?.families ?? {}).flatMap(([familyId, f]) => [
+    ...(f.positive ?? []).map(e => ({ familyId, ...e.route, expect: 'write' })),
+    ...(f.negative ?? []).map(e => ({ familyId, ...e.route, expect: 'stop' })),
+  ]).filter(c => Number.isSafeInteger(c.workPackageId));
 }
 
 /** Decides one unseen route from a frozen artifact. No model call. Anything short of eligible is a stop. */

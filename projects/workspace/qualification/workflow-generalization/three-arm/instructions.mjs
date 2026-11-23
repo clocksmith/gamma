@@ -24,7 +24,9 @@ Create guard.mjs in your working directory. It must export:
 - Return { decision: "write", reason } or { decision: "stop", reason }.
 - The guard runs later on its own: no network except get, no files, and you will not be there. If it throws, takes too long or returns anything else, that counts as a stop.
 
-Test it. Build work packages that you judge right and wrong under each policy, and run the guard on them with try_guard, which runs it exactly as it will be run later. Keep any notes or test lists you want as files in your working directory. Only guard.mjs is used afterwards.
+Test it. Build work packages that you judge right and wrong under each policy, and run the guard on them with try_guard, which runs it exactly as it will be run later.
+
+Keep your cases. You may list cases in tests.json in your working directory, as a JSON array with at most 24 entries per family: { "familyId", "project", "workPackageId", "workHours", "expect": "write" or "stop" }. They are kept with the guard. When the application is next upgraded, the work packages behind them are rebuilt and the guard is rerun on each before it is used again; a family whose kept cases no longer come out as expected is not reused until it has been looked at. Other files you keep are notes only.
 
 When you are satisfied, or close to your limits, make sure guard.mjs is in its final state and reply with the single word DONE.`;
 
@@ -40,6 +42,8 @@ A learner derives a guard for each family from examples that you label. For each
 What the learner can see. Only numbers, true/false values and durations from those reads: hours, the status as a number, the project as a number, version counters and entry counts. It also sees one fact for the hours the write would save, under the role "intent". It cannot see text, names, dates or links. A guard is a short list of tests, each "this fact equals that value" or "this fact equals that other fact".
 
 How it behaves. It picks the guard with the fewest reads that fits every example. With one valid example it may tie the guard to that example's exact values; give at least two valid examples that differ wherever the policy allows them to differ. Every invalid example must fail the guard, so label only what you are sure of. If it reports that nothing separates your examples, the deciding fact may be something it cannot see; that family will then stop on every work package, which is the right outcome when the fact cannot be read.
+
+Your examples are kept. Every example you label, at most 24 per family, is kept with the guard. When the application is next upgraded, the work packages behind them are rebuilt and the guard is rerun on each before it is used again; a family whose kept examples no longer come out as labelled is not reused until it has been looked at.
 
 When each family has the guard you want, or you are close to your limits, reply with the single word DONE. The last result of learn for each family is what is used afterwards.`;
 

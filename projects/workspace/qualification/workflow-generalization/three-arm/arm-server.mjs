@@ -64,7 +64,7 @@ const routeFrom = input => {
 };
 
 /** Builds the tool set for one arm and phase. `request` reaches the instance; `log` receives every call. */
-export function createArmTools({ arm, phase, request, log = () => {}, limits = DEFAULT_LIMITS, workDir, familyIds = [],
+export function createArmTools({ arm, phase, request, log = () => {}, trace = () => {}, limits = DEFAULT_LIMITS, workDir, familyIds = [],
   saveArtifact = () => {}, guardRunner = runGuard }) {
   const reader = () => createAppSurface({ mode: 'decision', request, log, limits }).tools.app_get;
   const note = (tool, detail) => log({ at: new Date().toISOString(), tool, ...detail });
@@ -74,7 +74,7 @@ export function createArmTools({ arm, phase, request, log = () => {}, limits = D
     return { tools: surface.tools, definitions: [TOOL_DEFINITIONS.app_get] };
   }
   if (phase !== 'discovery') throw Error('phase must be discovery or decision');
-  const surface = createAppSurface({ mode: 'discovery', request, log, limits });
+  const surface = createAppSurface({ mode: 'discovery', request, log, trace, limits });
   const tools = { ...surface.tools };
   const definitions = [TOOL_DEFINITIONS.app_request];
   if (arm === 'agent-written-guard') {
@@ -124,6 +124,7 @@ async function main() {
     request: openProjectRequester(state[config.side ?? 'new']),
     limits: { ...DEFAULT_LIMITS, ...(config.limits ?? {}) },
     log: entry => appendFileSync(config.surfaceLog, JSON.stringify({ arm: config.arm, ...entry }) + '\n', { mode: 0o600 }),
+    trace: entry => { if (config.traceFile) appendFileSync(config.traceFile, JSON.stringify(entry) + '\n', { mode: 0o600 }); },
     saveArtifact: text => { if (config.artifactFile) writeFileSync(config.artifactFile, text, { mode: 0o600 }); },
   });
   serveStdio(createToolHandler(set, message => process.stdout.write(JSON.stringify(message) + '\n')));

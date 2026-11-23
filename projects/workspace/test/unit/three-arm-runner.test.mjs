@@ -5,11 +5,13 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, before, test } from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { blind, CONFIG, discovery, frozenFileSet, hashDirectory } from '../../qualification/workflow-generalization/three-arm/runner.mjs';
+import { blind, CONFIG, discovery, frozenFileSet, hashDirectory, regress } from '../../qualification/workflow-generalization/three-arm/runner.mjs';
 
 // A stand-in OpenProject: work packages with hours, a status and a parent, and the two accounts.
 const store = new Map();
 let nextId = 1;
+// Two ways a later release could break what an arm learned: statuses renumbered, or a call refused.
+const upgrade = { statusShift: 0, refuseParents: false };
 const view = r => ({ id: r.id, lockVersion: r.lockVersion, estimatedTime: r.estimatedTime, subject: r.subject,
   _links: { status: { href: `/api/v3/statuses/${r.status}` }, project: { href: '/api/v3/projects/1' }, ...(r.parent ? { parent: { href: r.parent } } : {}) } });
 const http = createServer(async (req, res) => {
@@ -20,6 +22,7 @@ const http = createServer(async (req, res) => {
   const send = (status, value) => { res.statusCode = status; res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify(value)); };
   const one = req.url.match(/^\/api\/v3\/work_packages\/(\d+)$/);
   if (req.method === 'POST' && /^\/api\/v3\/projects\/[^/]+\/work_packages$/.test(req.url)) {
+    if (upgrade.refuseParents && body._links?.parent) return send(422, { message: 'Parent is invalid' });
     const record = { id: nextId++, lockVersion: 0, estimatedTime: body.estimatedTime ?? null, subject: body.subject, status: 15,
       parent: body._links?.parent?.href ?? null };
     store.set(record.id, record);
@@ -30,7 +33,7 @@ const http = createServer(async (req, res) => {
     if (req.method === 'GET') return send(200, view(record));
     if (req.method === 'PATCH') {
       if (body._links?.status && account !== 'approver') return send(422, { message: 'Status is invalid' });
-      if (body._links?.status) record.status = Number(body._links.status.href.split('/').pop());
+      if (body._links?.status) record.status = Number(body._links.status.href.split('/').pop()) + upgrade.statusShift;
       if (body.estimatedTime) record.estimatedTime = body.estimatedTime;
       record.lockVersion += 1;
       return send(200, view(record));
@@ -42,6 +45,7 @@ const http = createServer(async (req, res) => {
 
 let dir;
 let deps;
+let instances = -1;
 const recipe = (routeId, approvalHours, status, workHours, entryBranch) => ({
   routeId, familyId: 'fam', entryBranch,
   setup: [
@@ -71,7 +75,8 @@ before(async () => {
   deps = {
     executable: fileURLToPath(new URL('../support/fake-claude.mjs', import.meta.url)),
     stateFile: join(dir, 'state.json'),
-    freshInstance() { store.clear(); nextId = 1; },
+    // A new database does not hand out the same numbers again.
+    freshInstance() { store.clear(); nextId = 1 + 100 * (instances += 1); },
     stopInstance() {},
     async openWriter() {
       return { readRow: row, close: async () => {},
@@ -125,6 +130,15 @@ test('discovery freezes each arm, then the unseen routes are decided, written an
   assert.equal(guard.costUsd, 0.01);
   assert.equal(guard.budgetUsd, CONFIG.discovery.budgetUsd);
   assert.equal(boundary.recordsCreated, 6);
+  // Both arms keep labelled cases and the calls that built their records.
+  const kept = arm => JSON.parse(readFileSync(join(runDir, 'artifacts', `${arm}.regression.json`), 'utf8'));
+  assert.deepEqual(kept('agent-written-guard').cases.map(c => c.expect), ['write', 'stop']);
+  assert.deepEqual(kept('repair-boundary').cases.map(c => c.expect), ['write', 'write', 'stop', 'stop']);
+  assert.equal(kept('repair-boundary').trace.length, 9);
+  assert.ok(kept('agent-written-guard').trace.every(call => call.method !== 'GET'));
+  const summary = arm => JSON.parse(readFileSync(join(runDir, 'logs', `discovery-${arm}.summary.json`), 'utf8')).keptCases;
+  assert.deepEqual([summary('agent-written-guard').cases, summary('agent-written-guard').passingAtFreeze], [2, 2]);
+  assert.deepEqual([summary('repair-boundary').cases, summary('repair-boundary').passingAtFreeze], [4, 4]);
   assert.equal(replan.costUsd, 0);
   assert.equal(hashDirectory(join(runDir, 'artifacts', 'agent-written-guard')), guard.artifactSha256);
   const learned = JSON.parse(readFileSync(join(runDir, 'artifacts', 'repair-boundary.json'), 'utf8')).families.fam.boundary;
@@ -160,6 +174,35 @@ test('discovery freezes each arm, then the unseen routes are decided, written an
   for (const p of phases) assert.deepEqual(Object.keys(p).sort(), [...schema.$defs.phaseRecord.required].sort());
 });
 
+test('kept cases are rebuilt on a new database and rerun; a release that breaks them is caught', async () => {
+  const runDir = join(dir, 'run');
+  const common = { familiesFile: join(dir, 'families.json'), runDir, deps };
+  for (const arm of ['agent-written-guard', 'repair-boundary']) {
+    const same = await regress({ ...common, arm });
+    assert.equal(same.rebuilt, true, arm);
+    assert.equal(same.passed, same.total, arm);
+    assert.deepEqual(same.failedFamilies, [], arm);
+    assert.ok(same.results.every(r => r.workPackageId > 100), 'numbers differ on the new database');
+  }
+  upgrade.statusShift = 10;
+  try {
+    for (const arm of ['agent-written-guard', 'repair-boundary']) {
+      const shifted = await regress({ ...common, arm });
+      assert.equal(shifted.rebuilt, true, arm);
+      assert.deepEqual(shifted.failedFamilies, ['fam'], arm);
+      assert.ok(shifted.results.some(r => r.expect === 'write' && r.got === 'stop'), arm);
+    }
+  } finally { upgrade.statusShift = 0; }
+  upgrade.refuseParents = true;
+  try {
+    const refused = await regress({ ...common, arm: 'repair-boundary' });
+    assert.equal(refused.rebuilt, false);
+    assert.match(refused.reason, /returned 422: Parent is invalid/);
+    assert.deepEqual(refused.failedFamilies, ['fam']);
+  } finally { upgrade.refuseParents = false; }
+  await assert.rejects(regress({ ...common, arm: 'always-replan' }), /keep cases/);
+});
+
 test('a session that calls a tool outside its surface is counted, and a changed artifact is refused', async () => {
   const runDir = join(dir, 'dirty');
   const common = { familiesFile: join(dir, 'families.json'), runDir, approvePaid: true, deps };
@@ -170,4 +213,37 @@ test('a session that calls a tool outside its surface is counted, and a changed 
   } finally { delete process.env.FAKE_CLAUDE_MISBEHAVE; }
   writeFileSync(join(runDir, 'artifacts', 'agent-written-guard', 'guard.mjs'), 'export async function decide() { return { decision: "write" }; }');
   await assert.rejects(blind({ ...common, arm: 'agent-written-guard', recipesFile: join(dir, 'blind.json') }), /changed after it was frozen/);
+});
+
+test('rebuilding maps new record numbers through later calls and stops at the first call that answers differently', async () => {
+  const { rebuildRecords, readGuardCases } = await import('../../qualification/workflow-generalization/three-arm/regression.mjs');
+  const sent = [];
+  let next = 500;
+  const request = async (as, method, path, body) => {
+    sent.push({ as, method, path, body });
+    if (method === 'POST') return { status: path.includes('refuse') ? 422 : 201, body: { id: next++ } };
+    return { status: 200, body: {} };
+  };
+  const trace = [
+    { as: 'approver', method: 'POST', path: '/api/v3/projects/p/work_packages', body: { subject: 'a' }, status: 201, id: 7 },
+    { as: 'approver', method: 'PATCH', path: '/api/v3/work_packages/7', body: { lockVersion: 0 }, status: 200, id: 7 },
+    { as: 'author', method: 'POST', path: '/api/v3/projects/p/work_packages', body: { _links: { parent: { href: '/api/v3/work_packages/7' } } }, status: 201, id: 8 },
+    { as: 'author', method: 'POST', path: '/api/v3/projects/p/work_packages', body: { _links: { parent: { href: '/api/v3/work_packages/3' } } }, status: 201, id: 9 },
+  ];
+  const done = await rebuildRecords({ trace, request, ids: new Map([[3, 303]]) });
+  assert.equal(done.rebuilt, true);
+  assert.deepEqual([...done.ids], [[3, 303], [7, 500], [8, 501], [9, 502]]);
+  assert.equal(sent[1].path, '/api/v3/work_packages/500');
+  assert.equal(sent[2].body._links.parent.href, '/api/v3/work_packages/500');
+  assert.equal(sent[3].body._links.parent.href, '/api/v3/work_packages/303');
+  const broken = await rebuildRecords({ trace: [{ as: 'author', method: 'POST', path: '/api/v3/projects/refuse/work_packages', body: null, status: 201, id: 1 }, ...trace], request });
+  assert.equal(broken.rebuilt, false);
+  assert.equal(broken.failedAt, 0);
+  const read = readGuardCases([{ familyId: 'f', project: 'p', workPackageId: 1, workHours: 2, expect: 'write' }, { familyId: 'f', expect: 'maybe' }, 'x']);
+  assert.equal(read.cases.length, 1);
+  assert.equal(read.problems.length, 2);
+  assert.equal(readGuardCases({}).problems.length, 1);
+  const many = Array.from({ length: 30 }, (_, i) => ({ familyId: i < 26 ? 'f' : 'g', project: 'p', workPackageId: i + 1, workHours: 2, expect: 'stop' }));
+  assert.equal(readGuardCases(many).cases.filter(c => c.familyId === 'f').length, 24);
+  assert.equal(readGuardCases(many).cases.filter(c => c.familyId === 'g').length, 4);
 });

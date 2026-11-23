@@ -9,12 +9,13 @@ Nothing here calls a model.
 | `task-contract-openproject.md` | the family author | The whole brief for writing policies, routes and the answer key |
 | `provision.mjs`, `example-recipes.json` | the family author and the runner | The route-recipe format and the tool that checks and builds recipes |
 | `route-record.md`, `route-record.schema.json` | the scorer | The records the runner emits, and what the scorer computes from them |
-| `runner.mjs` | the operator | `hash`, `preflight`, `discovery` and `blind`; the spend ledger and the stage cap |
+| `runner.mjs` | the operator | `hash`, `preflight`, `discovery`, `blind` and `regress`; the spend ledger and the stage cap |
 | `instructions.mjs` | the operator | What each arm's model session is told |
 | `session.mjs` | the runner | Starts one model session with no shell, no web tool and one MCP server, and keeps its event log |
 | `arm-server.mjs`, `app-surface.mjs` | the runner | The one MCP server a session talks to: API calls on the instance under test, plus the arm's own tools; the audit of a session's tool calls |
 | `guard-sandbox.mjs`, `guard-host.mjs` | the runner | Runs a model-written guard in a container with no network |
 | `repair-boundary-arm.mjs` | the runner | Read plans, labelled examples, the unchanged learner, and deciding a route from the frozen guard |
+| `regression.mjs` | the runner | Rebuilds the records behind an arm's kept cases on a new database and reruns the cases with its frozen work |
 | `write-step.mjs` | the runner | The one write every arm shares, made through the page, and the database read before and after |
 
 ## State
@@ -60,3 +61,8 @@ Checked so far, all against a local OpenProject `14.0.0` started by
   `--approve-paid`. This test found one real fault before any spend: the
   working directory has to be given as its real path, or the audit flags the
   session's own files.
+- Kept cases: both arms end discovery with a file of labelled cases and the
+  write calls behind them. `regress` rebuilt them on a new database whose
+  record numbers differed, and every case came out as labelled. With statuses
+  renumbered, as a later release might do, both arms' families were caught;
+  with a call refused, the rebuild stopped and said which call.
