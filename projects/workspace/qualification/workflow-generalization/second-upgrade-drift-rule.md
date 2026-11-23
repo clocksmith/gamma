@@ -158,3 +158,13 @@ seeing results in order to manufacture a test.
   a rule 2 or rule 3 outcome must say, beside that outcome, that the second
   upgrade was a no-change control and that only one upgrade per application
   needed repair.
+
+**Note on amendment 3, added the same hour.** When amendment 3 was committed
+(gamma 2bb553eaf) the ERPNext receipt already held a sixth entry, v15.80.0.
+The evaluator had seen that six releases were listed and that none was marked
+as biting, and had not read the sixth entry, which records check 1 as met (the
+old write committed 0 of 3, by timeout, cause not yet examined). So amendment 3
+was written after six ERPNext results, one of them possibly a break, and not
+after five clean ones as its heading says. Its content stands: the search stays
+bounded at the 17 points, and a release that meets check 1 is followed up
+inside its interval as amendment 1 requires.
