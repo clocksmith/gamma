@@ -71,3 +71,26 @@ upgrades the decision rule of the pre-registration needs.
   A different recorded workflow could survive a release that breaks this one.
 - This is a development evaluation: the evaluator and the operator are
   separated by session, not by account.
+
+## Amendment 1 (2026-11-23, before any screening result exists)
+
+Made by the evaluator after the operator counted the releases (29 for
+OpenProject, 149 for ERPNext) and before the first screening probe ran.
+
+- **Granularity.** Screen `x.y.0` releases only. Patch releases are not
+  screened.
+- **Order of the checks.** Run check 4, then check 1, on every candidate.
+  Run checks 2 and 3 only when check 1 is met; otherwise record them as
+  "not needed: check 1 not met". A release that fails check 1 is already out.
+- **Check 2 uses the arms' own write surface.** The arms write through the
+  page, so the reference route is a page write with whatever selectors the
+  candidate needs. A write through the API alone does not show the task is
+  possible for an arm; record it as an extra fact, not as check 2.
+- **Check 3 uses that same reference route** on the look-alike.
+- **OpenProject:** strict ascending order over all 29.
+- **ERPNext:** ascending at a stride of ten minor releases (v15.30.0,
+  v15.40.0, v15.50.0, ...) until check 1 is first met, then strict ascending
+  inside the last interval, and freeze the first release there that meets all
+  four. This finds the first biting release only if a break persists. A
+  release that broke the workflow and was repaired within the same stride
+  would be missed; the receipt must say so.
