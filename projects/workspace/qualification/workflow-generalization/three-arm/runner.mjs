@@ -46,6 +46,24 @@ export const CONFIG = Object.freeze({
 });
 
 const sha256 = data => createHash('sha256').update(data).digest('hex');
+
+/**
+ * The runner's own calls to the application are tried again when the connection
+ * itself fails (a reset, a refusal), never when the application answers. A reset
+ * right after a fresh instance was seen once in a dry run. Calls made by an arm's
+ * session are not retried: the model sees the failure and decides what to do.
+ */
+export function steady(request, { attempts = 4, waitMs = 1000 } = {}) {
+  return async (...call) => {
+    for (let attempt = 1; ; attempt += 1) {
+      try { return await request(...call); } catch (error) {
+        if (attempt >= attempts) throw error;
+        await new Promise(done => setTimeout(done, waitMs * attempt));
+      }
+    }
+  };
+}
+const appRequester = release => steady(openProjectRequester(release));
 const listFiles = dir => readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
   const path = join(dir, entry.name);
   return entry.isDirectory() ? listFiles(path) : entry.isFile() ? [path] : [];
@@ -154,7 +172,7 @@ function loadFamilies(file) {
 
 /** Builds each family's disclosed example on the current instance and returns what an arm is told. */
 async function discloseFamilies(families, state, tag) {
-  const request = openProjectRequester(state.new);
+  const request = appRequester(state.new);
   const disclosed = [];
   for (const family of families) {
     const built = await provisionRecipe(family.disclosedExample, { request, seed: state.new.seed, tag: `${tag}-${family.familyId}` });
@@ -233,7 +251,7 @@ export async function discovery({ arm, familiesFile, runDir, approvePaid = false
       } else {
         cases = keptCases(JSON.parse(readFileSync(artifactFile, 'utf8')));
       }
-      const decideCase = caseDecider({ arm, runDir, deps, request: openProjectRequester(state.new) });
+      const decideCase = caseDecider({ arm, runDir, deps, request: appRequester(state.new) });
       let passingAtFreeze = 0;
       for (const kept of cases) if ((await decideCase(kept)).decision === kept.expect) passingAtFreeze += 1;
       const text = JSON.stringify({ schema: 'three-arm-kept-cases/v1', arm, release: state.new.tag ?? null, disclosed, cases,
@@ -278,7 +296,7 @@ export async function regress({ arm, familiesFile, runDir, deps = defaultDeps() 
   deps.freshInstance();
   try {
     const state = readState(deps.stateFile);
-    const request = openProjectRequester(state.new);
+    const request = appRequester(state.new);
     let outcome;
     try {
       const now = await discloseFamilies(families, state, `g-${arm}`);
@@ -328,7 +346,7 @@ export async function maintenance({ arm, familiesFile, runDir, fromRunDir, upgra
   deps.freshInstance(tags);
   try {
     const state = readState(deps.stateFile);
-    const request = openProjectRequester(state.new);
+    const request = appRequester(state.new);
     let disclosed = [];
     let outcome;
     try {
@@ -403,7 +421,7 @@ export async function blind({ arm, familiesFile, recipesFile, runDir, approvePai
   let writer = null;
   try {
     const state = readState(deps.stateFile);
-    const request = openProjectRequester(state.new);
+    const request = appRequester(state.new);
     const disclosed = replans ? await discloseFamilies(families, state, 'b') : [];
     writer = await deps.openWriter(state);
     for (const recipe of document.recipes) {

@@ -116,5 +116,25 @@ with open(sys.argv[1], "w") as f:
 PY
 chmod 600 "$STATE_FILE"
 rm -f "$STATE_DIR"/gammatron-op-*.env
+
+# Settle: a release that has only just answered can still reset a connection.
+# Require five authenticated answers in a row from each release before handing over.
+python3 - "$STATE_FILE" <<'PY'
+import base64, json, sys, time, urllib.request
+state = json.load(open(sys.argv[1]))
+for side in ("old", "new"):
+    release = state[side]
+    token = base64.b64encode(("apikey:" + release["seed"]["approverToken"]).encode()).decode()
+    streak, deadline = 0, time.time() + 120
+    while streak < 5:
+        if time.time() > deadline:
+            sys.exit(f"{release['container']} did not settle: no five answers in a row within 120 s")
+        try:
+            request = urllib.request.Request(release["url"] + "/api/v3/users/me", headers={"Authorization": "Basic " + token})
+            streak = streak + 1 if urllib.request.urlopen(request, timeout=20).status == 200 else 0
+        except Exception:
+            streak = 0
+        time.sleep(1)
+PY
 echo "OpenProject $OLD_TAG on :$OLD_PORT and $NEW_TAG on :$NEW_PORT are seeded."
 echo "State (tokens, passwords, status hrefs): $STATE_FILE"

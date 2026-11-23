@@ -287,3 +287,19 @@ test('rebuilding maps new record numbers through later calls and stops at the fi
   assert.equal(readGuardCases(many).cases.filter(c => c.familyId === 'f').length, 24);
   assert.equal(readGuardCases(many).cases.filter(c => c.familyId === 'g').length, 4);
 });
+
+test('the runner retries its own calls when the connection fails, and never when the application answers', async () => {
+  const { steady } = await import('../../qualification/workflow-generalization/three-arm/runner.mjs');
+  let calls = 0;
+  const flaky = steady(async () => { calls += 1; if (calls < 3) throw new TypeError('fetch failed'); return { status: 201, body: {} }; }, { waitMs: 1 });
+  assert.equal((await flaky('approver', 'POST', '/api/v3/x')).status, 201);
+  assert.equal(calls, 3);
+  calls = 0;
+  const refused = steady(async () => { calls += 1; return { status: 422, body: {} }; }, { waitMs: 1 });
+  assert.equal((await refused('approver', 'POST', '/api/v3/x')).status, 422);
+  assert.equal(calls, 1);
+  calls = 0;
+  const dead = steady(async () => { calls += 1; throw new TypeError('fetch failed'); }, { attempts: 3, waitMs: 1 });
+  await assert.rejects(dead('approver', 'GET', '/api/v3/x'), /fetch failed/);
+  assert.equal(calls, 3);
+});
