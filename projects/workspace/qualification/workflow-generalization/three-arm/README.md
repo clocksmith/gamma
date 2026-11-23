@@ -98,6 +98,20 @@ Checked so far, all against a local OpenProject `14.0.0` started by
     both look-alikes itself with no write sent. The control guard that always
     writes got all three committed, the two look-alikes included: neither the
     server nor the harness blocks a wrong write, so an arm's zero is its own.
+  - A probe on `14.6.0` then showed a write recorded as sent and not
+    committed: the write step could take the page's form check for the save
+    and read the row too early. Commit detection now rests on the row alone,
+    with a settle wait and a final reading of every row. The dry run was
+    repeated on that tree and passed; the first runner hash was withdrawn.
+- Second upgrade, same stand-in and public family, receipt
+  `../receipts/three-arm-second-upgrade-probe-receipt.json`: on OpenProject
+  `14.6.0` and, separately, on `15.0.0`, every kept case was rebuilt and came
+  out as labelled (2 of 2 for the guard arm, 4 of 4 for the learner),
+  maintenance completed for all three arms, the valid route was written with
+  the row changed, and both look-alikes were stopped by the arm. Neither
+  release changed anything this family or the frozen write step touches, so
+  on this evidence a second upgrade to either would measure an upgrade that
+  needs no maintenance. That says nothing yet about the sealed families.
 - Known and not fixed: `bringup/erpnext-up.sh` still passes its generated
   passwords on the command line. The OpenProject script was fixed; the
   ERPNext one is not used before Stage B and will be fixed with that freeze.

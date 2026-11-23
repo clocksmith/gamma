@@ -1,0 +1,513 @@
+{
+ "schema": "gammatron-three-arm-second-upgrade-probe-receipt/v1",
+ "issue": "clocksmith/deco#88",
+ "model": "none: a scripted stand-in for the model CLI (test/support/fake-claude.mjs)",
+ "modelSpendUsd": 0,
+ "cases": "the public example family on disposable records; no evaluator case",
+ "startingPoint": "the work each arm froze in the dry run on OpenProject 14.0.0 (receipts/three-arm-dry-run-receipt.json)",
+ "note": "Each entry below refers to one release only. A result for 14.6.0 says nothing about 15.0.0 and the reverse.",
+ "releases": [
+  {
+   "release": "14.6.0",
+   "upgrade": "14.0.0->14.6.0",
+   "at": "2026-11-23T03:13:35.433Z",
+   "runnerSha256": "8e7361e2521fcd95d025e50646a33a412ff15dc75d512fa10fa4578d4583c890",
+   "steps": [
+    {
+     "name": "regress agent-written-guard",
+     "ok": true,
+     "result": {
+      "rebuilt": true,
+      "reason": null,
+      "passed": 2,
+      "total": 2,
+      "failedFamilies": [],
+      "cases": [
+       {
+        "workPackageId": 2,
+        "workHours": 24,
+        "expect": "write",
+        "got": "write",
+        "pass": true
+       },
+       {
+        "workPackageId": 4,
+        "workHours": 40,
+        "expect": "stop",
+        "got": "stop",
+        "pass": true
+       }
+      ]
+     }
+    },
+    {
+     "name": "regress repair-boundary",
+     "ok": true,
+     "result": {
+      "rebuilt": true,
+      "reason": null,
+      "passed": 4,
+      "total": 4,
+      "failedFamilies": [],
+      "cases": [
+       {
+        "workPackageId": 2,
+        "workHours": 24,
+        "expect": "write",
+        "got": "write",
+        "pass": true
+       },
+       {
+        "workPackageId": 4,
+        "workHours": 40,
+        "expect": "write",
+        "got": "write",
+        "pass": true
+       },
+       {
+        "workPackageId": 6,
+        "workHours": 40,
+        "expect": "stop",
+        "got": "stop",
+        "pass": true
+       },
+       {
+        "workPackageId": 8,
+        "workHours": 40,
+        "expect": "stop",
+        "got": "stop",
+        "pass": true
+       }
+      ]
+     }
+    },
+    {
+     "name": "maintenance agent-written-guard",
+     "ok": true,
+     "result": {
+      "completed": true,
+      "outOfSurfaceCalls": 0,
+      "wallMs": 72219,
+      "keptCases": {
+       "total": 2,
+       "passedAfterUpgrade": 2,
+       "rebuilt": true,
+       "familiesCaught": []
+      }
+     }
+    },
+    {
+     "name": "maintenance repair-boundary",
+     "ok": true,
+     "result": {
+      "completed": true,
+      "outOfSurfaceCalls": 0,
+      "wallMs": 71591,
+      "keptCases": {
+       "total": 4,
+       "passedAfterUpgrade": 4,
+       "rebuilt": true,
+       "familiesCaught": []
+      }
+     }
+    },
+    {
+     "name": "maintenance always-replan",
+     "ok": true,
+     "result": {
+      "completed": true,
+      "outOfSurfaceCalls": 0,
+      "wallMs": 0,
+      "keptCases": null
+     }
+    },
+    {
+     "name": "routes agent-written-guard",
+     "ok": true,
+     "result": [
+      {
+       "routeId": "dry-valid",
+       "decision": "write",
+       "writeSent": true,
+       "httpStatus": 200,
+       "committed": true,
+       "hours": [
+        8,
+        56
+       ],
+       "error": null,
+       "stopReason": null
+      },
+      {
+       "routeId": "dry-lookalike-hold",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "hours": [
+        8,
+        8
+       ],
+       "error": null,
+       "stopReason": "approval does not cover this"
+      },
+      {
+       "routeId": "dry-lookalike-hours",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "hours": [
+        8,
+        8
+       ],
+       "error": null,
+       "stopReason": "approval does not cover this"
+      }
+     ]
+    },
+    {
+     "name": "routes repair-boundary",
+     "ok": true,
+     "result": [
+      {
+       "routeId": "dry-valid",
+       "decision": "write",
+       "writeSent": true,
+       "httpStatus": 200,
+       "committed": true,
+       "hours": [
+        8,
+        56
+       ],
+       "error": null,
+       "stopReason": null
+      },
+      {
+       "routeId": "dry-lookalike-hold",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "hours": [
+        8,
+        8
+       ],
+       "error": null,
+       "stopReason": "guard-mismatch"
+      },
+      {
+       "routeId": "dry-lookalike-hours",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "hours": [
+        8,
+        8
+       ],
+       "error": null,
+       "stopReason": "guard-mismatch"
+      }
+     ]
+    },
+    {
+     "name": "routes always-replan",
+     "ok": true,
+     "result": [
+      {
+       "routeId": "dry-valid",
+       "decision": "write",
+       "writeSent": true,
+       "httpStatus": 200,
+       "committed": true,
+       "hours": [
+        8,
+        56
+       ],
+       "error": null,
+       "stopReason": null
+      },
+      {
+       "routeId": "dry-lookalike-hold",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "hours": [
+        8,
+        8
+       ],
+       "error": null,
+       "stopReason": "approval does not cover this"
+      },
+      {
+       "routeId": "dry-lookalike-hours",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "hours": [
+        8,
+        8
+       ],
+       "error": null,
+       "stopReason": "approval does not cover this"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "release": "15.0.0",
+   "upgrade": "14.0.0->15.0.0",
+   "at": "2026-11-23T03:22:34.969Z",
+   "runnerSha256": "8e7361e2521fcd95d025e50646a33a412ff15dc75d512fa10fa4578d4583c890",
+   "steps": [
+    {
+     "name": "regress agent-written-guard",
+     "ok": true,
+     "result": {
+      "rebuilt": true,
+      "reason": null,
+      "passed": 2,
+      "total": 2,
+      "failedFamilies": [],
+      "cases": [
+       {
+        "workPackageId": 2,
+        "workHours": 24,
+        "expect": "write",
+        "got": "write",
+        "pass": true
+       },
+       {
+        "workPackageId": 4,
+        "workHours": 40,
+        "expect": "stop",
+        "got": "stop",
+        "pass": true
+       }
+      ]
+     }
+    },
+    {
+     "name": "regress repair-boundary",
+     "ok": true,
+     "result": {
+      "rebuilt": true,
+      "reason": null,
+      "passed": 4,
+      "total": 4,
+      "failedFamilies": [],
+      "cases": [
+       {
+        "workPackageId": 2,
+        "workHours": 24,
+        "expect": "write",
+        "got": "write",
+        "pass": true
+       },
+       {
+        "workPackageId": 4,
+        "workHours": 40,
+        "expect": "write",
+        "got": "write",
+        "pass": true
+       },
+       {
+        "workPackageId": 6,
+        "workHours": 40,
+        "expect": "stop",
+        "got": "stop",
+        "pass": true
+       },
+       {
+        "workPackageId": 8,
+        "workHours": 40,
+        "expect": "stop",
+        "got": "stop",
+        "pass": true
+       }
+      ]
+     }
+    },
+    {
+     "name": "maintenance agent-written-guard",
+     "ok": true,
+     "result": {
+      "completed": true,
+      "outOfSurfaceCalls": 0,
+      "wallMs": 72509,
+      "keptCases": {
+       "total": 2,
+       "passedAfterUpgrade": 2,
+       "rebuilt": true,
+       "familiesCaught": []
+      }
+     }
+    },
+    {
+     "name": "maintenance repair-boundary",
+     "ok": true,
+     "result": {
+      "completed": true,
+      "outOfSurfaceCalls": 0,
+      "wallMs": 72452,
+      "keptCases": {
+       "total": 4,
+       "passedAfterUpgrade": 4,
+       "rebuilt": true,
+       "familiesCaught": []
+      }
+     }
+    },
+    {
+     "name": "maintenance always-replan",
+     "ok": true,
+     "result": {
+      "completed": true,
+      "outOfSurfaceCalls": 0,
+      "wallMs": 0,
+      "keptCases": null
+     }
+    },
+    {
+     "name": "routes agent-written-guard",
+     "ok": true,
+     "result": [
+      {
+       "routeId": "dry-valid",
+       "decision": "write",
+       "writeSent": true,
+       "httpStatus": 200,
+       "committed": true,
+       "hours": [
+        8,
+        56
+       ],
+       "error": null,
+       "stopReason": null
+      },
+      {
+       "routeId": "dry-lookalike-hold",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "hours": [
+        8,
+        8
+       ],
+       "error": null,
+       "stopReason": "approval does not cover this"
+      },
+      {
+       "routeId": "dry-lookalike-hours",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "hours": [
+        8,
+        8
+       ],
+       "error": null,
+       "stopReason": "approval does not cover this"
+      }
+     ]
+    },
+    {
+     "name": "routes repair-boundary",
+     "ok": true,
+     "result": [
+      {
+       "routeId": "dry-valid",
+       "decision": "write",
+       "writeSent": true,
+       "httpStatus": 200,
+       "committed": true,
+       "hours": [
+        8,
+        56
+       ],
+       "error": null,
+       "stopReason": null
+      },
+      {
+       "routeId": "dry-lookalike-hold",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "hours": [
+        8,
+        8
+       ],
+       "error": null,
+       "stopReason": "guard-mismatch"
+      },
+      {
+       "routeId": "dry-lookalike-hours",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "hours": [
+        8,
+        8
+       ],
+       "error": null,
+       "stopReason": "guard-mismatch"
+      }
+     ]
+    },
+    {
+     "name": "routes always-replan",
+     "ok": true,
+     "result": [
+      {
+       "routeId": "dry-valid",
+       "decision": "write",
+       "writeSent": true,
+       "httpStatus": 200,
+       "committed": true,
+       "hours": [
+        8,
+        56
+       ],
+       "error": null,
+       "stopReason": null
+      },
+      {
+       "routeId": "dry-lookalike-hold",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "hours": [
+        8,
+        8
+       ],
+       "error": null,
+       "stopReason": "approval does not cover this"
+      },
+      {
+       "routeId": "dry-lookalike-hours",
+       "decision": "stop",
+       "writeSent": false,
+       "httpStatus": null,
+       "committed": false,
+       "hours": [
+        8,
+        8
+       ],
+       "error": null,
+       "stopReason": "approval does not cover this"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
