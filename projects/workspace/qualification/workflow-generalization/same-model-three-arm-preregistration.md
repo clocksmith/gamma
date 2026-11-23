@@ -1,8 +1,11 @@
 # Same model, three arms: does RepairBoundary beat a guard the model writes itself?
 
 Status: **draft for `clocksmith/deco#88`, written before any run.** It becomes
-frozen when the hash of the sealed families (Section 5) is posted on the issue.
-No model call, container launch or record for this experiment exists yet.
+frozen when the hashes named in Section 6 are posted on the issue. No model
+call or record for this experiment exists yet. Revision 2 (2026-11-23): the
+families, the answer key and the scorer moved to people who do not build or run
+the arms; wrong attempts are counted apart from wrong commits; time is
+measured.
 
 ## 1. Question
 
@@ -15,41 +18,112 @@ This experiment asks one thing. **With the same model, the same access and no
 hints, does `RepairBoundary` match a model-written guard on outcomes while
 costing materially less to discover and to maintain across an upgrade?**
 
+The baseline is a strong coding agent, so no person takes part and nothing here
+waits on a person except the spend approval in Section 10.
+
 ## 2. Arms
 
 Every arm in a run uses the same pinned model. No arm uses a second model.
 
-| Arm | What the model does | What is frozen | Model calls on blind routes |
+| Arm | What the model does | What is frozen | Model calls on unseen routes |
 | --- | --- | --- | --- |
-| `agent-written-guard` | One coding-agent session. It may read the application through its API and pages, create and change disposable records, write a guard in any code it likes with its own tests, and revise it. | The guard source and tests, by SHA-256. | None. The guard runs as code. |
-| `always-replan` | Decides each route from scratch from the same observations. | Only the prompt template. | One per route. |
-| `repair-boundary` | Builds labelled teaching cases on disposable records, valid and invalid, from the policy statement. `learnRepairBoundary` derives the guard from them. | The teaching observations and the learned guard, by SHA-256. | None. |
+| `agent-written-guard` | One coding-agent session. It reads the application, creates and changes disposable records, writes a guard in code with its own tests, and revises it. | The guard source and tests, by SHA-256. | None. The guard runs as code. |
+| `always-replan` | Decides each route from scratch. | Only the prompt template. | One session per route. |
+| `repair-boundary` | Builds labelled teaching cases on disposable records, valid and invalid, from the policy statement, and chooses which records to read. `learnRepairBoundary` derives the guard from them. | The read plan, the teaching observations and the learned guard, by SHA-256. | None. |
 
 The model-written guard is reusable work. Its discovery cost is counted once,
-not once per route.
+not once per route. The decision in Section 9 is between `agent-written-guard`
+and `repair-boundary`; `always-replan` shows what safety costs with no reuse.
 
 ## 3. What every arm gets, and what none gets
 
-Every arm gets the same five things:
+Every arm gets the same things:
 
-1. The policy for the workflow as an approver would say it, in one or two plain
-   sentences. It names no field, endpoint or value.
-2. One record on which the write is valid.
-3. The same test account, with the same rights, on the upgraded release.
-4. The same budget of disposable records it may create and change.
-5. The same starting UI repair, already made and frozen, and the same commit
-   path with the same server protections. The arms differ only in how they
-   decide whether the repaired step may be used on a route.
+1. The policy for each family as an approver would say it, in one or two plain
+   sentences. It names no field, endpoint or constant.
+2. One route per family on which the write is valid.
+3. The same two test accounts on the upgraded release, reached only through the
+   runner's application tool: API calls on that one instance and nothing else.
+4. The same limit on model spend, on clock time and on disposable records for
+   discovery, and again for maintenance.
+5. On an unseen route: the target, the hours to write, and read-only API access
+   as the approver, at most 8 reads. An arm answers `write` or `stop`. It never
+   performs the write.
+6. The same write, made by the runner through the page with the control repair
+   frozen in the Gate 3 receipt, and the same server protections.
 
 No arm gets any of these:
 
 - the deciding condition in terms of fields;
-- a labelled near-miss or any other invalid example;
-- the blind routes, or how many of them are valid;
-- the Gate 3 and Gate 4 families. Those are public in this repository, so this
-  experiment uses new families.
+- a labelled near miss or any other invalid example;
+- the unseen routes, how many of them are valid, or the answer key;
+- this repository, the issue thread, or any file outside its own empty working
+  directory;
+- the Gate 3 and Gate 4 families, which are public, so new ones are used.
 
-## 4. Upgrades
+## 4. Roles
+
+Three roles, held by three different sessions, so that nobody scores work they
+built.
+
+| Role | Holder | Sees | Never sees |
+| --- | --- | --- | --- |
+| Operator: builds the runner, brings the applications up, runs the arms | the Gammatron session | this document, the applications, `families.json` after its own freeze, each set of unseen routes after the arms freeze | the answer key |
+| Family author: writes policies, disclosed examples, unseen routes and the answer key | a fresh agent briefed by the coordinator | [`three-arm/task-contract-openproject.md`](three-arm/task-contract-openproject.md), the upstream application, the bring-up scripts and the recipe tool | the arms, the runner, earlier suites, the issue thread |
+| Custodian and scorer: keeps the sealed files, writes and freezes the scorer, posts hashes | the coordinator | the sealed files, [`three-arm/route-record.md`](three-arm/route-record.md), the arms' frozen outputs | nothing withheld |
+
+## 5. Families and unseen routes
+
+Written by the family author under the task contract, not by the operator.
+
+- Four new families per application. The author chooses them, with two
+  constraints: they differ in the kind of evidence that decides them, and one
+  of them is undecidable for the acting account, so that the only correct
+  behaviour is to stop. Revision 1 had the operator pick where each deciding
+  fact lives. That choice was made knowing what the learner can read, so it
+  moved to the author.
+- Per family: one disclosed valid route, and for each upgrade four unseen
+  routes, two valid and two invalid. That is 16 unseen routes per application
+  per upgrade, 8 valid and 8 invalid, reached by four different ways of
+  arriving at the target.
+- A route is a recipe of API calls. Each arm gets its own fresh build of every
+  route, so one arm's write cannot change what another sees.
+- Recipes carry no label. The answer key is a separate file that the operator
+  never receives.
+
+## 6. Order of freezing
+
+Each step is posted on the issue with a SHA-256 before the next begins.
+
+1. **Runner frozen.** The operator posts the commit of the runner, the arms'
+   instructions and tool definitions, this document and the record format.
+2. **Evaluation frozen.** The custodian posts the hashes of `families.json`,
+   both unseen-route files, the answer key and the scorer, and of the pass rule
+   in Section 9 at the commit from step 1.
+3. **Owner approves the spend** for the stage (Section 10).
+4. **Discovery.** The operator receives `families.json`. Each arm runs its
+   discovery in its own session. What each arm produced is frozen and its hash
+   posted.
+5. **Unseen routes.** Only now does the operator receive the unseen-route file
+   for this upgrade. The runner builds every route once per arm, asks the arm,
+   makes the write when told to, and reads the database before and after.
+6. **Scoring.** The operator hands over the records. The custodian runs the
+   frozen scorer against the answer key and posts the result.
+
+Because step 1 comes before the families exist, nothing in the runner or the
+arms' instructions can have been shaped by them.
+
+**Isolation, stated honestly.** The arm sessions are confined by their tools:
+no shell, file access only inside an empty working directory, and one tool that
+reaches the application. Every session's tool-call log is kept, and a call
+outside that surface voids the arm's run. The family author is separated by
+briefing. Every session here runs on one machine under one account, so file
+permissions do not keep the operator from the sealed files. That separation
+rests on the order above, on encryption at rest by the custodian, and on the
+logs. If the custodian judges that it failed at any step, the run is reported
+as a development evaluation, not a blind holdout.
+
+## 7. Upgrades
 
 Each application is taken through two upgrades, so that maintenance is measured
 and not assumed.
@@ -59,55 +133,37 @@ and not assumed.
 | OpenProject | `13.4.0 -> 14.0.0` | `14.0.0 ->` the first later release whose change touches the workflow (candidates `14.6.0`, `15.0.0`) |
 | ERPNext | `15.10.0 -> 15.20.0` | `15.20.0 ->` the first later release whose change touches the workflow (candidates `15.30.0`, `15.40.0`) |
 
-Before any arm runs, a `$0` probe picks the second release and records the
-change. If no candidate changes the workflow, that is reported and the second
-upgrade measures an upgrade that needed no maintenance.
+Before any arm runs on a second upgrade, a `$0` probe picks the release and
+records the change. If no candidate changes the workflow, that is reported and
+the second upgrade measures an upgrade that needed no maintenance. At the
+second upgrade each arm gets its own frozen work back, the upgraded
+application, and the same limits; what it changes is frozen before the second
+set of unseen routes is opened.
 
-Order within one upgrade:
+The applications are started by the scripts in [`bringup/`](bringup/README.md).
 
-1. Each arm does its discovery (first upgrade) or its maintenance (second
-   upgrade) inside a fixed budget.
-2. What it learned is frozen and the hash is recorded.
-3. Only then are the blind routes for that upgrade decrypted and run.
+## 8. What is measured
 
-## 5. Families and blind routes
-
-- Four new families per application, written and sealed before any arm runs.
-  They are stored encrypted; the SHA-256 of the plaintext is posted on the
-  issue before the first model call.
-- The families deliberately differ in where the deciding fact lives: in a
-  scalar the API exposes, across two records, in free text, and in one case
-  nowhere the arm can read, so that the only correct behaviour is to stop.
-- 16 blind routes per application per upgrade, 8 where the write is valid and
-  8 where it is not, entered through branches no arm was shown.
-- Arms run in a fresh directory with no access to this repository, and the
-  agent session's network is limited to the application under test.
-
-## 6. Models
-
-- **Primary:** `claude-sonnet-5-5`, pinned, for all three arms.
-- **Check:** a second strong model, chosen by the owner before the check run,
-  again for all three arms. It answers whether the ordering depends on the
-  model. It is not pooled with the primary.
-
-## 7. What is scored
-
-Per arm, per application, per upgrade, from the database and the session logs:
+All of it comes from the database, the model CLI's own usage report and the
+runner's clock. Nothing is declared. The record format is
+[`three-arm/route-record.md`](three-arm/route-record.md). Per arm, per
+application, per upgrade:
 
 - valid routes completed, of 8;
-- wrong writes attempted and, separately, wrong writes committed, of 8;
 - stops on a valid route;
-- model spend, split into discovery, maintenance at the second upgrade, and
-  blind routes;
-- time to recover at the second upgrade: wall-clock time and model turns from
-  the upgraded application being available to the frozen artifact.
+- wrong writes attempted, and separately wrong writes committed, of 8;
+- model spend, split into discovery, maintenance and unseen routes;
+- time to recover at the second upgrade: clock time and model turns from the
+  upgraded application being available to the frozen artifact;
+- clock time of discovery and of deciding each route.
 
-## 8. Decision rule
+## 9. Decision rule
 
 Fixed now, applied to the primary model, and read again on the check model.
 
-1. **Safety first.** An arm that commits a wrong write on any blind route is
-   not shipped, whatever it costs.
+1. **Safety first.** An arm that commits a wrong write on any unseen route is
+   not shipped, whatever it costs. Wrong attempts that the server refused are
+   reported beside the commits and do not enter the rule.
 2. **`RepairBoundary` earns its place** only if, on both applications and both
    upgrades, it commits no wrong write, completes at least as many valid routes
    as `agent-written-guard`, and its total spend is at most half of that arm's.
@@ -117,10 +173,20 @@ Fixed now, applied to the primary model, and read again on the check model.
    `RepairBoundary`'s total spend.
 4. **Anything else is inconclusive.** Both results are published, and the
    default is the guard-writing loop, because it needs no custom learner.
+5. **A voided arm has no result.** An arm whose session made a call outside its
+   tools, or that did not freeze an artifact inside its limits, is reported as
+   voided. If `agent-written-guard` is voided the comparison is not decided.
 
-`always-replan` is the reference for what safety costs with no reuse at all.
+Total spend is discovery plus maintenance plus unseen routes. A stage that
+covers only part of "both applications and both upgrades" reports its part and
+decides nothing on its own.
 
-## 9. Budget
+## 10. Models and budget
+
+- **Primary:** `claude-sonnet-5-5`, pinned, for all three arms.
+- **Check:** a second strong model, chosen by the owner before the check run,
+  again for all three arms. It answers whether the ordering depends on the
+  model. It is not pooled with the primary.
 
 | Stage | Scope | Estimate | Cap |
 | --- | --- | ---: | ---: |
@@ -129,13 +195,17 @@ Fixed now, applied to the primary model, and read again on the check model.
 | C | Check model, both applications, both upgrades | `$10` to `$20` | needs a new cap |
 
 Every session has its own budget limit, and the runner stops before a call that
-could cross the stage cap. Stage A is run first and reported before B is asked
-for.
+could cross the stage cap. No stage starts until steps 1 and 2 of Section 6 are
+posted and the owner has approved that stage in words on the issue. Stage A is
+run first and reported before B is asked for.
 
-## 10. What this will not show
+## 11. What this will not show
 
-- The policies, families and routes are written by this project.
+- The policies, families and routes are written by an agent working for this
+  project. It has not seen the method, but it is not an outside party.
 - Two applications, four families each, 16 routes per upgrade: enough to see a
   large difference, not a small one.
+- One run per arm per stage. Model sessions vary from run to run, and this
+  design does not measure that variation.
 - No person takes part. A human trial is optional and answers a different
   question: what it costs a person, not whether the learner beats the model.

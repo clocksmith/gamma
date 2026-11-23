@@ -22,8 +22,9 @@ on a command line you intend to keep, and commit none of it.
 `Stage2Approved`, `Stage2Hold`, `Stage2Disallowed` (closed); roles
 `Stage2AuthorRole` and `Stage2ApproverRole`, where only the approver may move a
 work package between statuses; projects `stage2-qual-proj`,
-`stage2-partner-proj` and `stage2-quarantine-proj`; users `stage2_author` and
-`stage2_approver`, each with an API token.
+`stage2-partner-proj` and `stage2-quarantine-proj`, which both users belong to,
+and `stage2-restricted-proj`, which only the author belongs to; users
+`stage2_author` and `stage2_approver`, each with an API token.
 
 **ERPNext** (`seed_erpnext_qual.py`): companies `Stage2 Qual Corp`,
 `Stage2 Partner Corp` and `Stage2 Quarantine Corp`; supplier
@@ -36,10 +37,12 @@ Quotation.
 
 The commands and both seed scripts were recovered from the session that ran
 Gates 3 and 4, where they existed only as typed commands and scratch files.
-Three things differ from that run: passwords are generated instead of fixed,
+Four things differ from that run: passwords are generated instead of fixed,
 the two extra OpenProject projects are created by the seeder instead of by a
-later one-off command, and containers and databases are named `old` and `new`
-instead of by version, so that a second upgrade reuses the scripts.
+later one-off command, containers and databases are named `old` and `new`
+instead of by version so that a second upgrade reuses the scripts, and the
+OpenProject seeder adds `stage2-restricted-proj`, which Gates 3 and 4 did not
+have.
 
 - `openproject-up.sh` was run on 2026-11-23 with the default tags: ready and
   seeded in 88 seconds on an Apple-silicon Mac with both images cached. Both
@@ -48,8 +51,13 @@ instead of by version, so that a second upgrade reuses the scripts.
   `17` hold), the image digests matched the Gate 3 pre-registration, and the
   single-release contract probe in `stage2-upstream-contract-probe.mjs` gave
   the same result on both releases as the committed Step 2 receipt.
-- `erpnext-up.sh` has **not** been run since it was written. It is a
-  transcription of the Gate 4 commands with the same three changes.
+- `erpnext-up.sh` was run on 2026-11-23 with the default tags: both sites
+  created and seeded in 3 minutes 9 seconds on the same machine. Both accounts
+  authenticated on both releases, the three companies were listed, and the
+  image digests and the Frappe versions (`15.9.0` and `15.21.0`) matched the
+  Gate 4 pre-registration. No gate runner was run against it.
+- The approver account gets `404` for `stage2-restricted-proj` and for a record
+  the author created in it.
 
 ## Launching the earlier gate runners against a fresh bring-up
 

@@ -111,6 +111,20 @@ projects.each do |p|
   end
 end
 
+# A project the approver cannot see. Records the author creates here are invisible
+# to the approver through every page and API call, which lets a route hide a fact.
+restricted = Project.find_or_initialize_by(identifier: 'stage2-restricted-proj')
+restricted.name = 'Stage 2 Restricted Review'
+restricted.public = false
+restricted.active = true
+restricted.enabled_module_names = ['work_package_tracking']
+restricted.save!
+restricted.types = [task_type] unless restricted.types.include?(task_type)
+Member.where(project_id: restricted.id, user_id: u_approver.id).destroy_all
+m = Member.find_or_initialize_by(project_id: restricted.id, principal: u_author)
+m.roles = [author_role]
+m.save!
+
 Token::API.where(user_id: [u_author.id, u_approver.id]).delete_all
 tok_author = Token::API.create!(user: u_author)
 tok_approver = Token::API.create!(user: u_approver)
@@ -119,6 +133,7 @@ puts "STAGE2_SEED_JSON:" + JSON.generate({
   projectIdentifier: project.identifier,
   projectId: project.id,
   projectIdentifiers: projects.map(&:identifier),
+  restrictedProjectIdentifier: restricted.identifier,
   newStatusHref: "/api/v3/statuses/#{s_new.id}",
   approvedStatusHref: "/api/v3/statuses/#{s_approved.id}",
   holdStatusHref: "/api/v3/statuses/#{s_hold.id}",
