@@ -73,10 +73,12 @@ const keptLines = [...prompt.matchAll(/Family "([^"]+)": number (\d+) in project
   .map(m => ({ familyId: m[1], workPackageId: Number(m[2]), project: m[3], workHours: Number(m[4]), expect: m[5] }));
 
 if (upgraded && tools.includes('try_guard')) {
-  // The statuses were renumbered: read the approved one from the disclosed example instead of assuming 16.
-  const repaired = GUARD.replace("String(approval.body?._links?.status?.href ?? '').endsWith('/16')",
-    "String(approval.body?._links?.status?.href ?? '').endsWith('/26')");
-  emitUse('Edit', { file_path: join(process.cwd(), 'guard.mjs'), old_string: "'/16'", new_string: "'/26'" });
+  // Statuses may have been renumbered: read the approved one from the disclosed example instead of assuming it.
+  const record = await call('app_request', { as: 'approver', method: 'GET', path: `/api/v3/work_packages/${numbers[0].workPackageId}` });
+  const approval = await call('app_request', { as: 'approver', method: 'GET', path: record.body._links.parent.href });
+  const approved = approval.body._links.status.href.split('/').pop();
+  const repaired = GUARD.replace(".endsWith('/16')", `.endsWith('/${approved}')`);
+  emitUse('Write', { file_path: join(process.cwd(), 'guard.mjs'), content: repaired });
   writeFileSync(join(process.cwd(), 'guard.mjs'), repaired);
   await call('try_guard', { familyId, ...numbers[0] });
 } else if (upgraded && tools.includes('learn')) {
