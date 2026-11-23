@@ -21,7 +21,7 @@ plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 8, 'axes.edgecol
                      'axes.spines.top': False, 'axes.spines.right': False, 'axes.linewidth': .6,
                      'xtick.major.width': .6, 'ytick.major.width': .6, 'pdf.fonttype': 42,
                      'axes.titlesize': 9, 'axes.titleweight': 'bold', 'axes.titlelocation': 'left'})
-TICKS = [64, 128, 256, 512, 1024, 2048, 4096]
+TICKS = [64, 256, 1024, 4096]
 TITLES = {'python': 'Python (400 files)', 'javascript': 'JavaScript (400 files)',
           'both': 'Both languages (800 files)'}
 
@@ -105,7 +105,8 @@ def length_figure(summary, chains, out):
     for limit, color in zip(lengths, SEQUENCE):
         rows = [r for r in chains[f'both-L{limit}-greedy-entry'] if r[2] >= 0]
         axes[0].plot([r[0] for r in rows], [r[2] for r in rows], color=color, lw=1.5)
-        axes[0].text(4150, rows[-1][2], f'{limit}', color=INK, fontsize=6.6, va='center')
+        if limit <= 8:
+            axes[0].text(4150, rows[-1][2], f'{limit}', color=INK, fontsize=6.6, va='center')
         rows_b = [r for r in chains[f'both-L{limit}-greedy-byte'] if r[2] >= 0]
         axes[1].plot([r[1] / 1024 for r in rows_b], [r[2] for r in rows_b], color=color, lw=1.5,
                      label=f'up to {limit} bytes')
@@ -113,6 +114,7 @@ def length_figure(summary, chains, out):
     axes[0].set_xlim(94, 4096)
     axes[0].set_xticks([128, 256, 512, 1024, 2048, 4096])
     axes[0].set_xticklabels(['128', '256', '512', '1024', '2048', '4096'])
+    axes[0].text(4150, 34000, '16+', color=INK, fontsize=6.6, va='center')
     thousands(axes[0])
     axes[0].set_ylim(0, None)
     axes[0].set_title('Fewer tokens as the list grows')
@@ -130,7 +132,7 @@ def length_figure(summary, chains, out):
     thousands(axes[1])
     axes[1].set_ylim(0, None)
     axes[1].set_title('The same trade-off, paid in stored bytes')
-    axes[1].set_xlabel('Dictionary storage (KiB); vertical lines are the frozen budgets')
+    axes[1].set_xlabel('Stored dictionary (KiB); lines mark frozen budgets')
     axes[1].legend(frameon=False, fontsize=6.6, ncol=2, title='Longest entry', title_fontsize=6.8, loc='upper right')
     figure.tight_layout(w_pad=1.6)
     figure.savefig(out / 'fig-v3-length-storage.pdf')
@@ -147,11 +149,11 @@ def sharing_figure(summary, out):
         axis.plot(*zip(*points), color=color, lw=1.6, marker='o', ms=2.6, label=label)
     axis.axhline(0, color=INK, lw=.8)
     axis.axvspan(64, 183, color='#f1f0ec', lw=0)
-    axis.text(66, axis.get_ylim()[1] * .9, 'two dictionaries\ncannot hold both\nalphabets', color=MUTED, fontsize=6.3, va='top')
+    axis.text(67, 30, 'both\nalphabets\ndo not fit', color=MUTED, fontsize=6.3, va='center')
     size_axis(axis)
     axis.set_title('What sharing buys')
     axis.set_xlabel('Combined entries')
-    axis.set_ylabel('Extra tokens with two dictionaries (%)')
+    axis.set_ylabel('Extra tokens, two lists (%)')
     axis.legend(frameon=False, fontsize=6.8, loc='upper right')
     axis = axes[1]
     profile = summary['profile']['by_budget']
@@ -211,8 +213,8 @@ def kinds_figure(summary, out):
         left = [a + b for a, b in zip(left, widths)]
     axis.set_yticks(positions)
     axis.set_yticklabels([names[c] for c, _ in keys], color=INK)
-    axis.text(-15.5, 5.6, '256\nentries', va='center', ha='center', color=MUTED, fontsize=7)
-    axis.text(-15.5, 2.4, '1024\nentries', va='center', ha='center', color=MUTED, fontsize=7)
+    axis.text(-20, 5.6, '256\nentries', va='center', ha='center', color=MUTED, fontsize=7)
+    axis.text(-20, 2.4, '1024\nentries', va='center', ha='center', color=MUTED, fontsize=7)
     axis.set_xlim(0, 100)
     axis.set_xlabel('Share of the tokens saved over single characters (%)')
     axis.spines['left'].set_visible(False)
@@ -220,7 +222,7 @@ def kinds_figure(summary, out):
     axis.legend(frameon=False, ncol=7, loc='lower center', bbox_to_anchor=(.46, 1.0), fontsize=6.7, handlelength=1,
                 columnspacing=.9)
     figure.tight_layout()
-    figure.subplots_adjust(left=.15)
+    figure.subplots_adjust(left=.2)
     figure.savefig(out / 'fig-v3-kinds.pdf')
     plt.close(figure)
 

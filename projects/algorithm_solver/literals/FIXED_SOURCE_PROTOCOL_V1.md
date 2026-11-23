@@ -1,5 +1,7 @@
 # Fixed canonical source comparison v1 (proposed)
 
+**Status:** run once as [fixed-source-v1](fixed-source-v1/FREEZE.md). Its frozen rules and [results](fixed-source-v1/RESULTS.md) are the record of that run.
+
 Freeze the manifest, policy, metrics, baseline implementations and analysis plan
 before execution. This is a protocol, not a run or an approved promotion gate.
 It asks how compactly fixed source can be represented, not whether it transfers to

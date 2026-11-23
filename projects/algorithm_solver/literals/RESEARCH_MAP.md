@@ -5,7 +5,7 @@ and cohort reports remain the authority for numerical claims.
 
 | Lane | First entry | What it establishes |
 | --- | --- | --- |
-| Next experiment | [Fixed canonical source protocol v1](FIXED_SOURCE_PROTOCOL_V1.md) | Proposed hypotheses, equal-budget controls and rules for changing the next run. No new result. |
+| Current result | [Fixed-source comparison v1](fixed-source-v1/RESULTS.md) | Frozen run of the [protocol](FIXED_SOURCE_PROTOCOL_V1.md) on 400 paired Python and JavaScript solutions: verified dictionaries, certified bounds, shared against separate. In-sample only. |
 | Representation baseline | [Pure 7/8-bit literal comparison](pure-literal-compare-v1/README.md) | Exact reconstruction of 400 known development programs per language, with separate payload, packet and dictionary accounting. Its exposed validation set is not a fresh holdout. |
 | Transfer evidence | [Witness length and unseen transfer](witness-length-sweep-v1/RESULTS.md) | Frozen byte-level sweep and replay on four train/test pairs. `jointBest` can use singletons; `greedyDP` is fragment-heavy, not singleton-free. No recorded multi-byte transfer lift in these arms. |
 | Capacity evidence | [Capacity reproduction manifest](bits-reproduce-v1/MANIFEST.md) | Rechecks stored witnesses and certificates; it does not repeat search or establish timings. |
