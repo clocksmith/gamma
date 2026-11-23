@@ -60,31 +60,44 @@ async function enter(page, baseUrl, { project, workPackageId, entryBranch }, rep
 
 /**
  * Sets Work to `workHours` through the page and saves. Returns what the server
- * answered and the row before and after. `committed` is true only when the row
- * version moved; `effectMatches` when the stored hours equal what was asked.
+ * answered and the row before and after.
+ *
+ * Whether the write landed is decided by the row, never by a response. While the
+ * dialog is open the page also sends a form check (`POST .../form`) that changes
+ * nothing; an earlier version took the first response for the save and could read
+ * the row before the save had landed. Now the row is read until its version moves
+ * or `settleMs` passes, and once more after a short pause. `httpStatus` is the last
+ * answer to a request on this work package other than the form check, or null.
  */
-export async function executeWorkWrite(page, { baseUrl, pgUrl, route, repair = FROZEN_REPAIR_14_0 }) {
+export async function executeWorkWrite(page, { baseUrl, pgUrl, route, repair = FROZEN_REPAIR_14_0, settleMs = 8000 }) {
   const started = Date.now();
   const before = readWorkPackageRow(pgUrl, route.workPackageId);
   let httpStatus = null;
   let error = null;
+  const onResponse = response => {
+    const request = response.request();
+    if (request.method() === 'GET') return;
+    const path = new URL(response.url()).pathname;
+    if (!path.includes(`/work_packages/${route.workPackageId}`) || path.endsWith('/form')) return;
+    httpStatus = response.status();
+  };
   try {
     await enter(page, baseUrl, route, repair);
     await page.locator(repair.openSelector).click();
     const input = page.locator(repair.inputSelector);
     await input.waitFor({ state: 'visible', timeout: 10000 });
     await input.fill(String(route.workHours));
-    const [response] = await Promise.all([
-      page.waitForResponse(
-        r => r.url().includes(`/work_packages/${route.workPackageId}`) && ['PATCH', 'POST', 'PUT'].includes(r.request().method()),
-        { timeout: 15000 },
-      ),
-      page.locator(repair.saveSelector).click(),
-    ]);
-    httpStatus = response.status();
+    page.on('response', onResponse);
+    await page.locator(repair.saveSelector).click();
+    const deadline = Date.now() + settleMs;
+    while (Date.now() < deadline && readWorkPackageRow(pgUrl, route.workPackageId).lockVersion === before.lockVersion) {
+      await page.waitForTimeout(100);
+    }
     await page.waitForTimeout(400);
   } catch (caught) {
     error = String(caught?.message ?? caught).split('\n')[0].slice(0, 240);
+  } finally {
+    page.off('response', onResponse);
   }
   const after = readWorkPackageRow(pgUrl, route.workPackageId);
   return Object.freeze({

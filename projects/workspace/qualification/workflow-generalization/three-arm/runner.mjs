@@ -419,6 +419,7 @@ export async function blind({ arm, familiesFile, recipesFile, runDir, approvePai
   let outOfSurfaceCalls = 0;
   deps.freshInstance(tags);
   let writer = null;
+  const held = [];
   try {
     const state = readState(deps.stateFile);
     const request = appRequester(state.new);
@@ -466,7 +467,7 @@ export async function blind({ arm, familiesFile, recipesFile, runDir, approvePai
       const after = wrote ? wrote.after : writer.readRow(route.workPackageId);
       costUsd += answer.costUsd;
       modelCalls += answer.modelCalls;
-      appendRecord(runDir, 'route-records.jsonl', {
+      held.push({ workPackageId: route.workPackageId, record: {
         schema: 'gammatron-three-arm-route-record/v1', ...base, routeId: route.routeId,
         decision: answer.decision, stopReason: answer.decision === 'stop' ? (answer.reason ?? null) : null,
         writeAttempted: wrote !== null, httpStatus: wrote?.httpStatus ?? null, before, after,
@@ -474,7 +475,19 @@ export async function blind({ arm, familiesFile, recipesFile, runDir, approvePai
         effectMatches: Number(after.estimatedHours) === Number(route.workHours),
         workHours: route.workHours, reads: answer.reads, modelCalls: answer.modelCalls, costUsd: answer.costUsd,
         decisionWallMs, artifactSha256: frozen.artifactSha256, error: answer.error ?? wrote?.error ?? null,
-      });
+      } });
+    }
+    // Every row is read once more before the instance goes away. A write that landed after its
+    // first reading must not be recorded as not committed, least of all a wrong one.
+    for (const { workPackageId, record } of held) {
+      const final = writer.readRow(workPackageId);
+      if (final.lockVersion !== record.after.lockVersion || Number(final.estimatedHours) !== Number(record.after.estimatedHours)) {
+        record.after = final;
+        record.committed = final.lockVersion !== record.before.lockVersion;
+        record.effectMatches = Number(final.estimatedHours) === Number(record.workHours);
+        record.error = record.error ?? 'the row changed after its first reading; the final reading is recorded';
+      }
+      appendRecord(runDir, 'route-records.jsonl', record);
     }
   } finally {
     await writer?.close();

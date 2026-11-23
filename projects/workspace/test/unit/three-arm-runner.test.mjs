@@ -243,6 +243,35 @@ test('after an upgrade that renumbers statuses, each arm repairs its frozen work
   await assert.rejects(maintenance({ ...common, arm: 'repair-boundary', fromRunDir, approvePaid: false }), /--approve-paid/);
 });
 
+test('a write that lands after its first reading is still recorded as committed', async () => {
+  const runDir = join(dir, 'late');
+  const common = { familiesFile: join(dir, 'families.json'), runDir, approvePaid: true, deps };
+  await discovery({ ...common, arm: 'agent-written-guard' });
+  // A writer whose save lands only after the write step has read the row.
+  const late = { ...deps, async openWriter(state) {
+    const writer = await deps.openWriter(state);
+    return { ...writer, async write(route) {
+      const before = writer.readRow(route.workPackageId);
+      setTimeout(() => { const r = store.get(route.workPackageId); r.estimatedTime = `PT${route.workHours}H`; r.lockVersion += 1; }, 20);
+      return { httpStatus: 200, before, after: before, committed: false, effectMatches: false, wallMs: 1, error: null };
+    }, close: async () => { await new Promise(done => setTimeout(done, 60)); } };
+  } };
+  await new Promise(done => setTimeout(done, 0));
+  const slowRead = { ...late, async openWriter(state) {
+    const writer = await late.openWriter(state);
+    let reads = 0;
+    // The final pass happens after every route was decided; give the late saves time to land first.
+    return { ...writer, readRow(id) { reads += 1; return writer.readRow(id); }, write: async route => { const r = await writer.write(route); await new Promise(done => setTimeout(done, 40)); return r; } };
+  } };
+  await blind({ ...common, deps: slowRead, arm: 'agent-written-guard', recipesFile: join(dir, 'blind.json') });
+  const written = readFileSync(join(runDir, 'route-records.jsonl'), 'utf8').trim().split('\n').map(l => JSON.parse(l)).find(r => r.routeId === 'r-1');
+  assert.equal(written.decision, 'write');
+  assert.equal(written.committed, true);
+  assert.equal(written.effectMatches, true);
+  assert.equal(written.after.estimatedHours, 56);
+  assert.match(written.error, /changed after its first reading/);
+});
+
 test('a session that calls a tool outside its surface is counted, and a changed artifact is refused', async () => {
   const runDir = join(dir, 'dirty');
   const common = { familiesFile: join(dir, 'families.json'), runDir, approvePaid: true, deps };
