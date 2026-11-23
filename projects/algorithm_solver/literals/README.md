@@ -1,4 +1,13 @@
-# Literal composition pilot: joint source and vocabulary optimization
+# BITS literal research
+
+Start with the [research map](RESEARCH_MAP.md). The next comparison holds
+canonical source bytes fixed and varies the vocabulary, as described in the
+[proposed experiment protocol](FIXED_SOURCE_PROTOCOL_V1.md). The
+[pure-literal packet replay](pure-literal-compare-v1/README.md) is its historical
+engineering baseline. The [capacity verifier](bits-reproduce-v1/MANIFEST.md)
+checks separate mathematical results. Neither claims autonomous solving.
+
+## Historical pilot: joint source and vocabulary optimization
 
 [Experiment index: versions, lineage, languages, evidence and proposals](INDEX.md).
 
