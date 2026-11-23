@@ -1,0 +1,84 @@
+{
+  "note": "Format example only. It restates a family that is already public in the Gate 3 suite, so it must not be reused or lightly varied as a sealed family.",
+  "recipes": [
+    {
+      "routeId": "example-valid",
+      "familyId": "example-approval-hours-match",
+      "entryBranch": "direct",
+      "setup": [
+        {
+          "as": "approver",
+          "method": "POST",
+          "path": "/api/v3/projects/stage2-qual-proj/work_packages",
+          "body": { "subject": "Approval {tag}", "estimatedTime": "PT24H" },
+          "save": { "approval": "id" }
+        },
+        {
+          "as": "approver",
+          "method": "PATCH",
+          "path": "/api/v3/work_packages/{approval}",
+          "body": { "_links": { "status": { "href": "{status.approved}" } } }
+        },
+        {
+          "as": "author",
+          "method": "POST",
+          "path": "/api/v3/projects/stage2-qual-proj/work_packages",
+          "body": {
+            "subject": "Order {tag}",
+            "estimatedTime": "PT20H",
+            "_links": { "parent": { "href": "/api/v3/work_packages/{approval}" } }
+          },
+          "save": { "order": "id" }
+        }
+      ],
+      "target": { "workPackage": "{order}", "project": "stage2-qual-proj" },
+      "write": { "workHours": 24 }
+    },
+    {
+      "routeId": "example-approval-changed-after-order",
+      "familyId": "example-approval-hours-match",
+      "entryBranch": "relations-tab",
+      "setup": [
+        {
+          "as": "approver",
+          "method": "POST",
+          "path": "/api/v3/projects/stage2-qual-proj/work_packages",
+          "body": { "subject": "Approval {tag}", "estimatedTime": "PT24H" },
+          "save": { "approval": "id" }
+        },
+        {
+          "as": "approver",
+          "method": "PATCH",
+          "path": "/api/v3/work_packages/{approval}",
+          "body": { "_links": { "status": { "href": "{status.approved}" } } }
+        },
+        {
+          "as": "author",
+          "method": "POST",
+          "path": "/api/v3/projects/stage2-qual-proj/work_packages",
+          "body": {
+            "subject": "Order {tag}",
+            "estimatedTime": "PT20H",
+            "_links": { "parent": { "href": "/api/v3/work_packages/{approval}" } }
+          },
+          "save": { "order": "id" }
+        },
+        {
+          "as": "approver",
+          "method": "PATCH",
+          "path": "/api/v3/work_packages/{approval}",
+          "body": { "estimatedTime": "PT16H" }
+        },
+        {
+          "as": "author",
+          "method": "PATCH",
+          "path": "/api/v3/work_packages/{approval}",
+          "body": { "_links": { "status": { "href": "{status.hold}" } } },
+          "expectStatus": 422
+        }
+      ],
+      "target": { "workPackage": "{order}", "project": "stage2-qual-proj" },
+      "write": { "workHours": 24 }
+    }
+  ]
+}

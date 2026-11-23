@@ -1,0 +1,298 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gammatron-three-arm-records/v1",
+  "title": "Records the three-arm runner emits for the scorer (clocksmith/deco#88)",
+  "$defs": {
+    "routeRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "runId",
+        "application",
+        "upgrade",
+        "arm",
+        "routeId",
+        "decision",
+        "stopReason",
+        "writeAttempted",
+        "httpStatus",
+        "before",
+        "after",
+        "committed",
+        "effectMatches",
+        "workHours",
+        "reads",
+        "modelCalls",
+        "costUsd",
+        "decisionWallMs",
+        "artifactSha256",
+        "error"
+      ],
+      "properties": {
+        "schema": {
+          "const": "gammatron-three-arm-route-record/v1"
+        },
+        "runId": {
+          "type": "string"
+        },
+        "application": {
+          "enum": [
+            "openproject",
+            "erpnext"
+          ]
+        },
+        "upgrade": {
+          "type": "string"
+        },
+        "arm": {
+          "enum": [
+            "agent-written-guard",
+            "always-replan",
+            "repair-boundary"
+          ]
+        },
+        "routeId": {
+          "type": "string"
+        },
+        "decision": {
+          "enum": [
+            "write",
+            "stop"
+          ]
+        },
+        "stopReason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "writeAttempted": {
+          "type": "boolean"
+        },
+        "httpStatus": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "before": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "lockVersion",
+            "estimatedHours",
+            "remainingHours",
+            "statusId",
+            "journalCount"
+          ],
+          "properties": {
+            "lockVersion": {
+              "type": "integer"
+            },
+            "estimatedHours": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "remainingHours": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "statusId": {
+              "type": "integer"
+            },
+            "journalCount": {
+              "type": "integer"
+            }
+          }
+        },
+        "after": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "lockVersion",
+            "estimatedHours",
+            "remainingHours",
+            "statusId",
+            "journalCount"
+          ],
+          "properties": {
+            "lockVersion": {
+              "type": "integer"
+            },
+            "estimatedHours": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "remainingHours": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "statusId": {
+              "type": "integer"
+            },
+            "journalCount": {
+              "type": "integer"
+            }
+          }
+        },
+        "committed": {
+          "type": "boolean"
+        },
+        "effectMatches": {
+          "type": "boolean"
+        },
+        "workHours": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "reads": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "modelCalls": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "costUsd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "decisionWallMs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "artifactSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "error": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "phaseRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "runId",
+        "application",
+        "upgrade",
+        "arm",
+        "phase",
+        "startedAt",
+        "endedAt",
+        "wallMs",
+        "modelCalls",
+        "modelTurns",
+        "costUsd",
+        "budgetUsd",
+        "recordsCreated",
+        "outOfSurfaceCalls",
+        "artifactSha256",
+        "completed"
+      ],
+      "properties": {
+        "schema": {
+          "const": "gammatron-three-arm-phase-record/v1"
+        },
+        "runId": {
+          "type": "string"
+        },
+        "application": {
+          "enum": [
+            "openproject",
+            "erpnext"
+          ]
+        },
+        "upgrade": {
+          "type": "string"
+        },
+        "arm": {
+          "enum": [
+            "agent-written-guard",
+            "always-replan",
+            "repair-boundary"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "discovery",
+            "maintenance",
+            "blind-routes"
+          ]
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "wallMs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "modelCalls": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "modelTurns": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "costUsd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "budgetUsd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "recordsCreated": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "outOfSurfaceCalls": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "artifactSha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completed": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/routeRecord"
+    },
+    {
+      "$ref": "#/$defs/phaseRecord"
+    }
+  ]
+}
