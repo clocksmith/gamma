@@ -1,0 +1,48 @@
+{
+ "schema": "gammatron-three-arm-erpnext-feasibility/v1",
+ "issue": "clocksmith/deco#88",
+ "at": "2026-11-23T12:27:00Z",
+ "model": "none; scratch scripts against the real application",
+ "modelSpendUsd": 0,
+ "what": "Whether the pieces the three-arm test needs exist on stock ERPNext, before any ERPNext arm is built. Disposable records, seeded by bringup/erpnext-up.sh as frozen.",
+ "workflow": "A draft Purchase Order whose line names the Supplier Quotation it was raised from (items[0].supplier_quotation). The write: signed in as the approver, add a confirmation reference to the order's Terms and save.",
+ "note": "Each release is reported on its own. A result for v15.20.0 says nothing about v15.10.0 and the reverse.",
+ "releases": [
+  {
+   "release": "v15.20.0",
+   "checksPassed": "4 of 4",
+   "checks": {
+    "approverCanFindTheQuotationBehindAnOrder": {"pass": true, "detail": "The order's line carries the quotation's name; the approver account reads the order and the quotation (docstatus, total quantity)."},
+    "pageWriteLands": {"pass": true, "detail": "One POST to frappe.desk.form.save.savedocs, 200; the row's modified time moved about 1.15 s after the click in 6 of 6 saves; one tabVersion entry added."},
+    "rowReadableFromTheDatabase": {"pass": true, "detail": "tabPurchase Order read from MariaDB before and after."},
+    "serverAcceptsAWrongWrite": {"pass": true, "detail": "Stated separately below."}
+   },
+   "wrongWrite": {
+    "quotationStillADraft": "accepted and committed (200)",
+    "quotationForAnotherQuantity": "accepted and committed (200); order 10, quotation 6",
+    "quotationCancelledAfterTheOrderWasTiedToIt": "REFUSED by the server (417, Cannot link cancelled document); no row change",
+    "orderCreatedAgainstAnAlreadyCancelledQuotation": "refused at creation (417)",
+    "reading": "Two of the look-alikes are let through by the server, so an arm's stop on them is the arm's doing. A cancelled quotation is stopped by the server itself: on such a route a wrong attempt would not become a wrong commit, and a result there says nothing about the arm."
+   }
+  },
+  {
+   "release": "v15.10.0",
+   "checksPassed": "2 of 4",
+   "checks": {
+    "approverCanFindTheQuotationBehindAnOrder": {"pass": true, "detail": "Same as on v15.20.0."},
+    "pageWriteLands": {"pass": false, "detail": "Opening the order as the approver raises a dialog, No permission for Stock Settings (or Accounts Settings), which covers the page; the Terms tab cannot be clicked. 0 of 4 saves were attempted."},
+    "rowReadableFromTheDatabase": {"pass": true, "detail": "Same as on v15.20.0."},
+    "serverAcceptsAWrongWrite": {"pass": false, "detail": "Not testable through the page for the reason above; not tried through the API."}
+   },
+   "wrongWrite": {
+    "orderCreatedAgainstAnAlreadyCancelledQuotation": "refused at creation (417)",
+    "quotationCancelledAfterTheOrderWasTiedToIt": "the cancellation itself is allowed (200); the save could not be tried"
+   }
+  }
+ ],
+ "consequences": [
+  "The three-arm runner decides routes on the newer release only, so v15.10.0 -> v15.20.0 is workable as a first ERPNext upgrade: the older release is never written through the page.",
+  "The approver account on v15.10.0 would need a permission fix in the seeder before any release pair that ends on v15.10.0 could be used.",
+  "A family built on a cancelled quotation is server-blocked on ERPNext. The family author should know this property of the application; it is not something an arm does."
+ ]
+}
