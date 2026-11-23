@@ -148,6 +148,16 @@ the routes on which two arms differ.
   Added 2026-11-23 14:05 UTC at the coordinator's request, still before any
   Stage A number exists.
 
+- The frozen bring-up script can lose a race with PostgreSQL's first start: it
+  asks for the databases while the server is restarting after its own
+  initialisation. It was seen twice on 2026-11-23 while screening later
+  releases on a busy machine, after about forty clean starts. In Stage A the
+  runner asks for a fresh instance before any model session of a phase, so a
+  lost race aborts the phase before any spend and the phase is run again; it
+  is listed under Deviations if it happens. The frozen script is not changed
+  for this. Added 2026-11-23 16:00 UTC, before any Stage A number exists,
+  with the coordinator's agreement.
+
 ## 5. Results
 
 Empty until the stage has run.
