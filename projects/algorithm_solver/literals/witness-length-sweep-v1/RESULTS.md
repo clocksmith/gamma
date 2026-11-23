@@ -1,6 +1,6 @@
 # Results: `K x L` Capacity Sweep and Unseen-Program Transfer (`witness-length-sweep-v1`)
 
-Two pre-registered experiments were frozen before execution (`SHA256SUMS-FROZEN` and `SHA256SUMS-TRANSFER-FROZEN`, unchanged) and verified 100% solver-free:
+Two pre-registered experiments were frozen before execution (`SHA256SUMS-FROZEN` and `SHA256SUMS-TRANSFER-FROZEN`, unchanged) and verified 100% solver-free. *Provenance note:* the prediction files, freeze checksums, and run outputs entered git together in a single commit (`d36e52f27`), so git history alone does not independently timestamp the pre-registration prior to execution; the on-disk checksums verify internal artifact consistency rather than an external pre-run timestamp.
 1. **In-sample `K x L` sweep on frozen `matched80` compact** (`N = 80`, `|Sigma| = 92`, Gamma commit `59ff04415ff2afd04ff2ed451340f4f02852bf18`, `run_length_sweep.py` in `37.82 s`, verified solver-free by `check_length_sweep.py`: `7 lengths, 651 cells (247 exact), 345 dictionaries replayed, 39 integer LP duals checked`, `primesAgree = True` across primes `1,000,000,007` base `2` and `998,244,353` base `3`).
 2. **Unseen-program `K x L` transfer test on frozen disjoint `-a -> -b` pairs** (`J-80`, `P-80`, `J-160`, `P-160` from `../witness-scaling-v1/cohorts.json`, `run_unseen_transfer.py` in `794.36 s`, verified solver-free by `check_unseen_transfer.py`: `4 pairs, 2,681 cells, 1,750 frozen dictionaries replayed`).
 
