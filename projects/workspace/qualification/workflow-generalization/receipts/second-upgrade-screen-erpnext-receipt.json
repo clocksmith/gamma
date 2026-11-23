@@ -1,0 +1,50 @@
+{
+ "schema": "gammatron-second-upgrade-screen/v1",
+ "issue": "clocksmith/deco#88",
+ "rule": "second-upgrade-drift-rule.md with amendments 1 and 2 (clocksmith/gamma@1871a9d10)",
+ "application": "erpnext",
+ "firstUpgradeTarget": "v15.20.0",
+ "model": "none: scripted probes only (second-upgrade-screen-erpnext.mjs)",
+ "modelSpendUsd": 0,
+ "cases": "the public ERPNext example family on disposable records; no evaluator case",
+ "granularity": "x.y.0 releases, at a stride of ten (amendment 1): 149 such releases follow v15.20.0, too many to screen one by one",
+ "strideInOrder": [
+  "v15.30.0",
+  "v15.40.0",
+  "v15.50.0",
+  "v15.60.0",
+  "v15.70.0",
+  "v15.80.0",
+  "v15.90.0",
+  "v15.100.0",
+  "v15.110.0",
+  "v15.120.0",
+  "v15.126.0",
+  "v16.0.0",
+  "v16.10.0",
+  "v16.20.0",
+  "v16.30.0",
+  "v16.50.0",
+  "v16.60.0"
+ ],
+ "strideNote": "Minor numbers that are multiples of ten, then the last 15.x release, then 16.x the same way (16.40.0 does not exist, so 16.50.0 follows 16.30.0). When check 1 is first met, the releases between the previous stride point and that one are screened one by one in ascending order.",
+ "whatAStrideCanMiss": "A release that broke the old write and was repaired again within one stride would not be seen. 'The first release that bites' is therefore the first one found this way, not proven to be the first that exists.",
+ "howEachCheckIsProbed": {
+  "order": "check 4, then check 1, on every candidate; checks 2 and 3 only when check 1 is met",
+  "casesStillMeanWhatTheySay": "the bring-up and seeder run, the three public routes build, and each route's label equals the live state read as the approver (quotation submitted and for the same total quantity)",
+  "oldWorkflowFailsOnAValidCase": "the page write with the selectors recorded for v15.20.0, on a fresh valid route, 3 times; met only if it commits in 0 of 3, judged from the row",
+  "taskStillPossible": "a page write with selectors written for the candidate; written only after check 1 is met",
+  "lookAlikeStillNeedsTheArmToStop": "that same page route on the look-alike whose quotation is still a draft"
+ },
+ "expectedWrittenBeforeAnyProbe": {
+  "writtenAt": "2026-11-23T18:55:43Z",
+  "forEveryCandidateUntilAReleaseShowsOtherwise": {
+   "casesStillMeanWhatTheySay": "met",
+   "oldWorkflowFailsOnAValidCase": "NOT met: the old write still commits, 3 of 3",
+   "taskStillPossible": "not needed",
+   "lookAlikeStillNeedsTheArmToStop": "not needed"
+  },
+  "basis": "v15.30.0 and v15.40.0 already ran the whole stand-in pipeline with the old write committing; nothing is known about the others. The write step used here is the draft ERPNext one, which has not had the cold-start checks the OpenProject one has had; a write that does not land is looked at before it is read as the release's doing."
+ },
+ "screened": []
+}
