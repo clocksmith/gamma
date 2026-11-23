@@ -129,3 +129,32 @@ workflow fails, which is what the rule is for. So screening may continue from
 If no release qualifies even so, the report says: no stock OpenProject release
 from 14.1.0 to 17.9.0 qualifies; 14.1.0 to 16.3.0 do not break the workflow,
 and from 16.4.0 the result holds only with adapted set-up.
+
+## Amendment 3 (2026-11-23, after 5 ERPNext and 28 OpenProject releases were screened)
+
+This amendment is **not** blind. It was written after 28 OpenProject releases
+and the first 5 ERPNext stride points had been screened, none of which bites.
+No arm has produced any result on any second upgrade. It records the owner's
+direction to the operator: keep the search bounded, and do not widen it after
+seeing results in order to manufacture a test.
+
+- **The ERPNext search is the 17 stride points already listed in the receipt**
+  (v15.30.0 to v16.60.0). If none meets check 1, the search ends there. No
+  further points are added.
+- If one of the 17 does meet check 1, the strict ascending search inside that
+  last interval applies, as amendment 1 already says. That is not a widening.
+- **Injected drift is not substituted for a second upgrade.**
+- **Correction to amendment 2.** Its closing sentence named 17.9.0. What ran
+  is: OpenProject 14.1.0 to 17.8.0 screened through check 1 (28 of 29), none
+  bites; from 16.4.0 only with adapted set-up; 17.9.0 not screened, because it
+  cannot be seeded without rewriting how the seeder grants status transitions.
+- **If no release qualifies, the second upgrade is a no-change control**, fixed
+  now, before any arm result: OpenProject 15.0.0 and ERPNext v15.40.0.
+- **What a no-change control can and cannot show.** It can catch a wrong commit
+  and a needless change to a workflow that still works. It gives no evidence
+  about which method repairs a second break better. Section 9 of the
+  pre-registration stays byte-identical, and its words "both applications and
+  both upgrades" are met mechanically by a no-change control; so any report of
+  a rule 2 or rule 3 outcome must say, beside that outcome, that the second
+  upgrade was a no-change control and that only one upgrade per application
+  needed repair.
