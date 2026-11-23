@@ -1609,7 +1609,22 @@
     4.53,
     4.85,
     8.31
-   ]
+   ],
+   "causeExamined": {
+    "recordedAt": "2026-11-23T20:07:16Z",
+    "cause": "On v15.120.0 the approver's POST of a Supplier Quotation is refused with PermissionError: the account 'does not have doctype access via role permission for document Item'. On v15.20.0 the same POST succeeds and adds an Item Price for the item as a side effect, so the refusal is on the Item touched while saving, not on the quotation.",
+    "storedPermissionsOnQuotationAndOrder": "identical on both releases; no custom permissions and no user permissions",
+    "whatStillWorksOnV15_120": {
+     "authorCreatesAQuotation": 200,
+     "approverReadsThatQuotation": 200,
+     "authorReadsThatQuotation": 200,
+     "approverListsQuotations": 200,
+     "approverListsOrders": 200
+    },
+    "reading": "A change in what the set-up call needs. The approver's reads of quotations and orders, which are what the arms use, still answer 200. Check 1 has not run on this release, so this is not a result that it does or does not bite.",
+    "alsoSeen": "On v15.20.0 the author account holds System Manager; on v15.120.0 it does not, though the seeder grants the same three roles on both. Not examined.",
+    "notDone": "No role, permission, seeder or recipe was changed. v15.126.0 to v16.60.0 have not run. A ruling is needed."
+   }
   }
  ],
  "probeSelfCheck": {
