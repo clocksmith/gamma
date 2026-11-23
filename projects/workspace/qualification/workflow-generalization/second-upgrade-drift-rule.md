@@ -94,3 +94,38 @@ OpenProject, 149 for ERPNext) and before the first screening probe ran.
   four. This finds the first biting release only if a break persists. A
   release that broke the workflow and was repaired within the same stride
   would be missed; the receipt must say so.
+
+## Amendment 2 (2026-11-23, after 16 OpenProject releases were screened)
+
+This amendment is **not** blind to screening results. It was written after
+16 releases (14.1.0 to 16.3.0) had been screened with none biting, and after
+the operator found that from 16.4.0 the frozen seeder cannot create a project
+("Workspace type is not set to one of the allowed values"). No arm has
+produced any result on any second upgrade.
+
+By the letter, check 4 is not met on 16.4.0 with the frozen seeder, and that
+is recorded as such. But a set-up tool that a newer data model rejects says
+nothing about whether the cases still mean what they say, or whether the old
+workflow fails, which is what the rule is for. So screening may continue from
+16.4.0 with a **screening seeder**, under these conditions:
+
+1. It is a separate file. The frozen seeder is not changed.
+2. It differs from the frozen seeder only by supplying values the newer
+   release requires in order to create the same records. It adds no record,
+   removes none, and changes no value an arm or a label depends on.
+3. Its full difference from the frozen seeder is committed and shown to the
+   evaluator before any release is screened with it, and its hash is recorded
+   in the receipt.
+4. Check 4 is then judged as written: the routes are built and each label
+   agrees with the live state. Every entry screened this way says
+   "screened with the screening seeder" and also records "check 4 not met with
+   the frozen seeder".
+5. A release that meets all four checks this way is reported as a second
+   upgrade that bites **with adapted set-up**. A stage that uses it needs its
+   own freeze, including that seeder, before any arm runs.
+6. If a later release needs a further set-up change, screening stops and the
+   evaluator is asked again. Changes are not stacked without a ruling.
+
+If no release qualifies even so, the report says: no stock OpenProject release
+from 14.1.0 to 17.9.0 qualifies; 14.1.0 to 16.3.0 do not break the workflow,
+and from 16.4.0 the result holds only with adapted set-up.
