@@ -26,9 +26,10 @@ import encoded as X
 import verify as V
 
 SCENARIOS = ('s1-whole', 's2-nowhole', 'p2-nowhole')
-ARMS = ('greedy-entry', 'greedy-byte', 'bpe', 'pathpiece')
+ARMS = ('greedy-entry', 'greedy-byte', 'bpe', 'pathpiece', 'greedtok')
+BASELINES = ('bpe', 'bpe-ordinary', 'pathpiece', 'greedtok')
 CODINGS = ('raw', 'merge', 'deflate')
-SAMPLE = 64
+SAMPLE = 16
 BAR = 0.25
 
 
@@ -48,6 +49,9 @@ def parents(entries, merges):
 
 
 def dictionary_bytes(entries, size, pairs):
+    """Bytes a decoder needs. Merge coding stores each alphabet byte and two parent IDs
+    per merged entry. Merges that recreate an existing string are encoder rules, and a
+    decoder does not need them, so they are not charged."""
     head = [row[4] for row in entries[:size]]
     raw = entries[size - 1][1]
     packed = len(zlib.compress(b''.join(bytes([len(e)]) + e for e in head), 9))
@@ -138,19 +142,17 @@ def best(points, arms, coding, budget, cap):
 def compare(points):
     report = {}
     for coding in CODINGS:
-        rows = {'bpe': [], 'pathpiece': []}
+        rows = {name: [] for name in BASELINES}
         for (scenario, limit), items in points.items():
             for budget in X.SLOTS:
                 for cap in X.CAPS:
                     greedy = best(items, ('greedy-entry', 'greedy-byte'), coding, budget, cap)
                     if greedy is None:
                         continue
-                    other = best(items, ('bpe', 'bpe-ordinary'), coding, budget, cap)
-                    if other is not None:
-                        rows['bpe'].append((scenario, other / greedy - 1))
-                    other = best(items, ('pathpiece',), coding, budget, cap)
-                    if other is not None:
-                        rows['pathpiece'].append((scenario, other / greedy - 1))
+                    for name in BASELINES:
+                        other = best(items, (name,), coding, budget, cap)
+                        if other is not None:
+                            rows[name].append((scenario, other / greedy - 1))
         report[coding] = {}
         for name, values in rows.items():
             for scenario in SCENARIOS:
@@ -217,9 +219,13 @@ def main():
     os.nice(19)
     with multiprocessing.get_context('fork').Pool(workers) as pool:
         results = pool.map(measure_parsed, jobs, chunksize=1) + pool.map(measure_ordinary, ordinary, chunksize=1)
-    points = {}
+    own, points = {}, {}
     for scenario, limit, rows in results:
-        points.setdefault((scenario, limit), []).extend(rows)
+        own.setdefault((scenario, limit), []).extend(rows)
+    for (scenario, limit), rows in own.items():
+        points[(scenario, limit)] = list(rows)
+        for source in X.stricter(scenario):
+            points[(scenario, limit)].extend(own.get((source, limit), []))
     floors, carried = equal_floor(run)
     score = json.loads((run / 'out' / 'score.json').read_text())
     k1 = score['kill_bar']['k1_design_inversion']
