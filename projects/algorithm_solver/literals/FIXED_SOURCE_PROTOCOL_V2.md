@@ -1,6 +1,6 @@
 # Fixed-source vocabulary retest: remove the two-file rule
 
-**Status:** proposed, not a frozen run. No new results. The [v1 freeze](fixed-source-v1/FREEZE.md) and [v1 results](fixed-source-v1/RESULTS.md) remain unchanged and apply to their own rules.
+**Status:** run as [`fixed-source-v2-r1`](fixed-source-v2/FREEZE.md), with [results](fixed-source-v2/RESULTS.md). The [v1 freeze](fixed-source-v1/FREEZE.md) and [v1 results](fixed-source-v1/RESULTS.md) remain unchanged and apply to their own rules.
 
 **Question:** On the same fixed source bytes and budgets, what changes when a multibyte entry may come from only one file? The primary result is the unrestricted experiment, not a reinterpretation of v1. This is in-sample representation, not transfer, model performance, semantic reuse, or a compression claim without end-to-end storage accounting.
 

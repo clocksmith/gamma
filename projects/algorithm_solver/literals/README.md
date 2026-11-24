@@ -2,9 +2,8 @@
 
 Start with the [research map](RESEARCH_MAP.md). The
 [fixed-source v1 results](fixed-source-v1/RESULTS.md) use the frozen two-file
-rule. The [unrestricted retest protocol](FIXED_SOURCE_PROTOCOL_V2.md) proposes
-comparing all source substrings with a matched v1-rule control on the same
-source, with no new results yet. The
+rule. The [unrestricted v2 results](fixed-source-v2/RESULTS.md) compare all
+source substrings with a matched v1-rule control on the same source. The
 [pure-literal packet replay](pure-literal-compare-v1/README.md) is its historical
 engineering baseline. The [capacity verifier](bits-reproduce-v1/MANIFEST.md)
 checks separate mathematical results. Neither claims autonomous solving.
