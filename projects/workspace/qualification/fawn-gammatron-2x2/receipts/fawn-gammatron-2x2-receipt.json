@@ -1,0 +1,177 @@
+{
+  "schema": "gammatron.fawn-2x2-mechanism-ablation/v1",
+  "recordedAt": "2026-11-24T20:43:19.165Z",
+  "modelSpendUsd": 0,
+  "browserVersion": "145.0.7632.6",
+  "scopeNote": "Real headless Chromium + node:sqlite two-application (work-packages, purchase-orders) v1->v2 mechanism ablation. Branch previews run with network egress blocked in Page.fawnBranchStatus wire format (0 preview mutations reached SQLite); Linux CoW renderer fork() remains separately qualified on Fawn host.",
+  "learnedMinimalRoles": {
+    "work-packages": [
+      "approval",
+      "record"
+    ],
+    "purchase-orders": [
+      "order",
+      "quotation"
+    ]
+  },
+  "discoveryCatalogRoles": {
+    "work-packages": [
+      "record",
+      "approval",
+      "audit_log",
+      "team_stats",
+      "history"
+    ],
+    "purchase-orders": [
+      "order",
+      "quotation",
+      "audit_log",
+      "vendor_stats",
+      "history"
+    ]
+  },
+  "counts": {
+    "independentInvalidTotal": 100,
+    "rowAServerConflictInvalid": 50,
+    "rowBClientDriftInvalid": 50,
+    "validV1Reuse": 50,
+    "validV2Repair": 50
+  },
+  "serverPreviewMutationsObserved": 0,
+  "arms": {
+    "blind-replay": {
+      "arm": "blind-replay",
+      "independentInvalidCases": 100,
+      "wrongInvalidRowAServerConflict": 50,
+      "wrongInvalidRowBClientDrift": 50,
+      "totalInvalidWrongCommits": 100,
+      "corruptedValidCommits": 24,
+      "clopperPearson95Upper": 1,
+      "clopperPearson95UpperPct": 100,
+      "meetsThreePctSafetyBar": false,
+      "validReuseCompletedOf50": 50,
+      "validRepairCompletedOf50": 0,
+      "totalValidCompletedOf100": 50,
+      "serverReads": 0,
+      "branchesEvaluated": 0,
+      "certificatesEmitted": 0,
+      "wallMs": 3037
+    },
+    "fawn-branch-only": {
+      "arm": "fawn-branch-only",
+      "independentInvalidCases": 100,
+      "wrongInvalidRowAServerConflict": 50,
+      "wrongInvalidRowBClientDrift": 0,
+      "totalInvalidWrongCommits": 50,
+      "corruptedValidCommits": 0,
+      "clopperPearson95Upper": 0.586378,
+      "clopperPearson95UpperPct": 58.638,
+      "meetsThreePctSafetyBar": false,
+      "validReuseCompletedOf50": 50,
+      "validRepairCompletedOf50": 50,
+      "totalValidCompletedOf100": 100,
+      "serverReads": 0,
+      "branchesEvaluated": 1800,
+      "certificatesEmitted": 0,
+      "wallMs": 26972
+    },
+    "gammatron-facts-only": {
+      "arm": "gammatron-facts-only",
+      "independentInvalidCases": 100,
+      "wrongInvalidRowAServerConflict": 0,
+      "wrongInvalidRowBClientDrift": 50,
+      "totalInvalidWrongCommits": 50,
+      "corruptedValidCommits": 24,
+      "clopperPearson95Upper": 0.586378,
+      "clopperPearson95UpperPct": 58.638,
+      "meetsThreePctSafetyBar": false,
+      "validReuseCompletedOf50": 50,
+      "validRepairCompletedOf50": 0,
+      "totalValidCompletedOf100": 50,
+      "serverReads": 800,
+      "branchesEvaluated": 0,
+      "certificatesEmitted": 0,
+      "wallMs": 1612
+    },
+    "stock-reload-plus-guard": {
+      "arm": "stock-reload-plus-guard",
+      "independentInvalidCases": 100,
+      "wrongInvalidRowAServerConflict": 0,
+      "wrongInvalidRowBClientDrift": 0,
+      "totalInvalidWrongCommits": 0,
+      "corruptedValidCommits": 100,
+      "clopperPearson95Upper": 0.029513,
+      "clopperPearson95UpperPct": 2.951,
+      "meetsThreePctSafetyBar": false,
+      "validReuseCompletedOf50": 0,
+      "validRepairCompletedOf50": 0,
+      "totalValidCompletedOf100": 0,
+      "serverReads": 1800,
+      "branchesEvaluated": 480,
+      "certificatesEmitted": 0,
+      "wallMs": 5260
+    },
+    "authored-guard-exhaustive-branch": {
+      "arm": "authored-guard-exhaustive-branch",
+      "independentInvalidCases": 100,
+      "wrongInvalidRowAServerConflict": 0,
+      "wrongInvalidRowBClientDrift": 0,
+      "totalInvalidWrongCommits": 0,
+      "corruptedValidCommits": 0,
+      "clopperPearson95Upper": 0.029513,
+      "clopperPearson95UpperPct": 2.951,
+      "meetsThreePctSafetyBar": true,
+      "validReuseCompletedOf50": 50,
+      "validRepairCompletedOf50": 50,
+      "totalValidCompletedOf100": 100,
+      "serverReads": 1550,
+      "branchesEvaluated": 1440,
+      "certificatesEmitted": 0,
+      "wallMs": 11687
+    },
+    "authored-guard-minimal-pruned": {
+      "arm": "authored-guard-minimal-pruned",
+      "independentInvalidCases": 100,
+      "wrongInvalidRowAServerConflict": 0,
+      "wrongInvalidRowBClientDrift": 0,
+      "totalInvalidWrongCommits": 0,
+      "corruptedValidCommits": 0,
+      "clopperPearson95Upper": 0.029513,
+      "clopperPearson95UpperPct": 2.951,
+      "meetsThreePctSafetyBar": true,
+      "validReuseCompletedOf50": 50,
+      "validRepairCompletedOf50": 50,
+      "totalValidCompletedOf100": 100,
+      "serverReads": 620,
+      "branchesEvaluated": 480,
+      "certificatesEmitted": 0,
+      "wallMs": 3556
+    },
+    "gammatron-pruned-lookahead": {
+      "arm": "gammatron-pruned-lookahead",
+      "independentInvalidCases": 100,
+      "wrongInvalidRowAServerConflict": 0,
+      "wrongInvalidRowBClientDrift": 0,
+      "totalInvalidWrongCommits": 0,
+      "corruptedValidCommits": 0,
+      "clopperPearson95Upper": 0.029513,
+      "clopperPearson95UpperPct": 2.951,
+      "meetsThreePctSafetyBar": true,
+      "validReuseCompletedOf50": 50,
+      "validRepairCompletedOf50": 50,
+      "totalValidCompletedOf100": 100,
+      "serverReads": 620,
+      "branchesEvaluated": 480,
+      "certificatesEmitted": 100,
+      "wallMs": 4509
+    }
+  },
+  "mechanismFindings": {
+    "fawnAloneFailsServerConflicts": true,
+    "gammatronAloneFailsClientPayloadDrift": true,
+    "stockReloadLosesUnsavedClosureState": true,
+    "combinedLookaheadMeetsSafetyAndCompletesAll": true,
+    "prunedLookaheadBeatsExhaustiveAuthoredOnReadsAndBranches": true,
+    "learnedMatchesHandTunedMinimalPrunedAtRuntime": true
+  }
+}

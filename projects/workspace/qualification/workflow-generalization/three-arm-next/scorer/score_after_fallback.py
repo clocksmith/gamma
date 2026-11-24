@@ -725,7 +725,7 @@ def selftest() -> None:
             'pairOf': None, 'decidingFact': {'readableBy': 'approver', 'where': 'quotation'},
             'release': 'v15.20.0', 'confidence': 'sure', 'author': 'A2',
         }
-    for i in range(10):
+    for i in range(50):
         rid_op = f'op-val-{i:02d}'
         op_recipes.append({'routeId': rid_op, 'familyId': 'op-fam'})
         key_routes[rid_op] = {'valid': True, 'why': 'ok', 'application': 'openproject', 'familyId': 'op-fam', 'confidence': 'sure'}
@@ -733,7 +733,7 @@ def selftest() -> None:
         erp_recipes.append({'routeId': rid_erp, 'familyId': 'erp-fam'})
         key_routes[rid_erp] = {'valid': True, 'why': 'ok', 'application': 'erpnext', 'familyId': 'erp-fam', 'confidence': 'sure'}
 
-    # Case A: Learned policy wins cleanly at 0, r, and 2r; total-abstainer loses!
+    # Case A: Learned policy wins cleanly at 0, r, and 2r; total-abstainer (`rule-selector`) loses!
     routes: list[dict[str, Any]] = []
     for r in op_recipes:
         rid = r['routeId']
@@ -741,20 +741,22 @@ def selftest() -> None:
         routes.append(make_op_route('repair-boundary', rid, 'write' if is_val else 'stop', cost='0.00'))
         routes.append(make_op_route('agent-written-guard', rid, 'write' if is_val else 'stop', cost='0.00'))
         routes.append(make_op_route('rule-selector', rid, 'stop', cost='0.001'))  # abstains on everything!
-        routes.append(make_op_route(FALLBACK_ARM, rid, 'write' if is_val else 'stop', cost='0.02'))
+        routes.append(make_op_route(FALLBACK_ARM, rid, 'write' if is_val else 'stop', cost='0.08'))
     for r in erp_recipes:
         rid = r['routeId']
         is_val = key_routes[rid]['valid']
         routes.append(make_erp_route('repair-boundary', rid, 'write' if is_val else 'stop', cost='0.00'))
         routes.append(make_erp_route('agent-written-guard', rid, 'write' if is_val else 'stop', cost='0.00'))
         routes.append(make_erp_route('rule-selector', rid, 'stop', cost='0.001'))
-        routes.append(make_erp_route(FALLBACK_ARM, rid, 'write' if is_val else 'stop', cost='0.02'))
+        routes.append(make_erp_route(FALLBACK_ARM, rid, 'write' if is_val else 'stop', cost='0.08'))
 
     phases = [
         make_phase('openproject', '13.4.0->14.0.0', 'repair-boundary', 'discovery', '0.10', minutes='2'),
         make_phase('erpnext', '15.10.0->15.20.0', 'repair-boundary', 'discovery', '0.10', minutes='2'),
         make_phase('openproject', '13.4.0->14.0.0', 'agent-written-guard', 'discovery', '0.35', minutes='5'),
         make_phase('erpnext', '15.10.0->15.20.0', 'agent-written-guard', 'discovery', '0.35', minutes='5'),
+        make_phase('openproject', '13.4.0->14.0.0', 'rule-selector', 'discovery', '0.00', minutes='3'),
+        make_phase('erpnext', '15.10.0->15.20.0', 'rule-selector', 'discovery', '0.00', minutes='3'),
     ]
     res = score_after_fallback(
         routes, phases, {'routes': key_routes}, [{'recipes': op_recipes}, {'recipes': erp_recipes}],
@@ -785,6 +787,8 @@ def selftest() -> None:
         make_phase('erpnext', '15.10.0->15.20.0', 'repair-boundary', 'discovery', '0.50', minutes='1'),
         make_phase('openproject', '13.4.0->14.0.0', 'agent-written-guard', 'discovery', '0.20', minutes='10'),
         make_phase('erpnext', '15.10.0->15.20.0', 'agent-written-guard', 'discovery', '0.20', minutes='10'),
+        make_phase('openproject', '13.4.0->14.0.0', 'rule-selector', 'discovery', '0.00', minutes='10'),
+        make_phase('erpnext', '15.10.0->15.20.0', 'rule-selector', 'discovery', '0.00', minutes='10'),
     ]
     res_flip = score_after_fallback(
         routes, phases_flip, {'routes': key_routes}, [{'recipes': op_recipes}, {'recipes': erp_recipes}],
