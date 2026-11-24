@@ -1,0 +1,1 @@
+require("fs").readFileSync("/dev/stdin","utf8").split('\n').some(function(i){if(i)console.log(~~(i*i/98+2))})

@@ -1,0 +1,1 @@
+require("fs").readFileSync("/dev/stdin","utf8").trim().split('\n').some(function(i){j=i.split(' ');if(j[1])a=j[0],b=j[1],c=j[2],d=j[3],e=j[4],f=j[5],g=a*a,h=b*b,k=c*c,l=d*d,m=e*e,n=f*f,o=a-c,r=b-d,s=b-f,t=a-e,p=(s*(h-l+g-k)-r*(h-n+g-m))/(2*s*o-2*r*t),q=(t*(g-k+h-l)-o*(g-m+h-n))/(2*t*r-2*o*s),console.log(p.toFixed(3),q.toFixed(3),Math.sqrt((a-p)*(a-p)+(b-q)*(b-q)).toFixed(3))})

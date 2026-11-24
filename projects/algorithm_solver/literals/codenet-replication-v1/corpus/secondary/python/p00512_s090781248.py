@@ -1,0 +1,10 @@
+n=int(input())
+d=dict()
+for i in range(n):
+    a,b=input().split()
+    if a in d:d[a]+=int(b)
+    else:d[a]=int(b)
+s=list(d.items())
+s.sort(key=lambda y: y[0])
+s.sort(key=lambda y: len(y[0]))
+for i in s:print(i[0],i[1])

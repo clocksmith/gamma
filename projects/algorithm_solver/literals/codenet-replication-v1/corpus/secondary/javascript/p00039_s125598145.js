@@ -1,0 +1,1 @@
+for(r=".IVXLCDM",k=n=s=p=0,j=require("fs").readFileSync("/dev/stdin","utf8");i=j[k];k++)i=='\n'?(console.log(s),n=s=p=0):s+=(n=Math.pow(10,~~((n=r.indexOf(i))/2))/(2-(n%2))),n>p?s-=p*2:0,p=n
