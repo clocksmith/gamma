@@ -6,9 +6,10 @@ const page = (change = {}) => {
   const dirty = change.dirty ?? [];
   return { alerts: [], statuses: [], truncated: false, ...change, dirty, values: change.values ?? dirty.map(name => [name, 'digest']) };
 };
-const branch = ({ ended = 'finished', attempts = [], after = {}, before = {}, thrown = null, ok = true, value } = {}) => [ended,
+const branch = ({ ended = 'finished', attempts = [], after = {}, before = {}, thrown = null, ok = true, value, intents = [], intentsTruncated = false } = {}) => [ended,
   ...attempts.map(([attempt, target]) => JSON.stringify({ attempt, target })),
-  ...(ended === 'finished' ? [JSON.stringify({ ok, value: value ?? { schema: OBSERVATION_SCHEMA, before: page(before), after: page(after), thrown } })] : [])].join('\n');
+  ...(ended === 'finished' ? [JSON.stringify({ ok, value: value ?? { schema: OBSERVATION_SCHEMA, before: page(before), after: page(after), thrown, intents, intentsTruncated } })] : [])].join('\n');
+const intent = (method, fields, kind = 'urlencoded') => ({ api: 'form', target: 'https://app.test/items/7/save', url: 'https://app.test/items/7/save', method, body: { kind, bytes: 10, fields } });
 const write = ['form', 'https://app.test/items/7/save'];
 const expect = { attempt: write[0], target: write[1] };
 const control = branch();
@@ -97,6 +98,31 @@ test('an observation that could not hold the whole page is not trusted', () => {
   const result = verifyBranches({ control, candidates: [candidate('a', { after: { truncated: true } })] });
   assert.deepEqual(verdicts(result), { a: 'observation-truncated' });
   assert.equal(verifyBranches({ control: branch({ after: { truncated: true } }), candidates: [candidate('a')] }).reason, 'control-invalid');
+});
+
+test('a declared write must match the method and body the page recorded', () => {
+  const declared = { ...expect, method: 'POST', bodyFields: ['hours'] };
+  const good = { intents: [intent('POST', [['hours', 'aaaa']])] };
+  const result = verifyBranches({ control, candidates: [
+    candidate('good', good, { expect: declared }),
+    candidate('get', { intents: [intent('GET', [['hours', 'aaaa']])] }, { expect: declared }),
+    candidate('hidden-field', { intents: [intent('POST', [['hours', 'aaaa'], ['surcharge', 'bbbb']])] }, { expect: declared }),
+    candidate('opaque', { intents: [intent('POST', [], 'opaque')] }, { expect: declared }),
+    candidate('unseen', {}, { expect: declared }),
+    candidate('cut', { ...good, intentsTruncated: true }, { expect: declared }),
+    candidate('split', { intents: [intent('POST', [['hours', 'aaaa']]), intent('POST', [['hours', 'bbbb']])] }, { expect: declared }),
+  ] });
+  assert.deepEqual(verdicts(result), { good: 'eligible', get: 'intent-mismatch', 'hidden-field': 'unexpected-body-field', opaque: 'intent-opaque', unseen: 'intent-missing', cut: 'observation-truncated', split: 'unexpected-effect' });
+  assert.equal(result.winner, 'good');
+});
+
+test('the same write with different body values is an ambiguous effect', () => {
+  const declared = { ...expect, method: 'POST', bodyFields: ['hours'] };
+  const result = verifyBranches({ control, candidates: [
+    candidate('a', { intents: [intent('POST', [['hours', 'aaaa']])] }, { expect: declared }),
+    candidate('b', { intents: [intent('POST', [['hours', 'bbbb']])] }, { expect: declared }),
+  ] });
+  assert.equal(result.reason, 'ambiguous-effects');
 });
 
 test('an invalid control or candidate list abstains', () => {

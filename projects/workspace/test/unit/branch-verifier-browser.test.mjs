@@ -46,3 +46,46 @@ test('observes the page in a real browser', { skip: !executablePath }, async () 
     assert.deepEqual(framed.after.statuses, ['Ready']);
   } finally { await browser.close(); }
 });
+
+test('records what the page tried to send in a real browser', { skip: !executablePath }, async () => {
+  const browser = await chromium.launch({ executablePath, args: ['--headless=new'] });
+  try {
+    const page = await browser.newPage();
+    await page.route('https://app.test/**', route => route.fulfill({ status: 204, body: '' }));
+    const form = `<!doctype html><iframe name=sink></iframe><form id=f method=post action="https://app.test/save" target=sink>
+      <input name=hours value=8><input type=hidden name=csrf value=x><button id=go name=op value=save>Save</button></form>`;
+    const run = async action => {
+      await page.goto('about:blank');
+      await page.setContent(form);
+      await page.evaluate(() => { window.fetch = () => Promise.reject(new DOMException('no', 'NotAllowedError')); });
+      return page.evaluate(branchExpression(action));
+    };
+    const names = entry => entry.body.fields.map(field => field[0]);
+
+    const submitted = await run(`document.querySelector('[name=hours]').value = '12', document.querySelector('#go').click()`);
+    assert.equal(submitted.intents.length, 1);
+    assert.equal(submitted.intents[0].api, 'form');
+    assert.equal(submitted.intents[0].method, 'POST');
+    assert.equal(submitted.intents[0].url, 'https://app.test/save');
+    assert.deepEqual(names(submitted.intents[0]), ['csrf', 'hours', 'op']);
+    assert.ok(!JSON.stringify(submitted).includes('"12"'), 'field values leave the branch only as digests');
+
+    const prevented = await run(`document.querySelector('#f').addEventListener('submit', event => event.preventDefault()), document.querySelector('#go').click()`);
+    assert.deepEqual(prevented.intents, []);
+
+    const json = await run(`fetch('/api/items/7', { method: 'PATCH', body: JSON.stringify({ hours: 12, note: 'x' }) })`);
+    assert.equal(json.thrown, 'NotAllowedError');
+    assert.equal(json.intents[0].method, 'PATCH');
+    assert.equal(json.intents[0].body.kind, 'json');
+    assert.deepEqual(names(json.intents[0]), ['hours', 'note']);
+
+    const xhr = await run(`(() => { const request = new XMLHttpRequest(); request.open('POST', 'https://app.test/x'); request.send(new URLSearchParams({ a: '1' })); })()`);
+    assert.equal(xhr.intents[0].api, 'xhr');
+    assert.equal(xhr.intents[0].body.kind, 'urlencoded');
+    const beacon = await run(`navigator.sendBeacon('https://app.test/b', 'a=1&b=2')`);
+    assert.equal(beacon.intents[0].api, 'beacon');
+    assert.deepEqual(names(beacon.intents[0]), ['a', 'b']);
+    const blob = await run(`fetch('https://app.test/u', { method: 'POST', body: new Blob(['x']) })`);
+    assert.equal(blob.intents[0].body.kind, 'opaque');
+  } finally { await browser.close(); }
+});
