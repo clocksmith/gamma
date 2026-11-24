@@ -586,8 +586,8 @@ def eval_bits_out_of_sample(dict_hex_path, train_py, train_js, eval_py, eval_js,
     bits_j_frozen = sum(c * lj_tr[s] for s, c in ev_cj.items())
 
     # Verify exact bitstream roundtrip for Design B frozen-table transfer!
-    codes_p = BE.canonical_codes_from_lengths(lp_tr)
-    codes_j = BE.canonical_codes_from_lengths(lj_tr)
+    codes_p = BE.assign_canonical_codes(lp_tr)
+    codes_j = BE.assign_canonical_codes(lj_tr)
     pieces_p, _, _ = BE.segment_corpus_bits(eval_py, root, lp_tr, max(lp_tr.values()) + 1)
     pieces_j, _, _ = BE.segment_corpus_bits(eval_js, root, lj_tr, max(lj_tr.values()) + 1)
     bs_p, _ = BE.encode_bitstream(pieces_p, codes_p)

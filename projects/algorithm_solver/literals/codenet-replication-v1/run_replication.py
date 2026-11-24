@@ -26,6 +26,7 @@ import concurrent.futures
 import hashlib
 import json
 import math
+import multiprocessing
 import os
 import subprocess
 import sys
@@ -39,13 +40,15 @@ sys.path.insert(0, str(HERE))
 import byte_encode as BE
 
 ROUTING = 4
-STEP = 16
+STEP_MAIN = 16
+STEP_AUX = 64
 SLOTS = (128, 256, 512, 1024, 2048, 4096)
 PRIMARY_SLOTS = (256, 1024, 4096)
 CAPS = (4096, 8192, 16384, 32768, 65536, None)
 POLICIES = ('s1-whole', 's2-nowhole', 'p2-nowhole')
 ARMS = ('greedy-entry', 'greedy-byte', 'greedtok', 'freq-occ', 'freq-doc', 'bpe', 'pathpiece')
 LIMIT_SECONDS = 300
+_WORKER_DOCS = {}
 
 
 def sha256_file(path):
@@ -162,9 +165,9 @@ def run_single_engine_job(job):
     return str(out_chain), elapsed
 
 
-def prefix_sizes(entries):
+def prefix_sizes(entries, step=STEP_MAIN):
     total = len(entries)
-    wanted = {s for s in range(STEP, total + 1, STEP)} | {total}
+    wanted = {s for s in range(step, total + 1, step)} | {total}
     for k in SLOTS:
         if k <= total:
             wanted.add(k)
@@ -182,12 +185,12 @@ def prefix_sizes(entries):
     return sorted(s for s in wanted if 0 < s <= total)
 
 
-def score_shared_chain_token_min(entries, py_docs, js_docs, arm, policy):
+def score_shared_chain_token_min(entries, py_docs, js_docs, arm, policy, step=STEP_MAIN):
     """Score all prefix sizes of a shared chain under token-minimal segmentation."""
     out = []
     root = {}
     at = 0
-    for size in prefix_sizes(entries):
+    for size in prefix_sizes(entries, step=step):
         while at < size:
             BE.insert_trie(root, entries[at][4])
             at += 1
@@ -235,11 +238,11 @@ def score_shared_chain_token_min(entries, py_docs, js_docs, arm, policy):
     return out
 
 
-def score_lang_chain_token_min(entries, docs, arm, policy):
+def score_lang_chain_token_min(entries, docs, arm, policy, step=STEP_MAIN):
     out = []
     root = {}
     at = 0
-    for size in prefix_sizes(entries):
+    for size in prefix_sizes(entries, step=step):
         while at < size:
             BE.insert_trie(root, entries[at][4])
             at += 1
@@ -332,7 +335,7 @@ def score_shared_entries_exact(entry_bytes_list, py_docs, js_docs, do_bytemin=Tr
                 'payload_bits': bm_a['payload_bits'],
                 'total_bytes': stored + symbols + bm_a['payload_bytes'],
                 'tokens': bm_a['tokens'],
-                'iterations': opt_a['iterations'],
+                'iterations': bm_a['iters'],
                 'active_entries': sum(1 for k in bm_a['counts'] if k != BE.EOF_SYMBOL),
             },
             'B': {
@@ -345,8 +348,8 @@ def score_shared_entries_exact(entry_bytes_list, py_docs, js_docs, do_bytemin=Tr
                 'payload_bits': bm_p['payload_bits'] + bm_j['payload_bits'],
                 'total_bytes': stored + 2 * symbols + ROUTING + bm_p['payload_bytes'] + bm_j['payload_bytes'],
                 'tokens': bm_p['tokens'] + bm_j['tokens'],
-                'iterations_py': opt_py['iterations'],
-                'iterations_js': opt_js['iterations'],
+                'iterations_py': bm_p['iters'],
+                'iterations_js': bm_j['iters'],
                 'active_entries_py': sum(1 for k in bm_p['counts'] if k != BE.EOF_SYMBOL),
                 'active_entries_js': sum(1 for k in bm_j['counts'] if k != BE.EOF_SYMBOL),
             },
@@ -387,7 +390,7 @@ def score_single_lang_entries_exact(entry_bytes_list, docs, do_bytemin=True):
             'payload_bits': bm['payload_bits'],
             'total_bytes': stored + symbols + bm['payload_bytes'],
             'tokens': bm['tokens'],
-            'iterations': opt['iterations'],
+            'iterations': bm['iters'],
             'active_entries': sum(1 for k in bm['counts'] if k != BE.EOF_SYMBOL),
         }
     return res
@@ -467,29 +470,85 @@ def load_split_docs(manifest, split_name):
     return py_docs, js_docs, groups
 
 
+def _score_chain_worker(job):
+    policy, L, corpus, arm, cpath_str = job
+    _, entries, _ = read_chain(cpath_str)
+    step = STEP_MAIN if L == 16 else STEP_AUX
+    if corpus == 'both':
+        rows = score_shared_chain_token_min(entries, _WORKER_DOCS['python'], _WORKER_DOCS['javascript'], arm, policy, step=step)
+    else:
+        rows = score_lang_chain_token_min(entries, _WORKER_DOCS[corpus], arm, policy, step=step)
+    return (policy, L, corpus, arm), entries, rows
+
+
+def kl_decomp_from_docs(py_docs, js_docs, root, num_entries):
+    _, c_py, t_py = BE.segment_corpus_tokens(py_docs, root)
+    _, c_js, t_js = BE.segment_corpus_tokens(js_docs, root)
+    base = BE.compute_kl_js_decomposition(c_py, c_js, num_entries)
+    c_all = Counter(c_py)
+    c_all.update(c_js)
+    la = BE.canonical_huffman_lengths(c_all)
+    lp = BE.canonical_huffman_lengths(c_py)
+    lj = BE.canonical_huffman_lengths(c_js)
+    pay_a = math.ceil(BE.total_huffman_bits(c_all, la) / 8)
+    pay_b = math.ceil(BE.total_huffman_bits(c_py, lp) / 8) + math.ceil(BE.total_huffman_bits(c_js, lj) / 8)
+    n_tok = sum(c_all.values())
+    extra_hdr = (num_entries + 1) + ROUTING
+    return {
+        **base,
+        'tokens_py': t_py,
+        'tokens_js': t_js,
+        'symbols_emitted_with_eof': n_tok,
+        'mutual_info_bits_per_token': base['mutual_info_bits'] / n_tok if n_tok else 0.0,
+        'ideal_payload_saving_bytes': base['mutual_info_bits'] / 8.0,
+        'actual_huffman_payload_saving_bytes': pay_a - pay_b,
+        'actual_net_B_saving_bytes': (pay_a - pay_b) - extra_hdr,
+    }
+
+
 def analyze_split(split_name, lengths, manifest, chains_dir, dict_export_dir=None):
     py_docs, js_docs, groups = load_split_docs(manifest, split_name)
     both_docs = py_docs + js_docs
     both_groups = groups + groups
 
-    # Cache loaded chains
+    _WORKER_DOCS['python'] = py_docs
+    _WORKER_DOCS['javascript'] = js_docs
+
+    cache_path = chains_dir / f'cache_{split_name}_own.json'
     chain_cache = {}
-    own = {}
     for policy in POLICIES:
         for L in lengths:
-            for corpus, docs in (('both', None), ('python', py_docs), ('javascript', js_docs)):
-                rows = []
+            for corpus in ('both', 'python', 'javascript'):
                 for arm in ARMS:
                     cpath = chains_dir / split_name / policy / f'{corpus}-L{L}-{arm}.txt'
-                    if not cpath.exists():
-                        continue
-                    _, entries, _ = read_chain(cpath)
-                    chain_cache[(policy, L, corpus, arm)] = entries
-                    if corpus == 'both':
-                        rows.extend(score_shared_chain_token_min(entries, py_docs, js_docs, arm, policy))
-                    else:
-                        rows.extend(score_lang_chain_token_min(entries, docs, arm, policy))
-                own[(policy, L, corpus)] = rows
+                    if cpath.exists():
+                        _, entries, _ = read_chain(cpath)
+                        chain_cache[(policy, L, corpus, arm)] = entries
+
+    if cache_path.exists():
+        raw_own = json.loads(cache_path.read_text(encoding='utf-8'))
+        own = {tuple(k.split('|'))[:1] + (int(k.split('|')[1]), k.split('|')[2]): v for k, v in raw_own.items()}
+        print(f'  Loaded cached prefix scores from {cache_path.name}', flush=True)
+    else:
+        score_jobs = []
+        for policy in POLICIES:
+            for L in lengths:
+                for corpus in ('both', 'python', 'javascript'):
+                    for arm in ARMS:
+                        cpath = chains_dir / split_name / policy / f'{corpus}-L{L}-{arm}.txt'
+                        if cpath.exists():
+                            score_jobs.append((policy, L, corpus, arm, str(cpath)))
+
+        own = {(policy, L, corpus): [] for policy in POLICIES for L in lengths for corpus in ('both', 'python', 'javascript')}
+        workers = min(8, os.cpu_count() or 4)
+        with multiprocessing.get_context('fork').Pool(workers) as pool:
+            for key, entries, rows in pool.imap_unordered(_score_chain_worker, score_jobs, chunksize=1):
+                policy, L, corpus, arm = key
+                chain_cache[key] = entries
+                own[(policy, L, corpus)].extend(rows)
+        ser_own = {f'{p}|{L}|{c}': rows for (p, L, c), rows in own.items()}
+        cache_path.write_text(json.dumps(ser_own), encoding='utf-8')
+        print(f'  Saved prefix score cache to {cache_path.name}', flush=True)
 
     # Apply monotonicity floors (looser policy includes stricter policies' legal chains)
     points = {}
@@ -646,10 +705,10 @@ def analyze_split(split_name, lengths, manifest, chains_dir, dict_export_dir=Non
                         missing = [name for name, val in (('A', a_row), ('B', b_row), ('C', c_row), ('token_best', tok_row)) if val is None]
                         cell['excluded_reason'] = 'infeasible_for_' + '+'.join(missing)
 
-                    # Exact byte-optimal segmentation for ALL feasible L=16 cells!
-                    # Furthermore, at uncapped cells (B is None), check EVERY arm's best A/B/token_best
-                    # AND top-3 near-optimal candidates so we catch any cross-arm reversal under byte-min!
-                    if L == 16 and cell['feasible']:
+                    # Exact byte-optimal segmentation for ALL L=16 cells where shared designs A & B are feasible
+                    # (including K=256 where A & B are feasible even though C is structurally infeasible due to
+                    # 167+166=333 > 256 UTF-8 single-byte alphabet overlap!).
+                    if L == 16 and a_row is not None and b_row is not None and tok_row is not None:
                         # Candidate pool for A and B under byte-min:
                         cand_A_list = [a_row, b_row, tok_row]
                         cand_B_list = [b_row, a_row, tok_row]
@@ -707,59 +766,62 @@ def analyze_split(split_name, lengths, manifest, chains_dir, dict_export_dir=Non
                             'entries': tok_row['entries'],
                         }
 
-                        # Design C under byte-min: evaluate winning C pair (and for uncapped cells,
-                        # check top-5 Pareto C pairs so we don't miss a C byte-min improvement)
-                        c_pairs_to_check = [(
-                            c_row['python_arm'], c_row['python_policy'], c_row['python_entries'],
-                            c_row['javascript_arm'], c_row['javascript_policy'], c_row['javascript_entries'],
-                        )]
-                        if B is None:
-                            # Collect top 5 separate pairs by token-min total
-                            scored_pairs = []
-                            for a in py_pts:
-                                if a['entries'] >= K:
-                                    continue
-                                for b in js_pts:
-                                    if a['entries'] + b['entries'] <= K:
-                                        scored_pairs.append((a['cost'] + b['cost'] + ROUTING, a, b))
-                            scored_pairs.sort(key=lambda x: x[0])
-                            for _, a, b in scored_pairs[:6]:
-                                c_pairs_to_check.append((
-                                    a['arm'], a['source_policy'], a['entries'],
-                                    b['arm'], b['source_policy'], b['entries'],
-                                ))
-
+                        # Design C under byte-min (only when C is feasible):
                         best_bm_C = None
-                        seen_c = set()
-                        for pa, pp, pe, ja, jp, je in c_pairs_to_check:
-                            if (pa, pp, pe, ja, jp, je) in seen_c:
-                                continue
-                            seen_c.add((pa, pp, pe, ja, jp, je))
-                            py_el = [r[4] for r in chain_cache[(pp, L, 'python', pa)][:pe]]
-                            js_el = [r[4] for r in chain_cache[(jp, L, 'javascript', ja)][:je]]
-                            sp = eval_lang_bm('python', py_el)['byte_min']
-                            sj = eval_lang_bm('javascript', js_el)['byte_min']
-                            tot = sp['total_bytes'] + sj['total_bytes'] + ROUTING
-                            rec = {
-                                'total_bytes': tot,
-                                'dict_bytes': sp['dict_bytes'] + sj['dict_bytes'],
-                                'table_bytes': sp['table_bytes'] + sj['table_bytes'],
-                                'routing_bytes': ROUTING,
-                                'payload_bytes': sp['payload_bytes'] + sj['payload_bytes'],
-                                'payload_py_bytes': sp['payload_bytes'],
-                                'payload_js_bytes': sj['payload_bytes'],
-                                'tokens': sp['tokens'] + sj['tokens'],
-                                'python_arm': pa, 'javascript_arm': ja,
-                                'python_policy': pp, 'javascript_policy': jp,
-                                'python_entries': pe, 'javascript_entries': je,
-                                'entries': pe + je,
-                            }
-                            if best_bm_C is None or rec['total_bytes'] < best_bm_C['total_bytes']:
-                                best_bm_C = rec
+                        if c_row is not None:
+                            c_pairs_to_check = [(
+                                c_row['python_arm'], c_row['python_policy'], c_row['python_entries'],
+                                c_row['javascript_arm'], c_row['javascript_policy'], c_row['javascript_entries'],
+                            )]
+                            if B is None:
+                                scored_pairs = []
+                                for a in py_pts:
+                                    if a['entries'] >= K:
+                                        continue
+                                    for b in js_pts:
+                                        if a['entries'] + b['entries'] <= K:
+                                            scored_pairs.append((a['cost'] + b['cost'] + ROUTING, a, b))
+                                scored_pairs.sort(key=lambda x: x[0])
+                                for _, a, b in scored_pairs[:6]:
+                                    c_pairs_to_check.append((
+                                        a['arm'], a['source_policy'], a['entries'],
+                                        b['arm'], b['source_policy'], b['entries'],
+                                    ))
 
-                        # Check reversals
-                        tm_winner = min(('A', cell['A']['total_bytes']), ('B', cell['B_design']['total_bytes']), ('C', cell['C']['total_bytes']), key=lambda x: x[1])[0]
-                        bm_winner = min(('A', best_bm_A['total_bytes']), ('B', best_bm_B['total_bytes']), ('C', best_bm_C['total_bytes']), key=lambda x: x[1])[0]
+                            seen_c = set()
+                            for pa, pp, pe, ja, jp, je in c_pairs_to_check:
+                                if (pa, pp, pe, ja, jp, je) in seen_c:
+                                    continue
+                                seen_c.add((pa, pp, pe, ja, jp, je))
+                                py_el = [r[4] for r in chain_cache[(pp, L, 'python', pa)][:pe]]
+                                js_el = [r[4] for r in chain_cache[(jp, L, 'javascript', ja)][:je]]
+                                sp = eval_lang_bm('python', py_el)['byte_min']
+                                sj = eval_lang_bm('javascript', js_el)['byte_min']
+                                tot = sp['total_bytes'] + sj['total_bytes'] + ROUTING
+                                rec = {
+                                    'total_bytes': tot,
+                                    'dict_bytes': sp['dict_bytes'] + sj['dict_bytes'],
+                                    'table_bytes': sp['table_bytes'] + sj['table_bytes'],
+                                    'routing_bytes': ROUTING,
+                                    'payload_bytes': sp['payload_bytes'] + sj['payload_bytes'],
+                                    'payload_py_bytes': sp['payload_bytes'],
+                                    'payload_js_bytes': sj['payload_bytes'],
+                                    'tokens': sp['tokens'] + sj['tokens'],
+                                    'python_arm': pa, 'javascript_arm': ja,
+                                    'python_policy': pp, 'javascript_policy': jp,
+                                    'python_entries': pe, 'javascript_entries': je,
+                                    'entries': pe + je,
+                                }
+                                if best_bm_C is None or rec['total_bytes'] < best_bm_C['total_bytes']:
+                                    best_bm_C = rec
+
+                        tm_cands = [('A', cell['A']['total_bytes']), ('B', cell['B_design']['total_bytes'])]
+                        bm_cands = [('A', best_bm_A['total_bytes']), ('B', best_bm_B['total_bytes'])]
+                        if cell['C'] is not None and best_bm_C is not None:
+                            tm_cands.append(('C', cell['C']['total_bytes']))
+                            bm_cands.append(('C', best_bm_C['total_bytes']))
+                        tm_winner = min(tm_cands, key=lambda x: x[1])[0]
+                        bm_winner = min(bm_cands, key=lambda x: x[1])[0]
                         cell['byte_min'] = {
                             'A': best_bm_A,
                             'B_design': best_bm_B,
@@ -769,25 +831,24 @@ def analyze_split(split_name, lengths, manifest, chains_dir, dict_export_dir=Non
                             'byte_min_winner': bm_winner,
                             'winner_reversed': tm_winner != bm_winner,
                             'B_beats_A': best_bm_B['total_bytes'] < best_bm_A['total_bytes'],
-                            'B_beats_C': best_bm_B['total_bytes'] < best_bm_C['total_bytes'],
+                            'B_beats_C': None if best_bm_C is None else (best_bm_B['total_bytes'] < best_bm_C['total_bytes']),
                             'A_delta_bytes': best_bm_A['total_bytes'] - cell['A']['total_bytes'],
                             'B_delta_bytes': best_bm_B['total_bytes'] - cell['B_design']['total_bytes'],
-                            'C_delta_bytes': best_bm_C['total_bytes'] - cell['C']['total_bytes'],
+                            'C_delta_bytes': None if best_bm_C is None else (best_bm_C['total_bytes'] - cell['C']['total_bytes']),
                             'token_best_delta_bytes': bm_tok['total_bytes'] - cell['token_best']['total_bytes'],
                         }
 
                         # Export headline verified dictionaries for primary/secondary s1-whole L=16 uncapped K in {256, 1024, 4096}
                         if dict_export_dir is not None and policy == 's1-whole' and B is None and K in PRIMARY_SLOTS:
                             dict_export_dir.mkdir(parents=True, exist_ok=True)
-                            # Export A, B, token_best, and C(py, js) for BOTH token-min winner and byte-min winner
                             to_export = {
                                 f'{split_name}_K{K}_A_tm': get_shared_entries(a_row, L),
                                 f'{split_name}_K{K}_B_tm': get_shared_entries(b_row, L),
                                 f'{split_name}_K{K}_tokbest': get_shared_entries(tok_row, L),
-                                f'{split_name}_K{K}_C_py_tm': [r[4] for r in chain_cache[(c_row['python_policy'], L, 'python', c_row['python_arm'])][: c_row['python_entries']]],
-                                f'{split_name}_K{K}_C_js_tm': [r[4] for r in chain_cache[(c_row['javascript_policy'], L, 'javascript', c_row['javascript_arm'])][: c_row['javascript_entries']]],
                             }
-                            # Also export byte-min winners if different arm/entries
+                            if c_row is not None:
+                                to_export[f'{split_name}_K{K}_C_py_tm'] = [r[4] for r in chain_cache[(c_row['python_policy'], L, 'python', c_row['python_arm'])][: c_row['python_entries']]]
+                                to_export[f'{split_name}_K{K}_C_js_tm'] = [r[4] for r in chain_cache[(c_row['javascript_policy'], L, 'javascript', c_row['javascript_arm'])][: c_row['javascript_entries']]]
                             if best_bm_A['arm'] != a_row['arm'] or best_bm_A['entries'] != a_row['entries']:
                                 if best_bm_A['arm'] == 'union':
                                     to_export[f'{split_name}_K{K}_A_bm'] = union_pt['_union_entries']
@@ -812,11 +873,13 @@ def analyze_split(split_name, lengths, manifest, chains_dir, dict_export_dir=Non
 
                     cells.append(cell)
 
-    # Information-theoretic KL / Jensen-Shannon decomposition across K in SLOTS (s1-whole, L=16, uncapped)
+    # Information-theoretic KL / Jensen-Shannon decomposition across feasible K in SLOTS (s1-whole, L=16, uncapped)
     kl_by_k = []
     for K in SLOTS:
         cell_k = next(c for c in cells if c['policy'] == 's1-whole' and c['L'] == 16 and c['K'] == K and c['B'] is None)
         b_meta = cell_k['B_design']
+        if b_meta is None:
+            continue
         if b_meta['arm'] == 'union':
             c_row = cell_k['C']
             union_pt = build_union_entries('s1-whole', 16, c_row, K)
@@ -824,14 +887,14 @@ def analyze_split(split_name, lengths, manifest, chains_dir, dict_export_dir=Non
         else:
             elist = [r[4] for r in chain_cache[(b_meta['source_policy'], 16, 'both', b_meta['arm'])][: b_meta['entries']]]
         root = BE.build_trie(elist)
-        decomp = BE.compute_kl_js_decomposition(py_docs, js_docs, root, len(elist))
+        decomp = kl_decomp_from_docs(py_docs, js_docs, root, len(elist))
         decomp['K'] = K
         decomp['arm'] = b_meta['arm']
         decomp['entries'] = len(elist)
         kl_by_k.append(decomp)
 
     # Corpus-size crossover curve at K=4096 (using the winning K=4096 Design B dictionary across
-    # nested prefixes of N_pairs in {10, 20, 40, 80, 120, 160, 200} problems, showing exact
+    # nested prefixes of N_pairs in {5, 10, 20, 40, 60, 100, 150, 200} problems, showing exact
     # crossover where I(Symbol; Language)/8 crosses |D| + 5!)
     kl_crossover_n = []
     cell_4096 = next(c for c in cells if c['policy'] == 's1-whole' and c['L'] == 16 and c['K'] == 4096 and c['B'] is None)
@@ -843,7 +906,7 @@ def analyze_split(split_name, lengths, manifest, chains_dir, dict_export_dir=Non
         elist_4096 = [r[4] for r in chain_cache[(b4096['source_policy'], 16, 'both', b4096['arm'])][: b4096['entries']]]
     root_4096 = BE.build_trie(elist_4096)
     for n_pairs in (5, 10, 20, 40, 60, 100, 150, len(py_docs)):
-        d = BE.compute_kl_js_decomposition(py_docs[:n_pairs], js_docs[:n_pairs], root_4096, len(elist_4096))
+        d = kl_decomp_from_docs(py_docs[:n_pairs], js_docs[:n_pairs], root_4096, len(elist_4096))
         d['n_pairs'] = n_pairs
         d['raw_bytes'] = sum(len(x) for x in py_docs[:n_pairs]) + sum(len(x) for x in js_docs[:n_pairs])
         kl_crossover_n.append(d)
@@ -865,18 +928,34 @@ def analyze_split(split_name, lengths, manifest, chains_dir, dict_export_dir=Non
             else:
                 elist_a = [r[4] for r in chain_cache[(a_meta['source_policy'], 16, 'both', a_meta['arm'])][: a_meta['entries']]]
 
-            bench_a = BE.benchmark_encode_decode(both_docs, BE.build_trie(elist_a), repeats=5)
-            bench_b_py = BE.benchmark_encode_decode(py_docs, BE.build_trie(elist_b), repeats=5)
-            bench_b_js = BE.benchmark_encode_decode(js_docs, BE.build_trie(elist_b), repeats=5)
-            raw_total = bench_a['raw_bytes']
-            b_enc_tm = bench_b_py['encode_token_min_ms'] + bench_b_js['encode_token_min_ms']
-            b_enc_bm = bench_b_py['encode_byte_min_ms'] + bench_b_js['encode_byte_min_ms']
-            b_dec_tm = bench_b_py['decode_token_min_ms'] + bench_b_js['decode_token_min_ms']
-            b_dec_bm = bench_b_py['decode_byte_min_ms'] + bench_b_js['decode_byte_min_ms']
+            ba_tm = BE.benchmark_encode_decode(both_docs, elist_a, mode='token_min', repeats=5)
+            ba_bm = BE.benchmark_encode_decode(both_docs, elist_a, mode='byte_min', repeats=5)
+            bp_tm = BE.benchmark_encode_decode(py_docs, elist_b, mode='token_min', repeats=5)
+            bj_tm = BE.benchmark_encode_decode(js_docs, elist_b, mode='token_min', repeats=5)
+            bp_bm = BE.benchmark_encode_decode(py_docs, elist_b, mode='byte_min', repeats=5)
+            bj_bm = BE.benchmark_encode_decode(js_docs, elist_b, mode='byte_min', repeats=5)
+            raw_total = ba_tm['raw_bytes']
+            b_enc_tm = bp_tm['encode_median_ms'] + bj_tm['encode_median_ms']
+            b_enc_bm = bp_bm['encode_median_ms'] + bj_bm['encode_median_ms']
+            b_dec_tm = bp_tm['decode_median_ms'] + bj_tm['decode_median_ms']
+            b_dec_bm = bp_bm['decode_median_ms'] + bj_bm['decode_median_ms']
             runtime_benchmarks.append({
                 'K': K,
                 'raw_bytes': raw_total,
-                'A': bench_a,
+                'A': {
+                    'raw_bytes': raw_total,
+                    'encode_token_min_ms': ba_tm['encode_median_ms'],
+                    'encode_token_min_MB_s': ba_tm['encode_mb_per_s'],
+                    'encode_byte_min_ms': ba_bm['encode_median_ms'],
+                    'encode_byte_min_MB_s': ba_bm['encode_mb_per_s'],
+                    'decode_token_min_ms': ba_tm['decode_median_ms'],
+                    'decode_token_min_MB_s': ba_tm['decode_mb_per_s'],
+                    'decode_byte_min_ms': ba_bm['decode_median_ms'],
+                    'decode_byte_min_MB_s': ba_bm['decode_mb_per_s'],
+                    'payload_token_min_bytes': ba_tm['payload_bytes'],
+                    'payload_byte_min_bytes': ba_bm['payload_bytes'],
+                    'roundtrip_verified': ba_tm['verified_exact'] and ba_bm['verified_exact'],
+                },
                 'B': {
                     'raw_bytes': raw_total,
                     'encode_token_min_ms': b_enc_tm,
@@ -887,9 +966,9 @@ def analyze_split(split_name, lengths, manifest, chains_dir, dict_export_dir=Non
                     'decode_token_min_MB_s': (raw_total / 1e6) / (b_dec_tm / 1000.0),
                     'decode_byte_min_ms': b_dec_bm,
                     'decode_byte_min_MB_s': (raw_total / 1e6) / (b_dec_bm / 1000.0),
-                    'payload_token_min_bytes': bench_b_py['payload_token_min_bytes'] + bench_b_js['payload_token_min_bytes'],
-                    'payload_byte_min_bytes': bench_b_py['payload_byte_min_bytes'] + bench_b_js['payload_byte_min_bytes'],
-                    'roundtrip_verified': bench_b_py['roundtrip_verified'] and bench_b_js['roundtrip_verified'],
+                    'payload_token_min_bytes': bp_tm['payload_bytes'] + bj_tm['payload_bytes'],
+                    'payload_byte_min_bytes': bp_bm['payload_bytes'] + bj_bm['payload_bytes'],
+                    'roundtrip_verified': bp_tm['verified_exact'] and bj_tm['verified_exact'] and bp_bm['verified_exact'] and bj_bm['verified_exact'],
                 },
             })
 
@@ -961,15 +1040,17 @@ def main():
         for K in PRIMARY_SLOTS:
             c = next(x for x in out['splits'][split]['cells'] if x['policy'] == 's1-whole' and x['L'] == 16 and x['K'] == K and x['B'] is None)
             bm = c['byte_min']
+            c_tm_str = f"{c['C']['total_bytes']:7d}" if c['C'] else ' INFEAS'
+            c_bm_str = f"{bm['C']['total_bytes']:7d}" if bm['C'] else ' INFEAS'
             print(
                 f"K={K:4d} [tok-min] A={c['A']['total_bytes']:7d} ({c['A']['arm']}:{c['A']['entries']}) | "
                 f"B={c['B_design']['total_bytes']:7d} ({c['B_design']['arm']}:{c['B_design']['entries']}) | "
-                f"C={c['C']['total_bytes']:7d} | tokbest={c['token_best']['total_bytes']:7d}"
+                f"C={c_tm_str} | tokbest={c['token_best']['total_bytes']:7d}"
             )
             print(
                 f"K={K:4d} [byt-min] A={bm['A']['total_bytes']:7d} ({bm['A']['arm']}:{bm['A']['entries']}) | "
                 f"B={bm['B_design']['total_bytes']:7d} ({bm['B_design']['arm']}:{bm['B_design']['entries']}) | "
-                f"C={bm['C']['total_bytes']:7d} | tokbest={bm['token_best']['total_bytes']:7d} | rev={bm['winner_reversed']}"
+                f"C={c_bm_str} | tokbest={bm['token_best']['total_bytes']:7d} | rev={bm['winner_reversed']}"
             )
 
 

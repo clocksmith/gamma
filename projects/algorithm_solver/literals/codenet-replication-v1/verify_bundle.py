@@ -90,7 +90,7 @@ def verify_bitstream_roundtrip(docs, root, mode):
         pieces, counts, lengths, toks = bm['pieces'], bm['counts'], bm['lengths'], bm['tokens']
     else:
         raise ValueError(mode)
-    codes = BE.canonical_codes_from_lengths(lengths)
+    codes = BE.assign_canonical_codes(lengths)
     if len(lengths) > 1:
         # Exact Kraft equality check in integer arithmetic
         max_l = max(lengths.values())
@@ -152,18 +152,19 @@ def verify_codenet_results(manifest):
             assert tok_bp + tok_bj == cell['B_design']['tokens']
             decoded_checks += 1
 
-            # 3. Design C (token_min)
-            el_cp, _ = load_hex_dict(HERE / exported[f'{split}_K{K}_C_py_tm']['path'])
-            el_cj, _ = load_hex_dict(HERE / exported[f'{split}_K{K}_C_js_tm']['path'])
-            pay_cp, tok_cp = verify_bitstream_roundtrip(py_docs, BE.build_trie(el_cp), 'token_min')
-            pay_cj, tok_cj = verify_bitstream_roundtrip(js_docs, BE.build_trie(el_cj), 'token_min')
-            tot_c = (
-                sum(1 + len(e) for e in el_cp) + (len(el_cp) + 1) + pay_cp
-                + sum(1 + len(e) for e in el_cj) + (len(el_cj) + 1) + pay_cj + 4
-            )
-            assert tot_c == cell['C']['total_bytes'], f'{split} K={K} C_tm mismatch'
-            assert tok_cp + tok_cj == cell['C']['tokens']
-            decoded_checks += 1
+            # 3. Design C (token_min, when feasible; at K=256 Design C is structurally infeasible because py+js single-byte alphabets exceed 256)
+            if cell['C'] is not None:
+                el_cp, _ = load_hex_dict(HERE / exported[f'{split}_K{K}_C_py_tm']['path'])
+                el_cj, _ = load_hex_dict(HERE / exported[f'{split}_K{K}_C_js_tm']['path'])
+                pay_cp, tok_cp = verify_bitstream_roundtrip(py_docs, BE.build_trie(el_cp), 'token_min')
+                pay_cj, tok_cj = verify_bitstream_roundtrip(js_docs, BE.build_trie(el_cj), 'token_min')
+                tot_c = (
+                    sum(1 + len(e) for e in el_cp) + (len(el_cp) + 1) + pay_cp
+                    + sum(1 + len(e) for e in el_cj) + (len(el_cj) + 1) + pay_cj + 4
+                )
+                assert tot_c == cell['C']['total_bytes'], f'{split} K={K} C_tm mismatch'
+                assert tok_cp + tok_cj == cell['C']['tokens']
+                decoded_checks += 1
 
             # 4. Token-best A (token_min AND byte_min)
             el_tb, _ = load_hex_dict(HERE / exported[f'{split}_K{K}_tokbest']['path'])
