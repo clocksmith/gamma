@@ -56,6 +56,16 @@ elif frozen_allows:
 else:
     verdict = 'The frozen kill bar did not pass. BITS should end with the benchmark note.'
 w.append(f'**Decision.** {verdict}\n')
+counts = []
+for coding, label in CODINGS.items():
+    parts = []
+    for name in ('bpe', 'pathpiece'):
+        row = posthoc['comparison'][coding].get(name, {}).get('s1-whole')
+        if row:
+            parts.append(f"{row['greedy_smaller']} of {row['cells']} cells against {BASELINES[name]}")
+    counts.append(f"{label.lower()}: {', '.join(parts)}")
+w.append('**Greedy against the main baselines.** Passing K2 does not mean greedy beats BPE or PathPiece. Under the primary rule, greedy is smaller in '
+         + '; '.join(counts) + '.\n')
 w.append(f"**Predictions.** {sum(item['held'] for item in P.values())} of {len(P)} held. Failed: {', '.join(failed) if failed else 'none'}.\n")
 w.append('Everything here is in-sample on 400 paired Python and JavaScript solutions, with exact reconstruction. '
          'It says nothing about unseen code or model quality, and it claims no new algorithm or certificate. '
