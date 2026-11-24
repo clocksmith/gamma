@@ -22,6 +22,7 @@ import hashlib
 import json
 import math
 import sys
+from collections import Counter
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -109,6 +110,7 @@ def verify_codenet_results(manifest):
     assert results['manifest_sha256'] == sha256_bytes((HERE / 'manifest.json').read_bytes())
 
     decoded_checks = 0
+    kl_checks = 0
     for split in ('primary', 'secondary'):
         pairs = manifest['splits'][split]['pairs']
         py_docs = [(HERE / p['python']['path']).read_bytes() for p in pairs]
@@ -193,15 +195,41 @@ def verify_codenet_results(manifest):
             assert tot_bbm == cell['byte_min']['B_design']['total_bytes'], f'{split} K={K} B_bm mismatch'
             decoded_checks += 1
 
-        # Verify KL/JS identities
+        # Directly recompute KL/JS mutual-information & corpus-size crossover from corpus + exported dicts
         for row in sres['kl_by_k']:
             assert row['mutual_info_bits'] >= 0.0
             assert abs(row['ideal_payload_saving_bytes'] - row['mutual_info_bits'] / 8.0) < 1e-6
             assert row['extra_table_and_routing_bytes'] == row['entries'] + 5
+            if row['K'] in (256, 1024, 4096):
+                el_kl, _ = load_hex_dict(HERE / exported[f'{split}_K{row["K"]}_B_tm']['path'])
+                rt_kl = BE.build_trie(el_kl)
+                _, c_py, _ = BE.segment_corpus_tokens(py_docs, rt_kl)
+                _, c_js, _ = BE.segment_corpus_tokens(js_docs, rt_kl)
+                recomp = BE.compute_kl_js_decomposition(c_py, c_js, len(el_kl))
+                assert abs(recomp['mutual_info_bits'] - row['mutual_info_bits']) < 0.05
+                kl_checks += 1
+
+        el_4k, _ = load_hex_dict(HERE / exported[f'{split}_K4096_B_tm']['path'])
+        rt_4k = BE.build_trie(el_4k)
+        for row in sres['kl_crossover_n']:
+            np_n = row['n_pairs']
+            _, c_py, _ = BE.segment_corpus_tokens(py_docs[:np_n], rt_4k)
+            _, c_js, _ = BE.segment_corpus_tokens(js_docs[:np_n], rt_4k)
+            recomp = BE.compute_kl_js_decomposition(c_py, c_js, len(el_4k))
+            assert abs(recomp['mutual_info_bits'] - row['mutual_info_bits']) < 0.05
+            c_all = Counter(c_py)
+            c_all.update(c_js)
+            pay_a = math.ceil(BE.total_huffman_bits(c_all, BE.canonical_huffman_lengths(c_all)) / 8)
+            pay_b = (
+                math.ceil(BE.total_huffman_bits(c_py, BE.canonical_huffman_lengths(c_py)) / 8)
+                + math.ceil(BE.total_huffman_bits(c_js, BE.canonical_huffman_lengths(c_js)) / 8)
+            )
+            assert (pay_a - pay_b) - (len(el_4k) + 5) == row['actual_net_B_saving_bytes']
+            kl_checks += 1
 
     print(
-        f'[PASS] CodeNet results & bitstreams verified: {decoded_checks} independent '
-        f'full-corpus canonical Huffman encode+decode checks passed bit-for-bit.'
+        f'[PASS] CodeNet results, bitstreams & KL/JS crossover verified: {decoded_checks} independent '
+        f'full-corpus canonical Huffman encode+decode checks + {kl_checks} direct KL/JS recomputations passed.'
     )
 
 
