@@ -87,5 +87,30 @@ test('records what the page tried to send in a real browser', { skip: !executabl
     assert.deepEqual(names(beacon.intents[0]), ['a', 'b']);
     const blob = await run(`fetch('https://app.test/u', { method: 'POST', body: new Blob(['x']) })`);
     assert.equal(blob.intents[0].body.kind, 'opaque');
+
+    const nested = await run(`fetch('/graphql', { method: 'POST', body: JSON.stringify({ query: 'mutation', variables: { input: { hours: 12, surcharge: 90 }, lines: [{ price: 1 }, { price: 2 }] } }) })`);
+    assert.deepEqual(names(nested.intents[0]), ['query', 'variables.input.hours', 'variables.input.surcharge', 'variables.lines[].price', 'variables.lines[].price']);
+    const list = await run(`fetch('/bulk', { method: 'POST', body: JSON.stringify([{ id: 1 }]) })`);
+    assert.equal(list.intents[0].body.kind, 'json');
+    assert.deepEqual(names(list.intents[0]), ['[].id']);
+    const typed = await run(`fetch('/a', { method: 'POST', body: JSON.stringify({ hours: 12 }) })`);
+    const quoted = await run(`fetch('/a', { method: 'POST', body: JSON.stringify({ hours: '12' }) })`);
+    assert.notDeepEqual(typed.intents[0].body.fields, quoted.intents[0].body.fields);
+    const deep = await run(`fetch('/a', { method: 'POST', body: JSON.stringify({ a: { b: { c: { d: { e: { f: { g: { h: { i: 1 } } } } } } } } }) })`);
+    assert.equal(deep.intentsTruncated, true);
+
+    const request = await run(`fetch(new Request('https://app.test/r', { method: 'POST', body: JSON.stringify({ hours: 12 }) }))`);
+    assert.equal(request.intents[0].method, 'POST');
+    assert.equal(request.intents[0].body.kind, 'json');
+    assert.deepEqual(names(request.intents[0]), ['hours']);
+
+    await page.goto('about:blank');
+    await page.setContent(form);
+    await page.evaluate(() => { const stub = () => Promise.reject(new DOMException('no', 'NotAllowedError')); window.fetch = stub; window.boundFetch = stub; });
+    assert.deepEqual((await page.evaluate(branchExpression(`window.boundFetch('https://app.test/x', { method: 'POST' })`))).intents, []);
+
+    const removed = await run(`document.querySelector('[name=csrf]').remove()`);
+    assert.deepEqual(removed.after.dirty, ['csrf']);
+    assert.deepEqual(removed.after.values, [['csrf', 'removed']]);
   } finally { await browser.close(); }
 });

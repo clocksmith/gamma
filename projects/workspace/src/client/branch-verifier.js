@@ -75,16 +75,33 @@ export function branchExpression(action) {
         } else if (dirty(field)) changed.push([name, digest(valueOf(field))]);
       }
     }
-    if (hiddenBefore) for (const [key, entry] of hidden) if (hiddenBefore.get(key)?.[1] !== entry[1]) changed.push(entry);
+    if (hiddenBefore) {
+      for (const [key, entry] of hidden) if (hiddenBefore.get(key)?.[1] !== entry[1]) changed.push(entry);
+      for (const [key, entry] of hiddenBefore) if (!hidden.has(key)) changed.push([entry[0], 'removed']);
+    }
     changed.sort((x, y) => x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : x[1] < y[1] ? -1 : x[1] > y[1] ? 1 : 0);
     const truncated = alerts.length > LIMIT || statuses.length > LIMIT || changed.length > LIMIT;
     const values = changed.slice(0, LIMIT);
     return { hidden, view: { alerts: alerts.slice(0, LIMIT), statuses: statuses.slice(0, LIMIT), dirty: values.map(entry => entry[0]), values, truncated } };
   };
   // What the page's code asked to send. This is the branch's own claim; the browser's attempts stay authoritative.
-  const URL_LIMIT = ${LIMITS.url}, BYTES = ${LIMITS.bytes};
+  // A fetch bound before this wrapper runs is invisible here and ends as intent-missing, which is why a native
+  // record in the browser is the stronger source.
+  const URL_LIMIT = ${LIMITS.url}, BYTES = ${LIMITS.bytes}, DEPTH = 8;
   const intents = [], pendingForms = [];
   let intentsTruncated = false;
+  const flatten = (value, path, out, depth) => {
+    if (out.length > LIMIT) { intentsTruncated = true; return out; }
+    if (value !== null && typeof value === 'object') {
+      if (depth >= DEPTH) { intentsTruncated = true; out.push([path || '(body)', JSON.stringify(value)]); return out; }
+      const entries = Array.isArray(value) ? value.map(item => ['[]', item]) : Object.entries(value);
+      if (!entries.length) out.push([path || '(body)', JSON.stringify(value)]);
+      for (const [key, item] of entries) flatten(item, key === '[]' ? path + '[]' : path ? path + '.' + key : key, out, depth + 1);
+      return out;
+    }
+    out.push([path || '(body)', JSON.stringify(value) ?? String(value)]);
+    return out;
+  };
   const pairs = entries => {
     const fields = [];
     for (const [name, value] of entries) {
@@ -100,7 +117,7 @@ export function branchExpression(action) {
       const whole = [['(body)', digest(body)]];
       try {
         const parsed = JSON.parse(body);
-        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) return { kind: 'json', bytes: body.length, fields: pairs(Object.entries(parsed)) };
+        if (parsed && typeof parsed === 'object') return { kind: 'json', bytes: body.length, fields: pairs(flatten(parsed, '', [], 0)) };
       } catch {}
       if (/^[^=&\\s]+=[^&\\s]*(&[^=&\\s]+=[^&\\s]*)*$/.test(body)) return { kind: 'urlencoded', bytes: body.length, fields: pairs(new URLSearchParams(body)) };
       return { kind: 'text', bytes: body.length, fields: whole };
@@ -130,10 +147,18 @@ export function branchExpression(action) {
   };
   const formMethod = (form, submitter) => submitter?.getAttribute?.('formmethod') || form.getAttribute('method') || 'GET';
   const watch = root => {
+    // Reading a Request body needs a task a branch may never run, so keep the body given to its constructor.
+    const NativeRequest = root.Request, requestBodies = new WeakMap();
+    root.Request = new Proxy(NativeRequest, { construct(target, args, newTarget) {
+      const made = Reflect.construct(target, args, newTarget);
+      if (args[1] && 'body' in args[1]) requestBodies.set(made, args[1].body);
+      else if (args[0] instanceof NativeRequest && requestBodies.has(args[0])) requestBodies.set(made, requestBodies.get(args[0]));
+      return made;
+    } });
     const nativeFetch = root.fetch;
     root.fetch = function (input, init) {
-      const request = typeof Request === 'function' && input instanceof root.Request ? input : null;
-      const body = init && 'body' in init ? init.body : request?.body ? new Blob() : null;
+      const request = input instanceof NativeRequest ? input : null;
+      const body = init && 'body' in init ? init.body : request && requestBodies.has(request) ? requestBodies.get(request) : request?.body ? new root.Blob() : null;
       note(root, 'fetch', request ? request.url : input, init?.method ?? request?.method ?? 'GET', body);
       return nativeFetch.apply(this, arguments);
     };
