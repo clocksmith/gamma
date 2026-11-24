@@ -4,6 +4,8 @@ Start with the [research map](RESEARCH_MAP.md). The
 [fixed-source v1 results](fixed-source-v1/RESULTS.md) use the frozen two-file
 rule. The [unrestricted v2 results](fixed-source-v2/RESULTS.md) compare all
 source substrings with a matched v1-rule control on the same source. The
+[v3 results](fixed-source-v3/RESULTS.md) count total encoded size, dictionary
+included, and close this lane. The
 [pure-literal packet replay](pure-literal-compare-v1/README.md) is its historical
 engineering baseline. The [capacity verifier](bits-reproduce-v1/MANIFEST.md)
 checks separate mathematical results. Neither claims autonomous solving.
