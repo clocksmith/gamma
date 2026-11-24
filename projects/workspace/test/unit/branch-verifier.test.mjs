@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { OBSERVATION_SCHEMA, branchExpression, decideBranch, parseBranchResult, verifyBranches } from '../../src/client/branch-verifier.js';
 
-const page = (change = {}) => ({ alerts: [], statuses: [], dirty: [], ...change });
+const page = (change = {}) => {
+  const dirty = change.dirty ?? [];
+  return { alerts: [], statuses: [], truncated: false, ...change, dirty, values: change.values ?? dirty.map(name => [name, 'digest']) };
+};
 const branch = ({ ended = 'finished', attempts = [], after = {}, before = {}, thrown = null, ok = true, value } = {}) => [ended,
   ...attempts.map(([attempt, target]) => JSON.stringify({ attempt, target })),
   ...(ended === 'finished' ? [JSON.stringify({ ok, value: value ?? { schema: OBSERVATION_SCHEMA, before: page(before), after: page(after), thrown } })] : [])].join('\n');
@@ -82,6 +85,18 @@ test('different eligible effects abstain and identical effects choose the first'
   const ambiguous = verifyBranches({ control, candidates: [candidate('a'), { id: 'b', text: branch({ attempts: [[other.attempt, other.target]] }), expect: other }] });
   assert.equal(ambiguous.reason, 'ambiguous-effects');
   assert.equal(verifyBranches({ control, candidates: [candidate('a'), candidate('b')] }).winner, 'a');
+});
+
+test('the same field with different values is an ambiguous effect', () => {
+  const value = digest => ({ after: { dirty: ['hours'], values: [['hours', digest]] } });
+  const result = verifyBranches({ control, candidates: [candidate('eight', value('aaaa'), { fields: ['hours'] }), candidate('eight-hundred', value('bbbb'), { fields: ['hours'] })] });
+  assert.equal(result.reason, 'ambiguous-effects');
+});
+
+test('an observation that could not hold the whole page is not trusted', () => {
+  const result = verifyBranches({ control, candidates: [candidate('a', { after: { truncated: true } })] });
+  assert.deepEqual(verdicts(result), { a: 'observation-truncated' });
+  assert.equal(verifyBranches({ control: branch({ after: { truncated: true } }), candidates: [candidate('a')] }).reason, 'control-invalid');
 });
 
 test('an invalid control or candidate list abstains', () => {
