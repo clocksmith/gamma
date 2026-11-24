@@ -1,0 +1,139 @@
+{
+ "schema": "gamma.fixed-source-score.v3",
+ "by_scenario": {
+  "s1-whole": {
+   "cells": 144,
+   "feasible": 120,
+   "lowest_total": {
+    "B": 120
+   },
+   "k1_other_design_at_least_1pct_smaller": 1.0,
+   "k2_token_best_at_least_1pct_larger": 0.4,
+   "a_beats_c": 0.475,
+   "b_lowest": 1.0,
+   "best_baseline_within_2pct_of_best_arm": 1.0
+  },
+  "s2-nowhole": {
+   "cells": 144,
+   "feasible": 120,
+   "lowest_total": {
+    "B": 120
+   },
+   "k1_other_design_at_least_1pct_smaller": 1.0,
+   "k2_token_best_at_least_1pct_larger": 0.375,
+   "a_beats_c": 0.475,
+   "b_lowest": 1.0,
+   "best_baseline_within_2pct_of_best_arm": 1.0
+  },
+  "p2-nowhole": {
+   "cells": 144,
+   "feasible": 120,
+   "lowest_total": {
+    "B": 120
+   },
+   "k1_other_design_at_least_1pct_smaller": 1.0,
+   "k2_token_best_at_least_1pct_larger": 0.4083333333333333,
+   "a_beats_c": 0.475,
+   "b_lowest": 1.0,
+   "best_baseline_within_2pct_of_best_arm": 1.0
+  },
+  "s1-whole-cuts": {
+   "cells": 144,
+   "feasible": 120,
+   "lowest_total": {
+    "B": 120
+   },
+   "k1_other_design_at_least_1pct_smaller": 1.0,
+   "k2_token_best_at_least_1pct_larger": 0.35833333333333334,
+   "a_beats_c": 0.2,
+   "b_lowest": 1.0,
+   "best_baseline_within_2pct_of_best_arm": 1.0
+  }
+ },
+ "predictions": {
+  "V1": {
+   "text": "Design A is smaller than C in at least 75% of feasible primary cells",
+   "value": 0.475,
+   "held": false
+  },
+  "V2": {
+   "text": "Design B is lowest in fewer than 25% of feasible primary cells",
+   "value": 1.0,
+   "held": false
+  },
+  "V3": {
+   "text": "The token-best dictionary is within 1% of the byte-best in at least 75% of feasible primary cells",
+   "value": 0.6,
+   "held": false
+  },
+  "V4": {
+   "text": "The best baseline is within 2% of the best arm in at least 50% of feasible primary cells",
+   "value": 1.0,
+   "held": true
+  },
+  "V5": {
+   "text": "Forbidding boundary crossing raises design A bytes by at least 3% at K=1024, L=16, uncapped",
+   "primary": 85049,
+   "forbidden": 116344,
+   "value": 0.36796434996296257,
+   "held": true
+  }
+ },
+ "kill_bar": {
+  "threshold": 0.25,
+  "k1_design_inversion": true,
+  "k2_objective_inversion": true,
+  "decision": "full paper allowed"
+ },
+ "lp": [
+  {
+   "policy": "s1-whole",
+   "corpus": "both",
+   "L": 16,
+   "K": 1024,
+   "status": "Time limit reached",
+   "objective": null,
+   "columns": 5715140,
+   "rows": 4408237,
+   "solve_seconds": 3603.5194141864777,
+   "label": "numerical LP value, not an exact certificate"
+  },
+  {
+   "policy": "s1-whole",
+   "corpus": "both",
+   "L": 16,
+   "K": 256,
+   "status": "Time limit reached",
+   "objective": null,
+   "columns": 5715140,
+   "rows": 4408237,
+   "solve_seconds": 3603.4980051517487,
+   "label": "numerical LP value, not an exact certificate"
+  },
+  {
+   "policy": "s1-whole",
+   "corpus": "both",
+   "L": 16,
+   "K": 4096,
+   "status": "Time limit reached",
+   "objective": null,
+   "columns": 5715140,
+   "rows": 4408237,
+   "solve_seconds": 3603.4904363155365,
+   "label": "numerical LP value, not an exact certificate"
+  },
+  {
+   "policy": "s2-nowhole",
+   "corpus": "both",
+   "L": 16,
+   "K": 256,
+   "status": "Time limit reached",
+   "objective": null,
+   "columns": 3092670,
+   "rows": 3045540,
+   "solve_seconds": 3601.483783721924,
+   "label": "numerical LP value, not an exact certificate"
+  }
+ ],
+ "lp_failures": []
+}

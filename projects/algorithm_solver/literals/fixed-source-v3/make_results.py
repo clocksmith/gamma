@@ -71,6 +71,15 @@ w.append('Everything here is in-sample on 400 paired Python and JavaScript solut
          'It says nothing about unseen code or model quality, and it claims no new algorithm or certificate. '
          'The certificate used in v1 and v2 is Theorem 1 of [Du and Chen](https://arxiv.org/abs/2609.35869).\n')
 
+finish = (RESULTS / 'finish.log').read_text() if (RESULTS / 'finish.log').exists() else ''
+if 'stage stopped at the LP limit' in finish:
+    solved = {(row['policy'], row['K']) for row in score['lp']}
+    missing = [f'{p} K={k}' for p in ('s1-whole', 's2-nowhole') for k in (256, 1024, 4096) if (p, k) not in solved]
+    w.append('**Run note.** The LP stage reached its frozen 3-hour limit, so the pipeline stopped before verification. '
+             f"Unfinished LP solves: {', '.join(missing) if missing else 'none'}. As the freeze requires, the run reports what finished: "
+             'verification, regression, encoded sizes, scoring and the post-hoc checks were then run with the frozen code and commands '
+             '(`finish.log`). The chain stage finished within its limit.\n')
+
 w.append('## Checks\n')
 w.append(f"- {checks['chains']} chains and {checks['single_dictionaries']} LP-rounded dictionaries were decoded byte for byte across {n(checks['cells'])} grid cells. "
          f"{len(checks['stopped_chains'])} chains stopped at a limit.")
