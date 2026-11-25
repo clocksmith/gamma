@@ -1,0 +1,3937 @@
+{
+  "builder": {
+    "file": "build_corpus.py",
+    "sha256": "83a67a80b883a16ab19131dacfe3b9233709334159fbe508ed7d578ddf1febcc"
+  },
+  "built_utc": "2026-11-25T13:10:32Z",
+  "length_statistics": "bytes per record; p95 is the nearest-rank percentile",
+  "licence_field": "licence names recognised in the licence files at the repository root (or in a root LICENSE/LICENSES directory); a repository with several such files lists every name found, so the list can include licences of bundled third-party code",
+  "schema": "bits-fresh-short-records/v1",
+  "split_rule": {
+    "order": "sources sorted by sha256(salt + source name), hex ascending",
+    "salt": "32 random bytes, generated once, held in the custody directory",
+    "sizes": "test = ceil(n/4) at the end, validation = ceil(n/4) before it, train = the rest",
+    "unit": "source (one source per organisation, across all three workloads)"
+  },
+  "test_sources_digest": "sha256(salt + sorted test source names joined by a newline)",
+  "workloads": {
+    "w1-short-files": {
+      "rules": {
+        "cap_choice": "the records with the smallest sha256(salt + record)",
+        "cap_per_source": 150,
+        "duplicates": "one copy per source; a record found in several sources is kept only in the source with the smallest sha256(source name + 0x00 + record)",
+        "extensions": [
+          ".json",
+          ".yml",
+          ".yaml",
+          ".toml",
+          ".ts",
+          ".tsx",
+          ".js",
+          ".jsx",
+          ".mjs",
+          ".cjs",
+          ".wgsl",
+          ".glsl",
+          ".vert",
+          ".frag",
+          ".css"
+        ],
+        "max_len": 400,
+        "min_distinct_per_source": 200,
+        "min_len": 40,
+        "record": "the whole content of one file, byte for byte",
+        "record_filter": "valid UTF-8, no NUL byte, length within min_len..max_len bytes",
+        "shared_collections": "two sources that share 5% or more of the smaller one's eligible records count as one collection; the larger one is not used",
+        "skip_dirs": [
+          ".git",
+          ".yarn",
+          "3rdparty",
+          "bower_components",
+          "build",
+          "deps",
+          "dist",
+          "ee",
+          "enterprise",
+          "external",
+          "externals",
+          "node_modules",
+          "out",
+          "target",
+          "third-party",
+          "third_party",
+          "thirdparty",
+          "vendor",
+          "vendors"
+        ],
+        "source_unit": "repository",
+        "title": "short source and config files"
+      },
+      "sources_total": 76,
+      "splits": {
+        "test": {
+          "record_length": {
+            "max": 400,
+            "mean": 208.0,
+            "median": 196.0,
+            "min": 40,
+            "p95": 378
+          },
+          "records": 2850,
+          "sha256_salt_sorted_test_sources": "bcaee4fac4c0e9594d95c1a5839bd7562e2a897c4ef2da01b72fdb51a26f6d7e",
+          "sha256_test_jsonl": "a004cc9880aa80077532f4d445f573862d2902341c258990c30aa977acaeb118",
+          "sources": 19,
+          "total_bytes": 592814
+        },
+        "train": {
+          "record_length": {
+            "max": 400,
+            "mean": 216.3,
+            "median": 216.0,
+            "min": 40,
+            "p95": 380
+          },
+          "records": 5700,
+          "sha256_jsonl": "613b16d2b5a8593444c6ed19cb0038f16869ece478522fb6c8562b206b5a103e",
+          "source_list": [
+            {
+              "bytes": 25954,
+              "commit": "b6bda05c29c9eb7d07d7f6cb2703508483b30493",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "AssemblyScript/assemblyscript",
+              "url": "https://github.com/AssemblyScript/assemblyscript"
+            },
+            {
+              "bytes": 37817,
+              "commit": "57e4efcc84112abcd426dc5ec248b5339bee04f2",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "KhronosGroup/SPIRV-Cross",
+              "url": "https://github.com/KhronosGroup/SPIRV-Cross"
+            },
+            {
+              "bytes": 36789,
+              "commit": "04c312f582e24eef1a74949105a3b3ca0790fde3",
+              "licence": "MIT",
+              "records": 150,
+              "source": "QwikDev/qwik",
+              "url": "https://github.com/QwikDev/qwik"
+            },
+            {
+              "bytes": 39134,
+              "commit": "4fca0889be532fced536b77e1dff982001ebc672",
+              "licence": "MIT",
+              "records": 150,
+              "source": "chakra-ui/chakra-ui",
+              "url": "https://github.com/chakra-ui/chakra-ui"
+            },
+            {
+              "bytes": 38709,
+              "commit": "21fc4bdb2218773abb1cf366d8ec3759b9a7e9f1",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "cilium/cilium",
+              "url": "https://github.com/cilium/cilium"
+            },
+            {
+              "bytes": 27133,
+              "commit": "42b468ab051043174c954c4f3f48bb6aedc85d4f",
+              "licence": "MIT / MIT-0",
+              "records": 150,
+              "source": "csstools/postcss-plugins",
+              "url": "https://github.com/csstools/postcss-plugins"
+            },
+            {
+              "bytes": 31260,
+              "commit": "5a30d970af1b90446eb618c85453c29696fd8ad9",
+              "licence": "MIT",
+              "records": 150,
+              "source": "cypress-io/cypress",
+              "url": "https://github.com/cypress-io/cypress"
+            },
+            {
+              "bytes": 27057,
+              "commit": "d93e089d9e5e2f7e09d4173fdf380eb3cd046652",
+              "licence": "MIT",
+              "records": 150,
+              "source": "element-plus/element-plus",
+              "url": "https://github.com/element-plus/element-plus"
+            },
+            {
+              "bytes": 33189,
+              "commit": "b0191b30145594af83c6bdbc348520499243925b",
+              "licence": "MIT",
+              "records": 150,
+              "source": "emberjs/ember.js",
+              "url": "https://github.com/emberjs/ember.js"
+            },
+            {
+              "bytes": 30033,
+              "commit": "082c070b6a5c1d6f8a5385a6201ec9d45dc70671",
+              "licence": "MIT",
+              "records": 150,
+              "source": "expo/expo",
+              "url": "https://github.com/expo/expo"
+            },
+            {
+              "bytes": 30538,
+              "commit": "60cef2be828e03ba54e2e1598001b4625c0c2163",
+              "licence": "Apache-2.0 / MIT",
+              "records": 150,
+              "source": "gfx-rs/wgpu",
+              "url": "https://github.com/gfx-rs/wgpu"
+            },
+            {
+              "bytes": 26981,
+              "commit": "cfaa38e432762a1f3a067c7a5cb92237fce614bf",
+              "licence": "GPL-3",
+              "records": 150,
+              "source": "golangci/golangci-lint",
+              "url": "https://github.com/golangci/golangci-lint"
+            },
+            {
+              "bytes": 36261,
+              "commit": "8f46feadd4fb93f1bf0442d83389f33dde3caab3",
+              "licence": "MIT",
+              "records": 150,
+              "source": "ionic-team/ionic-framework",
+              "url": "https://github.com/ionic-team/ionic-framework"
+            },
+            {
+              "bytes": 38388,
+              "commit": "12a341541c442c4ce0edd93fa06233747b6f5a35",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "kubernetes/kubernetes",
+              "url": "https://github.com/kubernetes/kubernetes"
+            },
+            {
+              "bytes": 32645,
+              "commit": "278c17b544ec7148eb6a7d2d5a4d7aeea28b8ffe",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "kyverno/kyverno",
+              "url": "https://github.com/kyverno/kyverno"
+            },
+            {
+              "bytes": 28885,
+              "commit": "fdf3654dcaaf6b0f57c91ff9ca9aaa205e8f5c8c",
+              "licence": "MIT",
+              "records": 150,
+              "source": "meteor/meteor",
+              "url": "https://github.com/meteor/meteor"
+            },
+            {
+              "bytes": 33078,
+              "commit": "e49745a23cd02f5cc34fc92331b382ad343b72a8",
+              "licence": "MIT",
+              "records": 150,
+              "source": "microsoft/vscode",
+              "url": "https://github.com/microsoft/vscode"
+            },
+            {
+              "bytes": 29214,
+              "commit": "04eb516fe73eb3da0ac2a057dd9349d210c19b5f",
+              "licence": "MIT",
+              "records": 150,
+              "source": "mochajs/mocha",
+              "url": "https://github.com/mochajs/mocha"
+            },
+            {
+              "bytes": 40744,
+              "commit": "9769f52feec52782e29a1770b268ac3eb26e4ab9",
+              "licence": "MIT",
+              "records": 150,
+              "source": "mui/material-ui",
+              "url": "https://github.com/mui/material-ui"
+            },
+            {
+              "bytes": 35587,
+              "commit": "258e74796f370710088cfbb87d1b2771d8622b2b",
+              "licence": "MIT",
+              "records": 150,
+              "source": "nestjs/nest",
+              "url": "https://github.com/nestjs/nest"
+            },
+            {
+              "bytes": 20492,
+              "commit": "d5f4f4b6b9dc08bb3b9641b0e547c46d9c045662",
+              "licence": "MIT",
+              "records": 150,
+              "source": "netlify/build",
+              "url": "https://github.com/netlify/build"
+            },
+            {
+              "bytes": 42581,
+              "commit": "d49351a9ed534edf960c6a90d4ca5c9540d26a6a",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "open-policy-agent/opa",
+              "url": "https://github.com/open-policy-agent/opa"
+            },
+            {
+              "bytes": 34050,
+              "commit": "65e079fd3031915f96b21e0572a967f56ac5fc5c",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "open-telemetry/opentelemetry-collector-contrib",
+              "url": "https://github.com/open-telemetry/opentelemetry-collector-contrib"
+            },
+            {
+              "bytes": 22374,
+              "commit": "346bc72407d384bb4d998898b6d272c770b4e7f9",
+              "licence": "MIT",
+              "records": 150,
+              "source": "parcel-bundler/parcel",
+              "url": "https://github.com/parcel-bundler/parcel"
+            },
+            {
+              "bytes": 33439,
+              "commit": "be854b2a8e345f8046ac1809da58017c34506bc2",
+              "licence": "MIT",
+              "records": 150,
+              "source": "playcanvas/engine",
+              "url": "https://github.com/playcanvas/engine"
+            },
+            {
+              "bytes": 25496,
+              "commit": "4772dcfad89966f1639f0832713a03e056edfbb3",
+              "licence": "MIT",
+              "records": 150,
+              "source": "prettier/prettier",
+              "url": "https://github.com/prettier/prettier"
+            },
+            {
+              "bytes": 21761,
+              "commit": "e56aabdcbec6d8d6621244530654502244d2f5de",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "prometheus/prometheus",
+              "url": "https://github.com/prometheus/prometheus"
+            },
+            {
+              "bytes": 38450,
+              "commit": "433dfa37da51f837b94aa75b02f4849981ad1494",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "pulumi/examples",
+              "url": "https://github.com/pulumi/examples"
+            },
+            {
+              "bytes": 39292,
+              "commit": "16637f69c0edb6dd78b73cce4af7c502ff31fc84",
+              "licence": "MIT",
+              "records": 150,
+              "source": "quasarframework/quasar",
+              "url": "https://github.com/quasarframework/quasar"
+            },
+            {
+              "bytes": 32337,
+              "commit": "a7852fb92d0e4ac2bcce1d9a755717ba6cf53ffd",
+              "licence": "MIT",
+              "records": 150,
+              "source": "redwoodjs/redwood",
+              "url": "https://github.com/redwoodjs/redwood"
+            },
+            {
+              "bytes": 23433,
+              "commit": "173cfd3ac9f35acd1defc2b2dfe075b9c2759df0",
+              "licence": "MIT / Apache-2.0 / BSD-2-Clause / Unlicense / BSL-1.0 / Zlib / public-domain",
+              "records": 150,
+              "source": "rollup/rollup",
+              "url": "https://github.com/rollup/rollup"
+            },
+            {
+              "bytes": 32764,
+              "commit": "1aa6a0e28f834ed5b29374a58fc49f63ddb67b83",
+              "licence": "MIT",
+              "records": 150,
+              "source": "storybookjs/storybook",
+              "url": "https://github.com/storybookjs/storybook"
+            },
+            {
+              "bytes": 35408,
+              "commit": "9eab5e865d6af30b4db01140cdc70d0f4424bffd",
+              "licence": "MIT",
+              "records": 150,
+              "source": "sveltejs/svelte",
+              "url": "https://github.com/sveltejs/svelte"
+            },
+            {
+              "bytes": 49723,
+              "commit": "4db99ac4dc8924279ae07ed3246385924e878519",
+              "licence": "BSD-3-Clause",
+              "records": 150,
+              "source": "tc39/test262",
+              "url": "https://github.com/tc39/test262"
+            },
+            {
+              "bytes": 36158,
+              "commit": "8fcaa7cda47c139b76e02ab3d115c168d093ac04",
+              "licence": "MIT",
+              "records": 150,
+              "source": "traefik/traefik",
+              "url": "https://github.com/traefik/traefik"
+            },
+            {
+              "bytes": 27938,
+              "commit": "b8e68eb8f87dc64e8e5490d8fd4fb9f758424d41",
+              "licence": "MIT",
+              "records": 150,
+              "source": "vercel/next.js",
+              "url": "https://github.com/vercel/next.js"
+            },
+            {
+              "bytes": 23441,
+              "commit": "86bf3067e8fcaea2ad6226bb77adc72fbb2ab95a",
+              "licence": "MIT",
+              "records": 150,
+              "source": "vitejs/vite",
+              "url": "https://github.com/vitejs/vite"
+            },
+            {
+              "bytes": 34389,
+              "commit": "a844adec70ff2802c3b769b47c03a3a52001b84b",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "zephyrproject-rtos/zephyr",
+              "url": "https://github.com/zephyrproject-rtos/zephyr"
+            }
+          ],
+          "sources": 38,
+          "total_bytes": 1232922
+        },
+        "validation": {
+          "record_length": {
+            "max": 400,
+            "mean": 192.29,
+            "median": 180.0,
+            "min": 40,
+            "p95": 374
+          },
+          "records": 2850,
+          "sha256_jsonl": "14603f12d9251142342d00be45f0f456968134bfa99445f5d6b9aac2bce07aa3",
+          "source_list": [
+            {
+              "bytes": 28471,
+              "commit": "6c19e861617a0c5de99aa6af979eaaad00ae2889",
+              "licence": "BSD-2-Clause",
+              "records": 150,
+              "source": "LadybirdBrowser/ladybird",
+              "url": "https://github.com/LadybirdBrowser/ladybird"
+            },
+            {
+              "bytes": 29513,
+              "commit": "d4e0bf0bc80630e48840338fa808edab91ae7537",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "SchemaStore/schemastore",
+              "url": "https://github.com/SchemaStore/schemastore"
+            },
+            {
+              "bytes": 25164,
+              "commit": "cd313f0a8650ded36707a24e2bad61375f1214ce",
+              "licence": "GPL-3",
+              "records": 150,
+              "source": "ansible/ansible",
+              "url": "https://github.com/ansible/ansible"
+            },
+            {
+              "bytes": 18893,
+              "commit": "270a4678661efa02ba51942539a6c433556ed8e4",
+              "licence": "MIT",
+              "records": 150,
+              "source": "babel/babel",
+              "url": "https://github.com/babel/babel"
+            },
+            {
+              "bytes": 19972,
+              "commit": "d8c551b5a5b46d8ec3892a91d0364cfcbca2c681",
+              "licence": "MIT",
+              "records": 150,
+              "source": "denoland/deno",
+              "url": "https://github.com/denoland/deno"
+            },
+            {
+              "bytes": 27690,
+              "commit": "13471d2d5e11def421198551b0fbbe5176ed2c43",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "docker/compose",
+              "url": "https://github.com/docker/compose"
+            },
+            {
+              "bytes": 34835,
+              "commit": "732cb7605ba2c4737382689804edae781a18d995",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "home-assistant/core",
+              "url": "https://github.com/home-assistant/core"
+            },
+            {
+              "bytes": 37668,
+              "commit": "aa88f7cf0bfc7a3a2efbfcab97914886b22d4454",
+              "licence": "MIT",
+              "records": 150,
+              "source": "jestjs/jest",
+              "url": "https://github.com/jestjs/jest"
+            },
+            {
+              "bytes": 30531,
+              "commit": "7b8c4851cdc15ad02fc6a1f189212f1f15a88c00",
+              "licence": "BSD-3-Clause",
+              "records": 150,
+              "source": "jupyterlab/jupyterlab",
+              "url": "https://github.com/jupyterlab/jupyterlab"
+            },
+            {
+              "bytes": 23678,
+              "commit": "17629a941a1cd60b18ee25db5d427d113821379f",
+              "licence": "MIT",
+              "records": 150,
+              "source": "pnpm/pnpm",
+              "url": "https://github.com/pnpm/pnpm"
+            },
+            {
+              "bytes": 35006,
+              "commit": "0b1b23915cc9c94bf2466d63a1e3ea0b0d17dcfd",
+              "licence": "Apache-2.0",
+              "records": 150,
+              "source": "prisma/prisma",
+              "url": "https://github.com/prisma/prisma"
+            },
+            {
+              "bytes": 31609,
+              "commit": "aacaf7206841611e209512ff949c9b6cf6596228",
+              "licence": "GPL-3 / LGPL-3 / MIT",
+              "records": 150,
+              "source": "rescript-lang/rescript",
+              "url": "https://github.com/rescript-lang/rescript"
+            },
+            {
+              "bytes": 38954,
+              "commit": "3afa016bbe6eb13418fba6eaca003c660bc4c241",
+              "licence": "MIT",
+              "records": 150,
+              "source": "svaarala/duktape",
+              "url": "https://github.com/svaarala/duktape"
+            },
+            {
+              "bytes": 19496,
+              "commit": "96fd088448ec0f4d9f061c730ed7854399c46faf",
+              "licence": "MIT",
+              "records": 150,
+              "source": "toml-lang/toml-test",
+              "url": "https://github.com/toml-lang/toml-test"
+            },
+            {
+              "bytes": 34414,
+              "commit": "f6d113b3aa64ac07533a727fbf81774e8de81e67",
+              "licence": "MIT",
+              "records": 150,
+              "source": "trpc/trpc",
+              "url": "https://github.com/trpc/trpc"
+            },
+            {
+              "bytes": 23084,
+              "commit": "07ba66de8f31315facaa9adee6d64ea91d590ffb",
+              "licence": "MIT",
+              "records": 150,
+              "source": "typescript-eslint/typescript-eslint",
+              "url": "https://github.com/typescript-eslint/typescript-eslint"
+            },
+            {
+              "bytes": 27864,
+              "commit": "c879bd677429193410389be29207da6c44c5aa21",
+              "licence": "GPL-2.0 / MPL-2.0",
+              "records": 150,
+              "source": "vectordotdev/vector",
+              "url": "https://github.com/vectordotdev/vector"
+            },
+            {
+              "bytes": 39806,
+              "commit": "c5f69954a1c2c272c3b96ffd869d2463e80d0886",
+              "licence": "MIT",
+              "records": 150,
+              "source": "visgl/deck.gl",
+              "url": "https://github.com/visgl/deck.gl"
+            },
+            {
+              "bytes": 21377,
+              "commit": "4e6cd8667e4d337ecaa76ef553d997405ac630a3",
+              "licence": "MIT",
+              "records": 150,
+              "source": "webpack/webpack",
+              "url": "https://github.com/webpack/webpack"
+            }
+          ],
+          "sources": 19,
+          "total_bytes": 548025
+        }
+      },
+      "title": "short source and config files"
+    },
+    "w2-message-entries": {
+      "rules": {
+        "cap_choice": "the records with the smallest sha256(salt + record)",
+        "cap_per_source": 150,
+        "duplicates": "one copy per source; a record found in several sources is kept only in the source with the smallest sha256(source name + 0x00 + record)",
+        "max_file_bytes": 8388608,
+        "max_len": 1024,
+        "max_paths": 40,
+        "min_distinct_per_source": 200,
+        "min_len": 40,
+        "record": "one entry of an English message catalogue: for JSON the pair \"key\": \"value\" with nested keys joined by \".\"; for line formats (properties, ini, ftl, strings, php) the stripped key=value line; for Android resources the stripped <string name=\"...\">...</string> line",
+        "record_filter": "valid UTF-8, no NUL byte, length within min_len..max_len bytes",
+        "shared_collections": "two sources that share 5% or more of the smaller one's eligible records count as one collection; the larger one is not used",
+        "source_unit": "project",
+        "title": "key-value message entries"
+      },
+      "sources_total": 131,
+      "splits": {
+        "test": {
+          "record_length": {
+            "max": 805,
+            "mean": 82.72,
+            "median": 67.0,
+            "min": 40,
+            "p95": 176
+          },
+          "records": 4950,
+          "sha256_salt_sorted_test_sources": "03d5c30413b5eda9e1c37fceafa5c070f4d812e6450ba0978353d3b9c4ea930a",
+          "sha256_test_jsonl": "4f5af669106af4194be64e3564f4345076fdd1d23f58a213ed4eb59f5ab0cb9d",
+          "sources": 33,
+          "total_bytes": 409487
+        },
+        "train": {
+          "record_length": {
+            "max": 1011,
+            "mean": 78.85,
+            "median": 62.0,
+            "min": 40,
+            "p95": 171
+          },
+          "records": 9750,
+          "sha256_jsonl": "2649f6dbc892e3a28b2ee2ea3a1a5016444a85543d6a228f7f1a29ba02691ad8",
+          "source_list": [
+            {
+              "bytes": 21180,
+              "commit": "57a4e06a4caf162446d1c28caa7983f0493fecf0",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "core/src/main/assets/messages/actors/actors.properties",
+                  "core/src/main/assets/messages/items/items.properties",
+                  "core/src/main/assets/messages/journal/journal.properties",
+                  "core/src/main/assets/messages/levels/levels.properties",
+                  "core/src/main/assets/messages/misc/misc.properties",
+                  "core/src/main/assets/messages/plants/plants.properties",
+                  "core/src/main/assets/messages/scenes/scenes.properties",
+                  "core/src/main/assets/messages/ui/ui.properties",
+                  "core/src/main/assets/messages/windows/windows.properties"
+                ]
+              },
+              "records": 150,
+              "source": "00-Evan/shattered-pixel-dungeon",
+              "url": "https://github.com/00-Evan/shattered-pixel-dungeon"
+            },
+            {
+              "bytes": 11353,
+              "commit": "5fa043e90a0cc3567455b2c793be425de510435c",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "V2rayNG/app/src/dev/res/values/strings.xml",
+                  "V2rayNG/app/src/fdroid/res/values/strings.xml",
+                  "V2rayNG/app/src/main/res/values/strings.xml",
+                  "V2rayNG/app/src/pre_release/res/values/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "2dust/v2rayNG",
+              "url": "https://github.com/2dust/v2rayNG"
+            },
+            {
+              "bytes": 11910,
+              "commit": "dbbe6215277ae3993c6df3f33350bf8cacfe826a",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "client/src/__locales/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "AdguardTeam/AdGuardHome",
+              "url": "https://github.com/AdguardTeam/AdGuardHome"
+            },
+            {
+              "bytes": 13221,
+              "commit": "19a0f40d44514f4802a8b79770456e7e32e34da0",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "core/assets/bundles/bundle.properties"
+                ]
+              },
+              "records": 150,
+              "source": "Anuken/Mindustry",
+              "url": "https://github.com/Anuken/Mindustry"
+            },
+            {
+              "bytes": 10196,
+              "commit": "8fcee27d9bd93aad4ee0191d5d8d915d6a9a4e93",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "frontend/resources/translations/en-US.json"
+                ]
+              },
+              "records": 150,
+              "source": "AppFlowy-IO/AppFlowy",
+              "url": "https://github.com/AppFlowy-IO/AppFlowy"
+            },
+            {
+              "bytes": 9313,
+              "commit": "88b7c411ba5ab2d089b9a7529c070afd0e74c45f",
+              "licence": "LGPL-3",
+              "params": {
+                "paths": [
+                  "src/generated/resources/assets/ae2/lang/en_us.json"
+                ]
+              },
+              "records": 150,
+              "source": "AppliedEnergistics/Applied-Energistics-2",
+              "url": "https://github.com/AppliedEnergistics/Applied-Energistics-2"
+            },
+            {
+              "bytes": 18800,
+              "commit": "446bcf43e7a89a0411218821de54d87d7f3cfe11",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "packages/chatbox-i18n/src/locales/en/translation.json"
+                ]
+              },
+              "records": 150,
+              "source": "Bin-Huang/chatbox",
+              "url": "https://github.com/Bin-Huang/chatbox"
+            },
+            {
+              "bytes": 13650,
+              "commit": "bbf8889c1ea7ae1bfce941cdcf675d460492cc53",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "jablib/src/main/resources/l10n/JabRef_en.properties"
+                ]
+              },
+              "records": 150,
+              "source": "JabRef/jabref",
+              "url": "https://github.com/JabRef/jabref"
+            },
+            {
+              "bytes": 13249,
+              "commit": "e7e5de62a17c7febdca11d444296379a150ef8c8",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "apps/ledger-live-desktop/static/i18n/en/app.json"
+                ]
+              },
+              "records": 150,
+              "source": "LedgerHQ/ledger-live",
+              "url": "https://github.com/LedgerHQ/ledger-live"
+            },
+            {
+              "bytes": 9300,
+              "commit": "33c929ae6c3372c38feffadaa8af71fcbc21f446",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "backend/en.json",
+                  "frontend/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "LemmyNet/lemmy-translations",
+              "url": "https://github.com/LemmyNet/lemmy-translations"
+            },
+            {
+              "bytes": 9185,
+              "commit": "ea81d6cbdcb56b81fc20e2b466f6af6a8ad42293",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "src/assets/locales/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "Lissy93/dashy",
+              "url": "https://github.com/Lissy93/dashy"
+            },
+            {
+              "bytes": 10786,
+              "commit": "4964ed4aaca63db51be33f08079747ab6400f6b5",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "platform/i18n/src/locales/en-US/AboutModal.json",
+                  "platform/i18n/src/locales/en-US/AppearanceModal.json",
+                  "platform/i18n/src/locales/en-US/Buttons.json",
+                  "platform/i18n/src/locales/en-US/CaptureViewportModal.json",
+                  "platform/i18n/src/locales/en-US/CineDialog.json",
+                  "platform/i18n/src/locales/en-US/Colormaps.json",
+                  "platform/i18n/src/locales/en-US/Common.json",
+                  "platform/i18n/src/locales/en-US/DataRow.json",
+                  "platform/i18n/src/locales/en-US/DataSourceConfiguration.json",
+                  "platform/i18n/src/locales/en-US/DataTable.json",
+                  "platform/i18n/src/locales/en-US/DatePicker.json",
+                  "platform/i18n/src/locales/en-US/EncapsulatedDocument.json",
+                  "platform/i18n/src/locales/en-US/ErrorBoundary.json",
+                  "platform/i18n/src/locales/en-US/Header.json",
+                  "platform/i18n/src/locales/en-US/HotkeysValidators.json",
+                  "platform/i18n/src/locales/en-US/Hps.json",
+                  "platform/i18n/src/locales/en-US/MeasurementTable.json",
+                  "platform/i18n/src/locales/en-US/Messages.json",
+                  "platform/i18n/src/locales/en-US/Modes.json",
+                  "platform/i18n/src/locales/en-US/Onboarding.json",
+                  "platform/i18n/src/locales/en-US/PanelSUV.json",
+                  "platform/i18n/src/locales/en-US/ROIThresholdConfiguration.json",
+                  "platform/i18n/src/locales/en-US/SegmentationPanel.json",
+                  "platform/i18n/src/locales/en-US/SidePanel.json",
+                  "platform/i18n/src/locales/en-US/StudyBrowser.json",
+                  "platform/i18n/src/locales/en-US/StudyItem.json",
+                  "platform/i18n/src/locales/en-US/StudyList.json",
+                  "platform/i18n/src/locales/en-US/ThumbnailTracked.json",
+                  "platform/i18n/src/locales/en-US/ToolbarLayoutSelector.json",
+                  "platform/i18n/src/locales/en-US/Tools.json",
+                  "platform/i18n/src/locales/en-US/TooltipClipboard.json",
+                  "platform/i18n/src/locales/en-US/TrackedCornerstoneViewport.json",
+                  "platform/i18n/src/locales/en-US/USAnnotationPanel.json",
+                  "platform/i18n/src/locales/en-US/UserPreferencesModal.json",
+                  "platform/i18n/src/locales/en-US/ViewportDownloadForm.json",
+                  "platform/i18n/src/locales/en-US/WindowLevelActionMenu.json"
+                ]
+              },
+              "records": 150,
+              "source": "OHIF/Viewers",
+              "url": "https://github.com/OHIF/Viewers"
+            },
+            {
+              "bytes": 9461,
+              "commit": "3855cacf0bc00785da32276632620cdecd78419d",
+              "licence": "GPL-2",
+              "params": {
+                "paths": [
+                  "src/Ombi/wwwroot/translations/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "Ombi-app/Ombi",
+              "url": "https://github.com/Ombi-app/Ombi"
+            },
+            {
+              "bytes": 12599,
+              "commit": "b1735fb41484ea814c4f160808747a70ac07b5ba",
+              "licence": "LGPL-3",
+              "params": {
+                "paths": [
+                  "sonar-core/src/main/resources/org/sonar/l10n/core.properties"
+                ]
+              },
+              "records": 150,
+              "source": "SonarSource/sonarqube",
+              "url": "https://github.com/SonarSource/sonarqube"
+            },
+            {
+              "bytes": 17748,
+              "commit": "67c3a6ed911bf482cc0f8f280851019314b74c04",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "locales/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "YunoHost/yunohost",
+              "url": "https://github.com/YunoHost/yunohost"
+            },
+            {
+              "bytes": 11922,
+              "commit": "a17ed2374cba71daf6f8495a3c538f146f443844",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "ci/tests/puppeteer/scenarios/custom-fields-login/messages.properties",
+                  "support/cas-server-support-thymeleaf/src/main/resources/messages.properties"
+                ]
+              },
+              "records": 150,
+              "source": "apereo/cas",
+              "url": "https://github.com/apereo/cas"
+            },
+            {
+              "bytes": 14066,
+              "commit": "182e91f524dea300c8e7e8a5bc9e3a9f4e45721e",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "app/src/main/res/values/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "beemdevelopment/Aegis",
+              "url": "https://github.com/beemdevelopment/Aegis"
+            },
+            {
+              "bytes": 10950,
+              "commit": "7cb855a821ba559831251c8d0d9ed6056032250a",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "core/src/main/resources/i18n/displayStrings.properties"
+                ]
+              },
+              "records": 150,
+              "source": "bisq-network/bisq",
+              "url": "https://github.com/bisq-network/bisq"
+            },
+            {
+              "bytes": 12785,
+              "commit": "2e57ea5e25331117e977305383a0b064fce94dce",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "web/src/locales/en/data.json"
+                ]
+              },
+              "records": 150,
+              "source": "casdoor/casdoor",
+              "url": "https://github.com/casdoor/casdoor"
+            },
+            {
+              "bytes": 10921,
+              "commit": "52bb25531c694235f13fda0fd5963807f2a0b64b",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "src/locales/en/connections.json",
+                  "src/locales/en/home.json",
+                  "src/locales/en/layout.json",
+                  "src/locales/en/logs.json",
+                  "src/locales/en/profiles.json",
+                  "src/locales/en/proxies.json",
+                  "src/locales/en/rules.json",
+                  "src/locales/en/settings.json",
+                  "src/locales/en/shared.json",
+                  "src/locales/en/tests.json"
+                ]
+              },
+              "records": 150,
+              "source": "clash-verge-rev/clash-verge-rev",
+              "url": "https://github.com/clash-verge-rev/clash-verge-rev"
+            },
+            {
+              "bytes": 11721,
+              "commit": "84505d138a74260545ee7a8e8f80263bf4f7d3b0",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "src/main/resources/i18n/strings.properties"
+                ]
+              },
+              "records": 150,
+              "source": "cryptomator/cryptomator",
+              "url": "https://github.com/cryptomator/cryptomator"
+            },
+            {
+              "bytes": 11473,
+              "commit": "72e44852d72401dd68d78c642d1548e4be84921a",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "paths": [
+                  "dhis-2/dhis-services/dhis-service-core/src/main/resources/i18n_global.properties"
+                ]
+              },
+              "records": 150,
+              "source": "dhis2/dhis2-core",
+              "url": "https://github.com/dhis2/dhis2-core"
+            },
+            {
+              "bytes": 10193,
+              "commit": "8de945567a222fb0febdd766a4c946723ee0edc2",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "web/packages/base/locales/en-US/translation.json"
+                ]
+              },
+              "records": 150,
+              "source": "ente-io/ente",
+              "url": "https://github.com/ente-io/ente"
+            },
+            {
+              "bytes": 11272,
+              "commit": "9f78b1e5fd31479cc2fc2df1abe75e06f5273575",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "src/locales/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "ether/etherpad-lite",
+              "url": "https://github.com/ether/etherpad-lite"
+            },
+            {
+              "bytes": 13406,
+              "commit": "4c579f41036fe4866f5fd3f2bd9e727ee2da4260",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "paths": [
+                  "client/i18n/locales/english/translations.json"
+                ]
+              },
+              "records": 150,
+              "source": "freeCodeCamp/freeCodeCamp",
+              "url": "https://github.com/freeCodeCamp/freeCodeCamp"
+            },
+            {
+              "bytes": 10455,
+              "commit": "432ebd98cb9a964adee5a45a0dc718969f8c8675",
+              "licence": "GPL-2.0 / MIT / Apache-2.0 / BSD-3-Clause / EPL / Artistic",
+              "params": {
+                "paths": [
+                  "src/community/acl/web/src/main/resources/GeoServerApplication.properties",
+                  "src/community/backup-restore/web/src/main/resources/GeoServerApplication.properties",
+                  "src/community/cog/cog-core/src/main/resources/GeoServerApplication.properties",
+                  "src/community/dyndimension/src/main/resources/GeoServerApplication.properties",
+                  "src/community/elasticsearch/src/main/resources/GeoServerApplication.properties",
+                  "src/community/features-templating/features-templating-web/src/main/resources/GeoServerApplication.properties",
+                  "src/community/fips/web-fips/src/main/resources/GeoServerApplication.properties",
+                  "src/community/geoparquet/src/main/resources/GeoServerApplication.properties",
+                  "src/community/graticule/src/main/resources/GeoServerApplication.properties",
+                  "src/community/gwc-gcs-blob/src/main/resources/GeoServerApplication.properties",
+                  "src/community/jwt-headers/gs-jwt-headers/src/main/resources/GeoServerApplication.properties",
+                  "src/community/libdeflate/src/main/resources/GeoServerApplication.properties",
+                  "src/community/ogcapi/web-maps/src/main/resources/GeoServerApplication.properties",
+                  "src/community/oseo/web-oseo/src/main/resources/GeoServerApplication.properties",
+                  "src/community/proxy-base-ext/src/main/resources/GeoServerApplication.properties",
+                  "src/community/taskmanager/core/src/main/resources/GeoServerApplication.properties",
+                  "src/community/updates-checker/src/main/java/GeoServerApplication.properties",
+                  "src/community/vsi/src/main/resources/GeoServerApplication.properties",
+                  "src/community/web-service-auth/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/authkey/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/csw/web-csw/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/excel-wfs/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/geofence/geofence-server/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/geofence/geofence/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/geopkg-output/wfs/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/geopkg-output/wms/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/importer/web/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/inspire/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/netcdf-out/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/ogr/ogr-wfs/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/rat/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/security/cas/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/security/oidc-web/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/vectortiles/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/web-resource/src/main/resources/GeoServerApplication.properties",
+                  "src/extension/wps-download/src/main/resources/GeoServerApplication.properties",
+                  "src/security/ldap/src/main/resources/GeoServerApplication.properties",
+                  "src/web/rest/src/main/resources/GeoServerApplication.properties",
+                  "src/web/wcs/src/main/resources/GeoServerApplication.properties",
+                  "src/web/wms/src/main/resources/GeoServerApplication.properties"
+                ]
+              },
+              "records": 150,
+              "source": "geoserver/geoserver",
+              "url": "https://github.com/geoserver/geoserver"
+            },
+            {
+              "bytes": 11837,
+              "commit": "a46dea66514b86cee5b58e137c3e020db6967dd2",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "options/locale/locale_en-US.json"
+                ]
+              },
+              "records": 150,
+              "source": "go-gitea/gitea",
+              "url": "https://github.com/go-gitea/gitea"
+            },
+            {
+              "bytes": 10966,
+              "commit": "094af82c3a014e6b991fcc914febe1b162178b2f",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "frontend/src/i18n/lang/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "go-vikunja/vikunja",
+              "url": "https://github.com/go-vikunja/vikunja"
+            },
+            {
+              "bytes": 9597,
+              "commit": "19cb01b005af7f8299bc08adc2f09c339cbeb924",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "komga-webui/src/locales/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "gotson/komga",
+              "url": "https://github.com/gotson/komga"
+            },
+            {
+              "bytes": 11160,
+              "commit": "c7d848199975d9cdcbc9e9025d6ea9191540688c",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "packages/translation/src/lang/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "homarr-labs/homarr",
+              "url": "https://github.com/homarr-labs/homarr"
+            },
+            {
+              "bytes": 9885,
+              "commit": "d71bb5c0feca2dbd9871a97f9091ad44d1079c1d",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "iina/Base.lproj/FilterPresets.strings",
+                  "iina/Base.lproj/InfoPlist.strings",
+                  "iina/Base.lproj/KeyBinding.strings",
+                  "iina/Base.lproj/Localizable.strings",
+                  "iina/en.lproj/FilterPresets.strings",
+                  "iina/en.lproj/FilterWindowController.strings",
+                  "iina/en.lproj/InfoPlist.strings",
+                  "iina/en.lproj/KeyBinding.strings",
+                  "iina/en.lproj/Localizable.strings",
+                  "iina/en.lproj/MainMenu.strings",
+                  "iina/en.lproj/MainWindowController.strings",
+                  "iina/en.lproj/MiniPlayerWindowController.strings",
+                  "iina/en.lproj/OpenURLWindowController.strings",
+                  "iina/en.lproj/PrefOSCToolbarSettingsSheetController.strings"
+                ]
+              },
+              "records": 150,
+              "source": "iina/iina",
+              "url": "https://github.com/iina/iina"
+            },
+            {
+              "bytes": 11865,
+              "commit": "7b27863b13d7ec52340e87637d71a39aa8d7efc0",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "i18n/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "immich-app/immich",
+              "url": "https://github.com/immich-app/immich"
+            },
+            {
+              "bytes": 11303,
+              "commit": "1bd3954850c1eb1efac041854f8f0ba098f1b47a",
+              "licence": "Apache-2.0 / BSD-3-Clause",
+              "params": {
+                "paths": [
+                  "invokeai/frontend/webv2/public/locales/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "invoke-ai/InvokeAI",
+              "url": "https://github.com/invoke-ai/InvokeAI"
+            },
+            {
+              "bytes": 11838,
+              "commit": "49a84bdeaebdfc0f36c00f252eb638f516a48432",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "web-app/src/locales/en/assistants.json",
+                  "web-app/src/locales/en/chat.json",
+                  "web-app/src/locales/en/common.json",
+                  "web-app/src/locales/en/extensions.json",
+                  "web-app/src/locales/en/hub.json",
+                  "web-app/src/locales/en/logs.json",
+                  "web-app/src/locales/en/mcp-servers.json",
+                  "web-app/src/locales/en/model-errors.json",
+                  "web-app/src/locales/en/provider.json",
+                  "web-app/src/locales/en/providers.json",
+                  "web-app/src/locales/en/settings.json",
+                  "web-app/src/locales/en/setup.json",
+                  "web-app/src/locales/en/system-monitor.json",
+                  "web-app/src/locales/en/tools.json",
+                  "web-app/src/locales/en/updater.json"
+                ]
+              },
+              "records": 150,
+              "source": "janhq/jan",
+              "url": "https://github.com/janhq/jan"
+            },
+            {
+              "bytes": 11504,
+              "commit": "3209f9a6edadeb5ae84faa8786b2783333e822b1",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "core/src/main/resources/hudson/cli/Messages.properties",
+                  "core/src/main/resources/hudson/fsp/Messages.properties",
+                  "core/src/main/resources/hudson/lifecycle/Messages.properties",
+                  "core/src/main/resources/hudson/model/queue/Messages.properties",
+                  "core/src/main/resources/hudson/model/userproperty/Messages.properties",
+                  "core/src/main/resources/hudson/node_monitors/Messages.properties",
+                  "core/src/main/resources/hudson/scheduler/Messages.properties",
+                  "core/src/main/resources/hudson/scm/Messages.properties",
+                  "core/src/main/resources/hudson/search/Messages.properties",
+                  "core/src/main/resources/hudson/security/Messages.properties",
+                  "core/src/main/resources/hudson/security/csrf/Messages.properties",
+                  "core/src/main/resources/hudson/slaves/Messages.properties",
+                  "core/src/main/resources/hudson/tasks/Messages.properties",
+                  "core/src/main/resources/hudson/tools/Messages.properties",
+                  "core/src/main/resources/hudson/triggers/Messages.properties",
+                  "core/src/main/resources/hudson/util/Messages.properties",
+                  "core/src/main/resources/hudson/views/Messages.properties",
+                  "core/src/main/resources/hudson/widgets/Messages.properties",
+                  "core/src/main/resources/jenkins/appearance/Messages.properties",
+                  "core/src/main/resources/jenkins/console/Messages.properties",
+                  "core/src/main/resources/jenkins/diagnostics/Messages.properties",
+                  "core/src/main/resources/jenkins/fingerprints/Messages.properties",
+                  "core/src/main/resources/jenkins/install/Messages.properties",
+                  "core/src/main/resources/jenkins/management/Messages.properties",
+                  "core/src/main/resources/jenkins/model/Messages.properties",
+                  "core/src/main/resources/jenkins/model/agent/Messages.properties",
+                  "core/src/main/resources/jenkins/model/details/Messages.properties",
+                  "core/src/main/resources/jenkins/model/item_category/Messages.properties",
+                  "core/src/main/resources/jenkins/model/job/Messages.properties",
+                  "core/src/main/resources/jenkins/model/run/Messages.properties",
+                  "core/src/main/resources/jenkins/mvn/Messages.properties",
+                  "core/src/main/resources/jenkins/search/Messages.properties",
+                  "core/src/main/resources/jenkins/security/Messages.properties",
+                  "core/src/main/resources/jenkins/security/apitoken/Messages.properties",
+                  "core/src/main/resources/jenkins/security/csp/impl/Messages.properties",
+                  "core/src/main/resources/jenkins/security/csrf/Messages.properties",
+                  "core/src/main/resources/jenkins/security/seed/Messages.properties",
+                  "core/src/main/resources/jenkins/slaves/systemInfo/Messages.properties",
+                  "core/src/main/resources/jenkins/tasks/filters/impl/Messages.properties",
+                  "core/src/main/resources/jenkins/triggers/Messages.properties"
+                ]
+              },
+              "records": 150,
+              "source": "jenkinsci/jenkins",
+              "url": "https://github.com/jenkinsci/jenkins"
+            },
+            {
+              "bytes": 11675,
+              "commit": "f411a11f4f6b8994d869bdbc45f4d4d9e2284f34",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "src/main/webapp/resources/dia.txt"
+                ]
+              },
+              "records": 150,
+              "source": "jgraph/drawio",
+              "url": "https://github.com/jgraph/drawio"
+            },
+            {
+              "bytes": 11204,
+              "commit": "13fe8ff33b3e27088570002e3197527ef53f1151",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "ui/src/translations/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "kestra-io/kestra",
+              "url": "https://github.com/kestra-io/kestra"
+            },
+            {
+              "bytes": 13177,
+              "commit": "4a02c005e990fd7d2572a7e54832d29e24d6cc9b",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "app/src/main/res/values/strings.xml",
+                  "branded/src/main/res/values/strings.xml",
+                  "core/src/main/res/values/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "kiwix/kiwix-android",
+              "url": "https://github.com/kiwix/kiwix-android"
+            },
+            {
+              "bytes": 10437,
+              "commit": "ee5fa3eefc8c615df9507ab44714d1917533c2b8",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "app/src/main/res/values/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "libre-tube/LibreTube",
+              "url": "https://github.com/libre-tube/LibreTube"
+            },
+            {
+              "bytes": 12000,
+              "commit": "8c079b8d4fb287816ddb02792c2a7fe12a5d5323",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "src/lang/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "louislam/uptime-kuma",
+              "url": "https://github.com/louislam/uptime-kuma"
+            },
+            {
+              "bytes": 12868,
+              "commit": "4721f2e7060e2bec35f1d8c2d32683d49ea78760",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "data/web/lang/lang.en-gb.json"
+                ]
+              },
+              "records": 150,
+              "source": "mailcow/mailcow-dockerized",
+              "url": "https://github.com/mailcow/mailcow-dockerized"
+            },
+            {
+              "bytes": 12349,
+              "commit": "3653211e753e508ee94aeeda617fa828a15da3b4",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "app/javascript/mastodon/locales/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "mastodon/mastodon",
+              "url": "https://github.com/mastodon/mastodon"
+            },
+            {
+              "bytes": 11812,
+              "commit": "19e12a4fdb8517dc697aec899261307887691ab5",
+              "licence": "GPL-3 / Apache-2.0",
+              "params": {
+                "paths": [
+                  "app/bundles/ApiBundle/Translations/en_US/flashes.ini",
+                  "app/bundles/AssetBundle/Translations/en_US/flashes.ini",
+                  "app/bundles/AssetBundle/Translations/en_US/messages.ini",
+                  "app/bundles/AssetBundle/Translations/en_US/validators.ini",
+                  "app/bundles/CampaignBundle/Translations/en_US/javascript.ini",
+                  "app/bundles/CampaignBundle/Translations/en_US/validators.ini",
+                  "app/bundles/CategoryBundle/Translations/en_US/flashes.ini",
+                  "app/bundles/CategoryBundle/Translations/en_US/messages.ini",
+                  "app/bundles/ChannelBundle/Translations/en_US/validators.ini",
+                  "app/bundles/ConfigBundle/Translations/en_US/flashes.ini",
+                  "app/bundles/ConfigBundle/Translations/en_US/javascript.ini",
+                  "app/bundles/CoreBundle/Translations/en_US/messages.ini",
+                  "app/bundles/DashboardBundle/Translations/en_US/messages.ini",
+                  "app/bundles/DynamicContentBundle/Translations/en_US/validators.ini",
+                  "app/bundles/EmailBundle/Translations/en_US/flashes.ini",
+                  "app/bundles/EmailBundle/Translations/en_US/javascript.ini",
+                  "app/bundles/EmailBundle/Translations/en_US/messages.ini",
+                  "app/bundles/InstallBundle/Translations/en_US/fixtures.ini",
+                  "app/bundles/InstallBundle/Translations/en_US/messages.ini",
+                  "app/bundles/LeadBundle/Translations/en_US/javascript.ini",
+                  "app/bundles/LeadBundle/Translations/en_US/messages.ini",
+                  "app/bundles/NotificationBundle/Translations/en_US/flashes.ini",
+                  "app/bundles/NotificationBundle/Translations/en_US/messages.ini",
+                  "app/bundles/NotificationBundle/Translations/en_US/validators.ini",
+                  "app/bundles/PageBundle/Translations/en_US/validators.ini",
+                  "app/bundles/PluginBundle/Translations/en_US/flashes.ini",
+                  "app/bundles/PluginBundle/Translations/en_US/messages.ini",
+                  "app/bundles/PluginBundle/Translations/en_US/validators.ini",
+                  "app/bundles/PointBundle/Translations/en_US/validators.ini",
+                  "app/bundles/ProjectBundle/Translations/en_US/messages.ini",
+                  "app/bundles/ProjectBundle/Translations/en_US/validators.ini",
+                  "app/bundles/ReportBundle/Translations/en_US/flashes.ini",
+                  "app/bundles/ReportBundle/Translations/en_US/messages.ini",
+                  "app/bundles/ReportBundle/Translations/en_US/validators.ini",
+                  "app/bundles/SmsBundle/Translations/en_US/flashes.ini",
+                  "app/bundles/SmsBundle/Translations/en_US/messages.ini",
+                  "app/bundles/SmsBundle/Translations/en_US/validators.ini",
+                  "app/bundles/StageBundle/Translations/en_US/messages.ini",
+                  "app/bundles/UserBundle/Translations/en_US/flashes.ini",
+                  "app/bundles/WebhookBundle/Translations/en_US/flashes.ini"
+                ]
+              },
+              "records": 150,
+              "source": "mautic/mautic",
+              "url": "https://github.com/mautic/mautic"
+            },
+            {
+              "bytes": 13287,
+              "commit": "c3ee357d516a59b13f5d07d49d23b96d15a2e04c",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "frontend/app/lang/messages/en-US.json"
+                ]
+              },
+              "records": 150,
+              "source": "mealie-recipes/mealie",
+              "url": "https://github.com/mealie-recipes/mealie"
+            },
+            {
+              "bytes": 9902,
+              "commit": "f8e30a86086020aaee1e89a9d015373b1a4ff026",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "i18n/src/commonMain/moko-resources/base/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "mihonapp/mihon",
+              "url": "https://github.com/mihonapp/mihon"
+            },
+            {
+              "bytes": 11951,
+              "commit": "7e0fe783245b41a8c3f6b0a81f210bce7975e581",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "public/lang/en/access.php",
+                  "public/lang/en/ai.php",
+                  "public/lang/en/antivirus.php",
+                  "public/lang/en/auth.php",
+                  "public/lang/en/availability.php",
+                  "public/lang/en/backup.php",
+                  "public/lang/en/badges.php",
+                  "public/lang/en/block.php",
+                  "public/lang/en/cache.php",
+                  "public/lang/en/comment.php",
+                  "public/lang/en/completion.php",
+                  "public/lang/en/contentbank.php",
+                  "public/lang/en/courseformat.php",
+                  "public/lang/en/currencies.php",
+                  "public/lang/en/dbtransfer.php",
+                  "public/lang/en/editor.php",
+                  "public/lang/en/enrol.php",
+                  "public/lang/en/external.php",
+                  "public/lang/en/favourites.php",
+                  "public/lang/en/filters.php",
+                  "public/lang/en/grading.php",
+                  "public/lang/en/hub.php",
+                  "public/lang/en/imscc.php",
+                  "public/lang/en/langconfig.php",
+                  "public/lang/en/license.php",
+                  "public/lang/en/media.php",
+                  "public/lang/en/mnet.php",
+                  "public/lang/en/moodle.php",
+                  "public/lang/en/notes.php",
+                  "public/lang/en/pagetype.php",
+                  "public/lang/en/payment.php",
+                  "public/lang/en/plugin.php",
+                  "public/lang/en/portfolio.php",
+                  "public/lang/en/question.php",
+                  "public/lang/en/report.php",
+                  "public/lang/en/reportbuilder.php",
+                  "public/lang/en/search.php",
+                  "public/lang/en/table.php",
+                  "public/lang/en/tag.php",
+                  "public/lang/en/timezones.php"
+                ]
+              },
+              "records": 150,
+              "source": "moodle/moodle",
+              "url": "https://github.com/moodle/moodle"
+            },
+            {
+              "bytes": 12023,
+              "commit": "2b7c945e27f280fcd57ed2c365f870b3592f20cb",
+              "licence": "GPL-2",
+              "params": {
+                "paths": [
+                  "app/src/main/res/values/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "nextcloud/android",
+              "url": "https://github.com/nextcloud/android"
+            },
+            {
+              "bytes": 12583,
+              "commit": "cb41af94cd1e0bece24280e49b846ec5d6e85e47",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "packages/node_modules/@node-red/editor-client/locales/en-US/editor.json",
+                  "packages/node_modules/@node-red/editor-client/locales/en-US/infotips.json",
+                  "packages/node_modules/@node-red/editor-client/locales/en-US/jsonata.json"
+                ]
+              },
+              "records": 150,
+              "source": "node-red/node-red",
+              "url": "https://github.com/node-red/node-red"
+            },
+            {
+              "bytes": 15416,
+              "commit": "4a21fb2780a3a26847ee96a98c49dc3f793c2998",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "src/i18n/locales/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "nurikk/zigbee2mqtt-frontend",
+              "url": "https://github.com/nurikk/zigbee2mqtt-frontend"
+            },
+            {
+              "bytes": 10243,
+              "commit": "ac8fd1018325943308cf82ed87fe79f1d0e4da29",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "upload/admin/language/en-gb/cms/antispam.php",
+                  "upload/admin/language/en-gb/common/forgotten.php",
+                  "upload/admin/language/en-gb/common/header.php",
+                  "upload/admin/language/en-gb/design/banner.php",
+                  "upload/admin/language/en-gb/design/sass.php",
+                  "upload/admin/language/en-gb/design/seo_regex.php",
+                  "upload/admin/language/en-gb/extension/currency.php",
+                  "upload/admin/language/en-gb/extension/feed.php",
+                  "upload/admin/language/en-gb/extension/marketplace.php",
+                  "upload/admin/language/en-gb/extension/shipping.php",
+                  "upload/admin/language/en-gb/localisation/address_format.php",
+                  "upload/admin/language/en-gb/localisation/length_class.php",
+                  "upload/admin/language/en-gb/localisation/stock_status.php",
+                  "upload/admin/language/en-gb/localisation/subscription_status.php",
+                  "upload/admin/language/en-gb/mail/gdpr_deny.php",
+                  "upload/admin/language/en-gb/mail/gdpr_export.php",
+                  "upload/admin/language/en-gb/marketplace/cron.php",
+                  "upload/admin/language/en-gb/sale/subscription.php",
+                  "upload/admin/language/en-gb/setting/setting.php",
+                  "upload/admin/language/en-gb/task/admin/customer_group.php",
+                  "upload/admin/language/en-gb/task/admin/language.php",
+                  "upload/admin/language/en-gb/task/catalog/category.php",
+                  "upload/admin/language/en-gb/task/catalog/comment.php",
+                  "upload/admin/language/en-gb/task/catalog/information.php",
+                  "upload/admin/language/en-gb/task/catalog/manufacturer.php",
+                  "upload/admin/language/en-gb/task/catalog/stock_status.php",
+                  "upload/admin/language/en-gb/task/catalog/stylesheet.php",
+                  "upload/admin/language/en-gb/task/catalog/translation.php",
+                  "upload/catalog/language/en-gb/account/edit.php",
+                  "upload/catalog/language/en-gb/account/payment_method.php",
+                  "upload/catalog/language/en-gb/catalog/compare.php",
+                  "upload/catalog/language/en-gb/catalog/related.php",
+                  "upload/catalog/language/en-gb/catalog/review.php",
+                  "upload/catalog/language/en-gb/catalog/search.php",
+                  "upload/catalog/language/en-gb/checkout/payment_address.php",
+                  "upload/catalog/language/en-gb/checkout/success.php",
+                  "upload/catalog/language/en-gb/default.php",
+                  "upload/catalog/language/en-gb/information/contact.php",
+                  "upload/catalog/language/en-gb/information/gdpr_success.php",
+                  "upload/catalog/language/en-gb/mail/review.php"
+                ]
+              },
+              "records": 150,
+              "source": "opencart/opencart",
+              "url": "https://github.com/opencart/opencart"
+            },
+            {
+              "bytes": 11912,
+              "commit": "bf2af8abaa4680886472afc469b9078c03a80261",
+              "licence": "GPL-2.0 / MPL-2.0 / SPDX-pointer",
+              "params": {
+                "paths": [
+                  "api/src/main/resources/messages.properties"
+                ]
+              },
+              "records": 150,
+              "source": "openmrs/openmrs-core",
+              "url": "https://github.com/openmrs/openmrs-core"
+            },
+            {
+              "bytes": 11848,
+              "commit": "bcb8dd4d6eef17185e8a3c3792ca75b2084c0969",
+              "licence": "GPL-3 / MIT",
+              "params": {
+                "paths": [
+                  "OsmAnd-api/res/values/strings.xml",
+                  "OsmAnd-telegram/res/values/strings.xml",
+                  "OsmAnd/res/values/strings.xml",
+                  "plugins/OsmAnd-AIConnector/res/values/strings.xml",
+                  "plugins/Osmand-Nautical/res/values/strings.xml",
+                  "plugins/Osmand-SRTMPlugin/res/values/strings.xml",
+                  "plugins/Osmand-Skimaps/res/values/strings.xml",
+                  "test/ais/app/src/main/res/values/strings.xml",
+                  "test/ble-sensors/app/src/main/res/values/strings.xml",
+                  "ui-test-app/app/src/main/res/values/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "osmandapp/OsmAnd",
+              "url": "https://github.com/osmandapp/OsmAnd"
+            },
+            {
+              "bytes": 11642,
+              "commit": "ef6e6d5eb8913306f1d2916a99f7810ada94f042",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "backend/locales/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "requarks/wiki",
+              "url": "https://github.com/requarks/wiki"
+            },
+            {
+              "bytes": 8552,
+              "commit": "d2af8ed4cce2ac9883a18d569d4547ddf414d90f",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "program/localization/en_US/csv2vcard.inc",
+                  "program/localization/en_US/labels.inc",
+                  "program/localization/en_US/messages.inc",
+                  "program/localization/en_US/timezones.inc"
+                ]
+              },
+              "records": 150,
+              "source": "roundcube/roundcubemail",
+              "url": "https://github.com/roundcube/roundcubemail"
+            },
+            {
+              "bytes": 11330,
+              "commit": "881559aebc745eb61cb2e35e7b351ddac25caa7e",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "packages/backend/src/modules/i18n/translations/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "runtipi/runtipi",
+              "url": "https://github.com/runtipi/runtipi"
+            },
+            {
+              "bytes": 10827,
+              "commit": "72d3a2a989b865d3d331c663d59128e9f4f69594",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "paths": [
+                  "locale/defaultMessages.json"
+                ]
+              },
+              "records": 150,
+              "source": "saleor/saleor-dashboard",
+              "url": "https://github.com/saleor/saleor-dashboard"
+            },
+            {
+              "bytes": 11144,
+              "commit": "da8afa50b2a59c3aaec78854c0ae8145a16e6cd8",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "app/locales/taiga/locale-en.json"
+                ]
+              },
+              "records": 150,
+              "source": "taigaio/taiga-front",
+              "url": "https://github.com/taigaio/taiga-front"
+            },
+            {
+              "bytes": 13441,
+              "commit": "42d9ac581538936ebb47d48c8f09c9e4ef73bdad",
+              "licence": "AGPL-3 / AGPL / MIT",
+              "params": {
+                "paths": [
+                  "packages/common-i18n/src/locales/en/auth.json",
+                  "packages/common-i18n/src/locales/en/chart.json",
+                  "packages/common-i18n/src/locales/en/common.json",
+                  "packages/common-i18n/src/locales/en/dashboard.json",
+                  "packages/common-i18n/src/locales/en/developer.json",
+                  "packages/common-i18n/src/locales/en/oauth.json",
+                  "packages/common-i18n/src/locales/en/plugin.json",
+                  "packages/common-i18n/src/locales/en/sdk.json",
+                  "packages/common-i18n/src/locales/en/setting.json",
+                  "packages/common-i18n/src/locales/en/share.json",
+                  "packages/common-i18n/src/locales/en/space.json",
+                  "packages/common-i18n/src/locales/en/table.json",
+                  "packages/common-i18n/src/locales/en/token.json",
+                  "packages/common-i18n/src/locales/en/zod.json"
+                ]
+              },
+              "records": 150,
+              "source": "teableio/teable",
+              "url": "https://github.com/teableio/teable"
+            },
+            {
+              "bytes": 10934,
+              "commit": "2600e13c7f1cd7d6afdc4bc3d2b04810f3d57662",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "Telegram/Resources/langs/lang.strings"
+                ]
+              },
+              "records": 150,
+              "source": "telegramdesktop/tdesktop",
+              "url": "https://github.com/telegramdesktop/tdesktop"
+            },
+            {
+              "bytes": 9225,
+              "commit": "b68926e25116e51f35eb4ce0aeaf45dfb3b3449d",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "snappymail/v/0.0.0/app/localization/en/admin.json",
+                  "snappymail/v/0.0.0/app/localization/en/static.json",
+                  "snappymail/v/0.0.0/app/localization/en/user.json"
+                ]
+              },
+              "records": 150,
+              "source": "the-djmaze/snappymail",
+              "url": "https://github.com/the-djmaze/snappymail"
+            },
+            {
+              "bytes": 10795,
+              "commit": "dbb8d606fbd4e99220fb83bcb4abad3e0f97f42a",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "public/intl/messages/en-US.json"
+                ]
+              },
+              "records": 150,
+              "source": "umami-software/umami",
+              "url": "https://github.com/umami-software/umami"
+            },
+            {
+              "bytes": 9924,
+              "commit": "44d6c4f38b590d63d20b81a6bdedcae35bb5413c",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "web/src/locales/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "usememos/memos",
+              "url": "https://github.com/usememos/memos"
+            },
+            {
+              "bytes": 10516,
+              "commit": "6f06739a8869127f38818accdb4c3414aefb2ced",
+              "licence": "GPL-2",
+              "params": {
+                "paths": [
+                  "application/live-plot-graph/src/main/res/values/strings.xml",
+                  "application/resources/src/main/res/values/strings.xml",
+                  "medialibrary/res/values/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "videolan/vlc-android",
+              "url": "https://github.com/videolan/vlc-android"
+            },
+            {
+              "bytes": 10815,
+              "commit": "d2b50a502e848742aab0d116e034c1f736ef1646",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "paths": [
+                  "adsl-client/lang/en",
+                  "apache/lang/en",
+                  "bsdexports/lang/en",
+                  "change-user/lang/en",
+                  "cluster-usermin/lang/en",
+                  "cpan/lang/en",
+                  "custom/lang/en",
+                  "dfsadmin/lang/en",
+                  "exports/lang/en",
+                  "fdisk/lang/en",
+                  "filter/lang/en",
+                  "firewall/lang/en",
+                  "firewalld/lang/en",
+                  "gray-theme/lang/en",
+                  "grub2/lang/en",
+                  "htpasswd-file/lang/en",
+                  "idmapd/lang/en",
+                  "inetd/lang/en",
+                  "iscsi-tgtd/lang/en",
+                  "ldap-server/lang/en",
+                  "lpadmin/lang/en",
+                  "man/lang/en",
+                  "nftables/lang/en",
+                  "pam/lang/en",
+                  "pap/lang/en",
+                  "phpini/lang/en",
+                  "postfix/lang/en",
+                  "samba/lang/en",
+                  "sendmail/lang/en",
+                  "servers/lang/en",
+                  "shorewall/lang/en",
+                  "software/lang/en",
+                  "spam/lang/en",
+                  "sshd/lang/en",
+                  "stunnel/lang/en",
+                  "tcpwrappers/lang/en",
+                  "tunnel/lang/en",
+                  "webalizer/lang/en",
+                  "webmincron/lang/en",
+                  "zones/lang/en"
+                ]
+              },
+              "records": 150,
+              "source": "webmin/webmin",
+              "url": "https://github.com/webmin/webmin"
+            },
+            {
+              "bytes": 13903,
+              "commit": "53b7b683d60fa5e508735fa8effc4502678f585c",
+              "licence": "GPL-2",
+              "params": {
+                "paths": [
+                  "languages/i18n/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "wikimedia/mediawiki",
+              "url": "https://github.com/wikimedia/mediawiki"
+            }
+          ],
+          "sources": 65,
+          "total_bytes": 768805
+        },
+        "validation": {
+          "record_length": {
+            "max": 957,
+            "mean": 79.84,
+            "median": 65.0,
+            "min": 40,
+            "p95": 166
+          },
+          "records": 4950,
+          "sha256_jsonl": "a237bfe88b100add24cd91e9c3381047a0c0d34f9de602a521f7c4fdd62e6c5e",
+          "source_list": [
+            {
+              "bytes": 11342,
+              "commit": "c5c1aeb442a1c94278558acb76db23d8ec43e07f",
+              "licence": "GPL-3 / MIT",
+              "params": {
+                "paths": [
+                  "ui/i18n/src/main/res/values/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "AntennaPod/AntennaPod",
+              "url": "https://github.com/AntennaPod/AntennaPod"
+            },
+            {
+              "bytes": 11571,
+              "commit": "b9057c9400a413718bfb3a00c52d042c8ff6cf54",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "src/locales/en/main.json"
+                ]
+              },
+              "records": 150,
+              "source": "Comfy-Org/ComfyUI_frontend",
+              "url": "https://github.com/Comfy-Org/ComfyUI_frontend"
+            },
+            {
+              "bytes": 11108,
+              "commit": "37ea4afcfe5bf85875d4b0749798a45330070a1f",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "src/generated/resources/assets/create/lang/en_us.json"
+                ]
+              },
+              "records": 150,
+              "source": "Creators-of-Create/Create",
+              "url": "https://github.com/Creators-of-Create/Create"
+            },
+            {
+              "bytes": 10843,
+              "commit": "7fcf1085a5355a8c592d17adcfbb28b69276ae40",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "UI/Web/src/assets/langs/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "Kareadita/Kavita",
+              "url": "https://github.com/Kareadita/Kavita"
+            },
+            {
+              "bytes": 14026,
+              "commit": "2b749836c96bed82f0ed8fedabb7291e97a685f3",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "app/Language/en-US.ini"
+                ]
+              },
+              "records": 150,
+              "source": "Leantime/leantime",
+              "url": "https://github.com/Leantime/leantime"
+            },
+            {
+              "bytes": 12287,
+              "commit": "07923a014193e1d9ecbdecbeed211fc78832a18c",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "app/src/main/res/values/strings.xml",
+                  "openpgp-api/src/main/res/values/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "M66B/FairEmail",
+              "url": "https://github.com/M66B/FairEmail"
+            },
+            {
+              "bytes": 10998,
+              "commit": "dc4154f4c04399602895f31f9390bb66b25ea8a0",
+              "licence": "GPL-3 / SPDX-pointer",
+              "params": {
+                "paths": [
+                  "app/src/main/res/values/strings.xml",
+                  "libcore/ui/src/main/res/values/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "MuntashirAkon/AppManager",
+              "url": "https://github.com/MuntashirAkon/AppManager"
+            },
+            {
+              "bytes": 13229,
+              "commit": "326d4bd3842f4c2150fb945ef758e22a5994f4c0",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "packages/i18n/src/locales/en.i18n.json"
+                ]
+              },
+              "records": 150,
+              "source": "RocketChat/Rocket.Chat",
+              "url": "https://github.com/RocketChat/Rocket.Chat"
+            },
+            {
+              "bytes": 12321,
+              "commit": "62c87aa6b7556e260d5639da1d23240cfba17e6e",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "app/src/main/res/values/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "TeamNewPipe/NewPipe",
+              "url": "https://github.com/TeamNewPipe/NewPipe"
+            },
+            {
+              "bytes": 12108,
+              "commit": "32d0c6eac60e2318fa757d459e724ec7cb3741a5",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "apps/client/src/translations/en/translation.json"
+                ]
+              },
+              "records": 150,
+              "source": "TriliumNext/Trilium",
+              "url": "https://github.com/TriliumNext/Trilium"
+            },
+            {
+              "bytes": 9656,
+              "commit": "5de038dafda294d13ca48861eda7d4405bbd7368",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "client/strings/en-us.json"
+                ]
+              },
+              "records": 150,
+              "source": "advplyr/audiobookshelf",
+              "url": "https://github.com/advplyr/audiobookshelf"
+            },
+            {
+              "bytes": 11271,
+              "commit": "149b1901421281110aa4bf6510a971e9c5f2046d",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "ftl/core/actions.ftl",
+                  "ftl/core/adding.ftl",
+                  "ftl/core/browsing.ftl",
+                  "ftl/core/card-stats.ftl",
+                  "ftl/core/card-template-rendering.ftl",
+                  "ftl/core/card-templates.ftl",
+                  "ftl/core/change-notetype.ftl",
+                  "ftl/core/custom-study.ftl",
+                  "ftl/core/database-check.ftl",
+                  "ftl/core/deck-config.ftl",
+                  "ftl/core/decks.ftl",
+                  "ftl/core/editing.ftl",
+                  "ftl/core/empty-cards.ftl",
+                  "ftl/core/errors.ftl",
+                  "ftl/core/exporting.ftl",
+                  "ftl/core/fields.ftl",
+                  "ftl/core/findreplace.ftl",
+                  "ftl/core/help.ftl",
+                  "ftl/core/importing.ftl",
+                  "ftl/core/keyboard.ftl",
+                  "ftl/core/media-check.ftl",
+                  "ftl/core/media.ftl",
+                  "ftl/core/network.ftl",
+                  "ftl/core/notetypes.ftl",
+                  "ftl/core/preferences.ftl",
+                  "ftl/core/profiles.ftl",
+                  "ftl/core/scheduling.ftl",
+                  "ftl/core/search.ftl",
+                  "ftl/core/statistics.ftl",
+                  "ftl/core/studying.ftl",
+                  "ftl/core/sync.ftl",
+                  "ftl/core/undo.ftl",
+                  "ftl/qt/about.ftl",
+                  "ftl/qt/addons.ftl",
+                  "ftl/qt/errors.ftl",
+                  "ftl/qt/preferences.ftl",
+                  "ftl/qt/profiles.ftl",
+                  "ftl/qt/qt-accel.ftl",
+                  "ftl/qt/qt-misc.ftl"
+                ]
+              },
+              "records": 150,
+              "source": "ankitects/anki",
+              "url": "https://github.com/ankitects/anki"
+            },
+            {
+              "bytes": 13087,
+              "commit": "95db6d4899438b4a9356bfbc67df9969da574f8a",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "locales/en/messages.json"
+                ]
+              },
+              "records": 150,
+              "source": "betaflight/betaflight-configurator",
+              "url": "https://github.com/betaflight/betaflight-configurator"
+            },
+            {
+              "bytes": 13220,
+              "commit": "4b56b6252c0f06805e16f5c904ed13154f690404",
+              "licence": "GPL / GPL-3",
+              "params": {
+                "paths": [
+                  "apps/browser/src/_locales/en/messages.json"
+                ]
+              },
+              "records": 150,
+              "source": "bitwarden/clients",
+              "url": "https://github.com/bitwarden/clients"
+            },
+            {
+              "bytes": 11471,
+              "commit": "ce51a448526b83048be4169597c2d3a78de289c6",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "web-frontend/modules/agent/locales/en.json",
+                  "web-frontend/modules/automation/locales/en.json",
+                  "web-frontend/modules/builder/locales/en.json",
+                  "web-frontend/modules/core/locales/en.json",
+                  "web-frontend/modules/dashboard/locales/en.json",
+                  "web-frontend/modules/database/locales/en.json",
+                  "web-frontend/modules/integrations/locales/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "bram2w/baserow",
+              "url": "https://github.com/bram2w/baserow"
+            },
+            {
+              "bytes": 11002,
+              "commit": "ae027bb70e694e2d2c44569f398d6cbcee0389b1",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "packages/i18n/locales/en/common.json"
+                ]
+              },
+              "records": 150,
+              "source": "calcom/cal.com",
+              "url": "https://github.com/calcom/cal.com"
+            },
+            {
+              "bytes": 10878,
+              "commit": "4700c44eb77c142b4f9f8b87476924f22890eb39",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "client/src/locales/en/translation.json"
+                ]
+              },
+              "records": 150,
+              "source": "danny-avila/LibreChat",
+              "url": "https://github.com/danny-avila/LibreChat"
+            },
+            {
+              "bytes": 12740,
+              "commit": "c956adaa3272a9fe5899d185a16331ec9bcd65f6",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "apps/client/public/locales/en-US/translation.json"
+                ]
+              },
+              "records": 150,
+              "source": "docmost/docmost",
+              "url": "https://github.com/docmost/docmost"
+            },
+            {
+              "bytes": 11285,
+              "commit": "5681e7d8be319092b13979e947afe632d5a4a525",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "packages/excalidraw/locales/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "excalidraw/excalidraw",
+              "url": "https://github.com/excalidraw/excalidraw"
+            },
+            {
+              "bytes": 15242,
+              "commit": "a8d9de9b568b5c2a4c3e39cdd473c8bb987088cc",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "i18n/src/main/resources/openfire_i18n.properties"
+                ]
+              },
+              "records": 150,
+              "source": "igniterealtime/Openfire",
+              "url": "https://github.com/igniterealtime/Openfire"
+            },
+            {
+              "bytes": 9848,
+              "commit": "44f48f18a5503c43873570ff489d27ff1983e198",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "app/assets/i18n/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "localsend/localsend",
+              "url": "https://github.com/localsend/localsend"
+            },
+            {
+              "bytes": 9668,
+              "commit": "98100629a8ab3c6625c82a5ab5b9a82457f415f3",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "l10n/en-US/viewer.ftl"
+                ]
+              },
+              "records": 150,
+              "source": "mozilla/pdf.js",
+              "url": "https://github.com/mozilla/pdf.js"
+            },
+            {
+              "bytes": 11753,
+              "commit": "02bfff09e1cbfd5cb16961074fc39045fb7d96d7",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "src/languages/en_US.json"
+                ]
+              },
+              "records": 150,
+              "source": "rainbow-me/rainbow",
+              "url": "https://github.com/rainbow-me/rainbow"
+            },
+            {
+              "bytes": 11873,
+              "commit": "c0162f2321197a55180d6b0e1cbdfe4f23637e20",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "rundeckapp/grails-app/i18n/messages.properties"
+                ]
+              },
+              "records": 150,
+              "source": "rundeck/rundeck",
+              "url": "https://github.com/rundeck/rundeck"
+            },
+            {
+              "bytes": 13407,
+              "commit": "98ea135f2d370faba0362d259fccf51d8fd44a16",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "src/i18n/locale/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "sct/overseerr",
+              "url": "https://github.com/sct/overseerr"
+            },
+            {
+              "bytes": 12624,
+              "commit": "6a4c7889817447d8156776b1d10d4094a4de24d2",
+              "licence": "MIT",
+              "params": {
+                "paths": [
+                  "src/Administration/Resources/app/administration/src/module/sw-category/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-cms/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-custom-entity/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-dashboard/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-extension-sdk/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-extension/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-flow/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-inactivity-login/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-integration/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-manufacturer/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-newsletter-recipient/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-oauth-authorize/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-order/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-payments/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-product/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-profile/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-promotion-v2/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-review/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-sales-channel/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-basic-information/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-cache/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-cart/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-country/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-customer-group/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-document/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-login-registration/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-mailer/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-measurement/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-media/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-newsletter/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-rule/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-salutation/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-search/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-services/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-shipping/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-sitemap/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-snippet/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings-tax/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-settings/snippet/en.json",
+                  "src/Administration/Resources/app/administration/src/module/sw-sso-error/snippet/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "shopware/shopware",
+              "url": "https://github.com/shopware/shopware"
+            },
+            {
+              "bytes": 17901,
+              "commit": "01e59719454fec204b3f7902fb663d68419848c9",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "_locales/en/messages.json"
+                ]
+              },
+              "records": 150,
+              "source": "signalapp/Signal-Desktop",
+              "url": "https://github.com/signalapp/Signal-Desktop"
+            },
+            {
+              "bytes": 11919,
+              "commit": "d334409de59d1f84e0a28254b1d269fea376bd58",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "apps/multiplatform/common/src/commonMain/moko-resources/base/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "simplex-chat/simplex-chat",
+              "url": "https://github.com/simplex-chat/simplex-chat"
+            },
+            {
+              "bytes": 13033,
+              "commit": "fa96d925c2e3db86859d04995b51cf7cda473d34",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "ui/v2.5/src/locales/en-GB.json"
+                ]
+              },
+              "records": 150,
+              "source": "stashapp/stash",
+              "url": "https://github.com/stashapp/stash"
+            },
+            {
+              "bytes": 12010,
+              "commit": "b4ef98f405240201d1ee709869f2362f836e55d5",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "app/src/commonMain/composeResources/values/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "streetcomplete/StreetComplete",
+              "url": "https://github.com/streetcomplete/StreetComplete"
+            },
+            {
+              "bytes": 9793,
+              "commit": "0117334e935f692d5042cfe9b09a1111f164d6f2",
+              "licence": "GPL-3",
+              "params": {
+                "paths": [
+                  "app/src/main/res/values/strings.xml",
+                  "cert4android/src/androidMain/res/values/strings.xml",
+                  "wear/src/main/res/values/strings.xml"
+                ]
+              },
+              "records": 150,
+              "source": "tasks/tasks",
+              "url": "https://github.com/tasks/tasks"
+            },
+            {
+              "bytes": 10640,
+              "commit": "ba33b167d0dcb1ec569a6fe652db99b4d6428f84",
+              "licence": "Apache-2.0",
+              "params": {
+                "paths": [
+                  "web/src/assets/locales/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "woodpecker-ci/woodpecker",
+              "url": "https://github.com/woodpecker-ci/woodpecker"
+            },
+            {
+              "bytes": 11037,
+              "commit": "c02ad5dd570f9d8c42445284276d782464263933",
+              "licence": "AGPL-3",
+              "params": {
+                "paths": [
+                  "console/src/assets/i18n/en.json"
+                ]
+              },
+              "records": 150,
+              "source": "zitadel/zitadel",
+              "url": "https://github.com/zitadel/zitadel"
+            }
+          ],
+          "sources": 33,
+          "total_bytes": 395191
+        }
+      },
+      "title": "key-value message entries"
+    },
+    "w3-commit-subjects": {
+      "rules": {
+        "cap_choice": "the records with the smallest sha256(salt + record)",
+        "cap_per_source": 150,
+        "duplicates": "one copy per source; a record found in several sources is kept only in the source with the smallest sha256(source name + 0x00 + record)",
+        "max_len": 1024,
+        "min_distinct_per_source": 200,
+        "min_len": 40,
+        "record": "the subject line of one non-merge commit",
+        "record_filter": "valid UTF-8, no NUL byte, length within min_len..max_len bytes",
+        "shared_collections": "two sources that share 5% or more of the smaller one's eligible records count as one collection; the larger one is not used",
+        "source_unit": "repository",
+        "title": "commit subject lines",
+        "window": "commits reachable from the pinned commit whose committer date is on or after `since` (kept per source); `since` is the pinned commit date minus the first window in window_days that holds at least window_min_commits non-merge commits, or the longest window if none does",
+        "window_days": [
+          10,
+          45,
+          180,
+          730,
+          2920
+        ],
+        "window_min_commits": 700
+      },
+      "sources_total": 168,
+      "splits": {
+        "test": {
+          "record_length": {
+            "max": 396,
+            "mean": 60.86,
+            "median": 57.0,
+            "min": 40,
+            "p95": 89
+          },
+          "records": 6300,
+          "sha256_salt_sorted_test_sources": "852d6316a9174716029c5fd9fb04e9869350d65a7ae9f0cdeea40d5d1092aa22",
+          "sha256_test_jsonl": "39d078a8299567989f62a7d72a2f930ee79dd19b38a6acc32567001063b631b3",
+          "sources": 42,
+          "total_bytes": 383434
+        },
+        "train": {
+          "record_length": {
+            "max": 793,
+            "mean": 61.73,
+            "median": 57.0,
+            "min": 40,
+            "p95": 92
+          },
+          "records": 12600,
+          "sha256_jsonl": "5916bdded903baf4209577b34a480a03e3b3656e20b6714f128869510f5c86a4",
+          "source_list": [
+            {
+              "bytes": 7617,
+              "commit": "3e85c6c148fdce38a99ceeb9d2780dc7b03b4a4f",
+              "licence": "MIT / Unlicense",
+              "params": {
+                "since": 1543244221,
+                "window_days": 2920
+              },
+              "records": 150,
+              "source": "BurntSushi/ripgrep",
+              "url": "https://github.com/BurntSushi/ripgrep"
+            },
+            {
+              "bytes": 8404,
+              "commit": "0083d65a779bf69068d7c650cf193d614f7f2988",
+              "licence": "LGPL-2.1",
+              "params": {
+                "since": 1780041377,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "FreeCAD/FreeCAD",
+              "url": "https://github.com/FreeCAD/FreeCAD"
+            },
+            {
+              "bytes": 8293,
+              "commit": "be8be7fa7ecc06b306f1469f26fa7a30cf7ad825",
+              "licence": "GPL-3 / GPL / CC0-1.0",
+              "params": {
+                "since": 1780055927,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "GNOME/gimp",
+              "url": "https://github.com/GNOME/gimp"
+            },
+            {
+              "bytes": 7633,
+              "commit": "92a04e281172a19ed0ff9a2a1855ffe649ee57cb",
+              "licence": "BSD-2-Clause",
+              "params": {
+                "since": 1780046739,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "Homebrew/brew",
+              "url": "https://github.com/Homebrew/brew"
+            },
+            {
+              "bytes": 9434,
+              "commit": "cf640915aa0ac9d16a67dd38862e0b374771fc3d",
+              "licence": "Apache-2.0 / EPL / BSL-1.0",
+              "params": {
+                "since": 1791720691,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "JetBrains/kotlin",
+              "url": "https://github.com/JetBrains/kotlin"
+            },
+            {
+              "bytes": 8137,
+              "commit": "4daae96d3dc955df6321f8acece5ac8f08eb2709",
+              "licence": "GPL-3 / BSD-3-Clause / Apache-2.0 / BSL-1.0 / CC-BY / CC0-1.0 / ISC / MIT",
+              "params": {
+                "since": 1791723056,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "KiCad/kicad-source-mirror",
+              "url": "https://github.com/KiCad/kicad-source-mirror"
+            },
+            {
+              "bytes": 8631,
+              "commit": "7558e8c2f6f3f2ca4b5ff1ddd85d2b82f0c3881d",
+              "licence": "GPL-3",
+              "params": {
+                "since": 1732473268,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "Klipper3d/klipper",
+              "url": "https://github.com/Klipper3d/klipper"
+            },
+            {
+              "bytes": 8300,
+              "commit": "9ba28f8f10996229a90ad3460f49e9cfecd3bf0b",
+              "licence": "BSD-2-Clause",
+              "params": {
+                "since": 1732475880,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "Leaflet/Leaflet",
+              "url": "https://github.com/Leaflet/Leaflet"
+            },
+            {
+              "bytes": 7078,
+              "commit": "1b855b332f461c8ec020c07104b7d0693ec295b3",
+              "licence": "GPL-3",
+              "params": {
+                "since": 1732511241,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "MarlinFirmware/Marlin",
+              "url": "https://github.com/MarlinFirmware/Marlin"
+            },
+            {
+              "bytes": 9964,
+              "commit": "50b78476df100fd360f6623223c5e4510c569c5c",
+              "licence": "Apache-2.0 / MIT / NCSA / BSD-2-Clause / BSD-3-Clause",
+              "params": {
+                "since": 1780046675,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "NationalSecurityAgency/ghidra",
+              "url": "https://github.com/NationalSecurityAgency/ghidra"
+            },
+            {
+              "bytes": 8010,
+              "commit": "87bc1644ed76bcc74dd120bef9db29386e8121be",
+              "licence": "AGPL-3",
+              "params": {
+                "since": 1732539065,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "OctoPrint/OctoPrint",
+              "url": "https://github.com/OctoPrint/OctoPrint"
+            },
+            {
+              "bytes": 8508,
+              "commit": "28bb5e553467b5471516a5a22a3e7294a6d8dc94",
+              "licence": "GPL-3",
+              "params": {
+                "since": 1732480317,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "OpenRCT2/OpenRCT2",
+              "url": "https://github.com/OpenRCT2/OpenRCT2"
+            },
+            {
+              "bytes": 10449,
+              "commit": "07154a8eca3d7454b70164a540ea2f5be6e0921b",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "since": 1791720609,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "PX4/PX4-Autopilot",
+              "url": "https://github.com/PX4/PX4-Autopilot"
+            },
+            {
+              "bytes": 7866,
+              "commit": "f759ab8b97ee9734602328f6b010f5ab7b246e96",
+              "licence": "GPL-1",
+              "params": {
+                "since": 1779973344,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "Perl/perl5",
+              "url": "https://github.com/Perl/perl5"
+            },
+            {
+              "bytes": 9646,
+              "commit": "93fe5d82fb206e850a21809bf45800ae00b17fc7",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "since": 1542885759,
+                "window_days": 2920
+              },
+              "records": 150,
+              "source": "assimp/assimp",
+              "url": "https://github.com/assimp/assimp"
+            },
+            {
+              "bytes": 10967,
+              "commit": "94024c74960350e6fad96ff735cdf56f83221760",
+              "licence": "BSD-3-Clause / BSD-2-Clause / MIT / GPL",
+              "params": {
+                "since": 1780007744,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "astropy/astropy",
+              "url": "https://github.com/astropy/astropy"
+            },
+            {
+              "bytes": 8208,
+              "commit": "3b34ac8cb8d3054e189e91df011eee808c97d0b7",
+              "licence": "MIT",
+              "params": {
+                "since": 1780054795,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "beetbox/beets",
+              "url": "https://github.com/beetbox/beets"
+            },
+            {
+              "bytes": 9359,
+              "commit": "6ff424880c7931eb2306626b26a73b02fedb1959",
+              "licence": "BSD-2-Clause",
+              "params": {
+                "since": 1779984363,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "borgbackup/borg",
+              "url": "https://github.com/borgbackup/borg"
+            },
+            {
+              "bytes": 9545,
+              "commit": "01c27be558abd2cd5b8897a3030857cd1d6cad68",
+              "licence": "AGPL-3 / MIT / Apache-2.0 / BSD-3-Clause / CC-BY / BSL-1.0 / Zlib / GPL-2 / LGPL-2.1 / LGPL-3",
+              "params": {
+                "since": 1791718433,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "ceph/ceph",
+              "url": "https://github.com/ceph/ceph"
+            },
+            {
+              "bytes": 8794,
+              "commit": "ea2c98272d65645d205077e138bbb7a3300345da",
+              "licence": "MIT / Apache-2.0",
+              "params": {
+                "since": 1543278524,
+                "window_days": 2920
+              },
+              "records": 150,
+              "source": "certbot/certbot",
+              "url": "https://github.com/certbot/certbot"
+            },
+            {
+              "bytes": 9669,
+              "commit": "903f3c944d715174e6793149e4515b676804d523",
+              "licence": "Apache-2.0",
+              "params": {
+                "since": 1732524129,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "coredns/coredns",
+              "url": "https://github.com/coredns/coredns"
+            },
+            {
+              "bytes": 9056,
+              "commit": "aa14222577117e6f9ca2bd1341c10d9eb864c489",
+              "licence": "Apache-2.0 / MIT",
+              "params": {
+                "since": 1732537614,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "crystal-lang/crystal",
+              "url": "https://github.com/crystal-lang/crystal"
+            },
+            {
+              "bytes": 10108,
+              "commit": "663144edda3643b0a27986168a4a03a58d03aac6",
+              "licence": "GPL-2 / MIT",
+              "params": {
+                "since": 1791722723,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "discourse/discourse",
+              "url": "https://github.com/discourse/discourse"
+            },
+            {
+              "bytes": 9751,
+              "commit": "0318069674bbd7971f0db434fe1f7bd9f1c5750e",
+              "licence": "BSD-3-Clause / CC0-1.0 / GPL-2 / MIT",
+              "params": {
+                "since": 1732424169,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "dolphin-emu/dolphin",
+              "url": "https://github.com/dolphin-emu/dolphin"
+            },
+            {
+              "bytes": 10481,
+              "commit": "802f4d17c6ce828423ba19256ea03d3ed0556664",
+              "licence": "GPL-3",
+              "params": {
+                "since": 1732449722,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "domoticz/domoticz",
+              "url": "https://github.com/domoticz/domoticz"
+            },
+            {
+              "bytes": 9910,
+              "commit": "9402d1176a53449e08cc5f63523742a279483e71",
+              "licence": "MIT",
+              "params": {
+                "since": 1794743200,
+                "window_days": 10
+              },
+              "records": 150,
+              "source": "duckdb/duckdb",
+              "url": "https://github.com/duckdb/duckdb"
+            },
+            {
+              "bytes": 8948,
+              "commit": "1de636e48bd32c865338515f040ef45fb6e7da96",
+              "licence": "Apache-2.0 / MIT",
+              "params": {
+                "since": 1780040548,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "elixir-lang/elixir",
+              "url": "https://github.com/elixir-lang/elixir"
+            },
+            {
+              "bytes": 8250,
+              "commit": "a0497461397747f1db1cee9b8fc70747c14af791",
+              "licence": "Apache-2.0 / BSD-2-Clause / BSD-3-Clause / MIT",
+              "params": {
+                "since": 1779979430,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "erlang/otp",
+              "url": "https://github.com/erlang/otp"
+            },
+            {
+              "bytes": 9162,
+              "commit": "5ae6df447e12cbdfca0c65fa6341e161046df6b7",
+              "licence": "GPL-2 / LGPL-2.1 / GPL-3",
+              "params": {
+                "since": 1791721762,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "gcc-mirror/gcc",
+              "url": "https://github.com/gcc-mirror/gcc"
+            },
+            {
+              "bytes": 8114,
+              "commit": "56bb91d95f89509cb351a5eb4a7406825675866c",
+              "licence": "BSD-2-Clause",
+              "params": {
+                "since": 1732410824,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "ghc/ghc",
+              "url": "https://github.com/ghc/ghc"
+            },
+            {
+              "bytes": 6917,
+              "commit": "92dcf4ce74f2e2554a98fea09be7c705c17daa5a",
+              "licence": "Zlib",
+              "params": {
+                "since": 1533488690,
+                "window_days": 2920
+              },
+              "records": 150,
+              "source": "glfw/glfw",
+              "url": "https://github.com/glfw/glfw"
+            },
+            {
+              "bytes": 9079,
+              "commit": "25d0522345fb8b58cc469b6760dd73c04b0f0186",
+              "licence": "GPL-3 / MIT / Apache-2.0 / BSD-3-Clause / MPL-2.0 / Unlicense / CC0-1.0 / CC-BY / BSL-1.0 / Zlib",
+              "params": {
+                "since": 1780007419,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "godotengine/godot",
+              "url": "https://github.com/godotengine/godot"
+            },
+            {
+              "bytes": 8701,
+              "commit": "840b7574e059ac417fa25bb335a8575fabd0f5a8",
+              "licence": "MIT",
+              "params": {
+                "since": 1780054367,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "haiku/haiku",
+              "url": "https://github.com/haiku/haiku"
+            },
+            {
+              "bytes": 8487,
+              "commit": "1a3fdfda6dfdda4567af6093a6249bb2bb422fc6",
+              "licence": "GPL-2.0 / MPL-2.0",
+              "params": {
+                "since": 1732101314,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "helix-editor/helix",
+              "url": "https://github.com/helix-editor/helix"
+            },
+            {
+              "bytes": 7771,
+              "commit": "9e8317c84e9540ac0b09689dd9f9d4fafe44ac00",
+              "licence": "Apache-2.0",
+              "params": {
+                "since": 1542721226,
+                "window_days": 2920
+              },
+              "records": 150,
+              "source": "lapce/lapce",
+              "url": "https://github.com/lapce/lapce"
+            },
+            {
+              "bytes": 10102,
+              "commit": "64de808fe0f46db3279c6b3f348d61ac1459b8c3",
+              "licence": "MIT",
+              "params": {
+                "since": 1779985161,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "laravel/framework",
+              "url": "https://github.com/laravel/framework"
+            },
+            {
+              "bytes": 8952,
+              "commit": "ad4e45ca091cdbe5b6d0e3b3b3e6a61fbd6172db",
+              "licence": "GPL-3",
+              "params": {
+                "since": 1794738912,
+                "window_days": 10
+              },
+              "records": 150,
+              "source": "libretro/RetroArch",
+              "url": "https://github.com/libretro/RetroArch"
+            },
+            {
+              "bytes": 9461,
+              "commit": "a01f51916eb3a3989b0bcbc2e2dbcbc724515414",
+              "licence": "Zlib",
+              "params": {
+                "since": 1780032054,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "libsdl-org/SDL",
+              "url": "https://github.com/libsdl-org/SDL"
+            },
+            {
+              "bytes": 8892,
+              "commit": "ed25523818fb2fc1573225a5d13b6e32f4ff6070",
+              "licence": "MIT / Apache-2.0 / GPL-3",
+              "params": {
+                "since": 1732515791,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "matplotlib/matplotlib",
+              "url": "https://github.com/matplotlib/matplotlib"
+            },
+            {
+              "bytes": 8759,
+              "commit": "b9620707e3697def3d8829a365aa0c863a69974e",
+              "licence": "MIT",
+              "params": {
+                "since": 1780008681,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "micropython/micropython",
+              "url": "https://github.com/micropython/micropython"
+            },
+            {
+              "bytes": 8563,
+              "commit": "046618526875cad96d23043bef78b3ffd422b033",
+              "licence": "MIT",
+              "params": {
+                "since": 1543143612,
+                "window_days": 2920
+              },
+              "records": 150,
+              "source": "mitmproxy/mitmproxy",
+              "url": "https://github.com/mitmproxy/mitmproxy"
+            },
+            {
+              "bytes": 8462,
+              "commit": "d32c910be63d1dd325c7b3efeaa09c3c4c8d51ce",
+              "licence": "GPL-2 / LGPL-2.1",
+              "params": {
+                "since": 1779982060,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "mpv-player/mpv",
+              "url": "https://github.com/mpv-player/mpv"
+            },
+            {
+              "bytes": 9108,
+              "commit": "b2d7e3397fc5468f2cbf38c7b7ece752261b03f2",
+              "licence": "GPL-3",
+              "params": {
+                "since": 1780046611,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "musescore/MuseScore",
+              "url": "https://github.com/musescore/MuseScore"
+            },
+            {
+              "bytes": 8155,
+              "commit": "2402d2f96d48d38e1f61a13aa8561830d105f6d2",
+              "licence": "BSD-2-Clause",
+              "params": {
+                "since": 1543248813,
+                "window_days": 2920
+              },
+              "records": 150,
+              "source": "nginx/nginx",
+              "url": "https://github.com/nginx/nginx"
+            },
+            {
+              "bytes": 7752,
+              "commit": "18bb2e5e0e075f6f286310f2b08ebf7afcc507e7",
+              "licence": "GPL-2 / MIT / Apache-2.0 / BSD-3-Clause / ISC / Zlib / Artistic",
+              "params": {
+                "since": 1791722241,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "nodejs/node",
+              "url": "https://github.com/nodejs/node"
+            },
+            {
+              "bytes": 9779,
+              "commit": "dbb684ea51f028bc5093ac686879e2b3dfa1c980",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "since": 1780024727,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "numpy/numpy",
+              "url": "https://github.com/numpy/numpy"
+            },
+            {
+              "bytes": 8607,
+              "commit": "f9a67b9ace65be692ef7571496c37bf180ad9853",
+              "licence": "LGPL-2.1",
+              "params": {
+                "since": 1732528415,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "ocaml/ocaml",
+              "url": "https://github.com/ocaml/ocaml"
+            },
+            {
+              "bytes": 14037,
+              "commit": "667c01946451f71f7852aeda8acbdf41d1b9f36a",
+              "licence": "MIT",
+              "params": {
+                "since": 1732475803,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "ocornut/imgui",
+              "url": "https://github.com/ocornut/imgui"
+            },
+            {
+              "bytes": 9067,
+              "commit": "d19330ddcc2c36c50f2eac6ab995d42438c8cace",
+              "licence": "Apache-2.0",
+              "params": {
+                "since": 1780057754,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "opencv/opencv",
+              "url": "https://github.com/opencv/opencv"
+            },
+            {
+              "bytes": 11724,
+              "commit": "e289c72d86c1b8ed541b582d7014521d50e8e0a7",
+              "licence": "GPL-2",
+              "params": {
+                "since": 1791714774,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "openjdk/jdk",
+              "url": "https://github.com/openjdk/jdk"
+            },
+            {
+              "bytes": 9266,
+              "commit": "77a103b912c69e86f6b1217bd68500d2926ed1b2",
+              "licence": "GPL-2",
+              "params": {
+                "since": 1732392367,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "openscad/openscad",
+              "url": "https://github.com/openscad/openscad"
+            },
+            {
+              "bytes": 8239,
+              "commit": "76c1fb82631faf6c1cb80d5c074d564362fb81ef",
+              "licence": "CDDL",
+              "params": {
+                "since": 1779987049,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "openzfs/zfs",
+              "url": "https://github.com/openzfs/zfs"
+            },
+            {
+              "bytes": 8007,
+              "commit": "49943b5a94413a530761350f04e896f76e8d620e",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "since": 1541084720,
+                "window_days": 2920
+              },
+              "records": 150,
+              "source": "pallets/flask",
+              "url": "https://github.com/pallets/flask"
+            },
+            {
+              "bytes": 11417,
+              "commit": "a0885a1054bb9a91f10584944a613062cdebdc5c",
+              "licence": "BSD-3-Clause / BSD-2-Clause / Apache-2.0 / MIT / GPL / ISC",
+              "params": {
+                "since": 1779999336,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "pandas-dev/pandas",
+              "url": "https://github.com/pandas-dev/pandas"
+            },
+            {
+              "bytes": 9749,
+              "commit": "5ddcc3591fb739245bdc039fb9c46c6f4156a78b",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "since": 1791710160,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "php/php-src",
+              "url": "https://github.com/php/php-src"
+            },
+            {
+              "bytes": 8514,
+              "commit": "2bdbde8b3bd782ec18168e19b70ccaa945ab0177",
+              "licence": "PostgreSQL",
+              "params": {
+                "since": 1780046574,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "postgres/postgres",
+              "url": "https://github.com/postgres/postgres"
+            },
+            {
+              "bytes": 8493,
+              "commit": "5b4d45102eb54ceb77740f83c80ef09017565a67",
+              "licence": "MIT",
+              "params": {
+                "since": 1732411655,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "pypa/pip",
+              "url": "https://github.com/pypa/pip"
+            },
+            {
+              "bytes": 8208,
+              "commit": "6bf90d4fc5027567cb704d7888f5ec792b4ed75a",
+              "licence": "GPL-2 / LGPL-2.1",
+              "params": {
+                "since": 1791644981,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "qemu/qemu",
+              "url": "https://github.com/qemu/qemu"
+            },
+            {
+              "bytes": 9862,
+              "commit": "cae8948bc280237c7a9497daed8040ad89ee989c",
+              "licence": "GPL-2",
+              "params": {
+                "since": 1791721957,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "qgis/QGIS",
+              "url": "https://github.com/qgis/QGIS"
+            },
+            {
+              "bytes": 8239,
+              "commit": "80973aa0b5413e9a5bbbf9293507f39e870f9aa3",
+              "licence": "GPL-2 / GPL-3 / BSD-3-Clause",
+              "params": {
+                "since": 1731932668,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "qmk/qmk_firmware",
+              "url": "https://github.com/qmk/qmk_firmware"
+            },
+            {
+              "bytes": 8345,
+              "commit": "a979324297f0106b326a66ef0a52a55c2ae64f2f",
+              "licence": "LGPL-3 / MIT / Apache-2.0 / MPL-2.0",
+              "params": {
+                "since": 1732466532,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "racket/racket",
+              "url": "https://github.com/racket/racket"
+            },
+            {
+              "bytes": 9642,
+              "commit": "079c6f39023649b154152db30f1d781e884879bc",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "since": 1536273316,
+                "window_days": 2920
+              },
+              "records": 150,
+              "source": "raspberrypi/pico-sdk",
+              "url": "https://github.com/raspberrypi/pico-sdk"
+            },
+            {
+              "bytes": 11040,
+              "commit": "88648d8b6bab98a60893d8a5b43a32df921ee5f7",
+              "licence": "MIT / Apache-2.0 / BSD-3-Clause",
+              "params": {
+                "since": 1780037859,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "ray-project/ray",
+              "url": "https://github.com/ray-project/ray"
+            },
+            {
+              "bytes": 10078,
+              "commit": "5e2a70fee058ca16948d37d4dabd4aabb4549dd2",
+              "licence": "MIT",
+              "params": {
+                "since": 1780057978,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "rclone/rclone",
+              "url": "https://github.com/rclone/rclone"
+            },
+            {
+              "bytes": 9238,
+              "commit": "08840a4179667bf694a4e9f4fde1b2cc047c2fea",
+              "licence": "GPL-2 / BSD-2-Clause / LGPL-2.1",
+              "params": {
+                "since": 1780053375,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "reactos/reactos",
+              "url": "https://github.com/reactos/reactos"
+            },
+            {
+              "bytes": 8883,
+              "commit": "62bb1f56341b538ddfef5800fcceeb249893a43d",
+              "licence": "MIT / Apache-2.0 / BSD-2-Clause / CC-BY / public-domain / GPL-3 / GPL-2 / ISC",
+              "params": {
+                "since": 1791707063,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "rust-lang/rust",
+              "url": "https://github.com/rust-lang/rust"
+            },
+            {
+              "bytes": 8875,
+              "commit": "8de8dad7bcb38e1baa43508cbe944bf04a2d0401",
+              "licence": "GPL-2 / MIT / BSD-3-Clause / ISC / public-domain",
+              "params": {
+                "since": 1779144451,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "sagemath/sage",
+              "url": "https://github.com/sagemath/sage"
+            },
+            {
+              "bytes": 9487,
+              "commit": "6a78a55d76dfcc379794a3beb545ccce4004cc49",
+              "licence": "MIT / Apache-2.0 / BSD-2-Clause",
+              "params": {
+                "since": 1780052043,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "saltstack/salt",
+              "url": "https://github.com/saltstack/salt"
+            },
+            {
+              "bytes": 10400,
+              "commit": "46a731ce82bde3f52cdf94dd099c1c0f7c8f2bf8",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "since": 1732493066,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "scikit-learn/scikit-learn",
+              "url": "https://github.com/scikit-learn/scikit-learn"
+            },
+            {
+              "bytes": 8355,
+              "commit": "ebb5e11c70c50469c45f8aada56dd6d477c6b77f",
+              "licence": "Apache-2.0",
+              "params": {
+                "since": 1779751880,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "spring-projects/spring-boot",
+              "url": "https://github.com/spring-projects/spring-boot"
+            },
+            {
+              "bytes": 22585,
+              "commit": "61ad1dfcb35ddcf649e7bc0d2d9ef069b49e2961",
+              "licence": "public-domain",
+              "params": {
+                "since": 1780052103,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "sqlite/sqlite",
+              "url": "https://github.com/sqlite/sqlite"
+            },
+            {
+              "bytes": 8751,
+              "commit": "76d813169215a82dea60b8a0820d0b100120263e",
+              "licence": "GPL-2",
+              "params": {
+                "since": 1541744567,
+                "window_days": 2920
+              },
+              "records": 150,
+              "source": "squid-cache/squid",
+              "url": "https://github.com/squid-cache/squid"
+            },
+            {
+              "bytes": 6875,
+              "commit": "34ac0c5ff4f70b0c9b2183e899024bf8e13ec15f",
+              "licence": "BSD-2-Clause",
+              "params": {
+                "since": 1731966144,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "streamlink/streamlink",
+              "url": "https://github.com/streamlink/streamlink"
+            },
+            {
+              "bytes": 9812,
+              "commit": "a79bb171315469f9fa2d11c5154f9a7776d65ad8",
+              "licence": "Apache-2.0",
+              "params": {
+                "since": 1791713058,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "swiftlang/swift",
+              "url": "https://github.com/swiftlang/swift"
+            },
+            {
+              "bytes": 9478,
+              "commit": "a883a4db0f9f6ee877bff3e1a968a42c7e04e814",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "since": 1780058824,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "sympy/sympy",
+              "url": "https://github.com/sympy/sympy"
+            },
+            {
+              "bytes": 14045,
+              "commit": "64eaf48199a8ecbe59223710b3b2309d8844eee6",
+              "licence": "ISC",
+              "params": {
+                "since": 1780053675,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "tmux/tmux",
+              "url": "https://github.com/tmux/tmux"
+            },
+            {
+              "bytes": 8310,
+              "commit": "749ab208293294c1c276f2692b9108ed6450d859",
+              "licence": "Apache-2.0",
+              "params": {
+                "since": 1543288888,
+                "window_days": 2920
+              },
+              "records": 150,
+              "source": "tornadoweb/tornado",
+              "url": "https://github.com/tornadoweb/tornado"
+            },
+            {
+              "bytes": 8929,
+              "commit": "4dce97c6c265544342e716e62fd24bbb232590c5",
+              "licence": "GPL-2 / SPDX-pointer",
+              "params": {
+                "since": 1791664057,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "torvalds/linux",
+              "url": "https://github.com/torvalds/linux"
+            },
+            {
+              "bytes": 9590,
+              "commit": "ac4130d401a2bf4a2a876910dd59b4206a7ad000",
+              "licence": "BSD-3-Clause / Apache-2.0 / BSD-2-Clause / BSL-1.0 / CC0-1.0 / ISC / MIT / Zlib",
+              "params": {
+                "since": 1732539204,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "valkey-io/valkey",
+              "url": "https://github.com/valkey-io/valkey"
+            },
+            {
+              "bytes": 9429,
+              "commit": "584d987a207d6d123f1e8d2da410a38ccd9a71dc",
+              "licence": "GPL-2",
+              "params": {
+                "since": 1780051739,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "wesnoth/wesnoth",
+              "url": "https://github.com/wesnoth/wesnoth"
+            },
+            {
+              "bytes": 8824,
+              "commit": "a79470449d0388ed3b5ff7975a4cefd6a3d80a2a",
+              "licence": "LGPL-2.1",
+              "params": {
+                "since": 1791667724,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "wine-mirror/wine",
+              "url": "https://github.com/wine-mirror/wine"
+            },
+            {
+              "bytes": 8334,
+              "commit": "ab7522bc2d0783fa4cd4343549a86a5c3d2575d5",
+              "licence": "GPL / MIT / Apache-2.0 / SPDX-pointer / BSD-2-Clause / BSD-3-Clause / CC-BY / public-domain / GPL-2 / LGPL-2.0 / LGPL-2.1 / MIT-0",
+              "params": {
+                "since": 1780044982,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "xen-project/xen",
+              "url": "https://github.com/xen-project/xen"
+            },
+            {
+              "bytes": 9521,
+              "commit": "cd585371e8bf275664f4ae3434bb1e0a7fe6b7e9",
+              "licence": "Apache-2.0 / GPL-3",
+              "params": {
+                "since": 1780058743,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "zed-industries/zed",
+              "url": "https://github.com/zed-industries/zed"
+            },
+            {
+              "bytes": 8333,
+              "commit": "c993baf3a38dca0418fcb0c90f193764691cec6f",
+              "licence": "BSD-3-Clause / LGPL-3 / MIT / Apache-2.0 / ISC / MPL-2.0 / BSL-1.0 / NCSA / public-domain",
+              "params": {
+                "since": 1780049509,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "zeek/zeek",
+              "url": "https://github.com/zeek/zeek"
+            }
+          ],
+          "sources": 84,
+          "total_bytes": 777820
+        },
+        "validation": {
+          "record_length": {
+            "max": 459,
+            "mean": 59.44,
+            "median": 56.0,
+            "min": 40,
+            "p95": 85
+          },
+          "records": 6300,
+          "sha256_jsonl": "b352df4139a7de980da752ee3e2932d17548d22e7b7d427e2aeb4da53c129700",
+          "source_list": [
+            {
+              "bytes": 8856,
+              "commit": "7250f9d47a89c7859b63f09d18a1c401a9358657",
+              "licence": "GPL-3",
+              "params": {
+                "since": 1791708132,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "ArduPilot/ardupilot",
+              "url": "https://github.com/ArduPilot/ardupilot"
+            },
+            {
+              "bytes": 9195,
+              "commit": "08e736601b0223c62428662c6c87747d54126c40",
+              "licence": "Apache-2.0 / MIT / GPL / BSD-3-Clause / CC-BY / BSL-1.0",
+              "params": {
+                "since": 1780034074,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "CleverRaven/Cataclysm-DDA",
+              "url": "https://github.com/CleverRaven/Cataclysm-DDA"
+            },
+            {
+              "bytes": 10643,
+              "commit": "3f870e09b422af35a908573160a4ae381b9eceed",
+              "licence": "Apache-2.0",
+              "params": {
+                "since": 1794747222,
+                "window_days": 10
+              },
+              "records": 150,
+              "source": "ClickHouse/ClickHouse",
+              "url": "https://github.com/ClickHouse/ClickHouse"
+            },
+            {
+              "bytes": 7755,
+              "commit": "3e220ff42e3ea78e8e2e854d6bce0f61ef7ed79a",
+              "licence": "GPL-3 / BSD-3-Clause / Apache-2.0 / BSD-2-Clause / BSL-1.0 / CC0-1.0 / GPL-2",
+              "params": {
+                "since": 1780047291,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "KDE/krita",
+              "url": "https://github.com/KDE/krita"
+            },
+            {
+              "bytes": 8039,
+              "commit": "7225538aee2a85ff5a993e06dd98317d5486271f",
+              "licence": "MIT",
+              "params": {
+                "since": 1794746918,
+                "window_days": 10
+              },
+              "records": 150,
+              "source": "NixOS/nixpkgs",
+              "url": "https://github.com/NixOS/nixpkgs"
+            },
+            {
+              "bytes": 8360,
+              "commit": "a3514de49fea8142dae949a8e6e46eae00e4f6ab",
+              "licence": "MIT",
+              "params": {
+                "since": 1732496559,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "OGRECave/ogre",
+              "url": "https://github.com/OGRECave/ogre"
+            },
+            {
+              "bytes": 7757,
+              "commit": "1f762c1a361c8d71bf21b9f60d5068942e3a9666",
+              "licence": "GPL-2",
+              "params": {
+                "since": 1779988042,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "OISF/suricata",
+              "url": "https://github.com/OISF/suricata"
+            },
+            {
+              "bytes": 9948,
+              "commit": "871c4f4cb544af7b45fb22c72129ddea293172ae",
+              "licence": "GPL-2",
+              "params": {
+                "since": 1732524694,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "OpenTTD/OpenTTD",
+              "url": "https://github.com/OpenTTD/OpenTTD"
+            },
+            {
+              "bytes": 8392,
+              "commit": "4e56d430595164106eab9606cb46c94c902802cd",
+              "licence": "GPL-3",
+              "params": {
+                "since": 1732408138,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "PCSX2/pcsx2",
+              "url": "https://github.com/PCSX2/pcsx2"
+            },
+            {
+              "bytes": 8836,
+              "commit": "8d5e4cd103dbc8279e5af23aa8b8365ed27b5482",
+              "licence": "GPL-2",
+              "params": {
+                "since": 1780048522,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "PowerDNS/pdns",
+              "url": "https://github.com/PowerDNS/pdns"
+            },
+            {
+              "bytes": 8500,
+              "commit": "d264e2f19ff82d8313474549a8e78ae8f03b8060",
+              "licence": "GPL-2",
+              "params": {
+                "since": 1779994160,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "RPCS3/rpcs3",
+              "url": "https://github.com/RPCS3/rpcs3"
+            },
+            {
+              "bytes": 8059,
+              "commit": "1a221ec29a86960d16a412940becc1f63534c41f",
+              "licence": "LGPL-3",
+              "params": {
+                "since": 1731150222,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "Ultimaker/Cura",
+              "url": "https://github.com/Ultimaker/Cura"
+            },
+            {
+              "bytes": 9087,
+              "commit": "0078ac6c28e03bf4c44690a05977e752b5d34fd7",
+              "licence": "GPL-3",
+              "params": {
+                "since": 1732535435,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "arendst/Tasmota",
+              "url": "https://github.com/arendst/Tasmota"
+            },
+            {
+              "bytes": 8532,
+              "commit": "47187d8163a9f3433d3efce2eb15f78ee094de56",
+              "licence": "MIT",
+              "params": {
+                "since": 1780052021,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "bitcoin/bitcoin",
+              "url": "https://github.com/bitcoin/bitcoin"
+            },
+            {
+              "bytes": 9306,
+              "commit": "4e37636455852b4cc84a3611c6c456f5209d50cd",
+              "licence": "GPL",
+              "params": {
+                "since": 1791720760,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "blender/blender",
+              "url": "https://github.com/blender/blender"
+            },
+            {
+              "bytes": 8428,
+              "commit": "f8d0aef5a7b5d7efad0fd44a49e3e89fb84aa313",
+              "licence": "Apache-2.0",
+              "params": {
+                "since": 1732522597,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "containerd/containerd",
+              "url": "https://github.com/containerd/containerd"
+            },
+            {
+              "bytes": 8098,
+              "commit": "5a4d842e4b91906e57b4eac4811bad24f96a4e7f",
+              "licence": "ISC / BSD-3-Clause",
+              "params": {
+                "since": 1780047633,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "curl/curl",
+              "url": "https://github.com/curl/curl"
+            },
+            {
+              "bytes": 9180,
+              "commit": "ad20ded62a2d67a26e501fdc1905f43ba7ad6c81",
+              "licence": "Apache-2.0",
+              "params": {
+                "since": 1779201671,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "espressif/esp-idf",
+              "url": "https://github.com/espressif/esp-idf"
+            },
+            {
+              "bytes": 9277,
+              "commit": "85f020793fb4b2855fda1a0f52d2a46ef07693c3",
+              "licence": "GPL-3 / LGPL-3",
+              "params": {
+                "since": 1732521802,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "ethereum/go-ethereum",
+              "url": "https://github.com/ethereum/go-ethereum"
+            },
+            {
+              "bytes": 9203,
+              "commit": "05e6df7e906c3decba377c37548019973f40bf15",
+              "licence": "MIT",
+              "params": {
+                "since": 1779477225,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "fastapi/fastapi",
+              "url": "https://github.com/fastapi/fastapi"
+            },
+            {
+              "bytes": 8043,
+              "commit": "72862c63735216c38ad356d516340d7215283481",
+              "licence": "GPL-2 / MIT",
+              "params": {
+                "since": 1732532570,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "fish-shell/fish-shell",
+              "url": "https://github.com/fish-shell/fish-shell"
+            },
+            {
+              "bytes": 8534,
+              "commit": "ed173e71e44b2a5fa6264ecf232a153dee6994d0",
+              "licence": "MIT",
+              "params": {
+                "since": 1732452536,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "junegunn/fzf",
+              "url": "https://github.com/junegunn/fzf"
+            },
+            {
+              "bytes": 15248,
+              "commit": "89185ed286c7830b4e6daa647d843a929077ecd2",
+              "licence": "GPL / MIT / BSD-3-Clause / Zlib / public-domain",
+              "params": {
+                "since": 1791721304,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "mamedev/mame",
+              "url": "https://github.com/mamedev/mame"
+            },
+            {
+              "bytes": 9640,
+              "commit": "ebca18f6246f0926d01e207ed0bce4a4b6b92423",
+              "licence": "GPL-2 / MIT / Apache-2.0",
+              "params": {
+                "since": 1780058065,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "neovim/neovim",
+              "url": "https://github.com/neovim/neovim"
+            },
+            {
+              "bytes": 8344,
+              "commit": "f4ff9a6fbca3e90de95f3769186c240ce8639d7f",
+              "licence": "ISC",
+              "params": {
+                "since": 1732463239,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "openstreetmap/iD",
+              "url": "https://github.com/openstreetmap/iD"
+            },
+            {
+              "bytes": 8398,
+              "commit": "fb742de8e5126809fddf16fa2b5e82b016be0edb",
+              "licence": "GPL-2 / SPDX-pointer / BSD-2-Clause / BSD-3-Clause / GPL-1 / ISC / MIT",
+              "params": {
+                "since": 1791715090,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "openwrt/openwrt",
+              "url": "https://github.com/openwrt/openwrt"
+            },
+            {
+              "bytes": 11782,
+              "commit": "a765244dc9b12d8c2c9927596cf2a393bf67ff04",
+              "licence": "AGPL-3",
+              "params": {
+                "since": 1779977570,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "prusa3d/PrusaSlicer",
+              "url": "https://github.com/prusa3d/PrusaSlicer"
+            },
+            {
+              "bytes": 9750,
+              "commit": "90d697f840907742c11a7a94f7ffc8b6213ce37a",
+              "licence": "MIT",
+              "params": {
+                "since": 1732533566,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "pydantic/pydantic",
+              "url": "https://github.com/pydantic/pydantic"
+            },
+            {
+              "bytes": 7687,
+              "commit": "e6b69eb4b532146b34177b405734d36ff7624762",
+              "licence": "GPL-2 / GPL-3",
+              "params": {
+                "since": 1732367961,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "qbittorrent/qBittorrent",
+              "url": "https://github.com/qbittorrent/qBittorrent"
+            },
+            {
+              "bytes": 8581,
+              "commit": "f25ec9a5ab18fbb6797ab336b995d6639d62c4d4",
+              "licence": "BSD-2-Clause",
+              "params": {
+                "since": 1732474689,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "restic/restic",
+              "url": "https://github.com/restic/restic"
+            },
+            {
+              "bytes": 8839,
+              "commit": "1f240101bc24ca2f8bcda79d4f55b2ee6bab609a",
+              "licence": "GPL-3",
+              "params": {
+                "since": 1780053904,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "samba-team/samba",
+              "url": "https://github.com/samba-team/samba"
+            },
+            {
+              "bytes": 9412,
+              "commit": "1c42e7210e300be54bf9b0e29b27df9130c23d26",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "since": 1780045302,
+                "window_days": 180
+              },
+              "records": 150,
+              "source": "scipy/scipy",
+              "url": "https://github.com/scipy/scipy"
+            },
+            {
+              "bytes": 8665,
+              "commit": "531bc329984701fcfa02993720382072f3a390d5",
+              "licence": "BSD-3-Clause",
+              "params": {
+                "since": 1732373576,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "scrapy/scrapy",
+              "url": "https://github.com/scrapy/scrapy"
+            },
+            {
+              "bytes": 8341,
+              "commit": "9c88919beb770ff0b14deab7e914ff7aaa5c4bd2",
+              "licence": "MIT",
+              "params": {
+                "since": 1732458422,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "sqlalchemy/sqlalchemy",
+              "url": "https://github.com/sqlalchemy/sqlalchemy"
+            },
+            {
+              "bytes": 8589,
+              "commit": "c9fbd7a34c5df37fcf10f153fd8eb9d04d35b7f1",
+              "licence": "GPL",
+              "params": {
+                "since": 1732474938,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "sqlmapproject/sqlmap",
+              "url": "https://github.com/sqlmapproject/sqlmap"
+            },
+            {
+              "bytes": 9307,
+              "commit": "134b625bcb0f60a527171acc529bf1f8cff71b15",
+              "licence": "GPL-2.0 / MPL-2.0",
+              "params": {
+                "since": 1543312695,
+                "window_days": 2920
+              },
+              "records": 150,
+              "source": "syncthing/syncthing",
+              "url": "https://github.com/syncthing/syncthing"
+            },
+            {
+              "bytes": 8269,
+              "commit": "c629c4eeb2593687521a9b7173b686fb226c1e6e",
+              "licence": "GPL-2 / LGPL-2.1 / BSD-2-Clause / BSD-3-Clause / CC0-1.0 / LGPL-2 / MIT / MIT-0 / LGPL",
+              "params": {
+                "since": 1791723438,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "systemd/systemd",
+              "url": "https://github.com/systemd/systemd"
+            },
+            {
+              "bytes": 8512,
+              "commit": "4dd1e4cab324b56927f598eb36c698f6a4e08825",
+              "licence": "Apache-2.0",
+              "params": {
+                "since": 1732450913,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "typst/typst",
+              "url": "https://github.com/typst/typst"
+            },
+            {
+              "bytes": 8785,
+              "commit": "aaa0471203b4e961221934244007b968f15f0f5f",
+              "licence": "MIT",
+              "params": {
+                "since": 1794747385,
+                "window_days": 10
+              },
+              "records": 150,
+              "source": "vlang/v",
+              "url": "https://github.com/vlang/v"
+            },
+            {
+              "bytes": 8029,
+              "commit": "738d2be9d6b6ef3ff3559130c05159ef53336224",
+              "licence": "MIT",
+              "params": {
+                "since": 1760319772,
+                "window_days": 45
+              },
+              "records": 150,
+              "source": "ziglang/zig",
+              "url": "https://github.com/ziglang/zig"
+            },
+            {
+              "bytes": 7878,
+              "commit": "4de313367288aad5aeaa1243890e40dc813f7008",
+              "licence": "MIT",
+              "params": {
+                "since": 1542412469,
+                "window_days": 2920
+              },
+              "records": 150,
+              "source": "zmkfirmware/zmk",
+              "url": "https://github.com/zmkfirmware/zmk"
+            },
+            {
+              "bytes": 8391,
+              "commit": "5c3676746f92068667de0a01ffa9d92ebf70ed72",
+              "licence": "AGPL-3",
+              "params": {
+                "since": 1732475774,
+                "window_days": 730
+              },
+              "records": 150,
+              "source": "zotero/zotero",
+              "url": "https://github.com/zotero/zotero"
+            }
+          ],
+          "sources": 42,
+          "total_bytes": 374475
+        }
+      },
+      "title": "commit subject lines"
+    }
+  }
+}
