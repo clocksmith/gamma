@@ -47,14 +47,12 @@ freeze (`../three-arm/` at `gamma@776462de7`, hash `306e6171…`) byte-identical
    validates submission shapes and `failureId` independence, creates salted SHA-256 commitments
    (`MANIFEST.tsv`, per-route answer-key salts), verifies openings, and scans builder transcripts
    and artifacts for sealed needles.
-7. **Free ($0) counterexample falsification check first (`counterexample-check.mjs`) & OpenProject 17.8 candidate screen (`../op178-target-versions-screen.mjs`):**
-   - `counterexample-check.mjs` runs at `$0` (`0` model calls) on disposable copies, reproducing
-     the minimal `approval:/statusCode === 16` literal guard and showing that policy-invalid cases
-     satisfying `statusCode === 16` (hours mismatch, quarantine project, `[LEGAL-HOLD]` in
-     `description`) commit `3/3` wrong writes vs `0/3` for `expert-guard`, while free-text clauses
-     hit `no-separating-guard` under scalar projection. Scoped strictly to falsifying that guard
-     instance / identifying `"don't learn here"` blindspots without claiming Rung 2 or ruling out
-     every learned guard.
+7. **Free ($0) counterexample suite (`counterexample-check.mjs`), pre-learning decision rule (`prelearn-decision-rule.mjs`), & OpenProject 17.8 candidate screen (`../op178-target-versions-screen.mjs`):**
+   - `counterexample-check.mjs` runs three `$0` (`0` model calls) disposable suites:
+     1. OpenProject `approval:/statusCode === 16` (`3/3` wrong writes vs `0/3` for `expert-guard` + `no-separating-guard` on `[LEGAL-HOLD]` text).
+     2. ERPNext `projectFrappeResourceScalars`: even when trained on full scalar contrast (`docstatus`, `totalQty`, `companyCode`, `lineCount`), swapping line-item quantities (`8x BOLT + 2x TURBINE` vs `2x BOLT + 8x TURBINE`, identical `totalQty=10, lineCount=2`) commits a wrong write while `rate` gouging hits `no-separating-guard`.
+     3. OpenProject 17.8 constructive upgrade boundary: single `Version` (`versionCode`) is learnable pre-conversion (`record:/versionCode === approval:/versionCode`), whereas post-conversion multi-value `Target versions` subset inclusion (`child subseteq parent`) breaks conjunctive scalar equality (`no-separating-guard` vs `100%` accuracy for a 3-line subset guard).
+   - `prelearn-decision-rule.mjs` implements the `$0` pre-deployment selector over `{'always-replan', 'authored-guard', 'learned-repair-boundary'}` by rejecting inseparable projections, multi-value HAL link / free-text hazards, and under-constrained single-literal guards before pricing break-even volume `V*` across rates `0`, `r`, and `2r`.
    - `../op178-target-versions-screen.mjs` implements the 4-gate x 3-repeat `$0` screen for
      OpenProject 17.8's opt-in `Version` -> multi-value `Target versions` conversion as a
      documented candidate for a **new, separately frozen corpus** (keeping voided Stage A `306e6171`
@@ -64,6 +62,7 @@ freeze (`../three-arm/` at `gamma@776462de7`, hash `306e6171…`) byte-identical
 
 ```bash
 node qualification/workflow-generalization/three-arm-next/counterexample-check.mjs
+node qualification/workflow-generalization/three-arm-next/prelearn-decision-rule.mjs
 node qualification/workflow-generalization/op178-target-versions-screen.mjs
 node qualification/workflow-generalization/three-arm-next/runner.mjs hash
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/score_after_fallback.py --selftest

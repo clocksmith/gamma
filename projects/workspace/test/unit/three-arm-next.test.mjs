@@ -13,6 +13,7 @@ import {
 } from '../../qualification/workflow-generalization/second-upgrade-read-check-erpnext.mjs';
 import { selftest as op178ScreenSelftest } from '../../qualification/workflow-generalization/op178-target-versions-screen.mjs';
 import { runFreeCounterexampleCheck } from '../../qualification/workflow-generalization/three-arm-next/counterexample-check.mjs';
+import { selftest as prelearnRuleSelftest } from '../../qualification/workflow-generalization/three-arm-next/prelearn-decision-rule.mjs';
 import {
   forArm,
   freezeDeterministicArm,
@@ -651,7 +652,7 @@ test('ERPNext drift screen preflight blocks below 25 GiB and records 403 setup r
   }
 });
 
-test('free ($0) counterexample check falsifies literal statusCode === 16 guard and exposes free-text projection blindspot', async () => {
+test('free ($0) counterexample check falsifies OpenProject statusCode===16, ERPNext line-item swap, and OP 17.8 multi-version subset boundary', async () => {
   const report = await runFreeCounterexampleCheck();
   assert.equal(report.modelCalls, 0);
   assert.equal(report.costUsd, 0);
@@ -662,9 +663,17 @@ test('free ($0) counterexample check falsifies literal statusCode === 16 guard a
   assert.equal(report.repairBoundarySummary.wrongWritesCommitted, 3);
   assert.equal(report.expertGuardSummary.wrongWritesCommitted, 0);
   assert.equal(report.scalarProjectionBlindspotWhenTrained.reason, 'no-separating-guard');
+  assert.equal(report.erpnextScalarCollapseSuite.lineItemSwapWrongWriteByLearned, true);
+  assert.equal(report.erpnextScalarCollapseSuite.lineItemSwapBlockedByExpertGuard, true);
+  assert.equal(report.erpnextScalarCollapseSuite.rateOverrunLearnReason, 'no-separating-guard');
+  assert.equal(report.op178MultiTargetVersionsUpgradeProof.preConversionSingleVersion.status, 'learned');
+  assert.equal(report.op178MultiTargetVersionsUpgradeProof.postConversionMultiTargetVersions.reason, 'no-separating-guard');
+  assert.equal(report.op178MultiTargetVersionsUpgradeProof.postConversionMultiTargetVersions.expertSubsetGuardCompletesBothValid, true);
 });
 
-test('OpenProject 17.8 Target versions 3-repeat $0 candidate screen enforces all four qualification gates', async () => {
+test('OpenProject 17.8 Target versions 3-repeat $0 candidate screen and prelearn decision rule enforce all gates', async () => {
   const res = await op178ScreenSelftest();
   assert.equal(res.ok, true);
+  const preRes = prelearnRuleSelftest();
+  assert.equal(preRes.ok, true);
 });
