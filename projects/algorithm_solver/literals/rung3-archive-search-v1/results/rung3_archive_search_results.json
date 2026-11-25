@@ -1,0 +1,177 @@
+{
+  "schema": "bits-rung3-archive-search-eval/v1",
+  "elapsed_sec": 410.53,
+  "benchmarks": [
+    {
+      "label": "codenet_py_js_200_to_200",
+      "train_raw_bytes": 259706,
+      "held_out_raw_bytes": 270994,
+      "methods": {
+        "greedy-entry+mdl": {
+          "search_sec": 26.5217,
+          "selected_entries": 1440,
+          "dict_bytes": 10881,
+          "in_sample_unindexed_bytes": 84417,
+          "in_sample_serialized_random_access_bytes": 86026,
+          "held_out_serialized_random_access_bytes": 100268,
+          "random_access_verified": true
+        },
+        "greedy-byte+mdl": {
+          "search_sec": 25.9829,
+          "selected_entries": 1952,
+          "dict_bytes": 9866,
+          "in_sample_unindexed_bytes": 87454,
+          "in_sample_serialized_random_access_bytes": 89063,
+          "held_out_serialized_random_access_bytes": 101336,
+          "random_access_verified": true
+        },
+        "mdl-archive-prune": {
+          "search_sec": 22.1258,
+          "selected_entries": 1696,
+          "dict_bytes": 11258,
+          "in_sample_unindexed_bytes": 84936,
+          "in_sample_serialized_random_access_bytes": 86545,
+          "held_out_serialized_random_access_bytes": 100778,
+          "random_access_verified": true,
+          "pruned_absorbed_entries": 724
+        }
+      },
+      "zstd_train_8kib_matched_random_access": {
+        "in_sample": {
+          "dict_bytes": 8192,
+          "payload_frames_bytes": 81253,
+          "unindexed_per_file_total_bytes": 89445,
+          "serialized_random_access_archive_bytes": 91055,
+          "random_access_verified": true
+        },
+        "held_out": {
+          "dict_bytes": 8192,
+          "payload_frames_bytes": 85630,
+          "unindexed_per_file_total_bytes": 93822,
+          "serialized_random_access_archive_bytes": 95432,
+          "random_access_verified": true
+        }
+      },
+      "comparisons": {
+        "prune_gain_over_greedy_entry_in_sample_bytes": -519,
+        "prune_gain_over_greedy_entry_held_out_bytes": -510,
+        "prune_gain_over_greedy_byte_in_sample_bytes": 2518,
+        "held_out_gap_vs_zstd_train_8kib_bytes": 5346
+      }
+    },
+    {
+      "label": "untouched_zig_vs_wgsl_40_to_40",
+      "train_raw_bytes": 99338,
+      "held_out_raw_bytes": 88651,
+      "methods": {
+        "greedy-entry+mdl": {
+          "search_sec": 13.8938,
+          "selected_entries": 896,
+          "dict_bytes": 7556,
+          "in_sample_unindexed_bytes": 34244,
+          "in_sample_serialized_random_access_bytes": 34573,
+          "held_out_serialized_random_access_bytes": 42623,
+          "random_access_verified": true
+        },
+        "greedy-byte+mdl": {
+          "search_sec": 14.0704,
+          "selected_entries": 1312,
+          "dict_bytes": 7076,
+          "in_sample_unindexed_bytes": 35875,
+          "in_sample_serialized_random_access_bytes": 36204,
+          "held_out_serialized_random_access_bytes": 41380,
+          "random_access_verified": true
+        },
+        "mdl-archive-prune": {
+          "search_sec": 5.655,
+          "selected_entries": 1152,
+          "dict_bytes": 7972,
+          "in_sample_unindexed_bytes": 34460,
+          "in_sample_serialized_random_access_bytes": 34789,
+          "held_out_serialized_random_access_bytes": 42045,
+          "random_access_verified": true,
+          "pruned_absorbed_entries": 285
+        }
+      },
+      "zstd_train_8kib_matched_random_access": {
+        "in_sample": {
+          "dict_bytes": 8192,
+          "payload_frames_bytes": 23146,
+          "unindexed_per_file_total_bytes": 31338,
+          "serialized_random_access_archive_bytes": 31668,
+          "random_access_verified": true
+        },
+        "held_out": {
+          "dict_bytes": 8192,
+          "payload_frames_bytes": 22979,
+          "unindexed_per_file_total_bytes": 31171,
+          "serialized_random_access_archive_bytes": 31501,
+          "random_access_verified": true
+        }
+      },
+      "comparisons": {
+        "prune_gain_over_greedy_entry_in_sample_bytes": -216,
+        "prune_gain_over_greedy_entry_held_out_bytes": 578,
+        "prune_gain_over_greedy_byte_in_sample_bytes": 1415,
+        "held_out_gap_vs_zstd_train_8kib_bytes": 10544
+      }
+    },
+    {
+      "label": "untouched_c_vs_ts_40_to_40",
+      "train_raw_bytes": 149845,
+      "held_out_raw_bytes": 150379,
+      "methods": {
+        "greedy-entry+mdl": {
+          "search_sec": 15.4021,
+          "selected_entries": 1248,
+          "dict_bytes": 10354,
+          "in_sample_unindexed_bytes": 52499,
+          "in_sample_serialized_random_access_bytes": 52828,
+          "held_out_serialized_random_access_bytes": 66822,
+          "random_access_verified": true
+        },
+        "greedy-byte+mdl": {
+          "search_sec": 18.0109,
+          "selected_entries": 1760,
+          "dict_bytes": 9410,
+          "in_sample_unindexed_bytes": 54656,
+          "in_sample_serialized_random_access_bytes": 54985,
+          "held_out_serialized_random_access_bytes": 65020,
+          "random_access_verified": true
+        },
+        "mdl-archive-prune": {
+          "search_sec": 13.9988,
+          "selected_entries": 1504,
+          "dict_bytes": 10361,
+          "in_sample_unindexed_bytes": 52628,
+          "in_sample_serialized_random_access_bytes": 52957,
+          "held_out_serialized_random_access_bytes": 65470,
+          "random_access_verified": true,
+          "pruned_absorbed_entries": 448
+        }
+      },
+      "zstd_train_8kib_matched_random_access": {
+        "in_sample": {
+          "dict_bytes": 8192,
+          "payload_frames_bytes": 39336,
+          "unindexed_per_file_total_bytes": 47528,
+          "serialized_random_access_archive_bytes": 47858,
+          "random_access_verified": true
+        },
+        "held_out": {
+          "dict_bytes": 8192,
+          "payload_frames_bytes": 41065,
+          "unindexed_per_file_total_bytes": 49257,
+          "serialized_random_access_archive_bytes": 49587,
+          "random_access_verified": true
+        }
+      },
+      "comparisons": {
+        "prune_gain_over_greedy_entry_in_sample_bytes": -129,
+        "prune_gain_over_greedy_entry_held_out_bytes": 1352,
+        "prune_gain_over_greedy_byte_in_sample_bytes": 2028,
+        "held_out_gap_vs_zstd_train_8kib_bytes": 15883
+      }
+    }
+  ]
+}
