@@ -48,9 +48,25 @@ and `dcc-v5`:
   applying unregularized in-sample `VMM` across a deep `4,096` tail admits corpus-specific `count=3..4`
   strings that win `+326 B` in-sample while overfitting unseen files.
 
+### 3. 2x2 Mechanism Ablation: Pooled-Substring Revival & Leave-One-Document-Out Transfer VMM (`transfer_vmm.py`, `results/transfer_vmm_2x2_results_v1.json`)
+
+Diagnoses and resolves both structural limits of one-shot `Base VMM` (`revival=False, shrinkage='none'`):
+1. **Superstring-Substring Nash Lock-In (`revival=True`):** Long low-count superstrings (`c=2`) steal
+   occurrences from core substrings (`c -> 1`), inflating the substring's one-shot header surcharge so
+   neither yields. Pooling active superstring counts & document bitmasks during de-cannibalization
+   breaks lock-in (**`9/9` (`100%`) in-sample wins** vs. `MDL-prefix-stop`, `+13,220 B` net saved).
+2. **Leave-One-Document-Out Risk Shrinkage (`shrinkage='loo_doc'`):** Weighting non-singleton headers
+   by $df(w) / (df(w) - 1)$ (`+\infty` for $df \le 1$) eliminates single-document burst memorization:
+   - **`TransferVMM` (`revival=True, shrinkage='loo_doc'`) wins `9/9` (`100%`) held-out single-chain
+     cells (`+16,161 B` net saved vs. `MDL-prefix-stop`, `+17,864 B` vs. `Base VMM`) and beats both
+     single-mechanism ablations on all `12/12` rows (including unordered `Union(BPE, greedy-entry)`)**:
+     - CodeNet held-out `BIT3`: **`96,956 B`** (`greedy-entry`, `+3,611 B` vs. `MDL`, `-6,178 B` vs. `Base`), **`97,954 B`** (`greedy-byte`), **`98,294 B`** (`bpe`, `+4,906 B` vs. `MDL`).
+     - `short_wgsl_vs_json` held-out `BIT3`: **`11,392 B`** (`-11.3%` smaller than raw `DFL3-zdict` `12,842 B` and **`-22.4%` smaller than `ZST3-tuned` `14,678 B`**).
+     - `short_ts_vs_mjs` held-out `BIT3`: **`12,262 B`** (`-8.9%` smaller than `DFL3-zdict` `13,458 B` and **`-20.7%` smaller than `ZST3-tuned` `15,459 B`**).
+
 ## Verification
 
 ```bash
-/usr/bin/python3 -m py_compile vmm_subset_polish.py evaluate_vmm_rung3.py test_vmm_subset.py
+/usr/bin/python3 -m py_compile vmm_subset_polish.py transfer_vmm.py evaluate_vmm_rung3.py evaluate_transfer_vmm_2x2.py test_vmm_subset.py
 /usr/bin/python3 -B test_vmm_subset.py
 ```

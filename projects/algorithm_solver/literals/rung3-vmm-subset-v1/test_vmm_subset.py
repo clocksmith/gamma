@@ -20,6 +20,7 @@ from vmm_subset_polish import (  # noqa: E402
     polish_to_certified_nash_single,
     variational_two_part_mm,
 )
+from transfer_vmm import transfer_variational_mm  # noqa: E402
 
 
 def test_certifier_catches_suboptimal_parse_and_polishes_to_zero_gap() -> None:
@@ -77,6 +78,45 @@ def test_vmm_excises_absorbed_bpe_scaffolds_and_beats_prefix_stop() -> None:
     assert dec == all_docs
 
 
+def test_homotopy_revival_recovers_cannibalized_core_substring() -> None:
+    # `b'function '` occurs 13 times across 6 docs, but 6 superstrings `b'function call_k('` (2x each)
+    # steal 12 of its 13 occurrences (`c_init(b'function ') == 1`).
+    docs_1 = [f'function call_{k}(x); function call_{k}(y);\n'.encode('ascii') for k in range(3)]
+    docs_2 = [f'function call_{k}(x); function call_{k}(y);\n'.encode('ascii') for k in range(3, 6)]
+    docs_1[0] += b'function z(0);\n'
+    all_docs = docs_1 + docs_2
+    singles = sorted({bytes([b]) for d in all_docs for b in d})
+    superstrings = [f'function call_{k}('.encode('ascii') for k in range(6)]
+    seed = singles + [b'function '] + superstrings
+
+    no_rev = transfer_variational_mm(docs_1, docs_2, seed, n_tables=2, revival=False, shrinkage='none')
+    with_rev = transfer_variational_mm(docs_1, docs_2, seed, n_tables=2, revival=True, shrinkage='none')
+
+    assert b'function ' not in no_rev['entries'], 'simultaneous VMM should lose cannibalized substring'
+    assert b'function ' in with_rev['entries'], 'homotopy revival VMM must recover core substring'
+    assert with_rev['total_archive_bytes'] < no_rev['total_archive_bytes']
+    assert with_rev['is_certified_nash_fixed_point'] is True
+
+
+def test_loo_doc_shrinkage_eliminates_single_document_burst_overfitting() -> None:
+    # `b'shared_header = '` appears across all 10 docs (`df = 10`), whereas `b'burst_only_doc0_'`
+    # appears 15 times inside doc 0 ONLY (`df = 1`) and never on unseen test docs!
+    docs_1 = [b'shared_header = 1;\n' * 4 for _ in range(5)]
+    docs_2 = [b'shared_header = 2;\n' * 4 for _ in range(5)]
+    docs_1[0] += b'burst_only_doc0_ = 9;\n' * 15
+    all_docs = docs_1 + docs_2
+    singles = sorted({bytes([b]) for d in all_docs for b in d})
+    seed = singles + [b'shared_header = ', b'burst_only_doc0_']
+
+    unreg = transfer_variational_mm(docs_1, docs_2, seed, n_tables=2, revival=True, shrinkage='none')
+    loo = transfer_variational_mm(docs_1, docs_2, seed, n_tables=2, revival=True, shrinkage='loo_doc')
+
+    assert b'burst_only_doc0_' in unreg['entries']
+    assert b'burst_only_doc0_' not in loo['entries']
+    assert b'shared_header = ' in loo['entries']
+    assert loo['is_certified_nash_fixed_point'] is True
+
+
 def test_codenet_untouched() -> None:
     out = subprocess.check_output(['git', '-C', str(CODENET_DIR), 'status', '--porcelain', '.'], text=True).strip()
     assert out == '', f'codenet-replication-v1 dirtied: {out}'
@@ -87,6 +127,10 @@ def main() -> None:
     print('  [PASS] Nash fixed-point certifier catches suboptimal parse and polishes to 0-bit gap')
     test_vmm_excises_absorbed_bpe_scaffolds_and_beats_prefix_stop()
     print('  [PASS] Variational Two-Part MM excises BPE scaffolds + middle bloat and round-trips')
+    test_homotopy_revival_recovers_cannibalized_core_substring()
+    print('  [PASS] Homotopy Revival VMM recovers substring cannibalized by low-count superstrings')
+    test_loo_doc_shrinkage_eliminates_single_document_burst_overfitting()
+    print('  [PASS] Leave-One-Document-Out shrinkage prunes df=1 single-file burst memorization')
     test_codenet_untouched()
     print('  [PASS] codenet-replication-v1 untouched')
     print('ALL rung3-vmm-subset-v1 unit tests PASSED.')

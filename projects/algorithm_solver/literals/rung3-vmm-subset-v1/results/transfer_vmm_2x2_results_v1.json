@@ -1,0 +1,738 @@
+{
+  "schema": "bits-rung3-transfer-vmm-2x2/v1",
+  "elapsed_sec": 510.93,
+  "aggregate_9_cell_summary": {
+    "base_vmm": {
+      "single_chain_cells": 9,
+      "in_sample_wins_vs_mdl_prefix": 7,
+      "held_out_wins_vs_mdl_prefix": 4,
+      "net_in_sample_bytes_saved_vs_mdl_prefix": 11012,
+      "net_held_out_bytes_saved_vs_mdl_prefix": -1703
+    },
+    "revival_only_vmm": {
+      "single_chain_cells": 9,
+      "in_sample_wins_vs_mdl_prefix": 9,
+      "held_out_wins_vs_mdl_prefix": 8,
+      "net_in_sample_bytes_saved_vs_mdl_prefix": 13220,
+      "net_held_out_bytes_saved_vs_mdl_prefix": 6212
+    },
+    "loo_only_vmm": {
+      "single_chain_cells": 9,
+      "in_sample_wins_vs_mdl_prefix": 6,
+      "held_out_wins_vs_mdl_prefix": 9,
+      "net_in_sample_bytes_saved_vs_mdl_prefix": 5934,
+      "net_held_out_bytes_saved_vs_mdl_prefix": 13538
+    },
+    "transfer_vmm": {
+      "single_chain_cells": 9,
+      "in_sample_wins_vs_mdl_prefix": 6,
+      "held_out_wins_vs_mdl_prefix": 9,
+      "net_in_sample_bytes_saved_vs_mdl_prefix": 5769,
+      "net_held_out_bytes_saved_vs_mdl_prefix": 16161
+    }
+  },
+  "suites": [
+    {
+      "label": "codenet_py_js_200_to_200",
+      "k_max": 4096,
+      "generators": {
+        "bpe": {
+          "mdl_prefix_stop": {
+            "entries": 1856,
+            "in_sample_ra_bytes": 93058,
+            "held_out_ra_bytes": 103200,
+            "held_out_ns_per_seek": 1722.56,
+            "held_out_mib_per_sec": 376.71
+          },
+          "base_vmm": {
+            "entries": 1839,
+            "in_sample_ra_bytes": 87883,
+            "held_out_ra_bytes": 101795,
+            "held_out_ns_per_seek": 1620.88,
+            "held_out_mib_per_sec": 400.34,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "revival_only_vmm": {
+            "entries": 1491,
+            "in_sample_ra_bytes": 87339,
+            "held_out_ra_bytes": 99532,
+            "held_out_ns_per_seek": 1705.4,
+            "held_out_mib_per_sec": 380.5,
+            "certified_nash": true,
+            "revived_total": 154
+          },
+          "loo_only_vmm": {
+            "entries": 1554,
+            "in_sample_ra_bytes": 89175,
+            "held_out_ra_bytes": 98952,
+            "held_out_ns_per_seek": 1599.86,
+            "held_out_mib_per_sec": 405.6,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "transfer_vmm": {
+            "entries": 1318,
+            "in_sample_ra_bytes": 89163,
+            "held_out_ra_bytes": 98294,
+            "held_out_ns_per_seek": 1656.78,
+            "held_out_mib_per_sec": 391.66,
+            "certified_nash": true,
+            "revived_total": 376
+          },
+          "deltas_vs_mdl_prefix_stop": {
+            "base_vmm": {
+              "in_sample_saved_bytes": 5175,
+              "held_out_saved_bytes": 1405
+            },
+            "revival_only_vmm": {
+              "in_sample_saved_bytes": 5719,
+              "held_out_saved_bytes": 3668
+            },
+            "loo_only_vmm": {
+              "in_sample_saved_bytes": 3883,
+              "held_out_saved_bytes": 4248
+            },
+            "transfer_vmm": {
+              "in_sample_saved_bytes": 3895,
+              "held_out_saved_bytes": 4906
+            }
+          }
+        },
+        "greedy-byte": {
+          "mdl_prefix_stop": {
+            "entries": 1920,
+            "in_sample_ra_bytes": 89119,
+            "held_out_ra_bytes": 101355,
+            "held_out_ns_per_seek": 1668.18,
+            "held_out_mib_per_sec": 388.99
+          },
+          "base_vmm": {
+            "entries": 1902,
+            "in_sample_ra_bytes": 86014,
+            "held_out_ra_bytes": 101013,
+            "held_out_ns_per_seek": 1635.18,
+            "held_out_mib_per_sec": 396.84,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "revival_only_vmm": {
+            "entries": 1902,
+            "in_sample_ra_bytes": 86014,
+            "held_out_ra_bytes": 101013,
+            "held_out_ns_per_seek": 1630.1,
+            "held_out_mib_per_sec": 398.07,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "loo_only_vmm": {
+            "entries": 1617,
+            "in_sample_ra_bytes": 88102,
+            "held_out_ra_bytes": 98386,
+            "held_out_ns_per_seek": 1646.86,
+            "held_out_mib_per_sec": 394.02,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "transfer_vmm": {
+            "entries": 1351,
+            "in_sample_ra_bytes": 88384,
+            "held_out_ra_bytes": 97954,
+            "held_out_ns_per_seek": 1669.6,
+            "held_out_mib_per_sec": 388.65,
+            "certified_nash": true,
+            "revived_total": 109
+          },
+          "deltas_vs_mdl_prefix_stop": {
+            "base_vmm": {
+              "in_sample_saved_bytes": 3105,
+              "held_out_saved_bytes": 342
+            },
+            "revival_only_vmm": {
+              "in_sample_saved_bytes": 3105,
+              "held_out_saved_bytes": 342
+            },
+            "loo_only_vmm": {
+              "in_sample_saved_bytes": 1017,
+              "held_out_saved_bytes": 2969
+            },
+            "transfer_vmm": {
+              "in_sample_saved_bytes": 735,
+              "held_out_saved_bytes": 3401
+            }
+          }
+        },
+        "greedy-entry": {
+          "mdl_prefix_stop": {
+            "entries": 1472,
+            "in_sample_ra_bytes": 86075,
+            "held_out_ra_bytes": 100567,
+            "held_out_ns_per_seek": 1585.6,
+            "held_out_mib_per_sec": 409.24
+          },
+          "base_vmm": {
+            "entries": 1805,
+            "in_sample_ra_bytes": 85742,
+            "held_out_ra_bytes": 103134,
+            "held_out_ns_per_seek": 1644.32,
+            "held_out_mib_per_sec": 394.63,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "revival_only_vmm": {
+            "entries": 1485,
+            "in_sample_ra_bytes": 85360,
+            "held_out_ra_bytes": 100454,
+            "held_out_ns_per_seek": 1642.62,
+            "held_out_mib_per_sec": 395.04,
+            "certified_nash": true,
+            "revived_total": 3
+          },
+          "loo_only_vmm": {
+            "entries": 1304,
+            "in_sample_ra_bytes": 87678,
+            "held_out_ra_bytes": 97159,
+            "held_out_ns_per_seek": 1583.44,
+            "held_out_mib_per_sec": 409.8,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "transfer_vmm": {
+            "entries": 1151,
+            "in_sample_ra_bytes": 87854,
+            "held_out_ra_bytes": 96956,
+            "held_out_ns_per_seek": 1635.6,
+            "held_out_mib_per_sec": 396.73,
+            "certified_nash": true,
+            "revived_total": 20
+          },
+          "deltas_vs_mdl_prefix_stop": {
+            "base_vmm": {
+              "in_sample_saved_bytes": 333,
+              "held_out_saved_bytes": -2567
+            },
+            "revival_only_vmm": {
+              "in_sample_saved_bytes": 715,
+              "held_out_saved_bytes": 113
+            },
+            "loo_only_vmm": {
+              "in_sample_saved_bytes": -1603,
+              "held_out_saved_bytes": 3408
+            },
+            "transfer_vmm": {
+              "in_sample_saved_bytes": -1779,
+              "held_out_saved_bytes": 3611
+            }
+          }
+        },
+        "union_bpe_ge": {
+          "mdl_prefix_stop": null,
+          "base_vmm": {
+            "entries": 1874,
+            "in_sample_ra_bytes": 86471,
+            "held_out_ra_bytes": 104279,
+            "held_out_ns_per_seek": 1924.0,
+            "held_out_mib_per_sec": 337.26,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "revival_only_vmm": {
+            "entries": 1561,
+            "in_sample_ra_bytes": 86257,
+            "held_out_ra_bytes": 100182,
+            "held_out_ns_per_seek": 3279.28,
+            "held_out_mib_per_sec": 197.88,
+            "certified_nash": true,
+            "revived_total": 357
+          },
+          "loo_only_vmm": {
+            "entries": 1489,
+            "in_sample_ra_bytes": 88357,
+            "held_out_ra_bytes": 98441,
+            "held_out_ns_per_seek": 1599.42,
+            "held_out_mib_per_sec": 405.71,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "transfer_vmm": {
+            "entries": 1313,
+            "in_sample_ra_bytes": 88633,
+            "held_out_ra_bytes": 97964,
+            "held_out_ns_per_seek": 1660.38,
+            "held_out_mib_per_sec": 390.81,
+            "certified_nash": true,
+            "revived_total": 493
+          }
+        }
+      }
+    },
+    {
+      "label": "short_wgsl_vs_json_80_to_80",
+      "k_max": 1024,
+      "generators": {
+        "bpe": {
+          "mdl_prefix_stop": {
+            "entries": 320,
+            "in_sample_ra_bytes": 11345,
+            "held_out_ra_bytes": 12071,
+            "held_out_ns_per_seek": 238.88,
+            "held_out_mib_per_sec": 596.19
+          },
+          "base_vmm": {
+            "entries": 332,
+            "in_sample_ra_bytes": 10445,
+            "held_out_ra_bytes": 12020,
+            "held_out_ns_per_seek": 215.84,
+            "held_out_mib_per_sec": 659.83,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "revival_only_vmm": {
+            "entries": 330,
+            "in_sample_ra_bytes": 10321,
+            "held_out_ra_bytes": 11486,
+            "held_out_ns_per_seek": 213.24,
+            "held_out_mib_per_sec": 667.88,
+            "certified_nash": true,
+            "revived_total": 35
+          },
+          "loo_only_vmm": {
+            "entries": 275,
+            "in_sample_ra_bytes": 10397,
+            "held_out_ra_bytes": 11632,
+            "held_out_ns_per_seek": 221.08,
+            "held_out_mib_per_sec": 644.19,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "transfer_vmm": {
+            "entries": 300,
+            "in_sample_ra_bytes": 10382,
+            "held_out_ra_bytes": 11392,
+            "held_out_ns_per_seek": 228.3,
+            "held_out_mib_per_sec": 623.82,
+            "certified_nash": true,
+            "revived_total": 106
+          },
+          "deltas_vs_mdl_prefix_stop": {
+            "base_vmm": {
+              "in_sample_saved_bytes": 900,
+              "held_out_saved_bytes": 51
+            },
+            "revival_only_vmm": {
+              "in_sample_saved_bytes": 1024,
+              "held_out_saved_bytes": 585
+            },
+            "loo_only_vmm": {
+              "in_sample_saved_bytes": 948,
+              "held_out_saved_bytes": 439
+            },
+            "transfer_vmm": {
+              "in_sample_saved_bytes": 963,
+              "held_out_saved_bytes": 679
+            }
+          }
+        },
+        "greedy-byte": {
+          "mdl_prefix_stop": {
+            "entries": 448,
+            "in_sample_ra_bytes": 10913,
+            "held_out_ra_bytes": 12185,
+            "held_out_ns_per_seek": 208.02,
+            "held_out_mib_per_sec": 684.64
+          },
+          "base_vmm": {
+            "entries": 366,
+            "in_sample_ra_bytes": 10355,
+            "held_out_ra_bytes": 12294,
+            "held_out_ns_per_seek": 211.16,
+            "held_out_mib_per_sec": 674.46,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "revival_only_vmm": {
+            "entries": 354,
+            "in_sample_ra_bytes": 10279,
+            "held_out_ra_bytes": 11892,
+            "held_out_ns_per_seek": 213.92,
+            "held_out_mib_per_sec": 665.76,
+            "certified_nash": true,
+            "revived_total": 35
+          },
+          "loo_only_vmm": {
+            "entries": 287,
+            "in_sample_ra_bytes": 10360,
+            "held_out_ra_bytes": 11611,
+            "held_out_ns_per_seek": 215.84,
+            "held_out_mib_per_sec": 659.83,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "transfer_vmm": {
+            "entries": 308,
+            "in_sample_ra_bytes": 10401,
+            "held_out_ra_bytes": 11516,
+            "held_out_ns_per_seek": 217.92,
+            "held_out_mib_per_sec": 653.54,
+            "certified_nash": true,
+            "revived_total": 71
+          },
+          "deltas_vs_mdl_prefix_stop": {
+            "base_vmm": {
+              "in_sample_saved_bytes": 558,
+              "held_out_saved_bytes": -109
+            },
+            "revival_only_vmm": {
+              "in_sample_saved_bytes": 634,
+              "held_out_saved_bytes": 293
+            },
+            "loo_only_vmm": {
+              "in_sample_saved_bytes": 553,
+              "held_out_saved_bytes": 574
+            },
+            "transfer_vmm": {
+              "in_sample_saved_bytes": 512,
+              "held_out_saved_bytes": 669
+            }
+          }
+        },
+        "greedy-entry": {
+          "mdl_prefix_stop": {
+            "entries": 256,
+            "in_sample_ra_bytes": 10273,
+            "held_out_ra_bytes": 12092,
+            "held_out_ns_per_seek": 223.18,
+            "held_out_mib_per_sec": 638.13
+          },
+          "base_vmm": {
+            "entries": 258,
+            "in_sample_ra_bytes": 10717,
+            "held_out_ra_bytes": 12650,
+            "held_out_ns_per_seek": 270.52,
+            "held_out_mib_per_sec": 526.46,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "revival_only_vmm": {
+            "entries": 303,
+            "in_sample_ra_bytes": 10242,
+            "held_out_ra_bytes": 12163,
+            "held_out_ns_per_seek": 219.18,
+            "held_out_mib_per_sec": 649.78,
+            "certified_nash": true,
+            "revived_total": 36
+          },
+          "loo_only_vmm": {
+            "entries": 239,
+            "in_sample_ra_bytes": 10504,
+            "held_out_ra_bytes": 11672,
+            "held_out_ns_per_seek": 241.42,
+            "held_out_mib_per_sec": 589.92,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "transfer_vmm": {
+            "entries": 244,
+            "in_sample_ra_bytes": 10345,
+            "held_out_ra_bytes": 11465,
+            "held_out_ns_per_seek": 224.64,
+            "held_out_mib_per_sec": 633.99,
+            "certified_nash": true,
+            "revived_total": 14
+          },
+          "deltas_vs_mdl_prefix_stop": {
+            "base_vmm": {
+              "in_sample_saved_bytes": -444,
+              "held_out_saved_bytes": -558
+            },
+            "revival_only_vmm": {
+              "in_sample_saved_bytes": 31,
+              "held_out_saved_bytes": -71
+            },
+            "loo_only_vmm": {
+              "in_sample_saved_bytes": -231,
+              "held_out_saved_bytes": 420
+            },
+            "transfer_vmm": {
+              "in_sample_saved_bytes": -72,
+              "held_out_saved_bytes": 627
+            }
+          }
+        },
+        "union_bpe_ge": {
+          "mdl_prefix_stop": null,
+          "base_vmm": {
+            "entries": 258,
+            "in_sample_ra_bytes": 10779,
+            "held_out_ra_bytes": 12763,
+            "held_out_ns_per_seek": 249.02,
+            "held_out_mib_per_sec": 571.92,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "revival_only_vmm": {
+            "entries": 349,
+            "in_sample_ra_bytes": 10347,
+            "held_out_ra_bytes": 12024,
+            "held_out_ns_per_seek": 211.84,
+            "held_out_mib_per_sec": 672.29,
+            "certified_nash": true,
+            "revived_total": 429
+          },
+          "loo_only_vmm": {
+            "entries": 254,
+            "in_sample_ra_bytes": 10555,
+            "held_out_ra_bytes": 11724,
+            "held_out_ns_per_seek": 221.88,
+            "held_out_mib_per_sec": 641.87,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "transfer_vmm": {
+            "entries": 289,
+            "in_sample_ra_bytes": 10380,
+            "held_out_ra_bytes": 11460,
+            "held_out_ns_per_seek": 312.84,
+            "held_out_mib_per_sec": 455.24,
+            "certified_nash": true,
+            "revived_total": 158
+          }
+        }
+      }
+    },
+    {
+      "label": "short_ts_vs_mjs_80_to_80",
+      "k_max": 1024,
+      "generators": {
+        "bpe": {
+          "mdl_prefix_stop": {
+            "entries": 448,
+            "in_sample_ra_bytes": 12721,
+            "held_out_ra_bytes": 13387,
+            "held_out_ns_per_seek": 222.8,
+            "held_out_mib_per_sec": 644.81
+          },
+          "base_vmm": {
+            "entries": 420,
+            "in_sample_ra_bytes": 11474,
+            "held_out_ra_bytes": 12898,
+            "held_out_ns_per_seek": 207.22,
+            "held_out_mib_per_sec": 693.29,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "revival_only_vmm": {
+            "entries": 390,
+            "in_sample_ra_bytes": 11384,
+            "held_out_ra_bytes": 12618,
+            "held_out_ns_per_seek": 211.8,
+            "held_out_mib_per_sec": 678.3,
+            "certified_nash": true,
+            "revived_total": 45
+          },
+          "loo_only_vmm": {
+            "entries": 362,
+            "in_sample_ra_bytes": 11474,
+            "held_out_ra_bytes": 12793,
+            "held_out_ns_per_seek": 214.1,
+            "held_out_mib_per_sec": 671.01,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "transfer_vmm": {
+            "entries": 336,
+            "in_sample_ra_bytes": 11464,
+            "held_out_ra_bytes": 12397,
+            "held_out_ns_per_seek": 220.32,
+            "held_out_mib_per_sec": 652.07,
+            "certified_nash": true,
+            "revived_total": 128
+          },
+          "deltas_vs_mdl_prefix_stop": {
+            "base_vmm": {
+              "in_sample_saved_bytes": 1247,
+              "held_out_saved_bytes": 489
+            },
+            "revival_only_vmm": {
+              "in_sample_saved_bytes": 1337,
+              "held_out_saved_bytes": 769
+            },
+            "loo_only_vmm": {
+              "in_sample_saved_bytes": 1247,
+              "held_out_saved_bytes": 594
+            },
+            "transfer_vmm": {
+              "in_sample_saved_bytes": 1257,
+              "held_out_saved_bytes": 990
+            }
+          }
+        },
+        "greedy-byte": {
+          "mdl_prefix_stop": {
+            "entries": 448,
+            "in_sample_ra_bytes": 11672,
+            "held_out_ra_bytes": 12722,
+            "held_out_ns_per_seek": 211.48,
+            "held_out_mib_per_sec": 679.33
+          },
+          "base_vmm": {
+            "entries": 421,
+            "in_sample_ra_bytes": 11248,
+            "held_out_ra_bytes": 12946,
+            "held_out_ns_per_seek": 205.1,
+            "held_out_mib_per_sec": 700.46,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "revival_only_vmm": {
+            "entries": 388,
+            "in_sample_ra_bytes": 11126,
+            "held_out_ra_bytes": 12524,
+            "held_out_ns_per_seek": 209.46,
+            "held_out_mib_per_sec": 685.88,
+            "certified_nash": true,
+            "revived_total": 37
+          },
+          "loo_only_vmm": {
+            "entries": 353,
+            "in_sample_ra_bytes": 11323,
+            "held_out_ra_bytes": 12431,
+            "held_out_ns_per_seek": 208.94,
+            "held_out_mib_per_sec": 687.59,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "transfer_vmm": {
+            "entries": 362,
+            "in_sample_ra_bytes": 11361,
+            "held_out_ra_bytes": 12282,
+            "held_out_ns_per_seek": 211.6,
+            "held_out_mib_per_sec": 678.94,
+            "certified_nash": true,
+            "revived_total": 68
+          },
+          "deltas_vs_mdl_prefix_stop": {
+            "base_vmm": {
+              "in_sample_saved_bytes": 424,
+              "held_out_saved_bytes": -224
+            },
+            "revival_only_vmm": {
+              "in_sample_saved_bytes": 546,
+              "held_out_saved_bytes": 198
+            },
+            "loo_only_vmm": {
+              "in_sample_saved_bytes": 349,
+              "held_out_saved_bytes": 291
+            },
+            "transfer_vmm": {
+              "in_sample_saved_bytes": 311,
+              "held_out_saved_bytes": 440
+            }
+          }
+        },
+        "greedy-entry": {
+          "mdl_prefix_stop": {
+            "entries": 320,
+            "in_sample_ra_bytes": 11206,
+            "held_out_ra_bytes": 13100,
+            "held_out_ns_per_seek": 215.9,
+            "held_out_mib_per_sec": 665.42
+          },
+          "base_vmm": {
+            "entries": 308,
+            "in_sample_ra_bytes": 11492,
+            "held_out_ra_bytes": 13632,
+            "held_out_ns_per_seek": 248.44,
+            "held_out_mib_per_sec": 578.26,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "revival_only_vmm": {
+            "entries": 342,
+            "in_sample_ra_bytes": 11097,
+            "held_out_ra_bytes": 12785,
+            "held_out_ns_per_seek": 212.7,
+            "held_out_mib_per_sec": 675.43,
+            "certified_nash": true,
+            "revived_total": 21
+          },
+          "loo_only_vmm": {
+            "entries": 272,
+            "in_sample_ra_bytes": 11435,
+            "held_out_ra_bytes": 12505,
+            "held_out_ns_per_seek": 225.08,
+            "held_out_mib_per_sec": 638.28,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "transfer_vmm": {
+            "entries": 281,
+            "in_sample_ra_bytes": 11259,
+            "held_out_ra_bytes": 12262,
+            "held_out_ns_per_seek": 223.28,
+            "held_out_mib_per_sec": 643.43,
+            "certified_nash": true,
+            "revived_total": 7
+          },
+          "deltas_vs_mdl_prefix_stop": {
+            "base_vmm": {
+              "in_sample_saved_bytes": -286,
+              "held_out_saved_bytes": -532
+            },
+            "revival_only_vmm": {
+              "in_sample_saved_bytes": 109,
+              "held_out_saved_bytes": 315
+            },
+            "loo_only_vmm": {
+              "in_sample_saved_bytes": -229,
+              "held_out_saved_bytes": 595
+            },
+            "transfer_vmm": {
+              "in_sample_saved_bytes": -53,
+              "held_out_saved_bytes": 838
+            }
+          }
+        },
+        "union_bpe_ge": {
+          "mdl_prefix_stop": null,
+          "base_vmm": {
+            "entries": 312,
+            "in_sample_ra_bytes": 11525,
+            "held_out_ra_bytes": 13618,
+            "held_out_ns_per_seek": 256.6,
+            "held_out_mib_per_sec": 559.88,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "revival_only_vmm": {
+            "entries": 364,
+            "in_sample_ra_bytes": 11232,
+            "held_out_ra_bytes": 12621,
+            "held_out_ns_per_seek": 214.94,
+            "held_out_mib_per_sec": 668.39,
+            "certified_nash": true,
+            "revived_total": 392
+          },
+          "loo_only_vmm": {
+            "entries": 287,
+            "in_sample_ra_bytes": 11484,
+            "held_out_ra_bytes": 12541,
+            "held_out_ns_per_seek": 222.64,
+            "held_out_mib_per_sec": 645.27,
+            "certified_nash": true,
+            "revived_total": 0
+          },
+          "transfer_vmm": {
+            "entries": 339,
+            "in_sample_ra_bytes": 11347,
+            "held_out_ra_bytes": 12332,
+            "held_out_ns_per_seek": 218.72,
+            "held_out_mib_per_sec": 656.84,
+            "certified_nash": true,
+            "revived_total": 180
+          }
+        }
+      }
+    }
+  ]
+}
