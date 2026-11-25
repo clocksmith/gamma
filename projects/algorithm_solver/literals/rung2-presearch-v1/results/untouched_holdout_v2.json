@@ -1,0 +1,2545 @@
+{
+  "schema": "bits-rung2-untouched-holdout-results/v2",
+  "frozen_predictor_rule_version": "bits-rung2-presearch-v2",
+  "frozen_predictor_sha256": "79d74f4a748f9126418ec1a0faa7aa1cecca71682bd3345c5c14706013189d57",
+  "post_hoc_retuning": false,
+  "cells_evaluated": 12,
+  "upgraded_rung2_layout_bar": {
+    "cells_where_default_always_B_misses_gt_1pct": 6,
+    "cell_labels_where_default_B_misses_gt_1pct": [
+      "c_vs_ts_n80",
+      "sh_vs_wgsl_n8",
+      "sh_vs_wgsl_n75",
+      "zig_vs_zig_ctrl_n8",
+      "zig_vs_zig_ctrl_n30",
+      "zig_vs_zig_ctrl_n80"
+    ],
+    "predictor_beats_default_B_on_gt_1pct_misses": "5/6",
+    "mean_layout_bytes_gained_over_default_B_on_gt_1pct_misses": 19608.17,
+    "total_layout_bytes_gained_over_default_B_all_12_cells": 115015,
+    "total_layout_regret_vs_oracle_all_12_cells": 52968,
+    "uncorrected_plug_in_mi_total_bytes_lost_all_12_cells": 167227
+  },
+  "decoupled_stopping_vs_mdl_summary": {
+    "total_ordinary_mdl_byte_stopping_saving_over_tokmin_fill_bytes": 61763,
+    "total_presearch_k_hat_truncation_extra_cost_vs_full_mdl_bytes": 43694,
+    "mean_search_seconds_saved_vs_single_layout_k4096": 8.634
+  },
+  "overall_summary": {
+    "exact_layout_accuracy": "5/12",
+    "within_1pct_materiality_rate": "5/12",
+    "mean_total_bytes_lost_vs_oracle": 8055.17,
+    "total_search_seconds_saved_vs_full_grid": 452.88,
+    "wall_elapsed_sec": 956.95
+  },
+  "evaluations": [
+    {
+      "schema": "bits-rung2-presearch-eval/v2",
+      "label": "zig_vs_wgsl_n8",
+      "hypothesis_status": "empirical_evaluation",
+      "raw_bytes_total": 21082,
+      "prediction": {
+        "rule_version": "bits-rung2-presearch-v2",
+        "layout_hat": "B",
+        "K_hat": 256,
+        "predictor_elapsed_ms": 5.154,
+        "executed_total_bytes": 8938,
+        "executed_elapsed_sec": 1.2636,
+        "roundtrip_verified": true
+      },
+      "decoupled_layout_score": {
+        "oracle_layout": "A",
+        "predicted_layout": "B",
+        "default_always_B_mdl_bytes": 8822,
+        "default_always_B_loss_bytes": 30,
+        "default_always_B_loss_pct": 0.3412,
+        "default_B_misses_gt_1pct": false,
+        "predicted_layout_mdl_kmax_bytes": 8822,
+        "layout_regret_vs_oracle_bytes": 30,
+        "layout_gain_over_default_B_bytes": 0,
+        "beats_default_B": false
+      },
+      "decoupled_stopping_score": {
+        "layout_held_fixed": "B",
+        "token_min_fill_kmax_bytes": 17053,
+        "mdl_byte_stop_kmax_bytes": 8822,
+        "presearch_k_hat_mdl_bytes": 8938,
+        "ordinary_mdl_stopping_saving_bytes": 8231,
+        "k_hat_presearch_truncation_cost_bytes": 116,
+        "search_seconds_saved_vs_single_layout_kmax": 3.5922
+      },
+      "ablations": {
+        "naive_1byte_mi": {
+          "feasible": true,
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "naive_byte_mi_saving_bytes": 283.47,
+          "assumed_extra_header_bytes": 212,
+          "naive_net_B_over_A_bytes": 71.47,
+          "bytes_lost_vs_oracle": 30
+        },
+        "plug_in_mi_without_miller_madow": {
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "plug_in_mi_saving_bytes": 368.9,
+          "bytes_lost_vs_oracle": 30
+        }
+      },
+      "oracle": {
+        "best_layout": "A",
+        "best_K": 512,
+        "best_total_bytes": 8792,
+        "full_grid_elapsed_sec": 8.9844,
+        "shared_elapsed_sec": 4.8558,
+        "separate_elapsed_sec": 4.0841,
+        "shared_wall_cap_sec": 2.5,
+        "separate_wall_cap_sec": 2.5,
+        "allow_union_floor": false,
+        "roundtrip_verified": true
+      },
+      "metrics": {
+        "bytes_lost": 146,
+        "pct_regret": 1.6606,
+        "picked_exact_layout": false,
+        "picked_within_1pct_materiality": false,
+        "search_seconds_saved_vs_grid": 7.7208,
+        "search_speedup_vs_grid": 7.11
+      },
+      "oracle_cells_compact": [
+        {
+          "layout": "A",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 8984,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 8938,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 9813,
+          "entries": 256,
+          "reparsed_pairs_evaluated": 28
+        },
+        {
+          "layout": "A",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 8792,
+          "entries": 320,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 8822,
+          "entries": 320,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 8800,
+          "entries": 400,
+          "reparsed_pairs_evaluated": 245
+        },
+        {
+          "layout": "A",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 8792,
+          "entries": 320,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 8822,
+          "entries": 320,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 8800,
+          "entries": 400,
+          "reparsed_pairs_evaluated": 247
+        },
+        {
+          "layout": "A",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 8792,
+          "entries": 320,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 8822,
+          "entries": 320,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 8800,
+          "entries": 400,
+          "reparsed_pairs_evaluated": 247
+        },
+        {
+          "layout": "A",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 8792,
+          "entries": 320,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 8822,
+          "entries": 320,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 8800,
+          "entries": 400,
+          "reparsed_pairs_evaluated": 247
+        }
+      ],
+      "manifest_files_sample": {
+        "lang1_count": 8,
+        "lang2_count": 8,
+        "lang1_first3": [
+          "fawn/runtime/zig/src/backend/metal/artifact_emit.zig",
+          "fawn/runtime/zig/src/backend/metal/metal_wait_policy.zig",
+          "fawn/runtime/zig/src/plan/synthetic_assets.zig"
+        ],
+        "lang2_first3": [
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/compiler/independent_tests_m12/inputs/frozen/ai_four_large_cancel_2.wgsl",
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/compiler/independent_tests_m12/inputs/frozen/local_clamp_f32_3.wgsl",
+          "fawn/reports/browser-compiler/20261004/three-screen/shader-6.wgsl"
+        ]
+      }
+    },
+    {
+      "schema": "bits-rung2-presearch-eval/v2",
+      "label": "zig_vs_wgsl_n30",
+      "hypothesis_status": "empirical_evaluation",
+      "raw_bytes_total": 73960,
+      "prediction": {
+        "rule_version": "bits-rung2-presearch-v2",
+        "layout_hat": "C",
+        "K_hat": 1024,
+        "predictor_elapsed_ms": 15.722,
+        "executed_total_bytes": 26777,
+        "executed_elapsed_sec": 8.1885,
+        "roundtrip_verified": true
+      },
+      "decoupled_layout_score": {
+        "oracle_layout": "C",
+        "predicted_layout": "C",
+        "default_always_B_mdl_bytes": 26924,
+        "default_always_B_loss_bytes": 147,
+        "default_always_B_loss_pct": 0.549,
+        "default_B_misses_gt_1pct": false,
+        "predicted_layout_mdl_kmax_bytes": 26777,
+        "layout_regret_vs_oracle_bytes": 0,
+        "layout_gain_over_default_B_bytes": 147,
+        "beats_default_B": true
+      },
+      "decoupled_stopping_score": {
+        "layout_held_fixed": "C",
+        "token_min_fill_kmax_bytes": null,
+        "mdl_byte_stop_kmax_bytes": 26777,
+        "presearch_k_hat_mdl_bytes": 26777,
+        "ordinary_mdl_stopping_saving_bytes": null,
+        "k_hat_presearch_truncation_cost_bytes": 0,
+        "search_seconds_saved_vs_single_layout_kmax": 4.4515
+      },
+      "ablations": {
+        "naive_1byte_mi": {
+          "feasible": true,
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "naive_byte_mi_saving_bytes": 890.97,
+          "assumed_extra_header_bytes": 510,
+          "naive_net_B_over_A_bytes": 380.97,
+          "bytes_lost_vs_oracle": 147
+        },
+        "plug_in_mi_without_miller_madow": {
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "plug_in_mi_saving_bytes": 1173.51,
+          "bytes_lost_vs_oracle": 147
+        }
+      },
+      "oracle": {
+        "best_layout": "C",
+        "best_K": 1024,
+        "best_total_bytes": 26777,
+        "full_grid_elapsed_sec": 32.3429,
+        "shared_elapsed_sec": 19.4349,
+        "separate_elapsed_sec": 12.64,
+        "shared_wall_cap_sec": 2.5,
+        "separate_wall_cap_sec": 2.5,
+        "allow_union_floor": false,
+        "roundtrip_verified": true
+      },
+      "metrics": {
+        "bytes_lost": 0,
+        "pct_regret": 0.0,
+        "picked_exact_layout": true,
+        "picked_within_1pct_materiality": true,
+        "search_seconds_saved_vs_grid": 24.1544,
+        "search_speedup_vs_grid": 3.95
+      },
+      "oracle_cells_compact": [
+        {
+          "layout": "A",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 32271,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 31563,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 35867,
+          "entries": 256,
+          "reparsed_pairs_evaluated": 15
+        },
+        {
+          "layout": "A",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 27897,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 27366,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 28610,
+          "entries": 512,
+          "reparsed_pairs_evaluated": 295
+        },
+        {
+          "layout": "A",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 27124,
+          "entries": 768,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 26924,
+          "entries": 704,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 26777,
+          "entries": 896,
+          "reparsed_pairs_evaluated": 461
+        },
+        {
+          "layout": "A",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 27124,
+          "entries": 768,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 26924,
+          "entries": 704,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 26777,
+          "entries": 896,
+          "reparsed_pairs_evaluated": 504
+        },
+        {
+          "layout": "A",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 27124,
+          "entries": 768,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 26924,
+          "entries": 704,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 26777,
+          "entries": 896,
+          "reparsed_pairs_evaluated": 504
+        }
+      ],
+      "manifest_files_sample": {
+        "lang1_count": 30,
+        "lang2_count": 30,
+        "lang1_first3": [
+          "fawn/runtime/zig/src/backend/metal/artifact_emit.zig",
+          "fawn/runtime/zig/src/backend/metal/metal_wait_policy.zig",
+          "fawn/runtime/zig/src/plan/synthetic_assets.zig"
+        ],
+        "lang2_first3": [
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/compiler/independent_tests_m12/inputs/frozen/ai_four_large_cancel_2.wgsl",
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/compiler/independent_tests_m12/inputs/frozen/local_clamp_f32_3.wgsl",
+          "fawn/reports/browser-compiler/20261004/three-screen/shader-6.wgsl"
+        ]
+      }
+    },
+    {
+      "schema": "bits-rung2-presearch-eval/v2",
+      "label": "zig_vs_wgsl_n80",
+      "hypothesis_status": "empirical_evaluation",
+      "raw_bytes_total": 187989,
+      "prediction": {
+        "rule_version": "bits-rung2-presearch-v2",
+        "layout_hat": "C",
+        "K_hat": 2048,
+        "predictor_elapsed_ms": 42.292,
+        "executed_total_bytes": 60427,
+        "executed_elapsed_sec": 23.8273,
+        "roundtrip_verified": true
+      },
+      "decoupled_layout_score": {
+        "oracle_layout": "B",
+        "predicted_layout": "C",
+        "default_always_B_mdl_bytes": 60089,
+        "default_always_B_loss_bytes": 0,
+        "default_always_B_loss_pct": 0.0,
+        "default_B_misses_gt_1pct": false,
+        "predicted_layout_mdl_kmax_bytes": 60427,
+        "layout_regret_vs_oracle_bytes": 338,
+        "layout_gain_over_default_B_bytes": -338,
+        "beats_default_B": false
+      },
+      "decoupled_stopping_score": {
+        "layout_held_fixed": "C",
+        "token_min_fill_kmax_bytes": null,
+        "mdl_byte_stop_kmax_bytes": 60427,
+        "presearch_k_hat_mdl_bytes": 60427,
+        "ordinary_mdl_stopping_saving_bytes": null,
+        "k_hat_presearch_truncation_cost_bytes": 0,
+        "search_seconds_saved_vs_single_layout_kmax": 2.2469
+      },
+      "ablations": {
+        "naive_1byte_mi": {
+          "feasible": true,
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "naive_byte_mi_saving_bytes": 1681.49,
+          "assumed_extra_header_bytes": 1147,
+          "naive_net_B_over_A_bytes": 534.49,
+          "bytes_lost_vs_oracle": 0
+        },
+        "plug_in_mi_without_miller_madow": {
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "plug_in_mi_saving_bytes": 2586.74,
+          "bytes_lost_vs_oracle": 0
+        }
+      },
+      "oracle": {
+        "best_layout": "B",
+        "best_K": 2048,
+        "best_total_bytes": 60089,
+        "full_grid_elapsed_sec": 78.8697,
+        "shared_elapsed_sec": 52.2691,
+        "separate_elapsed_sec": 26.0742,
+        "shared_wall_cap_sec": 2.5,
+        "separate_wall_cap_sec": 2.5,
+        "allow_union_floor": false,
+        "roundtrip_verified": true
+      },
+      "metrics": {
+        "bytes_lost": 338,
+        "pct_regret": 0.5625,
+        "picked_exact_layout": false,
+        "picked_within_1pct_materiality": true,
+        "search_seconds_saved_vs_grid": 55.0424,
+        "search_speedup_vs_grid": 3.31
+      },
+      "oracle_cells_compact": [
+        {
+          "layout": "A",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 82975,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 81130,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 93668,
+          "entries": 256,
+          "reparsed_pairs_evaluated": 18
+        },
+        {
+          "layout": "A",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 70489,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 68783,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 73933,
+          "entries": 512,
+          "reparsed_pairs_evaluated": 233
+        },
+        {
+          "layout": "A",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 62000,
+          "entries": 1024,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 60890,
+          "entries": 1024,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 62933,
+          "entries": 1024,
+          "reparsed_pairs_evaluated": 508
+        },
+        {
+          "layout": "A",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 60721,
+          "entries": 1472,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 60089,
+          "entries": 1344,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 60427,
+          "entries": 1536,
+          "reparsed_pairs_evaluated": 767
+        },
+        {
+          "layout": "A",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 60721,
+          "entries": 1472,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 60089,
+          "entries": 1344,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 60427,
+          "entries": 1536,
+          "reparsed_pairs_evaluated": 770
+        }
+      ],
+      "manifest_files_sample": {
+        "lang1_count": 80,
+        "lang2_count": 80,
+        "lang1_first3": [
+          "fawn/runtime/zig/src/backend/metal/artifact_emit.zig",
+          "fawn/runtime/zig/src/backend/metal/metal_wait_policy.zig",
+          "fawn/runtime/zig/src/plan/synthetic_assets.zig"
+        ],
+        "lang2_first3": [
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/compiler/independent_tests_m12/inputs/frozen/ai_four_large_cancel_2.wgsl",
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/compiler/independent_tests_m12/inputs/frozen/local_clamp_f32_3.wgsl",
+          "fawn/reports/browser-compiler/20261004/three-screen/shader-6.wgsl"
+        ]
+      }
+    },
+    {
+      "schema": "bits-rung2-presearch-eval/v2",
+      "label": "c_vs_ts_n8",
+      "hypothesis_status": "empirical_evaluation",
+      "raw_bytes_total": 35128,
+      "prediction": {
+        "rule_version": "bits-rung2-presearch-v2",
+        "layout_hat": "B",
+        "K_hat": 512,
+        "predictor_elapsed_ms": 8.654,
+        "executed_total_bytes": 14007,
+        "executed_elapsed_sec": 3.5893,
+        "roundtrip_verified": true
+      },
+      "decoupled_layout_score": {
+        "oracle_layout": "A",
+        "predicted_layout": "B",
+        "default_always_B_mdl_bytes": 14009,
+        "default_always_B_loss_bytes": 2,
+        "default_always_B_loss_pct": 0.0143,
+        "default_B_misses_gt_1pct": false,
+        "predicted_layout_mdl_kmax_bytes": 14009,
+        "layout_regret_vs_oracle_bytes": 2,
+        "layout_gain_over_default_B_bytes": 0,
+        "beats_default_B": false
+      },
+      "decoupled_stopping_score": {
+        "layout_held_fixed": "B",
+        "token_min_fill_kmax_bytes": 29506,
+        "mdl_byte_stop_kmax_bytes": 14009,
+        "presearch_k_hat_mdl_bytes": 14007,
+        "ordinary_mdl_stopping_saving_bytes": 15497,
+        "k_hat_presearch_truncation_cost_bytes": -2,
+        "search_seconds_saved_vs_single_layout_kmax": 4.6968
+      },
+      "ablations": {
+        "naive_1byte_mi": {
+          "feasible": true,
+          "layout_hat": "A",
+          "K_hat": 4096,
+          "naive_byte_mi_saving_bytes": 272.35,
+          "assumed_extra_header_bytes": 291,
+          "naive_net_B_over_A_bytes": -18.65,
+          "bytes_lost_vs_oracle": 0
+        },
+        "plug_in_mi_without_miller_madow": {
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "plug_in_mi_saving_bytes": 478.31,
+          "bytes_lost_vs_oracle": 2
+        }
+      },
+      "oracle": {
+        "best_layout": "A",
+        "best_K": 512,
+        "best_total_bytes": 14007,
+        "full_grid_elapsed_sec": 14.4081,
+        "shared_elapsed_sec": 8.2861,
+        "separate_elapsed_sec": 6.0148,
+        "shared_wall_cap_sec": 2.5,
+        "separate_wall_cap_sec": 2.5,
+        "allow_union_floor": false,
+        "roundtrip_verified": true
+      },
+      "metrics": {
+        "bytes_lost": 0,
+        "pct_regret": 0.0,
+        "picked_exact_layout": false,
+        "picked_within_1pct_materiality": true,
+        "search_seconds_saved_vs_grid": 10.8188,
+        "search_speedup_vs_grid": 4.01
+      },
+      "oracle_cells_compact": [
+        {
+          "layout": "A",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 15181,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 15017,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 16824,
+          "entries": 256,
+          "reparsed_pairs_evaluated": 16
+        },
+        {
+          "layout": "A",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 14007,
+          "entries": 448,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 14009,
+          "entries": 448,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 14132,
+          "entries": 512,
+          "reparsed_pairs_evaluated": 265
+        },
+        {
+          "layout": "A",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 14007,
+          "entries": 448,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 14009,
+          "entries": 448,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 14132,
+          "entries": 512,
+          "reparsed_pairs_evaluated": 294
+        },
+        {
+          "layout": "A",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 14007,
+          "entries": 448,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 14009,
+          "entries": 448,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 14132,
+          "entries": 512,
+          "reparsed_pairs_evaluated": 294
+        },
+        {
+          "layout": "A",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 14007,
+          "entries": 448,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 14009,
+          "entries": 448,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 14132,
+          "entries": 512,
+          "reparsed_pairs_evaluated": 294
+        }
+      ],
+      "manifest_files_sample": {
+        "lang1_count": 8,
+        "lang2_count": 8,
+        "lang1_first3": [
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/native/tests/mapping_timing.c",
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/compiler/tests/test_hlsl_draw_offsets.c",
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/compiler/tests/test_layout_v2.c"
+        ],
+        "lang2_first3": [
+          "hatch/pooled-doppler-components-20261029/deep-profile/bindings/doppler-cached/src/experimental/training/distillation/artifacts.d.ts",
+          "hatch/pooled-doppler-components-20261029/deep-profile/bindings/doppler-cached/src/inference/pipelines/vision/ops.d.ts",
+          "hatch/pooled-doppler-components-20261029/deep-profile/bindings/doppler-cached/src/inference/pipelines/text/config-components.d.ts"
+        ]
+      }
+    },
+    {
+      "schema": "bits-rung2-presearch-eval/v2",
+      "label": "c_vs_ts_n30",
+      "hypothesis_status": "empirical_evaluation",
+      "raw_bytes_total": 114285,
+      "prediction": {
+        "rule_version": "bits-rung2-presearch-v2",
+        "layout_hat": "C",
+        "K_hat": 1024,
+        "predictor_elapsed_ms": 25.804,
+        "executed_total_bytes": 41895,
+        "executed_elapsed_sec": 11.4005,
+        "roundtrip_verified": true
+      },
+      "decoupled_layout_score": {
+        "oracle_layout": "B",
+        "predicted_layout": "C",
+        "default_always_B_mdl_bytes": 41468,
+        "default_always_B_loss_bytes": 0,
+        "default_always_B_loss_pct": 0.0,
+        "default_B_misses_gt_1pct": false,
+        "predicted_layout_mdl_kmax_bytes": 41613,
+        "layout_regret_vs_oracle_bytes": 145,
+        "layout_gain_over_default_B_bytes": -145,
+        "beats_default_B": false
+      },
+      "decoupled_stopping_score": {
+        "layout_held_fixed": "C",
+        "token_min_fill_kmax_bytes": null,
+        "mdl_byte_stop_kmax_bytes": 41613,
+        "presearch_k_hat_mdl_bytes": 41895,
+        "ordinary_mdl_stopping_saving_bytes": null,
+        "k_hat_presearch_truncation_cost_bytes": 282,
+        "search_seconds_saved_vs_single_layout_kmax": 25.6309
+      },
+      "ablations": {
+        "naive_1byte_mi": {
+          "feasible": true,
+          "layout_hat": "A",
+          "K_hat": 4096,
+          "naive_byte_mi_saving_bytes": 729.75,
+          "assumed_extra_header_bytes": 738,
+          "naive_net_B_over_A_bytes": -8.25,
+          "bytes_lost_vs_oracle": 350
+        },
+        "plug_in_mi_without_miller_madow": {
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "plug_in_mi_saving_bytes": 1400.91,
+          "bytes_lost_vs_oracle": 0
+        }
+      },
+      "oracle": {
+        "best_layout": "B",
+        "best_K": 1024,
+        "best_total_bytes": 41468,
+        "full_grid_elapsed_sec": 71.2601,
+        "shared_elapsed_sec": 32.6248,
+        "separate_elapsed_sec": 37.0314,
+        "shared_wall_cap_sec": 2.5,
+        "separate_wall_cap_sec": 2.5,
+        "allow_union_floor": false,
+        "roundtrip_verified": true
+      },
+      "metrics": {
+        "bytes_lost": 427,
+        "pct_regret": 1.0297,
+        "picked_exact_layout": false,
+        "picked_within_1pct_materiality": false,
+        "search_seconds_saved_vs_grid": 59.8596,
+        "search_speedup_vs_grid": 6.25
+      },
+      "oracle_cells_compact": [
+        {
+          "layout": "A",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 53109,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 52225,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 59418,
+          "entries": 256,
+          "reparsed_pairs_evaluated": 16
+        },
+        {
+          "layout": "A",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 45602,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 44750,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 47623,
+          "entries": 512,
+          "reparsed_pairs_evaluated": 264
+        },
+        {
+          "layout": "A",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 41825,
+          "entries": 1024,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 41468,
+          "entries": 960,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 41895,
+          "entries": 1024,
+          "reparsed_pairs_evaluated": 517
+        },
+        {
+          "layout": "A",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 41818,
+          "entries": 1088,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 41468,
+          "entries": 960,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 41613,
+          "entries": 1216,
+          "reparsed_pairs_evaluated": 638
+        },
+        {
+          "layout": "A",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 41818,
+          "entries": 1088,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 41468,
+          "entries": 960,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 41613,
+          "entries": 1216,
+          "reparsed_pairs_evaluated": 638
+        }
+      ],
+      "manifest_files_sample": {
+        "lang1_count": 30,
+        "lang2_count": 30,
+        "lang1_first3": [
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/native/tests/mapping_timing.c",
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/compiler/tests/test_hlsl_draw_offsets.c",
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/compiler/tests/test_layout_v2.c"
+        ],
+        "lang2_first3": [
+          "hatch/pooled-doppler-components-20261029/deep-profile/bindings/doppler-cached/src/experimental/training/distillation/artifacts.d.ts",
+          "hatch/pooled-doppler-components-20261029/deep-profile/bindings/doppler-cached/src/inference/pipelines/vision/ops.d.ts",
+          "hatch/pooled-doppler-components-20261029/deep-profile/bindings/doppler-cached/src/inference/pipelines/text/config-components.d.ts"
+        ]
+      }
+    },
+    {
+      "schema": "bits-rung2-presearch-eval/v2",
+      "label": "c_vs_ts_n80",
+      "hypothesis_status": "empirical_evaluation",
+      "raw_bytes_total": 300224,
+      "prediction": {
+        "rule_version": "bits-rung2-presearch-v2",
+        "layout_hat": "C",
+        "K_hat": 2048,
+        "predictor_elapsed_ms": 156.153,
+        "executed_total_bytes": 131810,
+        "executed_elapsed_sec": 49.8834,
+        "roundtrip_verified": true
+      },
+      "decoupled_layout_score": {
+        "oracle_layout": "C",
+        "predicted_layout": "C",
+        "default_always_B_mdl_bytes": 169744,
+        "default_always_B_loss_bytes": 56866,
+        "default_always_B_loss_pct": 50.3783,
+        "default_B_misses_gt_1pct": true,
+        "predicted_layout_mdl_kmax_bytes": 112878,
+        "layout_regret_vs_oracle_bytes": 0,
+        "layout_gain_over_default_B_bytes": 56866,
+        "beats_default_B": true
+      },
+      "decoupled_stopping_score": {
+        "layout_held_fixed": "C",
+        "token_min_fill_kmax_bytes": null,
+        "mdl_byte_stop_kmax_bytes": 112878,
+        "presearch_k_hat_mdl_bytes": 131810,
+        "ordinary_mdl_stopping_saving_bytes": null,
+        "k_hat_presearch_truncation_cost_bytes": 18932,
+        "search_seconds_saved_vs_single_layout_kmax": 4.5045
+      },
+      "ablations": {
+        "naive_1byte_mi": {
+          "feasible": true,
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "naive_byte_mi_saving_bytes": 1940.22,
+          "assumed_extra_header_bytes": 1773,
+          "naive_net_B_over_A_bytes": 167.22,
+          "bytes_lost_vs_oracle": 56866
+        },
+        "plug_in_mi_without_miller_madow": {
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "plug_in_mi_saving_bytes": 3876.51,
+          "bytes_lost_vs_oracle": 56866
+        }
+      },
+      "oracle": {
+        "best_layout": "C",
+        "best_K": 2048,
+        "best_total_bytes": 112878,
+        "full_grid_elapsed_sec": 81.6709,
+        "shared_elapsed_sec": 25.6447,
+        "separate_elapsed_sec": 54.3879,
+        "shared_wall_cap_sec": 2.5,
+        "separate_wall_cap_sec": 2.5,
+        "allow_union_floor": false,
+        "roundtrip_verified": true
+      },
+      "metrics": {
+        "bytes_lost": 18932,
+        "pct_regret": 16.7721,
+        "picked_exact_layout": true,
+        "picked_within_1pct_materiality": false,
+        "search_seconds_saved_vs_grid": 31.7875,
+        "search_speedup_vs_grid": 1.64
+      },
+      "oracle_cells_compact": [
+        {
+          "layout": "A",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 172246,
+          "entries": 132,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 169744,
+          "entries": 132,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 159156,
+          "entries": 256,
+          "reparsed_pairs_evaluated": 22
+        },
+        {
+          "layout": "A",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 172246,
+          "entries": 132,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 169744,
+          "entries": 132,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 126801,
+          "entries": 512,
+          "reparsed_pairs_evaluated": 193
+        },
+        {
+          "layout": "A",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 172246,
+          "entries": 132,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 169744,
+          "entries": 132,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 113301,
+          "entries": 1022,
+          "reparsed_pairs_evaluated": 312
+        },
+        {
+          "layout": "A",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 172246,
+          "entries": 132,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 169744,
+          "entries": 132,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 112878,
+          "entries": 1134,
+          "reparsed_pairs_evaluated": 315
+        },
+        {
+          "layout": "A",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 172246,
+          "entries": 132,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 169744,
+          "entries": 132,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 112878,
+          "entries": 1134,
+          "reparsed_pairs_evaluated": 315
+        }
+      ],
+      "manifest_files_sample": {
+        "lang1_count": 80,
+        "lang2_count": 80,
+        "lang1_first3": [
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/native/tests/mapping_timing.c",
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/compiler/tests/test_hlsl_draw_offsets.c",
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/compiler/tests/test_layout_v2.c"
+        ],
+        "lang2_first3": [
+          "hatch/pooled-doppler-components-20261029/deep-profile/bindings/doppler-cached/src/experimental/training/distillation/artifacts.d.ts",
+          "hatch/pooled-doppler-components-20261029/deep-profile/bindings/doppler-cached/src/inference/pipelines/vision/ops.d.ts",
+          "hatch/pooled-doppler-components-20261029/deep-profile/bindings/doppler-cached/src/inference/pipelines/text/config-components.d.ts"
+        ]
+      }
+    },
+    {
+      "schema": "bits-rung2-presearch-eval/v2",
+      "label": "sh_vs_wgsl_n8",
+      "hypothesis_status": "empirical_evaluation",
+      "raw_bytes_total": 28611,
+      "prediction": {
+        "rule_version": "bits-rung2-presearch-v2",
+        "layout_hat": "B",
+        "K_hat": 256,
+        "predictor_elapsed_ms": 14.419,
+        "executed_total_bytes": 12577,
+        "executed_elapsed_sec": 6.924,
+        "roundtrip_verified": true
+      },
+      "decoupled_layout_score": {
+        "oracle_layout": "C",
+        "predicted_layout": "B",
+        "default_always_B_mdl_bytes": 12130,
+        "default_always_B_loss_bytes": 164,
+        "default_always_B_loss_pct": 1.3705,
+        "default_B_misses_gt_1pct": true,
+        "predicted_layout_mdl_kmax_bytes": 12130,
+        "layout_regret_vs_oracle_bytes": 164,
+        "layout_gain_over_default_B_bytes": 0,
+        "beats_default_B": false
+      },
+      "decoupled_stopping_score": {
+        "layout_held_fixed": "B",
+        "token_min_fill_kmax_bytes": 23031,
+        "mdl_byte_stop_kmax_bytes": 12130,
+        "presearch_k_hat_mdl_bytes": 12577,
+        "ordinary_mdl_stopping_saving_bytes": 10901,
+        "k_hat_presearch_truncation_cost_bytes": 447,
+        "search_seconds_saved_vs_single_layout_kmax": 13.9073
+      },
+      "ablations": {
+        "naive_1byte_mi": {
+          "feasible": true,
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "naive_byte_mi_saving_bytes": 435.42,
+          "assumed_extra_header_bytes": 258,
+          "naive_net_B_over_A_bytes": 177.42,
+          "bytes_lost_vs_oracle": 164
+        },
+        "plug_in_mi_without_miller_madow": {
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "plug_in_mi_saving_bytes": 547.93,
+          "bytes_lost_vs_oracle": 164
+        }
+      },
+      "oracle": {
+        "best_layout": "C",
+        "best_K": 512,
+        "best_total_bytes": 11966,
+        "full_grid_elapsed_sec": 29.2924,
+        "shared_elapsed_sec": 20.8313,
+        "separate_elapsed_sec": 8.2218,
+        "shared_wall_cap_sec": 2.5,
+        "separate_wall_cap_sec": 2.5,
+        "allow_union_floor": false,
+        "roundtrip_verified": true
+      },
+      "metrics": {
+        "bytes_lost": 611,
+        "pct_regret": 5.1061,
+        "picked_exact_layout": false,
+        "picked_within_1pct_materiality": false,
+        "search_seconds_saved_vs_grid": 22.3684,
+        "search_speedup_vs_grid": 4.23
+      },
+      "oracle_cells_compact": [
+        {
+          "layout": "A",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 12737,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 12577,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 13803,
+          "entries": 256,
+          "reparsed_pairs_evaluated": 19
+        },
+        {
+          "layout": "A",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 12162,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 12130,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 11966,
+          "entries": 480,
+          "reparsed_pairs_evaluated": 195
+        },
+        {
+          "layout": "A",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 12162,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 12130,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 11966,
+          "entries": 480,
+          "reparsed_pairs_evaluated": 224
+        },
+        {
+          "layout": "A",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 12162,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 12130,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 11966,
+          "entries": 480,
+          "reparsed_pairs_evaluated": 224
+        },
+        {
+          "layout": "A",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 12162,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 12130,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 11966,
+          "entries": 480,
+          "reparsed_pairs_evaluated": 224
+        }
+      ],
+      "manifest_files_sample": {
+        "lang1_count": 8,
+        "lang2_count": 8,
+        "lang1_first3": [
+          "reploid/artifacts/completion-qualification-20261013/native-launch.sh",
+          "reploid/artifacts/faster-candidate-20261015/numerical/setup-amd.sh",
+          "reploid/artifacts/native-partition-0.6.28-20261012/preparation-observer/supervise-native.sh"
+        ],
+        "lang2_first3": [
+          "doppler/src/gpu/kernels/residual_rmsnorm_pair.wgsl",
+          "doppler/reports/training/wgsl-writer/doppler-wgsl-writer-v2/corpus-v1/references/calibration/writer-v2-calibration-cap-004.wgsl",
+          "doppler/benchmarks/compute/results/2026-09-12T21-32-37-281Z-1cbe6212/source/src/gpu/kernels/silu.wgsl"
+        ]
+      }
+    },
+    {
+      "schema": "bits-rung2-presearch-eval/v2",
+      "label": "sh_vs_wgsl_n30",
+      "hypothesis_status": "empirical_evaluation",
+      "raw_bytes_total": 106918,
+      "prediction": {
+        "rule_version": "bits-rung2-presearch-v2",
+        "layout_hat": "C",
+        "K_hat": 1024,
+        "predictor_elapsed_ms": 51.514,
+        "executed_total_bytes": 38136,
+        "executed_elapsed_sec": 25.5255,
+        "roundtrip_verified": true
+      },
+      "decoupled_layout_score": {
+        "oracle_layout": "B",
+        "predicted_layout": "C",
+        "default_always_B_mdl_bytes": 41315,
+        "default_always_B_loss_bytes": 0,
+        "default_always_B_loss_pct": 0.0,
+        "default_B_misses_gt_1pct": false,
+        "predicted_layout_mdl_kmax_bytes": 43613,
+        "layout_regret_vs_oracle_bytes": 2298,
+        "layout_gain_over_default_B_bytes": -2298,
+        "beats_default_B": false
+      },
+      "decoupled_stopping_score": {
+        "layout_held_fixed": "C",
+        "token_min_fill_kmax_bytes": null,
+        "mdl_byte_stop_kmax_bytes": 43613,
+        "presearch_k_hat_mdl_bytes": 38136,
+        "ordinary_mdl_stopping_saving_bytes": null,
+        "k_hat_presearch_truncation_cost_bytes": -5477,
+        "search_seconds_saved_vs_single_layout_kmax": 9.9193
+      },
+      "ablations": {
+        "naive_1byte_mi": {
+          "feasible": true,
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "naive_byte_mi_saving_bytes": 1433.25,
+          "assumed_extra_header_bytes": 695,
+          "naive_net_B_over_A_bytes": 738.25,
+          "bytes_lost_vs_oracle": 0
+        },
+        "plug_in_mi_without_miller_madow": {
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "plug_in_mi_saving_bytes": 2107.69,
+          "bytes_lost_vs_oracle": 0
+        }
+      },
+      "oracle": {
+        "best_layout": "B",
+        "best_K": 512,
+        "best_total_bytes": 41315,
+        "full_grid_elapsed_sec": 99.5216,
+        "shared_elapsed_sec": 61.2081,
+        "separate_elapsed_sec": 35.4448,
+        "shared_wall_cap_sec": 2.5,
+        "separate_wall_cap_sec": 2.5,
+        "allow_union_floor": false,
+        "roundtrip_verified": true
+      },
+      "metrics": {
+        "bytes_lost": -3179,
+        "pct_regret": -7.6945,
+        "picked_exact_layout": false,
+        "picked_within_1pct_materiality": false,
+        "search_seconds_saved_vs_grid": 73.9961,
+        "search_speedup_vs_grid": 3.9
+      },
+      "oracle_cells_compact": [
+        {
+          "layout": "A",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 50232,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 48908,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 55572,
+          "entries": 256,
+          "reparsed_pairs_evaluated": 26
+        },
+        {
+          "layout": "A",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 42527,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 41315,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 43613,
+          "entries": 505,
+          "reparsed_pairs_evaluated": 156
+        },
+        {
+          "layout": "A",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 42527,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 41315,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 43613,
+          "entries": 505,
+          "reparsed_pairs_evaluated": 156
+        },
+        {
+          "layout": "A",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 42527,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 41315,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 43613,
+          "entries": 505,
+          "reparsed_pairs_evaluated": 156
+        },
+        {
+          "layout": "A",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 42527,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 41315,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 43613,
+          "entries": 505,
+          "reparsed_pairs_evaluated": 156
+        }
+      ],
+      "manifest_files_sample": {
+        "lang1_count": 30,
+        "lang2_count": 30,
+        "lang1_first3": [
+          "reploid/artifacts/completion-qualification-20261013/native-launch.sh",
+          "reploid/artifacts/faster-candidate-20261015/numerical/setup-amd.sh",
+          "reploid/artifacts/native-partition-0.6.28-20261012/preparation-observer/supervise-native.sh"
+        ],
+        "lang2_first3": [
+          "doppler/src/gpu/kernels/residual_rmsnorm_pair.wgsl",
+          "doppler/reports/training/wgsl-writer/doppler-wgsl-writer-v2/corpus-v1/references/calibration/writer-v2-calibration-cap-004.wgsl",
+          "doppler/benchmarks/compute/results/2026-09-12T21-32-37-281Z-1cbe6212/source/src/gpu/kernels/silu.wgsl"
+        ]
+      }
+    },
+    {
+      "schema": "bits-rung2-presearch-eval/v2",
+      "label": "sh_vs_wgsl_n75",
+      "hypothesis_status": "empirical_evaluation",
+      "raw_bytes_total": 263711,
+      "prediction": {
+        "rule_version": "bits-rung2-presearch-v2",
+        "layout_hat": "C",
+        "K_hat": 2048,
+        "predictor_elapsed_ms": 266.846,
+        "executed_total_bytes": 143980,
+        "executed_elapsed_sec": 47.956,
+        "roundtrip_verified": true
+      },
+      "decoupled_layout_score": {
+        "oracle_layout": "C",
+        "predicted_layout": "C",
+        "default_always_B_mdl_bytes": 155131,
+        "default_always_B_loss_bytes": 60027,
+        "default_always_B_loss_pct": 63.1172,
+        "default_B_misses_gt_1pct": true,
+        "predicted_layout_mdl_kmax_bytes": 95104,
+        "layout_regret_vs_oracle_bytes": 0,
+        "layout_gain_over_default_B_bytes": 60027,
+        "beats_default_B": true
+      },
+      "decoupled_stopping_score": {
+        "layout_held_fixed": "C",
+        "token_min_fill_kmax_bytes": null,
+        "mdl_byte_stop_kmax_bytes": 95104,
+        "presearch_k_hat_mdl_bytes": 143980,
+        "ordinary_mdl_stopping_saving_bytes": null,
+        "k_hat_presearch_truncation_cost_bytes": 48876,
+        "search_seconds_saved_vs_single_layout_kmax": -0.8584
+      },
+      "ablations": {
+        "naive_1byte_mi": {
+          "feasible": true,
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "naive_byte_mi_saving_bytes": 3459.18,
+          "assumed_extra_header_bytes": 1566,
+          "naive_net_B_over_A_bytes": 1893.18,
+          "bytes_lost_vs_oracle": 60027
+        },
+        "plug_in_mi_without_miller_madow": {
+          "layout_hat": "B",
+          "K_hat": 4096,
+          "plug_in_mi_saving_bytes": 5388.28,
+          "bytes_lost_vs_oracle": 60027
+        }
+      },
+      "oracle": {
+        "best_layout": "C",
+        "best_K": 1024,
+        "best_total_bytes": 95104,
+        "full_grid_elapsed_sec": 100.0115,
+        "shared_elapsed_sec": 51.4677,
+        "separate_elapsed_sec": 47.0976,
+        "shared_wall_cap_sec": 2.5,
+        "separate_wall_cap_sec": 2.5,
+        "allow_union_floor": false,
+        "roundtrip_verified": true
+      },
+      "metrics": {
+        "bytes_lost": 48876,
+        "pct_regret": 51.3922,
+        "picked_exact_layout": true,
+        "picked_within_1pct_materiality": false,
+        "search_seconds_saved_vs_grid": 52.0555,
+        "search_speedup_vs_grid": 2.09
+      },
+      "oracle_cells_compact": [
+        {
+          "layout": "A",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 158213,
+          "entries": 112,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 155131,
+          "entries": 112,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 135869,
+          "entries": 256,
+          "reparsed_pairs_evaluated": 19
+        },
+        {
+          "layout": "A",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 158213,
+          "entries": 112,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 155131,
+          "entries": 112,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 104023,
+          "entries": 512,
+          "reparsed_pairs_evaluated": 180
+        },
+        {
+          "layout": "A",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 158213,
+          "entries": 112,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 155131,
+          "entries": 112,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 95104,
+          "entries": 700,
+          "reparsed_pairs_evaluated": 208
+        },
+        {
+          "layout": "A",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 158213,
+          "entries": 112,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 155131,
+          "entries": 112,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 95104,
+          "entries": 700,
+          "reparsed_pairs_evaluated": 208
+        },
+        {
+          "layout": "A",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 158213,
+          "entries": 112,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 155131,
+          "entries": 112,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 95104,
+          "entries": 700,
+          "reparsed_pairs_evaluated": 208
+        }
+      ],
+      "manifest_files_sample": {
+        "lang1_count": 75,
+        "lang2_count": 75,
+        "lang1_first3": [
+          "reploid/artifacts/completion-qualification-20261013/native-launch.sh",
+          "reploid/artifacts/faster-candidate-20261015/numerical/setup-amd.sh",
+          "reploid/artifacts/native-partition-0.6.28-20261012/preparation-observer/supervise-native.sh"
+        ],
+        "lang2_first3": [
+          "doppler/src/gpu/kernels/residual_rmsnorm_pair.wgsl",
+          "doppler/reports/training/wgsl-writer/doppler-wgsl-writer-v2/corpus-v1/references/calibration/writer-v2-calibration-cap-004.wgsl",
+          "doppler/benchmarks/compute/results/2026-09-12T21-32-37-281Z-1cbe6212/source/src/gpu/kernels/silu.wgsl"
+        ]
+      }
+    },
+    {
+      "schema": "bits-rung2-presearch-eval/v2",
+      "label": "zig_vs_zig_ctrl_n8",
+      "hypothesis_status": "empirical_evaluation",
+      "raw_bytes_total": 31614,
+      "prediction": {
+        "rule_version": "bits-rung2-presearch-v2",
+        "layout_hat": "A",
+        "K_hat": 512,
+        "predictor_elapsed_ms": 16.421,
+        "executed_total_bytes": 11845,
+        "executed_elapsed_sec": 6.3338,
+        "roundtrip_verified": true
+      },
+      "decoupled_layout_score": {
+        "oracle_layout": "A",
+        "predicted_layout": "A",
+        "default_always_B_mdl_bytes": 12008,
+        "default_always_B_loss_bytes": 163,
+        "default_always_B_loss_pct": 1.3761,
+        "default_B_misses_gt_1pct": true,
+        "predicted_layout_mdl_kmax_bytes": 11845,
+        "layout_regret_vs_oracle_bytes": 0,
+        "layout_gain_over_default_B_bytes": 163,
+        "beats_default_B": true
+      },
+      "decoupled_stopping_score": {
+        "layout_held_fixed": "A",
+        "token_min_fill_kmax_bytes": 22480,
+        "mdl_byte_stop_kmax_bytes": 11845,
+        "presearch_k_hat_mdl_bytes": 11845,
+        "ordinary_mdl_stopping_saving_bytes": 10635,
+        "k_hat_presearch_truncation_cost_bytes": 0,
+        "search_seconds_saved_vs_single_layout_kmax": 5.9355
+      },
+      "ablations": {
+        "naive_1byte_mi": {
+          "feasible": true,
+          "layout_hat": "A",
+          "K_hat": 4096,
+          "naive_byte_mi_saving_bytes": 117.56,
+          "assumed_extra_header_bytes": 273,
+          "naive_net_B_over_A_bytes": -155.44,
+          "bytes_lost_vs_oracle": 0
+        },
+        "plug_in_mi_without_miller_madow": {
+          "layout_hat": "A",
+          "K_hat": 4096,
+          "plug_in_mi_saving_bytes": 226.96,
+          "bytes_lost_vs_oracle": 0
+        }
+      },
+      "oracle": {
+        "best_layout": "A",
+        "best_K": 512,
+        "best_total_bytes": 11845,
+        "full_grid_elapsed_sec": 19.5005,
+        "shared_elapsed_sec": 12.2693,
+        "separate_elapsed_sec": 7.1689,
+        "shared_wall_cap_sec": 2.5,
+        "separate_wall_cap_sec": 2.5,
+        "allow_union_floor": false,
+        "roundtrip_verified": true
+      },
+      "metrics": {
+        "bytes_lost": 0,
+        "pct_regret": 0.0,
+        "picked_exact_layout": true,
+        "picked_within_1pct_materiality": true,
+        "search_seconds_saved_vs_grid": 13.1667,
+        "search_speedup_vs_grid": 3.08
+      },
+      "oracle_cells_compact": [
+        {
+          "layout": "A",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 12489,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 12566,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 15102,
+          "entries": 256,
+          "reparsed_pairs_evaluated": 15
+        },
+        {
+          "layout": "A",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 11845,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 12008,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 12781,
+          "entries": 491,
+          "reparsed_pairs_evaluated": 292
+        },
+        {
+          "layout": "A",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 11845,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 12008,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 12781,
+          "entries": 491,
+          "reparsed_pairs_evaluated": 306
+        },
+        {
+          "layout": "A",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 11845,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 12008,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 12781,
+          "entries": 491,
+          "reparsed_pairs_evaluated": 306
+        },
+        {
+          "layout": "A",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 11845,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 12008,
+          "entries": 384,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 12781,
+          "entries": 491,
+          "reparsed_pairs_evaluated": 306
+        }
+      ],
+      "manifest_files_sample": {
+        "lang1_count": 8,
+        "lang2_count": 8,
+        "lang1_first3": [
+          "fawn/runtime/zig/src/backend/metal/artifact_emit.zig",
+          "fawn/runtime/zig/src/backend/metal/metal_wait_policy.zig",
+          "fawn/runtime/zig/src/plan/synthetic_assets.zig"
+        ],
+        "lang2_first3": [
+          "fawn/runtime/zig/src/compiler/wgsl/emit/operator_text.zig",
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/instance/independent_tests/tests/default_regressions_v2.zig",
+          "fawn/runtime/zig/src/cli/entrypoints/main_emit_hlsl.zig"
+        ]
+      }
+    },
+    {
+      "schema": "bits-rung2-presearch-eval/v2",
+      "label": "zig_vs_zig_ctrl_n30",
+      "hypothesis_status": "empirical_evaluation",
+      "raw_bytes_total": 108501,
+      "prediction": {
+        "rule_version": "bits-rung2-presearch-v2",
+        "layout_hat": "A",
+        "K_hat": 1024,
+        "predictor_elapsed_ms": 23.4,
+        "executed_total_bytes": 35643,
+        "executed_elapsed_sec": 12.0085,
+        "roundtrip_verified": true
+      },
+      "decoupled_layout_score": {
+        "oracle_layout": "A",
+        "predicted_layout": "A",
+        "default_always_B_mdl_bytes": 36164,
+        "default_always_B_loss_bytes": 521,
+        "default_always_B_loss_pct": 1.4617,
+        "default_B_misses_gt_1pct": true,
+        "predicted_layout_mdl_kmax_bytes": 35643,
+        "layout_regret_vs_oracle_bytes": 0,
+        "layout_gain_over_default_B_bytes": 521,
+        "beats_default_B": true
+      },
+      "decoupled_stopping_score": {
+        "layout_held_fixed": "A",
+        "token_min_fill_kmax_bytes": 52142,
+        "mdl_byte_stop_kmax_bytes": 35643,
+        "presearch_k_hat_mdl_bytes": 35643,
+        "ordinary_mdl_stopping_saving_bytes": 16499,
+        "k_hat_presearch_truncation_cost_bytes": 0,
+        "search_seconds_saved_vs_single_layout_kmax": 17.8603
+      },
+      "ablations": {
+        "naive_1byte_mi": {
+          "feasible": true,
+          "layout_hat": "A",
+          "K_hat": 4096,
+          "naive_byte_mi_saving_bytes": 69.79,
+          "assumed_extra_header_bytes": 706,
+          "naive_net_B_over_A_bytes": -636.21,
+          "bytes_lost_vs_oracle": 0
+        },
+        "plug_in_mi_without_miller_madow": {
+          "layout_hat": "A",
+          "K_hat": 4096,
+          "plug_in_mi_saving_bytes": 310.22,
+          "bytes_lost_vs_oracle": 0
+        }
+      },
+      "oracle": {
+        "best_layout": "A",
+        "best_K": 1024,
+        "best_total_bytes": 35643,
+        "full_grid_elapsed_sec": 67.9537,
+        "shared_elapsed_sec": 29.8688,
+        "separate_elapsed_sec": 36.2628,
+        "shared_wall_cap_sec": 2.5,
+        "separate_wall_cap_sec": 2.5,
+        "allow_union_floor": false,
+        "roundtrip_verified": true
+      },
+      "metrics": {
+        "bytes_lost": 0,
+        "pct_regret": 0.0,
+        "picked_exact_layout": true,
+        "picked_within_1pct_materiality": true,
+        "search_seconds_saved_vs_grid": 55.9452,
+        "search_speedup_vs_grid": 5.66
+      },
+      "oracle_cells_compact": [
+        {
+          "layout": "A",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 45598,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 45699,
+          "entries": 256,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 56139,
+          "entries": 256,
+          "reparsed_pairs_evaluated": 19
+        },
+        {
+          "layout": "A",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 38379,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 38622,
+          "entries": 512,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 44801,
+          "entries": 512,
+          "reparsed_pairs_evaluated": 236
+        },
+        {
+          "layout": "A",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 35643,
+          "entries": 896,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 36164,
+          "entries": 896,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 39538,
+          "entries": 1024,
+          "reparsed_pairs_evaluated": 496
+        },
+        {
+          "layout": "A",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 35643,
+          "entries": 896,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 36164,
+          "entries": 896,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 39358,
+          "entries": 1280,
+          "reparsed_pairs_evaluated": 625
+        },
+        {
+          "layout": "A",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 35643,
+          "entries": 896,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 36164,
+          "entries": 896,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 39358,
+          "entries": 1280,
+          "reparsed_pairs_evaluated": 625
+        }
+      ],
+      "manifest_files_sample": {
+        "lang1_count": 30,
+        "lang2_count": 30,
+        "lang1_first3": [
+          "fawn/runtime/zig/src/backend/metal/artifact_emit.zig",
+          "fawn/runtime/zig/src/backend/metal/metal_wait_policy.zig",
+          "fawn/runtime/zig/src/plan/synthetic_assets.zig"
+        ],
+        "lang2_first3": [
+          "fawn/runtime/zig/src/compiler/wgsl/emit/operator_text.zig",
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/instance/independent_tests/tests/default_regressions_v2.zig",
+          "fawn/runtime/zig/src/cli/entrypoints/main_emit_hlsl.zig"
+        ]
+      }
+    },
+    {
+      "schema": "bits-rung2-presearch-eval/v2",
+      "label": "zig_vs_zig_ctrl_n80",
+      "hypothesis_status": "empirical_evaluation",
+      "raw_bytes_total": 279316,
+      "prediction": {
+        "rule_version": "bits-rung2-presearch-v2",
+        "layout_hat": "A",
+        "K_hat": 2048,
+        "predictor_elapsed_ms": 290.744,
+        "executed_total_bytes": 122662,
+        "executed_elapsed_sec": 46.4989,
+        "roundtrip_verified": true
+      },
+      "decoupled_layout_score": {
+        "oracle_layout": "C",
+        "predicted_layout": "A",
+        "default_always_B_mdl_bytes": 142214,
+        "default_always_B_loss_bytes": 50063,
+        "default_always_B_loss_pct": 54.3271,
+        "default_B_misses_gt_1pct": true,
+        "predicted_layout_mdl_kmax_bytes": 142142,
+        "layout_regret_vs_oracle_bytes": 49991,
+        "layout_gain_over_default_B_bytes": 72,
+        "beats_default_B": true
+      },
+      "decoupled_stopping_score": {
+        "layout_held_fixed": "A",
+        "token_min_fill_kmax_bytes": 142142,
+        "mdl_byte_stop_kmax_bytes": 142142,
+        "presearch_k_hat_mdl_bytes": 122662,
+        "ordinary_mdl_stopping_saving_bytes": 0,
+        "k_hat_presearch_truncation_cost_bytes": -19480,
+        "search_seconds_saved_vs_single_layout_kmax": 11.7189
+      },
+      "ablations": {
+        "naive_1byte_mi": {
+          "feasible": true,
+          "layout_hat": "A",
+          "K_hat": 4096,
+          "naive_byte_mi_saving_bytes": 73.69,
+          "assumed_extra_header_bytes": 1655,
+          "naive_net_B_over_A_bytes": -1581.31,
+          "bytes_lost_vs_oracle": 49991
+        },
+        "plug_in_mi_without_miller_madow": {
+          "layout_hat": "A",
+          "K_hat": 4096,
+          "plug_in_mi_saving_bytes": 555.39,
+          "bytes_lost_vs_oracle": 49991
+        }
+      },
+      "oracle": {
+        "best_layout": "C",
+        "best_K": 2048,
+        "best_total_bytes": 92151,
+        "full_grid_elapsed_sec": 92.464,
+        "shared_elapsed_sec": 58.2178,
+        "separate_elapsed_sec": 32.858,
+        "shared_wall_cap_sec": 2.5,
+        "separate_wall_cap_sec": 2.5,
+        "allow_union_floor": false,
+        "roundtrip_verified": true
+      },
+      "metrics": {
+        "bytes_lost": 30511,
+        "pct_regret": 33.1098,
+        "picked_exact_layout": false,
+        "picked_within_1pct_materiality": false,
+        "search_seconds_saved_vs_grid": 45.9651,
+        "search_speedup_vs_grid": 1.99
+      },
+      "oracle_cells_compact": [
+        {
+          "layout": "A",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 142142,
+          "entries": 146,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 142214,
+          "entries": 146,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 256,
+          "feasible": true,
+          "total_bytes": 146525,
+          "entries": 256,
+          "reparsed_pairs_evaluated": 12
+        },
+        {
+          "layout": "A",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 142142,
+          "entries": 146,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 142214,
+          "entries": 146,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 512,
+          "feasible": true,
+          "total_bytes": 119788,
+          "entries": 512,
+          "reparsed_pairs_evaluated": 227
+        },
+        {
+          "layout": "A",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 142142,
+          "entries": 146,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 142214,
+          "entries": 146,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 1024,
+          "feasible": true,
+          "total_bytes": 101159,
+          "entries": 1024,
+          "reparsed_pairs_evaluated": 490
+        },
+        {
+          "layout": "A",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 142142,
+          "entries": 146,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 142214,
+          "entries": 146,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 2048,
+          "feasible": true,
+          "total_bytes": 92151,
+          "entries": 1874,
+          "reparsed_pairs_evaluated": 648
+        },
+        {
+          "layout": "A",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 142142,
+          "entries": 146,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "B",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 142214,
+          "entries": 146,
+          "reparsed_pairs_evaluated": null
+        },
+        {
+          "layout": "C",
+          "K": 4096,
+          "feasible": true,
+          "total_bytes": 92151,
+          "entries": 1874,
+          "reparsed_pairs_evaluated": 648
+        }
+      ],
+      "manifest_files_sample": {
+        "lang1_count": 80,
+        "lang2_count": 80,
+        "lang1_first3": [
+          "fawn/runtime/zig/src/backend/metal/artifact_emit.zig",
+          "fawn/runtime/zig/src/backend/metal/metal_wait_policy.zig",
+          "fawn/runtime/zig/src/plan/synthetic_assets.zig"
+        ],
+        "lang2_first3": [
+          "fawn/runtime/zig/src/compiler/wgsl/emit/operator_text.zig",
+          "fawn/bench/out/submit-trace-4d563b5-20261106/src/runtime/c/instance/independent_tests/tests/default_regressions_v2.zig",
+          "fawn/runtime/zig/src/cli/entrypoints/main_emit_hlsl.zig"
+        ]
+      }
+    }
+  ]
+}
