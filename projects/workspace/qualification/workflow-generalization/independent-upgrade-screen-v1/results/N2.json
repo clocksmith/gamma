@@ -1,0 +1,2235 @@
+{
+  "schema": "gammatron-real-upgrade-screen-result/v1",
+  "case_id": "N2",
+  "screen_lane": "iu1-b",
+  "app": "Dolibarr ERP/CRM",
+  "from_version": "18.0.9",
+  "to_version": "19.0.2",
+  "images": [
+    {
+      "ref": "dolibarr/dolibarr:18.0.9",
+      "sealed_platform": "arm64",
+      "sealed_digest": "sha256:f70fa3a28c3951ec69ce843f2afeabbcffbdf2458a98f504e0a7d76a578e93b8",
+      "pulled_ref": "dolibarr/dolibarr@sha256:f70fa3a28c3951ec69ce843f2afeabbcffbdf2458a98f504e0a7d76a578e93b8",
+      "inspect_id": "sha256:f70fa3a28c3951ec69ce843f2afeabbcffbdf2458a98f504e0a7d76a578e93b8",
+      "repo_digests": [
+        "dolibarr/dolibarr@sha256:f70fa3a28c3951ec69ce843f2afeabbcffbdf2458a98f504e0a7d76a578e93b8"
+      ],
+      "architecture": "arm64",
+      "os": "linux",
+      "created": "2026-10-21T17:47:20.201816958Z",
+      "size_bytes": 342567952,
+      "pulled_digest_equals_sealed": true,
+      "tag_resolves_today_to": "sha256:f70fa3a28c3951ec69ce843f2afeabbcffbdf2458a98f504e0a7d76a578e93b8",
+      "tag_today_equals_sealed": true
+    },
+    {
+      "ref": "dolibarr/dolibarr:19.0.2",
+      "sealed_platform": "arm64",
+      "sealed_digest": "sha256:aa5421ecb7f402f10662830bd8c53b35565986ba798332fdb5d12ff2ef4a5a9f",
+      "pulled_ref": "dolibarr/dolibarr@sha256:aa5421ecb7f402f10662830bd8c53b35565986ba798332fdb5d12ff2ef4a5a9f",
+      "inspect_id": "sha256:aa5421ecb7f402f10662830bd8c53b35565986ba798332fdb5d12ff2ef4a5a9f",
+      "repo_digests": [
+        "dolibarr/dolibarr@sha256:aa5421ecb7f402f10662830bd8c53b35565986ba798332fdb5d12ff2ef4a5a9f"
+      ],
+      "architecture": "arm64",
+      "os": "linux",
+      "created": "2024-08-19T13:24:51.563638886Z",
+      "size_bytes": 273036378,
+      "pulled_digest_equals_sealed": true,
+      "tag_resolves_today_to": "sha256:aa5421ecb7f402f10662830bd8c53b35565986ba798332fdb5d12ff2ef4a5a9f",
+      "tag_today_equals_sealed": true
+    },
+    {
+      "ref": "mariadb:10.6",
+      "sealed_platform": "arm64",
+      "sealed_digest": "sha256:b65497131ccd25dbb1f7943e61285b3dc5296b3016359f5e033a902547ddd942",
+      "pulled_ref": "mariadb@sha256:b65497131ccd25dbb1f7943e61285b3dc5296b3016359f5e033a902547ddd942",
+      "inspect_id": "sha256:b65497131ccd25dbb1f7943e61285b3dc5296b3016359f5e033a902547ddd942",
+      "repo_digests": [
+        "mariadb@sha256:b65497131ccd25dbb1f7943e61285b3dc5296b3016359f5e033a902547ddd942"
+      ],
+      "architecture": "arm64",
+      "os": "linux",
+      "created": "2026-11-20T03:29:44.523098656Z",
+      "size_bytes": 98362015,
+      "pulled_digest_equals_sealed": true,
+      "tag_resolves_today_to": "sha256:b65497131ccd25dbb1f7943e61285b3dc5296b3016359f5e033a902547ddd942",
+      "tag_today_equals_sealed": true
+    }
+  ],
+  "conditions": {
+    "host": "macOS on Apple Silicon, Docker Desktop, linux/arm64 containers, all ports bound to 127.0.0.1",
+    "install": "every repeat is a fresh install on an empty MariaDB; no in-place upgrade was run",
+    "time_zone": "PHP date.timezone UTC (image default, set explicitly); MariaDB container TZ=UTC",
+    "acting_role": "non-admin internal user sales1 with rights 81, 82, 121 and 342 granted by the administrator on the permissions page; API key issued to the user by POST /login",
+    "settings_that_matter": "modules Societe, Commande and Api enabled through the image's DOLI_ENABLE_MODULES; company country US; no other configuration",
+    "gate_B_and_C": "the same to-version instance serves B (Customer X) and C (Customer Y) in each repeat",
+    "per_repeat": "see conditions inside each repeat"
+  },
+  "sealed": {
+    "old_workflow_steps": [
+      "POST /api/index.php/orders with header DOLAPIKEY and body {\"socid\": X, \"date\": 1795478400, \"date_livraison\": 1797292800}",
+      "Treat HTTP 200 and the returned order id as success"
+    ],
+    "correct_path_on_to_version": "The same POST with \"delivery_date\": 1797292800 in place of date_livraison",
+    "database_outcome": {
+      "read_via": "MariaDB in the database container; GET /api/index.php/orders/{id} as a second witness",
+      "on_from_version": "llx_commande.date_livraison = '2026-12-15 00:00:00' (server time zone UTC)",
+      "right_on_to_version": "llx_commande.date_livraison = '2026-12-15 00:00:00'",
+      "predicted_stored_on_to_version": "llx_commande.date_livraison IS NULL"
+    },
+    "predicted_disposition": "silent-wrong-write",
+    "prediction_detail": "The POST answers 200 with a new order id. The order is stored without a delivery date."
+  },
+  "requests_as_run": {
+    "old_workflow": "POST /api/index.php/orders, header DOLAPIKEY: <redacted>, body {\"socid\": X, \"date\": 1795478400, \"date_livraison\": 1797292800}",
+    "correct_path": "POST /api/index.php/orders, header DOLAPIKEY: <redacted>, body {\"socid\": Y, \"date\": 1795478400, \"delivery_date\": 1797292800}",
+    "stored_value_read": "llx_commande.date_livraison for the returned order id, read with the mariadb client inside the database container"
+  },
+  "gates": {
+    "A": {
+      "what": "old workflow on the from-version",
+      "pass": "3 of 3"
+    },
+    "B": {
+      "what": "identical steps on the to-version",
+      "per_repeat": [
+        "silent-wrong-write",
+        "silent-wrong-write",
+        "silent-wrong-write"
+      ],
+      "observations_in_short": [
+        {
+          "repeat": 1,
+          "status": 200,
+          "body": "1",
+          "stored_value": "NULL",
+          "right_value": "2026-12-15 00:00:00"
+        },
+        {
+          "repeat": 2,
+          "status": 200,
+          "body": "1",
+          "stored_value": "NULL",
+          "right_value": "2026-12-15 00:00:00"
+        },
+        {
+          "repeat": 3,
+          "status": 200,
+          "body": "1",
+          "stored_value": "NULL",
+          "right_value": "2026-12-15 00:00:00"
+        }
+      ]
+    },
+    "C": {
+      "what": "correct path on the to-version",
+      "pass": "3 of 3"
+    }
+  },
+  "disposition": "silent-wrong-write",
+  "disposition_rule": "protocol README table, applied mechanically to the observations below",
+  "prediction": {
+    "sealed": "silent-wrong-write",
+    "observed": "silent-wrong-write",
+    "right": true
+  },
+  "deviations": [],
+  "flags": [],
+  "repeats": {
+    "from_version": [
+      {
+        "repeat": 1,
+        "image": "dolibarr/dolibarr:18.0.9",
+        "pulled_ref": "dolibarr/dolibarr@sha256:f70fa3a28c3951ec69ce843f2afeabbcffbdf2458a98f504e0a7d76a578e93b8",
+        "instance_started_utc": "2026-11-25T14:29:36Z",
+        "instance_ready_utc": "2026-11-25T14:41:50Z",
+        "reported_version": "18.0.9",
+        "conditions": {
+          "install": "fresh install by the image's own first-start routine (DOLI_INSTALL_AUTO=1); no in-place upgrade",
+          "modules_enabled_through": "image environment DOLI_ENABLE_MODULES=Societe,Commande,Api",
+          "php_timezone_and_version": "UTC 8.1.34",
+          "mariadb_time": [
+            "@@global.time_zone\t@@system_time_zone\tNOW()\tUTC_TIMESTAMP()\tVERSION()",
+            "SYSTEM\tUTC\t2026-11-25 14:41:58\t2026-11-25 14:41:58\t10.6.28-MariaDB-ubu2204"
+          ],
+          "dolibarr_version_const": [
+            "name\tvalue",
+            "MAIN_VERSION_LAST_INSTALL\t18.0.9"
+          ],
+          "modules_const": [
+            "name\tvalue",
+            "MAIN_MODULE_API\t1",
+            "MAIN_MODULE_COMMANDE\t1",
+            "MAIN_MODULE_SOCIETE\t1",
+            "MAIN_MODULE_USER\t1"
+          ],
+          "container_memory": [
+            "iu1b-n2-app\t123.3MiB / 7.653GiB",
+            "iu1b-n2-db\t147.8MiB / 7.653GiB"
+          ]
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "admin obtains an API key",
+              "utc": "2026-11-25T14:41:50Z",
+              "method": "POST",
+              "path": "/api/index.php/login",
+              "request_body": {
+                "login": "admin",
+                "password": "<redacted>",
+                "reset": 1
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"token\": \"<redacted>\",\n        \"entity\": \"0\",\n        \"message\": \"Welcome admin - Token is new\"\n    }\n}",
+              "response_body_length": 181
+            },
+            {
+              "step": "version check",
+              "utc": "2026-11-25T14:41:51Z",
+              "method": "GET",
+              "path": "/api/index.php/status",
+              "request_body": null,
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"dolibarr_version\": \"18.0.9\",\n        \"access_locked\": \"0\"\n    }\n}",
+              "response_body_length": 114
+            },
+            {
+              "step": "admin creates customer Customer X",
+              "utc": "2026-11-25T14:41:51Z",
+              "method": "POST",
+              "path": "/api/index.php/thirdparties",
+              "request_body": {
+                "name": "Customer X",
+                "client": 1,
+                "code_client": "auto"
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "1",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin creates customer Customer Y",
+              "utc": "2026-11-25T14:41:51Z",
+              "method": "POST",
+              "path": "/api/index.php/thirdparties",
+              "request_body": {
+                "name": "Customer Y",
+                "client": 1,
+                "code_client": "auto"
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "2",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin creates the sales user",
+              "utc": "2026-11-25T14:41:51Z",
+              "method": "POST",
+              "path": "/api/index.php/users",
+              "request_body": {
+                "login": "sales1",
+                "lastname": "Sales",
+                "firstname": "Sam",
+                "pass": "<redacted>",
+                "employee": 1
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "2",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin opens the login page",
+              "utc": "2026-11-25T14:41:52Z",
+              "method": "GET",
+              "path": "/index.php",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Login @ 18.0.9",
+              "response_body_length": 6568,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin logs in",
+              "utc": "2026-11-25T14:41:53Z",
+              "method": "POST",
+              "path": "/index.php?mainmenu=home",
+              "request_body": {
+                "token": "<redacted>",
+                "actionlogin": "login",
+                "loginfunction": "loginfunction",
+                "username": "admin",
+                "password": "<redacted>"
+              },
+              "status": 200,
+              "response_body_excerpt": "html page, title: Home - Dolibarr 18.0.9",
+              "response_body_length": 46286,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin opens the user's permissions page",
+              "utc": "2026-11-25T14:41:54Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55098,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 81",
+              "utc": "2026-11-25T14:41:55Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=81&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55223,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 82",
+              "utc": "2026-11-25T14:41:55Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=82&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55241,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 121",
+              "utc": "2026-11-25T14:41:56Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=121&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55260,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 342",
+              "utc": "2026-11-25T14:41:56Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=342&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55278,
+              "surface": "admin web session"
+            },
+            {
+              "step": "sales user obtains its own API key",
+              "utc": "2026-11-25T14:41:56Z",
+              "method": "POST",
+              "path": "/api/index.php/login",
+              "request_body": {
+                "login": "sales1",
+                "password": "<redacted>",
+                "reset": 1
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"token\": \"<redacted>\",\n        \"entity\": \"1\",\n        \"message\": \"Welcome sales1 - Token is new\"\n    }\n}",
+              "response_body_length": 182
+            }
+          ],
+          "socids": {
+            "Customer X": 1,
+            "Customer Y": 2
+          },
+          "sales_user_id": 2,
+          "db_rows_sales_user_rights": [
+            "fk_user\tfk_id",
+            "2\t81",
+            "2\t82",
+            "2\t121",
+            "2\t342"
+          ],
+          "db_rows_users": [
+            "rowid\tlogin\tadmin\tstatut",
+            "1\tadmin\t1\t1",
+            "2\tsales1\t0\t1"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "A",
+            "acting_user": "sales1 (non-admin; rights [81, 82, 121, 342])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, from-version",
+                "utc": "2026-11-25T14:42:04Z",
+                "method": "POST",
+                "path": "/api/index.php/orders",
+                "request_body": {
+                  "socid": 1,
+                  "date": 1795478400,
+                  "date_livraison": 1797292800
+                },
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "1",
+                "response_body_length": 1
+              },
+              {
+                "step": "second witness: admin reads the order",
+                "utc": "2026-11-25T14:42:05Z",
+                "method": "GET",
+                "path": "/api/index.php/orders/1",
+                "request_body": null,
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\n    \"module\": null,\n    \"id\": \"1\",\n    \"entity\": \"1\",\n    \"import_key\": null,\n    \"array_options\": [],\n    \"array_languages\": null,\n    \"contacts_ids\": [],\n    \"linked_objects\": [],\n    \"linkedObjectsIds\": [],\n    \"oldref\": null,\n    \"canvas\": null,\n    \"fk_project\": null,\n    \"contact_id\": null,\n",
+                "response_body_length": 3095
+              }
+            ],
+            "application_answer": {
+              "status": 200,
+              "body_excerpt": "1"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 200 and the returned order id",
+            "returned_order_id": 1,
+            "db_query": "SELECT rowid, ref, fk_soc, fk_user_author, date_commande, date_livraison, fk_statut FROM llx_commande ORDER BY rowid",
+            "db_rows_before": [],
+            "db_rows_after": [
+              "rowid\tref\tfk_soc\tfk_user_author\tdate_commande\tdate_livraison\tfk_statut",
+              "1\t(PROV1)\t1\t2\t2026-11-24\t2026-12-15 00:00:00\t0"
+            ],
+            "db_row_for_returned_id": [
+              "rowid\tfk_soc\tdate_livraison\tdelivery_is_null",
+              "1\t1\t2026-12-15 00:00:00\t0"
+            ],
+            "stored_value": "2026-12-15 00:00:00",
+            "right_value": "2026-12-15 00:00:00",
+            "stored_equals_right": true,
+            "second_witness_admin_get": {
+              "id": "1",
+              "ref": "(PROV1)",
+              "socid": "1",
+              "date": 1795478400,
+              "date_commande": 1795478400,
+              "date_livraison": 1797292800,
+              "delivery_date": 1797292800,
+              "statut": "0"
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T14:42:04Z",
+              "checked_after_utc": "2026-11-25T14:42:05Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 2,
+        "image": "dolibarr/dolibarr:18.0.9",
+        "pulled_ref": "dolibarr/dolibarr@sha256:f70fa3a28c3951ec69ce843f2afeabbcffbdf2458a98f504e0a7d76a578e93b8",
+        "instance_started_utc": "2026-11-25T14:42:10Z",
+        "instance_ready_utc": "2026-11-25T14:45:39Z",
+        "reported_version": "18.0.9",
+        "conditions": {
+          "install": "fresh install by the image's own first-start routine (DOLI_INSTALL_AUTO=1); no in-place upgrade",
+          "modules_enabled_through": "image environment DOLI_ENABLE_MODULES=Societe,Commande,Api",
+          "php_timezone_and_version": "UTC 8.1.34",
+          "mariadb_time": [
+            "@@global.time_zone\t@@system_time_zone\tNOW()\tUTC_TIMESTAMP()\tVERSION()",
+            "SYSTEM\tUTC\t2026-11-25 14:45:46\t2026-11-25 14:45:46\t10.6.28-MariaDB-ubu2204"
+          ],
+          "dolibarr_version_const": [
+            "name\tvalue",
+            "MAIN_VERSION_LAST_INSTALL\t18.0.9"
+          ],
+          "modules_const": [
+            "name\tvalue",
+            "MAIN_MODULE_API\t1",
+            "MAIN_MODULE_COMMANDE\t1",
+            "MAIN_MODULE_SOCIETE\t1",
+            "MAIN_MODULE_USER\t1"
+          ],
+          "container_memory": [
+            "iu1b-n2-app\t68.6MiB / 7.653GiB",
+            "iu1b-n2-db\t147.3MiB / 7.653GiB"
+          ]
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "admin obtains an API key",
+              "utc": "2026-11-25T14:45:39Z",
+              "method": "POST",
+              "path": "/api/index.php/login",
+              "request_body": {
+                "login": "admin",
+                "password": "<redacted>",
+                "reset": 1
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"token\": \"<redacted>\",\n        \"entity\": \"0\",\n        \"message\": \"Welcome admin - Token is new\"\n    }\n}",
+              "response_body_length": 181
+            },
+            {
+              "step": "version check",
+              "utc": "2026-11-25T14:45:40Z",
+              "method": "GET",
+              "path": "/api/index.php/status",
+              "request_body": null,
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"dolibarr_version\": \"18.0.9\",\n        \"access_locked\": \"0\"\n    }\n}",
+              "response_body_length": 114
+            },
+            {
+              "step": "admin creates customer Customer X",
+              "utc": "2026-11-25T14:45:40Z",
+              "method": "POST",
+              "path": "/api/index.php/thirdparties",
+              "request_body": {
+                "name": "Customer X",
+                "client": 1,
+                "code_client": "auto"
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "1",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin creates customer Customer Y",
+              "utc": "2026-11-25T14:45:40Z",
+              "method": "POST",
+              "path": "/api/index.php/thirdparties",
+              "request_body": {
+                "name": "Customer Y",
+                "client": 1,
+                "code_client": "auto"
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "2",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin creates the sales user",
+              "utc": "2026-11-25T14:45:41Z",
+              "method": "POST",
+              "path": "/api/index.php/users",
+              "request_body": {
+                "login": "sales1",
+                "lastname": "Sales",
+                "firstname": "Sam",
+                "pass": "<redacted>",
+                "employee": 1
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "2",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin opens the login page",
+              "utc": "2026-11-25T14:45:41Z",
+              "method": "GET",
+              "path": "/index.php",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Login @ 18.0.9",
+              "response_body_length": 6568,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin logs in",
+              "utc": "2026-11-25T14:45:41Z",
+              "method": "POST",
+              "path": "/index.php?mainmenu=home",
+              "request_body": {
+                "token": "<redacted>",
+                "actionlogin": "login",
+                "loginfunction": "loginfunction",
+                "username": "admin",
+                "password": "<redacted>"
+              },
+              "status": 200,
+              "response_body_excerpt": "html page, title: Home - Dolibarr 18.0.9",
+              "response_body_length": 46286,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin opens the user's permissions page",
+              "utc": "2026-11-25T14:45:42Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55098,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 81",
+              "utc": "2026-11-25T14:45:43Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=81&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55223,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 82",
+              "utc": "2026-11-25T14:45:43Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=82&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55241,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 121",
+              "utc": "2026-11-25T14:45:43Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=121&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55260,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 342",
+              "utc": "2026-11-25T14:45:44Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=342&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55278,
+              "surface": "admin web session"
+            },
+            {
+              "step": "sales user obtains its own API key",
+              "utc": "2026-11-25T14:45:44Z",
+              "method": "POST",
+              "path": "/api/index.php/login",
+              "request_body": {
+                "login": "sales1",
+                "password": "<redacted>",
+                "reset": 1
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"token\": \"<redacted>\",\n        \"entity\": \"1\",\n        \"message\": \"Welcome sales1 - Token is new\"\n    }\n}",
+              "response_body_length": 182
+            }
+          ],
+          "socids": {
+            "Customer X": 1,
+            "Customer Y": 2
+          },
+          "sales_user_id": 2,
+          "db_rows_sales_user_rights": [
+            "fk_user\tfk_id",
+            "2\t81",
+            "2\t82",
+            "2\t121",
+            "2\t342"
+          ],
+          "db_rows_users": [
+            "rowid\tlogin\tadmin\tstatut",
+            "1\tadmin\t1\t1",
+            "2\tsales1\t0\t1"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "A",
+            "acting_user": "sales1 (non-admin; rights [81, 82, 121, 342])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, from-version",
+                "utc": "2026-11-25T14:45:50Z",
+                "method": "POST",
+                "path": "/api/index.php/orders",
+                "request_body": {
+                  "socid": 1,
+                  "date": 1795478400,
+                  "date_livraison": 1797292800
+                },
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "1",
+                "response_body_length": 1
+              },
+              {
+                "step": "second witness: admin reads the order",
+                "utc": "2026-11-25T14:45:51Z",
+                "method": "GET",
+                "path": "/api/index.php/orders/1",
+                "request_body": null,
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\n    \"module\": null,\n    \"id\": \"1\",\n    \"entity\": \"1\",\n    \"import_key\": null,\n    \"array_options\": [],\n    \"array_languages\": null,\n    \"contacts_ids\": [],\n    \"linked_objects\": [],\n    \"linkedObjectsIds\": [],\n    \"oldref\": null,\n    \"canvas\": null,\n    \"fk_project\": null,\n    \"contact_id\": null,\n",
+                "response_body_length": 3095
+              }
+            ],
+            "application_answer": {
+              "status": 200,
+              "body_excerpt": "1"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 200 and the returned order id",
+            "returned_order_id": 1,
+            "db_query": "SELECT rowid, ref, fk_soc, fk_user_author, date_commande, date_livraison, fk_statut FROM llx_commande ORDER BY rowid",
+            "db_rows_before": [],
+            "db_rows_after": [
+              "rowid\tref\tfk_soc\tfk_user_author\tdate_commande\tdate_livraison\tfk_statut",
+              "1\t(PROV1)\t1\t2\t2026-11-24\t2026-12-15 00:00:00\t0"
+            ],
+            "db_row_for_returned_id": [
+              "rowid\tfk_soc\tdate_livraison\tdelivery_is_null",
+              "1\t1\t2026-12-15 00:00:00\t0"
+            ],
+            "stored_value": "2026-12-15 00:00:00",
+            "right_value": "2026-12-15 00:00:00",
+            "stored_equals_right": true,
+            "second_witness_admin_get": {
+              "id": "1",
+              "ref": "(PROV1)",
+              "socid": "1",
+              "date": 1795478400,
+              "date_commande": 1795478400,
+              "date_livraison": 1797292800,
+              "delivery_date": 1797292800,
+              "statut": "0"
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T14:45:50Z",
+              "checked_after_utc": "2026-11-25T14:45:51Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 3,
+        "image": "dolibarr/dolibarr:18.0.9",
+        "pulled_ref": "dolibarr/dolibarr@sha256:f70fa3a28c3951ec69ce843f2afeabbcffbdf2458a98f504e0a7d76a578e93b8",
+        "instance_started_utc": "2026-11-25T14:45:57Z",
+        "instance_ready_utc": "2026-11-25T14:50:20Z",
+        "reported_version": "18.0.9",
+        "conditions": {
+          "install": "fresh install by the image's own first-start routine (DOLI_INSTALL_AUTO=1); no in-place upgrade",
+          "modules_enabled_through": "image environment DOLI_ENABLE_MODULES=Societe,Commande,Api",
+          "php_timezone_and_version": "UTC 8.1.34",
+          "mariadb_time": [
+            "@@global.time_zone\t@@system_time_zone\tNOW()\tUTC_TIMESTAMP()\tVERSION()",
+            "SYSTEM\tUTC\t2026-11-25 14:50:25\t2026-11-25 14:50:25\t10.6.28-MariaDB-ubu2204"
+          ],
+          "dolibarr_version_const": [
+            "name\tvalue",
+            "MAIN_VERSION_LAST_INSTALL\t18.0.9"
+          ],
+          "modules_const": [
+            "name\tvalue",
+            "MAIN_MODULE_API\t1",
+            "MAIN_MODULE_COMMANDE\t1",
+            "MAIN_MODULE_SOCIETE\t1",
+            "MAIN_MODULE_USER\t1"
+          ],
+          "container_memory": [
+            "iu1b-n2-app\t68.62MiB / 7.653GiB",
+            "iu1b-n2-db\t147.5MiB / 7.653GiB"
+          ]
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "admin obtains an API key",
+              "utc": "2026-11-25T14:50:20Z",
+              "method": "POST",
+              "path": "/api/index.php/login",
+              "request_body": {
+                "login": "admin",
+                "password": "<redacted>",
+                "reset": 1
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"token\": \"<redacted>\",\n        \"entity\": \"0\",\n        \"message\": \"Welcome admin - Token is new\"\n    }\n}",
+              "response_body_length": 181
+            },
+            {
+              "step": "version check",
+              "utc": "2026-11-25T14:50:20Z",
+              "method": "GET",
+              "path": "/api/index.php/status",
+              "request_body": null,
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"dolibarr_version\": \"18.0.9\",\n        \"access_locked\": \"0\"\n    }\n}",
+              "response_body_length": 114
+            },
+            {
+              "step": "admin creates customer Customer X",
+              "utc": "2026-11-25T14:50:20Z",
+              "method": "POST",
+              "path": "/api/index.php/thirdparties",
+              "request_body": {
+                "name": "Customer X",
+                "client": 1,
+                "code_client": "auto"
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "1",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin creates customer Customer Y",
+              "utc": "2026-11-25T14:50:21Z",
+              "method": "POST",
+              "path": "/api/index.php/thirdparties",
+              "request_body": {
+                "name": "Customer Y",
+                "client": 1,
+                "code_client": "auto"
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "2",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin creates the sales user",
+              "utc": "2026-11-25T14:50:21Z",
+              "method": "POST",
+              "path": "/api/index.php/users",
+              "request_body": {
+                "login": "sales1",
+                "lastname": "Sales",
+                "firstname": "Sam",
+                "pass": "<redacted>",
+                "employee": 1
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "2",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin opens the login page",
+              "utc": "2026-11-25T14:50:21Z",
+              "method": "GET",
+              "path": "/index.php",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Login @ 18.0.9",
+              "response_body_length": 6568,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin logs in",
+              "utc": "2026-11-25T14:50:21Z",
+              "method": "POST",
+              "path": "/index.php?mainmenu=home",
+              "request_body": {
+                "token": "<redacted>",
+                "actionlogin": "login",
+                "loginfunction": "loginfunction",
+                "username": "admin",
+                "password": "<redacted>"
+              },
+              "status": 200,
+              "response_body_excerpt": "html page, title: Home - Dolibarr 18.0.9",
+              "response_body_length": 46286,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin opens the user's permissions page",
+              "utc": "2026-11-25T14:50:22Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55098,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 81",
+              "utc": "2026-11-25T14:50:22Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=81&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55223,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 82",
+              "utc": "2026-11-25T14:50:23Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=82&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55241,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 121",
+              "utc": "2026-11-25T14:50:23Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=121&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55260,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 342",
+              "utc": "2026-11-25T14:50:24Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=342&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55278,
+              "surface": "admin web session"
+            },
+            {
+              "step": "sales user obtains its own API key",
+              "utc": "2026-11-25T14:50:24Z",
+              "method": "POST",
+              "path": "/api/index.php/login",
+              "request_body": {
+                "login": "sales1",
+                "password": "<redacted>",
+                "reset": 1
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"token\": \"<redacted>\",\n        \"entity\": \"1\",\n        \"message\": \"Welcome sales1 - Token is new\"\n    }\n}",
+              "response_body_length": 182
+            }
+          ],
+          "socids": {
+            "Customer X": 1,
+            "Customer Y": 2
+          },
+          "sales_user_id": 2,
+          "db_rows_sales_user_rights": [
+            "fk_user\tfk_id",
+            "2\t81",
+            "2\t82",
+            "2\t121",
+            "2\t342"
+          ],
+          "db_rows_users": [
+            "rowid\tlogin\tadmin\tstatut",
+            "1\tadmin\t1\t1",
+            "2\tsales1\t0\t1"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "A",
+            "acting_user": "sales1 (non-admin; rights [81, 82, 121, 342])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, from-version",
+                "utc": "2026-11-25T14:50:29Z",
+                "method": "POST",
+                "path": "/api/index.php/orders",
+                "request_body": {
+                  "socid": 1,
+                  "date": 1795478400,
+                  "date_livraison": 1797292800
+                },
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "1",
+                "response_body_length": 1
+              },
+              {
+                "step": "second witness: admin reads the order",
+                "utc": "2026-11-25T14:50:30Z",
+                "method": "GET",
+                "path": "/api/index.php/orders/1",
+                "request_body": null,
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\n    \"module\": null,\n    \"id\": \"1\",\n    \"entity\": \"1\",\n    \"import_key\": null,\n    \"array_options\": [],\n    \"array_languages\": null,\n    \"contacts_ids\": [],\n    \"linked_objects\": [],\n    \"linkedObjectsIds\": [],\n    \"oldref\": null,\n    \"canvas\": null,\n    \"fk_project\": null,\n    \"contact_id\": null,\n",
+                "response_body_length": 3095
+              }
+            ],
+            "application_answer": {
+              "status": 200,
+              "body_excerpt": "1"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 200 and the returned order id",
+            "returned_order_id": 1,
+            "db_query": "SELECT rowid, ref, fk_soc, fk_user_author, date_commande, date_livraison, fk_statut FROM llx_commande ORDER BY rowid",
+            "db_rows_before": [],
+            "db_rows_after": [
+              "rowid\tref\tfk_soc\tfk_user_author\tdate_commande\tdate_livraison\tfk_statut",
+              "1\t(PROV1)\t1\t2\t2026-11-24\t2026-12-15 00:00:00\t0"
+            ],
+            "db_row_for_returned_id": [
+              "rowid\tfk_soc\tdate_livraison\tdelivery_is_null",
+              "1\t1\t2026-12-15 00:00:00\t0"
+            ],
+            "stored_value": "2026-12-15 00:00:00",
+            "right_value": "2026-12-15 00:00:00",
+            "stored_equals_right": true,
+            "second_witness_admin_get": {
+              "id": "1",
+              "ref": "(PROV1)",
+              "socid": "1",
+              "date": 1795478400,
+              "date_commande": 1795478400,
+              "date_livraison": 1797292800,
+              "delivery_date": 1797292800,
+              "statut": "0"
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T14:50:29Z",
+              "checked_after_utc": "2026-11-25T14:50:30Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      }
+    ],
+    "to_version": [
+      {
+        "repeat": 1,
+        "image": "dolibarr/dolibarr:19.0.2",
+        "pulled_ref": "dolibarr/dolibarr@sha256:aa5421ecb7f402f10662830bd8c53b35565986ba798332fdb5d12ff2ef4a5a9f",
+        "instance_started_utc": "2026-11-25T14:50:34Z",
+        "instance_ready_utc": "2026-11-25T14:54:53Z",
+        "reported_version": "19.0.2",
+        "conditions": {
+          "install": "fresh install by the image's own first-start routine (DOLI_INSTALL_AUTO=1); no in-place upgrade",
+          "modules_enabled_through": "image environment DOLI_ENABLE_MODULES=Societe,Commande,Api",
+          "php_timezone_and_version": "UTC 8.2.7",
+          "mariadb_time": [
+            "@@global.time_zone\t@@system_time_zone\tNOW()\tUTC_TIMESTAMP()\tVERSION()",
+            "SYSTEM\tUTC\t2026-11-25 14:55:01\t2026-11-25 14:55:01\t10.6.28-MariaDB-ubu2204"
+          ],
+          "dolibarr_version_const": [
+            "name\tvalue",
+            "MAIN_VERSION_LAST_INSTALL\t19.0.2"
+          ],
+          "modules_const": [
+            "name\tvalue",
+            "MAIN_MODULE_API\t1",
+            "MAIN_MODULE_COMMANDE\t1",
+            "MAIN_MODULE_SOCIETE\t1",
+            "MAIN_MODULE_USER\t1"
+          ],
+          "container_memory": [
+            "iu1b-n2-app\t149.3MiB / 7.653GiB",
+            "iu1b-n2-db\t149.4MiB / 7.653GiB"
+          ]
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "admin obtains an API key",
+              "utc": "2026-11-25T14:54:53Z",
+              "method": "POST",
+              "path": "/api/index.php/login",
+              "request_body": {
+                "login": "admin",
+                "password": "<redacted>",
+                "reset": 1
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"token\": \"<redacted>\",\n        \"entity\": \"0\",\n        \"message\": \"Welcome admin - Token is new\"\n    }\n}",
+              "response_body_length": 181
+            },
+            {
+              "step": "version check",
+              "utc": "2026-11-25T14:54:53Z",
+              "method": "GET",
+              "path": "/api/index.php/status",
+              "request_body": null,
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"dolibarr_version\": \"19.0.2\",\n        \"access_locked\": \"0\"\n    }\n}",
+              "response_body_length": 114
+            },
+            {
+              "step": "admin creates customer Customer X",
+              "utc": "2026-11-25T14:54:54Z",
+              "method": "POST",
+              "path": "/api/index.php/thirdparties",
+              "request_body": {
+                "name": "Customer X",
+                "client": 1,
+                "code_client": "auto"
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "1",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin creates customer Customer Y",
+              "utc": "2026-11-25T14:54:54Z",
+              "method": "POST",
+              "path": "/api/index.php/thirdparties",
+              "request_body": {
+                "name": "Customer Y",
+                "client": 1,
+                "code_client": "auto"
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "2",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin creates the sales user",
+              "utc": "2026-11-25T14:54:55Z",
+              "method": "POST",
+              "path": "/api/index.php/users",
+              "request_body": {
+                "login": "sales1",
+                "lastname": "Sales",
+                "firstname": "Sam",
+                "pass": "<redacted>",
+                "employee": 1
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "2",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin opens the login page",
+              "utc": "2026-11-25T14:54:55Z",
+              "method": "GET",
+              "path": "/index.php",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Login @ 19.0.2",
+              "response_body_length": 6438,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin logs in",
+              "utc": "2026-11-25T14:54:56Z",
+              "method": "POST",
+              "path": "/index.php?mainmenu=home",
+              "request_body": {
+                "token": "<redacted>",
+                "actionlogin": "login",
+                "loginfunction": "loginfunction",
+                "username": "admin",
+                "password": "<redacted>"
+              },
+              "status": 200,
+              "response_body_excerpt": "html page, title: Home - Dolibarr 19.0.2",
+              "response_body_length": 46966,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin opens the user's permissions page",
+              "utc": "2026-11-25T14:54:57Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55659,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 81",
+              "utc": "2026-11-25T14:54:57Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=81&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55748,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 82",
+              "utc": "2026-11-25T14:54:58Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=82&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55730,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 121",
+              "utc": "2026-11-25T14:54:59Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=121&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55713,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 342",
+              "utc": "2026-11-25T14:55:00Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=342&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55695,
+              "surface": "admin web session"
+            },
+            {
+              "step": "sales user obtains its own API key",
+              "utc": "2026-11-25T14:55:00Z",
+              "method": "POST",
+              "path": "/api/index.php/login",
+              "request_body": {
+                "login": "sales1",
+                "password": "<redacted>",
+                "reset": 1
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"token\": \"<redacted>\",\n        \"entity\": \"1\",\n        \"message\": \"Welcome sales1 - Token is new\"\n    }\n}",
+              "response_body_length": 182
+            }
+          ],
+          "socids": {
+            "Customer X": 1,
+            "Customer Y": 2
+          },
+          "sales_user_id": 2,
+          "db_rows_sales_user_rights": [
+            "fk_user\tfk_id",
+            "2\t81",
+            "2\t82",
+            "2\t121",
+            "2\t342"
+          ],
+          "db_rows_users": [
+            "rowid\tlogin\tadmin\tstatut",
+            "1\tadmin\t1\t1",
+            "2\tsales1\t0\t1"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "B",
+            "acting_user": "sales1 (non-admin; rights [81, 82, 121, 342])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, to-version",
+                "utc": "2026-11-25T14:55:05Z",
+                "method": "POST",
+                "path": "/api/index.php/orders",
+                "request_body": {
+                  "socid": 1,
+                  "date": 1795478400,
+                  "date_livraison": 1797292800
+                },
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "1",
+                "response_body_length": 1
+              },
+              {
+                "step": "second witness: admin reads the order",
+                "utc": "2026-11-25T14:55:06Z",
+                "method": "GET",
+                "path": "/api/index.php/orders/1",
+                "request_body": null,
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\n    \"module\": null,\n    \"id\": \"1\",\n    \"entity\": \"1\",\n    \"import_key\": null,\n    \"array_options\": [],\n    \"array_languages\": null,\n    \"contacts_ids\": [],\n    \"linked_objects\": [],\n    \"linkedObjectsIds\": [],\n    \"oldref\": null,\n    \"actionmsg\": null,\n    \"actionmsg2\": null,\n    \"canvas\": null,\n ",
+                "response_body_length": 3249
+              }
+            ],
+            "application_answer": {
+              "status": 200,
+              "body_excerpt": "1"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 200 and the returned order id",
+            "returned_order_id": 1,
+            "db_query": "SELECT rowid, ref, fk_soc, fk_user_author, date_commande, date_livraison, fk_statut FROM llx_commande ORDER BY rowid",
+            "db_rows_before": [],
+            "db_rows_after": [
+              "rowid\tref\tfk_soc\tfk_user_author\tdate_commande\tdate_livraison\tfk_statut",
+              "1\t(PROV1)\t1\t2\t2026-11-24\tNULL\t0"
+            ],
+            "db_row_for_returned_id": [
+              "rowid\tfk_soc\tdate_livraison\tdelivery_is_null",
+              "1\t1\tNULL\t1"
+            ],
+            "stored_value": "NULL",
+            "right_value": "2026-12-15 00:00:00",
+            "stored_equals_right": false,
+            "second_witness_admin_get": {
+              "id": "1",
+              "ref": "(PROV1)",
+              "socid": "1",
+              "date": 1795478400,
+              "date_commande": 1795478400,
+              "date_livraison": null,
+              "delivery_date": "",
+              "statut": "0"
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T14:55:04Z",
+              "checked_after_utc": "2026-11-25T14:55:06Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          },
+          {
+            "gate": "C",
+            "acting_user": "sales1 (non-admin; rights [81, 82, 121, 342])",
+            "calls": [
+              {
+                "step": "correct path as sealed, to-version, second customer",
+                "utc": "2026-11-25T14:55:07Z",
+                "method": "POST",
+                "path": "/api/index.php/orders",
+                "request_body": {
+                  "socid": 2,
+                  "date": 1795478400,
+                  "delivery_date": 1797292800
+                },
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "2",
+                "response_body_length": 1
+              },
+              {
+                "step": "second witness: admin reads the order",
+                "utc": "2026-11-25T14:55:08Z",
+                "method": "GET",
+                "path": "/api/index.php/orders/2",
+                "request_body": null,
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\n    \"module\": null,\n    \"id\": \"2\",\n    \"entity\": \"1\",\n    \"import_key\": null,\n    \"array_options\": [],\n    \"array_languages\": null,\n    \"contacts_ids\": [],\n    \"linked_objects\": [],\n    \"linkedObjectsIds\": [],\n    \"oldref\": null,\n    \"actionmsg\": null,\n    \"actionmsg2\": null,\n    \"canvas\": null,\n ",
+                "response_body_length": 3257
+              }
+            ],
+            "application_answer": {
+              "status": 200,
+              "body_excerpt": "2"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 200 and the returned order id",
+            "returned_order_id": 2,
+            "db_query": "SELECT rowid, ref, fk_soc, fk_user_author, date_commande, date_livraison, fk_statut FROM llx_commande ORDER BY rowid",
+            "db_rows_before": [
+              "rowid\tref\tfk_soc\tfk_user_author\tdate_commande\tdate_livraison\tfk_statut",
+              "1\t(PROV1)\t1\t2\t2026-11-24\tNULL\t0"
+            ],
+            "db_rows_after": [
+              "rowid\tref\tfk_soc\tfk_user_author\tdate_commande\tdate_livraison\tfk_statut",
+              "1\t(PROV1)\t1\t2\t2026-11-24\tNULL\t0",
+              "2\t(PROV2)\t2\t2\t2026-11-24\t2026-12-15 00:00:00\t0"
+            ],
+            "db_row_for_returned_id": [
+              "rowid\tfk_soc\tdate_livraison\tdelivery_is_null",
+              "2\t2\t2026-12-15 00:00:00\t0"
+            ],
+            "stored_value": "2026-12-15 00:00:00",
+            "right_value": "2026-12-15 00:00:00",
+            "stored_equals_right": true,
+            "second_witness_admin_get": {
+              "id": "2",
+              "ref": "(PROV2)",
+              "socid": "2",
+              "date": 1795478400,
+              "date_commande": 1795478400,
+              "date_livraison": null,
+              "delivery_date": 1797292800,
+              "statut": "0"
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T14:55:06Z",
+              "checked_after_utc": "2026-11-25T14:55:08Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 2,
+        "image": "dolibarr/dolibarr:19.0.2",
+        "pulled_ref": "dolibarr/dolibarr@sha256:aa5421ecb7f402f10662830bd8c53b35565986ba798332fdb5d12ff2ef4a5a9f",
+        "instance_started_utc": "2026-11-25T14:55:11Z",
+        "instance_ready_utc": "2026-11-25T14:57:58Z",
+        "reported_version": "19.0.2",
+        "conditions": {
+          "install": "fresh install by the image's own first-start routine (DOLI_INSTALL_AUTO=1); no in-place upgrade",
+          "modules_enabled_through": "image environment DOLI_ENABLE_MODULES=Societe,Commande,Api",
+          "php_timezone_and_version": "UTC 8.2.7",
+          "mariadb_time": [
+            "@@global.time_zone\t@@system_time_zone\tNOW()\tUTC_TIMESTAMP()\tVERSION()",
+            "SYSTEM\tUTC\t2026-11-25 14:58:06\t2026-11-25 14:58:06\t10.6.28-MariaDB-ubu2204"
+          ],
+          "dolibarr_version_const": [
+            "name\tvalue",
+            "MAIN_VERSION_LAST_INSTALL\t19.0.2"
+          ],
+          "modules_const": [
+            "name\tvalue",
+            "MAIN_MODULE_API\t1",
+            "MAIN_MODULE_COMMANDE\t1",
+            "MAIN_MODULE_SOCIETE\t1",
+            "MAIN_MODULE_USER\t1"
+          ],
+          "container_memory": [
+            "iu1b-n2-app\t115.6MiB / 7.653GiB",
+            "iu1b-n2-db\t146.1MiB / 7.653GiB"
+          ]
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "admin obtains an API key",
+              "utc": "2026-11-25T14:57:58Z",
+              "method": "POST",
+              "path": "/api/index.php/login",
+              "request_body": {
+                "login": "admin",
+                "password": "<redacted>",
+                "reset": 1
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"token\": \"<redacted>\",\n        \"entity\": \"0\",\n        \"message\": \"Welcome admin - Token is new\"\n    }\n}",
+              "response_body_length": 181
+            },
+            {
+              "step": "version check",
+              "utc": "2026-11-25T14:57:58Z",
+              "method": "GET",
+              "path": "/api/index.php/status",
+              "request_body": null,
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"dolibarr_version\": \"19.0.2\",\n        \"access_locked\": \"0\"\n    }\n}",
+              "response_body_length": 114
+            },
+            {
+              "step": "admin creates customer Customer X",
+              "utc": "2026-11-25T14:57:59Z",
+              "method": "POST",
+              "path": "/api/index.php/thirdparties",
+              "request_body": {
+                "name": "Customer X",
+                "client": 1,
+                "code_client": "auto"
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "1",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin creates customer Customer Y",
+              "utc": "2026-11-25T14:57:59Z",
+              "method": "POST",
+              "path": "/api/index.php/thirdparties",
+              "request_body": {
+                "name": "Customer Y",
+                "client": 1,
+                "code_client": "auto"
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "2",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin creates the sales user",
+              "utc": "2026-11-25T14:57:59Z",
+              "method": "POST",
+              "path": "/api/index.php/users",
+              "request_body": {
+                "login": "sales1",
+                "lastname": "Sales",
+                "firstname": "Sam",
+                "pass": "<redacted>",
+                "employee": 1
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "2",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin opens the login page",
+              "utc": "2026-11-25T14:58:00Z",
+              "method": "GET",
+              "path": "/index.php",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Login @ 19.0.2",
+              "response_body_length": 6438,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin logs in",
+              "utc": "2026-11-25T14:58:00Z",
+              "method": "POST",
+              "path": "/index.php?mainmenu=home",
+              "request_body": {
+                "token": "<redacted>",
+                "actionlogin": "login",
+                "loginfunction": "loginfunction",
+                "username": "admin",
+                "password": "<redacted>"
+              },
+              "status": 200,
+              "response_body_excerpt": "html page, title: Home - Dolibarr 19.0.2",
+              "response_body_length": 46966,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin opens the user's permissions page",
+              "utc": "2026-11-25T14:58:01Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55659,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 81",
+              "utc": "2026-11-25T14:58:03Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=81&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55748,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 82",
+              "utc": "2026-11-25T14:58:03Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=82&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55730,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 121",
+              "utc": "2026-11-25T14:58:04Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=121&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55713,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 342",
+              "utc": "2026-11-25T14:58:05Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=342&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55695,
+              "surface": "admin web session"
+            },
+            {
+              "step": "sales user obtains its own API key",
+              "utc": "2026-11-25T14:58:05Z",
+              "method": "POST",
+              "path": "/api/index.php/login",
+              "request_body": {
+                "login": "sales1",
+                "password": "<redacted>",
+                "reset": 1
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"token\": \"<redacted>\",\n        \"entity\": \"1\",\n        \"message\": \"Welcome sales1 - Token is new\"\n    }\n}",
+              "response_body_length": 182
+            }
+          ],
+          "socids": {
+            "Customer X": 1,
+            "Customer Y": 2
+          },
+          "sales_user_id": 2,
+          "db_rows_sales_user_rights": [
+            "fk_user\tfk_id",
+            "2\t81",
+            "2\t82",
+            "2\t121",
+            "2\t342"
+          ],
+          "db_rows_users": [
+            "rowid\tlogin\tadmin\tstatut",
+            "1\tadmin\t1\t1",
+            "2\tsales1\t0\t1"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "B",
+            "acting_user": "sales1 (non-admin; rights [81, 82, 121, 342])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, to-version",
+                "utc": "2026-11-25T14:58:11Z",
+                "method": "POST",
+                "path": "/api/index.php/orders",
+                "request_body": {
+                  "socid": 1,
+                  "date": 1795478400,
+                  "date_livraison": 1797292800
+                },
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "1",
+                "response_body_length": 1
+              },
+              {
+                "step": "second witness: admin reads the order",
+                "utc": "2026-11-25T14:58:12Z",
+                "method": "GET",
+                "path": "/api/index.php/orders/1",
+                "request_body": null,
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\n    \"module\": null,\n    \"id\": \"1\",\n    \"entity\": \"1\",\n    \"import_key\": null,\n    \"array_options\": [],\n    \"array_languages\": null,\n    \"contacts_ids\": [],\n    \"linked_objects\": [],\n    \"linkedObjectsIds\": [],\n    \"oldref\": null,\n    \"actionmsg\": null,\n    \"actionmsg2\": null,\n    \"canvas\": null,\n ",
+                "response_body_length": 3249
+              }
+            ],
+            "application_answer": {
+              "status": 200,
+              "body_excerpt": "1"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 200 and the returned order id",
+            "returned_order_id": 1,
+            "db_query": "SELECT rowid, ref, fk_soc, fk_user_author, date_commande, date_livraison, fk_statut FROM llx_commande ORDER BY rowid",
+            "db_rows_before": [],
+            "db_rows_after": [
+              "rowid\tref\tfk_soc\tfk_user_author\tdate_commande\tdate_livraison\tfk_statut",
+              "1\t(PROV1)\t1\t2\t2026-11-24\tNULL\t0"
+            ],
+            "db_row_for_returned_id": [
+              "rowid\tfk_soc\tdate_livraison\tdelivery_is_null",
+              "1\t1\tNULL\t1"
+            ],
+            "stored_value": "NULL",
+            "right_value": "2026-12-15 00:00:00",
+            "stored_equals_right": false,
+            "second_witness_admin_get": {
+              "id": "1",
+              "ref": "(PROV1)",
+              "socid": "1",
+              "date": 1795478400,
+              "date_commande": 1795478400,
+              "date_livraison": null,
+              "delivery_date": "",
+              "statut": "0"
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T14:58:11Z",
+              "checked_after_utc": "2026-11-25T14:58:12Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          },
+          {
+            "gate": "C",
+            "acting_user": "sales1 (non-admin; rights [81, 82, 121, 342])",
+            "calls": [
+              {
+                "step": "correct path as sealed, to-version, second customer",
+                "utc": "2026-11-25T14:58:13Z",
+                "method": "POST",
+                "path": "/api/index.php/orders",
+                "request_body": {
+                  "socid": 2,
+                  "date": 1795478400,
+                  "delivery_date": 1797292800
+                },
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "2",
+                "response_body_length": 1
+              },
+              {
+                "step": "second witness: admin reads the order",
+                "utc": "2026-11-25T14:58:14Z",
+                "method": "GET",
+                "path": "/api/index.php/orders/2",
+                "request_body": null,
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\n    \"module\": null,\n    \"id\": \"2\",\n    \"entity\": \"1\",\n    \"import_key\": null,\n    \"array_options\": [],\n    \"array_languages\": null,\n    \"contacts_ids\": [],\n    \"linked_objects\": [],\n    \"linkedObjectsIds\": [],\n    \"oldref\": null,\n    \"actionmsg\": null,\n    \"actionmsg2\": null,\n    \"canvas\": null,\n ",
+                "response_body_length": 3257
+              }
+            ],
+            "application_answer": {
+              "status": 200,
+              "body_excerpt": "2"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 200 and the returned order id",
+            "returned_order_id": 2,
+            "db_query": "SELECT rowid, ref, fk_soc, fk_user_author, date_commande, date_livraison, fk_statut FROM llx_commande ORDER BY rowid",
+            "db_rows_before": [
+              "rowid\tref\tfk_soc\tfk_user_author\tdate_commande\tdate_livraison\tfk_statut",
+              "1\t(PROV1)\t1\t2\t2026-11-24\tNULL\t0"
+            ],
+            "db_rows_after": [
+              "rowid\tref\tfk_soc\tfk_user_author\tdate_commande\tdate_livraison\tfk_statut",
+              "1\t(PROV1)\t1\t2\t2026-11-24\tNULL\t0",
+              "2\t(PROV2)\t2\t2\t2026-11-24\t2026-12-15 00:00:00\t0"
+            ],
+            "db_row_for_returned_id": [
+              "rowid\tfk_soc\tdate_livraison\tdelivery_is_null",
+              "2\t2\t2026-12-15 00:00:00\t0"
+            ],
+            "stored_value": "2026-12-15 00:00:00",
+            "right_value": "2026-12-15 00:00:00",
+            "stored_equals_right": true,
+            "second_witness_admin_get": {
+              "id": "2",
+              "ref": "(PROV2)",
+              "socid": "2",
+              "date": 1795478400,
+              "date_commande": 1795478400,
+              "date_livraison": null,
+              "delivery_date": 1797292800,
+              "statut": "0"
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T14:58:13Z",
+              "checked_after_utc": "2026-11-25T14:58:14Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 3,
+        "image": "dolibarr/dolibarr:19.0.2",
+        "pulled_ref": "dolibarr/dolibarr@sha256:aa5421ecb7f402f10662830bd8c53b35565986ba798332fdb5d12ff2ef4a5a9f",
+        "instance_started_utc": "2026-11-25T14:58:21Z",
+        "instance_ready_utc": "2026-11-25T15:03:01Z",
+        "reported_version": "19.0.2",
+        "conditions": {
+          "install": "fresh install by the image's own first-start routine (DOLI_INSTALL_AUTO=1); no in-place upgrade",
+          "modules_enabled_through": "image environment DOLI_ENABLE_MODULES=Societe,Commande,Api",
+          "php_timezone_and_version": "UTC 8.2.7",
+          "mariadb_time": [
+            "@@global.time_zone\t@@system_time_zone\tNOW()\tUTC_TIMESTAMP()\tVERSION()",
+            "SYSTEM\tUTC\t2026-11-25 15:03:08\t2026-11-25 15:03:08\t10.6.28-MariaDB-ubu2204"
+          ],
+          "dolibarr_version_const": [
+            "name\tvalue",
+            "MAIN_VERSION_LAST_INSTALL\t19.0.2"
+          ],
+          "modules_const": [
+            "name\tvalue",
+            "MAIN_MODULE_API\t1",
+            "MAIN_MODULE_COMMANDE\t1",
+            "MAIN_MODULE_SOCIETE\t1",
+            "MAIN_MODULE_USER\t1"
+          ],
+          "container_memory": [
+            "iu1b-n5x-app\t40.64MiB / 7.653GiB",
+            "iu1b-n2-app\t115.4MiB / 7.653GiB",
+            "iu1b-n2-db\t143.3MiB / 7.653GiB"
+          ]
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "admin obtains an API key",
+              "utc": "2026-11-25T15:03:01Z",
+              "method": "POST",
+              "path": "/api/index.php/login",
+              "request_body": {
+                "login": "admin",
+                "password": "<redacted>",
+                "reset": 1
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"token\": \"<redacted>\",\n        \"entity\": \"0\",\n        \"message\": \"Welcome admin - Token is new\"\n    }\n}",
+              "response_body_length": 181
+            },
+            {
+              "step": "version check",
+              "utc": "2026-11-25T15:03:01Z",
+              "method": "GET",
+              "path": "/api/index.php/status",
+              "request_body": null,
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"dolibarr_version\": \"19.0.2\",\n        \"access_locked\": \"0\"\n    }\n}",
+              "response_body_length": 114
+            },
+            {
+              "step": "admin creates customer Customer X",
+              "utc": "2026-11-25T15:03:02Z",
+              "method": "POST",
+              "path": "/api/index.php/thirdparties",
+              "request_body": {
+                "name": "Customer X",
+                "client": 1,
+                "code_client": "auto"
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "1",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin creates customer Customer Y",
+              "utc": "2026-11-25T15:03:02Z",
+              "method": "POST",
+              "path": "/api/index.php/thirdparties",
+              "request_body": {
+                "name": "Customer Y",
+                "client": 1,
+                "code_client": "auto"
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "2",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin creates the sales user",
+              "utc": "2026-11-25T15:03:02Z",
+              "method": "POST",
+              "path": "/api/index.php/users",
+              "request_body": {
+                "login": "sales1",
+                "lastname": "Sales",
+                "firstname": "Sam",
+                "pass": "<redacted>",
+                "employee": 1
+              },
+              "request_header_names": [
+                "DOLAPIKEY"
+              ],
+              "status": 200,
+              "response_body_excerpt": "2",
+              "response_body_length": 1
+            },
+            {
+              "step": "admin opens the login page",
+              "utc": "2026-11-25T15:03:03Z",
+              "method": "GET",
+              "path": "/index.php",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Login @ 19.0.2",
+              "response_body_length": 6438,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin logs in",
+              "utc": "2026-11-25T15:03:03Z",
+              "method": "POST",
+              "path": "/index.php?mainmenu=home",
+              "request_body": {
+                "token": "<redacted>",
+                "actionlogin": "login",
+                "loginfunction": "loginfunction",
+                "username": "admin",
+                "password": "<redacted>"
+              },
+              "status": 200,
+              "response_body_excerpt": "html page, title: Home - Dolibarr 19.0.2",
+              "response_body_length": 46966,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin opens the user's permissions page",
+              "utc": "2026-11-25T15:03:04Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55659,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 81",
+              "utc": "2026-11-25T15:03:05Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=81&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55748,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 82",
+              "utc": "2026-11-25T15:03:05Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=82&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55730,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 121",
+              "utc": "2026-11-25T15:03:06Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=121&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55713,
+              "surface": "admin web session"
+            },
+            {
+              "step": "admin grants right 342",
+              "utc": "2026-11-25T15:03:06Z",
+              "method": "GET",
+              "path": "/user/perms.php?id=2&action=addrights&entity=1&rights=342&confirm=yes&token=<redacted>",
+              "request_body": null,
+              "status": 200,
+              "response_body_excerpt": "html page, title: Sales, Sam - Permissions",
+              "response_body_length": 55695,
+              "surface": "admin web session"
+            },
+            {
+              "step": "sales user obtains its own API key",
+              "utc": "2026-11-25T15:03:07Z",
+              "method": "POST",
+              "path": "/api/index.php/login",
+              "request_body": {
+                "login": "sales1",
+                "password": "<redacted>",
+                "reset": 1
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\n    \"success\": {\n        \"code\": 200,\n        \"token\": \"<redacted>\",\n        \"entity\": \"1\",\n        \"message\": \"Welcome sales1 - Token is new\"\n    }\n}",
+              "response_body_length": 182
+            }
+          ],
+          "socids": {
+            "Customer X": 1,
+            "Customer Y": 2
+          },
+          "sales_user_id": 2,
+          "db_rows_sales_user_rights": [
+            "fk_user\tfk_id",
+            "2\t81",
+            "2\t82",
+            "2\t121",
+            "2\t342"
+          ],
+          "db_rows_users": [
+            "rowid\tlogin\tadmin\tstatut",
+            "1\tadmin\t1\t1",
+            "2\tsales1\t0\t1"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "B",
+            "acting_user": "sales1 (non-admin; rights [81, 82, 121, 342])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, to-version",
+                "utc": "2026-11-25T15:03:12Z",
+                "method": "POST",
+                "path": "/api/index.php/orders",
+                "request_body": {
+                  "socid": 1,
+                  "date": 1795478400,
+                  "date_livraison": 1797292800
+                },
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "1",
+                "response_body_length": 1
+              },
+              {
+                "step": "second witness: admin reads the order",
+                "utc": "2026-11-25T15:03:13Z",
+                "method": "GET",
+                "path": "/api/index.php/orders/1",
+                "request_body": null,
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\n    \"module\": null,\n    \"id\": \"1\",\n    \"entity\": \"1\",\n    \"import_key\": null,\n    \"array_options\": [],\n    \"array_languages\": null,\n    \"contacts_ids\": [],\n    \"linked_objects\": [],\n    \"linkedObjectsIds\": [],\n    \"oldref\": null,\n    \"actionmsg\": null,\n    \"actionmsg2\": null,\n    \"canvas\": null,\n ",
+                "response_body_length": 3249
+              }
+            ],
+            "application_answer": {
+              "status": 200,
+              "body_excerpt": "1"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 200 and the returned order id",
+            "returned_order_id": 1,
+            "db_query": "SELECT rowid, ref, fk_soc, fk_user_author, date_commande, date_livraison, fk_statut FROM llx_commande ORDER BY rowid",
+            "db_rows_before": [],
+            "db_rows_after": [
+              "rowid\tref\tfk_soc\tfk_user_author\tdate_commande\tdate_livraison\tfk_statut",
+              "1\t(PROV1)\t1\t2\t2026-11-24\tNULL\t0"
+            ],
+            "db_row_for_returned_id": [
+              "rowid\tfk_soc\tdate_livraison\tdelivery_is_null",
+              "1\t1\tNULL\t1"
+            ],
+            "stored_value": "NULL",
+            "right_value": "2026-12-15 00:00:00",
+            "stored_equals_right": false,
+            "second_witness_admin_get": {
+              "id": "1",
+              "ref": "(PROV1)",
+              "socid": "1",
+              "date": 1795478400,
+              "date_commande": 1795478400,
+              "date_livraison": null,
+              "delivery_date": "",
+              "statut": "0"
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:03:11Z",
+              "checked_after_utc": "2026-11-25T15:03:13Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          },
+          {
+            "gate": "C",
+            "acting_user": "sales1 (non-admin; rights [81, 82, 121, 342])",
+            "calls": [
+              {
+                "step": "correct path as sealed, to-version, second customer",
+                "utc": "2026-11-25T15:03:14Z",
+                "method": "POST",
+                "path": "/api/index.php/orders",
+                "request_body": {
+                  "socid": 2,
+                  "date": 1795478400,
+                  "delivery_date": 1797292800
+                },
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "2",
+                "response_body_length": 1
+              },
+              {
+                "step": "second witness: admin reads the order",
+                "utc": "2026-11-25T15:03:15Z",
+                "method": "GET",
+                "path": "/api/index.php/orders/2",
+                "request_body": null,
+                "request_header_names": [
+                  "DOLAPIKEY"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\n    \"module\": null,\n    \"id\": \"2\",\n    \"entity\": \"1\",\n    \"import_key\": null,\n    \"array_options\": [],\n    \"array_languages\": null,\n    \"contacts_ids\": [],\n    \"linked_objects\": [],\n    \"linkedObjectsIds\": [],\n    \"oldref\": null,\n    \"actionmsg\": null,\n    \"actionmsg2\": null,\n    \"canvas\": null,\n ",
+                "response_body_length": 3257
+              }
+            ],
+            "application_answer": {
+              "status": 200,
+              "body_excerpt": "2"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 200 and the returned order id",
+            "returned_order_id": 2,
+            "db_query": "SELECT rowid, ref, fk_soc, fk_user_author, date_commande, date_livraison, fk_statut FROM llx_commande ORDER BY rowid",
+            "db_rows_before": [
+              "rowid\tref\tfk_soc\tfk_user_author\tdate_commande\tdate_livraison\tfk_statut",
+              "1\t(PROV1)\t1\t2\t2026-11-24\tNULL\t0"
+            ],
+            "db_rows_after": [
+              "rowid\tref\tfk_soc\tfk_user_author\tdate_commande\tdate_livraison\tfk_statut",
+              "1\t(PROV1)\t1\t2\t2026-11-24\tNULL\t0",
+              "2\t(PROV2)\t2\t2\t2026-11-24\t2026-12-15 00:00:00\t0"
+            ],
+            "db_row_for_returned_id": [
+              "rowid\tfk_soc\tdate_livraison\tdelivery_is_null",
+              "2\t2\t2026-12-15 00:00:00\t0"
+            ],
+            "stored_value": "2026-12-15 00:00:00",
+            "right_value": "2026-12-15 00:00:00",
+            "stored_equals_right": true,
+            "second_witness_admin_get": {
+              "id": "2",
+              "ref": "(PROV2)",
+              "socid": "2",
+              "date": 1795478400,
+              "date_commande": 1795478400,
+              "date_livraison": null,
+              "delivery_date": 1797292800,
+              "statut": "0"
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:03:13Z",
+              "checked_after_utc": "2026-11-25T15:03:15Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      }
+    ]
+  },
+  "times_utc": {
+    "started": "2026-11-25T14:29:25Z",
+    "finished": "2026-11-25T15:03:19Z",
+    "clock": "date -u on the host"
+  },
+  "free_disk_gib_at_end": 64.4,
+  "notes": [
+    "An earlier attempt of this case (started 2026-11-25T13:32Z) was abandoned and is not part of this file: its first 19.0.2 instance had not finished the image's first-start database import within the 600 s allowance while the machine was heavily loaded, so no gate B or C observation was made. Its three from-version repeats had each answered 200 and stored 2026-12-15 00:00:00; they are superseded by the repeats recorded here. The allowance was raised to 1800 s and the whole case was run again from the start.",
+    "During to-version repeat 3 one unrelated container of this lane (iu1b-n5x-app, an exploratory Vikunja instance for case N5 on another port) was running; it appears in that repeat's memory snapshot and shares nothing with the Dolibarr instance.",
+    "No hold overlapped any observation (hold records are inside each observation).",
+    "Gate C uses a second customer (Customer Y) on the same to-version instance as gate B, so the two orders are separate records; the request is otherwise the sealed correct path."
+  ]
+}

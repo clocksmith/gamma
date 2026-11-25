@@ -1,0 +1,2039 @@
+{
+  "schema": "gammatron-real-upgrade-screen-result/v1",
+  "case_id": "L2",
+  "screen_lane": "iu1-b",
+  "app": "NetBox (network inventory; community-maintained netbox-docker image)",
+  "from_version": "v4.0.11",
+  "to_version": "v4.1.0",
+  "images": [
+    {
+      "ref": "netboxcommunity/netbox:v4.0.11",
+      "sealed_platform": "arm64",
+      "sealed_digest": "sha256:5b296bae95f0208bf20427e70554b5c1f56a4d6b4cff201339db7feb30ee34eb",
+      "pulled_ref": "netboxcommunity/netbox@sha256:5b296bae95f0208bf20427e70554b5c1f56a4d6b4cff201339db7feb30ee34eb",
+      "inspect_id": "sha256:5b296bae95f0208bf20427e70554b5c1f56a4d6b4cff201339db7feb30ee34eb",
+      "repo_digests": [
+        "netboxcommunity/netbox@sha256:5b296bae95f0208bf20427e70554b5c1f56a4d6b4cff201339db7feb30ee34eb"
+      ],
+      "architecture": "arm64",
+      "os": "linux",
+      "created": "2024-09-03T18:00:21.789939828Z",
+      "size_bytes": 226800386,
+      "pulled_digest_equals_sealed": true,
+      "tag_resolves_today_to": "sha256:5b296bae95f0208bf20427e70554b5c1f56a4d6b4cff201339db7feb30ee34eb",
+      "tag_today_equals_sealed": true
+    },
+    {
+      "ref": "netboxcommunity/netbox:v4.1.0",
+      "sealed_platform": "arm64",
+      "sealed_digest": "sha256:e9e50ccd52d875d62de5ce074f1cf33f548303f427b8f9baebca52308276385f",
+      "pulled_ref": "netboxcommunity/netbox@sha256:e9e50ccd52d875d62de5ce074f1cf33f548303f427b8f9baebca52308276385f",
+      "inspect_id": "sha256:e9e50ccd52d875d62de5ce074f1cf33f548303f427b8f9baebca52308276385f",
+      "repo_digests": [
+        "netboxcommunity/netbox@sha256:e9e50ccd52d875d62de5ce074f1cf33f548303f427b8f9baebca52308276385f"
+      ],
+      "architecture": "arm64",
+      "os": "linux",
+      "created": "2024-09-06T07:53:32.573829761Z",
+      "size_bytes": 238652436,
+      "pulled_digest_equals_sealed": true,
+      "tag_resolves_today_to": "sha256:e9e50ccd52d875d62de5ce074f1cf33f548303f427b8f9baebca52308276385f",
+      "tag_today_equals_sealed": true
+    },
+    {
+      "ref": "postgres:16-alpine",
+      "sealed_platform": "arm64",
+      "sealed_digest": "sha256:ddc1c45d23db7f0702f5a2727e28f24cbb75746f625c8c5083a190e50cf01740",
+      "pulled_ref": "postgres@sha256:ddc1c45d23db7f0702f5a2727e28f24cbb75746f625c8c5083a190e50cf01740",
+      "inspect_id": "sha256:ddc1c45d23db7f0702f5a2727e28f24cbb75746f625c8c5083a190e50cf01740",
+      "repo_digests": [
+        "postgres@sha256:ddc1c45d23db7f0702f5a2727e28f24cbb75746f625c8c5083a190e50cf01740"
+      ],
+      "architecture": "arm64",
+      "os": "linux",
+      "created": "2026-11-18T21:32:45.361642157Z",
+      "size_bytes": 114073593,
+      "pulled_digest_equals_sealed": true,
+      "tag_resolves_today_to": "sha256:ddc1c45d23db7f0702f5a2727e28f24cbb75746f625c8c5083a190e50cf01740",
+      "tag_today_equals_sealed": true
+    },
+    {
+      "ref": "redis:7-alpine",
+      "sealed_platform": "arm64",
+      "sealed_digest": "sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db",
+      "pulled_ref": "redis@sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db",
+      "inspect_id": "sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db",
+      "repo_digests": [
+        "redis@sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db"
+      ],
+      "architecture": "arm64",
+      "os": "linux",
+      "created": "2026-11-09T20:09:26.701357753Z",
+      "size_bytes": 16917125,
+      "pulled_digest_equals_sealed": true,
+      "tag_resolves_today_to": "sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db",
+      "tag_today_equals_sealed": true
+    }
+  ],
+  "conditions": {
+    "host": "macOS on Apple Silicon, Docker Desktop, linux/arm64 containers, ports bound to 127.0.0.1",
+    "install": "every repeat is a fresh install on an empty PostgreSQL database; no in-place upgrade was run",
+    "time_zone": "container defaults (UTC); the case holds no time value",
+    "acting_role": "neteng, a non-superuser created by the superuser through the REST API, with object permissions view/add/change on ipam.vlangroup, and its own API token",
+    "settings_that_matter": "image defaults; no plugins",
+    "gate_B_and_C": "the same to-version instance serves B (group campus-a) and C (group campus-c)",
+    "parallelism": "from-version and to-version stacks ran side by side on two ports; they share nothing"
+  },
+  "sealed": {
+    "old_workflow_steps": [
+      "POST /api/ipam/vlan-groups/ with {\"name\": \"campus-a\", \"slug\": \"campus-a\", \"min_vid\": 100, \"max_vid\": 199}",
+      "Treat HTTP 201 as success"
+    ],
+    "correct_path_on_to_version": "POST /api/ipam/vlan-groups/ with {\"name\": \"campus-a\", \"slug\": \"campus-a\", \"vid_ranges\": [[100, 199]]}",
+    "database_outcome": {
+      "read_via": "PostgreSQL in the database container; GET /api/ipam/vlan-groups/{id}/ as a second witness",
+      "on_from_version": "ipam_vlangroup.min_vid = 100, max_vid = 199",
+      "right_on_to_version": "ipam_vlangroup.vid_ranges = {\"[100,200)\"}; API shows vid_ranges = [[100, 199]]",
+      "predicted_stored_on_to_version": "ipam_vlangroup.vid_ranges = {\"[1,4095)\"}; API shows vid_ranges = [[1, 4094]]"
+    },
+    "predicted_disposition": "silent-wrong-write",
+    "prediction_detail": "The POST answers 201. The group is created with the default range 1..4094 instead of 100..199, so a VLAN with ID 500 can then be added to it."
+  },
+  "requests_as_run": {
+    "old_workflow": "POST /api/ipam/vlan-groups/ with {\"name\": \"campus-a\", \"slug\": \"campus-a\", \"min_vid\": 100, \"max_vid\": 199}, header Authorization: Token <redacted>; HTTP 201 is success",
+    "correct_path": "POST /api/ipam/vlan-groups/ with {\"name\": \"campus-c\", \"slug\": \"campus-c\", \"vid_ranges\": [[100, 199]]}",
+    "stored_value_read": "ipam_vlangroup row of the returned id, with psql inside the PostgreSQL container"
+  },
+  "gates": {
+    "A": {
+      "what": "old workflow on the from-version",
+      "pass": "3 of 3",
+      "observations_in_short": [
+        {
+          "repeat": 1,
+          "status": 201,
+          "body": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope",
+          "stored_value": {
+            "min_vid": "100",
+            "max_vid": "199"
+          },
+          "right_value": {
+            "min_vid": "100",
+            "max_vid": "199"
+          },
+          "stored_equals_right": true,
+          "probe_vlan_500_status": 400
+        },
+        {
+          "repeat": 2,
+          "status": 201,
+          "body": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope",
+          "stored_value": {
+            "min_vid": "100",
+            "max_vid": "199"
+          },
+          "right_value": {
+            "min_vid": "100",
+            "max_vid": "199"
+          },
+          "stored_equals_right": true,
+          "probe_vlan_500_status": 400
+        },
+        {
+          "repeat": 3,
+          "status": 201,
+          "body": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope",
+          "stored_value": {
+            "min_vid": "100",
+            "max_vid": "199"
+          },
+          "right_value": {
+            "min_vid": "100",
+            "max_vid": "199"
+          },
+          "stored_equals_right": true,
+          "probe_vlan_500_status": 400
+        }
+      ]
+    },
+    "B": {
+      "what": "identical steps on the to-version",
+      "per_repeat": [
+        "silent-wrong-write",
+        "silent-wrong-write",
+        "silent-wrong-write"
+      ],
+      "observations_in_short": [
+        {
+          "repeat": 1,
+          "status": 201,
+          "body": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\"",
+          "stored_value": {
+            "vid_ranges": "{\"[1,4095)\"}"
+          },
+          "right_value": {
+            "vid_ranges": "{\"[100,200)\"}"
+          },
+          "stored_equals_right": false,
+          "probe_vlan_500_status": 201
+        },
+        {
+          "repeat": 2,
+          "status": 201,
+          "body": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\"",
+          "stored_value": {
+            "vid_ranges": "{\"[1,4095)\"}"
+          },
+          "right_value": {
+            "vid_ranges": "{\"[100,200)\"}"
+          },
+          "stored_equals_right": false,
+          "probe_vlan_500_status": 201
+        },
+        {
+          "repeat": 3,
+          "status": 201,
+          "body": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\"",
+          "stored_value": {
+            "vid_ranges": "{\"[1,4095)\"}"
+          },
+          "right_value": {
+            "vid_ranges": "{\"[100,200)\"}"
+          },
+          "stored_equals_right": false,
+          "probe_vlan_500_status": 201
+        }
+      ]
+    },
+    "C": {
+      "what": "correct path on the to-version",
+      "pass": "3 of 3",
+      "observations_in_short": [
+        {
+          "repeat": 1,
+          "status": 201,
+          "body": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\"",
+          "stored_value": {
+            "vid_ranges": "{\"[100,200)\"}"
+          },
+          "right_value": {
+            "vid_ranges": "{\"[100,200)\"}"
+          },
+          "stored_equals_right": true,
+          "probe_vlan_500_status": 400
+        },
+        {
+          "repeat": 2,
+          "status": 201,
+          "body": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\"",
+          "stored_value": {
+            "vid_ranges": "{\"[100,200)\"}"
+          },
+          "right_value": {
+            "vid_ranges": "{\"[100,200)\"}"
+          },
+          "stored_equals_right": true,
+          "probe_vlan_500_status": 400
+        },
+        {
+          "repeat": 3,
+          "status": 201,
+          "body": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\"",
+          "stored_value": {
+            "vid_ranges": "{\"[100,200)\"}"
+          },
+          "right_value": {
+            "vid_ranges": "{\"[100,200)\"}"
+          },
+          "stored_equals_right": true,
+          "probe_vlan_500_status": 400
+        }
+      ]
+    }
+  },
+  "disposition": "silent-wrong-write",
+  "disposition_rule": "protocol README table, applied mechanically to the stored values below; the VLAN probes are supplementary and do not enter the rule",
+  "prediction": {
+    "sealed": "silent-wrong-write",
+    "observed": "silent-wrong-write",
+    "right": true
+  },
+  "deviations": [],
+  "flags": [],
+  "notes": [
+    "Gate C uses a second group (campus-c) on the instance that served gate B; the request is otherwise the sealed correct path.",
+    "After each stored value was read, the superuser tried to add VLAN 500 and VLAN 150 to the group, to show what the stored range means for the business outcome.",
+    "Business outcome, from the supplementary probes: on v4.0.11 the group refused VLAN 500 (400, 'VID must be between 100 and 199') in 3 of 3 repeats; on v4.1.0 the group made by the old workflow accepted VLAN 500 (201) in 3 of 3; the group made by the correct path refused it (400, 'VID must be in ranges 100-199') in 3 of 3. VLAN 150 was accepted everywhere.",
+    "The 201 body of the write on v4.1.0 does carry vid_ranges, so a client that inspects the response could see the miss. That body is also off by one against the database and against a later read: it shows [[1,4093]] where the row holds {\"[1,4095)\"} and a GET shows [[1,4094]], and [[100,198]] where the row holds {\"[100,200)\"} and a GET shows [[100,199]]. The stored value in this file is always the database row.",
+    "The stored default range on v4.1.0 is the one the sealed list predicted: {\"[1,4095)\"}.",
+    "No hold overlapped any observation, and no repeat was voided or repeated. The lane's containers together stayed under 1 GiB."
+  ],
+  "repeats_taken_from_an_earlier_execution_of_this_script": [],
+  "repeats": {
+    "from_version": [
+      {
+        "repeat": 1,
+        "image": "netboxcommunity/netbox:v4.0.11",
+        "pulled_ref": "netboxcommunity/netbox@sha256:5b296bae95f0208bf20427e70554b5c1f56a4d6b4cff201339db7feb30ee34eb",
+        "instance_started_utc": "2026-11-25T15:20:56Z",
+        "instance_ready_utc": "2026-11-25T15:22:53Z",
+        "conditions": {
+          "install": "fresh install: the image applies all migrations to an empty PostgreSQL database on first start; no in-place upgrade",
+          "reported_versions": {
+            "netbox-version": "4.0.11",
+            "django-version": "5.0.9",
+            "python-version": "3.11.6"
+          },
+          "postgres": [
+            "version|time_zone|now",
+            "PostgreSQL 16.16 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit|UTC|2026-11-25 15:22:56.124953+00"
+          ],
+          "container_memory": [
+            "iu1b-l2t-app\t335.7MiB / 7.653GiB",
+            "iu1b-l2f-app\t422.7MiB / 7.653GiB",
+            "iu1b-l2t-redis\t9.383MiB / 7.653GiB",
+            "iu1b-l2f-redis\t9.426MiB / 7.653GiB",
+            "iu1b-l2t-pg\t46.85MiB / 7.653GiB",
+            "iu1b-l2f-pg\t50.21MiB / 7.653GiB"
+          ],
+          "configuration": "image defaults; no plugins; no worker container (not needed for REST writes)"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "superuser creates the engineer account",
+              "utc": "2026-11-25T15:22:53Z",
+              "method": "POST",
+              "path": "/api/users/users/",
+              "request_body": {
+                "username": "neteng",
+                "password": "<redacted>"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28640/api/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\",\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\",\"is_staff\":false,\"is_active\":true,\"date_joined\":\"2026-11-25T15:22:53.589153Z\",\"last_login\":null,\"groups\":[],\"permissions\":[]}",
+              "response_body_length": 264
+            },
+            {
+              "step": "superuser grants permission 'engineer-vlan-groups'",
+              "utc": "2026-11-25T15:22:53Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-vlan-groups",
+                "object_types": [
+                  "ipam.vlangroup"
+                ],
+                "actions": [
+                  "view",
+                  "add",
+                  "change"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/users/permissions/1/\",\"display\":\"engineer-vlan-groups\",\"name\":\"engineer-vlan-groups\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"ipam.vlangroup\"],\"actions\":[\"view\",\"add\",\"change\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28640/api/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 366
+            },
+            {
+              "step": "superuser issues the engineer's API token",
+              "utc": "2026-11-25T15:22:55Z",
+              "method": "POST",
+              "path": "/api/users/tokens/",
+              "request_body": {
+                "user": 2
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28640/api/users/tokens/2/\",\"display\":\"<redacted>\",\"user\":{\"id\":2,\"url\":\"http://127.0.0.1:28640/api/users/users/2/\",\"display\":\"neteng\",\"use",
+              "response_body_length": 393
+            }
+          ],
+          "engineer_user_id": 2,
+          "db_rows_engineer": [
+            "id|username|is_superuser",
+            "1|admin|t",
+            "2|neteng|f"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "A",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-vlan-groups'])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, from-version",
+                "utc": "2026-11-25T15:22:58Z",
+                "method": "POST",
+                "path": "/api/ipam/vlan-groups/",
+                "request_body": {
+                  "name": "campus-a",
+                  "slug": "campus-a",
+                  "min_vid": 100,
+                  "max_vid": 199
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"min_vid\":100,\"max_vid\":199,\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:22:58.365387Z\",\"last_updated\":\"2026-11-25T15:22:58.365402Z\"}",
+                "response_body_length": 326
+              },
+              {
+                "step": "second witness: superuser reads the group",
+                "utc": "2026-11-25T15:22:58Z",
+                "method": "GET",
+                "path": "/api/ipam/vlan-groups/1/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"min_vid\":100,\"max_vid\":199,\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:22:58.365387Z\",\"last_updated\":\"202",
+                "response_body_length": 361
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 500 to the group",
+                "utc": "2026-11-25T15:22:58Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 500,
+                  "name": "probe-500-g1",
+                  "group": 1
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 400,
+                "response_body_excerpt": "{\"vid\":[\"VID must be between 100 and 199 for VLANs in group campus-a\"]}",
+                "response_body_length": 71
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 150 to the group",
+                "utc": "2026-11-25T15:22:58Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 150,
+                  "name": "probe-150-g1",
+                  "group": 1
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlans/1/\",\"display\":\"probe-150-g1 (150)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\"vid\":150,\"name\":\"probe-150-g1\",\"tenant\":null,\"status\"",
+                "response_body_length": 519
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"min_vid\":100,\"max_vid\":199,\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:22:58.365387Z\",\"last_updated\":\"2026-11-25T15:22:58.365402Z\"}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 1,
+            "db_query": "SELECT id, name, slug, min_vid, max_vid FROM ipam_vlangroup ORDER BY id",
+            "db_rows_before": [
+              "id|name|slug|min_vid|max_vid"
+            ],
+            "db_rows_after": [
+              "id|name|slug|min_vid|max_vid",
+              "1|campus-a|campus-a|100|199"
+            ],
+            "stored_value": {
+              "min_vid": "100",
+              "max_vid": "199"
+            },
+            "right_value": {
+              "min_vid": "100",
+              "max_vid": "199"
+            },
+            "stored_equals_right": true,
+            "second_witness_superuser_get": {
+              "id": 1,
+              "name": "campus-a",
+              "slug": "campus-a",
+              "min_vid": 100,
+              "max_vid": 199
+            },
+            "supplementary_probe_after_read": [
+              {
+                "vid": 500,
+                "status": 400,
+                "body_excerpt": "{\"vid\":[\"VID must be between 100 and 199 for VLANs in group campus-a\"]}"
+              },
+              {
+                "vid": 150,
+                "status": 201,
+                "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlans/1/\",\"display\":\"probe-150-g1 (150)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\"vid\":150,\"name\":\"probe-150-g1\",\"tenant\":null,\"status\""
+              }
+            ],
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:22:58Z",
+              "checked_after_utc": "2026-11-25T15:22:58Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 2,
+        "image": "netboxcommunity/netbox:v4.0.11",
+        "pulled_ref": "netboxcommunity/netbox@sha256:5b296bae95f0208bf20427e70554b5c1f56a4d6b4cff201339db7feb30ee34eb",
+        "instance_started_utc": "2026-11-25T15:22:59Z",
+        "instance_ready_utc": "2026-11-25T15:24:40Z",
+        "conditions": {
+          "install": "fresh install: the image applies all migrations to an empty PostgreSQL database on first start; no in-place upgrade",
+          "reported_versions": {
+            "netbox-version": "4.0.11",
+            "django-version": "5.0.9",
+            "python-version": "3.11.6"
+          },
+          "postgres": [
+            "version|time_zone|now",
+            "PostgreSQL 16.16 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit|UTC|2026-11-25 15:24:43.054547+00"
+          ],
+          "container_memory": [
+            "iu1b-l2t-app\t229MiB / 7.653GiB",
+            "iu1b-l2t-redis\t5.727MiB / 7.653GiB",
+            "iu1b-l2t-pg\t46.39MiB / 7.653GiB",
+            "iu1b-l2f-app\t375.1MiB / 7.653GiB",
+            "iu1b-l2f-redis\t10.57MiB / 7.653GiB",
+            "iu1b-l2f-pg\t50.32MiB / 7.653GiB"
+          ],
+          "configuration": "image defaults; no plugins; no worker container (not needed for REST writes)"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "superuser creates the engineer account",
+              "utc": "2026-11-25T15:24:40Z",
+              "method": "POST",
+              "path": "/api/users/users/",
+              "request_body": {
+                "username": "neteng",
+                "password": "<redacted>"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28640/api/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\",\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\",\"is_staff\":false,\"is_active\":true,\"date_joined\":\"2026-11-25T15:24:42.528270Z\",\"last_login\":null,\"groups\":[],\"permissions\":[]}",
+              "response_body_length": 264
+            },
+            {
+              "step": "superuser grants permission 'engineer-vlan-groups'",
+              "utc": "2026-11-25T15:24:42Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-vlan-groups",
+                "object_types": [
+                  "ipam.vlangroup"
+                ],
+                "actions": [
+                  "view",
+                  "add",
+                  "change"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/users/permissions/1/\",\"display\":\"engineer-vlan-groups\",\"name\":\"engineer-vlan-groups\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"ipam.vlangroup\"],\"actions\":[\"view\",\"add\",\"change\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28640/api/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 366
+            },
+            {
+              "step": "superuser issues the engineer's API token",
+              "utc": "2026-11-25T15:24:42Z",
+              "method": "POST",
+              "path": "/api/users/tokens/",
+              "request_body": {
+                "user": 2
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28640/api/users/tokens/2/\",\"display\":\"<redacted>\",\"user\":{\"id\":2,\"url\":\"http://127.0.0.1:28640/api/users/users/2/\",\"display\":\"neteng\",\"use",
+              "response_body_length": 393
+            }
+          ],
+          "engineer_user_id": 2,
+          "db_rows_engineer": [
+            "id|username|is_superuser",
+            "1|admin|t",
+            "2|neteng|f"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "A",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-vlan-groups'])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, from-version",
+                "utc": "2026-11-25T15:24:45Z",
+                "method": "POST",
+                "path": "/api/ipam/vlan-groups/",
+                "request_body": {
+                  "name": "campus-a",
+                  "slug": "campus-a",
+                  "min_vid": 100,
+                  "max_vid": 199
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"min_vid\":100,\"max_vid\":199,\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:24:45.318448Z\",\"last_updated\":\"2026-11-25T15:24:45.318462Z\"}",
+                "response_body_length": 326
+              },
+              {
+                "step": "second witness: superuser reads the group",
+                "utc": "2026-11-25T15:24:45Z",
+                "method": "GET",
+                "path": "/api/ipam/vlan-groups/1/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"min_vid\":100,\"max_vid\":199,\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:24:45.318448Z\",\"last_updated\":\"202",
+                "response_body_length": 361
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 500 to the group",
+                "utc": "2026-11-25T15:24:45Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 500,
+                  "name": "probe-500-g1",
+                  "group": 1
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 400,
+                "response_body_excerpt": "{\"vid\":[\"VID must be between 100 and 199 for VLANs in group campus-a\"]}",
+                "response_body_length": 71
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 150 to the group",
+                "utc": "2026-11-25T15:24:45Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 150,
+                  "name": "probe-150-g1",
+                  "group": 1
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlans/1/\",\"display\":\"probe-150-g1 (150)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\"vid\":150,\"name\":\"probe-150-g1\",\"tenant\":null,\"status\"",
+                "response_body_length": 519
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"min_vid\":100,\"max_vid\":199,\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:24:45.318448Z\",\"last_updated\":\"2026-11-25T15:24:45.318462Z\"}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 1,
+            "db_query": "SELECT id, name, slug, min_vid, max_vid FROM ipam_vlangroup ORDER BY id",
+            "db_rows_before": [
+              "id|name|slug|min_vid|max_vid"
+            ],
+            "db_rows_after": [
+              "id|name|slug|min_vid|max_vid",
+              "1|campus-a|campus-a|100|199"
+            ],
+            "stored_value": {
+              "min_vid": "100",
+              "max_vid": "199"
+            },
+            "right_value": {
+              "min_vid": "100",
+              "max_vid": "199"
+            },
+            "stored_equals_right": true,
+            "second_witness_superuser_get": {
+              "id": 1,
+              "name": "campus-a",
+              "slug": "campus-a",
+              "min_vid": 100,
+              "max_vid": 199
+            },
+            "supplementary_probe_after_read": [
+              {
+                "vid": 500,
+                "status": 400,
+                "body_excerpt": "{\"vid\":[\"VID must be between 100 and 199 for VLANs in group campus-a\"]}"
+              },
+              {
+                "vid": 150,
+                "status": 201,
+                "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlans/1/\",\"display\":\"probe-150-g1 (150)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\"vid\":150,\"name\":\"probe-150-g1\",\"tenant\":null,\"status\""
+              }
+            ],
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:24:45Z",
+              "checked_after_utc": "2026-11-25T15:24:45Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 3,
+        "image": "netboxcommunity/netbox:v4.0.11",
+        "pulled_ref": "netboxcommunity/netbox@sha256:5b296bae95f0208bf20427e70554b5c1f56a4d6b4cff201339db7feb30ee34eb",
+        "instance_started_utc": "2026-11-25T15:24:46Z",
+        "instance_ready_utc": "2026-11-25T15:27:19Z",
+        "conditions": {
+          "install": "fresh install: the image applies all migrations to an empty PostgreSQL database on first start; no in-place upgrade",
+          "reported_versions": {
+            "netbox-version": "4.0.11",
+            "django-version": "5.0.9",
+            "python-version": "3.11.6"
+          },
+          "postgres": [
+            "version|time_zone|now",
+            "PostgreSQL 16.16 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit|UTC|2026-11-25 15:27:23.871759+00"
+          ],
+          "container_memory": [
+            "iu1b-l2t-app\t109.1MiB / 7.653GiB",
+            "iu1b-l2t-redis\t9.387MiB / 7.653GiB",
+            "iu1b-l2t-pg\t44.84MiB / 7.653GiB",
+            "iu1b-l2f-app\t381.6MiB / 7.653GiB",
+            "iu1b-l2f-redis\t9.422MiB / 7.653GiB",
+            "iu1b-l2f-pg\t48.61MiB / 7.653GiB"
+          ],
+          "configuration": "image defaults; no plugins; no worker container (not needed for REST writes)"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "superuser creates the engineer account",
+              "utc": "2026-11-25T15:27:23Z",
+              "method": "POST",
+              "path": "/api/users/users/",
+              "request_body": {
+                "username": "neteng",
+                "password": "<redacted>"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28640/api/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\",\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\",\"is_staff\":false,\"is_active\":true,\"date_joined\":\"2026-11-25T15:27:23.348608Z\",\"last_login\":null,\"groups\":[],\"permissions\":[]}",
+              "response_body_length": 264
+            },
+            {
+              "step": "superuser grants permission 'engineer-vlan-groups'",
+              "utc": "2026-11-25T15:27:23Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-vlan-groups",
+                "object_types": [
+                  "ipam.vlangroup"
+                ],
+                "actions": [
+                  "view",
+                  "add",
+                  "change"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/users/permissions/1/\",\"display\":\"engineer-vlan-groups\",\"name\":\"engineer-vlan-groups\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"ipam.vlangroup\"],\"actions\":[\"view\",\"add\",\"change\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28640/api/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 366
+            },
+            {
+              "step": "superuser issues the engineer's API token",
+              "utc": "2026-11-25T15:27:23Z",
+              "method": "POST",
+              "path": "/api/users/tokens/",
+              "request_body": {
+                "user": 2
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28640/api/users/tokens/2/\",\"display\":\"<redacted>\",\"user\":{\"id\":2,\"url\":\"http://127.0.0.1:28640/api/users/users/2/\",\"display\":\"neteng\",\"use",
+              "response_body_length": 393
+            }
+          ],
+          "engineer_user_id": 2,
+          "db_rows_engineer": [
+            "id|username|is_superuser",
+            "1|admin|t",
+            "2|neteng|f"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "A",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-vlan-groups'])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, from-version",
+                "utc": "2026-11-25T15:27:26Z",
+                "method": "POST",
+                "path": "/api/ipam/vlan-groups/",
+                "request_body": {
+                  "name": "campus-a",
+                  "slug": "campus-a",
+                  "min_vid": 100,
+                  "max_vid": 199
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"min_vid\":100,\"max_vid\":199,\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:27:26.177913Z\",\"last_updated\":\"2026-11-25T15:27:26.177934Z\"}",
+                "response_body_length": 326
+              },
+              {
+                "step": "second witness: superuser reads the group",
+                "utc": "2026-11-25T15:27:26Z",
+                "method": "GET",
+                "path": "/api/ipam/vlan-groups/1/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"min_vid\":100,\"max_vid\":199,\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:27:26.177913Z\",\"last_updated\":\"202",
+                "response_body_length": 361
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 500 to the group",
+                "utc": "2026-11-25T15:27:26Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 500,
+                  "name": "probe-500-g1",
+                  "group": 1
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 400,
+                "response_body_excerpt": "{\"vid\":[\"VID must be between 100 and 199 for VLANs in group campus-a\"]}",
+                "response_body_length": 71
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 150 to the group",
+                "utc": "2026-11-25T15:27:26Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 150,
+                  "name": "probe-150-g1",
+                  "group": 1
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlans/1/\",\"display\":\"probe-150-g1 (150)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\"vid\":150,\"name\":\"probe-150-g1\",\"tenant\":null,\"status\"",
+                "response_body_length": 519
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"min_vid\":100,\"max_vid\":199,\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:27:26.177913Z\",\"last_updated\":\"2026-11-25T15:27:26.177934Z\"}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 1,
+            "db_query": "SELECT id, name, slug, min_vid, max_vid FROM ipam_vlangroup ORDER BY id",
+            "db_rows_before": [
+              "id|name|slug|min_vid|max_vid"
+            ],
+            "db_rows_after": [
+              "id|name|slug|min_vid|max_vid",
+              "1|campus-a|campus-a|100|199"
+            ],
+            "stored_value": {
+              "min_vid": "100",
+              "max_vid": "199"
+            },
+            "right_value": {
+              "min_vid": "100",
+              "max_vid": "199"
+            },
+            "stored_equals_right": true,
+            "second_witness_superuser_get": {
+              "id": 1,
+              "name": "campus-a",
+              "slug": "campus-a",
+              "min_vid": 100,
+              "max_vid": 199
+            },
+            "supplementary_probe_after_read": [
+              {
+                "vid": 500,
+                "status": 400,
+                "body_excerpt": "{\"vid\":[\"VID must be between 100 and 199 for VLANs in group campus-a\"]}"
+              },
+              {
+                "vid": 150,
+                "status": 201,
+                "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlans/1/\",\"display\":\"probe-150-g1 (150)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28640/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\"vid\":150,\"name\":\"probe-150-g1\",\"tenant\":null,\"status\""
+              }
+            ],
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:27:26Z",
+              "checked_after_utc": "2026-11-25T15:27:26Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      }
+    ],
+    "to_version": [
+      {
+        "repeat": 1,
+        "image": "netboxcommunity/netbox:v4.1.0",
+        "pulled_ref": "netboxcommunity/netbox@sha256:e9e50ccd52d875d62de5ce074f1cf33f548303f427b8f9baebca52308276385f",
+        "instance_started_utc": "2026-11-25T15:20:56Z",
+        "instance_ready_utc": "2026-11-25T15:22:58Z",
+        "conditions": {
+          "install": "fresh install: the image applies all migrations to an empty PostgreSQL database on first start; no in-place upgrade",
+          "reported_versions": {
+            "netbox-version": "4.1.0",
+            "django-version": "5.0.9",
+            "python-version": "3.12.3"
+          },
+          "postgres": [
+            "version|time_zone|now",
+            "PostgreSQL 16.16 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit|UTC|2026-11-25 15:23:01.239206+00"
+          ],
+          "container_memory": [
+            "iu1b-l2f-redis\t10.42MiB / 7.653GiB",
+            "iu1b-l2f-pg\t22.09MiB / 7.653GiB",
+            "iu1b-l2t-app\t417.1MiB / 7.653GiB",
+            "iu1b-l2t-redis\t9.422MiB / 7.653GiB",
+            "iu1b-l2t-pg\t49.47MiB / 7.653GiB",
+            "iu1b-l2f-app\t154.5MiB / 7.653GiB"
+          ],
+          "configuration": "image defaults; no plugins; no worker container (not needed for REST writes)"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "superuser creates the engineer account",
+              "utc": "2026-11-25T15:22:58Z",
+              "method": "POST",
+              "path": "/api/users/users/",
+              "request_body": {
+                "username": "neteng",
+                "password": "<redacted>"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28641/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\",\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\",\"is_staff\":false,\"is_active\":true,\"date_joined\":\"2026-11-25T15:23:00.811128Z\",\"last_login\":null,\"groups\":[],\"permissions\":[]}",
+              "response_body_length": 318
+            },
+            {
+              "step": "superuser grants permission 'engineer-vlan-groups'",
+              "utc": "2026-11-25T15:23:01Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-vlan-groups",
+                "object_types": [
+                  "ipam.vlangroup"
+                ],
+                "actions": [
+                  "view",
+                  "add",
+                  "change"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/users/permissions/1/\",\"display_url\":\"http://127.0.0.1:28641/users/permissions/1/\",\"display\":\"engineer-vlan-groups\",\"name\":\"engineer-vlan-groups\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"ipam.vlangroup\"],\"actions\":[\"view\",\"add\",\"change\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28641/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 480
+            },
+            {
+              "step": "superuser issues the engineer's API token",
+              "utc": "2026-11-25T15:23:01Z",
+              "method": "POST",
+              "path": "/api/users/tokens/",
+              "request_body": {
+                "user": 2
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/users/tokens/2/\",\"display_url\":\"http://127.0.0.1:28641/users/tokens/2/\",\"display\":\"<redacted>\",\"user\":{\"id\":2,\"url\":\"http://127.",
+              "response_body_length": 448
+            }
+          ],
+          "engineer_user_id": 2,
+          "db_rows_engineer": [
+            "id|username|is_superuser",
+            "1|admin|t",
+            "2|neteng|f"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "B",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-vlan-groups'])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, to-version",
+                "utc": "2026-11-25T15:23:04Z",
+                "method": "POST",
+                "path": "/api/ipam/vlan-groups/",
+                "request_body": {
+                  "name": "campus-a",
+                  "slug": "campus-a",
+                  "min_vid": 100,
+                  "max_vid": 199
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[1,4093]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:23:04.451095Z\",\"last_updated\":\"2026-11-25T15:23:04.451105Z\"}",
+                "response_body_length": 381
+              },
+              {
+                "step": "second witness: superuser reads the group",
+                "utc": "2026-11-25T15:23:04Z",
+                "method": "GET",
+                "path": "/api/ipam/vlan-groups/1/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[1,4094]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"cre",
+                "response_body_length": 416
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 500 to the group",
+                "utc": "2026-11-25T15:23:04Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 500,
+                  "name": "probe-500-g1",
+                  "group": 1
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/1/\",\"display\":\"probe-500-g1 (500)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\"",
+                "response_body_length": 572
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 150 to the group",
+                "utc": "2026-11-25T15:23:04Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 150,
+                  "name": "probe-150-g1",
+                  "group": 1
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/2/\",\"display\":\"probe-150-g1 (150)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\"",
+                "response_body_length": 572
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[1,4093]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:23:04.451095Z\",\"last_updated\":\"2026-11-25T15:23:04.451105Z\"}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 1,
+            "db_query": "SELECT id, name, slug, vid_ranges FROM ipam_vlangroup ORDER BY id",
+            "db_rows_before": [
+              "id|name|slug|vid_ranges"
+            ],
+            "db_rows_after": [
+              "id|name|slug|vid_ranges",
+              "1|campus-a|campus-a|{\"[1,4095)\"}"
+            ],
+            "stored_value": {
+              "vid_ranges": "{\"[1,4095)\"}"
+            },
+            "right_value": {
+              "vid_ranges": "{\"[100,200)\"}"
+            },
+            "stored_equals_right": false,
+            "second_witness_superuser_get": {
+              "id": 1,
+              "name": "campus-a",
+              "slug": "campus-a",
+              "vid_ranges": [
+                [
+                  1,
+                  4094
+                ]
+              ]
+            },
+            "supplementary_probe_after_read": [
+              {
+                "vid": 500,
+                "status": 201,
+                "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/1/\",\"display\":\"probe-500-g1 (500)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\""
+              },
+              {
+                "vid": 150,
+                "status": 201,
+                "body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/2/\",\"display\":\"probe-150-g1 (150)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\""
+              }
+            ],
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:23:04Z",
+              "checked_after_utc": "2026-11-25T15:23:04Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          },
+          {
+            "gate": "C",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-vlan-groups'])",
+            "calls": [
+              {
+                "step": "correct path as sealed, to-version, on a second group",
+                "utc": "2026-11-25T15:23:04Z",
+                "method": "POST",
+                "path": "/api/ipam/vlan-groups/",
+                "request_body": {
+                  "name": "campus-c",
+                  "slug": "campus-c",
+                  "vid_ranges": [
+                    [
+                      100,
+                      199
+                    ]
+                  ]
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[100,198]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:23:04.840961Z\",\"last_updated\":\"2026-11-25T15:23:04.840973Z\"}",
+                "response_body_length": 382
+              },
+              {
+                "step": "second witness: superuser reads the group",
+                "utc": "2026-11-25T15:23:04Z",
+                "method": "GET",
+                "path": "/api/ipam/vlan-groups/2/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[100,199]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"cr",
+                "response_body_length": 417
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 500 to the group",
+                "utc": "2026-11-25T15:23:04Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 500,
+                  "name": "probe-500-g2",
+                  "group": 2
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 400,
+                "response_body_excerpt": "{\"vid\":[\"VID must be in ranges 100-199 for VLANs in group campus-c\"]}",
+                "response_body_length": 69
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 150 to the group",
+                "utc": "2026-11-25T15:23:04Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 150,
+                  "name": "probe-150-g2",
+                  "group": 2
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":3,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/3/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/3/\",\"display\":\"probe-150-g2 (150)\",\"site\":null,\"group\":{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"description\":\"\"},\"",
+                "response_body_length": 572
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[100,198]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:23:04.840961Z\",\"last_updated\":\"2026-11-25T15:23:04.840973Z\"}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 2,
+            "db_query": "SELECT id, name, slug, vid_ranges FROM ipam_vlangroup ORDER BY id",
+            "db_rows_before": [
+              "id|name|slug|vid_ranges",
+              "1|campus-a|campus-a|{\"[1,4095)\"}"
+            ],
+            "db_rows_after": [
+              "id|name|slug|vid_ranges",
+              "1|campus-a|campus-a|{\"[1,4095)\"}",
+              "2|campus-c|campus-c|{\"[100,200)\"}"
+            ],
+            "stored_value": {
+              "vid_ranges": "{\"[100,200)\"}"
+            },
+            "right_value": {
+              "vid_ranges": "{\"[100,200)\"}"
+            },
+            "stored_equals_right": true,
+            "second_witness_superuser_get": {
+              "id": 2,
+              "name": "campus-c",
+              "slug": "campus-c",
+              "vid_ranges": [
+                [
+                  100,
+                  199
+                ]
+              ]
+            },
+            "supplementary_probe_after_read": [
+              {
+                "vid": 500,
+                "status": 400,
+                "body_excerpt": "{\"vid\":[\"VID must be in ranges 100-199 for VLANs in group campus-c\"]}"
+              },
+              {
+                "vid": 150,
+                "status": 201,
+                "body_excerpt": "{\"id\":3,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/3/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/3/\",\"display\":\"probe-150-g2 (150)\",\"site\":null,\"group\":{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"description\":\"\"},\""
+              }
+            ],
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:23:04Z",
+              "checked_after_utc": "2026-11-25T15:23:05Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 2,
+        "image": "netboxcommunity/netbox:v4.1.0",
+        "pulled_ref": "netboxcommunity/netbox@sha256:e9e50ccd52d875d62de5ce074f1cf33f548303f427b8f9baebca52308276385f",
+        "instance_started_utc": "2026-11-25T15:23:05Z",
+        "instance_ready_utc": "2026-11-25T15:24:47Z",
+        "conditions": {
+          "install": "fresh install: the image applies all migrations to an empty PostgreSQL database on first start; no in-place upgrade",
+          "reported_versions": {
+            "netbox-version": "4.1.0",
+            "django-version": "5.0.9",
+            "python-version": "3.12.3"
+          },
+          "postgres": [
+            "version|time_zone|now",
+            "PostgreSQL 16.16 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit|UTC|2026-11-25 15:24:50.551223+00"
+          ],
+          "container_memory": [
+            "iu1b-l2f-app\t37.38MiB / 7.653GiB",
+            "iu1b-l2f-redis\t9.516MiB / 7.653GiB",
+            "iu1b-l2f-pg\t22.05MiB / 7.653GiB",
+            "iu1b-l2t-app\t367.7MiB / 7.653GiB",
+            "iu1b-l2t-redis\t5.766MiB / 7.653GiB",
+            "iu1b-l2t-pg\t50.85MiB / 7.653GiB"
+          ],
+          "configuration": "image defaults; no plugins; no worker container (not needed for REST writes)"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "superuser creates the engineer account",
+              "utc": "2026-11-25T15:24:47Z",
+              "method": "POST",
+              "path": "/api/users/users/",
+              "request_body": {
+                "username": "neteng",
+                "password": "<redacted>"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28641/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\",\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\",\"is_staff\":false,\"is_active\":true,\"date_joined\":\"2026-11-25T15:24:47.279126Z\",\"last_login\":null,\"groups\":[],\"permissions\":[]}",
+              "response_body_length": 318
+            },
+            {
+              "step": "superuser grants permission 'engineer-vlan-groups'",
+              "utc": "2026-11-25T15:24:47Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-vlan-groups",
+                "object_types": [
+                  "ipam.vlangroup"
+                ],
+                "actions": [
+                  "view",
+                  "add",
+                  "change"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/users/permissions/1/\",\"display_url\":\"http://127.0.0.1:28641/users/permissions/1/\",\"display\":\"engineer-vlan-groups\",\"name\":\"engineer-vlan-groups\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"ipam.vlangroup\"],\"actions\":[\"view\",\"add\",\"change\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28641/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 480
+            },
+            {
+              "step": "superuser issues the engineer's API token",
+              "utc": "2026-11-25T15:24:50Z",
+              "method": "POST",
+              "path": "/api/users/tokens/",
+              "request_body": {
+                "user": 2
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/users/tokens/2/\",\"display_url\":\"http://127.0.0.1:28641/users/tokens/2/\",\"display\":\"<redacted>\",\"user\":{\"id\":2,\"url\":\"http://127.",
+              "response_body_length": 448
+            }
+          ],
+          "engineer_user_id": 2,
+          "db_rows_engineer": [
+            "id|username|is_superuser",
+            "1|admin|t",
+            "2|neteng|f"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "B",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-vlan-groups'])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, to-version",
+                "utc": "2026-11-25T15:24:52Z",
+                "method": "POST",
+                "path": "/api/ipam/vlan-groups/",
+                "request_body": {
+                  "name": "campus-a",
+                  "slug": "campus-a",
+                  "min_vid": 100,
+                  "max_vid": 199
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[1,4093]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:24:52.734717Z\",\"last_updated\":\"2026-11-25T15:24:52.734726Z\"}",
+                "response_body_length": 381
+              },
+              {
+                "step": "second witness: superuser reads the group",
+                "utc": "2026-11-25T15:24:52Z",
+                "method": "GET",
+                "path": "/api/ipam/vlan-groups/1/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[1,4094]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"cre",
+                "response_body_length": 416
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 500 to the group",
+                "utc": "2026-11-25T15:24:52Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 500,
+                  "name": "probe-500-g1",
+                  "group": 1
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/1/\",\"display\":\"probe-500-g1 (500)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\"",
+                "response_body_length": 572
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 150 to the group",
+                "utc": "2026-11-25T15:24:52Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 150,
+                  "name": "probe-150-g1",
+                  "group": 1
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/2/\",\"display\":\"probe-150-g1 (150)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\"",
+                "response_body_length": 572
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[1,4093]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:24:52.734717Z\",\"last_updated\":\"2026-11-25T15:24:52.734726Z\"}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 1,
+            "db_query": "SELECT id, name, slug, vid_ranges FROM ipam_vlangroup ORDER BY id",
+            "db_rows_before": [
+              "id|name|slug|vid_ranges"
+            ],
+            "db_rows_after": [
+              "id|name|slug|vid_ranges",
+              "1|campus-a|campus-a|{\"[1,4095)\"}"
+            ],
+            "stored_value": {
+              "vid_ranges": "{\"[1,4095)\"}"
+            },
+            "right_value": {
+              "vid_ranges": "{\"[100,200)\"}"
+            },
+            "stored_equals_right": false,
+            "second_witness_superuser_get": {
+              "id": 1,
+              "name": "campus-a",
+              "slug": "campus-a",
+              "vid_ranges": [
+                [
+                  1,
+                  4094
+                ]
+              ]
+            },
+            "supplementary_probe_after_read": [
+              {
+                "vid": 500,
+                "status": 201,
+                "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/1/\",\"display\":\"probe-500-g1 (500)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\""
+              },
+              {
+                "vid": 150,
+                "status": 201,
+                "body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/2/\",\"display\":\"probe-150-g1 (150)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\""
+              }
+            ],
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:24:52Z",
+              "checked_after_utc": "2026-11-25T15:24:52Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          },
+          {
+            "gate": "C",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-vlan-groups'])",
+            "calls": [
+              {
+                "step": "correct path as sealed, to-version, on a second group",
+                "utc": "2026-11-25T15:24:53Z",
+                "method": "POST",
+                "path": "/api/ipam/vlan-groups/",
+                "request_body": {
+                  "name": "campus-c",
+                  "slug": "campus-c",
+                  "vid_ranges": [
+                    [
+                      100,
+                      199
+                    ]
+                  ]
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[100,198]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:24:53.059884Z\",\"last_updated\":\"2026-11-25T15:24:53.059895Z\"}",
+                "response_body_length": 382
+              },
+              {
+                "step": "second witness: superuser reads the group",
+                "utc": "2026-11-25T15:24:53Z",
+                "method": "GET",
+                "path": "/api/ipam/vlan-groups/2/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[100,199]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"cr",
+                "response_body_length": 417
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 500 to the group",
+                "utc": "2026-11-25T15:24:53Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 500,
+                  "name": "probe-500-g2",
+                  "group": 2
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 400,
+                "response_body_excerpt": "{\"vid\":[\"VID must be in ranges 100-199 for VLANs in group campus-c\"]}",
+                "response_body_length": 69
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 150 to the group",
+                "utc": "2026-11-25T15:24:53Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 150,
+                  "name": "probe-150-g2",
+                  "group": 2
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":3,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/3/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/3/\",\"display\":\"probe-150-g2 (150)\",\"site\":null,\"group\":{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"description\":\"\"},\"",
+                "response_body_length": 572
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[100,198]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:24:53.059884Z\",\"last_updated\":\"2026-11-25T15:24:53.059895Z\"}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 2,
+            "db_query": "SELECT id, name, slug, vid_ranges FROM ipam_vlangroup ORDER BY id",
+            "db_rows_before": [
+              "id|name|slug|vid_ranges",
+              "1|campus-a|campus-a|{\"[1,4095)\"}"
+            ],
+            "db_rows_after": [
+              "id|name|slug|vid_ranges",
+              "1|campus-a|campus-a|{\"[1,4095)\"}",
+              "2|campus-c|campus-c|{\"[100,200)\"}"
+            ],
+            "stored_value": {
+              "vid_ranges": "{\"[100,200)\"}"
+            },
+            "right_value": {
+              "vid_ranges": "{\"[100,200)\"}"
+            },
+            "stored_equals_right": true,
+            "second_witness_superuser_get": {
+              "id": 2,
+              "name": "campus-c",
+              "slug": "campus-c",
+              "vid_ranges": [
+                [
+                  100,
+                  199
+                ]
+              ]
+            },
+            "supplementary_probe_after_read": [
+              {
+                "vid": 500,
+                "status": 400,
+                "body_excerpt": "{\"vid\":[\"VID must be in ranges 100-199 for VLANs in group campus-c\"]}"
+              },
+              {
+                "vid": 150,
+                "status": 201,
+                "body_excerpt": "{\"id\":3,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/3/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/3/\",\"display\":\"probe-150-g2 (150)\",\"site\":null,\"group\":{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"description\":\"\"},\""
+              }
+            ],
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:24:52Z",
+              "checked_after_utc": "2026-11-25T15:24:53Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 3,
+        "image": "netboxcommunity/netbox:v4.1.0",
+        "pulled_ref": "netboxcommunity/netbox@sha256:e9e50ccd52d875d62de5ce074f1cf33f548303f427b8f9baebca52308276385f",
+        "instance_started_utc": "2026-11-25T15:24:53Z",
+        "instance_ready_utc": "2026-11-25T15:27:31Z",
+        "conditions": {
+          "install": "fresh install: the image applies all migrations to an empty PostgreSQL database on first start; no in-place upgrade",
+          "reported_versions": {
+            "netbox-version": "4.1.0",
+            "django-version": "5.0.9",
+            "python-version": "3.12.3"
+          },
+          "postgres": [
+            "version|time_zone|now",
+            "PostgreSQL 16.16 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit|UTC|2026-11-25 15:27:34.768282+00"
+          ],
+          "container_memory": [
+            "iu1b-l2t-app\t374.3MiB / 7.653GiB",
+            "iu1b-l2t-redis\t9.43MiB / 7.653GiB",
+            "iu1b-l2t-pg\t49.29MiB / 7.653GiB"
+          ],
+          "configuration": "image defaults; no plugins; no worker container (not needed for REST writes)"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "superuser creates the engineer account",
+              "utc": "2026-11-25T15:27:34Z",
+              "method": "POST",
+              "path": "/api/users/users/",
+              "request_body": {
+                "username": "neteng",
+                "password": "<redacted>"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28641/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\",\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\",\"is_staff\":false,\"is_active\":true,\"date_joined\":\"2026-11-25T15:27:34.214514Z\",\"last_login\":null,\"groups\":[],\"permissions\":[]}",
+              "response_body_length": 318
+            },
+            {
+              "step": "superuser grants permission 'engineer-vlan-groups'",
+              "utc": "2026-11-25T15:27:34Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-vlan-groups",
+                "object_types": [
+                  "ipam.vlangroup"
+                ],
+                "actions": [
+                  "view",
+                  "add",
+                  "change"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/users/permissions/1/\",\"display_url\":\"http://127.0.0.1:28641/users/permissions/1/\",\"display\":\"engineer-vlan-groups\",\"name\":\"engineer-vlan-groups\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"ipam.vlangroup\"],\"actions\":[\"view\",\"add\",\"change\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28641/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 480
+            },
+            {
+              "step": "superuser issues the engineer's API token",
+              "utc": "2026-11-25T15:27:34Z",
+              "method": "POST",
+              "path": "/api/users/tokens/",
+              "request_body": {
+                "user": 2
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/users/tokens/2/\",\"display_url\":\"http://127.0.0.1:28641/users/tokens/2/\",\"display\":\"<redacted>\",\"user\":{\"id\":2,\"url\":\"http://127.",
+              "response_body_length": 448
+            }
+          ],
+          "engineer_user_id": 2,
+          "db_rows_engineer": [
+            "id|username|is_superuser",
+            "1|admin|t",
+            "2|neteng|f"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "B",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-vlan-groups'])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, to-version",
+                "utc": "2026-11-25T15:27:36Z",
+                "method": "POST",
+                "path": "/api/ipam/vlan-groups/",
+                "request_body": {
+                  "name": "campus-a",
+                  "slug": "campus-a",
+                  "min_vid": 100,
+                  "max_vid": 199
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[1,4093]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:27:37.021757Z\",\"last_updated\":\"2026-11-25T15:27:37.021772Z\"}",
+                "response_body_length": 381
+              },
+              {
+                "step": "second witness: superuser reads the group",
+                "utc": "2026-11-25T15:27:37Z",
+                "method": "GET",
+                "path": "/api/ipam/vlan-groups/1/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[1,4094]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"cre",
+                "response_body_length": 416
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 500 to the group",
+                "utc": "2026-11-25T15:27:37Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 500,
+                  "name": "probe-500-g1",
+                  "group": 1
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/1/\",\"display\":\"probe-500-g1 (500)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\"",
+                "response_body_length": 572
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 150 to the group",
+                "utc": "2026-11-25T15:27:37Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 150,
+                  "name": "probe-150-g1",
+                  "group": 1
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/2/\",\"display\":\"probe-150-g1 (150)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\"",
+                "response_body_length": 572
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[1,4093]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:27:37.021757Z\",\"last_updated\":\"2026-11-25T15:27:37.021772Z\"}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 1,
+            "db_query": "SELECT id, name, slug, vid_ranges FROM ipam_vlangroup ORDER BY id",
+            "db_rows_before": [
+              "id|name|slug|vid_ranges"
+            ],
+            "db_rows_after": [
+              "id|name|slug|vid_ranges",
+              "1|campus-a|campus-a|{\"[1,4095)\"}"
+            ],
+            "stored_value": {
+              "vid_ranges": "{\"[1,4095)\"}"
+            },
+            "right_value": {
+              "vid_ranges": "{\"[100,200)\"}"
+            },
+            "stored_equals_right": false,
+            "second_witness_superuser_get": {
+              "id": 1,
+              "name": "campus-a",
+              "slug": "campus-a",
+              "vid_ranges": [
+                [
+                  1,
+                  4094
+                ]
+              ]
+            },
+            "supplementary_probe_after_read": [
+              {
+                "vid": 500,
+                "status": 201,
+                "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/1/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/1/\",\"display\":\"probe-500-g1 (500)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\""
+              },
+              {
+                "vid": 150,
+                "status": 201,
+                "body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/2/\",\"display\":\"probe-150-g1 (150)\",\"site\":null,\"group\":{\"id\":1,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/1/\",\"display\":\"campus-a\",\"name\":\"campus-a\",\"slug\":\"campus-a\",\"description\":\"\"},\""
+              }
+            ],
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:27:36Z",
+              "checked_after_utc": "2026-11-25T15:27:37Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          },
+          {
+            "gate": "C",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-vlan-groups'])",
+            "calls": [
+              {
+                "step": "correct path as sealed, to-version, on a second group",
+                "utc": "2026-11-25T15:27:37Z",
+                "method": "POST",
+                "path": "/api/ipam/vlan-groups/",
+                "request_body": {
+                  "name": "campus-c",
+                  "slug": "campus-c",
+                  "vid_ranges": [
+                    [
+                      100,
+                      199
+                    ]
+                  ]
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[100,198]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:27:37.509496Z\",\"last_updated\":\"2026-11-25T15:27:37.509509Z\"}",
+                "response_body_length": 382
+              },
+              {
+                "step": "second witness: superuser reads the group",
+                "utc": "2026-11-25T15:27:37Z",
+                "method": "GET",
+                "path": "/api/ipam/vlan-groups/2/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[100,199]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"cr",
+                "response_body_length": 417
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 500 to the group",
+                "utc": "2026-11-25T15:27:37Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 500,
+                  "name": "probe-500-g2",
+                  "group": 2
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 400,
+                "response_body_excerpt": "{\"vid\":[\"VID must be in ranges 100-199 for VLANs in group campus-c\"]}",
+                "response_body_length": 69
+              },
+              {
+                "step": "supplementary probe after the read: superuser adds VLAN 150 to the group",
+                "utc": "2026-11-25T15:27:37Z",
+                "method": "POST",
+                "path": "/api/ipam/vlans/",
+                "request_body": {
+                  "vid": 150,
+                  "name": "probe-150-g2",
+                  "group": 2
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":3,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/3/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/3/\",\"display\":\"probe-150-g2 (150)\",\"site\":null,\"group\":{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"description\":\"\"},\"",
+                "response_body_length": 572
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"vid_ranges\":[[100,198]],\"description\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:27:37.509496Z\",\"last_updated\":\"2026-11-25T15:27:37.509509Z\"}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 2,
+            "db_query": "SELECT id, name, slug, vid_ranges FROM ipam_vlangroup ORDER BY id",
+            "db_rows_before": [
+              "id|name|slug|vid_ranges",
+              "1|campus-a|campus-a|{\"[1,4095)\"}"
+            ],
+            "db_rows_after": [
+              "id|name|slug|vid_ranges",
+              "1|campus-a|campus-a|{\"[1,4095)\"}",
+              "2|campus-c|campus-c|{\"[100,200)\"}"
+            ],
+            "stored_value": {
+              "vid_ranges": "{\"[100,200)\"}"
+            },
+            "right_value": {
+              "vid_ranges": "{\"[100,200)\"}"
+            },
+            "stored_equals_right": true,
+            "second_witness_superuser_get": {
+              "id": 2,
+              "name": "campus-c",
+              "slug": "campus-c",
+              "vid_ranges": [
+                [
+                  100,
+                  199
+                ]
+              ]
+            },
+            "supplementary_probe_after_read": [
+              {
+                "vid": 500,
+                "status": 400,
+                "body_excerpt": "{\"vid\":[\"VID must be in ranges 100-199 for VLANs in group campus-c\"]}"
+              },
+              {
+                "vid": 150,
+                "status": 201,
+                "body_excerpt": "{\"id\":3,\"url\":\"http://127.0.0.1:28641/api/ipam/vlans/3/\",\"display_url\":\"http://127.0.0.1:28641/ipam/vlans/3/\",\"display\":\"probe-150-g2 (150)\",\"site\":null,\"group\":{\"id\":2,\"url\":\"http://127.0.0.1:28641/api/ipam/vlan-groups/2/\",\"display\":\"campus-c\",\"name\":\"campus-c\",\"slug\":\"campus-c\",\"description\":\"\"},\""
+              }
+            ],
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:27:37Z",
+              "checked_after_utc": "2026-11-25T15:27:37Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      }
+    ]
+  },
+  "times_utc": {
+    "started": "2026-11-25T15:20:53Z",
+    "finished": "2026-11-25T15:27:38Z",
+    "clock": "date -u on the host"
+  },
+  "free_disk_gib_at_end": 51.9
+}

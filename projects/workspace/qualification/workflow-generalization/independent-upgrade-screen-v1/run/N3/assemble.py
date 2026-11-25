@@ -3,6 +3,9 @@
 
   SCREEN_OUT_DIR=<dir holding repeat-1.json .. repeat-3.json> ./assemble.py
 
+With SCREEN_PARTIAL_STATUS=<text> it writes results/<case>.partial.json instead, with that status and no
+disposition, for a case that was stopped before its three repeats.
+
 The table applied is the one in ../../README.md. The sealed list is only read.
 """
 import json
@@ -107,6 +110,7 @@ def main():
         "prediction_notes": case_meta.PREDICTION_NOTES,
         "conditions": case_meta.CONDITIONS,
         "deviations": case_meta.DEVIATIONS,
+        "notes": getattr(case_meta, "NOTES", []),
         "images": {"sealed_digests_by_platform": sealed_digests,
                    "ran": ran,
                    "same_in_every_repeat": all(r["images"] == ran for r in repeats) if repeats else None,
@@ -116,6 +120,17 @@ def main():
         "repeats": repeats,
     }
     target = os.path.join(SCREEN, "results", f"{case_meta.CASE}.json")
+    partial = os.environ.get("SCREEN_PARTIAL_STATUS")
+    if partial:
+        # A case stopped before three repeats: no disposition is derived; what was seen is kept as it is.
+        result.update({
+            "status": partial,
+            "disposition": None,
+            "disposition_reason": f"none derived: {len(repeats)} of 3 repeats observed ({reason})",
+            "prediction_right": None,
+            "repeats_observed": len(repeats),
+        })
+        target = os.path.join(SCREEN, "results", f"{case_meta.CASE}.partial.json")
     lib.write_json(target, result)
     print(case_meta.CASE, verdict, "|", reason, "| prediction", "right" if result["prediction_right"] else "wrong")
     print("A", a_ok, "B", b, "C", c_ok)

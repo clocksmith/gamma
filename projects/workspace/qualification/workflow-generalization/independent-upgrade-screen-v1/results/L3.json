@@ -1,0 +1,1980 @@
+{
+  "schema": "gammatron-real-upgrade-screen-result/v1",
+  "case_id": "L3",
+  "screen_lane": "iu1-b",
+  "app": "NetBox (network inventory; community-maintained netbox-docker image)",
+  "from_version": "v4.1.11",
+  "to_version": "v4.2.0",
+  "images": [
+    {
+      "ref": "netboxcommunity/netbox:v4.1.11",
+      "sealed_platform": "arm64",
+      "sealed_digest": "sha256:e3b3fea510491f265e7928d4e06ec87f1f521f4608c9ce0ca24dfa02a7d707ed",
+      "pulled_ref": "netboxcommunity/netbox@sha256:e3b3fea510491f265e7928d4e06ec87f1f521f4608c9ce0ca24dfa02a7d707ed",
+      "inspect_id": "sha256:e3b3fea510491f265e7928d4e06ec87f1f521f4608c9ce0ca24dfa02a7d707ed",
+      "repo_digests": [
+        "netboxcommunity/netbox@sha256:e3b3fea510491f265e7928d4e06ec87f1f521f4608c9ce0ca24dfa02a7d707ed"
+      ],
+      "architecture": "arm64",
+      "os": "linux",
+      "created": "2025-01-06T20:55:09.449213236Z",
+      "size_bytes": 221457028,
+      "pulled_digest_equals_sealed": true,
+      "tag_resolves_today_to": "sha256:e3b3fea510491f265e7928d4e06ec87f1f521f4608c9ce0ca24dfa02a7d707ed",
+      "tag_today_equals_sealed": true
+    },
+    {
+      "ref": "netboxcommunity/netbox:v4.2.0",
+      "sealed_platform": "arm64",
+      "sealed_digest": "sha256:de88ff3091f93095aa457a76a2171265a4e868e17f5edfc04653eada3f2c642f",
+      "pulled_ref": "netboxcommunity/netbox@sha256:de88ff3091f93095aa457a76a2171265a4e868e17f5edfc04653eada3f2c642f",
+      "inspect_id": "sha256:de88ff3091f93095aa457a76a2171265a4e868e17f5edfc04653eada3f2c642f",
+      "repo_digests": [
+        "netboxcommunity/netbox@sha256:de88ff3091f93095aa457a76a2171265a4e868e17f5edfc04653eada3f2c642f"
+      ],
+      "architecture": "arm64",
+      "os": "linux",
+      "created": "2025-01-07T08:03:17.029209495Z",
+      "size_bytes": 231906854,
+      "pulled_digest_equals_sealed": true,
+      "tag_resolves_today_to": "sha256:de88ff3091f93095aa457a76a2171265a4e868e17f5edfc04653eada3f2c642f",
+      "tag_today_equals_sealed": true
+    },
+    {
+      "ref": "postgres:16-alpine",
+      "sealed_platform": "arm64",
+      "sealed_digest": "sha256:ddc1c45d23db7f0702f5a2727e28f24cbb75746f625c8c5083a190e50cf01740",
+      "pulled_ref": "postgres@sha256:ddc1c45d23db7f0702f5a2727e28f24cbb75746f625c8c5083a190e50cf01740",
+      "inspect_id": "sha256:ddc1c45d23db7f0702f5a2727e28f24cbb75746f625c8c5083a190e50cf01740",
+      "repo_digests": [
+        "postgres@sha256:ddc1c45d23db7f0702f5a2727e28f24cbb75746f625c8c5083a190e50cf01740"
+      ],
+      "architecture": "arm64",
+      "os": "linux",
+      "created": "2026-11-18T21:32:45.361642157Z",
+      "size_bytes": 114073593,
+      "pulled_digest_equals_sealed": true,
+      "tag_resolves_today_to": "sha256:ddc1c45d23db7f0702f5a2727e28f24cbb75746f625c8c5083a190e50cf01740",
+      "tag_today_equals_sealed": true
+    },
+    {
+      "ref": "redis:7-alpine",
+      "sealed_platform": "arm64",
+      "sealed_digest": "sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db",
+      "pulled_ref": "redis@sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db",
+      "inspect_id": "sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db",
+      "repo_digests": [
+        "redis@sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db"
+      ],
+      "architecture": "arm64",
+      "os": "linux",
+      "created": "2026-11-09T20:09:26.701357753Z",
+      "size_bytes": 16917125,
+      "pulled_digest_equals_sealed": true,
+      "tag_resolves_today_to": "sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db",
+      "tag_today_equals_sealed": true
+    }
+  ],
+  "conditions": {
+    "host": "macOS on Apple Silicon, Docker Desktop, linux/arm64 containers, ports bound to 127.0.0.1",
+    "install": "every repeat is a fresh install on an empty PostgreSQL database; no in-place upgrade was run",
+    "time_zone": "container defaults (UTC); the case holds no time value",
+    "acting_role": "neteng, a non-superuser created by the superuser through the REST API, with object permissions view/add/change on ipam.prefix and view on dcim.site, and its own API token",
+    "settings_that_matter": "image defaults (ENFORCE_GLOBAL_UNIQUE at the release default); no plugins",
+    "gate_B_and_C": "the same to-version instance serves B (192.0.2.0/24) and C (198.51.100.0/24), both at site HQ",
+    "parallelism": "from-version and to-version stacks ran side by side on two ports; they share nothing"
+  },
+  "sealed": {
+    "old_workflow_steps": [
+      "POST /api/ipam/prefixes/ with {\"prefix\": \"192.0.2.0/24\", \"site\": S, \"status\": \"active\"}",
+      "Treat HTTP 201 as success"
+    ],
+    "correct_path_on_to_version": "POST /api/ipam/prefixes/ with {\"prefix\": \"192.0.2.0/24\", \"scope_type\": \"dcim.site\", \"scope_id\": S, \"status\": \"active\"}",
+    "database_outcome": {
+      "read_via": "PostgreSQL in the database container; GET /api/ipam/prefixes/{id}/ as a second witness",
+      "on_from_version": "ipam_prefix.site_id = S, status = 'active'",
+      "right_on_to_version": "ipam_prefix.scope_type_id = content type of dcim.site, scope_id = S, _site_id = S, status = 'active'",
+      "predicted_stored_on_to_version": "ipam_prefix.scope_type_id NULL, scope_id NULL, _site_id NULL, status = 'active'"
+    },
+    "predicted_disposition": "silent-wrong-write",
+    "prediction_detail": "The POST answers 201 and creates an active prefix that belongs to no site. A partial write: status is stored, the site assignment is lost."
+  },
+  "requests_as_run": {
+    "old_workflow": "POST /api/ipam/prefixes/ with {\"prefix\": \"192.0.2.0/24\", \"site\": S, \"status\": \"active\"}, header Authorization: Token <redacted>; HTTP 201 is success",
+    "correct_path": "POST /api/ipam/prefixes/ with {\"prefix\": \"198.51.100.0/24\", \"scope_type\": \"dcim.site\", \"scope_id\": S, \"status\": \"active\"}",
+    "stored_value_read": "ipam_prefix row of the returned id, with psql inside the PostgreSQL container"
+  },
+  "gates": {
+    "A": {
+      "what": "old workflow on the from-version",
+      "pass": "3 of 3",
+      "observations_in_short": [
+        {
+          "repeat": 1,
+          "status": 201,
+          "body": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28630/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4",
+          "stored_value": {
+            "site_id": "1",
+            "status": "active"
+          },
+          "right_value": {
+            "site_id": "1",
+            "status": "active"
+          },
+          "stored_equals_right": true
+        },
+        {
+          "repeat": 2,
+          "status": 201,
+          "body": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28630/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4",
+          "stored_value": {
+            "site_id": "1",
+            "status": "active"
+          },
+          "right_value": {
+            "site_id": "1",
+            "status": "active"
+          },
+          "stored_equals_right": true
+        },
+        {
+          "repeat": 3,
+          "status": 201,
+          "body": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28630/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4",
+          "stored_value": {
+            "site_id": "1",
+            "status": "active"
+          },
+          "right_value": {
+            "site_id": "1",
+            "status": "active"
+          },
+          "stored_equals_right": true
+        }
+      ]
+    },
+    "B": {
+      "what": "identical steps on the to-version",
+      "per_repeat": [
+        "silent-wrong-write",
+        "silent-wrong-write",
+        "silent-wrong-write"
+      ],
+      "observations_in_short": [
+        {
+          "repeat": 1,
+          "status": 201,
+          "body": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4",
+          "stored_value": {
+            "scope_type_id": "NULL",
+            "scope_id": "NULL",
+            "_site_id": "NULL",
+            "status": "active"
+          },
+          "right_value": {
+            "scope_type_id": "6",
+            "scope_id": "1",
+            "_site_id": "1",
+            "status": "active"
+          },
+          "stored_equals_right": false
+        },
+        {
+          "repeat": 2,
+          "status": 201,
+          "body": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4",
+          "stored_value": {
+            "scope_type_id": "NULL",
+            "scope_id": "NULL",
+            "_site_id": "NULL",
+            "status": "active"
+          },
+          "right_value": {
+            "scope_type_id": "6",
+            "scope_id": "1",
+            "_site_id": "1",
+            "status": "active"
+          },
+          "stored_equals_right": false
+        },
+        {
+          "repeat": 3,
+          "status": 201,
+          "body": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4",
+          "stored_value": {
+            "scope_type_id": "NULL",
+            "scope_id": "NULL",
+            "_site_id": "NULL",
+            "status": "active"
+          },
+          "right_value": {
+            "scope_type_id": "6",
+            "scope_id": "1",
+            "_site_id": "1",
+            "status": "active"
+          },
+          "stored_equals_right": false
+        }
+      ]
+    },
+    "C": {
+      "what": "correct path on the to-version",
+      "pass": "3 of 3",
+      "observations_in_short": [
+        {
+          "repeat": 1,
+          "status": 201,
+          "body": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/2/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/2/\",\"display\":\"198.51.100.0/24\",\"family\":{\"value",
+          "stored_value": {
+            "scope_type_id": "6",
+            "scope_id": "1",
+            "_site_id": "1",
+            "status": "active"
+          },
+          "right_value": {
+            "scope_type_id": "6",
+            "scope_id": "1",
+            "_site_id": "1",
+            "status": "active"
+          },
+          "stored_equals_right": true
+        },
+        {
+          "repeat": 2,
+          "status": 201,
+          "body": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/2/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/2/\",\"display\":\"198.51.100.0/24\",\"family\":{\"value",
+          "stored_value": {
+            "scope_type_id": "6",
+            "scope_id": "1",
+            "_site_id": "1",
+            "status": "active"
+          },
+          "right_value": {
+            "scope_type_id": "6",
+            "scope_id": "1",
+            "_site_id": "1",
+            "status": "active"
+          },
+          "stored_equals_right": true
+        },
+        {
+          "repeat": 3,
+          "status": 201,
+          "body": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/2/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/2/\",\"display\":\"198.51.100.0/24\",\"family\":{\"value",
+          "stored_value": {
+            "scope_type_id": "6",
+            "scope_id": "1",
+            "_site_id": "1",
+            "status": "active"
+          },
+          "right_value": {
+            "scope_type_id": "6",
+            "scope_id": "1",
+            "_site_id": "1",
+            "status": "active"
+          },
+          "stored_equals_right": true
+        }
+      ]
+    }
+  },
+  "disposition": "silent-wrong-write",
+  "disposition_rule": "protocol README table, applied mechanically to the observations below",
+  "prediction": {
+    "sealed": "silent-wrong-write",
+    "observed": "silent-wrong-write",
+    "right": true
+  },
+  "deviations": [],
+  "flags": [],
+  "notes": [
+    "Gate C uses a second prefix (198.51.100.0/24) at the same site on the instance that served gate B, so the two prefixes are separate records; the request is otherwise the sealed correct path.",
+    "During this case one unrelated container of this lane (iu1b-n7x-app, an exploratory NocoDB instance for case N7 on another port) was running; it appears in the memory snapshots and shares nothing with the NetBox stacks. The lane's containers together stayed under 1.4 GiB.",
+    "No hold overlapped any observation, and no repeat was voided or repeated.",
+    "The engineer also holds view permission on dcim.site, so that the site it names can be read; this is set-up and is the same on both releases."
+  ],
+  "repeats_taken_from_an_earlier_execution_of_this_script": [],
+  "repeats": {
+    "from_version": [
+      {
+        "repeat": 1,
+        "image": "netboxcommunity/netbox:v4.1.11",
+        "pulled_ref": "netboxcommunity/netbox@sha256:e3b3fea510491f265e7928d4e06ec87f1f521f4608c9ce0ca24dfa02a7d707ed",
+        "instance_started_utc": "2026-11-25T15:11:45Z",
+        "instance_ready_utc": "2026-11-25T15:14:45Z",
+        "conditions": {
+          "install": "fresh install: the image applies all migrations to an empty PostgreSQL database on first start; no in-place upgrade",
+          "reported_versions": {
+            "netbox-version": "4.1.11",
+            "django-version": "5.0.10",
+            "python-version": "3.12.3"
+          },
+          "postgres": [
+            "version|time_zone|now",
+            "PostgreSQL 16.16 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit|UTC|2026-11-25 15:14:53.356217+00"
+          ],
+          "container_memory": [
+            "iu1b-n7x-app\t218.4MiB / 7.653GiB",
+            "iu1b-l3t-app\t205.6MiB / 7.653GiB",
+            "iu1b-l3f-app\t419.4MiB / 7.653GiB",
+            "iu1b-l3f-redis\t8.625MiB / 7.653GiB",
+            "iu1b-l3t-redis\t7.219MiB / 7.653GiB",
+            "iu1b-l3t-pg\t60.47MiB / 7.653GiB",
+            "iu1b-l3f-pg\t70.17MiB / 7.653GiB"
+          ],
+          "configuration": "image defaults; no plugins; no worker container (not needed for REST writes)"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "superuser creates site HQ",
+              "utc": "2026-11-25T15:14:45Z",
+              "method": "POST",
+              "path": "/api/dcim/sites/",
+              "request_body": {
+                "name": "HQ",
+                "slug": "hq"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/dcim/sites/1/\",\"display_url\":\"http://127.0.0.1:28630/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"region\":null,\"group\":null,\"tenant\":null,\"facility\":\"\",\"time_zone\":null,\"description\":\"\",\"physical_address",
+              "response_body_length": 498
+            },
+            {
+              "step": "superuser creates the engineer account",
+              "utc": "2026-11-25T15:14:52Z",
+              "method": "POST",
+              "path": "/api/users/users/",
+              "request_body": {
+                "username": "neteng",
+                "password": "<redacted>"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28630/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\",\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\",\"is_staff\":false,\"is_active\":true,\"date_joined\":\"2026-11-25T15:14:52.169281Z\",\"last_login\":null,\"groups\":[],\"permissions\":[]}",
+              "response_body_length": 318
+            },
+            {
+              "step": "superuser grants permission 'engineer-prefixes'",
+              "utc": "2026-11-25T15:14:52Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-prefixes",
+                "object_types": [
+                  "ipam.prefix"
+                ],
+                "actions": [
+                  "view",
+                  "add",
+                  "change"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/users/permissions/1/\",\"display_url\":\"http://127.0.0.1:28630/users/permissions/1/\",\"display\":\"engineer-prefixes\",\"name\":\"engineer-prefixes\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"ipam.prefix\"],\"actions\":[\"view\",\"add\",\"change\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28630/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 471
+            },
+            {
+              "step": "superuser grants permission 'engineer-sites-read'",
+              "utc": "2026-11-25T15:14:52Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-sites-read",
+                "object_types": [
+                  "dcim.site"
+                ],
+                "actions": [
+                  "view"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/permissions/2/\",\"display_url\":\"http://127.0.0.1:28630/users/permissions/2/\",\"display\":\"engineer-sites-read\",\"name\":\"engineer-sites-read\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"dcim.site\"],\"actions\":[\"view\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28630/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 458
+            },
+            {
+              "step": "superuser issues the engineer's API token",
+              "utc": "2026-11-25T15:14:52Z",
+              "method": "POST",
+              "path": "/api/users/tokens/",
+              "request_body": {
+                "user": 2
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/tokens/2/\",\"display_url\":\"http://127.0.0.1:28630/users/tokens/2/\",\"display\":\"<redacted>\",\"user\":{\"id\":2,\"url\":\"http://127.",
+              "response_body_length": 448
+            }
+          ],
+          "site_id": 1,
+          "engineer_user_id": 2,
+          "db_rows_sites": [
+            "id|name|slug",
+            "1|HQ|hq"
+          ],
+          "db_rows_engineer": [
+            "id|username|is_superuser",
+            "1|admin|t",
+            "2|neteng|f"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "A",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-prefixes', 'engineer-sites-read'])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, from-version",
+                "utc": "2026-11-25T15:14:56Z",
+                "method": "POST",
+                "path": "/api/ipam/prefixes/",
+                "request_body": {
+                  "prefix": "192.0.2.0/24",
+                  "site": 1,
+                  "status": "active"
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28630/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"site\":{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"description\":\"\"},\"vrf\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:14:56.226118Z\",\"last_updated\":\"2026-11-25T15:14:56.226132Z\",\"children\":0,\"_depth\":0}",
+                "response_body_length": 623
+              },
+              {
+                "step": "second witness: superuser reads the prefix",
+                "utc": "2026-11-25T15:14:56Z",
+                "method": "GET",
+                "path": "/api/ipam/prefixes/1/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28630/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"site\":{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"",
+                "response_body_length": 623
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28630/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"site\":{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"description\":\"\"},\"vrf\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:14:56.226118Z\",\"last_updated\":\"2026-11-25T15:14:56.226132Z\",\"children\":0,\"_depth\":0}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 1,
+            "db_query": "SELECT id, prefix, status, site_id FROM ipam_prefix ORDER BY id",
+            "db_rows_before": [
+              "id|prefix|status|site_id"
+            ],
+            "db_rows_after": [
+              "id|prefix|status|site_id",
+              "1|192.0.2.0/24|active|1"
+            ],
+            "db_rows_content_type_dcim_site": null,
+            "stored_value": {
+              "site_id": "1",
+              "status": "active"
+            },
+            "right_value": {
+              "site_id": "1",
+              "status": "active"
+            },
+            "stored_equals_right": true,
+            "second_witness_superuser_get": {
+              "id": 1,
+              "prefix": "192.0.2.0/24",
+              "status": {
+                "value": "active"
+              },
+              "site": {
+                "id": 1,
+                "name": "HQ"
+              }
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:14:55Z",
+              "checked_after_utc": "2026-11-25T15:14:56Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 2,
+        "image": "netboxcommunity/netbox:v4.1.11",
+        "pulled_ref": "netboxcommunity/netbox@sha256:e3b3fea510491f265e7928d4e06ec87f1f521f4608c9ce0ca24dfa02a7d707ed",
+        "instance_started_utc": "2026-11-25T15:14:58Z",
+        "instance_ready_utc": "2026-11-25T15:17:17Z",
+        "conditions": {
+          "install": "fresh install: the image applies all migrations to an empty PostgreSQL database on first start; no in-place upgrade",
+          "reported_versions": {
+            "netbox-version": "4.1.11",
+            "django-version": "5.0.10",
+            "python-version": "3.12.3"
+          },
+          "postgres": [
+            "version|time_zone|now",
+            "PostgreSQL 16.16 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit|UTC|2026-11-25 15:17:20.184467+00"
+          ],
+          "container_memory": [
+            "iu1b-l3t-app\t415.1MiB / 7.653GiB",
+            "iu1b-l3t-redis\t5.059MiB / 7.653GiB",
+            "iu1b-l3t-pg\t53.66MiB / 7.653GiB",
+            "iu1b-l3f-app\t377.6MiB / 7.653GiB",
+            "iu1b-l3f-redis\t3.805MiB / 7.653GiB",
+            "iu1b-l3f-pg\t50.49MiB / 7.653GiB",
+            "iu1b-n7x-app\t203.3MiB / 7.653GiB"
+          ],
+          "configuration": "image defaults; no plugins; no worker container (not needed for REST writes)"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "superuser creates site HQ",
+              "utc": "2026-11-25T15:17:17Z",
+              "method": "POST",
+              "path": "/api/dcim/sites/",
+              "request_body": {
+                "name": "HQ",
+                "slug": "hq"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/dcim/sites/1/\",\"display_url\":\"http://127.0.0.1:28630/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"region\":null,\"group\":null,\"tenant\":null,\"facility\":\"\",\"time_zone\":null,\"description\":\"\",\"physical_address",
+              "response_body_length": 498
+            },
+            {
+              "step": "superuser creates the engineer account",
+              "utc": "2026-11-25T15:17:17Z",
+              "method": "POST",
+              "path": "/api/users/users/",
+              "request_body": {
+                "username": "neteng",
+                "password": "<redacted>"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28630/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\",\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\",\"is_staff\":false,\"is_active\":true,\"date_joined\":\"2026-11-25T15:17:17.580548Z\",\"last_login\":null,\"groups\":[],\"permissions\":[]}",
+              "response_body_length": 318
+            },
+            {
+              "step": "superuser grants permission 'engineer-prefixes'",
+              "utc": "2026-11-25T15:17:17Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-prefixes",
+                "object_types": [
+                  "ipam.prefix"
+                ],
+                "actions": [
+                  "view",
+                  "add",
+                  "change"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/users/permissions/1/\",\"display_url\":\"http://127.0.0.1:28630/users/permissions/1/\",\"display\":\"engineer-prefixes\",\"name\":\"engineer-prefixes\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"ipam.prefix\"],\"actions\":[\"view\",\"add\",\"change\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28630/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 471
+            },
+            {
+              "step": "superuser grants permission 'engineer-sites-read'",
+              "utc": "2026-11-25T15:17:19Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-sites-read",
+                "object_types": [
+                  "dcim.site"
+                ],
+                "actions": [
+                  "view"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/permissions/2/\",\"display_url\":\"http://127.0.0.1:28630/users/permissions/2/\",\"display\":\"engineer-sites-read\",\"name\":\"engineer-sites-read\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"dcim.site\"],\"actions\":[\"view\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28630/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 458
+            },
+            {
+              "step": "superuser issues the engineer's API token",
+              "utc": "2026-11-25T15:17:19Z",
+              "method": "POST",
+              "path": "/api/users/tokens/",
+              "request_body": {
+                "user": 2
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/tokens/2/\",\"display_url\":\"http://127.0.0.1:28630/users/tokens/2/\",\"display\":\"<redacted>\",\"user\":{\"id\":2,\"url\":\"http://127.",
+              "response_body_length": 448
+            }
+          ],
+          "site_id": 1,
+          "engineer_user_id": 2,
+          "db_rows_sites": [
+            "id|name|slug",
+            "1|HQ|hq"
+          ],
+          "db_rows_engineer": [
+            "id|username|is_superuser",
+            "1|admin|t",
+            "2|neteng|f"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "A",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-prefixes', 'engineer-sites-read'])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, from-version",
+                "utc": "2026-11-25T15:17:22Z",
+                "method": "POST",
+                "path": "/api/ipam/prefixes/",
+                "request_body": {
+                  "prefix": "192.0.2.0/24",
+                  "site": 1,
+                  "status": "active"
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28630/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"site\":{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"description\":\"\"},\"vrf\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:17:22.461230Z\",\"last_updated\":\"2026-11-25T15:17:22.461275Z\",\"children\":0,\"_depth\":0}",
+                "response_body_length": 623
+              },
+              {
+                "step": "second witness: superuser reads the prefix",
+                "utc": "2026-11-25T15:17:22Z",
+                "method": "GET",
+                "path": "/api/ipam/prefixes/1/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28630/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"site\":{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"",
+                "response_body_length": 623
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28630/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"site\":{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"description\":\"\"},\"vrf\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:17:22.461230Z\",\"last_updated\":\"2026-11-25T15:17:22.461275Z\",\"children\":0,\"_depth\":0}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 1,
+            "db_query": "SELECT id, prefix, status, site_id FROM ipam_prefix ORDER BY id",
+            "db_rows_before": [
+              "id|prefix|status|site_id"
+            ],
+            "db_rows_after": [
+              "id|prefix|status|site_id",
+              "1|192.0.2.0/24|active|1"
+            ],
+            "db_rows_content_type_dcim_site": null,
+            "stored_value": {
+              "site_id": "1",
+              "status": "active"
+            },
+            "right_value": {
+              "site_id": "1",
+              "status": "active"
+            },
+            "stored_equals_right": true,
+            "second_witness_superuser_get": {
+              "id": 1,
+              "prefix": "192.0.2.0/24",
+              "status": {
+                "value": "active"
+              },
+              "site": {
+                "id": 1,
+                "name": "HQ"
+              }
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:17:22Z",
+              "checked_after_utc": "2026-11-25T15:17:22Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 3,
+        "image": "netboxcommunity/netbox:v4.1.11",
+        "pulled_ref": "netboxcommunity/netbox@sha256:e3b3fea510491f265e7928d4e06ec87f1f521f4608c9ce0ca24dfa02a7d707ed",
+        "instance_started_utc": "2026-11-25T15:17:23Z",
+        "instance_ready_utc": "2026-11-25T15:19:13Z",
+        "conditions": {
+          "install": "fresh install: the image applies all migrations to an empty PostgreSQL database on first start; no in-place upgrade",
+          "reported_versions": {
+            "netbox-version": "4.1.11",
+            "django-version": "5.0.10",
+            "python-version": "3.12.3"
+          },
+          "postgres": [
+            "version|time_zone|now",
+            "PostgreSQL 16.16 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit|UTC|2026-11-25 15:19:17.330215+00"
+          ],
+          "container_memory": [
+            "iu1b-l3t-app\t409.1MiB / 7.653GiB",
+            "iu1b-l3t-redis\t3.656MiB / 7.653GiB",
+            "iu1b-l3t-pg\t47.57MiB / 7.653GiB",
+            "iu1b-l3f-app\t375MiB / 7.653GiB",
+            "iu1b-l3f-redis\t3.93MiB / 7.653GiB",
+            "iu1b-l3f-pg\t52.91MiB / 7.653GiB",
+            "iu1b-n7x-app\t203.3MiB / 7.653GiB"
+          ],
+          "configuration": "image defaults; no plugins; no worker container (not needed for REST writes)"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "superuser creates site HQ",
+              "utc": "2026-11-25T15:19:14Z",
+              "method": "POST",
+              "path": "/api/dcim/sites/",
+              "request_body": {
+                "name": "HQ",
+                "slug": "hq"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/dcim/sites/1/\",\"display_url\":\"http://127.0.0.1:28630/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"region\":null,\"group\":null,\"tenant\":null,\"facility\":\"\",\"time_zone\":null,\"description\":\"\",\"physical_address",
+              "response_body_length": 498
+            },
+            {
+              "step": "superuser creates the engineer account",
+              "utc": "2026-11-25T15:19:14Z",
+              "method": "POST",
+              "path": "/api/users/users/",
+              "request_body": {
+                "username": "neteng",
+                "password": "<redacted>"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28630/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\",\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\",\"is_staff\":false,\"is_active\":true,\"date_joined\":\"2026-11-25T15:19:14.121022Z\",\"last_login\":null,\"groups\":[],\"permissions\":[]}",
+              "response_body_length": 318
+            },
+            {
+              "step": "superuser grants permission 'engineer-prefixes'",
+              "utc": "2026-11-25T15:19:14Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-prefixes",
+                "object_types": [
+                  "ipam.prefix"
+                ],
+                "actions": [
+                  "view",
+                  "add",
+                  "change"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/users/permissions/1/\",\"display_url\":\"http://127.0.0.1:28630/users/permissions/1/\",\"display\":\"engineer-prefixes\",\"name\":\"engineer-prefixes\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"ipam.prefix\"],\"actions\":[\"view\",\"add\",\"change\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28630/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 471
+            },
+            {
+              "step": "superuser grants permission 'engineer-sites-read'",
+              "utc": "2026-11-25T15:19:14Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-sites-read",
+                "object_types": [
+                  "dcim.site"
+                ],
+                "actions": [
+                  "view"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/permissions/2/\",\"display_url\":\"http://127.0.0.1:28630/users/permissions/2/\",\"display\":\"engineer-sites-read\",\"name\":\"engineer-sites-read\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"dcim.site\"],\"actions\":[\"view\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28630/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 458
+            },
+            {
+              "step": "superuser issues the engineer's API token",
+              "utc": "2026-11-25T15:19:17Z",
+              "method": "POST",
+              "path": "/api/users/tokens/",
+              "request_body": {
+                "user": 2
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28630/api/users/tokens/2/\",\"display_url\":\"http://127.0.0.1:28630/users/tokens/2/\",\"display\":\"<redacted>\",\"user\":{\"id\":2,\"url\":\"http://127.",
+              "response_body_length": 448
+            }
+          ],
+          "site_id": 1,
+          "engineer_user_id": 2,
+          "db_rows_sites": [
+            "id|name|slug",
+            "1|HQ|hq"
+          ],
+          "db_rows_engineer": [
+            "id|username|is_superuser",
+            "1|admin|t",
+            "2|neteng|f"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "A",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-prefixes', 'engineer-sites-read'])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, from-version",
+                "utc": "2026-11-25T15:19:19Z",
+                "method": "POST",
+                "path": "/api/ipam/prefixes/",
+                "request_body": {
+                  "prefix": "192.0.2.0/24",
+                  "site": 1,
+                  "status": "active"
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28630/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"site\":{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"description\":\"\"},\"vrf\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:19:19.167805Z\",\"last_updated\":\"2026-11-25T15:19:19.167818Z\",\"children\":0,\"_depth\":0}",
+                "response_body_length": 623
+              },
+              {
+                "step": "second witness: superuser reads the prefix",
+                "utc": "2026-11-25T15:19:19Z",
+                "method": "GET",
+                "path": "/api/ipam/prefixes/1/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28630/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"site\":{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"",
+                "response_body_length": 623
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28630/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"site\":{\"id\":1,\"url\":\"http://127.0.0.1:28630/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"description\":\"\"},\"vrf\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:19:19.167805Z\",\"last_updated\":\"2026-11-25T15:19:19.167818Z\",\"children\":0,\"_depth\":0}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 1,
+            "db_query": "SELECT id, prefix, status, site_id FROM ipam_prefix ORDER BY id",
+            "db_rows_before": [
+              "id|prefix|status|site_id"
+            ],
+            "db_rows_after": [
+              "id|prefix|status|site_id",
+              "1|192.0.2.0/24|active|1"
+            ],
+            "db_rows_content_type_dcim_site": null,
+            "stored_value": {
+              "site_id": "1",
+              "status": "active"
+            },
+            "right_value": {
+              "site_id": "1",
+              "status": "active"
+            },
+            "stored_equals_right": true,
+            "second_witness_superuser_get": {
+              "id": 1,
+              "prefix": "192.0.2.0/24",
+              "status": {
+                "value": "active"
+              },
+              "site": {
+                "id": 1,
+                "name": "HQ"
+              }
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:19:19Z",
+              "checked_after_utc": "2026-11-25T15:19:19Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      }
+    ],
+    "to_version": [
+      {
+        "repeat": 1,
+        "image": "netboxcommunity/netbox:v4.2.0",
+        "pulled_ref": "netboxcommunity/netbox@sha256:de88ff3091f93095aa457a76a2171265a4e868e17f5edfc04653eada3f2c642f",
+        "instance_started_utc": "2026-11-25T15:11:45Z",
+        "instance_ready_utc": "2026-11-25T15:15:34Z",
+        "conditions": {
+          "install": "fresh install: the image applies all migrations to an empty PostgreSQL database on first start; no in-place upgrade",
+          "reported_versions": {
+            "netbox-version": "4.2.0",
+            "django-version": "5.1.4",
+            "python-version": "3.12.3"
+          },
+          "postgres": [
+            "version|time_zone|now",
+            "PostgreSQL 16.16 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit|UTC|2026-11-25 15:15:38.67727+00"
+          ],
+          "container_memory": [
+            "iu1b-l3f-app\t240.2MiB / 7.653GiB",
+            "iu1b-l3f-redis\t3.648MiB / 7.653GiB",
+            "iu1b-l3f-pg\t33.54MiB / 7.653GiB",
+            "iu1b-n7x-app\t203.2MiB / 7.653GiB",
+            "iu1b-l3t-app\t432.9MiB / 7.653GiB",
+            "iu1b-l3t-redis\t7.457MiB / 7.653GiB",
+            "iu1b-l3t-pg\t68.24MiB / 7.653GiB"
+          ],
+          "configuration": "image defaults; no plugins; no worker container (not needed for REST writes)"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "superuser creates site HQ",
+              "utc": "2026-11-25T15:15:35Z",
+              "method": "POST",
+              "path": "/api/dcim/sites/",
+              "request_body": {
+                "name": "HQ",
+                "slug": "hq"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/dcim/sites/1/\",\"display_url\":\"http://127.0.0.1:28631/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"region\":null,\"group\":null,\"tenant\":null,\"facility\":\"\",\"time_zone\":null,\"description\":\"\",\"physical_address",
+              "response_body_length": 498
+            },
+            {
+              "step": "superuser creates the engineer account",
+              "utc": "2026-11-25T15:15:35Z",
+              "method": "POST",
+              "path": "/api/users/users/",
+              "request_body": {
+                "username": "neteng",
+                "password": "<redacted>"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28631/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\",\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\",\"is_staff\":false,\"is_active\":true,\"date_joined\":\"2026-11-25T15:15:35.169860Z\",\"last_login\":null,\"groups\":[],\"permissions\":[]}",
+              "response_body_length": 318
+            },
+            {
+              "step": "superuser grants permission 'engineer-prefixes'",
+              "utc": "2026-11-25T15:15:35Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-prefixes",
+                "object_types": [
+                  "ipam.prefix"
+                ],
+                "actions": [
+                  "view",
+                  "add",
+                  "change"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/users/permissions/1/\",\"display_url\":\"http://127.0.0.1:28631/users/permissions/1/\",\"display\":\"engineer-prefixes\",\"name\":\"engineer-prefixes\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"ipam.prefix\"],\"actions\":[\"view\",\"add\",\"change\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28631/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 471
+            },
+            {
+              "step": "superuser grants permission 'engineer-sites-read'",
+              "utc": "2026-11-25T15:15:35Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-sites-read",
+                "object_types": [
+                  "dcim.site"
+                ],
+                "actions": [
+                  "view"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/permissions/2/\",\"display_url\":\"http://127.0.0.1:28631/users/permissions/2/\",\"display\":\"engineer-sites-read\",\"name\":\"engineer-sites-read\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"dcim.site\"],\"actions\":[\"view\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28631/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 458
+            },
+            {
+              "step": "superuser issues the engineer's API token",
+              "utc": "2026-11-25T15:15:38Z",
+              "method": "POST",
+              "path": "/api/users/tokens/",
+              "request_body": {
+                "user": 2
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/tokens/2/\",\"display_url\":\"http://127.0.0.1:28631/users/tokens/2/\",\"display\":\"<redacted>\",\"user\":{\"id\":2,\"url\":\"http://127.",
+              "response_body_length": 448
+            }
+          ],
+          "site_id": 1,
+          "engineer_user_id": 2,
+          "db_rows_sites": [
+            "id|name|slug",
+            "1|HQ|hq"
+          ],
+          "db_rows_engineer": [
+            "id|username|is_superuser",
+            "1|admin|t",
+            "2|neteng|f"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "B",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-prefixes', 'engineer-sites-read'])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, to-version",
+                "utc": "2026-11-25T15:15:40Z",
+                "method": "POST",
+                "path": "/api/ipam/prefixes/",
+                "request_body": {
+                  "prefix": "192.0.2.0/24",
+                  "site": 1,
+                  "status": "active"
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"vrf\":null,\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:15:40.151563Z\",\"last_updated\":\"2026-11-25T15:15:40.151576Z\",\"children\":0,\"_depth\":0}",
+                "response_body_length": 549
+              },
+              {
+                "step": "second witness: superuser reads the prefix",
+                "utc": "2026-11-25T15:15:40Z",
+                "method": "GET",
+                "path": "/api/ipam/prefixes/1/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"vrf\":null,\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"valu",
+                "response_body_length": 549
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"vrf\":null,\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:15:40.151563Z\",\"last_updated\":\"2026-11-25T15:15:40.151576Z\",\"children\":0,\"_depth\":0}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 1,
+            "db_query": "SELECT id, prefix, status, scope_type_id, scope_id, _site_id FROM ipam_prefix ORDER BY id",
+            "db_rows_before": [
+              "id|prefix|status|scope_type_id|scope_id|_site_id"
+            ],
+            "db_rows_after": [
+              "id|prefix|status|scope_type_id|scope_id|_site_id",
+              "1|192.0.2.0/24|active|NULL|NULL|NULL"
+            ],
+            "db_rows_content_type_dcim_site": [
+              "id|app_label|model",
+              "6|dcim|site"
+            ],
+            "stored_value": {
+              "scope_type_id": "NULL",
+              "scope_id": "NULL",
+              "_site_id": "NULL",
+              "status": "active"
+            },
+            "right_value": {
+              "scope_type_id": "6",
+              "scope_id": "1",
+              "_site_id": "1",
+              "status": "active"
+            },
+            "stored_equals_right": false,
+            "second_witness_superuser_get": {
+              "id": 1,
+              "prefix": "192.0.2.0/24",
+              "status": {
+                "value": "active"
+              },
+              "scope_type": null,
+              "scope_id": null,
+              "scope": null
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:15:40Z",
+              "checked_after_utc": "2026-11-25T15:15:40Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          },
+          {
+            "gate": "C",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-prefixes', 'engineer-sites-read'])",
+            "calls": [
+              {
+                "step": "correct path as sealed, to-version, on a second prefix at the same site",
+                "utc": "2026-11-25T15:15:40Z",
+                "method": "POST",
+                "path": "/api/ipam/prefixes/",
+                "request_body": {
+                  "prefix": "198.51.100.0/24",
+                  "scope_type": "dcim.site",
+                  "scope_id": 1,
+                  "status": "active"
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/2/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/2/\",\"display\":\"198.51.100.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"198.51.100.0/24\",\"vrf\":null,\"scope_type\":\"dcim.site\",\"scope_id\":1,\"scope\":{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"description\":\"\"},\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:15:40.581210Z\",\"last_updated\":\"2026-11-25T15:15:40.581226Z\",\"children\":0,\"_depth\":0}",
+                "response_body_length": 668
+              },
+              {
+                "step": "second witness: superuser reads the prefix",
+                "utc": "2026-11-25T15:15:40Z",
+                "method": "GET",
+                "path": "/api/ipam/prefixes/2/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/2/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/2/\",\"display\":\"198.51.100.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"198.51.100.0/24\",\"vrf\":null,\"scope_type\":\"dcim.site\",\"scope_id\":1,\"scope\":{\"id\":1,\"url\":\"http://127.0.0.1:2863",
+                "response_body_length": 668
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/2/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/2/\",\"display\":\"198.51.100.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"198.51.100.0/24\",\"vrf\":null,\"scope_type\":\"dcim.site\",\"scope_id\":1,\"scope\":{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"description\":\"\"},\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:15:40.581210Z\",\"last_updated\":\"2026-11-25T15:15:40.581226Z\",\"children\":0,\"_depth\":0}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 2,
+            "db_query": "SELECT id, prefix, status, scope_type_id, scope_id, _site_id FROM ipam_prefix ORDER BY id",
+            "db_rows_before": [
+              "id|prefix|status|scope_type_id|scope_id|_site_id",
+              "1|192.0.2.0/24|active|NULL|NULL|NULL"
+            ],
+            "db_rows_after": [
+              "id|prefix|status|scope_type_id|scope_id|_site_id",
+              "1|192.0.2.0/24|active|NULL|NULL|NULL",
+              "2|198.51.100.0/24|active|6|1|1"
+            ],
+            "db_rows_content_type_dcim_site": [
+              "id|app_label|model",
+              "6|dcim|site"
+            ],
+            "stored_value": {
+              "scope_type_id": "6",
+              "scope_id": "1",
+              "_site_id": "1",
+              "status": "active"
+            },
+            "right_value": {
+              "scope_type_id": "6",
+              "scope_id": "1",
+              "_site_id": "1",
+              "status": "active"
+            },
+            "stored_equals_right": true,
+            "second_witness_superuser_get": {
+              "id": 2,
+              "prefix": "198.51.100.0/24",
+              "status": {
+                "value": "active"
+              },
+              "scope_type": "dcim.site",
+              "scope_id": 1,
+              "scope": {
+                "id": 1,
+                "name": "HQ"
+              }
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:15:40Z",
+              "checked_after_utc": "2026-11-25T15:15:40Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 2,
+        "image": "netboxcommunity/netbox:v4.2.0",
+        "pulled_ref": "netboxcommunity/netbox@sha256:de88ff3091f93095aa457a76a2171265a4e868e17f5edfc04653eada3f2c642f",
+        "instance_started_utc": "2026-11-25T15:15:42Z",
+        "instance_ready_utc": "2026-11-25T15:18:08Z",
+        "conditions": {
+          "install": "fresh install: the image applies all migrations to an empty PostgreSQL database on first start; no in-place upgrade",
+          "reported_versions": {
+            "netbox-version": "4.2.0",
+            "django-version": "5.1.4",
+            "python-version": "3.12.3"
+          },
+          "postgres": [
+            "version|time_zone|now",
+            "PostgreSQL 16.16 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit|UTC|2026-11-25 15:18:11.655118+00"
+          ],
+          "container_memory": [
+            "iu1b-l3f-app\t372.6MiB / 7.653GiB",
+            "iu1b-l3f-redis\t3.777MiB / 7.653GiB",
+            "iu1b-l3f-pg\t44.65MiB / 7.653GiB",
+            "iu1b-l3t-app\t389.8MiB / 7.653GiB",
+            "iu1b-l3t-redis\t4.961MiB / 7.653GiB",
+            "iu1b-l3t-pg\t54.39MiB / 7.653GiB",
+            "iu1b-n7x-app\t203.3MiB / 7.653GiB"
+          ],
+          "configuration": "image defaults; no plugins; no worker container (not needed for REST writes)"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "superuser creates site HQ",
+              "utc": "2026-11-25T15:18:08Z",
+              "method": "POST",
+              "path": "/api/dcim/sites/",
+              "request_body": {
+                "name": "HQ",
+                "slug": "hq"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/dcim/sites/1/\",\"display_url\":\"http://127.0.0.1:28631/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"region\":null,\"group\":null,\"tenant\":null,\"facility\":\"\",\"time_zone\":null,\"description\":\"\",\"physical_address",
+              "response_body_length": 498
+            },
+            {
+              "step": "superuser creates the engineer account",
+              "utc": "2026-11-25T15:18:11Z",
+              "method": "POST",
+              "path": "/api/users/users/",
+              "request_body": {
+                "username": "neteng",
+                "password": "<redacted>"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28631/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\",\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\",\"is_staff\":false,\"is_active\":true,\"date_joined\":\"2026-11-25T15:18:11.103494Z\",\"last_login\":null,\"groups\":[],\"permissions\":[]}",
+              "response_body_length": 318
+            },
+            {
+              "step": "superuser grants permission 'engineer-prefixes'",
+              "utc": "2026-11-25T15:18:11Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-prefixes",
+                "object_types": [
+                  "ipam.prefix"
+                ],
+                "actions": [
+                  "view",
+                  "add",
+                  "change"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/users/permissions/1/\",\"display_url\":\"http://127.0.0.1:28631/users/permissions/1/\",\"display\":\"engineer-prefixes\",\"name\":\"engineer-prefixes\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"ipam.prefix\"],\"actions\":[\"view\",\"add\",\"change\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28631/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 471
+            },
+            {
+              "step": "superuser grants permission 'engineer-sites-read'",
+              "utc": "2026-11-25T15:18:11Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-sites-read",
+                "object_types": [
+                  "dcim.site"
+                ],
+                "actions": [
+                  "view"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/permissions/2/\",\"display_url\":\"http://127.0.0.1:28631/users/permissions/2/\",\"display\":\"engineer-sites-read\",\"name\":\"engineer-sites-read\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"dcim.site\"],\"actions\":[\"view\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28631/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 458
+            },
+            {
+              "step": "superuser issues the engineer's API token",
+              "utc": "2026-11-25T15:18:11Z",
+              "method": "POST",
+              "path": "/api/users/tokens/",
+              "request_body": {
+                "user": 2
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/tokens/2/\",\"display_url\":\"http://127.0.0.1:28631/users/tokens/2/\",\"display\":\"<redacted>\",\"user\":{\"id\":2,\"url\":\"http://127.",
+              "response_body_length": 448
+            }
+          ],
+          "site_id": 1,
+          "engineer_user_id": 2,
+          "db_rows_sites": [
+            "id|name|slug",
+            "1|HQ|hq"
+          ],
+          "db_rows_engineer": [
+            "id|username|is_superuser",
+            "1|admin|t",
+            "2|neteng|f"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "B",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-prefixes', 'engineer-sites-read'])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, to-version",
+                "utc": "2026-11-25T15:18:13Z",
+                "method": "POST",
+                "path": "/api/ipam/prefixes/",
+                "request_body": {
+                  "prefix": "192.0.2.0/24",
+                  "site": 1,
+                  "status": "active"
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"vrf\":null,\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:18:13.919379Z\",\"last_updated\":\"2026-11-25T15:18:13.919400Z\",\"children\":0,\"_depth\":0}",
+                "response_body_length": 549
+              },
+              {
+                "step": "second witness: superuser reads the prefix",
+                "utc": "2026-11-25T15:18:14Z",
+                "method": "GET",
+                "path": "/api/ipam/prefixes/1/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"vrf\":null,\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"valu",
+                "response_body_length": 549
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"vrf\":null,\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:18:13.919379Z\",\"last_updated\":\"2026-11-25T15:18:13.919400Z\",\"children\":0,\"_depth\":0}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 1,
+            "db_query": "SELECT id, prefix, status, scope_type_id, scope_id, _site_id FROM ipam_prefix ORDER BY id",
+            "db_rows_before": [
+              "id|prefix|status|scope_type_id|scope_id|_site_id"
+            ],
+            "db_rows_after": [
+              "id|prefix|status|scope_type_id|scope_id|_site_id",
+              "1|192.0.2.0/24|active|NULL|NULL|NULL"
+            ],
+            "db_rows_content_type_dcim_site": [
+              "id|app_label|model",
+              "6|dcim|site"
+            ],
+            "stored_value": {
+              "scope_type_id": "NULL",
+              "scope_id": "NULL",
+              "_site_id": "NULL",
+              "status": "active"
+            },
+            "right_value": {
+              "scope_type_id": "6",
+              "scope_id": "1",
+              "_site_id": "1",
+              "status": "active"
+            },
+            "stored_equals_right": false,
+            "second_witness_superuser_get": {
+              "id": 1,
+              "prefix": "192.0.2.0/24",
+              "status": {
+                "value": "active"
+              },
+              "scope_type": null,
+              "scope_id": null,
+              "scope": null
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:18:13Z",
+              "checked_after_utc": "2026-11-25T15:18:14Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          },
+          {
+            "gate": "C",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-prefixes', 'engineer-sites-read'])",
+            "calls": [
+              {
+                "step": "correct path as sealed, to-version, on a second prefix at the same site",
+                "utc": "2026-11-25T15:18:14Z",
+                "method": "POST",
+                "path": "/api/ipam/prefixes/",
+                "request_body": {
+                  "prefix": "198.51.100.0/24",
+                  "scope_type": "dcim.site",
+                  "scope_id": 1,
+                  "status": "active"
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/2/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/2/\",\"display\":\"198.51.100.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"198.51.100.0/24\",\"vrf\":null,\"scope_type\":\"dcim.site\",\"scope_id\":1,\"scope\":{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"description\":\"\"},\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:18:14.289732Z\",\"last_updated\":\"2026-11-25T15:18:14.289747Z\",\"children\":0,\"_depth\":0}",
+                "response_body_length": 668
+              },
+              {
+                "step": "second witness: superuser reads the prefix",
+                "utc": "2026-11-25T15:18:14Z",
+                "method": "GET",
+                "path": "/api/ipam/prefixes/2/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/2/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/2/\",\"display\":\"198.51.100.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"198.51.100.0/24\",\"vrf\":null,\"scope_type\":\"dcim.site\",\"scope_id\":1,\"scope\":{\"id\":1,\"url\":\"http://127.0.0.1:2863",
+                "response_body_length": 668
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/2/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/2/\",\"display\":\"198.51.100.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"198.51.100.0/24\",\"vrf\":null,\"scope_type\":\"dcim.site\",\"scope_id\":1,\"scope\":{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"description\":\"\"},\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:18:14.289732Z\",\"last_updated\":\"2026-11-25T15:18:14.289747Z\",\"children\":0,\"_depth\":0}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 2,
+            "db_query": "SELECT id, prefix, status, scope_type_id, scope_id, _site_id FROM ipam_prefix ORDER BY id",
+            "db_rows_before": [
+              "id|prefix|status|scope_type_id|scope_id|_site_id",
+              "1|192.0.2.0/24|active|NULL|NULL|NULL"
+            ],
+            "db_rows_after": [
+              "id|prefix|status|scope_type_id|scope_id|_site_id",
+              "1|192.0.2.0/24|active|NULL|NULL|NULL",
+              "2|198.51.100.0/24|active|6|1|1"
+            ],
+            "db_rows_content_type_dcim_site": [
+              "id|app_label|model",
+              "6|dcim|site"
+            ],
+            "stored_value": {
+              "scope_type_id": "6",
+              "scope_id": "1",
+              "_site_id": "1",
+              "status": "active"
+            },
+            "right_value": {
+              "scope_type_id": "6",
+              "scope_id": "1",
+              "_site_id": "1",
+              "status": "active"
+            },
+            "stored_equals_right": true,
+            "second_witness_superuser_get": {
+              "id": 2,
+              "prefix": "198.51.100.0/24",
+              "status": {
+                "value": "active"
+              },
+              "scope_type": "dcim.site",
+              "scope_id": 1,
+              "scope": {
+                "id": 1,
+                "name": "HQ"
+              }
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:18:14Z",
+              "checked_after_utc": "2026-11-25T15:18:14Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 3,
+        "image": "netboxcommunity/netbox:v4.2.0",
+        "pulled_ref": "netboxcommunity/netbox@sha256:de88ff3091f93095aa457a76a2171265a4e868e17f5edfc04653eada3f2c642f",
+        "instance_started_utc": "2026-11-25T15:18:15Z",
+        "instance_ready_utc": "2026-11-25T15:20:25Z",
+        "conditions": {
+          "install": "fresh install: the image applies all migrations to an empty PostgreSQL database on first start; no in-place upgrade",
+          "reported_versions": {
+            "netbox-version": "4.2.0",
+            "django-version": "5.1.4",
+            "python-version": "3.12.3"
+          },
+          "postgres": [
+            "version|time_zone|now",
+            "PostgreSQL 16.16 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit|UTC|2026-11-25 15:20:28.902825+00"
+          ],
+          "container_memory": [
+            "iu1b-l3t-app\t386.7MiB / 7.653GiB",
+            "iu1b-l3t-redis\t3.809MiB / 7.653GiB",
+            "iu1b-l3t-pg\t52.76MiB / 7.653GiB",
+            "iu1b-n7x-app\t203.3MiB / 7.653GiB"
+          ],
+          "configuration": "image defaults; no plugins; no worker container (not needed for REST writes)"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "superuser creates site HQ",
+              "utc": "2026-11-25T15:20:25Z",
+              "method": "POST",
+              "path": "/api/dcim/sites/",
+              "request_body": {
+                "name": "HQ",
+                "slug": "hq"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/dcim/sites/1/\",\"display_url\":\"http://127.0.0.1:28631/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"region\":null,\"group\":null,\"tenant\":null,\"facility\":\"\",\"time_zone\":null,\"description\":\"\",\"physical_address",
+              "response_body_length": 498
+            },
+            {
+              "step": "superuser creates the engineer account",
+              "utc": "2026-11-25T15:20:28Z",
+              "method": "POST",
+              "path": "/api/users/users/",
+              "request_body": {
+                "username": "neteng",
+                "password": "<redacted>"
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28631/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\",\"first_name\":\"\",\"last_name\":\"\",\"email\":\"\",\"is_staff\":false,\"is_active\":true,\"date_joined\":\"2026-11-25T15:20:28.175098Z\",\"last_login\":null,\"groups\":[],\"permissions\":[]}",
+              "response_body_length": 318
+            },
+            {
+              "step": "superuser grants permission 'engineer-prefixes'",
+              "utc": "2026-11-25T15:20:28Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-prefixes",
+                "object_types": [
+                  "ipam.prefix"
+                ],
+                "actions": [
+                  "view",
+                  "add",
+                  "change"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/users/permissions/1/\",\"display_url\":\"http://127.0.0.1:28631/users/permissions/1/\",\"display\":\"engineer-prefixes\",\"name\":\"engineer-prefixes\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"ipam.prefix\"],\"actions\":[\"view\",\"add\",\"change\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28631/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 471
+            },
+            {
+              "step": "superuser grants permission 'engineer-sites-read'",
+              "utc": "2026-11-25T15:20:28Z",
+              "method": "POST",
+              "path": "/api/users/permissions/",
+              "request_body": {
+                "name": "engineer-sites-read",
+                "object_types": [
+                  "dcim.site"
+                ],
+                "actions": [
+                  "view"
+                ],
+                "users": [
+                  2
+                ]
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/permissions/2/\",\"display_url\":\"http://127.0.0.1:28631/users/permissions/2/\",\"display\":\"engineer-sites-read\",\"name\":\"engineer-sites-read\",\"description\":\"\",\"enabled\":true,\"object_types\":[\"dcim.site\"],\"actions\":[\"view\"],\"constraints\":null,\"groups\":[],\"users\":[{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/users/2/\",\"display_url\":\"http://127.0.0.1:28631/users/users/2/\",\"display\":\"neteng\",\"username\":\"neteng\"}]}",
+              "response_body_length": 458
+            },
+            {
+              "step": "superuser issues the engineer's API token",
+              "utc": "2026-11-25T15:20:28Z",
+              "method": "POST",
+              "path": "/api/users/tokens/",
+              "request_body": {
+                "user": 2
+              },
+              "request_header_names": [
+                "Accept",
+                "Authorization"
+              ],
+              "status": 201,
+              "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/users/tokens/2/\",\"display_url\":\"http://127.0.0.1:28631/users/tokens/2/\",\"display\":\"<redacted>\",\"user\":{\"id\":2,\"url\":\"http://127.",
+              "response_body_length": 448
+            }
+          ],
+          "site_id": 1,
+          "engineer_user_id": 2,
+          "db_rows_sites": [
+            "id|name|slug",
+            "1|HQ|hq"
+          ],
+          "db_rows_engineer": [
+            "id|username|is_superuser",
+            "1|admin|t",
+            "2|neteng|f"
+          ]
+        },
+        "observations": [
+          {
+            "gate": "B",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-prefixes', 'engineer-sites-read'])",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, to-version",
+                "utc": "2026-11-25T15:20:31Z",
+                "method": "POST",
+                "path": "/api/ipam/prefixes/",
+                "request_body": {
+                  "prefix": "192.0.2.0/24",
+                  "site": 1,
+                  "status": "active"
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"vrf\":null,\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:20:31.187389Z\",\"last_updated\":\"2026-11-25T15:20:31.187403Z\",\"children\":0,\"_depth\":0}",
+                "response_body_length": 549
+              },
+              {
+                "step": "second witness: superuser reads the prefix",
+                "utc": "2026-11-25T15:20:31Z",
+                "method": "GET",
+                "path": "/api/ipam/prefixes/1/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"vrf\":null,\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"valu",
+                "response_body_length": 549
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/1/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/1/\",\"display\":\"192.0.2.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"192.0.2.0/24\",\"vrf\":null,\"scope_type\":null,\"scope_id\":null,\"scope\":null,\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:20:31.187389Z\",\"last_updated\":\"2026-11-25T15:20:31.187403Z\",\"children\":0,\"_depth\":0}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 1,
+            "db_query": "SELECT id, prefix, status, scope_type_id, scope_id, _site_id FROM ipam_prefix ORDER BY id",
+            "db_rows_before": [
+              "id|prefix|status|scope_type_id|scope_id|_site_id"
+            ],
+            "db_rows_after": [
+              "id|prefix|status|scope_type_id|scope_id|_site_id",
+              "1|192.0.2.0/24|active|NULL|NULL|NULL"
+            ],
+            "db_rows_content_type_dcim_site": [
+              "id|app_label|model",
+              "6|dcim|site"
+            ],
+            "stored_value": {
+              "scope_type_id": "NULL",
+              "scope_id": "NULL",
+              "_site_id": "NULL",
+              "status": "active"
+            },
+            "right_value": {
+              "scope_type_id": "6",
+              "scope_id": "1",
+              "_site_id": "1",
+              "status": "active"
+            },
+            "stored_equals_right": false,
+            "second_witness_superuser_get": {
+              "id": 1,
+              "prefix": "192.0.2.0/24",
+              "status": {
+                "value": "active"
+              },
+              "scope_type": null,
+              "scope_id": null,
+              "scope": null
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:20:31Z",
+              "checked_after_utc": "2026-11-25T15:20:31Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          },
+          {
+            "gate": "C",
+            "acting_user": "neteng (not a superuser; permissions ['engineer-prefixes', 'engineer-sites-read'])",
+            "calls": [
+              {
+                "step": "correct path as sealed, to-version, on a second prefix at the same site",
+                "utc": "2026-11-25T15:20:31Z",
+                "method": "POST",
+                "path": "/api/ipam/prefixes/",
+                "request_body": {
+                  "prefix": "198.51.100.0/24",
+                  "scope_type": "dcim.site",
+                  "scope_id": 1,
+                  "status": "active"
+                },
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 201,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/2/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/2/\",\"display\":\"198.51.100.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"198.51.100.0/24\",\"vrf\":null,\"scope_type\":\"dcim.site\",\"scope_id\":1,\"scope\":{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"description\":\"\"},\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:20:31.618448Z\",\"last_updated\":\"2026-11-25T15:20:31.618465Z\",\"children\":0,\"_depth\":0}",
+                "response_body_length": 668
+              },
+              {
+                "step": "second witness: superuser reads the prefix",
+                "utc": "2026-11-25T15:20:31Z",
+                "method": "GET",
+                "path": "/api/ipam/prefixes/2/",
+                "request_body": null,
+                "request_header_names": [
+                  "Accept",
+                  "Authorization"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/2/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/2/\",\"display\":\"198.51.100.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"198.51.100.0/24\",\"vrf\":null,\"scope_type\":\"dcim.site\",\"scope_id\":1,\"scope\":{\"id\":1,\"url\":\"http://127.0.0.1:2863",
+                "response_body_length": 668
+              }
+            ],
+            "application_answer": {
+              "status": 201,
+              "body_excerpt": "{\"id\":2,\"url\":\"http://127.0.0.1:28631/api/ipam/prefixes/2/\",\"display_url\":\"http://127.0.0.1:28631/ipam/prefixes/2/\",\"display\":\"198.51.100.0/24\",\"family\":{\"value\":4,\"label\":\"IPv4\"},\"prefix\":\"198.51.100.0/24\",\"vrf\":null,\"scope_type\":\"dcim.site\",\"scope_id\":1,\"scope\":{\"id\":1,\"url\":\"http://127.0.0.1:28631/api/dcim/sites/1/\",\"display\":\"HQ\",\"name\":\"HQ\",\"slug\":\"hq\",\"description\":\"\"},\"tenant\":null,\"vlan\":null,\"status\":{\"value\":\"active\",\"label\":\"Active\"},\"role\":null,\"is_pool\":false,\"mark_utilized\":false,\"description\":\"\",\"comments\":\"\",\"tags\":[],\"custom_fields\":{},\"created\":\"2026-11-25T15:20:31.618448Z\",\"last_updated\":\"2026-11-25T15:20:31.618465Z\",\"children\":0,\"_depth\":0}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 201",
+            "returned_id": 2,
+            "db_query": "SELECT id, prefix, status, scope_type_id, scope_id, _site_id FROM ipam_prefix ORDER BY id",
+            "db_rows_before": [
+              "id|prefix|status|scope_type_id|scope_id|_site_id",
+              "1|192.0.2.0/24|active|NULL|NULL|NULL"
+            ],
+            "db_rows_after": [
+              "id|prefix|status|scope_type_id|scope_id|_site_id",
+              "1|192.0.2.0/24|active|NULL|NULL|NULL",
+              "2|198.51.100.0/24|active|6|1|1"
+            ],
+            "db_rows_content_type_dcim_site": [
+              "id|app_label|model",
+              "6|dcim|site"
+            ],
+            "stored_value": {
+              "scope_type_id": "6",
+              "scope_id": "1",
+              "_site_id": "1",
+              "status": "active"
+            },
+            "right_value": {
+              "scope_type_id": "6",
+              "scope_id": "1",
+              "_site_id": "1",
+              "status": "active"
+            },
+            "stored_equals_right": true,
+            "second_witness_superuser_get": {
+              "id": 2,
+              "prefix": "198.51.100.0/24",
+              "status": {
+                "value": "active"
+              },
+              "scope_type": "dcim.site",
+              "scope_id": 1,
+              "scope": {
+                "id": 1,
+                "name": "HQ"
+              }
+            },
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:20:31Z",
+              "checked_after_utc": "2026-11-25T15:20:31Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      }
+    ]
+  },
+  "times_utc": {
+    "started": "2026-11-25T15:11:42Z",
+    "finished": "2026-11-25T15:20:32Z",
+    "clock": "date -u on the host"
+  },
+  "free_disk_gib_at_end": 56.1
+}

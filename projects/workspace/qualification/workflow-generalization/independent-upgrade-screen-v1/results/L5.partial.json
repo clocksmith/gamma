@@ -1,0 +1,55 @@
+{
+  "schema": "gammatron-real-upgrade-screen-result/v1",
+  "case_id": "L5",
+  "screen_lane": "iu1-b",
+  "status": "incomplete, paused by owner",
+  "app": "GitLab (Community Edition)",
+  "from_version": "15.11.13",
+  "to_version": "16.0.0",
+  "how_far": "nothing was run: no container was started, no gate was observed and no feasibility measurement was taken",
+  "images": [
+    {
+      "ref": "gitlab/gitlab-ce:15.11.13-ce.0",
+      "sealed_platform": "amd64",
+      "sealed_digest": "sha256:798b18325a90851922c916fcded34d1ba7decf810a311765b43e43f452bf564c",
+      "pulled": true,
+      "pulled_ref": "gitlab/gitlab-ce@sha256:798b18325a90851922c916fcded34d1ba7decf810a311765b43e43f452bf564c",
+      "pull_finished_utc": "2026-11-25T15:22:31Z",
+      "docker_image_inspect_at_15_24_utc": {
+        "Id": "sha256:798b18325a90851922c916fcded34d1ba7decf810a311765b43e43f452bf564c",
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 1379038886
+      }
+    },
+    {
+      "ref": "gitlab/gitlab-ce:16.0.0-ce.0",
+      "sealed_platform": "amd64",
+      "sealed_digest": "sha256:ab90cdb096c4f81247088357b0e051f5b8a999284b2186cbd1b1ec1a41cca7e8",
+      "pulled": false
+    }
+  ],
+  "gates": {
+    "A": "not run",
+    "B": "not run",
+    "C": "not run"
+  },
+  "disposition": null,
+  "disposition_note": "none. This is not a not-run record: whether this machine can carry GitLab inside the lane's memory limit was not measured.",
+  "prediction": {
+    "sealed": "silent-wrong-write",
+    "observed": null,
+    "right": null,
+    "note": "not scored"
+  },
+  "prepared": "run/L5/measure.py starts one 15.11.13 instance under a 2500 MiB cap and samples it until it is ready or a time bound is reached. It was written and compiled and has never been executed; it holds no gate code.",
+  "deviations": [],
+  "flags": [
+    "incomplete",
+    "nothing-run"
+  ],
+  "times_utc": {
+    "paused": "2026-11-25T15:31:24Z",
+    "clock": "date -u on the host"
+  }
+}

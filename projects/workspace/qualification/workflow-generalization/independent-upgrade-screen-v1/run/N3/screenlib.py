@@ -10,6 +10,7 @@ Environment:
 """
 import json
 import os
+import re
 import subprocess
 import threading
 import time
@@ -18,6 +19,8 @@ import urllib.request
 
 HOLD_FILE = os.environ.get("SCREEN_HOLD_FILE", "")
 BODY_EXCERPT_CHARS = 2500
+# Credential fields an application may echo in a response body; their values are never recorded.
+SECRET_FIELDS = re.compile(r'("(?:api_key|api_secret|password|new_password|sid|token|csrf_token)"\s*:\s*")[^"]*(")')
 
 
 def utc_now():
@@ -62,7 +65,7 @@ class Recorder:
         self.watch = SuspendWatch()
         self.watch.start()
 
-    def http(self, events, label, method, base_url, path, auth, credential_note, body=None, timeout=120,
+    def http(self, events, label, method, base_url, path, auth, credential_note, body=None, timeout=300,
              recorded_body=None):
         """Send one request and append the raw exchange to `events`.
 
@@ -92,7 +95,7 @@ class Recorder:
             "request_headers": {**{name: f"<redacted> ({credential_note})" for name in auth},
                                 **({"Content-Type": "application/json"} if data is not None else {})},
             "request_body": body if recorded_body is None else recorded_body, "response_status": status,
-            "response_body_excerpt": text[:BODY_EXCERPT_CHARS],
+            "response_body_excerpt": SECRET_FIELDS.sub(r"\1<redacted>\2", text)[:BODY_EXCERPT_CHARS],
             "response_body_chars": len(text), "transport_error": error,
             "started_utc": started, "elapsed_seconds": elapsed,
             "hold_marker_before": hold_before, "hold_marker_after": hold_exists(),

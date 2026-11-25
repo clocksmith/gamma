@@ -1,0 +1,1001 @@
+{
+ "schema": "gammatron-real-upgrade-screen-result/v1",
+ "case": "L1",
+ "app": "OpenProject (Community edition)",
+ "from_version": "17.7.0",
+ "to_version": "17.8.0",
+ "assembled_utc": "2026-11-25T15:30:09Z",
+ "disposition": null,
+ "disposition_reason": "none derived: 1 of 3 repeats observed (only 1 valid repeat(s))",
+ "flags": [],
+ "gate_summary": {
+  "A_old_workflow_on_from_version_right": "1 of 1",
+  "B_old_workflow_on_to_version": [
+   "accepted-wrong-value"
+  ],
+  "C_correct_path_on_to_version_right": "1 of 1",
+  "A_observations": [
+   {
+    "repeat": 1,
+    "status": 200,
+    "stored": {
+     "work_packages.version_id": 1,
+     "work_package_versions": [
+      {
+       "work_package_id": 1,
+       "version_id": 1,
+       "kind": "target"
+      }
+     ],
+     "lock_version_before": 0,
+     "lock_version_after": 1,
+     "journal_count_before": 1,
+     "journal_count_after": 1
+    },
+    "right": {
+     "work_packages.version_id": 1
+    }
+   }
+  ],
+  "B_observations": [
+   {
+    "repeat": 1,
+    "status": 200,
+    "stored": {
+     "work_packages.version_id": null,
+     "work_package_versions": [],
+     "lock_version_before": 0,
+     "lock_version_after": 0,
+     "journal_count_before": 1,
+     "journal_count_after": 1
+    },
+    "right": {
+     "work_package_versions": [
+      {
+       "work_package_id": 1,
+       "version_id": 1,
+       "kind": "target"
+      }
+     ]
+    }
+   }
+  ],
+  "C_observations": [
+   {
+    "repeat": 1,
+    "status": 200,
+    "stored": {
+     "work_packages.version_id": null,
+     "work_package_versions": [
+      {
+       "work_package_id": 2,
+       "version_id": 1,
+       "kind": "target"
+      }
+     ],
+     "lock_version_before": 0,
+     "lock_version_after": 0,
+     "journal_count_before": 1,
+     "journal_count_after": 1
+    },
+    "right": {
+     "work_package_versions": [
+      {
+       "work_package_id": 2,
+       "version_id": 1,
+       "kind": "target"
+      }
+     ]
+    }
+   }
+  ]
+ },
+ "steps_exactly_as_sealed": null,
+ "sealed_prediction": {
+  "predicted_disposition": "silent-wrong-write",
+  "prediction_detail": "With multiple target versions enabled on 17.8.0 the PATCH answers 200 and assigns nothing. It is a silent no-op: the workflow reports success and the work package still has no target version.",
+  "predicted_stored_on_to_version": "no row in work_package_versions for W; work_packages.version_id NULL; lock_version and journal count unchanged; _links.targetVersions = []"
+ },
+ "prediction_right": null,
+ "prediction_right_means": "the mechanical disposition equals the sealed predicted disposition; see prediction_notes for the stored values and for any flag that qualifies it",
+ "prediction_notes": "One repeat only; not scored. In that repeat, as predicted for a fresh install: the setting work_package_multiple_versions read false on the fresh 17.7.0 and true on the fresh 17.8.0 before the first request. On 17.8.0 the PATCH with _links.version answered 200 and changed nothing: no work_package_versions row, work_packages.version_id NULL, lock_version and journal count unchanged; the second account's GET showed no version link and targetVersions []. The other half of the sealed condition was not run: an in-place upgrade of a database seeded under 17.7.0, where the setting is predicted to stay off and the old steps to keep working.",
+ "conditions": {
+  "install": "fresh install of each release on an empty database (the bring-up migrates a new database per release); no in-place upgrade was run. The sealed prediction is conditional on this: on a fresh 17.8.0 the setting work_package_multiple_versions defaults to on; on a database seeded under 17.7.0 and upgraded in place it is predicted to stay off. That second condition was not run.",
+  "bring_up": "screening/openproject-up.sh 17.7.0-slim 17.8.0-slim (byte-identical copy of the frozen bring-up, mounting the screening seeder, as the sealed list names for this pair), once per repeat; bringup/openproject-down.sh after each repeat",
+  "host": "Docker Desktop on Apple silicon (linux/arm64 images), PostgreSQL 15 in its own container",
+  "time_zone": "containers run in UTC; the case has no dates",
+  "acting_account": "seeded project member stage2_author (role Stage2AuthorRole), own API token",
+  "set_up": "in rails runner on both releases: assign_versions added to Stage2AuthorRole with Role#add_permission!, version 'Sprint 3' created in stage2-qual-proj, and the setting read and printed before the first request; the work package W is created by the acting account through the API",
+  "settings_that_matter": "work_package_multiple_versions, read per repeat on both releases before the first probe (see setup.sides in each repeat); nothing was switched by the run",
+  "gates_B_and_C": "same 17.8.0 instance within a repeat, separate work packages, the same version",
+  "stored_value_read": "PostgreSQL in the database container (docker exec ... psql): work_packages.version_id and the rows of work_package_versions for W, after the response; a GET of W with the other seeded account (stage2_approver) as a second witness"
+ },
+ "deviations": [],
+ "notes": [
+  "On 17.7.0 the old PATCH wrote work_packages.version_id and also a work_package_versions row of kind 'target'; the table already exists in that release.",
+  "On 17.8.0 the correct path writes the work_package_versions row and leaves work_packages.version_id NULL and lock_version unchanged; the sealed right value names only the row.",
+  "Repeat 1 ran by hand on a pair brought up with the same command, as the runner's first execution ever and without any change afterwards. It is the only repeat observed: the owner paused the work while repeat 2 was being brought up through run.sh. Repeats 2 and 3 are still to be run."
+ ],
+ "images": {
+  "sealed_digests_by_platform": {
+   "openproject/openproject:17.7.0-slim": {
+    "amd64": {
+     "compressed_mb": 522,
+     "digest": "sha256:81b187997a0cd8dd45cbaf479c302d4b4a0c08dd4024b426b0faa6a12926d2de"
+    },
+    "arm64": {
+     "compressed_mb": 499,
+     "digest": "sha256:03ea7d05060944ee0fe945f02c43eb5074a3cb70c55a16796dde6b1171a77e13"
+    }
+   },
+   "openproject/openproject:17.8.0-slim": {
+    "amd64": {
+     "compressed_mb": 410,
+     "digest": "sha256:586665a78c261ac9e52670f907c4e4d7b83e4a97ecd4eebcf1db801d4caddcc9"
+    },
+    "arm64": {
+     "compressed_mb": 409,
+     "digest": "sha256:e122d5a61aee76b5eca977ead9da9c2f43bdaf4fa51d628b7087a91a32f1cc2a"
+    }
+   },
+   "postgres:15": {
+    "amd64": {
+     "compressed_mb": 164,
+     "digest": "sha256:b14fdb40f71c4ccdaf0f01afb3207f1f7e50fe281ad7480fe24e9974632bd892"
+    },
+    "arm64": {
+     "compressed_mb": 163,
+     "digest": "sha256:29d8637dc6e688cb732a85cfd9577d8367f2a45871a9c04fba6e67205c6987c4"
+    }
+   }
+  },
+  "ran": {
+   "openproject/openproject:17.7.0-slim": {
+    "repo_digests": [
+     "openproject/openproject@sha256:c59d3dbbf411657f4aa8481313587c76f5bba0aa89cd1c4c18dee135f470f729"
+    ],
+    "image_id": "sha256:c59d3dbbf411657f4aa8481313587c76f5bba0aa89cd1c4c18dee135f470f729",
+    "architecture": "arm64",
+    "os": "linux",
+    "platform_manifest_digest": "sha256:03ea7d05060944ee0fe945f02c43eb5074a3cb70c55a16796dde6b1171a77e13"
+   },
+   "openproject/openproject:17.8.0-slim": {
+    "repo_digests": [
+     "openproject/openproject@sha256:48952034215d2a8ecf07086db86be55c74819cc76aa26af61f8da9ce5f06eda2"
+    ],
+    "image_id": "sha256:48952034215d2a8ecf07086db86be55c74819cc76aa26af61f8da9ce5f06eda2",
+    "architecture": "arm64",
+    "os": "linux",
+    "platform_manifest_digest": "sha256:e122d5a61aee76b5eca977ead9da9c2f43bdaf4fa51d628b7087a91a32f1cc2a"
+   },
+   "postgres:15": {
+    "repo_digests": [
+     "postgres@sha256:697ff70295146d53b702b07532fe68aaed7a5f10d04ff68edbeffd5fbacd15a5"
+    ],
+    "image_id": "sha256:697ff70295146d53b702b07532fe68aaed7a5f10d04ff68edbeffd5fbacd15a5",
+    "architecture": "arm64",
+    "os": "linux",
+    "platform_manifest_digest": "sha256:f26f828cd8bb3faf415fdd0943966a09abdd46e61f6d49dc72bb1ba386d64e66"
+   }
+  },
+  "same_in_every_repeat": true,
+  "digest_comparison": {
+   "openproject/openproject:17.7.0-slim": {
+    "platform_ran": "linux/arm64",
+    "sealed_digest_for_that_platform": "sha256:03ea7d05060944ee0fe945f02c43eb5074a3cb70c55a16796dde6b1171a77e13",
+    "ran_platform_manifest_digest": "sha256:03ea7d05060944ee0fe945f02c43eb5074a3cb70c55a16796dde6b1171a77e13",
+    "same": true
+   },
+   "openproject/openproject:17.8.0-slim": {
+    "platform_ran": "linux/arm64",
+    "sealed_digest_for_that_platform": "sha256:e122d5a61aee76b5eca977ead9da9c2f43bdaf4fa51d628b7087a91a32f1cc2a",
+    "ran_platform_manifest_digest": "sha256:e122d5a61aee76b5eca977ead9da9c2f43bdaf4fa51d628b7087a91a32f1cc2a",
+    "same": true
+   },
+   "postgres:15": {
+    "platform_ran": "linux/arm64",
+    "sealed_digest_for_that_platform": "sha256:29d8637dc6e688cb732a85cfd9577d8367f2a45871a9c04fba6e67205c6987c4",
+    "ran_platform_manifest_digest": "sha256:f26f828cd8bb3faf415fdd0943966a09abdd46e61f6d49dc72bb1ba386d64e66",
+    "same": false
+   }
+  },
+  "digest_notes": "Both OpenProject images are the sealed arm64 digests. postgres:15 is not: the bring-up used the copy of postgres:15 that was already on the machine (built 2025-12-08), which belongs to other work there and was not pulled again; the sealed list records the registry's tag as pushed on 2026-11-24."
+ },
+ "voided_attempts": [
+  {
+   "what": "repeat 2, attempt 1",
+   "started_utc": "2026-11-25T15:28:51Z",
+   "why_void": "abandoned during bring-up when the owner paused the work, about half a minute in: the 17.8.0 database was still being migrated and no request had been sent to either release. The containers, the network and their anonymous volumes were removed."
+  }
+ ],
+ "repeats": [
+  {
+   "case": "L1",
+   "repeat": 1,
+   "started_utc": "2026-11-25T15:27:24Z",
+   "waited_for_hold_seconds": 0,
+   "images": {
+    "openproject/openproject:17.7.0-slim": {
+     "repo_digests": [
+      "openproject/openproject@sha256:c59d3dbbf411657f4aa8481313587c76f5bba0aa89cd1c4c18dee135f470f729"
+     ],
+     "image_id": "sha256:c59d3dbbf411657f4aa8481313587c76f5bba0aa89cd1c4c18dee135f470f729",
+     "architecture": "arm64",
+     "os": "linux",
+     "platform_manifest_digest": "sha256:03ea7d05060944ee0fe945f02c43eb5074a3cb70c55a16796dde6b1171a77e13"
+    },
+    "openproject/openproject:17.8.0-slim": {
+     "repo_digests": [
+      "openproject/openproject@sha256:48952034215d2a8ecf07086db86be55c74819cc76aa26af61f8da9ce5f06eda2"
+     ],
+     "image_id": "sha256:48952034215d2a8ecf07086db86be55c74819cc76aa26af61f8da9ce5f06eda2",
+     "architecture": "arm64",
+     "os": "linux",
+     "platform_manifest_digest": "sha256:e122d5a61aee76b5eca977ead9da9c2f43bdaf4fa51d628b7087a91a32f1cc2a"
+    },
+    "postgres:15": {
+     "repo_digests": [
+      "postgres@sha256:697ff70295146d53b702b07532fe68aaed7a5f10d04ff68edbeffd5fbacd15a5"
+     ],
+     "image_id": "sha256:697ff70295146d53b702b07532fe68aaed7a5f10d04ff68edbeffd5fbacd15a5",
+     "architecture": "arm64",
+     "os": "linux",
+     "platform_manifest_digest": "sha256:f26f828cd8bb3faf415fdd0943966a09abdd46e61f6d49dc72bb1ba386d64e66"
+    }
+   },
+   "setup": {
+    "events": [
+     {
+      "kind": "command",
+      "label": "grant assign_versions to Stage2AuthorRole, create version 'Sprint 3', read the setting",
+      "command": "docker exec gammatron-op-old bundle exec rails runner r = Role.find_by!(name: 'Stage2AuthorRole'); r.add_permission!(:assign_versions); p = Project.find_by!(identifier: 'stage2-qual-proj'); v = Version.find_or_create_by!(project: p, name: 'Sprint 3'); a = (Setting.work_package_multiple_versions? rescue \"unavailable: #{$!.class}\"); b = (Setting::WorkPackageMultipleVersions.active? rescue \"unavailable: #{$!.class}\"); puts 'L1_SETUP_JSON:' + {version_id: v.id, version_name: v.name, version_status: v.status, version_sharing: v.sharing, role_permissions: r.reload.permissions.map(&:to_s).sort, setting_work_package_multiple_versions: a, setting_class_active: b, core_version: OpenProject::VERSION.to_s}.to_json",
+      "exit_code": 0,
+      "stdout": "I, [2026-11-25T15:27:32.541197 #69]  INFO -- : Increasing database pool size to 17 to match max threads\nL1_SETUP_JSON:{\"version_id\":1,\"version_name\":\"Sprint 3\",\"version_status\":\"open\",\"version_sharing\":\"none\",\"role_permissions\":[\"add_work_package_notes\",\"add_work_packages\",\"assign_versions\",\"edit_work_packages\",\"manage_subtasks\",\"view_project\",\"view_work_packages\"],\"setting_work_package_multiple_versions\":false,\"setting_class_active\":false,\"core_version\":\"17.7.0\"}\n",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:27:27Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "old: stored setting and whether work_package_versions exists",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_old_qual -At -c \"SELECT row_to_json(t) FROM (SELECT (SELECT value FROM settings WHERE name = 'work_package_multiple_versions') AS setting_row_value, (SELECT count(*) FROM information_schema.tables WHERE table_name = 'work_package_versions') AS join_table, (SELECT count(*) FROM information_schema.columns WHERE table_name = 'work_packages' AND column_name = 'version_id') AS version_id_column) t\"",
+      "exit_code": 0,
+      "stdout": "{\"setting_row_value\":\"f\",\"join_table\":1,\"version_id_column\":1}\n",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:27:51Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "grant assign_versions to Stage2AuthorRole, create version 'Sprint 3', read the setting",
+      "command": "docker exec gammatron-op-new bundle exec rails runner r = Role.find_by!(name: 'Stage2AuthorRole'); r.add_permission!(:assign_versions); p = Project.find_by!(identifier: 'stage2-qual-proj'); v = Version.find_or_create_by!(project: p, name: 'Sprint 3'); a = (Setting.work_package_multiple_versions? rescue \"unavailable: #{$!.class}\"); b = (Setting::WorkPackageMultipleVersions.active? rescue \"unavailable: #{$!.class}\"); puts 'L1_SETUP_JSON:' + {version_id: v.id, version_name: v.name, version_status: v.status, version_sharing: v.sharing, role_permissions: r.reload.permissions.map(&:to_s).sort, setting_work_package_multiple_versions: a, setting_class_active: b, core_version: OpenProject::VERSION.to_s}.to_json",
+      "exit_code": 0,
+      "stdout": "I, [2026-11-25T15:27:59.280738 #67]  INFO -- : Increasing database pool size to 17 to match max threads\nL1_SETUP_JSON:{\"version_id\":1,\"version_name\":\"Sprint 3\",\"version_status\":\"open\",\"version_sharing\":\"none\",\"role_permissions\":[\"add_work_package_notes\",\"add_work_packages\",\"assign_versions\",\"edit_work_packages\",\"manage_subtasks\",\"view_project\",\"view_work_packages\"],\"setting_work_package_multiple_versions\":true,\"setting_class_active\":true,\"core_version\":\"17.8.0\"}\n",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:27:51Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "new: stored setting and whether work_package_versions exists",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_new_qual -At -c \"SELECT row_to_json(t) FROM (SELECT (SELECT value FROM settings WHERE name = 'work_package_multiple_versions') AS setting_row_value, (SELECT count(*) FROM information_schema.tables WHERE table_name = 'work_package_versions') AS join_table, (SELECT count(*) FROM information_schema.columns WHERE table_name = 'work_packages' AND column_name = 'version_id') AS version_id_column) t\"",
+      "exit_code": 0,
+      "stdout": "{\"setting_row_value\":\"true\",\"join_table\":1,\"version_id_column\":1}\n",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:28:21Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     }
+    ],
+    "sides": {
+     "old": {
+      "version_id": 1,
+      "version_name": "Sprint 3",
+      "version_status": "open",
+      "version_sharing": "none",
+      "role_permissions": [
+       "add_work_package_notes",
+       "add_work_packages",
+       "assign_versions",
+       "edit_work_packages",
+       "manage_subtasks",
+       "view_project",
+       "view_work_packages"
+      ],
+      "setting_work_package_multiple_versions": false,
+      "setting_class_active": false,
+      "core_version": "17.7.0",
+      "database": {
+       "setting_row_value": "f",
+       "join_table": 1,
+       "version_id_column": 1
+      }
+     },
+     "new": {
+      "version_id": 1,
+      "version_name": "Sprint 3",
+      "version_status": "open",
+      "version_sharing": "none",
+      "role_permissions": [
+       "add_work_package_notes",
+       "add_work_packages",
+       "assign_versions",
+       "edit_work_packages",
+       "manage_subtasks",
+       "view_project",
+       "view_work_packages"
+      ],
+      "setting_work_package_multiple_versions": true,
+      "setting_class_active": true,
+      "core_version": "17.8.0",
+      "database": {
+       "setting_row_value": "true",
+       "join_table": 1,
+       "version_id_column": 1
+      }
+     }
+    }
+   },
+   "gate_A": {
+    "release_tag": "17.7.0-slim",
+    "database": "op_old_qual",
+    "work_package_id": 1,
+    "version_id": 1,
+    "workflow_requests": [
+     {
+      "method": "GET",
+      "path": "/api/v3/work_packages/1"
+     },
+     {
+      "method": "PATCH",
+      "path": "/api/v3/work_packages/1",
+      "body": {
+       "lockVersion": 0,
+       "_links": {
+        "version": {
+         "href": "/api/v3/versions/1"
+        }
+       }
+      }
+     }
+    ],
+    "workflow_response_status": 200,
+    "reported_success": true,
+    "stored": {
+     "work_packages.version_id": 1,
+     "work_package_versions": [
+      {
+       "work_package_id": 1,
+       "version_id": 1,
+       "kind": "target"
+      }
+     ],
+     "lock_version_before": 0,
+     "lock_version_after": 1,
+     "journal_count_before": 1,
+     "journal_count_after": 1
+    },
+    "right": {
+     "work_packages.version_id": 1
+    },
+    "stored_is_right": true,
+    "second_witness": {
+     "account": "stage2_approver",
+     "status": 200,
+     "_links.version": {
+      "href": "/api/v3/versions/1",
+      "title": "Sprint 3"
+     },
+     "_links.targetVersions": [
+      {
+       "href": "/api/v3/versions/1",
+       "title": "Sprint 3"
+      }
+     ]
+    },
+    "database_before": {
+     "work_package": {
+      "id": 1,
+      "subject": "W (gate A)",
+      "version_id": null,
+      "lock_version": 0,
+      "journal_count": 1
+     },
+     "work_package_versions": []
+    },
+    "database_after": {
+     "work_package": {
+      "id": 1,
+      "subject": "W (gate A)",
+      "version_id": 1,
+      "lock_version": 1,
+      "journal_count": 1
+     },
+     "work_package_versions": [
+      {
+       "id": 1,
+       "work_package_id": 1,
+       "version_id": 1,
+       "kind": "target",
+       "created_at": "2026-11-25T15:28:22.841887+00:00",
+       "updated_at": "2026-11-25T15:28:22.841887+00:00"
+      }
+     ]
+    },
+    "overlapped_hold": false,
+    "events": [
+     {
+      "kind": "http",
+      "label": "set-up: create work package W",
+      "method": "POST",
+      "base_url": "http://127.0.0.1:28413",
+      "path": "/api/v3/projects/1/work_packages",
+      "request_headers": {
+       "Authorization": "<redacted> (API token of stage2_author)",
+       "Content-Type": "application/json"
+      },
+      "request_body": {
+       "subject": "W (gate A)"
+      },
+      "response_status": 201,
+      "response_body_excerpt": "{\"derivedStartDate\":null,\"derivedDueDate\":null,\"hasProjectAttributes\":false,\"_embedded\":{\"attachments\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/attachments\"}}},\"relations\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/relations\"}}},\"type\":{\"_type\":\"Type\",\"id\":1,\"name\":\"Task\",\"color\":\"#1A67A3\",\"position\":1,\"isDefault\":true,\"isMilestone\":false,\"createdAt\":\"2026-11-25T15:26:22.981Z\",\"updatedAt\":\"2026-11-25T15:26:22.981Z\",\"_links\":{\"self\":{\"href\":\"/api/v3/types/1\",\"title\":\"Task\"}}},\"priority\":{\"_type\":\"Priority\",\"id\":8,\"name\":\"Normal\",\"position\":2,\"color\":\"#74C0FC\",\"isDefault\":true,\"isActive\":true,\"_links\":{\"self\":{\"href\":\"/api/v3/priorities/8\",\"title\":\"Normal\"}}},\"project\":{\"favorited\":false,\"_type\":\"Project\",\"id\":1,\"identifier\":\"stage2-qual-proj\",\"name\":\"Stage 2 Qualification Project\",\"active\":true,\"public\":false,\"description\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"createdAt\":\"2026-11-25T15:26:28.957Z\",\"updatedAt\":\"2026-11-25T15:26:29.240Z\",\"statusExplanation\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"_links\":{\"self\":{\"href\":\"/api/v3/projects/1\",\"title\":\"Stage 2 Qualification Project\"},\"createWorkPackage\":{\"href\":\"/api/v3/workspaces/1/work_packages/form\",\"method\":\"post\"},\"createWorkPackageImmediately\":{\"href\":\"/api/v3/workspaces/1/work_packages\",\"method\":\"post\"},\"workPackages\":{\"href\":\"/api/v3/workspaces/1/work_packages\"},\"categories\":{\"href\":\"/api/v3/workspaces/1/categories\"},\"versions\":{\"href\":\"/api/v3/workspaces/1/versions\"},\"types\":{\"href\":\"/api/v3/workspaces/1/types\"},\"favor\":{\"method\":\"post\",\"href\":\"/api/v3/workspaces/1/favorite\"},\"schema\":{\"href\":\"/api/v3/workspaces/schema\"},\"status\":{\"href\":null},\"ancestors\":[],\"projectStorages\":{\"href\":\"/api/v3/project_storages?filters=%5B%7B%22projectId%22%3A%7B%22operator%22%3A%22%3D%22%2C%22values%22%3A%5B%221%22%5D%7D%7D%5D\"},\"parent\":{\"href\":null}}},\"status\":{\"_type\":\"Status\",\"id\":15,\"name\":\"Stage2New\",\"isClosed\":false,\"color\":null,\"isDefault\":true,\"isReadonly\":false,\"excludedFromTotals\":false,\"defaultDoneRatio\":0,\"position\":15,\"_links\":{\"self\":{\"href\":\"/api/v3/statuses/15\",\"title\":\"Stage2New\"}}},\"author\":{\"_type\":\"User\",\"id\":5,\"name\":\"Stage2 Author\",\"createdAt\":\"2026-11-25T15:26:29.369Z\",\"updatedAt\":\"2026-11-25T15:26:29.369Z\",\"login\":\"stage2_author\",\"firstName\":\"Stage2\",\"lastName\":\"Author\",\"email\":\"stage2_author@local.invalid\",\"avatar\":\"http://gravatar.com/",
+      "response_body_chars": 5227,
+      "transport_error": null,
+      "started_utc": "2026-11-25T15:28:21Z",
+      "elapsed_seconds": 0.968,
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "database read before the workflow: work package",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_old_qual -At -c \"SELECT row_to_json(t) FROM (SELECT w.id, w.subject, to_jsonb(w)->'version_id' AS version_id, w.lock_version, (SELECT count(*) FROM journals j WHERE j.journable_type = 'WorkPackage' AND j.journable_id = w.id) AS journal_count FROM work_packages w WHERE w.id = 1) t\"",
+      "exit_code": 0,
+      "stdout": "{\"id\":1,\"subject\":\"W (gate A)\",\"version_id\":null,\"lock_version\":0,\"journal_count\":1}\n",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:28:22Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "database read before the workflow: work_package_versions",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_old_qual -At -c \"SELECT row_to_json(t) FROM (SELECT * FROM work_package_versions WHERE work_package_id = 1 ORDER BY id) t\"",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:28:22Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "http",
+      "label": "workflow step 1: GET the work package, read lockVersion",
+      "method": "GET",
+      "base_url": "http://127.0.0.1:28413",
+      "path": "/api/v3/work_packages/1",
+      "request_headers": {
+       "Authorization": "<redacted> (API token of stage2_author)"
+      },
+      "request_body": null,
+      "response_status": 200,
+      "response_body_excerpt": "{\"derivedStartDate\":null,\"derivedDueDate\":null,\"hasProjectAttributes\":false,\"_embedded\":{\"attachments\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/attachments\"}}},\"relations\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/relations\"}}},\"type\":{\"_type\":\"Type\",\"id\":1,\"name\":\"Task\",\"color\":\"#1A67A3\",\"position\":1,\"isDefault\":true,\"isMilestone\":false,\"createdAt\":\"2026-11-25T15:26:22.981Z\",\"updatedAt\":\"2026-11-25T15:26:22.981Z\",\"_links\":{\"self\":{\"href\":\"/api/v3/types/1\",\"title\":\"Task\"}}},\"priority\":{\"_type\":\"Priority\",\"id\":8,\"name\":\"Normal\",\"position\":2,\"color\":\"#74C0FC\",\"isDefault\":true,\"isActive\":true,\"_links\":{\"self\":{\"href\":\"/api/v3/priorities/8\",\"title\":\"Normal\"}}},\"project\":{\"favorited\":false,\"_type\":\"Project\",\"id\":1,\"identifier\":\"stage2-qual-proj\",\"name\":\"Stage 2 Qualification Project\",\"active\":true,\"public\":false,\"description\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"createdAt\":\"2026-11-25T15:26:28.957Z\",\"updatedAt\":\"2026-11-25T15:26:29.240Z\",\"statusExplanation\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"_links\":{\"self\":{\"href\":\"/api/v3/projects/1\",\"title\":\"Stage 2 Qualification Project\"},\"createWorkPackage\":{\"href\":\"/api/v3/workspaces/1/work_packages/form\",\"method\":\"post\"},\"createWorkPackageImmediately\":{\"href\":\"/api/v3/workspaces/1/work_packages\",\"method\":\"post\"},\"workPackages\":{\"href\":\"/api/v3/workspaces/1/work_packages\"},\"categories\":{\"href\":\"/api/v3/workspaces/1/categories\"},\"versions\":{\"href\":\"/api/v3/workspaces/1/versions\"},\"types\":{\"href\":\"/api/v3/workspaces/1/types\"},\"favor\":{\"method\":\"post\",\"href\":\"/api/v3/workspaces/1/favorite\"},\"schema\":{\"href\":\"/api/v3/workspaces/schema\"},\"status\":{\"href\":null},\"ancestors\":[],\"projectStorages\":{\"href\":\"/api/v3/project_storages?filters=%5B%7B%22projectId%22%3A%7B%22operator%22%3A%22%3D%22%2C%22values%22%3A%5B%221%22%5D%7D%7D%5D\"},\"parent\":{\"href\":null}}},\"status\":{\"_type\":\"Status\",\"id\":15,\"name\":\"Stage2New\",\"isClosed\":false,\"color\":null,\"isDefault\":true,\"isReadonly\":false,\"excludedFromTotals\":false,\"defaultDoneRatio\":0,\"position\":15,\"_links\":{\"self\":{\"href\":\"/api/v3/statuses/15\",\"title\":\"Stage2New\"}}},\"author\":{\"_type\":\"User\",\"id\":5,\"name\":\"Stage2 Author\",\"createdAt\":\"2026-11-25T15:26:29.369Z\",\"updatedAt\":\"2026-11-25T15:26:29.369Z\",\"login\":\"stage2_author\",\"firstName\":\"Stage2\",\"lastName\":\"Author\",\"email\":\"stage2_author@local.invalid\",\"avatar\":\"http://gravatar.com/",
+      "response_body_chars": 5227,
+      "transport_error": null,
+      "started_utc": "2026-11-25T15:28:22Z",
+      "elapsed_seconds": 0.179,
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "http",
+      "label": "workflow step 2: PATCH with _links.version",
+      "method": "PATCH",
+      "base_url": "http://127.0.0.1:28413",
+      "path": "/api/v3/work_packages/1",
+      "request_headers": {
+       "Authorization": "<redacted> (API token of stage2_author)",
+       "Content-Type": "application/json"
+      },
+      "request_body": {
+       "lockVersion": 0,
+       "_links": {
+        "version": {
+         "href": "/api/v3/versions/1"
+        }
+       }
+      },
+      "response_status": 200,
+      "response_body_excerpt": "{\"derivedStartDate\":null,\"derivedDueDate\":null,\"hasProjectAttributes\":false,\"_embedded\":{\"attachments\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/attachments\"}}},\"relations\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/relations\"}}},\"type\":{\"_type\":\"Type\",\"id\":1,\"name\":\"Task\",\"color\":\"#1A67A3\",\"position\":1,\"isDefault\":true,\"isMilestone\":false,\"createdAt\":\"2026-11-25T15:26:22.981Z\",\"updatedAt\":\"2026-11-25T15:26:22.981Z\",\"_links\":{\"self\":{\"href\":\"/api/v3/types/1\",\"title\":\"Task\"}}},\"priority\":{\"_type\":\"Priority\",\"id\":8,\"name\":\"Normal\",\"position\":2,\"color\":\"#74C0FC\",\"isDefault\":true,\"isActive\":true,\"_links\":{\"self\":{\"href\":\"/api/v3/priorities/8\",\"title\":\"Normal\"}}},\"project\":{\"favorited\":false,\"_type\":\"Project\",\"id\":1,\"identifier\":\"stage2-qual-proj\",\"name\":\"Stage 2 Qualification Project\",\"active\":true,\"public\":false,\"description\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"createdAt\":\"2026-11-25T15:26:28.957Z\",\"updatedAt\":\"2026-11-25T15:26:29.240Z\",\"statusExplanation\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"_links\":{\"self\":{\"href\":\"/api/v3/projects/1\",\"title\":\"Stage 2 Qualification Project\"},\"createWorkPackage\":{\"href\":\"/api/v3/workspaces/1/work_packages/form\",\"method\":\"post\"},\"createWorkPackageImmediately\":{\"href\":\"/api/v3/workspaces/1/work_packages\",\"method\":\"post\"},\"workPackages\":{\"href\":\"/api/v3/workspaces/1/work_packages\"},\"categories\":{\"href\":\"/api/v3/workspaces/1/categories\"},\"versions\":{\"href\":\"/api/v3/workspaces/1/versions\"},\"types\":{\"href\":\"/api/v3/workspaces/1/types\"},\"favor\":{\"method\":\"post\",\"href\":\"/api/v3/workspaces/1/favorite\"},\"schema\":{\"href\":\"/api/v3/workspaces/schema\"},\"status\":{\"href\":null},\"ancestors\":[],\"projectStorages\":{\"href\":\"/api/v3/project_storages?filters=%5B%7B%22projectId%22%3A%7B%22operator%22%3A%22%3D%22%2C%22values%22%3A%5B%221%22%5D%7D%7D%5D\"},\"parent\":{\"href\":null}}},\"status\":{\"_type\":\"Status\",\"id\":15,\"name\":\"Stage2New\",\"isClosed\":false,\"color\":null,\"isDefault\":true,\"isReadonly\":false,\"excludedFromTotals\":false,\"defaultDoneRatio\":0,\"position\":15,\"_links\":{\"self\":{\"href\":\"/api/v3/statuses/15\",\"title\":\"Stage2New\"}}},\"author\":{\"_type\":\"User\",\"id\":5,\"name\":\"Stage2 Author\",\"createdAt\":\"2026-11-25T15:26:29.369Z\",\"updatedAt\":\"2026-11-25T15:26:29.369Z\",\"login\":\"stage2_author\",\"firstName\":\"Stage2\",\"lastName\":\"Author\",\"email\":\"stage2_author@local.invalid\",\"avatar\":\"http://gravatar.com/",
+      "response_body_chars": 6323,
+      "transport_error": null,
+      "started_utc": "2026-11-25T15:28:22Z",
+      "elapsed_seconds": 0.321,
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "database read after the workflow: work package",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_old_qual -At -c \"SELECT row_to_json(t) FROM (SELECT w.id, w.subject, to_jsonb(w)->'version_id' AS version_id, w.lock_version, (SELECT count(*) FROM journals j WHERE j.journable_type = 'WorkPackage' AND j.journable_id = w.id) AS journal_count FROM work_packages w WHERE w.id = 1) t\"",
+      "exit_code": 0,
+      "stdout": "{\"id\":1,\"subject\":\"W (gate A)\",\"version_id\":1,\"lock_version\":1,\"journal_count\":1}\n",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:28:23Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "database read after the workflow: work_package_versions",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_old_qual -At -c \"SELECT row_to_json(t) FROM (SELECT * FROM work_package_versions WHERE work_package_id = 1 ORDER BY id) t\"",
+      "exit_code": 0,
+      "stdout": "{\"id\":1,\"work_package_id\":1,\"version_id\":1,\"kind\":\"target\",\"created_at\":\"2026-11-25T15:28:22.841887+00:00\",\"updated_at\":\"2026-11-25T15:28:22.841887+00:00\"}\n",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:28:23Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "http",
+      "label": "second witness: GET the work package with another account",
+      "method": "GET",
+      "base_url": "http://127.0.0.1:28413",
+      "path": "/api/v3/work_packages/1",
+      "request_headers": {
+       "Authorization": "<redacted> (API token of stage2_approver)"
+      },
+      "request_body": null,
+      "response_status": 200,
+      "response_body_excerpt": "{\"derivedStartDate\":null,\"derivedDueDate\":null,\"hasProjectAttributes\":false,\"_embedded\":{\"attachments\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/attachments\"}}},\"relations\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/relations\"}}},\"type\":{\"_type\":\"Type\",\"id\":1,\"name\":\"Task\",\"color\":\"#1A67A3\",\"position\":1,\"isDefault\":true,\"isMilestone\":false,\"createdAt\":\"2026-11-25T15:26:22.981Z\",\"updatedAt\":\"2026-11-25T15:26:22.981Z\",\"_links\":{\"self\":{\"href\":\"/api/v3/types/1\",\"title\":\"Task\"}}},\"priority\":{\"_type\":\"Priority\",\"id\":8,\"name\":\"Normal\",\"position\":2,\"color\":\"#74C0FC\",\"isDefault\":true,\"isActive\":true,\"_links\":{\"self\":{\"href\":\"/api/v3/priorities/8\",\"title\":\"Normal\"}}},\"project\":{\"favorited\":false,\"_type\":\"Project\",\"id\":1,\"identifier\":\"stage2-qual-proj\",\"name\":\"Stage 2 Qualification Project\",\"active\":true,\"public\":false,\"description\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"createdAt\":\"2026-11-25T15:26:28.957Z\",\"updatedAt\":\"2026-11-25T15:26:29.240Z\",\"statusExplanation\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"_links\":{\"self\":{\"href\":\"/api/v3/projects/1\",\"title\":\"Stage 2 Qualification Project\"},\"createWorkPackage\":{\"href\":\"/api/v3/workspaces/1/work_packages/form\",\"method\":\"post\"},\"createWorkPackageImmediately\":{\"href\":\"/api/v3/workspaces/1/work_packages\",\"method\":\"post\"},\"workPackages\":{\"href\":\"/api/v3/workspaces/1/work_packages\"},\"categories\":{\"href\":\"/api/v3/workspaces/1/categories\"},\"versions\":{\"href\":\"/api/v3/workspaces/1/versions\"},\"types\":{\"href\":\"/api/v3/workspaces/1/types\"},\"favor\":{\"method\":\"post\",\"href\":\"/api/v3/workspaces/1/favorite\"},\"schema\":{\"href\":\"/api/v3/workspaces/schema\"},\"status\":{\"href\":null},\"ancestors\":[],\"projectStorages\":{\"href\":\"/api/v3/project_storages?filters=%5B%7B%22projectId%22%3A%7B%22operator%22%3A%22%3D%22%2C%22values%22%3A%5B%221%22%5D%7D%7D%5D\"},\"parent\":{\"href\":null}}},\"status\":{\"_type\":\"Status\",\"id\":15,\"name\":\"Stage2New\",\"isClosed\":false,\"color\":null,\"isDefault\":true,\"isReadonly\":false,\"excludedFromTotals\":false,\"defaultDoneRatio\":0,\"position\":15,\"_links\":{\"self\":{\"href\":\"/api/v3/statuses/15\",\"title\":\"Stage2New\"}}},\"author\":{\"_type\":\"User\",\"id\":5,\"name\":\"Stage2 Author\",\"avatar\":\"http://gravatar.com/avatar/3aabcf4780aaeb08503ec0ce4b0deb3a?default=404&secure=false\",\"_links\":{\"self\":{\"href\":\"/api/v3/users/5\",\"title\":\"Stage2 Author\"},\"showUser\":{\"href\":\"/users/5\",\"type\":\"text/html",
+      "response_body_chars": 6129,
+      "transport_error": null,
+      "started_utc": "2026-11-25T15:28:23Z",
+      "elapsed_seconds": 1.04,
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     }
+    ]
+   },
+   "gate_B": {
+    "release_tag": "17.8.0-slim",
+    "database": "op_new_qual",
+    "work_package_id": 1,
+    "version_id": 1,
+    "workflow_requests": [
+     {
+      "method": "GET",
+      "path": "/api/v3/work_packages/1"
+     },
+     {
+      "method": "PATCH",
+      "path": "/api/v3/work_packages/1",
+      "body": {
+       "lockVersion": 0,
+       "_links": {
+        "version": {
+         "href": "/api/v3/versions/1"
+        }
+       }
+      }
+     }
+    ],
+    "workflow_response_status": 200,
+    "reported_success": true,
+    "stored": {
+     "work_packages.version_id": null,
+     "work_package_versions": [],
+     "lock_version_before": 0,
+     "lock_version_after": 0,
+     "journal_count_before": 1,
+     "journal_count_after": 1
+    },
+    "right": {
+     "work_package_versions": [
+      {
+       "work_package_id": 1,
+       "version_id": 1,
+       "kind": "target"
+      }
+     ]
+    },
+    "stored_is_right": false,
+    "second_witness": {
+     "account": "stage2_approver",
+     "status": 200,
+     "_links.version": null,
+     "_links.targetVersions": []
+    },
+    "database_before": {
+     "work_package": {
+      "id": 1,
+      "subject": "W (gate B)",
+      "version_id": null,
+      "lock_version": 0,
+      "journal_count": 1
+     },
+     "work_package_versions": []
+    },
+    "database_after": {
+     "work_package": {
+      "id": 1,
+      "subject": "W (gate B)",
+      "version_id": null,
+      "lock_version": 0,
+      "journal_count": 1
+     },
+     "work_package_versions": []
+    },
+    "overlapped_hold": false,
+    "events": [
+     {
+      "kind": "http",
+      "label": "set-up: create work package W",
+      "method": "POST",
+      "base_url": "http://127.0.0.1:28414",
+      "path": "/api/v3/projects/1/work_packages",
+      "request_headers": {
+       "Authorization": "<redacted> (API token of stage2_author)",
+       "Content-Type": "application/json"
+      },
+      "request_body": {
+       "subject": "W (gate B)"
+      },
+      "response_status": 201,
+      "response_body_excerpt": "{\"derivedStartDate\":null,\"derivedDueDate\":null,\"hasProjectAttributes\":false,\"_embedded\":{\"attachments\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/attachments\"}}},\"relations\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/relations\"}}},\"type\":{\"_type\":\"Type\",\"id\":1,\"name\":\"Task\",\"ownName\":\"Task\",\"color\":\"#1A67A3\",\"position\":1,\"isDefault\":true,\"isMilestone\":false,\"createdAt\":\"2026-11-25T15:26:59.545Z\",\"updatedAt\":\"2026-11-25T15:26:59.545Z\",\"_links\":{\"self\":{\"href\":\"/api/v3/types/1\",\"title\":\"Task\"}}},\"priority\":{\"_type\":\"Priority\",\"id\":8,\"name\":\"Normal\",\"position\":2,\"color\":\"#74C0FC\",\"isDefault\":true,\"isActive\":true,\"_links\":{\"self\":{\"href\":\"/api/v3/priorities/8\",\"title\":\"Normal\"}}},\"project\":{\"favorited\":false,\"_type\":\"Project\",\"id\":1,\"identifier\":\"stage2-qual-proj\",\"name\":\"Stage 2 Qualification Project\",\"active\":true,\"public\":false,\"description\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"createdAt\":\"2026-11-25T15:27:02.878Z\",\"updatedAt\":\"2026-11-25T15:27:03.193Z\",\"statusExplanation\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"_links\":{\"self\":{\"href\":\"/api/v3/projects/1\",\"title\":\"Stage 2 Qualification Project\"},\"createWorkPackage\":{\"href\":\"/api/v3/workspaces/1/work_packages/form\",\"method\":\"post\"},\"createWorkPackageImmediately\":{\"href\":\"/api/v3/workspaces/1/work_packages\",\"method\":\"post\"},\"workPackages\":{\"href\":\"/api/v3/workspaces/1/work_packages\"},\"categories\":{\"href\":\"/api/v3/workspaces/1/categories\"},\"versions\":{\"href\":\"/api/v3/workspaces/1/versions\"},\"types\":{\"href\":\"/api/v3/workspaces/1/types\"},\"favor\":{\"method\":\"post\",\"href\":\"/api/v3/workspaces/1/favorite\"},\"schema\":{\"href\":\"/api/v3/workspaces/schema\"},\"status\":{\"href\":null},\"ancestors\":[],\"projectStorages\":{\"href\":\"/api/v3/project_storages?filters=%5B%7B%22projectId%22%3A%7B%22operator%22%3A%22%3D%22%2C%22values%22%3A%5B%221%22%5D%7D%7D%5D\"},\"parent\":{\"href\":null}}},\"status\":{\"_type\":\"Status\",\"id\":15,\"name\":\"Stage2New\",\"isClosed\":false,\"color\":null,\"isDefault\":true,\"isReadonly\":false,\"excludedFromTotals\":false,\"defaultDoneRatio\":0,\"position\":15,\"_links\":{\"self\":{\"href\":\"/api/v3/statuses/15\",\"title\":\"Stage2New\"}}},\"author\":{\"_type\":\"User\",\"id\":5,\"name\":\"Stage2 Author\",\"createdAt\":\"2026-11-25T15:27:03.307Z\",\"updatedAt\":\"2026-11-25T15:27:03.307Z\",\"login\":\"stage2_author\",\"firstName\":\"Stage2\",\"lastName\":\"Author\",\"email\":\"stage2_author@local.invalid\",\"avatar\":\"htt",
+      "response_body_chars": 5220,
+      "transport_error": null,
+      "started_utc": "2026-11-25T15:28:24Z",
+      "elapsed_seconds": 1.838,
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "database read before the workflow: work package",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_new_qual -At -c \"SELECT row_to_json(t) FROM (SELECT w.id, w.subject, to_jsonb(w)->'version_id' AS version_id, w.lock_version, (SELECT count(*) FROM journals j WHERE j.journable_type = 'WorkPackage' AND j.journable_id = w.id) AS journal_count FROM work_packages w WHERE w.id = 1) t\"",
+      "exit_code": 0,
+      "stdout": "{\"id\":1,\"subject\":\"W (gate B)\",\"version_id\":null,\"lock_version\":0,\"journal_count\":1}\n",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:28:26Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "database read before the workflow: work_package_versions",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_new_qual -At -c \"SELECT row_to_json(t) FROM (SELECT * FROM work_package_versions WHERE work_package_id = 1 ORDER BY id) t\"",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:28:26Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "http",
+      "label": "workflow step 1: GET the work package, read lockVersion",
+      "method": "GET",
+      "base_url": "http://127.0.0.1:28414",
+      "path": "/api/v3/work_packages/1",
+      "request_headers": {
+       "Authorization": "<redacted> (API token of stage2_author)"
+      },
+      "request_body": null,
+      "response_status": 200,
+      "response_body_excerpt": "{\"derivedStartDate\":null,\"derivedDueDate\":null,\"hasProjectAttributes\":false,\"_embedded\":{\"attachments\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/attachments\"}}},\"relations\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/relations\"}}},\"type\":{\"_type\":\"Type\",\"id\":1,\"name\":\"Task\",\"ownName\":\"Task\",\"color\":\"#1A67A3\",\"position\":1,\"isDefault\":true,\"isMilestone\":false,\"createdAt\":\"2026-11-25T15:26:59.545Z\",\"updatedAt\":\"2026-11-25T15:26:59.545Z\",\"_links\":{\"self\":{\"href\":\"/api/v3/types/1\",\"title\":\"Task\"}}},\"priority\":{\"_type\":\"Priority\",\"id\":8,\"name\":\"Normal\",\"position\":2,\"color\":\"#74C0FC\",\"isDefault\":true,\"isActive\":true,\"_links\":{\"self\":{\"href\":\"/api/v3/priorities/8\",\"title\":\"Normal\"}}},\"project\":{\"favorited\":false,\"_type\":\"Project\",\"id\":1,\"identifier\":\"stage2-qual-proj\",\"name\":\"Stage 2 Qualification Project\",\"active\":true,\"public\":false,\"description\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"createdAt\":\"2026-11-25T15:27:02.878Z\",\"updatedAt\":\"2026-11-25T15:27:03.193Z\",\"statusExplanation\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"_links\":{\"self\":{\"href\":\"/api/v3/projects/1\",\"title\":\"Stage 2 Qualification Project\"},\"createWorkPackage\":{\"href\":\"/api/v3/workspaces/1/work_packages/form\",\"method\":\"post\"},\"createWorkPackageImmediately\":{\"href\":\"/api/v3/workspaces/1/work_packages\",\"method\":\"post\"},\"workPackages\":{\"href\":\"/api/v3/workspaces/1/work_packages\"},\"categories\":{\"href\":\"/api/v3/workspaces/1/categories\"},\"versions\":{\"href\":\"/api/v3/workspaces/1/versions\"},\"types\":{\"href\":\"/api/v3/workspaces/1/types\"},\"favor\":{\"method\":\"post\",\"href\":\"/api/v3/workspaces/1/favorite\"},\"schema\":{\"href\":\"/api/v3/workspaces/schema\"},\"status\":{\"href\":null},\"ancestors\":[],\"projectStorages\":{\"href\":\"/api/v3/project_storages?filters=%5B%7B%22projectId%22%3A%7B%22operator%22%3A%22%3D%22%2C%22values%22%3A%5B%221%22%5D%7D%7D%5D\"},\"parent\":{\"href\":null}}},\"status\":{\"_type\":\"Status\",\"id\":15,\"name\":\"Stage2New\",\"isClosed\":false,\"color\":null,\"isDefault\":true,\"isReadonly\":false,\"excludedFromTotals\":false,\"defaultDoneRatio\":0,\"position\":15,\"_links\":{\"self\":{\"href\":\"/api/v3/statuses/15\",\"title\":\"Stage2New\"}}},\"author\":{\"_type\":\"User\",\"id\":5,\"name\":\"Stage2 Author\",\"createdAt\":\"2026-11-25T15:27:03.307Z\",\"updatedAt\":\"2026-11-25T15:27:03.307Z\",\"login\":\"stage2_author\",\"firstName\":\"Stage2\",\"lastName\":\"Author\",\"email\":\"stage2_author@local.invalid\",\"avatar\":\"htt",
+      "response_body_chars": 5220,
+      "transport_error": null,
+      "started_utc": "2026-11-25T15:28:26Z",
+      "elapsed_seconds": 1.272,
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "http",
+      "label": "workflow step 2: PATCH with _links.version",
+      "method": "PATCH",
+      "base_url": "http://127.0.0.1:28414",
+      "path": "/api/v3/work_packages/1",
+      "request_headers": {
+       "Authorization": "<redacted> (API token of stage2_author)",
+       "Content-Type": "application/json"
+      },
+      "request_body": {
+       "lockVersion": 0,
+       "_links": {
+        "version": {
+         "href": "/api/v3/versions/1"
+        }
+       }
+      },
+      "response_status": 200,
+      "response_body_excerpt": "{\"derivedStartDate\":null,\"derivedDueDate\":null,\"hasProjectAttributes\":false,\"_embedded\":{\"attachments\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/attachments\"}}},\"relations\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/relations\"}}},\"type\":{\"_type\":\"Type\",\"id\":1,\"name\":\"Task\",\"ownName\":\"Task\",\"color\":\"#1A67A3\",\"position\":1,\"isDefault\":true,\"isMilestone\":false,\"createdAt\":\"2026-11-25T15:26:59.545Z\",\"updatedAt\":\"2026-11-25T15:26:59.545Z\",\"_links\":{\"self\":{\"href\":\"/api/v3/types/1\",\"title\":\"Task\"}}},\"priority\":{\"_type\":\"Priority\",\"id\":8,\"name\":\"Normal\",\"position\":2,\"color\":\"#74C0FC\",\"isDefault\":true,\"isActive\":true,\"_links\":{\"self\":{\"href\":\"/api/v3/priorities/8\",\"title\":\"Normal\"}}},\"project\":{\"favorited\":false,\"_type\":\"Project\",\"id\":1,\"identifier\":\"stage2-qual-proj\",\"name\":\"Stage 2 Qualification Project\",\"active\":true,\"public\":false,\"description\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"createdAt\":\"2026-11-25T15:27:02.878Z\",\"updatedAt\":\"2026-11-25T15:27:03.193Z\",\"statusExplanation\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"_links\":{\"self\":{\"href\":\"/api/v3/projects/1\",\"title\":\"Stage 2 Qualification Project\"},\"createWorkPackage\":{\"href\":\"/api/v3/workspaces/1/work_packages/form\",\"method\":\"post\"},\"createWorkPackageImmediately\":{\"href\":\"/api/v3/workspaces/1/work_packages\",\"method\":\"post\"},\"workPackages\":{\"href\":\"/api/v3/workspaces/1/work_packages\"},\"categories\":{\"href\":\"/api/v3/workspaces/1/categories\"},\"versions\":{\"href\":\"/api/v3/workspaces/1/versions\"},\"types\":{\"href\":\"/api/v3/workspaces/1/types\"},\"favor\":{\"method\":\"post\",\"href\":\"/api/v3/workspaces/1/favorite\"},\"schema\":{\"href\":\"/api/v3/workspaces/schema\"},\"status\":{\"href\":null},\"ancestors\":[],\"projectStorages\":{\"href\":\"/api/v3/project_storages?filters=%5B%7B%22projectId%22%3A%7B%22operator%22%3A%22%3D%22%2C%22values%22%3A%5B%221%22%5D%7D%7D%5D\"},\"parent\":{\"href\":null}}},\"status\":{\"_type\":\"Status\",\"id\":15,\"name\":\"Stage2New\",\"isClosed\":false,\"color\":null,\"isDefault\":true,\"isReadonly\":false,\"excludedFromTotals\":false,\"defaultDoneRatio\":0,\"position\":15,\"_links\":{\"self\":{\"href\":\"/api/v3/statuses/15\",\"title\":\"Stage2New\"}}},\"author\":{\"_type\":\"User\",\"id\":5,\"name\":\"Stage2 Author\",\"createdAt\":\"2026-11-25T15:27:03.307Z\",\"updatedAt\":\"2026-11-25T15:27:03.307Z\",\"login\":\"stage2_author\",\"firstName\":\"Stage2\",\"lastName\":\"Author\",\"email\":\"stage2_author@local.invalid\",\"avatar\":\"htt",
+      "response_body_chars": 5220,
+      "transport_error": null,
+      "started_utc": "2026-11-25T15:28:27Z",
+      "elapsed_seconds": 0.626,
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "database read after the workflow: work package",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_new_qual -At -c \"SELECT row_to_json(t) FROM (SELECT w.id, w.subject, to_jsonb(w)->'version_id' AS version_id, w.lock_version, (SELECT count(*) FROM journals j WHERE j.journable_type = 'WorkPackage' AND j.journable_id = w.id) AS journal_count FROM work_packages w WHERE w.id = 1) t\"",
+      "exit_code": 0,
+      "stdout": "{\"id\":1,\"subject\":\"W (gate B)\",\"version_id\":null,\"lock_version\":0,\"journal_count\":1}\n",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:28:28Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "database read after the workflow: work_package_versions",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_new_qual -At -c \"SELECT row_to_json(t) FROM (SELECT * FROM work_package_versions WHERE work_package_id = 1 ORDER BY id) t\"",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:28:28Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "http",
+      "label": "second witness: GET the work package with another account",
+      "method": "GET",
+      "base_url": "http://127.0.0.1:28414",
+      "path": "/api/v3/work_packages/1",
+      "request_headers": {
+       "Authorization": "<redacted> (API token of stage2_approver)"
+      },
+      "request_body": null,
+      "response_status": 200,
+      "response_body_excerpt": "{\"derivedStartDate\":null,\"derivedDueDate\":null,\"hasProjectAttributes\":false,\"_embedded\":{\"attachments\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/attachments\"}}},\"relations\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/1/relations\"}}},\"type\":{\"_type\":\"Type\",\"id\":1,\"name\":\"Task\",\"ownName\":\"Task\",\"color\":\"#1A67A3\",\"position\":1,\"isDefault\":true,\"isMilestone\":false,\"createdAt\":\"2026-11-25T15:26:59.545Z\",\"updatedAt\":\"2026-11-25T15:26:59.545Z\",\"_links\":{\"self\":{\"href\":\"/api/v3/types/1\",\"title\":\"Task\"}}},\"priority\":{\"_type\":\"Priority\",\"id\":8,\"name\":\"Normal\",\"position\":2,\"color\":\"#74C0FC\",\"isDefault\":true,\"isActive\":true,\"_links\":{\"self\":{\"href\":\"/api/v3/priorities/8\",\"title\":\"Normal\"}}},\"project\":{\"favorited\":false,\"_type\":\"Project\",\"id\":1,\"identifier\":\"stage2-qual-proj\",\"name\":\"Stage 2 Qualification Project\",\"active\":true,\"public\":false,\"description\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"createdAt\":\"2026-11-25T15:27:02.878Z\",\"updatedAt\":\"2026-11-25T15:27:03.193Z\",\"statusExplanation\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"_links\":{\"self\":{\"href\":\"/api/v3/projects/1\",\"title\":\"Stage 2 Qualification Project\"},\"createWorkPackage\":{\"href\":\"/api/v3/workspaces/1/work_packages/form\",\"method\":\"post\"},\"createWorkPackageImmediately\":{\"href\":\"/api/v3/workspaces/1/work_packages\",\"method\":\"post\"},\"workPackages\":{\"href\":\"/api/v3/workspaces/1/work_packages\"},\"categories\":{\"href\":\"/api/v3/workspaces/1/categories\"},\"versions\":{\"href\":\"/api/v3/workspaces/1/versions\"},\"types\":{\"href\":\"/api/v3/workspaces/1/types\"},\"favor\":{\"method\":\"post\",\"href\":\"/api/v3/workspaces/1/favorite\"},\"schema\":{\"href\":\"/api/v3/workspaces/schema\"},\"status\":{\"href\":null},\"ancestors\":[],\"projectStorages\":{\"href\":\"/api/v3/project_storages?filters=%5B%7B%22projectId%22%3A%7B%22operator%22%3A%22%3D%22%2C%22values%22%3A%5B%221%22%5D%7D%7D%5D\"},\"parent\":{\"href\":null}}},\"status\":{\"_type\":\"Status\",\"id\":15,\"name\":\"Stage2New\",\"isClosed\":false,\"color\":null,\"isDefault\":true,\"isReadonly\":false,\"excludedFromTotals\":false,\"defaultDoneRatio\":0,\"position\":15,\"_links\":{\"self\":{\"href\":\"/api/v3/statuses/15\",\"title\":\"Stage2New\"}}},\"author\":{\"_type\":\"User\",\"id\":5,\"name\":\"Stage2 Author\",\"avatar\":\"http://gravatar.com/avatar/3aabcf4780aaeb08503ec0ce4b0deb3a?default=404&secure=false\",\"_links\":{\"self\":{\"href\":\"/api/v3/users/5\",\"title\":\"Stage2 Author\"},\"showUser\":{\"href\":\"/users/5\",",
+      "response_body_chars": 5026,
+      "transport_error": null,
+      "started_utc": "2026-11-25T15:28:28Z",
+      "elapsed_seconds": 0.23,
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     }
+    ]
+   },
+   "gate_C": {
+    "release_tag": "17.8.0-slim",
+    "database": "op_new_qual",
+    "work_package_id": 2,
+    "version_id": 1,
+    "workflow_requests": [
+     {
+      "method": "GET",
+      "path": "/api/v3/work_packages/2"
+     },
+     {
+      "method": "PATCH",
+      "path": "/api/v3/work_packages/2",
+      "body": {
+       "lockVersion": 0,
+       "_links": {
+        "targetVersions": [
+         {
+          "href": "/api/v3/versions/1"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "workflow_response_status": 200,
+    "reported_success": true,
+    "stored": {
+     "work_packages.version_id": null,
+     "work_package_versions": [
+      {
+       "work_package_id": 2,
+       "version_id": 1,
+       "kind": "target"
+      }
+     ],
+     "lock_version_before": 0,
+     "lock_version_after": 0,
+     "journal_count_before": 1,
+     "journal_count_after": 1
+    },
+    "right": {
+     "work_package_versions": [
+      {
+       "work_package_id": 2,
+       "version_id": 1,
+       "kind": "target"
+      }
+     ]
+    },
+    "stored_is_right": true,
+    "second_witness": {
+     "account": "stage2_approver",
+     "status": 200,
+     "_links.version": null,
+     "_links.targetVersions": [
+      {
+       "href": "/api/v3/versions/1",
+       "title": "Sprint 3"
+      }
+     ]
+    },
+    "database_before": {
+     "work_package": {
+      "id": 2,
+      "subject": "W (gate C)",
+      "version_id": null,
+      "lock_version": 0,
+      "journal_count": 1
+     },
+     "work_package_versions": []
+    },
+    "database_after": {
+     "work_package": {
+      "id": 2,
+      "subject": "W (gate C)",
+      "version_id": null,
+      "lock_version": 0,
+      "journal_count": 1
+     },
+     "work_package_versions": [
+      {
+       "id": 1,
+       "work_package_id": 2,
+       "version_id": 1,
+       "kind": "target",
+       "created_at": "2026-11-25T15:28:29.77781+00:00",
+       "updated_at": "2026-11-25T15:28:29.77781+00:00"
+      }
+     ]
+    },
+    "overlapped_hold": false,
+    "events": [
+     {
+      "kind": "http",
+      "label": "set-up: create work package W",
+      "method": "POST",
+      "base_url": "http://127.0.0.1:28414",
+      "path": "/api/v3/projects/1/work_packages",
+      "request_headers": {
+       "Authorization": "<redacted> (API token of stage2_author)",
+       "Content-Type": "application/json"
+      },
+      "request_body": {
+       "subject": "W (gate C)"
+      },
+      "response_status": 201,
+      "response_body_excerpt": "{\"derivedStartDate\":null,\"derivedDueDate\":null,\"hasProjectAttributes\":false,\"_embedded\":{\"attachments\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/2/attachments\"}}},\"relations\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/2/relations\"}}},\"type\":{\"_type\":\"Type\",\"id\":1,\"name\":\"Task\",\"ownName\":\"Task\",\"color\":\"#1A67A3\",\"position\":1,\"isDefault\":true,\"isMilestone\":false,\"createdAt\":\"2026-11-25T15:26:59.545Z\",\"updatedAt\":\"2026-11-25T15:26:59.545Z\",\"_links\":{\"self\":{\"href\":\"/api/v3/types/1\",\"title\":\"Task\"}}},\"priority\":{\"_type\":\"Priority\",\"id\":8,\"name\":\"Normal\",\"position\":2,\"color\":\"#74C0FC\",\"isDefault\":true,\"isActive\":true,\"_links\":{\"self\":{\"href\":\"/api/v3/priorities/8\",\"title\":\"Normal\"}}},\"project\":{\"favorited\":false,\"_type\":\"Project\",\"id\":1,\"identifier\":\"stage2-qual-proj\",\"name\":\"Stage 2 Qualification Project\",\"active\":true,\"public\":false,\"description\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"createdAt\":\"2026-11-25T15:27:02.878Z\",\"updatedAt\":\"2026-11-25T15:27:03.193Z\",\"statusExplanation\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"_links\":{\"self\":{\"href\":\"/api/v3/projects/1\",\"title\":\"Stage 2 Qualification Project\"},\"createWorkPackage\":{\"href\":\"/api/v3/workspaces/1/work_packages/form\",\"method\":\"post\"},\"createWorkPackageImmediately\":{\"href\":\"/api/v3/workspaces/1/work_packages\",\"method\":\"post\"},\"workPackages\":{\"href\":\"/api/v3/workspaces/1/work_packages\"},\"categories\":{\"href\":\"/api/v3/workspaces/1/categories\"},\"versions\":{\"href\":\"/api/v3/workspaces/1/versions\"},\"types\":{\"href\":\"/api/v3/workspaces/1/types\"},\"favor\":{\"method\":\"post\",\"href\":\"/api/v3/workspaces/1/favorite\"},\"schema\":{\"href\":\"/api/v3/workspaces/schema\"},\"status\":{\"href\":null},\"ancestors\":[],\"projectStorages\":{\"href\":\"/api/v3/project_storages?filters=%5B%7B%22projectId%22%3A%7B%22operator%22%3A%22%3D%22%2C%22values%22%3A%5B%221%22%5D%7D%7D%5D\"},\"parent\":{\"href\":null}}},\"status\":{\"_type\":\"Status\",\"id\":15,\"name\":\"Stage2New\",\"isClosed\":false,\"color\":null,\"isDefault\":true,\"isReadonly\":false,\"excludedFromTotals\":false,\"defaultDoneRatio\":0,\"position\":15,\"_links\":{\"self\":{\"href\":\"/api/v3/statuses/15\",\"title\":\"Stage2New\"}}},\"author\":{\"_type\":\"User\",\"id\":5,\"name\":\"Stage2 Author\",\"createdAt\":\"2026-11-25T15:27:03.307Z\",\"updatedAt\":\"2026-11-25T15:27:03.307Z\",\"login\":\"stage2_author\",\"firstName\":\"Stage2\",\"lastName\":\"Author\",\"email\":\"stage2_author@local.invalid\",\"avatar\":\"htt",
+      "response_body_chars": 5220,
+      "transport_error": null,
+      "started_utc": "2026-11-25T15:28:28Z",
+      "elapsed_seconds": 0.388,
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "database read before the workflow: work package",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_new_qual -At -c \"SELECT row_to_json(t) FROM (SELECT w.id, w.subject, to_jsonb(w)->'version_id' AS version_id, w.lock_version, (SELECT count(*) FROM journals j WHERE j.journable_type = 'WorkPackage' AND j.journable_id = w.id) AS journal_count FROM work_packages w WHERE w.id = 2) t\"",
+      "exit_code": 0,
+      "stdout": "{\"id\":2,\"subject\":\"W (gate C)\",\"version_id\":null,\"lock_version\":0,\"journal_count\":1}\n",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:28:29Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "database read before the workflow: work_package_versions",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_new_qual -At -c \"SELECT row_to_json(t) FROM (SELECT * FROM work_package_versions WHERE work_package_id = 2 ORDER BY id) t\"",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:28:29Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "http",
+      "label": "workflow step 1: GET the work package, read lockVersion",
+      "method": "GET",
+      "base_url": "http://127.0.0.1:28414",
+      "path": "/api/v3/work_packages/2",
+      "request_headers": {
+       "Authorization": "<redacted> (API token of stage2_author)"
+      },
+      "request_body": null,
+      "response_status": 200,
+      "response_body_excerpt": "{\"derivedStartDate\":null,\"derivedDueDate\":null,\"hasProjectAttributes\":false,\"_embedded\":{\"attachments\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/2/attachments\"}}},\"relations\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/2/relations\"}}},\"type\":{\"_type\":\"Type\",\"id\":1,\"name\":\"Task\",\"ownName\":\"Task\",\"color\":\"#1A67A3\",\"position\":1,\"isDefault\":true,\"isMilestone\":false,\"createdAt\":\"2026-11-25T15:26:59.545Z\",\"updatedAt\":\"2026-11-25T15:26:59.545Z\",\"_links\":{\"self\":{\"href\":\"/api/v3/types/1\",\"title\":\"Task\"}}},\"priority\":{\"_type\":\"Priority\",\"id\":8,\"name\":\"Normal\",\"position\":2,\"color\":\"#74C0FC\",\"isDefault\":true,\"isActive\":true,\"_links\":{\"self\":{\"href\":\"/api/v3/priorities/8\",\"title\":\"Normal\"}}},\"project\":{\"favorited\":false,\"_type\":\"Project\",\"id\":1,\"identifier\":\"stage2-qual-proj\",\"name\":\"Stage 2 Qualification Project\",\"active\":true,\"public\":false,\"description\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"createdAt\":\"2026-11-25T15:27:02.878Z\",\"updatedAt\":\"2026-11-25T15:27:03.193Z\",\"statusExplanation\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"_links\":{\"self\":{\"href\":\"/api/v3/projects/1\",\"title\":\"Stage 2 Qualification Project\"},\"createWorkPackage\":{\"href\":\"/api/v3/workspaces/1/work_packages/form\",\"method\":\"post\"},\"createWorkPackageImmediately\":{\"href\":\"/api/v3/workspaces/1/work_packages\",\"method\":\"post\"},\"workPackages\":{\"href\":\"/api/v3/workspaces/1/work_packages\"},\"categories\":{\"href\":\"/api/v3/workspaces/1/categories\"},\"versions\":{\"href\":\"/api/v3/workspaces/1/versions\"},\"types\":{\"href\":\"/api/v3/workspaces/1/types\"},\"favor\":{\"method\":\"post\",\"href\":\"/api/v3/workspaces/1/favorite\"},\"schema\":{\"href\":\"/api/v3/workspaces/schema\"},\"status\":{\"href\":null},\"ancestors\":[],\"projectStorages\":{\"href\":\"/api/v3/project_storages?filters=%5B%7B%22projectId%22%3A%7B%22operator%22%3A%22%3D%22%2C%22values%22%3A%5B%221%22%5D%7D%7D%5D\"},\"parent\":{\"href\":null}}},\"status\":{\"_type\":\"Status\",\"id\":15,\"name\":\"Stage2New\",\"isClosed\":false,\"color\":null,\"isDefault\":true,\"isReadonly\":false,\"excludedFromTotals\":false,\"defaultDoneRatio\":0,\"position\":15,\"_links\":{\"self\":{\"href\":\"/api/v3/statuses/15\",\"title\":\"Stage2New\"}}},\"author\":{\"_type\":\"User\",\"id\":5,\"name\":\"Stage2 Author\",\"createdAt\":\"2026-11-25T15:27:03.307Z\",\"updatedAt\":\"2026-11-25T15:27:03.307Z\",\"login\":\"stage2_author\",\"firstName\":\"Stage2\",\"lastName\":\"Author\",\"email\":\"stage2_author@local.invalid\",\"avatar\":\"htt",
+      "response_body_chars": 5220,
+      "transport_error": null,
+      "started_utc": "2026-11-25T15:28:29Z",
+      "elapsed_seconds": 0.162,
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "http",
+      "label": "workflow step 2: PATCH with _links.targetVersions",
+      "method": "PATCH",
+      "base_url": "http://127.0.0.1:28414",
+      "path": "/api/v3/work_packages/2",
+      "request_headers": {
+       "Authorization": "<redacted> (API token of stage2_author)",
+       "Content-Type": "application/json"
+      },
+      "request_body": {
+       "lockVersion": 0,
+       "_links": {
+        "targetVersions": [
+         {
+          "href": "/api/v3/versions/1"
+         }
+        ]
+       }
+      },
+      "response_status": 200,
+      "response_body_excerpt": "{\"derivedStartDate\":null,\"derivedDueDate\":null,\"hasProjectAttributes\":false,\"_embedded\":{\"attachments\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/2/attachments\"}}},\"relations\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/2/relations\"}}},\"type\":{\"_type\":\"Type\",\"id\":1,\"name\":\"Task\",\"ownName\":\"Task\",\"color\":\"#1A67A3\",\"position\":1,\"isDefault\":true,\"isMilestone\":false,\"createdAt\":\"2026-11-25T15:26:59.545Z\",\"updatedAt\":\"2026-11-25T15:26:59.545Z\",\"_links\":{\"self\":{\"href\":\"/api/v3/types/1\",\"title\":\"Task\"}}},\"priority\":{\"_type\":\"Priority\",\"id\":8,\"name\":\"Normal\",\"position\":2,\"color\":\"#74C0FC\",\"isDefault\":true,\"isActive\":true,\"_links\":{\"self\":{\"href\":\"/api/v3/priorities/8\",\"title\":\"Normal\"}}},\"project\":{\"favorited\":false,\"_type\":\"Project\",\"id\":1,\"identifier\":\"stage2-qual-proj\",\"name\":\"Stage 2 Qualification Project\",\"active\":true,\"public\":false,\"description\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"createdAt\":\"2026-11-25T15:27:02.878Z\",\"updatedAt\":\"2026-11-25T15:27:03.193Z\",\"statusExplanation\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"_links\":{\"self\":{\"href\":\"/api/v3/projects/1\",\"title\":\"Stage 2 Qualification Project\"},\"createWorkPackage\":{\"href\":\"/api/v3/workspaces/1/work_packages/form\",\"method\":\"post\"},\"createWorkPackageImmediately\":{\"href\":\"/api/v3/workspaces/1/work_packages\",\"method\":\"post\"},\"workPackages\":{\"href\":\"/api/v3/workspaces/1/work_packages\"},\"categories\":{\"href\":\"/api/v3/workspaces/1/categories\"},\"versions\":{\"href\":\"/api/v3/workspaces/1/versions\"},\"types\":{\"href\":\"/api/v3/workspaces/1/types\"},\"favor\":{\"method\":\"post\",\"href\":\"/api/v3/workspaces/1/favorite\"},\"schema\":{\"href\":\"/api/v3/workspaces/schema\"},\"status\":{\"href\":null},\"ancestors\":[],\"projectStorages\":{\"href\":\"/api/v3/project_storages?filters=%5B%7B%22projectId%22%3A%7B%22operator%22%3A%22%3D%22%2C%22values%22%3A%5B%221%22%5D%7D%7D%5D\"},\"parent\":{\"href\":null}}},\"status\":{\"_type\":\"Status\",\"id\":15,\"name\":\"Stage2New\",\"isClosed\":false,\"color\":null,\"isDefault\":true,\"isReadonly\":false,\"excludedFromTotals\":false,\"defaultDoneRatio\":0,\"position\":15,\"_links\":{\"self\":{\"href\":\"/api/v3/statuses/15\",\"title\":\"Stage2New\"}}},\"author\":{\"_type\":\"User\",\"id\":5,\"name\":\"Stage2 Author\",\"createdAt\":\"2026-11-25T15:27:03.307Z\",\"updatedAt\":\"2026-11-25T15:27:03.307Z\",\"login\":\"stage2_author\",\"firstName\":\"Stage2\",\"lastName\":\"Author\",\"email\":\"stage2_author@local.invalid\",\"avatar\":\"htt",
+      "response_body_chars": 5769,
+      "transport_error": null,
+      "started_utc": "2026-11-25T15:28:29Z",
+      "elapsed_seconds": 0.577,
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "database read after the workflow: work package",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_new_qual -At -c \"SELECT row_to_json(t) FROM (SELECT w.id, w.subject, to_jsonb(w)->'version_id' AS version_id, w.lock_version, (SELECT count(*) FROM journals j WHERE j.journable_type = 'WorkPackage' AND j.journable_id = w.id) AS journal_count FROM work_packages w WHERE w.id = 2) t\"",
+      "exit_code": 0,
+      "stdout": "{\"id\":2,\"subject\":\"W (gate C)\",\"version_id\":null,\"lock_version\":0,\"journal_count\":1}\n",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:28:30Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "command",
+      "label": "database read after the workflow: work_package_versions",
+      "command": "docker exec gammatron-op-pg15 psql -U opqual -d op_new_qual -At -c \"SELECT row_to_json(t) FROM (SELECT * FROM work_package_versions WHERE work_package_id = 2 ORDER BY id) t\"",
+      "exit_code": 0,
+      "stdout": "{\"id\":1,\"work_package_id\":2,\"version_id\":1,\"kind\":\"target\",\"created_at\":\"2026-11-25T15:28:29.77781+00:00\",\"updated_at\":\"2026-11-25T15:28:29.77781+00:00\"}\n",
+      "stderr_tail": "",
+      "started_utc": "2026-11-25T15:28:30Z",
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     },
+     {
+      "kind": "http",
+      "label": "second witness: GET the work package with another account",
+      "method": "GET",
+      "base_url": "http://127.0.0.1:28414",
+      "path": "/api/v3/work_packages/2",
+      "request_headers": {
+       "Authorization": "<redacted> (API token of stage2_approver)"
+      },
+      "request_body": null,
+      "response_status": 200,
+      "response_body_excerpt": "{\"derivedStartDate\":null,\"derivedDueDate\":null,\"hasProjectAttributes\":false,\"_embedded\":{\"attachments\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/2/attachments\"}}},\"relations\":{\"_type\":\"Collection\",\"total\":0,\"count\":0,\"_embedded\":{\"elements\":[]},\"_links\":{\"self\":{\"href\":\"/api/v3/work_packages/2/relations\"}}},\"type\":{\"_type\":\"Type\",\"id\":1,\"name\":\"Task\",\"ownName\":\"Task\",\"color\":\"#1A67A3\",\"position\":1,\"isDefault\":true,\"isMilestone\":false,\"createdAt\":\"2026-11-25T15:26:59.545Z\",\"updatedAt\":\"2026-11-25T15:26:59.545Z\",\"_links\":{\"self\":{\"href\":\"/api/v3/types/1\",\"title\":\"Task\"}}},\"priority\":{\"_type\":\"Priority\",\"id\":8,\"name\":\"Normal\",\"position\":2,\"color\":\"#74C0FC\",\"isDefault\":true,\"isActive\":true,\"_links\":{\"self\":{\"href\":\"/api/v3/priorities/8\",\"title\":\"Normal\"}}},\"project\":{\"favorited\":false,\"_type\":\"Project\",\"id\":1,\"identifier\":\"stage2-qual-proj\",\"name\":\"Stage 2 Qualification Project\",\"active\":true,\"public\":false,\"description\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"createdAt\":\"2026-11-25T15:27:02.878Z\",\"updatedAt\":\"2026-11-25T15:27:03.193Z\",\"statusExplanation\":{\"format\":\"markdown\",\"raw\":\"\",\"html\":\"\"},\"_links\":{\"self\":{\"href\":\"/api/v3/projects/1\",\"title\":\"Stage 2 Qualification Project\"},\"createWorkPackage\":{\"href\":\"/api/v3/workspaces/1/work_packages/form\",\"method\":\"post\"},\"createWorkPackageImmediately\":{\"href\":\"/api/v3/workspaces/1/work_packages\",\"method\":\"post\"},\"workPackages\":{\"href\":\"/api/v3/workspaces/1/work_packages\"},\"categories\":{\"href\":\"/api/v3/workspaces/1/categories\"},\"versions\":{\"href\":\"/api/v3/workspaces/1/versions\"},\"types\":{\"href\":\"/api/v3/workspaces/1/types\"},\"favor\":{\"method\":\"post\",\"href\":\"/api/v3/workspaces/1/favorite\"},\"schema\":{\"href\":\"/api/v3/workspaces/schema\"},\"status\":{\"href\":null},\"ancestors\":[],\"projectStorages\":{\"href\":\"/api/v3/project_storages?filters=%5B%7B%22projectId%22%3A%7B%22operator%22%3A%22%3D%22%2C%22values%22%3A%5B%221%22%5D%7D%7D%5D\"},\"parent\":{\"href\":null}}},\"status\":{\"_type\":\"Status\",\"id\":15,\"name\":\"Stage2New\",\"isClosed\":false,\"color\":null,\"isDefault\":true,\"isReadonly\":false,\"excludedFromTotals\":false,\"defaultDoneRatio\":0,\"position\":15,\"_links\":{\"self\":{\"href\":\"/api/v3/statuses/15\",\"title\":\"Stage2New\"}}},\"author\":{\"_type\":\"User\",\"id\":5,\"name\":\"Stage2 Author\",\"avatar\":\"http://gravatar.com/avatar/3aabcf4780aaeb08503ec0ce4b0deb3a?default=404&secure=false\",\"_links\":{\"self\":{\"href\":\"/api/v3/users/5\",\"title\":\"Stage2 Author\"},\"showUser\":{\"href\":\"/users/5\",",
+      "response_body_chars": 5575,
+      "transport_error": null,
+      "started_utc": "2026-11-25T15:28:30Z",
+      "elapsed_seconds": 0.15,
+      "hold_marker_before": false,
+      "hold_marker_after": false
+     }
+    ]
+   },
+   "process_stopped_gaps": [],
+   "finished_utc": "2026-11-25T15:28:30Z"
+  }
+ ],
+ "status": "incomplete, paused by owner",
+ "repeats_observed": 1
+}

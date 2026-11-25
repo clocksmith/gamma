@@ -1,0 +1,1050 @@
+{
+  "schema": "gammatron-real-upgrade-screen-result/v1",
+  "case_id": "N7",
+  "screen_lane": "iu1-b",
+  "status": "incomplete, paused by owner",
+  "app": "NocoDB (spreadsheet-style database)",
+  "from_version": "0.107.5",
+  "to_version": "0.108.0",
+  "images": [
+    {
+      "ref": "nocodb/nocodb:0.107.5",
+      "sealed_platform": "arm64",
+      "sealed_digest": "sha256:42c217e6c5e986fa481182d5b41d800ebcb026cb14085e8b3a184528aafc3886",
+      "pulled_ref": "nocodb/nocodb@sha256:42c217e6c5e986fa481182d5b41d800ebcb026cb14085e8b3a184528aafc3886",
+      "pulled_by_digest": true,
+      "pull_finished_utc": "2026-11-25T13:34:16Z",
+      "pull_output": "docker.io/nocodb/nocodb@sha256:42c217e6c5e986fa481182d5b41d800ebcb026cb14085e8b3a184528aafc3886",
+      "containers_were_started_from": "nocodb/nocodb@sha256:42c217e6c5e986fa481182d5b41d800ebcb026cb14085e8b3a184528aafc3886",
+      "docker_image_inspect": "not recorded: Docker had been shut down for the pause before this file was assembled, so docker image inspect could not be read again"
+    },
+    {
+      "ref": "nocodb/nocodb:0.108.0",
+      "sealed_platform": "arm64",
+      "sealed_digest": "sha256:67429cad091f2fecd6fc30e6e4c35df62688a4fd227697c6cd817b07a4354473",
+      "pulled_ref": "nocodb/nocodb@sha256:67429cad091f2fecd6fc30e6e4c35df62688a4fd227697c6cd817b07a4354473",
+      "pulled_by_digest": true,
+      "pull_finished_utc": "2026-11-25T13:34:22Z",
+      "pull_output": "docker.io/nocodb/nocodb@sha256:67429cad091f2fecd6fc30e6e4c35df62688a4fd227697c6cd817b07a4354473",
+      "containers_were_started_from": "nocodb/nocodb@sha256:67429cad091f2fecd6fc30e6e4c35df62688a4fd227697c6cd817b07a4354473",
+      "docker_image_inspect": "not recorded: Docker had been shut down for the pause before this file was assembled, so docker image inspect could not be read again"
+    }
+  ],
+  "conditions": {
+    "host": "macOS on Apple Silicon, Docker Desktop, linux/arm64 containers, port bound to 127.0.0.1",
+    "install": "every repeat is a fresh install with a new SQLite file; no in-place upgrade was run",
+    "database": "SQLite file in a labelled Docker volume; read from a copy taken with docker cp",
+    "time_zone": "container time zone UTC (image default, no TZ set); the viewer's browser is set to America/New_York (UTC-4 on 1 June 2023)",
+    "acting_role": "editor@example.test, added to the base by its owner with role editor; the request carries the editor's xc-auth token",
+    "page_read": "headless Chromium through Playwright, signed in as the editor, time zone America/New_York"
+  },
+  "sealed": {
+    "old_workflow_steps": [
+      "POST /api/v1/db/data/noco/{project}/{table} with {\"Title\": \"visit\", \"When\": \"2023-06-01 10:00:00\"} and the xc-auth token",
+      "Treat HTTP 200 as success"
+    ],
+    "correct_path_on_to_version": "Send the instant in UTC: \"When\": \"2023-06-01 14:00:00+00:00\"",
+    "database_outcome": {
+      "read_via": "the SQLite file in the data volume; an API read; and the value the page shows in a browser set to America/New_York",
+      "on_from_version": "column When = '2023-06-01 10:00:00', shown as 10:00",
+      "right_on_to_version": "the instant 2023-06-01T14:00:00Z (shown as 10:00 in New York)",
+      "predicted_stored_on_to_version": "the instant 2023-06-01T10:00:00Z, stored as '2023-06-01 10:00:00+00:00' (shown as 06:00 in New York)"
+    },
+    "prediction_condition": "Shows only for a viewer outside UTC, and the right outcome must be stated as an instant, because the stored text differs only by a zone suffix.",
+    "predicted_disposition": "silent-wrong-write",
+    "prediction_detail": "The POST answers 200. The same text is now taken as 10:00 UTC, so the office sees the visit at 06:00."
+  },
+  "how_far": {
+    "gate_A": "complete: 3 of 3 on fresh 0.107.5 instances",
+    "gate_B": "no observation",
+    "gate_C": "no observation"
+  },
+  "gates": {
+    "A": {
+      "what": "old workflow on the from-version",
+      "pass": "3 of 3",
+      "observations_in_short": [
+        {
+          "repeat": 1,
+          "status": 200,
+          "body": "{\"Id\":1,\"Title\":\"visit\",\"When\":\"2023-06-01 10:00:00\"}",
+          "stored_value": {
+            "sqlite_text": "2023-06-01 10:00:00",
+            "api_read_by_owner": "2023-06-01 10:00:00",
+            "page_shows_in_new_york": "2023-06-01 10:00"
+          },
+          "right_value": {
+            "sqlite_text": "2023-06-01 10:00:00",
+            "page_shows_in_new_york": "2023-06-01 10:00"
+          },
+          "stored_equals_right": true,
+          "page_agrees_with_right": true
+        },
+        {
+          "repeat": 2,
+          "status": 200,
+          "body": "{\"Id\":1,\"Title\":\"visit\",\"When\":\"2023-06-01 10:00:00\"}",
+          "stored_value": {
+            "sqlite_text": "2023-06-01 10:00:00",
+            "api_read_by_owner": "2023-06-01 10:00:00",
+            "page_shows_in_new_york": "2023-06-01 10:00"
+          },
+          "right_value": {
+            "sqlite_text": "2023-06-01 10:00:00",
+            "page_shows_in_new_york": "2023-06-01 10:00"
+          },
+          "stored_equals_right": true,
+          "page_agrees_with_right": true
+        },
+        {
+          "repeat": 3,
+          "status": 200,
+          "body": "{\"Id\":1,\"Title\":\"visit\",\"When\":\"2023-06-01 10:00:00\"}",
+          "stored_value": {
+            "sqlite_text": "2023-06-01 10:00:00",
+            "api_read_by_owner": "2023-06-01 10:00:00",
+            "page_shows_in_new_york": "2023-06-01 10:00"
+          },
+          "right_value": {
+            "sqlite_text": "2023-06-01 10:00:00",
+            "page_shows_in_new_york": "2023-06-01 10:00"
+          },
+          "stored_equals_right": true,
+          "page_agrees_with_right": true
+        }
+      ]
+    },
+    "B": {
+      "what": "identical steps on the to-version",
+      "observations": []
+    },
+    "C": {
+      "what": "correct path on the to-version",
+      "observations": []
+    }
+  },
+  "disposition": null,
+  "disposition_note": "none: gates B and C were not observed. Nothing here says how 0.108.0 treats the old request.",
+  "prediction": {
+    "sealed": "silent-wrong-write",
+    "observed": null,
+    "right": null,
+    "note": "not scored"
+  },
+  "void_attempts": [
+    {
+      "what": "to-version repeat 1, the only 0.108.0 instance started",
+      "void_because": "abandoned when the owner paused the work; no request had been sent to it",
+      "started_utc": "2026-11-25T15:28:46Z",
+      "observed_before_abandoning": {
+        "container": "nocodb/nocodb:0.108.0 started from the sealed arm64 digest with the same environment and volume layout as the 0.107.5 instances (NC_AUTH_JWT_SECRET, NC_DISABLE_TELE=true, NC_PUBLIC_URL, a new empty volume at /usr/app/data)",
+        "state_from_docker_inspect": {
+          "status": "exited",
+          "exit_code": 1,
+          "oom_killed": false,
+          "started_at": "2026-11-25T15:28:46Z",
+          "finished_at": "2026-11-25T15:28:52Z"
+        },
+        "log_line_count": 18,
+        "log_excerpt": [
+          "[Nest] 11  - 11/25/2026, 3:28:52 PM   ERROR [ExceptionHandler] Cannot read properties of undefined (reading '_noco')",
+          "TypeError: Cannot read properties of undefined (reading '_noco')",
+          "at Function.create (/usr/src/app/docker/main.js:1:1313338)",
+          "at Function.createByEnv (/usr/src/app/docker/main.js:1:1313513)",
+          "at InstanceWrapper.useFactory [as metatype] (/usr/src/app/docker/main.js:1:888880)"
+        ]
+      },
+      "not_established": "why the process exited. It was seen once and was not diagnosed: it could be the image on this platform, one of the three environment settings, or a transient fault. One exit is not evidence of a setup-block; that needs repeats and an attempt with the image's default environment."
+    }
+  ],
+  "deviations": [],
+  "flags": [
+    "incomplete"
+  ],
+  "notes": [
+    "The sealed list asks for three reads of the stored value. All three were taken for gate A: SQLite text '2023-06-01 10:00:00' (type text), the owner's API read '2023-06-01 10:00:00', and the grid showing '2023-06-01 10:00' to the editor in a browser set to America/New_York, in 3 of 3 repeats.",
+    "No hold overlapped a gate A observation.",
+    "To resume: run run/N7/run.py with --reuse while the three from-version files are still in the scratch directory, or without it to start again; first find out why the 0.108.0 container exits."
+  ],
+  "repeats": {
+    "from": [
+      {
+        "repeat": 1,
+        "kind": "from",
+        "started_utc": "2026-11-25T15:27:52Z",
+        "observations": [
+          {
+            "gate": "A",
+            "acting_user": "editor@example.test (role editor in the base; org-level viewer)",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, from-version",
+                "utc": "2026-11-25T15:28:02Z",
+                "method": "POST",
+                "path": "/api/v1/db/data/noco/p_0eetnspsia19e4/visits",
+                "request_body": {
+                  "Title": "visit",
+                  "When": "2023-06-01 10:00:00"
+                },
+                "request_header_names": [
+                  "xc-auth"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"Id\":1,\"Title\":\"visit\",\"When\":\"2023-06-01 10:00:00\"}",
+                "response_body_length": 53
+              },
+              {
+                "step": "API read by the owner",
+                "utc": "2026-11-25T15:28:04Z",
+                "method": "GET",
+                "path": "/api/v1/db/data/noco/p_0eetnspsia19e4/visits",
+                "request_body": null,
+                "request_header_names": [
+                  "xc-auth"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"list\":[{\"Id\":1,\"Title\":\"visit\",\"When\":\"2023-06-01 10:00:00\"}],\"pageInfo\":{\"totalRows\":1,\"page\":1,\"pageSize\":25,\"isFirstPage\":true,\"isLastPage\":true}}",
+                "response_body_length": 151
+              }
+            ],
+            "application_answer": {
+              "status": 200,
+              "body_excerpt": "{\"Id\":1,\"Title\":\"visit\",\"When\":\"2023-06-01 10:00:00\"}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 200",
+            "returned_id": 1,
+            "db_before": {
+              "query": "SELECT id, title, \"when\", typeof(\"when\") AS when_type FROM \"nc_k6ww___visits\" ORDER BY id",
+              "rows": [],
+              "table_ddl": "CREATE TABLE `nc_k6ww___visits` (`id` integer  NOT NULL,`title` varchar  ,`when` datetime  , PRIMARY KEY(`id`))"
+            },
+            "db_after": {
+              "query": "SELECT id, title, \"when\", typeof(\"when\") AS when_type FROM \"nc_k6ww___visits\" ORDER BY id",
+              "rows": [
+                {
+                  "id": 1,
+                  "title": "visit",
+                  "when": "2023-06-01 10:00:00",
+                  "when_type": "text"
+                }
+              ],
+              "table_ddl": "CREATE TABLE `nc_k6ww___visits` (`id` integer  NOT NULL,`title` varchar  ,`when` datetime  , PRIMARY KEY(`id`))"
+            },
+            "page_read": {
+              "time_zone_requested": "America/New_York",
+              "browser_time_zone": "America/New_York",
+              "browser_utc_offset_minutes_on_2023_06_01": 240,
+              "url": "/dashboard/#/nc/p_0eetnspsia19e4/table/md_oxy6rwes62xbmd",
+              "when_cells": [
+                {
+                  "testid": "cell-When-0",
+                  "shown": "2023-06-01 10:00"
+                }
+              ],
+              "title_cells": [
+                "visit"
+              ],
+              "ok": true,
+              "done": true
+            },
+            "stored_value": {
+              "sqlite_text": "2023-06-01 10:00:00",
+              "api_read_by_owner": "2023-06-01 10:00:00",
+              "page_shows_in_new_york": "2023-06-01 10:00"
+            },
+            "right_value": {
+              "sqlite_text": "2023-06-01 10:00:00",
+              "page_shows_in_new_york": "2023-06-01 10:00"
+            },
+            "stored_equals_right": true,
+            "page_agrees_with_right": true,
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:28:02Z",
+              "checked_after_utc": "2026-11-25T15:28:10Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "instance": {
+          "image": "nocodb/nocodb:0.107.5",
+          "ready_utc": "2026-11-25T15:28:01Z",
+          "reported_version": "0.107.5",
+          "container_clock": "TZ=[] UTC 2026-11-25T15:28:01Z"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "first user (owner) signs up",
+              "utc": "2026-11-25T15:28:01Z",
+              "method": "POST",
+              "path": "/api/v1/auth/user/signup",
+              "request_body": {
+                "email": "owner@example.test",
+                "password": "<redacted>"
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\"token\":\"<redacted>",
+              "response_body_length": 433
+            },
+            {
+              "step": "second user signs up",
+              "utc": "2026-11-25T15:28:01Z",
+              "method": "POST",
+              "path": "/api/v1/auth/user/signup",
+              "request_body": {
+                "email": "editor@example.test",
+                "password": "<redacted>"
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\"token\":\"<redacted>",
+              "response_body_length": 425
+            },
+            {
+              "step": "owner creates the base",
+              "utc": "2026-11-25T15:28:01Z",
+              "method": "POST",
+              "path": "/api/v1/db/meta/projects/",
+              "request_body": {
+                "title": "Field office"
+              },
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\"is_meta\":1,\"id\":\"p_0eetnspsia19e4\",\"title\":\"Field office\",\"prefix\":\"nc_k6ww__\",\"status\":null,\"description\":null,\"meta\":null,\"color\":null,\"uuid\":null,\"password\":null,\"roles\":null,\"deleted\":0,\"order\":",
+              "response_body_length": 570
+            },
+            {
+              "step": "owner creates table visits with a DateTime column",
+              "utc": "2026-11-25T15:28:01Z",
+              "method": "POST",
+              "path": "/api/v1/db/meta/projects/p_0eetnspsia19e4/tables",
+              "request_body": {
+                "table_name": "visits",
+                "title": "visits",
+                "columns": [
+                  {
+                    "column_name": "id",
+                    "title": "Id",
+                    "uidt": "ID",
+                    "dt": "integer",
+                    "pk": true,
+                    "ai": true,
+                    "rqd": true
+                  },
+                  {
+                    "column_name": "title",
+                    "title": "Title",
+                    "uidt": "SingleLineText",
+                    "pv": true
+                  },
+                  {
+                    "column_name": "when",
+                    "title": "When",
+                    "uidt": "DateTime"
+                  }
+                ]
+              },
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\"id\":\"md_oxy6rwes62xbmd\",\"base_id\":\"ds_vg2yu5tzv1aqwe\",\"project_id\":\"p_0eetnspsia19e4\",\"table_name\":\"nc_k6ww___visits\",\"title\":\"visits\",\"type\":\"table\",\"meta\":null,\"schema\":null,\"enabled\":1,\"mm\":0,\"ta",
+              "response_body_length": 4275
+            },
+            {
+              "step": "owner adds the second user to the base as editor",
+              "utc": "2026-11-25T15:28:02Z",
+              "method": "POST",
+              "path": "/api/v1/db/meta/projects/p_0eetnspsia19e4/users",
+              "request_body": {
+                "email": "editor@example.test",
+                "roles": "editor"
+              },
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\"msg\":\"The user has been invited successfully\"}",
+              "response_body_length": 48
+            },
+            {
+              "step": "editor signs in (xc-auth token)",
+              "utc": "2026-11-25T15:28:02Z",
+              "method": "POST",
+              "path": "/api/v1/auth/user/signin",
+              "request_body": {
+                "email": "editor@example.test",
+                "password": "<redacted>"
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\"token\":\"<redacted>",
+              "response_body_length": 435
+            },
+            {
+              "step": "editor's role in the base",
+              "utc": "2026-11-25T15:28:02Z",
+              "method": "GET",
+              "path": "/api/v1/auth/user/me?project_id=p_0eetnspsia19e4",
+              "request_body": null,
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "",
+              "response_body_length": 704
+            },
+            {
+              "step": "owner lists the base's users",
+              "utc": "2026-11-25T15:28:02Z",
+              "method": "GET",
+              "path": "/api/v1/db/meta/projects/p_0eetnspsia19e4/users",
+              "request_body": null,
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "",
+              "response_body_length": 428
+            }
+          ],
+          "project": "p_0eetnspsia19e4",
+          "table_title": "visits",
+          "table_name": "nc_k6ww___visits",
+          "columns": [
+            {
+              "title": "Id",
+              "column_name": "id",
+              "uidt": "ID",
+              "dt": "integer"
+            },
+            {
+              "title": "Title",
+              "column_name": "title",
+              "uidt": "SingleLineText",
+              "dt": "varchar"
+            },
+            {
+              "title": "When",
+              "column_name": "when",
+              "uidt": "DateTime",
+              "dt": "datetime"
+            }
+          ],
+          "editor_roles_in_base": {
+            "editor": true
+          },
+          "base_users": [
+            {
+              "email": "owner@example.test",
+              "roles": "owner",
+              "main_roles": "org-level-creator,super"
+            },
+            {
+              "email": "editor@example.test",
+              "roles": "editor",
+              "main_roles": "org-level-viewer"
+            }
+          ]
+        },
+        "container_memory": [
+          "iu1b-n7-app\t246.1MiB / 7.653GiB"
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 2,
+        "kind": "from",
+        "started_utc": "2026-11-25T15:28:13Z",
+        "observations": [
+          {
+            "gate": "A",
+            "acting_user": "editor@example.test (role editor in the base; org-level viewer)",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, from-version",
+                "utc": "2026-11-25T15:28:20Z",
+                "method": "POST",
+                "path": "/api/v1/db/data/noco/p_abek3hyrr7uvv3/visits",
+                "request_body": {
+                  "Title": "visit",
+                  "When": "2023-06-01 10:00:00"
+                },
+                "request_header_names": [
+                  "xc-auth"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"Id\":1,\"Title\":\"visit\",\"When\":\"2023-06-01 10:00:00\"}",
+                "response_body_length": 53
+              },
+              {
+                "step": "API read by the owner",
+                "utc": "2026-11-25T15:28:23Z",
+                "method": "GET",
+                "path": "/api/v1/db/data/noco/p_abek3hyrr7uvv3/visits",
+                "request_body": null,
+                "request_header_names": [
+                  "xc-auth"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"list\":[{\"Id\":1,\"Title\":\"visit\",\"When\":\"2023-06-01 10:00:00\"}],\"pageInfo\":{\"totalRows\":1,\"page\":1,\"pageSize\":25,\"isFirstPage\":true,\"isLastPage\":true}}",
+                "response_body_length": 151
+              }
+            ],
+            "application_answer": {
+              "status": 200,
+              "body_excerpt": "{\"Id\":1,\"Title\":\"visit\",\"When\":\"2023-06-01 10:00:00\"}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 200",
+            "returned_id": 1,
+            "db_before": {
+              "query": "SELECT id, title, \"when\", typeof(\"when\") AS when_type FROM \"nc_9dsq___visits\" ORDER BY id",
+              "rows": [],
+              "table_ddl": "CREATE TABLE `nc_9dsq___visits` (`id` integer  NOT NULL,`title` varchar  ,`when` datetime  , PRIMARY KEY(`id`))"
+            },
+            "db_after": {
+              "query": "SELECT id, title, \"when\", typeof(\"when\") AS when_type FROM \"nc_9dsq___visits\" ORDER BY id",
+              "rows": [
+                {
+                  "id": 1,
+                  "title": "visit",
+                  "when": "2023-06-01 10:00:00",
+                  "when_type": "text"
+                }
+              ],
+              "table_ddl": "CREATE TABLE `nc_9dsq___visits` (`id` integer  NOT NULL,`title` varchar  ,`when` datetime  , PRIMARY KEY(`id`))"
+            },
+            "page_read": {
+              "time_zone_requested": "America/New_York",
+              "browser_time_zone": "America/New_York",
+              "browser_utc_offset_minutes_on_2023_06_01": 240,
+              "url": "/dashboard/#/nc/p_abek3hyrr7uvv3/table/md_5g3vwjc7sl691h",
+              "when_cells": [
+                {
+                  "testid": "cell-When-0",
+                  "shown": "2023-06-01 10:00"
+                }
+              ],
+              "title_cells": [
+                "visit"
+              ],
+              "ok": true,
+              "done": true
+            },
+            "stored_value": {
+              "sqlite_text": "2023-06-01 10:00:00",
+              "api_read_by_owner": "2023-06-01 10:00:00",
+              "page_shows_in_new_york": "2023-06-01 10:00"
+            },
+            "right_value": {
+              "sqlite_text": "2023-06-01 10:00:00",
+              "page_shows_in_new_york": "2023-06-01 10:00"
+            },
+            "stored_equals_right": true,
+            "page_agrees_with_right": true,
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:28:20Z",
+              "checked_after_utc": "2026-11-25T15:28:28Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "instance": {
+          "image": "nocodb/nocodb:0.107.5",
+          "ready_utc": "2026-11-25T15:28:20Z",
+          "reported_version": "0.107.5",
+          "container_clock": "TZ=[] UTC 2026-11-25T15:28:20Z"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "first user (owner) signs up",
+              "utc": "2026-11-25T15:28:20Z",
+              "method": "POST",
+              "path": "/api/v1/auth/user/signup",
+              "request_body": {
+                "email": "owner@example.test",
+                "password": "<redacted>"
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\"token\":\"<redacted>",
+              "response_body_length": 433
+            },
+            {
+              "step": "second user signs up",
+              "utc": "2026-11-25T15:28:20Z",
+              "method": "POST",
+              "path": "/api/v1/auth/user/signup",
+              "request_body": {
+                "email": "editor@example.test",
+                "password": "<redacted>"
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\"token\":\"<redacted>",
+              "response_body_length": 425
+            },
+            {
+              "step": "owner creates the base",
+              "utc": "2026-11-25T15:28:20Z",
+              "method": "POST",
+              "path": "/api/v1/db/meta/projects/",
+              "request_body": {
+                "title": "Field office"
+              },
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\"is_meta\":1,\"id\":\"p_abek3hyrr7uvv3\",\"title\":\"Field office\",\"prefix\":\"nc_9dsq__\",\"status\":null,\"description\":null,\"meta\":null,\"color\":null,\"uuid\":null,\"password\":null,\"roles\":null,\"deleted\":0,\"order\":",
+              "response_body_length": 570
+            },
+            {
+              "step": "owner creates table visits with a DateTime column",
+              "utc": "2026-11-25T15:28:20Z",
+              "method": "POST",
+              "path": "/api/v1/db/meta/projects/p_abek3hyrr7uvv3/tables",
+              "request_body": {
+                "table_name": "visits",
+                "title": "visits",
+                "columns": [
+                  {
+                    "column_name": "id",
+                    "title": "Id",
+                    "uidt": "ID",
+                    "dt": "integer",
+                    "pk": true,
+                    "ai": true,
+                    "rqd": true
+                  },
+                  {
+                    "column_name": "title",
+                    "title": "Title",
+                    "uidt": "SingleLineText",
+                    "pv": true
+                  },
+                  {
+                    "column_name": "when",
+                    "title": "When",
+                    "uidt": "DateTime"
+                  }
+                ]
+              },
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\"id\":\"md_5g3vwjc7sl691h\",\"base_id\":\"ds_4opmxtw2y06a2a\",\"project_id\":\"p_abek3hyrr7uvv3\",\"table_name\":\"nc_9dsq___visits\",\"title\":\"visits\",\"type\":\"table\",\"meta\":null,\"schema\":null,\"enabled\":1,\"mm\":0,\"ta",
+              "response_body_length": 4275
+            },
+            {
+              "step": "owner adds the second user to the base as editor",
+              "utc": "2026-11-25T15:28:20Z",
+              "method": "POST",
+              "path": "/api/v1/db/meta/projects/p_abek3hyrr7uvv3/users",
+              "request_body": {
+                "email": "editor@example.test",
+                "roles": "editor"
+              },
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\"msg\":\"The user has been invited successfully\"}",
+              "response_body_length": 48
+            },
+            {
+              "step": "editor signs in (xc-auth token)",
+              "utc": "2026-11-25T15:28:20Z",
+              "method": "POST",
+              "path": "/api/v1/auth/user/signin",
+              "request_body": {
+                "email": "editor@example.test",
+                "password": "<redacted>"
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\"token\":\"<redacted>",
+              "response_body_length": 435
+            },
+            {
+              "step": "editor's role in the base",
+              "utc": "2026-11-25T15:28:20Z",
+              "method": "GET",
+              "path": "/api/v1/auth/user/me?project_id=p_abek3hyrr7uvv3",
+              "request_body": null,
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "",
+              "response_body_length": 704
+            },
+            {
+              "step": "owner lists the base's users",
+              "utc": "2026-11-25T15:28:20Z",
+              "method": "GET",
+              "path": "/api/v1/db/meta/projects/p_abek3hyrr7uvv3/users",
+              "request_body": null,
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "",
+              "response_body_length": 428
+            }
+          ],
+          "project": "p_abek3hyrr7uvv3",
+          "table_title": "visits",
+          "table_name": "nc_9dsq___visits",
+          "columns": [
+            {
+              "title": "Id",
+              "column_name": "id",
+              "uidt": "ID",
+              "dt": "integer"
+            },
+            {
+              "title": "Title",
+              "column_name": "title",
+              "uidt": "SingleLineText",
+              "dt": "varchar"
+            },
+            {
+              "title": "When",
+              "column_name": "when",
+              "uidt": "DateTime",
+              "dt": "datetime"
+            }
+          ],
+          "editor_roles_in_base": {
+            "editor": true
+          },
+          "base_users": [
+            {
+              "email": "owner@example.test",
+              "roles": "owner",
+              "main_roles": "org-level-creator,super"
+            },
+            {
+              "email": "editor@example.test",
+              "roles": "editor",
+              "main_roles": "org-level-viewer"
+            }
+          ]
+        },
+        "container_memory": [
+          "iu1b-n7-app\t210.7MiB / 7.653GiB"
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      },
+      {
+        "repeat": 3,
+        "kind": "from",
+        "started_utc": "2026-11-25T15:28:31Z",
+        "observations": [
+          {
+            "gate": "A",
+            "acting_user": "editor@example.test (role editor in the base; org-level viewer)",
+            "calls": [
+              {
+                "step": "old workflow exactly as sealed, from-version",
+                "utc": "2026-11-25T15:28:36Z",
+                "method": "POST",
+                "path": "/api/v1/db/data/noco/p_elo5x5z46h86p1/visits",
+                "request_body": {
+                  "Title": "visit",
+                  "When": "2023-06-01 10:00:00"
+                },
+                "request_header_names": [
+                  "xc-auth"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"Id\":1,\"Title\":\"visit\",\"When\":\"2023-06-01 10:00:00\"}",
+                "response_body_length": 53
+              },
+              {
+                "step": "API read by the owner",
+                "utc": "2026-11-25T15:28:38Z",
+                "method": "GET",
+                "path": "/api/v1/db/data/noco/p_elo5x5z46h86p1/visits",
+                "request_body": null,
+                "request_header_names": [
+                  "xc-auth"
+                ],
+                "status": 200,
+                "response_body_excerpt": "{\"list\":[{\"Id\":1,\"Title\":\"visit\",\"When\":\"2023-06-01 10:00:00\"}],\"pageInfo\":{\"totalRows\":1,\"page\":1,\"pageSize\":25,\"isFirstPage\":true,\"isLastPage\":true}}",
+                "response_body_length": 151
+              }
+            ],
+            "application_answer": {
+              "status": 200,
+              "body_excerpt": "{\"Id\":1,\"Title\":\"visit\",\"When\":\"2023-06-01 10:00:00\"}"
+            },
+            "reported_success": true,
+            "success_criterion": "HTTP 200",
+            "returned_id": 1,
+            "db_before": {
+              "query": "SELECT id, title, \"when\", typeof(\"when\") AS when_type FROM \"nc_6uhj___visits\" ORDER BY id",
+              "rows": [],
+              "table_ddl": "CREATE TABLE `nc_6uhj___visits` (`id` integer  NOT NULL,`title` varchar  ,`when` datetime  , PRIMARY KEY(`id`))"
+            },
+            "db_after": {
+              "query": "SELECT id, title, \"when\", typeof(\"when\") AS when_type FROM \"nc_6uhj___visits\" ORDER BY id",
+              "rows": [
+                {
+                  "id": 1,
+                  "title": "visit",
+                  "when": "2023-06-01 10:00:00",
+                  "when_type": "text"
+                }
+              ],
+              "table_ddl": "CREATE TABLE `nc_6uhj___visits` (`id` integer  NOT NULL,`title` varchar  ,`when` datetime  , PRIMARY KEY(`id`))"
+            },
+            "page_read": {
+              "time_zone_requested": "America/New_York",
+              "browser_time_zone": "America/New_York",
+              "browser_utc_offset_minutes_on_2023_06_01": 240,
+              "url": "/dashboard/#/nc/p_elo5x5z46h86p1/table/md_mci5b8kajgutdl",
+              "when_cells": [
+                {
+                  "testid": "cell-When-0",
+                  "shown": "2023-06-01 10:00"
+                }
+              ],
+              "title_cells": [
+                "visit"
+              ],
+              "ok": true,
+              "done": true
+            },
+            "stored_value": {
+              "sqlite_text": "2023-06-01 10:00:00",
+              "api_read_by_owner": "2023-06-01 10:00:00",
+              "page_shows_in_new_york": "2023-06-01 10:00"
+            },
+            "right_value": {
+              "sqlite_text": "2023-06-01 10:00:00",
+              "page_shows_in_new_york": "2023-06-01 10:00"
+            },
+            "stored_equals_right": true,
+            "page_agrees_with_right": true,
+            "hold": {
+              "checked_before_utc": "2026-11-25T15:28:36Z",
+              "checked_after_utc": "2026-11-25T15:28:43Z",
+              "hold_overlapped": false,
+              "hold_file_configured": true
+            }
+          }
+        ],
+        "instance": {
+          "image": "nocodb/nocodb:0.107.5",
+          "ready_utc": "2026-11-25T15:28:35Z",
+          "reported_version": "0.107.5",
+          "container_clock": "TZ=[] UTC 2026-11-25T15:28:35Z"
+        },
+        "setup": {
+          "calls": [
+            {
+              "step": "first user (owner) signs up",
+              "utc": "2026-11-25T15:28:35Z",
+              "method": "POST",
+              "path": "/api/v1/auth/user/signup",
+              "request_body": {
+                "email": "owner@example.test",
+                "password": "<redacted>"
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\"token\":\"<redacted>",
+              "response_body_length": 433
+            },
+            {
+              "step": "second user signs up",
+              "utc": "2026-11-25T15:28:36Z",
+              "method": "POST",
+              "path": "/api/v1/auth/user/signup",
+              "request_body": {
+                "email": "editor@example.test",
+                "password": "<redacted>"
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\"token\":\"<redacted>",
+              "response_body_length": 425
+            },
+            {
+              "step": "owner creates the base",
+              "utc": "2026-11-25T15:28:36Z",
+              "method": "POST",
+              "path": "/api/v1/db/meta/projects/",
+              "request_body": {
+                "title": "Field office"
+              },
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\"is_meta\":1,\"id\":\"p_elo5x5z46h86p1\",\"title\":\"Field office\",\"prefix\":\"nc_6uhj__\",\"status\":null,\"description\":null,\"meta\":null,\"color\":null,\"uuid\":null,\"password\":null,\"roles\":null,\"deleted\":0,\"order\":",
+              "response_body_length": 570
+            },
+            {
+              "step": "owner creates table visits with a DateTime column",
+              "utc": "2026-11-25T15:28:36Z",
+              "method": "POST",
+              "path": "/api/v1/db/meta/projects/p_elo5x5z46h86p1/tables",
+              "request_body": {
+                "table_name": "visits",
+                "title": "visits",
+                "columns": [
+                  {
+                    "column_name": "id",
+                    "title": "Id",
+                    "uidt": "ID",
+                    "dt": "integer",
+                    "pk": true,
+                    "ai": true,
+                    "rqd": true
+                  },
+                  {
+                    "column_name": "title",
+                    "title": "Title",
+                    "uidt": "SingleLineText",
+                    "pv": true
+                  },
+                  {
+                    "column_name": "when",
+                    "title": "When",
+                    "uidt": "DateTime"
+                  }
+                ]
+              },
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\"id\":\"md_mci5b8kajgutdl\",\"base_id\":\"ds_gaoiodtfq8mz2v\",\"project_id\":\"p_elo5x5z46h86p1\",\"table_name\":\"nc_6uhj___visits\",\"title\":\"visits\",\"type\":\"table\",\"meta\":null,\"schema\":null,\"enabled\":1,\"mm\":0,\"ta",
+              "response_body_length": 4275
+            },
+            {
+              "step": "owner adds the second user to the base as editor",
+              "utc": "2026-11-25T15:28:36Z",
+              "method": "POST",
+              "path": "/api/v1/db/meta/projects/p_elo5x5z46h86p1/users",
+              "request_body": {
+                "email": "editor@example.test",
+                "roles": "editor"
+              },
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "{\"msg\":\"The user has been invited successfully\"}",
+              "response_body_length": 48
+            },
+            {
+              "step": "editor signs in (xc-auth token)",
+              "utc": "2026-11-25T15:28:36Z",
+              "method": "POST",
+              "path": "/api/v1/auth/user/signin",
+              "request_body": {
+                "email": "editor@example.test",
+                "password": "<redacted>"
+              },
+              "request_header_names": [],
+              "status": 200,
+              "response_body_excerpt": "{\"token\":\"<redacted>",
+              "response_body_length": 435
+            },
+            {
+              "step": "editor's role in the base",
+              "utc": "2026-11-25T15:28:36Z",
+              "method": "GET",
+              "path": "/api/v1/auth/user/me?project_id=p_elo5x5z46h86p1",
+              "request_body": null,
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "",
+              "response_body_length": 704
+            },
+            {
+              "step": "owner lists the base's users",
+              "utc": "2026-11-25T15:28:36Z",
+              "method": "GET",
+              "path": "/api/v1/db/meta/projects/p_elo5x5z46h86p1/users",
+              "request_body": null,
+              "request_header_names": [
+                "xc-auth"
+              ],
+              "status": 200,
+              "response_body_excerpt": "",
+              "response_body_length": 428
+            }
+          ],
+          "project": "p_elo5x5z46h86p1",
+          "table_title": "visits",
+          "table_name": "nc_6uhj___visits",
+          "columns": [
+            {
+              "title": "Id",
+              "column_name": "id",
+              "uidt": "ID",
+              "dt": "integer"
+            },
+            {
+              "title": "Title",
+              "column_name": "title",
+              "uidt": "SingleLineText",
+              "dt": "varchar"
+            },
+            {
+              "title": "When",
+              "column_name": "when",
+              "uidt": "DateTime",
+              "dt": "datetime"
+            }
+          ],
+          "editor_roles_in_base": {
+            "editor": true
+          },
+          "base_users": [
+            {
+              "email": "owner@example.test",
+              "roles": "owner",
+              "main_roles": "org-level-creator,super"
+            },
+            {
+              "email": "editor@example.test",
+              "roles": "editor",
+              "main_roles": "org-level-viewer"
+            }
+          ]
+        },
+        "container_memory": [
+          "iu1b-n7-app\t211.8MiB / 7.653GiB"
+        ],
+        "attempt": 1,
+        "voided_attempts": []
+      }
+    ],
+    "to": []
+  },
+  "times_utc": {
+    "started": "2026-11-25T15:27:43Z",
+    "paused": "2026-11-25T15:31:24Z",
+    "clock": "date -u on the host"
+  },
+  "free_disk_gib_at_pause": 51.8
+}
