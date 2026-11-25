@@ -420,7 +420,7 @@ export function learnRelationalTraceGuard({
             pairPreds.push(intPred);
           }
         }
-      } else if (relational && lv0.type === 'kmap') {
+      } else if (relational && lv0.type === 'kmap' && tailToken(left) === tailToken(right)) {
         const eqMap = Object.freeze({ kind: 'kmap-eq', left, right });
         const lteMap = Object.freeze({ kind: 'kmap-lte', left, right });
         if (posFacts.every(pf => evaluateRelationalPredicate(eqMap, pf) === true)) {

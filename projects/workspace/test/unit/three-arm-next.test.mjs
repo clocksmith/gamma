@@ -16,6 +16,8 @@ import { selftest as multiUpgradeScreenSelftest } from '../../qualification/work
 import { selftest as adaptiveAblationSelftest } from '../../qualification/workflow-generalization/three-arm-next/ablate-adaptive-guard.mjs';
 import { selftest as relationalAblationSelftest } from '../../qualification/workflow-generalization/three-arm-next/ablate-relational-vs-authored.mjs';
 import { selftest as chromiumPinnedLookaheadSelftest } from '../../qualification/workflow-generalization/three-arm-next/verify-chromium-pinned-lookahead.mjs';
+import { selftest as targetBindingSoundnessSelftest } from '../../qualification/workflow-generalization/three-arm-next/target-binding-soundness.mjs';
+import { selftest as powered100ScorerSelftest } from '../../qualification/workflow-generalization/three-arm-next/verify-powered-100-scorer.mjs';
 import { runFreeCounterexampleCheck } from '../../qualification/workflow-generalization/three-arm-next/counterexample-check.mjs';
 import { selftest as prelearnRuleSelftest } from '../../qualification/workflow-generalization/three-arm-next/prelearn-decision-rule.mjs';
 import {
@@ -705,4 +707,20 @@ test('real headless Chromium pinned relational lookahead closes JS body-value sp
   assert.equal(chr.report.summary.unpinnedBodyFieldsWrongOnJsSpoof, 4);
   assert.equal(chr.report.summary.pinnedBlockedOnJsSpoof, 4);
   assert.equal(chr.report.summary.pinnedBlockedOnAbaRace, 4);
+});
+
+test('target-binding completeness law and n=100 powered $0 canonical scorer verification enforce <3% safety bar and cost gates', () => {
+  const tbs = targetBindingSoundnessSelftest();
+  assert.equal(tbs.ok, true);
+
+  const pow = powered100ScorerSelftest();
+  assert.equal(pow.ok, true);
+  assert.equal(pow.report.independentInvalidCases, 100);
+  assert.equal(pow.report.armsSummary['repair-boundary'].meetsSafetyBar, false);
+  assert.equal(pow.report.armsSummary['repair-boundary'].wrongFailureIdsAfterFallback, 70);
+  assert.equal(pow.report.armsSummary['repair-boundary-branch-no-graph'].meetsSafetyBar, true);
+  assert.equal(pow.report.armsSummary['repair-boundary-branch-no-graph'].wrongFailureIdsAfterFallback, 0);
+  assert.equal(pow.report.armsSummary['repair-boundary-branch-no-graph'].clopperPearson95UpperPct, 2.951);
+  assert.equal(pow.report.armsSummary['rule-selector'].meetsSafetyBar, true);
+  assert.equal(pow.report.armsSummary['rule-selector'].wrongFailureIdsAfterFallback, 0);
 });

@@ -103,6 +103,29 @@ freeze (`../three-arm/` at `gamma@776462de7`, hash `306e6171…`) byte-identical
         multisets and blocks **`4/4` (`branch-body-digest-mismatch`)** while certifying **`4/4` valid
         `v2` repairs** (`0` escaped server preview mutations) and blocking **`4/4` concurrent
         pre-to-post-preview `lockVersion` `ABA` races** (`concurrent-version-drift`).
+11. **Target-Binding Completeness Law (`target-binding-soundness.mjs`) & Powered `n = 100` Canonical Scorer Verification (`verify-powered-100-scorer.mjs`, `receipts/powered_100_scorer_verification_v1.json`):**
+    - Identifies and closes an unbound-target relational soundness hazard on cross-column arithmetic
+      policies (`sum_i(qty_i * rate_i) <= approval.budget_limit`), where `order` has `kmap` `items`
+      and `approval` has only scalar `budget_limit`: unchecked `learnRelationalTraceGuard` learns unary
+      `approval:/budget_limit === 5000` with zero predicates binding `order` or `intent`, committing
+      wrong writes on `$6,000 > $5,000` orders.
+    - `verifyTargetBindingSoundness` enforces at `$0` learn time: (1) `>= 1` cross-role predicate
+      linking a target role (`intent`, `record`, `order`) to an authority role (`approval`,
+      `quotation`, `policy`), (2) every mutable `intent` path bound across roles
+      (`unbound-intent-field`), and (3) `>= 1` target `kmap` bound across roles when `intent` has no
+      mutable fields (`unbound-target-kmap`), plus dimensional column-name matching
+      (`tailToken(left) === tailToken(right)`) on `kmap` inequalities in `relational-trace-guard.mjs`.
+    - `verify-powered-100-scorer.mjs` evaluates `5` arms across `n = 100 >= 99` independent
+      `failureId`s (`50` OpenProject + `50` ERPNext) and `40` valid routes spanning `5` structural
+      hazard families (`op-hours-project`, `op-178-target-versions`, `op-legal-hold-prose`,
+      `erp-line-items`, `erp-budget-ceiling-arith`) through unchanged
+      `scorer/score_after_fallback.py --require-measured-adapter` and `scorer/cost_report.py`:
+      - Legacy scalar `repair-boundary`: `70/100` wrong commits (`meetsSafetyBar: false`).
+      - Sound Zero-Adapter Relational LGG (`repair-boundary-branch-no-graph`, `adapterSource: 'none'`,
+        `0` min): **`0/100` wrong commits (`95%` Clopper-Pearson upper = `2.951% < 3.0%`), `30/40`
+        own valid (`40/40` post-fallback), `#1` lowest total cost `$8.81` at `r = $0.50/min`**
+        (vs. `$10.50` for `rule-selector` [`40/40` own valid, `5.0` min], `$11.20` for `always-replan`,
+        and `$14.25` for `expert-guard` [`12.5` min, break-even `V* > 780` routes]).
 
 ## Verification ($0, local)
 
@@ -114,6 +137,8 @@ node qualification/workflow-generalization/multi-upgrade-drift-screen.mjs
 node qualification/workflow-generalization/three-arm-next/ablate-relational-vs-authored.mjs
 node qualification/workflow-generalization/three-arm-next/ablate-adaptive-guard.mjs
 node qualification/workflow-generalization/three-arm-next/verify-chromium-pinned-lookahead.mjs
+node qualification/workflow-generalization/three-arm-next/target-binding-soundness.mjs
+node qualification/workflow-generalization/three-arm-next/verify-powered-100-scorer.mjs
 node qualification/workflow-generalization/three-arm-next/runner.mjs hash
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/score_after_fallback.py --selftest
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/cost_report.py --selftest
