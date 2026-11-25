@@ -25,9 +25,20 @@ freeze (`../three-arm/` at `gamma@776462de7`, hash `306e6171…`) byte-identical
      Clopper-Pearson upper bound `< 3%` (`0/99 -> 2.981%`), reports per-family abstentions, checks
      cost sensitivity at `0`, `r`, and `2r`, and emits the canonical verdict string from
      `scoring.md`.
-4. **Measured authoring & adapter accounting (`runner.mjs`, `measureAdapterLoc`):** records real
-   elapsed `authoringMinutes` and non-comment source lines of per-application scalar adapters or
-   guard files directly in `phase-records.jsonl`.
+4. **Measured authoring, adapter & maintenance accounting (`runner.mjs`, `measureAdapterLoc`, `scorer/cost_report.py`):**
+   - Closes the uncharged-adapter loophole where `repair-boundary` could omit human adapter authoring
+     time and default to script runtime (`wallMs / 60000`): `freezeDeterministicArm` requires positive
+     finite `adapterAuthoringMinutes` on `discovery` and finite `adapterMaintenanceMinutes >= 0` on
+     `maintenance` whenever `adapterSource: 'human'` is used, or an audited `adapter-discovery` /
+     `adapter-maintenance` model phase (`recordAuditedAdapterPhase`) when `adapterSource: 'model-phase'`.
+   - `scorer/score_after_fallback.py` disaggregates `adapterAuthoringMinutes`,
+     `adapterMaintenanceMinutes`, `guardAuthoringMinutes`, `guardMaintenanceMinutes`, and
+     `learnerWallMinutes`, charges model adapter phases in `spendOneOffUsd`, and voids unmetered
+     adapters (`--require-measured-adapter`).
+   - `scorer/cost_report.py` computes setup + maintenance + marginal per-route cost curves across
+     volume `V` at rates `0`, `r`, and `2r`, solves exact pairwise break-even volumes `V*` (including
+     `no-break-even`), and marks legacy Gate 3-4 OpenProject/ERPNext adapters as
+     `unmeasured_historical_code` (`usableForRung2EffortClaim: false`).
 5. **Setup-403 / refusal isolation (`runner.mjs`, `second-upgrade-read-check-erpnext.mjs`):**
    records 403 and setup blocks as `notTestable: true` with exact request and response under owner
    correction (d), never bypassing permissions, and enforces a `>= 25 GiB` free-disk preflight
@@ -42,6 +53,7 @@ freeze (`../three-arm/` at `gamma@776462de7`, hash `306e6171…`) byte-identical
 ```bash
 node qualification/workflow-generalization/three-arm-next/runner.mjs hash
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/score_after_fallback.py --selftest
+python3 -B qualification/workflow-generalization/three-arm-next/scorer/cost_report.py --selftest
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/custody.py selftest
 node --test test/unit/three-arm-next.test.mjs
 ```

@@ -149,16 +149,132 @@ def recompute_commit(record: dict[str, Any]) -> tuple[bool, bool, list[str]]:
     return False, False, errs
 
 
-def normalize_minutes(phases: list[dict[str, Any]], arm: str) -> Decimal:
+ONE_OFF_PHASES = ('discovery', 'maintenance', 'adapter-discovery', 'adapter-maintenance')
+SETUP_PHASES = ('discovery', 'adapter-discovery')
+MAINT_PHASES = ('maintenance', 'adapter-maintenance')
+
+
+def disaggregate_minutes(phases: list[dict[str, Any]], arm: str) -> dict[str, Decimal]:
+    """Sum disaggregated adapter, guard, and learner minutes across phases for one arm."""
+    adapter_auth = Decimal(0)
+    adapter_maint = Decimal(0)
+    guard_auth = Decimal(0)
+    guard_maint = Decimal(0)
+    learner_wall = Decimal(0)
     total = Decimal(0)
+    disagg_keys = (
+        'adapterAuthoringMinutes',
+        'adapterMaintenanceMinutes',
+        'guardAuthoringMinutes',
+        'guardMaintenanceMinutes',
+        'learnerWallMinutes',
+    )
     for p in phases:
         if p.get('arm') != arm:
             continue
-        if 'authoringMinutes' in p and p['authoringMinutes'] is not None:
-            total += money(p['authoringMinutes'])
-        elif p.get('phase') in ('discovery', 'maintenance') and p.get('wallMs') is not None:
-            total += money(p['wallMs']) / Decimal(60000)
-    return total
+        if any(k in p and p[k] is not None for k in disagg_keys):
+            aa = money(p.get('adapterAuthoringMinutes'))
+            am = money(p.get('adapterMaintenanceMinutes'))
+            ga = money(p.get('guardAuthoringMinutes'))
+            gm = money(p.get('guardMaintenanceMinutes'))
+            lw = money(p.get('learnerWallMinutes'))
+            adapter_auth += aa
+            adapter_maint += am
+            guard_auth += ga
+            guard_maint += gm
+            learner_wall += lw
+            total += aa + am + ga + gm + lw
+        elif 'authoringMinutes' in p and p['authoringMinutes'] is not None:
+            m = money(p['authoringMinutes'])
+            if arm in SIMPLE_GUARD_ARMS:
+                if p.get('phase') == 'maintenance':
+                    guard_maint += m
+                else:
+                    guard_auth += m
+            elif arm in LEARNED_VARIANTS:
+                learner_wall += m
+            total += m
+        elif p.get('phase') in ONE_OFF_PHASES and p.get('wallMs') is not None:
+            m = money(p['wallMs']) / Decimal(60000)
+            learner_wall += m
+            total += m
+    return {
+        'adapterAuthoringMinutes': adapter_auth,
+        'adapterMaintenanceMinutes': adapter_maint,
+        'guardAuthoringMinutes': guard_auth,
+        'guardMaintenanceMinutes': guard_maint,
+        'learnerWallMinutes': learner_wall,
+        'authoringMinutes': total,
+    }
+
+
+def normalize_minutes(phases: list[dict[str, Any]], arm: str) -> Decimal:
+    return disaggregate_minutes(phases, arm)['authoringMinutes']
+
+
+def audit_adapter_metering(
+    my_phases: list[dict[str, Any]],
+    arm: str,
+    *,
+    require_measured_adapter: bool = False,
+) -> list[str]:
+    """Return void reasons if a learned arm uses an uncharged or unaudited adapter."""
+    if arm not in LEARNED_VARIANTS:
+        return []
+    reasons: list[str] = []
+    for p in my_phases:
+        ph = p.get('phase')
+        if ph not in ('discovery', 'maintenance'):
+            continue
+        app = p.get('application')
+        upg = p.get('upgrade')
+        src = p.get('adapterSource')
+        loc = int(p.get('adapterOrGuardLoc') or 0)
+        if src == 'human':
+            if ph == 'discovery':
+                aa = p.get('adapterAuthoringMinutes')
+                if aa is None or money(aa) <= 0:
+                    reasons.append(
+                        f'{app} {upg} {ph}: adapterSource=human lacks positive measured adapterAuthoringMinutes'
+                    )
+            else:
+                am = p.get('adapterMaintenanceMinutes')
+                if am is None or money(am) < 0:
+                    reasons.append(
+                        f'{app} {upg} {ph}: adapterSource=human lacks measured adapterMaintenanceMinutes >= 0'
+                    )
+        elif src == 'model-phase':
+            expected_ph = 'adapter-discovery' if ph == 'discovery' else 'adapter-maintenance'
+            has_model_ph = any(
+                q.get('application') == app
+                and q.get('upgrade') == upg
+                and q.get('phase') == expected_ph
+                and q.get('completed') is True
+                for q in my_phases
+            )
+            if not has_model_ph:
+                reasons.append(
+                    f'{app} {upg} {ph}: adapterSource=model-phase lacks completed {expected_ph} phase record'
+                )
+        elif src == 'reused-prior-stage':
+            if ph != 'maintenance':
+                reasons.append(f'{app} {upg} {ph}: adapterSource=reused-prior-stage only valid on maintenance')
+            has_prior = any(
+                q.get('application') == app
+                and q.get('phase') == 'discovery'
+                and q.get('completed') is True
+                for q in my_phases
+            )
+            if not has_prior:
+                reasons.append(
+                    f'{app} {upg} {ph}: adapterSource=reused-prior-stage lacks prior discovery phase for {app}'
+                )
+        elif require_measured_adapter and src != 'none':
+            if loc > 0 or 'adapterSource' not in p:
+                reasons.append(
+                    f'{app} {upg} {ph}: unmetered legacy adapter (adapterSource={src!r}, adapterOrGuardLoc={loc})'
+                )
+    return reasons
 
 
 def score_after_fallback(
@@ -173,6 +289,7 @@ def score_after_fallback(
     drift_screen_found_break: bool = True,
     isolation_compromised_reason: str | None = None,
     max_per_app: int = DEFAULT_MAX_PER_APP,
+    require_measured_adapter: bool = False,
 ) -> dict[str, Any]:
     problems: list[str] = []
     rate_r = money(rate_per_minute_usd)
@@ -315,14 +432,23 @@ def score_after_fallback(
         for p in my_phases:
             if p.get('outOfSurfaceCalls', 0) > 0:
                 void_reasons.append(f"{p['application']} {p['upgrade']} {p['phase']}: {p['outOfSurfaceCalls']} out-of-surface call(s)")
-            if p.get('phase') in ('discovery', 'maintenance') and not p.get('completed'):
+            if p.get('phase') in ONE_OFF_PHASES and not p.get('completed'):
                 void_reasons.append(f"{p['application']} {p['upgrade']} {p['phase']}: no frozen artifact")
+        void_reasons.extend(
+            audit_adapter_metering(my_phases, arm, require_measured_adapter=require_measured_adapter)
+        )
 
-        one_off_spend = sum(
-            (money(p['costUsd']) for p in my_phases if p.get('phase') in ('discovery', 'maintenance')),
+        setup_spend = sum(
+            (money(p['costUsd']) for p in my_phases if p.get('phase') in SETUP_PHASES),
             Decimal(0),
         )
-        authoring_minutes = normalize_minutes(phases, arm)
+        maint_spend = sum(
+            (money(p['costUsd']) for p in my_phases if p.get('phase') in MAINT_PHASES),
+            Decimal(0),
+        )
+        one_off_spend = setup_spend + maint_spend
+        minute_parts = disaggregate_minutes(phases, arm)
+        authoring_minutes = minute_parts['authoringMinutes']
 
         valid_total = 0
         valid_completed_own = 0
@@ -493,7 +619,14 @@ def score_after_fallback(
             'modelCallsOwn': own_model_calls,
             'modelCallsFallback': fallback_model_calls,
             'modelCallsTotal': own_model_calls + fallback_model_calls,
+            'adapterAuthoringMinutes': str(minute_parts['adapterAuthoringMinutes']),
+            'adapterMaintenanceMinutes': str(minute_parts['adapterMaintenanceMinutes']),
+            'guardAuthoringMinutes': str(minute_parts['guardAuthoringMinutes']),
+            'guardMaintenanceMinutes': str(minute_parts['guardMaintenanceMinutes']),
+            'learnerWallMinutes': str(minute_parts['learnerWallMinutes']),
             'authoringMinutes': str(authoring_minutes),
+            'spendSetupUsd': str(setup_spend),
+            'spendMaintenanceUsd': str(maint_spend),
             'spendOneOffUsd': str(one_off_spend),
             'spendDecisionOwnUsd': str(own_decision_spend),
             'spendFallbackUsd': str(fallback_spend),
@@ -799,6 +932,41 @@ def selftest() -> None:
     # Case D: Not testable when drift screens find no break
     res_nt = score_after_fallback([], [], {'routes': {}}, [], drift_screen_found_break=False)
     assert res_nt['verdict'] == 'Not testable on the screened releases.'
+
+    # Case E: Unmetered human adapter on repair-boundary is voided; model-phase adapter charges costUsd
+    unmetered_phases = [
+        {**make_phase('openproject', '13.4.0->14.0.0', 'repair-boundary', 'discovery', '0.00', minutes='0.1'), 'adapterSource': 'human', 'adapterAuthoringMinutes': 0},
+        {**make_phase('erpnext', '15.10.0->15.20.0', 'repair-boundary', 'discovery', '0.00', minutes='0.1'), 'adapterSource': 'human', 'adapterAuthoringMinutes': 4.0},
+    ]
+    res_unmetered = score_after_fallback(
+        routes, unmetered_phases, {'routes': key_routes}, [{'recipes': op_recipes}, {'recipes': erp_recipes}],
+        rate_per_minute_usd='0.50',
+    )
+    assert res_unmetered['arms']['repair-boundary']['voided'] is True
+    assert res_unmetered['verdict'].startswith('Development evaluation only: arm(s) voided (repair-boundary)'), res_unmetered['verdict']
+
+    res_legacy_strict = score_after_fallback(
+        routes, phases, {'routes': key_routes}, [{'recipes': op_recipes}, {'recipes': erp_recipes}],
+        rate_per_minute_usd='0.50',
+        require_measured_adapter=True,
+    )
+    assert res_legacy_strict['arms']['repair-boundary']['voided'] is True
+
+    model_adapter_phases = [
+        {**make_phase('openproject', '13.4.0->14.0.0', 'repair-boundary', 'adapter-discovery', '0.45', minutes='1.5'), 'adapterSource': 'model-phase', 'learnerWallMinutes': 1.5},
+        {**make_phase('openproject', '13.4.0->14.0.0', 'repair-boundary', 'discovery', '0.00', minutes='0.1'), 'adapterSource': 'model-phase', 'learnerWallMinutes': 0.1},
+        {**make_phase('erpnext', '15.10.0->15.20.0', 'repair-boundary', 'adapter-discovery', '0.35', minutes='1.2'), 'adapterSource': 'model-phase', 'learnerWallMinutes': 1.2},
+        {**make_phase('erpnext', '15.10.0->15.20.0', 'repair-boundary', 'discovery', '0.00', minutes='0.1'), 'adapterSource': 'model-phase', 'learnerWallMinutes': 0.1},
+        make_phase('openproject', '13.4.0->14.0.0', 'agent-written-guard', 'discovery', '0.60', minutes='8'),
+        make_phase('erpnext', '15.10.0->15.20.0', 'agent-written-guard', 'discovery', '0.60', minutes='8'),
+    ]
+    res_model_adapter = score_after_fallback(
+        routes, model_adapter_phases, {'routes': key_routes}, [{'recipes': op_recipes}, {'recipes': erp_recipes}],
+        rate_per_minute_usd='0.50',
+        require_measured_adapter=True,
+    )
+    assert res_model_adapter['arms']['repair-boundary']['voided'] is False, res_model_adapter['arms']['repair-boundary']['voidReasons']
+    assert Decimal(res_model_adapter['arms']['repair-boundary']['spendOneOffUsd']) == Decimal('0.80')
     print('score_after_fallback selftest ok')
 
 
@@ -814,6 +982,7 @@ def main() -> None:
     parser.add_argument('--no-genuine-drift', action='store_true')
     parser.add_argument('--isolation-compromised', default=None)
     parser.add_argument('--max-per-app', type=int, default=DEFAULT_MAX_PER_APP)
+    parser.add_argument('--require-measured-adapter', action='store_true')
     parser.add_argument('--selftest', action='store_true')
     args = parser.parse_args()
     if args.selftest:
@@ -831,6 +1000,7 @@ def main() -> None:
         drift_screen_found_break=not args.no_genuine_drift,
         isolation_compromised_reason=args.isolation_compromised,
         max_per_app=args.max_per_app,
+        require_measured_adapter=args.require_measured_adapter,
     )
     print(json.dumps(report, indent=2))
     sys.exit(0 if report['valid'] else 1)

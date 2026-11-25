@@ -17,12 +17,16 @@ import {
   frozenNextFileSet,
   loadEqualTrainingRelease,
   measureAdapterLoc,
+  recordAuditedAdapterPhase,
   registerAlwaysReplanPhase,
   runBlindArm,
 } from '../../qualification/workflow-generalization/three-arm-next/runner.mjs';
 
 const SCORER = fileURLToPath(
   new URL('../../qualification/workflow-generalization/three-arm-next/scorer/score_after_fallback.py', import.meta.url),
+);
+const COST_REPORT = fileURLToPath(
+  new URL('../../qualification/workflow-generalization/three-arm-next/scorer/cost_report.py', import.meta.url),
 );
 
 // Stand-in dual server for OpenProject (/api/v3/...) and ERPNext (/api/resource/... & /api/method/...)
@@ -442,7 +446,27 @@ test('equal-arms runner runs OpenProject + ERPNext with identical contrast sets,
 
   const runDir = join(dir, 'combined-run');
 
-  // Freeze both arms on OpenProject and verify identical trainingReleaseSha256
+  // Verify uncharged human adapter is rejected (loophole closed)
+  await assert.rejects(
+    () => freezeDeterministicArm({
+      application: 'openproject',
+      upgrade: '13.4.0->14.0.0',
+      arm: 'repair-boundary',
+      familiesFile,
+      trainingExamplesFile: trainingFile,
+      runDir: join(runDir, 'op'),
+      readPlansByFamily: {
+        'op-approval-hours': [
+          { role: 'record', path: '/api/v3/work_packages/{target}' },
+          { role: 'approval', follow: { role: 'record', link: 'parent' } },
+        ],
+      },
+      deps: opDeps,
+    }),
+    /requires positive finite adapterAuthoringMinutes/,
+  );
+
+  // Freeze both arms on OpenProject with measured adapter/guard minutes and verify identical trainingReleaseSha256
   const opRb = await freezeDeterministicArm({
     application: 'openproject',
     upgrade: '13.4.0->14.0.0',
@@ -456,8 +480,13 @@ test('equal-arms runner runs OpenProject + ERPNext with identical contrast sets,
         { role: 'approval', follow: { role: 'record', link: 'parent' } },
       ],
     },
+    adapterSource: 'human',
+    adapterAuthoringMinutes: 4.25,
     deps: opDeps,
   });
+  assert.equal(opRb.adapterSource, 'human');
+  assert.equal(opRb.adapterAuthoringMinutes, 4.25);
+  assert.ok(opRb.authoringMinutes >= 4.25);
   const opExpert = await freezeDeterministicArm({
     application: 'openproject',
     upgrade: '13.4.0->14.0.0',
@@ -485,7 +514,21 @@ test('equal-arms runner runs OpenProject + ERPNext with identical contrast sets,
     });
   }
 
-  // Freeze & run ERPNext
+  // Freeze & run ERPNext using audited model-phase adapter discovery ($0.32 charged automatically)
+  recordAuditedAdapterPhase({
+    application: 'erpnext',
+    upgrade: '15.10.0->15.20.0',
+    phase: 'adapter-discovery',
+    runDir: join(runDir, 'erp'),
+    startedAt: '2026-11-24T10:00:00Z',
+    endedAt: '2026-11-24T10:01:30Z',
+    costUsd: 0.32,
+    budgetUsd: 0.60,
+    modelCalls: 2,
+    modelTurns: 4,
+    adapterLoc: measureAdapterLoc('erpnext'),
+    artifactSha256: 'c'.repeat(64),
+  });
   await freezeDeterministicArm({
     application: 'erpnext',
     upgrade: '15.10.0->15.20.0',
@@ -499,6 +542,7 @@ test('equal-arms runner runs OpenProject + ERPNext with identical contrast sets,
         { role: 'quotation', follow: { role: 'order', field: 'items.0.supplier_quotation', doctype: 'Supplier Quotation' } },
       ],
     },
+    adapterSource: 'model-phase',
     deps: erpDeps,
   });
   await freezeDeterministicArm({
@@ -540,6 +584,7 @@ test('equal-arms runner runs OpenProject + ERPNext with identical contrast sets,
     '--blind', opBlindFile,
     '--blind', erpBlindFile,
     '--rate-per-minute', '0.50',
+    '--require-measured-adapter',
   ], { encoding: 'utf8' });
   const report = JSON.parse(rawScore);
   assert.equal(report.valid, true, JSON.stringify(report.problems));
@@ -548,9 +593,33 @@ test('equal-arms runner runs OpenProject + ERPNext with identical contrast sets,
   // op-b3 hit 403 and was cleanly isolated into notTestableReleases (3 arms)
   assert.equal(report.notTestableReleases.length, 3);
   assert.equal(report.notTestableReleases[0].refusal.status, 403);
+  assert.equal(report.arms['repair-boundary'].voided, false);
   assert.equal(report.arms['repair-boundary'].wrongFailureIdsAfterFallback, 0);
   assert.equal(report.arms['repair-boundary'].validCompletedAfterFallback, 2);
+  assert.equal(report.arms['repair-boundary'].spendOneOffUsd, '0.32');
+  assert.equal(report.arms['repair-boundary'].adapterAuthoringMinutes, '4.25');
+  assert.equal(report.arms['expert-guard'].guardAuthoringMinutes, '13.0');
   assert.equal(report.arms['expert-guard'].validCompletedAfterFallback, 2);
+
+  // Run cost_report.py on the merged run and verify break-even & historical provenance audit
+  const rawCostReport = execFileSync('python3', [
+    '-B', COST_REPORT,
+    '--routes', mergedRoutes,
+    '--phases', mergedPhases,
+    '--key', keyFile,
+    '--blind', opBlindFile,
+    '--blind', erpBlindFile,
+    '--rate-per-minute', '0.50',
+  ], { encoding: 'utf8' });
+  const costReport = JSON.parse(rawCostReport);
+  assert.equal(costReport.valid, true);
+  assert.ok(costReport.legacyAdapterProvenance.length >= 4);
+  assert.ok(costReport.legacyAdapterProvenance.every(e => e.usableForRung2EffortClaim === false));
+  assert.equal(
+    costReport.pairwiseBreakEven['always-replan'].byRate.r.regime,
+    'break-even-above-V*',
+  );
+  assert.ok(costReport.pairwiseBreakEven['always-replan'].byRate.r.breakEvenVolumeRoutes > 0);
 });
 
 test('ERPNext drift screen preflight blocks below 25 GiB and records 403 setup refusals as notTestable under Owner Correction (d)', async () => {

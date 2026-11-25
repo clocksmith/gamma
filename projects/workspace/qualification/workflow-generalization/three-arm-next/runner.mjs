@@ -130,6 +130,7 @@ export function frozenNextFileSet() {
   const files = [
     fileURLToPath(import.meta.url),
     join(HERE, 'scorer', 'score_after_fallback.py'),
+    join(HERE, 'scorer', 'cost_report.py'),
     join(HERE, 'scorer', 'custody.py'),
     join(QUALIFICATION, 'repair-boundary-qualification.mjs'),
     resolve(QUALIFICATION, '../../src/client/repair-boundary.js'),
@@ -344,27 +345,202 @@ function prepareRunDir(runDir) {
   }
 }
 
+function readPhaseRecords(runDir) {
+  const p = join(runDir, 'phase-records.jsonl');
+  if (!existsSync(p)) return [];
+  return readFileSync(p, 'utf8').trim().split('\n').filter(Boolean).map(line => JSON.parse(line));
+}
+
 /**
- * Deterministic ($0) discovery for `repair-boundary` from `training-examples.json`
+ * Records an audited model-driven adapter authoring or maintenance phase
+ * (`adapter-discovery` or `adapter-maintenance`) so `costUsd` and `wallMs`
+ * are charged automatically when `repair-boundary` uses `adapterSource: 'model-phase'`.
+ */
+export function recordAuditedAdapterPhase({
+  application,
+  upgrade,
+  phase = 'adapter-discovery',
+  runDir,
+  startedAt,
+  endedAt,
+  costUsd,
+  budgetUsd = 0,
+  modelCalls = 0,
+  modelTurns = 0,
+  outOfSurfaceCalls = 0,
+  adapterLoc = 0,
+  artifactSha256,
+}) {
+  if (!APPLICATIONS.includes(application)) throw Error(`unsupported application: ${application}`);
+  if (!['adapter-discovery', 'adapter-maintenance'].includes(phase)) {
+    throw Error(`phase must be adapter-discovery or adapter-maintenance (got ${phase})`);
+  }
+  if (!Number.isFinite(costUsd) || costUsd < 0) throw Error('recordAuditedAdapterPhase requires finite costUsd >= 0');
+  if (!artifactSha256 || typeof artifactSha256 !== 'string') {
+    throw Error('recordAuditedAdapterPhase requires artifactSha256');
+  }
+  prepareRunDir(runDir);
+  const startDate = startedAt instanceof Date ? startedAt : new Date(startedAt);
+  const endDate = endedAt instanceof Date ? endedAt : new Date(endedAt);
+  const wallMs = Math.max(0, endDate - startDate);
+  const learnerWallMinutes = Number((wallMs / 60000).toFixed(6));
+  const record = {
+    schema: 'gammatron-three-arm-phase-record/v1',
+    runId: `next-${resolve(runDir).split('/').pop()}`,
+    application,
+    upgrade,
+    arm: 'repair-boundary',
+    phase,
+    adapterSource: 'model-phase',
+    startedAt: startDate.toISOString(),
+    endedAt: endDate.toISOString(),
+    wallMs,
+    adapterAuthoringMinutes: 0,
+    adapterMaintenanceMinutes: 0,
+    guardAuthoringMinutes: 0,
+    guardMaintenanceMinutes: 0,
+    learnerWallMinutes,
+    authoringMinutes: learnerWallMinutes,
+    adapterOrGuardLoc: Number(adapterLoc) || 0,
+    trainingReleaseSha256: null,
+    modelCalls: Number(modelCalls) || 0,
+    modelTurns: Number(modelTurns) || 0,
+    costUsd: Number(Number(costUsd).toFixed(6)),
+    budgetUsd: Number(budgetUsd) || 0,
+    recordsCreated: 0,
+    outOfSurfaceCalls: Number(outOfSurfaceCalls) || 0,
+    artifactSha256,
+    completed: true,
+  };
+  appendJsonl(runDir, 'phase-records.jsonl', record);
+  return record;
+}
+
+/**
+ * Deterministic ($0) discovery/maintenance for `repair-boundary` from `training-examples.json`
  * + explicit read plans, or registration of a pre-authored `expert-guard` / `rule-selector`
- * with measured authoring minutes.
+ * with measured authoring/maintenance minutes.
+ *
+ * Closes the Stage A uncharged-adapter loophole: `repair-boundary` can no longer omit
+ * adapter effort and fall back to `wallMs / 60000` (~0.1 min script runtime) when a
+ * human wrote the scalar adapter or `readPlansByFamily`.
  */
 export async function freezeDeterministicArm({
   application,
   upgrade,
   arm,
+  phase = 'discovery',
   familiesFile,
   trainingExamplesFile,
   runDir,
   readPlansByFamily = null,
+  adapterSource = 'human',
+  adapterAuthoringMinutes = null,
+  adapterMaintenanceMinutes = null,
   guardSourceFile = null,
   measuredAuthoringMinutes = null,
+  measuredMaintenanceMinutes = null,
   deps,
 }) {
   if (!['repair-boundary', 'expert-guard', 'rule-selector'].includes(arm)) {
     throw Error(`freezeDeterministicArm supports repair-boundary, expert-guard, rule-selector (got ${arm})`);
   }
+  if (!['discovery', 'maintenance'].includes(phase)) {
+    throw Error(`freezeDeterministicArm phase must be discovery or maintenance (got ${phase})`);
+  }
   prepareRunDir(runDir);
+  const existingPhases = readPhaseRecords(runDir);
+
+  let resolvedAdapterSource = 'none';
+  let resolvedAdapterAuthMin = 0;
+  let resolvedAdapterMaintMin = 0;
+  let resolvedGuardAuthMin = 0;
+  let resolvedGuardMaintMin = 0;
+
+  if (arm === 'repair-boundary') {
+    if (!readPlansByFamily) throw Error('repair-boundary deterministic freeze requires readPlansByFamily');
+    if (!['human', 'model-phase', 'reused-prior-stage'].includes(adapterSource)) {
+      throw Error(`repair-boundary adapterSource must be human, model-phase, or reused-prior-stage (got ${adapterSource})`);
+    }
+    resolvedAdapterSource = adapterSource;
+    if (adapterSource === 'human') {
+      if (phase === 'discovery') {
+        if (!Number.isFinite(adapterAuthoringMinutes) || adapterAuthoringMinutes <= 0) {
+          throw Error(
+            'repair-boundary discovery with adapterSource="human" requires positive finite adapterAuthoringMinutes '
+            + '(never uncharged or substituted with script wallMs)',
+          );
+        }
+        if (adapterMaintenanceMinutes !== null && (!Number.isFinite(adapterMaintenanceMinutes) || adapterMaintenanceMinutes < 0)) {
+          throw Error('repair-boundary adapterMaintenanceMinutes must be finite and >= 0');
+        }
+        resolvedAdapterAuthMin = Number(adapterAuthoringMinutes);
+        resolvedAdapterMaintMin = adapterMaintenanceMinutes !== null ? Number(adapterMaintenanceMinutes) : 0;
+      } else {
+        if (!Number.isFinite(adapterMaintenanceMinutes) || adapterMaintenanceMinutes < 0) {
+          throw Error('repair-boundary maintenance with adapterSource="human" requires finite adapterMaintenanceMinutes >= 0');
+        }
+        if (adapterAuthoringMinutes !== null && (!Number.isFinite(adapterAuthoringMinutes) || adapterAuthoringMinutes < 0)) {
+          throw Error('repair-boundary adapterAuthoringMinutes must be finite and >= 0');
+        }
+        resolvedAdapterAuthMin = adapterAuthoringMinutes !== null ? Number(adapterAuthoringMinutes) : 0;
+        resolvedAdapterMaintMin = Number(adapterMaintenanceMinutes);
+      }
+    } else if (adapterSource === 'model-phase') {
+      const expectedAdapterPhase = phase === 'discovery' ? 'adapter-discovery' : 'adapter-maintenance';
+      const audited = existingPhases.findLast(
+        p => p.arm === 'repair-boundary'
+          && p.application === application
+          && p.upgrade === upgrade
+          && p.phase === expectedAdapterPhase
+          && p.completed === true,
+      );
+      if (!audited) {
+        throw Error(
+          `repair-boundary with adapterSource="model-phase" requires a completed ${expectedAdapterPhase} phase record `
+          + `for ${application} ${upgrade} in ${runDir}`,
+        );
+      }
+      resolvedAdapterAuthMin = adapterAuthoringMinutes !== null ? Number(adapterAuthoringMinutes) : 0;
+      resolvedAdapterMaintMin = adapterMaintenanceMinutes !== null ? Number(adapterMaintenanceMinutes) : 0;
+    } else if (adapterSource === 'reused-prior-stage') {
+      if (phase !== 'maintenance') {
+        throw Error('adapterSource="reused-prior-stage" is only valid on phase="maintenance"');
+      }
+      const priorCharged = existingPhases.findLast(
+        p => p.arm === 'repair-boundary'
+          && p.application === application
+          && p.phase === 'discovery'
+          && p.completed === true,
+      );
+      if (!priorCharged) {
+        throw Error(`adapterSource="reused-prior-stage" requires a prior completed discovery phase for ${application}`);
+      }
+      if (adapterMaintenanceMinutes !== null && Number(adapterMaintenanceMinutes) !== 0) {
+        throw Error('adapterSource="reused-prior-stage" requires 0 adapterMaintenanceMinutes (use adapterSource="human" when edited)');
+      }
+      resolvedAdapterAuthMin = 0;
+      resolvedAdapterMaintMin = 0;
+    }
+  } else {
+    if (!guardSourceFile || !existsSync(guardSourceFile)) {
+      throw Error(`${arm} requires an existing guardSourceFile`);
+    }
+    if (phase === 'discovery') {
+      if (!Number.isFinite(measuredAuthoringMinutes) || measuredAuthoringMinutes < 0) {
+        throw Error(`${arm} discovery requires non-negative measuredAuthoringMinutes`);
+      }
+      resolvedGuardAuthMin = Number(measuredAuthoringMinutes);
+      resolvedGuardMaintMin = measuredMaintenanceMinutes !== null ? Number(measuredMaintenanceMinutes) : 0;
+    } else {
+      if (!Number.isFinite(measuredMaintenanceMinutes) || measuredMaintenanceMinutes < 0) {
+        throw Error(`${arm} maintenance requires non-negative measuredMaintenanceMinutes`);
+      }
+      resolvedGuardAuthMin = measuredAuthoringMinutes !== null ? Number(measuredAuthoringMinutes) : 0;
+      resolvedGuardMaintMin = Number(measuredMaintenanceMinutes);
+    }
+  }
+
   const release = loadEqualTrainingRelease({ application, familiesFile, trainingExamplesFile });
   const startedAt = new Date();
   deps.freshInstance();
@@ -378,7 +554,6 @@ export async function freezeDeterministicArm({
     let artifactSha256 = null;
     let integrationLoc = 0;
     if (arm === 'repair-boundary') {
-      if (!readPlansByFamily) throw Error('repair-boundary deterministic freeze requires readPlansByFamily');
       const teacher = application === 'openproject'
         ? createOpTeacher(release.families.map(f => f.familyId))
         : createErpTeacher(release.families.map(f => f.familyId));
@@ -406,12 +581,6 @@ export async function freezeDeterministicArm({
       artifactSha256 = frozen.sha256;
       integrationLoc = measureAdapterLoc(application);
     } else {
-      if (!guardSourceFile || !existsSync(guardSourceFile)) {
-        throw Error(`${arm} requires an existing guardSourceFile`);
-      }
-      if (!Number.isFinite(measuredAuthoringMinutes) || measuredAuthoringMinutes < 0) {
-        throw Error(`${arm} requires non-negative measuredAuthoringMinutes`);
-      }
       const outDir = join(runDir, 'artifacts', arm);
       mkdirSync(outDir, { recursive: true, mode: 0o700 });
       const srcText = readFileSync(guardSourceFile, 'utf8');
@@ -422,9 +591,16 @@ export async function freezeDeterministicArm({
 
     const endedAt = new Date();
     const wallMs = endedAt - startedAt;
-    const authoringMinutes = measuredAuthoringMinutes !== null
-      ? Number(measuredAuthoringMinutes)
-      : Number((wallMs / 60000).toFixed(6));
+    const learnerWallMinutes = arm === 'repair-boundary'
+      ? Number((wallMs / 60000).toFixed(6))
+      : 0;
+    const authoringMinutes = Number((
+      resolvedAdapterAuthMin
+      + resolvedAdapterMaintMin
+      + resolvedGuardAuthMin
+      + resolvedGuardMaintMin
+      + learnerWallMinutes
+    ).toFixed(6));
 
     const record = {
       schema: 'gammatron-three-arm-phase-record/v1',
@@ -432,10 +608,16 @@ export async function freezeDeterministicArm({
       application,
       upgrade,
       arm,
-      phase: 'discovery',
+      phase,
+      adapterSource: resolvedAdapterSource,
       startedAt: startedAt.toISOString(),
       endedAt: endedAt.toISOString(),
       wallMs,
+      adapterAuthoringMinutes: resolvedAdapterAuthMin,
+      adapterMaintenanceMinutes: resolvedAdapterMaintMin,
+      guardAuthoringMinutes: resolvedGuardAuthMin,
+      guardMaintenanceMinutes: resolvedGuardMaintMin,
+      learnerWallMinutes,
       authoringMinutes,
       adapterOrGuardLoc: integrationLoc,
       trainingReleaseSha256: release.trainingReleaseSha256,
@@ -467,9 +649,15 @@ export function registerAlwaysReplanPhase({ application, upgrade, runDir }) {
     upgrade,
     arm: 'always-replan',
     phase: 'discovery',
+    adapterSource: 'none',
     startedAt: at,
     endedAt: at,
     wallMs: 0,
+    adapterAuthoringMinutes: 0,
+    adapterMaintenanceMinutes: 0,
+    guardAuthoringMinutes: 0,
+    guardMaintenanceMinutes: 0,
+    learnerWallMinutes: 0,
     authoringMinutes: 0,
     adapterOrGuardLoc: 0,
     trainingReleaseSha256: null,
@@ -689,9 +877,15 @@ export async function runBlindArm({
     upgrade,
     arm,
     phase: 'blind-routes',
+    adapterSource: 'none',
     startedAt: startedAt.toISOString(),
     endedAt: endedAt.toISOString(),
     wallMs: endedAt - startedAt,
+    adapterAuthoringMinutes: 0,
+    adapterMaintenanceMinutes: 0,
+    guardAuthoringMinutes: 0,
+    guardMaintenanceMinutes: 0,
+    learnerWallMinutes: 0,
     authoringMinutes: 0,
     adapterOrGuardLoc: 0,
     trainingReleaseSha256: release.trainingReleaseSha256,
