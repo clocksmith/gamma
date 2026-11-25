@@ -5,11 +5,13 @@ Verifies from scratch (Python 3 standard library only, sharing zero code with en
   1. Integrity of the frozen public IBM Project CodeNet `primary` and `secondary`
      paired corpora (`manifest.json`, SHA-256 of all 800 source files, zero split
      overlap, deterministic SHA-256 rank ordering).
-  2. Independent bit-for-bit canonical Huffman encode + decode round-trip of EVERY
-     exported headline dictionary (Designs A, B, C, and token-best at K in
-     {256, 1024, 4096} under BOTH token-min and byte-min segmentation), verifying
-     Kraft equality, exact `dict + table + routing + payload == total_bytes`, and
-     exact agreement with `results/codenet_results.json`.
+  2. Independent bit-for-bit canonical Huffman encode + decode round-trip of 40 of the
+     44 feasible CodeNet headline cells in Table I (Designs A, B, and token-best at
+     K in {256, 1024, 4096} under both token-minimizing segmentation and iterative
+     bit-cost reparsing, plus Design C under token-minimizing segmentation at
+     K in {1024, 4096}; excludes the 4 reparsed Design C cells), verifying Kraft
+     equality, exact `dict + table + routing + payload == total_bytes`, and exact
+     agreement with `results/codenet_results.json`.
   3. Exact verification of the KL / Jensen-Shannon mutual-information decomposition
      reported in `results/codenet_results.json`.
   4. Consistency check of the permitted source-free `fixed-source-v3` background
@@ -228,8 +230,9 @@ def verify_codenet_results(manifest):
             kl_checks += 1
 
     print(
-        f'[PASS] CodeNet results, bitstreams & KL/JS crossover verified: {decoded_checks} independent '
-        f'full-corpus canonical Huffman encode+decode checks + {kl_checks} direct KL/JS recomputations passed.'
+        f'[PASS] CodeNet results, bitstreams & KL/JS crossover verified: {decoded_checks}/44 feasible '
+        f'Table I CodeNet cells verified offline via canonical Huffman encode+decode (4 reparsed Design C '
+        f'cells require run_replication.py) + {kl_checks} direct KL/JS recomputations passed.'
     )
 
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Exact canonical Huffman coding, byte-optimal DP segmentation, KL/JS Design-B
-decomposition, and real bitstream encode/decode benchmarking for BITS Rung 3/4.
+"""Exact canonical Huffman coding, exact single-pass shortest-path parsing, iterative
+bit-cost reparsing, KL/JS Design-B decomposition, and real bitstream encode/decode
+benchmarking for BITS.
 
 Zero external dependencies (Python 3 standard library only).
 """
@@ -251,10 +252,12 @@ def segment_corpus_bits(docs, root, bit_lengths, unused_cost):
 
 
 def optimize_byte_segmentation(docs, root, max_iters=15):
-    """Exact coordinate descent from token-optimal parse to byte-optimal fixed point.
+    """Iterative bit-cost reparsing initialized from the exact minimum-token parse.
 
-    Returns dict with pass0 (token-min), pass1 (1-step DP), and fixed_point results,
-    including verified bit lengths, counts, and parsed pieces.
+    Each pass runs exact shortest-path parsing (`segment_corpus_bits`) for the prior
+    pass's code lengths (assigning `max(cur_l) + 1` to zero-count entries), rebuilds
+    canonical Huffman lengths, and keeps only strict payload-bit reductions for up to
+    `max_iters` passes. Does not certify a global optimum over joint (parse, table) pairs.
     """
     p0, c0, t0 = segment_corpus_tokens(docs, root)
     if p0 is None:
