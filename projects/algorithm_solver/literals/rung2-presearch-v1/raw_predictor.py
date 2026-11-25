@@ -36,21 +36,23 @@ import time
 from collections import Counter
 from typing import Sequence
 
-FROZEN_RULE_VERSION = 'bits-rung2-presearch-v1'
+FROZEN_RULE_VERSION = 'bits-rung2-presearch-v2'
 DEFAULT_K_GRID = (256, 512, 1024, 2048, 4096)
 ROUTING_BYTES = 4
+MILLER_MADOW_UNIT = 1.0 / (2.0 * math.log(2.0))  # Exact 2x|A| contingency bias per cell: 1/(2 ln 2) bits
 
 # Frozen calibration constants (fit solely on codenet-replication-v1 ranks 0..399)
-MIN_GRAM4_SUPPORT = 6        # filter out singleton/rare 4-grams that never enter D (avoids Miller-Madow bias)
+MIN_GRAM4_SUPPORT = 6        # filter out singleton/rare 4-grams that never enter D
+GRAM4_STRIDE_DOF = 4.0       # 4 correlated stride-1 windows per 4-byte span in Miller-Madow subtraction
 COEF_UNCOV_BYTE_MI = 0.45    # fraction of 1-byte MI superseded where supported 4-grams cover the stream
-COEF_SUP_GRAM4_MI = 0.14     # stride-normalized lexical MI per supported 4-gram bit
+COEF_SUP_GRAM4_MI = 0.14     # stride-normalized lexical MI per debiased supported 4-gram bit
 COEF_DICT_REP12 = 0.45       # active multibyte entries per 4-gram with count >= 12
 BYTES_PER_AMORT_SLOT = 75.0  # minimum raw bytes needed per amortized multibyte entry
 DESIGN_B_PREFIX_RATIO = 0.88 # Design B optimal prefix shrinkage from 2-table header (+1 B/entry)
 INT_ROUNDING_SLACK = 0.015   # finite-corpus integer codeword rounding slack per table entry
 SHARED_MULTI_RATIO = 0.26    # shared multibyte entries per shared frequent 4-gram
 AVG_NET_GAIN_PER_ENTRY = 3.8 # average net archive byte gain per admitted amortized entry
-HEADROOM_FACTOR = 1.15       # slot headroom above predicted |D*| for candidate prefix selection
+HEADROOM_FACTOR = 1.35       # slot headroom above predicted |D*| so MDL stopping is not clipped early
 
 
 def _kl_mixture_bits(c1: Counter, n1: int, c2: Counter, n2: int) -> float:
@@ -88,19 +90,21 @@ def extract_raw_corpus_features(
     s_union = s1 | s2
     s_inter = s1 & s2
 
-    mi_byte_bits = _kl_mixture_bits(b1, n1, b2, n2)
-    i_byte = (mi_byte_bits / nt) if nt > 0 else 0.0
+    mi_byte_bits_raw = _kl_mixture_bits(b1, n1, b2, n2)
+    mi_byte_bits_mm = max(0.0, mi_byte_bits_raw - MILLER_MADOW_UNIT * max(0, len(s_union) - 1))
+    i_byte = (mi_byte_bits_raw / nt) if nt > 0 else 0.0
 
     # Stride-1 exact 4-byte rolling windows; filter to count >= MIN_GRAM4_SUPPORT (6)
-    # so singleton identifiers do not inject Miller-Madow finite-sample KL bias.
+    # and apply exact stride-4 Miller-Madow finite-sample bias subtraction.
     g1 = Counter(d[i:i + 4] for d in docs_1 for i in range(max(0, len(d) - 3)))
     g2 = Counter(d[i:i + 4] for d in docs_2 for i in range(max(0, len(d) - 3)))
     w1 = sum(g1.values())
     w2 = sum(g2.values())
     wt = w1 + w2
 
-    mi_g4_sup_bits = 0.0
+    mi_g4_sup_bits_raw = 0.0
     sup_occ = 0
+    sup_distinct = 0
     if w1 > 0 and w2 > 0 and wt > 0:
         for gram in (set(g1) | set(g2)):
             c1 = g1[gram]
@@ -108,14 +112,17 @@ def extract_raw_corpus_features(
             ct = c1 + c2
             if ct < MIN_GRAM4_SUPPORT:
                 continue
+            sup_distinct += 1
             sup_occ += ct
             pm = ct / wt
             if c1 > 0:
-                mi_g4_sup_bits += c1 * math.log2((c1 / w1) / pm)
+                mi_g4_sup_bits_raw += c1 * math.log2((c1 / w1) / pm)
             if c2 > 0:
-                mi_g4_sup_bits += c2 * math.log2((c2 / w2) / pm)
+                mi_g4_sup_bits_raw += c2 * math.log2((c2 / w2) / pm)
+    mm_g4_bias = GRAM4_STRIDE_DOF * MILLER_MADOW_UNIT * max(0, sup_distinct - 1)
+    mi_g4_sup_bits_mm = max(0.0, mi_g4_sup_bits_raw - mm_g4_bias)
     sup_coverage = min(1.0, sup_occ / wt) if wt > 0 else 0.0
-    j4_sup = (mi_g4_sup_bits / wt) if wt > 0 else 0.0
+    j4_sup = (mi_g4_sup_bits_mm / wt) if wt > 0 else 0.0
 
     freq1_ge6 = {k for k, v in g1.items() if v >= 6}
     freq2_ge6 = {k for k, v in g2.items() if v >= 6}
@@ -140,9 +147,12 @@ def extract_raw_corpus_features(
         'sigma_2': len(s2),
         'sigma_union': len(s_union),
         'sigma_inter': len(s_inter),
-        'single_byte_mi_bits': round(mi_byte_bits, 3),
+        'single_byte_mi_bits': round(mi_byte_bits_raw, 3),
+        'single_byte_mi_debiased_bits': round(mi_byte_bits_mm, 3),
         'i_byte_bits_per_byte': round(i_byte, 6),
-        'supported_gram4_mi_bits': round(mi_g4_sup_bits, 3),
+        'supported_gram4_distinct': sup_distinct,
+        'supported_gram4_mi_raw_bits': round(mi_g4_sup_bits_raw, 3),
+        'supported_gram4_mi_bits': round(mi_g4_sup_bits_mm, 3),
         'supported_gram4_coverage': round(sup_coverage, 6),
         'j4_bits_per_window': round(j4_sup, 6),
         'jaccard4_ge6': round(jaccard4, 6),
@@ -208,8 +218,10 @@ def predict_presearch(
     sig2 = int(feats['sigma_2'])
     sig_u = int(feats['sigma_union'])
     sig_i = int(feats['sigma_inter'])
-    mi_byte_bits = float(feats['single_byte_mi_bits'])
+    mi_byte_bits = float(feats['single_byte_mi_debiased_bits'])
+    mi_byte_raw = float(feats['single_byte_mi_bits'])
     mi_g4_sup_bits = float(feats['supported_gram4_mi_bits'])
+    mi_g4_raw = float(feats['supported_gram4_mi_raw_bits'])
     sup_cov = float(feats['supported_gram4_coverage'])
     rep12_all = int(feats['rep12_all'])
     rep12_1 = int(feats['rep12_1'])
@@ -347,6 +359,12 @@ def predict_presearch(
         feasible,
         key=lambda c: (float(c['predicted_rel_bytes']), int(c['K']), layout_rank[str(c['layout'])]),
     )
+    # Also compute uncorrected plug-in MI prediction at K_max to expose small-sample drift
+    k_max_feas = max(int(c['K']) for c in feasible)
+    d_b_kmax = min(k_max_feas, d_b_inf)
+    plug_in_mi_bytes = ((1.0 - COEF_UNCOV_BYTE_MI * sup_cov) * mi_byte_raw + COEF_SUP_GRAM4_MI * mi_g4_raw) / 8.0
+    plug_in_layout = 'B' if plug_in_mi_bytes > ((d_b_kmax + 5) + INT_ROUNDING_SLACK * d_b_kmax) else 'A'
+
     elapsed_ms = (time.perf_counter() - t0) * 1000.0
     return {
         'rule_version': FROZEN_RULE_VERSION,
@@ -362,5 +380,10 @@ def predict_presearch(
         'features': feats,
         'candidates': candidates,
         'naive_byte_mi_baseline': predict_naive_byte_mi(feats, k_grid=k_grid),
+        'plug_in_no_mm_baseline': {
+            'layout_hat': plug_in_layout,
+            'K_hat': k_max_feas,
+            'plug_in_mi_saving_bytes': round(plug_in_mi_bytes, 2),
+        },
         'predictor_elapsed_ms': round(elapsed_ms, 3),
     }

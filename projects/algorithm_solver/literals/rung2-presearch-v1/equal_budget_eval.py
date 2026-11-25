@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
 """Equal-budget pre-search vs. ground-truth oracle evaluator for BITS Rung 2.
 
-Fixes both evaluation asymmetries documented in `codenet-replication-v1/run_replication.py`:
-  1. Zero cross-layout union floor (`allow_union_floor=False` always):
-     - Shared layouts A and B see ONLY shared (`both`) search chains.
-     - Executing a predicted shared pick `(layout_hat in {'A','B'}, K_hat)` never touches
-       per-language chains, so `search_seconds_saved` is measured honestly.
-  2. Equal wall-clock search budget and exhaustive Pareto reparsing for Design C:
-     - Shared search (`both`) receives total wall-clock cap `limit_seconds` (`limit_seconds / |arms|`
-       per arm).
-     - Separate search (`C`) receives `limit_seconds / 2` on language 1 and `limit_seconds / 2`
-       on language 2 (`(limit_seconds / 2) / |arms|` per arm), so total search cap equals `limit_seconds`.
-     - Because Design C's archive size `T_1(D_1) + T_2(D_2) + 4` is additively separable, every
-       Pareto-undominated prefix of language 1 and language 2 is scored once under iterative
-       bit-cost reparsing (`byte_encode.optimize_byte_segmentation`) and ALL feasible `(K_1, K_2)`
-       pairs with `K_1 + K_2 <= K` are evaluated (replacing the 7-pair shortlist).
+Implements:
+  1. Zero cross-layout union floor (`allow_union_floor=False` always).
+  2. Equal wall-clock search budget (`limit_seconds` for shared `both`; `limit_seconds / 2`
+     per language for separate `C`) and symmetric iterative bit-cost reparsing (`top_reparse=10`
+     candidate prefixes per layout for A, B, and per-language C = up to 100 `(K_1, K_2)` pairs).
+  3. Explicit baseline & decoupled attribution required by the upgraded Rung 2 bar:
+     - `default_always_B`: always pick shared dictionary + separate tables (Design B) with
+       two-part MDL byte-cost prefix stopping (`mdl_byte_stop`). Identifies cells where
+       `default_always_B` loses to the fair-search oracle by `> 1.0%`.
+     - `mdl_byte_stop_Kmax`: ordinary two-part MDL / byte-cost stopping along the full `K_max`
+       chains (holding layout fixed), vs `fill_all_Kmax` (token-minimizing full-budget stop)
+       and `presearch_K_hat_stop` (truncating search at `K_hat` before running `engine.c`).
+     - Additively decomposes total regret into `layout_regret_bytes` + `k_hat_truncation_bytes`.
 
 Leaves `codenet-replication-v1/` and `fixed-source-v3/` completely untouched (read-only).
 """
@@ -23,11 +22,13 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import subprocess
 import sys
 import tempfile
 import time
+from collections import Counter
 from pathlib import Path
 from typing import Any, Sequence
 
@@ -43,6 +44,7 @@ from raw_predictor import DEFAULT_K_GRID, predict_presearch  # noqa: E402
 
 ROUTING_BYTES = 4
 DEFAULT_ARMS = ('greedy-entry', 'greedy-byte', 'greedtok', 'bpe', 'freq-occ')
+DEFAULT_TOP_REPARSE = 10
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -63,7 +65,6 @@ def compile_engine(build_dir: Path) -> Path:
 
 
 def read_chain_entries(path: Path) -> list[tuple[int, int, bytes]]:
-    """Return list of `(index_1based, cumulative_stored_bytes, entry_bytes)` from an engine chain."""
     out: list[tuple[int, int, bytes]] = []
     with open(path, encoding='utf-8') as fh:
         for line in fh:
@@ -109,34 +110,11 @@ def run_engine_arm(
     env.pop('FSV3_CUTS', None)
 
     t0 = time.perf_counter()
-    extra: list[str] = []
-    if arm == 'pathpiece':
-        seed_chain = out_chain.with_suffix('.v0.txt')
-        seed_file = out_chain.with_suffix('.seed')
-        half = max(0.05, limit_sec * 0.5)
-        subprocess.run(
-            [
-                str(engine_bin), 'bpe', policy, str(max_entry_len), '32768', f'{half:.4f}',
-                str(list_file), str(seed_chain),
-            ],
-            env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-        )
-        seeds: list[str] = []
-        with open(seed_chain, encoding='utf-8') as fh:
-            for line in fh:
-                parts = line.strip().split()
-                if len(parts) >= 6 and parts[0] == 'E' and len(parts[5]) >= 4:
-                    seeds.append(parts[5])
-        seed_file.write_text('\n'.join(seeds) + '\n', encoding='utf-8')
-        extra = [str(seed_file)]
-        rem = max(0.05, limit_sec - (time.perf_counter() - t0))
-    else:
-        rem = max(0.05, limit_sec)
-
+    rem = max(0.05, limit_sec)
     subprocess.run(
         [
             str(engine_bin), arm, policy, str(max_entry_len), str(k_max), f'{rem:.4f}',
-            str(list_file), str(out_chain), *extra,
+            str(list_file), str(out_chain),
         ],
         env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
     )
@@ -150,9 +128,7 @@ def candidate_prefix_sizes(total_entries: int, k_points: Sequence[int], step: in
     for k in k_points:
         if 0 < k <= total_entries:
             wanted.add(k)
-    # Also include alphabet-floor neighborhood so tiny optimal dictionaries are never skipped
-    wanted.add(1)
-    for small in range(8, min(total_entries, 384) + 1, 8):
+    for small in range(16, min(total_entries, 256) + 1, 16):
         wanted.add(small)
     return sorted(s for s in wanted if 0 < s <= total_entries)
 
@@ -223,7 +199,7 @@ def verify_exact_roundtrip_layout(
     raise ValueError(f'unknown layout {layout}')
 
 
-def _score_shared_prefixes_reparsed(
+def _score_shared_chains_symmetric(
     chain_entries_by_arm: dict[str, list[tuple[int, int, bytes]]],
     docs_1: Sequence[bytes],
     docs_2: Sequence[bytes],
@@ -231,109 +207,195 @@ def _score_shared_prefixes_reparsed(
     k_points: Sequence[int],
     step: int,
     layouts: Sequence[str],
+    top_reparse: int = DEFAULT_TOP_REPARSE,
 ) -> list[dict[str, Any]]:
-    """Score shared-chain prefixes under iterative bit-cost reparsing with ZERO union floor."""
+    """1-pass exact Huffman MDL scan over all prefixes + symmetric top-N iterative bit-cost reparsing."""
     docs_all = list(docs_1) + list(docs_2)
-    need_a = 'A' in layouts
-    need_b = 'B' in layouts
-    seen_hashes: dict[str, dict[str, Any]] = {}
-    rows: list[dict[str, Any]] = []
-
+    # Pass 1: fast exact token-min + canonical Huffman across every candidate prefix
+    tm_rows: list[dict[str, Any]] = []
     for arm, chain in chain_entries_by_arm.items():
+        root: dict[Any, Any] = {}
+        at = 0
         raw_entries = [e[2] for e in chain]
         for sz in candidate_prefix_sizes(len(raw_entries), k_points, step):
-            pref = raw_entries[:sz]
-            h = sha256_bytes(b'\x00'.join(pref))
-            cached = seen_hashes.get(h)
-            if cached is None:
-                root = BE.build_trie(pref)
-                stored = chain[sz - 1][1]
-                syms = sz + 1
-                item: dict[str, Any] = {
-                    'entries': sz,
-                    'stored': stored,
-                    '_entries': pref,
-                }
-                if need_a:
-                    opt_a = BE.optimize_byte_segmentation(docs_all, root)
-                    if opt_a is None:
-                        continue
-                    bma = opt_a['byte_min']
-                    item['A'] = {
-                        'dict_bytes': stored,
-                        'table_bytes': syms,
-                        'routing_bytes': 0,
-                        'payload_bytes': bma['payload_bytes'],
-                        'total_bytes': stored + syms + bma['payload_bytes'],
-                        'tokens': bma['tokens'],
-                    }
-                if need_b:
-                    opt1 = BE.optimize_byte_segmentation(docs_1, root)
-                    opt2 = BE.optimize_byte_segmentation(docs_2, root)
-                    if opt1 is None or opt2 is None:
-                        continue
-                    bm1 = opt1['byte_min']
-                    bm2 = opt2['byte_min']
-                    pay_b = bm1['payload_bytes'] + bm2['payload_bytes']
-                    item['B'] = {
-                        'dict_bytes': stored,
-                        'table_bytes': 2 * syms,
-                        'routing_bytes': ROUTING_BYTES,
-                        'payload_bytes': pay_b,
-                        'total_bytes': stored + 2 * syms + ROUTING_BYTES + pay_b,
-                        'tokens': bm1['tokens'] + bm2['tokens'],
-                    }
-                seen_hashes[h] = item
-                cached = item
-            rows.append({'arm': arm, **cached})
-    return rows
+            while at < sz:
+                BE.insert_trie(root, raw_entries[at])
+                at += 1
+            p1, c1, t1 = BE.segment_corpus_tokens(docs_1, root)
+            if p1 is None:
+                continue
+            p2, c2, t2 = BE.segment_corpus_tokens(docs_2, root)
+            if p2 is None:
+                continue
+            stored = chain[sz - 1][1]
+            syms = sz + 1
+            c_all = Counter(c1)
+            c_all.update(c2)
+            la = BE.canonical_huffman_lengths(c_all)
+            pay_a = math.ceil(BE.total_huffman_bits(c_all, la) / 8)
+            lp = BE.canonical_huffman_lengths(c1)
+            lj = BE.canonical_huffman_lengths(c2)
+            pay_b = math.ceil(BE.total_huffman_bits(c1, lp) / 8) + math.ceil(BE.total_huffman_bits(c2, lj) / 8)
+            tm_rows.append({
+                'arm': arm,
+                'entries': sz,
+                'stored': stored,
+                'tokens': t1 + t2,
+                'tm_A': stored + syms + pay_a,
+                'tm_B': stored + 2 * syms + ROUTING_BYTES + pay_b,
+                '_entries': raw_entries[:sz],
+            })
+
+    # Select top `top_reparse` distinct prefixes per (K, layout) + token-minimal endpoint for reparsing
+    want_a: set[str] = set()
+    want_b: set[str] = set()
+    by_hash: dict[str, dict[str, Any]] = {}
+    for r in tm_rows:
+        h = sha256_bytes(b'\x00'.join(r['_entries']))
+        r['_hash'] = h
+        by_hash.setdefault(h, r)
+
+    for k in k_points:
+        sub = [r for r in tm_rows if r['entries'] <= k]
+        if not sub:
+            continue
+        tok_best = min(sub, key=lambda r: (r['tokens'], r['tm_A']))
+        if 'A' in layouts:
+            want_a.add(tok_best['_hash'])
+            for r in sorted(sub, key=lambda r: (r['tm_A'], r['tokens']))[:top_reparse]:
+                want_a.add(r['_hash'])
+        if 'B' in layouts:
+            want_b.add(tok_best['_hash'])
+            for r in sorted(sub, key=lambda r: (r['tm_B'], r['tokens']))[:top_reparse]:
+                want_b.add(r['_hash'])
+
+    reparse_a_cache: dict[str, dict[str, Any]] = {}
+    reparse_b_cache: dict[str, dict[str, Any]] = {}
+    for h in want_a:
+        pref = by_hash[h]['_entries']
+        stored = by_hash[h]['stored']
+        syms = len(pref) + 1
+        opt_a = BE.optimize_byte_segmentation(docs_all, BE.build_trie(pref))
+        if opt_a is not None:
+            bma = opt_a['byte_min']
+            reparse_a_cache[h] = {
+                'dict_bytes': stored,
+                'table_bytes': syms,
+                'routing_bytes': 0,
+                'payload_bytes': bma['payload_bytes'],
+                'total_bytes': stored + syms + bma['payload_bytes'],
+                'tokens': bma['tokens'],
+            }
+    for h in want_b:
+        pref = by_hash[h]['_entries']
+        stored = by_hash[h]['stored']
+        syms = len(pref) + 1
+        root = BE.build_trie(pref)
+        opt1 = BE.optimize_byte_segmentation(docs_1, root)
+        opt2 = BE.optimize_byte_segmentation(docs_2, root)
+        if opt1 is not None and opt2 is not None:
+            bm1 = opt1['byte_min']
+            bm2 = opt2['byte_min']
+            pay_b = bm1['payload_bytes'] + bm2['payload_bytes']
+            reparse_b_cache[h] = {
+                'dict_bytes': stored,
+                'table_bytes': 2 * syms,
+                'routing_bytes': ROUTING_BYTES,
+                'payload_bytes': pay_b,
+                'total_bytes': stored + 2 * syms + ROUTING_BYTES + pay_b,
+                'tokens': bm1['tokens'] + bm2['tokens'],
+            }
+
+    out: list[dict[str, Any]] = []
+    for r in tm_rows:
+        h = r['_hash']
+        item = dict(r)
+        if h in reparse_a_cache:
+            item['A'] = reparse_a_cache[h]
+        if h in reparse_b_cache:
+            item['B'] = reparse_b_cache[h]
+        out.append(item)
+    return out
 
 
-def _score_single_lang_prefixes_reparsed(
+def _score_single_lang_chains_symmetric(
     chain_entries_by_arm: dict[str, list[tuple[int, int, bytes]]],
     docs: Sequence[bytes],
     *,
     k_points: Sequence[int],
     step: int,
+    top_reparse: int = DEFAULT_TOP_REPARSE,
 ) -> list[dict[str, Any]]:
-    """Score single-language prefixes under iterative bit-cost reparsing and Pareto-prune."""
-    seen_hashes: dict[str, dict[str, Any]] = {}
-    pts: list[dict[str, Any]] = []
+    """1-pass exact Huffman scan + symmetric top-N Pareto iterative bit-cost reparsing."""
+    tm_pts: list[dict[str, Any]] = []
     for arm, chain in chain_entries_by_arm.items():
+        root: dict[Any, Any] = {}
+        at = 0
         raw_entries = [e[2] for e in chain]
         for sz in candidate_prefix_sizes(len(raw_entries), k_points, step):
+            while at < sz:
+                BE.insert_trie(root, raw_entries[at])
+                at += 1
+            p0, c0, t0 = BE.segment_corpus_tokens(docs, root)
+            if p0 is None:
+                continue
+            stored = chain[sz - 1][1]
+            syms = sz + 1
+            l0 = BE.canonical_huffman_lengths(c0)
+            pay0 = math.ceil(BE.total_huffman_bits(c0, l0) / 8)
             pref = raw_entries[:sz]
-            h = sha256_bytes(b'\x00'.join(pref))
-            cached = seen_hashes.get(h)
-            if cached is None:
-                root = BE.build_trie(pref)
-                opt = BE.optimize_byte_segmentation(docs, root)
-                if opt is None:
-                    continue
-                bm = opt['byte_min']
-                stored = chain[sz - 1][1]
-                syms = sz + 1
-                cached = {
-                    'entries': sz,
-                    'stored': stored,
-                    'table_bytes': syms,
-                    'payload_bytes': bm['payload_bytes'],
-                    'cost': stored + syms + bm['payload_bytes'],
-                    'tokens': bm['tokens'],
-                    '_entries': pref,
-                }
-                seen_hashes[h] = cached
-            pts.append({'arm': arm, **cached})
+            tm_pts.append({
+                'arm': arm,
+                'entries': sz,
+                'stored': stored,
+                'tm_tokens': t0,
+                'tm_cost': stored + syms + pay0,
+                '_entries': pref,
+                '_hash': sha256_bytes(b'\x00'.join(pref)),
+            })
 
-    # Pareto prune by (entries, cost): drop any prefix strictly dominated in both slots and total cost
-    pts.sort(key=lambda p: (p['entries'], p['cost'], p['tokens'], p['arm']))
-    pareto_pts: list[dict[str, Any]] = []
-    best_cost_so_far = 1 << 60
-    for p in pts:
-        if p['cost'] < best_cost_so_far:
-            pareto_pts.append(p)
-            best_cost_so_far = p['cost']
-    return pareto_pts
+    # Pareto prune token-min points by (entries, tm_cost), then select top_reparse per K + Pareto spread
+    tm_pts.sort(key=lambda p: (p['entries'], p['tm_cost'], p['tm_tokens'], p['arm']))
+    pareto_tm: list[dict[str, Any]] = []
+    best_tm = 1 << 60
+    for p in tm_pts:
+        if p['tm_cost'] < best_tm:
+            pareto_tm.append(p)
+            best_tm = p['tm_cost']
+
+    chosen_hashes: set[str] = set()
+    by_hash = {p['_hash']: p for p in tm_pts}
+    for k in k_points:
+        sub = [p for p in tm_pts if p['entries'] < k]
+        for p in sorted(sub, key=lambda x: (x['tm_cost'], x['entries']))[:top_reparse]:
+            chosen_hashes.add(p['_hash'])
+        sub_par = [p for p in pareto_tm if p['entries'] < k]
+        for p in sub_par:
+            chosen_hashes.add(p['_hash'])
+
+    reparsed_pts: list[dict[str, Any]] = []
+    for h in sorted(chosen_hashes):
+        p = by_hash[h]
+        pref = p['_entries']
+        opt = BE.optimize_byte_segmentation(docs, BE.build_trie(pref))
+        if opt is None:
+            continue
+        bm = opt['byte_min']
+        stored = p['stored']
+        syms = len(pref) + 1
+        reparsed_pts.append({
+            'arm': p['arm'],
+            'entries': len(pref),
+            'stored': stored,
+            'table_bytes': syms,
+            'payload_bytes': bm['payload_bytes'],
+            'cost': stored + syms + bm['payload_bytes'],
+            'tokens': bm['tokens'],
+            '_entries': pref,
+        })
+
+    reparsed_pts.sort(key=lambda p: (p['entries'], p['cost'], p['tokens'], p['arm']))
+    return reparsed_pts
 
 
 def _best_separate_exhaustive(
@@ -341,7 +403,6 @@ def _best_separate_exhaustive(
     pts_2: Sequence[dict[str, Any]],
     k_budget: int,
 ) -> tuple[dict[str, Any] | None, int]:
-    """Evaluate ALL feasible (K_1, K_2) pairs with K_1 + K_2 <= k_budget (no 7-pair cap)."""
     best: tuple[Any, ...] | None = None
     pairs_checked = 0
     for p1 in pts_1:
@@ -388,8 +449,9 @@ def execute_single_choice(
     arms: Sequence[str] = DEFAULT_ARMS,
     policy: str = 's1-whole',
     max_entry_len: int = 16,
-    limit_seconds: float = 10.0,
-    step: int = 32,
+    limit_seconds: float = 4.0,
+    step: int = 64,
+    top_reparse: int = DEFAULT_TOP_REPARSE,
     work_dir: Path,
 ) -> dict[str, Any]:
     """Execute ONLY the predicted `(layout, k_budget)` with zero cross-layout search."""
@@ -413,21 +475,15 @@ def execute_single_choice(
             )
             chains[arm] = read_chain_entries(cpath)
 
-        # Strict anti-leakage assertion: per-language chains do NOT exist
         if (work_dir / 'lang1.txt').exists() or (work_dir / 'lang2.txt').exists():
             raise AssertionError('cross-layout leakage detected in shared prediction execution')
 
-        rows = _score_shared_prefixes_reparsed(
-            chains, docs_1, docs_2, k_points=(k_budget,), step=step, layouts=(layout,),
+        rows = _score_shared_chains_symmetric(
+            chains, docs_1, docs_2, k_points=(k_budget,), step=step, layouts=(layout,), top_reparse=top_reparse,
         )
         usable = [r for r in rows if r['entries'] <= k_budget and layout in r]
         if not usable:
-            return {
-                'feasible': False,
-                'layout': layout,
-                'K': k_budget,
-                'elapsed_sec': round(time.perf_counter() - t0, 4),
-            }
+            return {'feasible': False, 'layout': layout, 'K': k_budget, 'elapsed_sec': round(time.perf_counter() - t0, 4)}
         best_r = min(usable, key=lambda r: (r[layout]['total_bytes'], r[layout]['tokens'], r['arm'], r['entries']))
         winner = {
             'layout': layout,
@@ -438,13 +494,12 @@ def execute_single_choice(
             '_entries': best_r['_entries'],
         }
         rt_ok = verify_exact_roundtrip_layout(layout, docs_1, docs_2, winner)
-        total_sec = time.perf_counter() - t0
         return {
             'feasible': True,
             'allow_union_floor': False,
             'wall_budget_cap_sec': limit_seconds,
             'engine_elapsed_sec': round(engine_sec, 4),
-            'elapsed_sec': round(total_sec, 4),
+            'elapsed_sec': round(time.perf_counter() - t0, 4),
             'roundtrip_verified': rt_ok,
             **{k: v for k, v in winner.items() if not k.startswith('_')},
         }
@@ -476,19 +531,12 @@ def execute_single_choice(
         if (work_dir / 'both.txt').exists():
             raise AssertionError('cross-layout leakage detected in Design C prediction execution')
 
-        pts1 = _score_single_lang_prefixes_reparsed(chains1, docs_1, k_points=(k_budget,), step=step)
-        pts2 = _score_single_lang_prefixes_reparsed(chains2, docs_2, k_points=(k_budget,), step=step)
+        pts1 = _score_single_lang_chains_symmetric(chains1, docs_1, k_points=(k_budget,), step=step, top_reparse=top_reparse)
+        pts2 = _score_single_lang_chains_symmetric(chains2, docs_2, k_points=(k_budget,), step=step, top_reparse=top_reparse)
         winner_c, pairs_checked = _best_separate_exhaustive(pts1, pts2, k_budget)
         if winner_c is None:
-            return {
-                'feasible': False,
-                'layout': 'C',
-                'K': k_budget,
-                'reparsed_pairs_evaluated': pairs_checked,
-                'elapsed_sec': round(time.perf_counter() - t0, 4),
-            }
+            return {'feasible': False, 'layout': 'C', 'K': k_budget, 'reparsed_pairs_evaluated': pairs_checked, 'elapsed_sec': round(time.perf_counter() - t0, 4)}
         rt_ok = verify_exact_roundtrip_layout('C', docs_1, docs_2, winner_c)
-        total_sec = time.perf_counter() - t0
         return {
             'feasible': True,
             'allow_union_floor': False,
@@ -496,7 +544,7 @@ def execute_single_choice(
             'lang1_wall_cap_sec': per_lang_total_limit,
             'lang2_wall_cap_sec': per_lang_total_limit,
             'engine_elapsed_sec': round(engine_sec, 4),
-            'elapsed_sec': round(total_sec, 4),
+            'elapsed_sec': round(time.perf_counter() - t0, 4),
             'roundtrip_verified': rt_ok,
             'K': k_budget,
             **{k: v for k, v in winner_c.items() if not k.startswith('_')},
@@ -514,34 +562,34 @@ def evaluate_equal_budget_oracle(
     arms: Sequence[str] = DEFAULT_ARMS,
     policy: str = 's1-whole',
     max_entry_len: int = 16,
-    limit_seconds: float = 10.0,
-    step: int = 32,
+    limit_seconds: float = 4.0,
+    step: int = 64,
+    top_reparse: int = DEFAULT_TOP_REPARSE,
     work_dir: Path,
 ) -> dict[str, Any]:
-    """Evaluate all `(layout in {'A','B','C'}, K in k_grid)` under equal wall-clock caps."""
+    """Evaluate all `(layout in {'A','B','C'}, K in k_grid)` + token-min full-budget baseline."""
     work_dir.mkdir(parents=True, exist_ok=True)
     t0_grid = time.perf_counter()
     k_max = max(k_grid)
     n_arms = max(1, len(arms))
 
-    # 1. Shared (`both`) search with total cap `limit_seconds` (NO Design-C union floor)
+    # 1. Shared (`both`) search with total cap `limit_seconds` (NO union floor)
     t_shared0 = time.perf_counter()
     both_docs = list(docs_1) + list(docs_2)
     both_groups = list(range(len(docs_1))) + list(range(len(docs_2)))
     both_list = write_corpus_list(both_docs, work_dir, 'oracle_both', groups=both_groups)
     shared_per_arm_limit = limit_seconds / n_arms
     shared_chains: dict[str, list[tuple[int, int, bytes]]] = {}
-    shared_engine_sec = 0.0
     for arm in arms:
         cpath = work_dir / 'chains' / f'both-{arm}.txt'
-        shared_engine_sec += run_engine_arm(
+        run_engine_arm(
             engine_bin, arm=arm, policy=policy, max_entry_len=max_entry_len,
             k_max=k_max, limit_sec=shared_per_arm_limit, list_file=both_list,
             out_chain=cpath, run_tag='oracle-both',
         )
         shared_chains[arm] = read_chain_entries(cpath)
-    shared_rows = _score_shared_prefixes_reparsed(
-        shared_chains, docs_1, docs_2, k_points=k_grid, step=step, layouts=('A', 'B'),
+    shared_rows = _score_shared_chains_symmetric(
+        shared_chains, docs_1, docs_2, k_points=k_grid, step=step, layouts=('A', 'B'), top_reparse=top_reparse,
     )
     shared_total_sec = time.perf_counter() - t_shared0
 
@@ -553,16 +601,15 @@ def evaluate_equal_budget_oracle(
     sep_per_arm_limit = sep_per_lang_limit / n_arms
     chains1: dict[str, list[tuple[int, int, bytes]]] = {}
     chains2: dict[str, list[tuple[int, int, bytes]]] = {}
-    sep_engine_sec = 0.0
     for arm in arms:
         c1 = work_dir / 'chains' / f'lang1-{arm}.txt'
         c2 = work_dir / 'chains' / f'lang2-{arm}.txt'
-        sep_engine_sec += run_engine_arm(
+        run_engine_arm(
             engine_bin, arm=arm, policy=policy, max_entry_len=max_entry_len,
             k_max=k_max, limit_sec=sep_per_arm_limit, list_file=list1,
             out_chain=c1, run_tag='oracle-lang1',
         )
-        sep_engine_sec += run_engine_arm(
+        run_engine_arm(
             engine_bin, arm=arm, policy=policy, max_entry_len=max_entry_len,
             k_max=k_max, limit_sec=sep_per_arm_limit, list_file=list2,
             out_chain=c2, run_tag='oracle-lang2',
@@ -570,8 +617,8 @@ def evaluate_equal_budget_oracle(
         chains1[arm] = read_chain_entries(c1)
         chains2[arm] = read_chain_entries(c2)
 
-    pts1 = _score_single_lang_prefixes_reparsed(chains1, docs_1, k_points=k_grid, step=step)
-    pts2 = _score_single_lang_prefixes_reparsed(chains2, docs_2, k_points=k_grid, step=step)
+    pts1 = _score_single_lang_chains_symmetric(chains1, docs_1, k_points=k_grid, step=step, top_reparse=top_reparse)
+    pts2 = _score_single_lang_chains_symmetric(chains2, docs_2, k_points=k_grid, step=step, top_reparse=top_reparse)
     sep_total_sec = time.perf_counter() - t_sep0
 
     cells: list[dict[str, Any]] = []
@@ -586,12 +633,14 @@ def evaluate_equal_budget_oracle(
                 cells.append({'layout': layout, 'K': k, 'feasible': False})
                 continue
             win = min(feas, key=lambda r: (r[layout]['total_bytes'], r[layout]['tokens'], r['arm'], r['entries']))
+            tok_best = min(feas, key=lambda r: (r['tokens'], r[layout]['total_bytes']))
             cell = {
                 'layout': layout,
                 'K': k,
                 'feasible': True,
                 'arm': win['arm'],
                 'entries': win['entries'],
+                'token_min_stop_total_bytes': tok_best[layout]['total_bytes'],
                 **win[layout],
             }
             cells.append(cell)
@@ -643,10 +692,11 @@ def evaluate_presearch_vs_oracle(
     arms: Sequence[str] = DEFAULT_ARMS,
     policy: str = 's1-whole',
     max_entry_len: int = 16,
-    limit_seconds: float = 10.0,
-    step: int = 32,
+    limit_seconds: float = 4.0,
+    step: int = 64,
+    top_reparse: int = DEFAULT_TOP_REPARSE,
 ) -> dict[str, Any]:
-    """Run frozen raw predictor, isolated predicted search, and equal-budget oracle."""
+    """Run frozen raw predictor, isolated predicted search, equal-budget oracle, and decoupled baselines."""
     with tempfile.TemporaryDirectory(prefix='bits-rung2-') as tmp:
         tmp_path = Path(tmp)
         engine_bin = compile_engine(tmp_path / 'build')
@@ -664,6 +714,7 @@ def evaluate_presearch_vs_oracle(
             max_entry_len=max_entry_len,
             limit_seconds=limit_seconds,
             step=step,
+            top_reparse=top_reparse,
             work_dir=tmp_path / 'predicted_only',
         )
         oracle = evaluate_equal_budget_oracle(
@@ -674,50 +725,111 @@ def evaluate_presearch_vs_oracle(
             max_entry_len=max_entry_len,
             limit_seconds=limit_seconds,
             step=step,
+            top_reparse=top_reparse,
             work_dir=tmp_path / 'equal_budget_oracle',
         )
 
     oracle_win = oracle['oracle_winner']
+    k_max = max(k_grid)
+    pred_layout = str(pred['layout_hat'])
+    pred_k = int(pred['K_hat'])
+
+    def find_cell(layout_name: str, k_val: int) -> dict[str, Any] | None:
+        return next(
+            (c for c in oracle['cells'] if c.get('feasible') and c['layout'] == layout_name and c['K'] == k_val),
+            None,
+        )
+
+    # 1. Default baseline: "always pick shared dictionary + separate tables (Design B)" with MDL byte stopping
+    default_b_cell = find_cell('B', k_max)
+    default_b_bytes = int(default_b_cell['total_bytes']) if default_b_cell else None
+    oracle_bytes = int(oracle_win['total_bytes'])
+    default_b_loss_bytes = (default_b_bytes - oracle_bytes) if default_b_bytes is not None else None
+    default_b_loss_pct = round(100.0 * default_b_loss_bytes / oracle_bytes, 4) if default_b_loss_bytes is not None else None
+    default_b_misses_gt_1pct = bool(default_b_loss_pct is not None and default_b_loss_pct > 1.0)
+
+    # 2. Decoupled Layout Score (holding MDL byte-cost stopping fixed at K_max)
+    pred_layout_kmax_cell = find_cell(pred_layout, k_max)
+    pred_layout_kmax_bytes = int(pred_layout_kmax_cell['total_bytes']) if pred_layout_kmax_cell else int(pred_exec['total_bytes'])
+    layout_regret_bytes = pred_layout_kmax_bytes - oracle_bytes
+    layout_gain_over_default_b = (default_b_bytes - pred_layout_kmax_bytes) if default_b_bytes is not None else None
+
+    # 3. Decoupled Stopping-Size Score (holding layout fixed at pred_layout: token-min fill vs MDL stop vs K_hat truncation)
+    pred_exec_bytes = int(pred_exec['total_bytes'])
+    tok_fill_kmax_bytes = pred_layout_kmax_cell.get('token_min_stop_total_bytes') if pred_layout_kmax_cell else None
+    mdl_gain_over_tok_fill = (
+        int(tok_fill_kmax_bytes) - pred_layout_kmax_bytes
+        if tok_fill_kmax_bytes is not None else None
+    )
+    k_hat_truncation_cost = pred_exec_bytes - pred_layout_kmax_bytes
+
+    # 4. Naive 1-byte MI & uncorrected plug-in MI ablations
+    naive = pred['naive_byte_mi_baseline']
+    naive_cell = find_cell(str(naive['layout_hat']), int(naive['K_hat'])) if naive.get('feasible') else None
+    naive_bytes_lost = (int(naive_cell['total_bytes']) - oracle_bytes) if naive_cell else None
+
+    plug_in = pred['plug_in_no_mm_baseline']
+    plug_cell = find_cell(str(plug_in['layout_hat']), int(plug_in['K_hat']))
+    plug_bytes_lost = (int(plug_cell['total_bytes']) - oracle_bytes) if plug_cell else None
+
     pred_total_sec = (float(pred['predictor_elapsed_ms']) / 1000.0) + float(pred_exec['elapsed_sec'])
     grid_sec = float(oracle['full_grid_elapsed_sec'])
-    bytes_lost = int(pred_exec['total_bytes']) - int(oracle_win['total_bytes'])
-    pct_regret = round(100.0 * bytes_lost / int(oracle_win['total_bytes']), 4)
-
-    # Textbook naive single-byte MI ablation from oracle cells
-    naive = pred['naive_byte_mi_baseline']
-    naive_cell = next(
-        (c for c in oracle['cells'] if c.get('feasible') and c['layout'] == naive['layout_hat'] and c['K'] == naive['K_hat']),
-        None,
-    )
-    naive_bytes_lost = (
-        int(naive_cell['total_bytes']) - int(oracle_win['total_bytes'])
-        if naive_cell is not None else None
-    )
+    single_layout_kmax_sec = float(oracle['shared_elapsed_sec']) if pred_layout in ('A', 'B') else float(oracle['separate_elapsed_sec'])
+    bytes_lost = pred_exec_bytes - oracle_bytes
+    pct_regret = round(100.0 * bytes_lost / oracle_bytes, 4)
 
     return {
-        'schema': 'bits-rung2-presearch-eval/v1',
+        'schema': 'bits-rung2-presearch-eval/v2',
         'label': label,
         'hypothesis_status': 'empirical_evaluation',
         'raw_bytes_total': int(pred['features']['N_total']),
         'prediction': {
             'rule_version': pred['rule_version'],
-            'layout_hat': pred['layout_hat'],
-            'K_hat': pred['K_hat'],
+            'layout_hat': pred_layout,
+            'K_hat': pred_k,
             'predictor_elapsed_ms': pred['predictor_elapsed_ms'],
-            'executed_total_bytes': pred_exec['total_bytes'],
+            'executed_total_bytes': pred_exec_bytes,
             'executed_elapsed_sec': round(pred_total_sec, 4),
             'roundtrip_verified': pred_exec['roundtrip_verified'],
         },
-        'naive_byte_mi_ablation': {
-            **naive,
-            'oracle_cell_total_bytes': naive_cell['total_bytes'] if naive_cell else None,
-            'bytes_lost_vs_oracle': naive_bytes_lost,
+        'decoupled_layout_score': {
+            'oracle_layout': oracle_win['layout'],
+            'predicted_layout': pred_layout,
+            'default_always_B_mdl_bytes': default_b_bytes,
+            'default_always_B_loss_bytes': default_b_loss_bytes,
+            'default_always_B_loss_pct': default_b_loss_pct,
+            'default_B_misses_gt_1pct': default_b_misses_gt_1pct,
+            'predicted_layout_mdl_kmax_bytes': pred_layout_kmax_bytes,
+            'layout_regret_vs_oracle_bytes': layout_regret_bytes,
+            'layout_gain_over_default_B_bytes': layout_gain_over_default_b,
+            'beats_default_B': bool(layout_gain_over_default_b is not None and layout_gain_over_default_b > 0),
+        },
+        'decoupled_stopping_score': {
+            'layout_held_fixed': pred_layout,
+            'token_min_fill_kmax_bytes': tok_fill_kmax_bytes,
+            'mdl_byte_stop_kmax_bytes': pred_layout_kmax_bytes,
+            'presearch_k_hat_mdl_bytes': pred_exec_bytes,
+            'ordinary_mdl_stopping_saving_bytes': mdl_gain_over_tok_fill,
+            'k_hat_presearch_truncation_cost_bytes': k_hat_truncation_cost,
+            'search_seconds_saved_vs_single_layout_kmax': round(single_layout_kmax_sec - pred_total_sec, 4),
+        },
+        'ablations': {
+            'naive_1byte_mi': {
+                **naive,
+                'bytes_lost_vs_oracle': naive_bytes_lost,
+            },
+            'plug_in_mi_without_miller_madow': {
+                **plug_in,
+                'bytes_lost_vs_oracle': plug_bytes_lost,
+            },
         },
         'oracle': {
             'best_layout': oracle_win['layout'],
             'best_K': oracle_win['K'],
-            'best_total_bytes': oracle_win['total_bytes'],
+            'best_total_bytes': oracle_bytes,
             'full_grid_elapsed_sec': grid_sec,
+            'shared_elapsed_sec': oracle['shared_elapsed_sec'],
+            'separate_elapsed_sec': oracle['separate_elapsed_sec'],
             'shared_wall_cap_sec': oracle['shared_wall_cap_sec'],
             'separate_wall_cap_sec': oracle['separate_wall_cap_sec'],
             'allow_union_floor': oracle['allow_union_floor'],
@@ -726,7 +838,7 @@ def evaluate_presearch_vs_oracle(
         'metrics': {
             'bytes_lost': bytes_lost,
             'pct_regret': pct_regret,
-            'picked_exact_layout': pred['layout_hat'] == oracle_win['layout'],
+            'picked_exact_layout': pred_layout == oracle_win['layout'],
             'picked_within_1pct_materiality': abs(pct_regret) < 1.0,
             'search_seconds_saved_vs_grid': round(grid_sec - pred_total_sec, 4),
             'search_speedup_vs_grid': round(grid_sec / max(1e-6, pred_total_sec), 2),
@@ -754,8 +866,8 @@ def main() -> None:
     parser.add_argument('--label', default='pair-eval')
     parser.add_argument('--k-grid', default='256,512,1024,2048,4096')
     parser.add_argument('--arms', default=','.join(DEFAULT_ARMS))
-    parser.add_argument('--limit-seconds', type=float, default=10.0)
-    parser.add_argument('--step', type=int, default=32)
+    parser.add_argument('--limit-seconds', type=float, default=4.0)
+    parser.add_argument('--step', type=int, default=64)
     args = parser.parse_args()
 
     k_grid = tuple(int(x.strip()) for x in args.k_grid.split(',') if x.strip())

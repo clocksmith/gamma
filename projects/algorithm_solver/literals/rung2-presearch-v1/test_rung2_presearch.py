@@ -122,12 +122,13 @@ def test_regime_b_bilingual_shared_ascii_beats_naive_byte_mi() -> None:
         step=16,
     )
     # Naive 1-byte MI sees near-zero single-byte divergence and falsely picks 'A'!
-    assert res['naive_byte_mi_ablation']['layout_hat'] == 'A', res['naive_byte_mi_ablation']
-    assert res['naive_byte_mi_ablation']['bytes_lost_vs_oracle'] > 50, res['naive_byte_mi_ablation']
+    assert res['ablations']['naive_1byte_mi']['layout_hat'] == 'A', res['ablations']['naive_1byte_mi']
+    assert res['ablations']['naive_1byte_mi']['bytes_lost_vs_oracle'] > 50, res['ablations']['naive_1byte_mi']
 
-    # Multi-scale raw predictor sees 4-gram divergence + shared operators and picks 'B', matching oracle!
+    # Multi-scale Miller-Madow-debiased predictor picks 'B', matching oracle!
     assert res['prediction']['layout_hat'] == 'B', res['prediction']
     assert res['oracle']['best_layout'] == 'B', res['oracle']
+    assert res['decoupled_layout_score']['layout_regret_vs_oracle_bytes'] == 0
     assert abs(res['metrics']['pct_regret']) < 0.5, res['metrics']
 
 
@@ -156,6 +157,8 @@ def test_regime_c_disjoint_alphabets_wins_end_to_end() -> None:
     )
     assert res['prediction']['layout_hat'] == 'C', res['prediction']
     assert res['oracle']['best_layout'] == 'C', res['oracle']
+    assert res['decoupled_layout_score']['default_B_misses_gt_1pct'] is True
+    assert res['decoupled_layout_score']['beats_default_B'] is True
     assert res['oracle']['shared_wall_cap_sec'] == res['oracle']['separate_wall_cap_sec']
     assert res['oracle']['allow_union_floor'] is False
     # Verify exhaustive Design C Pareto evaluation checked >> 7 pairs!
