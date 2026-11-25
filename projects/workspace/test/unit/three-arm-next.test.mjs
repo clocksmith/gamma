@@ -12,6 +12,8 @@ import {
   freezeLearned as freezeErpScreenLearned,
 } from '../../qualification/workflow-generalization/second-upgrade-read-check-erpnext.mjs';
 import { selftest as op178ScreenSelftest } from '../../qualification/workflow-generalization/op178-target-versions-screen.mjs';
+import { selftest as multiUpgradeScreenSelftest } from '../../qualification/workflow-generalization/multi-upgrade-drift-screen.mjs';
+import { selftest as relationalAblationSelftest } from '../../qualification/workflow-generalization/three-arm-next/ablate-relational-vs-authored.mjs';
 import { runFreeCounterexampleCheck } from '../../qualification/workflow-generalization/three-arm-next/counterexample-check.mjs';
 import { selftest as prelearnRuleSelftest } from '../../qualification/workflow-generalization/three-arm-next/prelearn-decision-rule.mjs';
 import {
@@ -676,4 +678,15 @@ test('OpenProject 17.8 Target versions 3-repeat $0 candidate screen and prelearn
   assert.equal(res.ok, true);
   const preRes = prelearnRuleSelftest();
   assert.equal(preRes.ok, true);
+});
+
+test('multi-upgrade $0 candidate screen and 2x2 zero-adapter relational LGG ablation verify all safety and cost gates', async () => {
+  const upg = await multiUpgradeScreenSelftest();
+  assert.equal(upg.ok, true);
+  assert.equal(upg.report.qualifyingCandidateIds.length, 4);
+
+  const abl = relationalAblationSelftest();
+  assert.equal(abl.ok, true);
+  assert.equal(abl.report.arms['zero-adapter-relational-lgg'].wrongWritesCommitted, 0);
+  assert.equal(abl.report.arms['zero-adapter-relational-lgg'].humanMinutesTotal, 0);
 });

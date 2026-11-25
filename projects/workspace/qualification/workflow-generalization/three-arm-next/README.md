@@ -57,6 +57,26 @@ freeze (`../three-arm/` at `gamma@776462de7`, hash `306e6171…`) byte-identical
      OpenProject 17.8's opt-in `Version` -> multi-value `Target versions` conversion as a
      documented candidate for a **new, separately frozen corpus** (keeping voided Stage A `306e6171`
      and paid Stage A parked).
+8. **Multi-upgrade `$0` candidate catalog (`../multi-upgrade-drift-screen.mjs`) & Rung 3 Zero-Adapter Relational LGG 2x2 ablation (`relational-trace-guard.mjs`, `ablate-relational-vs-authored.mjs`):**
+   - `../multi-upgrade-drift-screen.mjs` screens four upstream-documented open-source REST API
+     breaking upgrades (`REQUIRED_REPEATS = 3` per gate, `0` model calls, `$0` spend) plus three
+     governance/falsification controls:
+     1. OpenProject `17.7 -> 17.8` (`_links.version` -> `_links.targetVersions[]`),
+     2. NetBox `v4.0 -> v4.1` (`min_vid`/`max_vid` -> `vid_ranges[][]`),
+     3. NetBox `v4.1 -> v4.2` (`site` -> polymorphic `scope_type` + `scope_id`),
+     4. GitLab `15.11 -> 16.0` (`approvals_before_merge` -> `approval_rules` `approvals_required` + `user_ids[]`).
+   - `relational-trace-guard.mjs` extracts canonical typed facts (`bool`, fixed-point `num`, `dur`,
+     `sym`, HAL/URI `ref`, `set`, `intervals`, and keyed child-table `kmap`) directly from raw HTTP
+     `GET` JSON + write `intent` (`0` per-app adapter LOC, `0` adapter/maintenance minutes), hashes
+     free-text prose to abstain on contrast-indistinguishable text hazards (`unprojected-text-hazard`),
+     and combines Cross-Role Least General Generalization (`lgg-closure`) with minimal residual
+     negative cover.
+   - `ablate-relational-vs-authored.mjs` (`receipts/relational_ablation_v1.json`) runs the `$0`
+     6-workflow x 5-arm benchmark + 2x2 ablation:
+     - `flat-scalar-min-cover` (`repair-boundary.js` + `23.0` min human adapters): learns `3/6`, `4/8` own valid, **`5/9` wrong writes**;
+     - `scalar-only-lgg-closure` (ablation without typed relational extraction): learns **`0/6`** on raw REST/HAL JSON;
+     - `typed-relational-min-cover` (ablation without Cross-Role LGG): learns `6/6` (`8/8` valid), **`5/9` wrong writes**;
+     - `zero-adapter-relational-lgg` (full prototype): learns **`6/6`**, **`0` human minutes**, **`0/9` wrong writes**, `7/8` own valid (`8/8` post-fallback, honestly billing `1` incidental-coincidence fallback), winning total billed cost at `r = $0.50/min` up to `2,800` total routes (`466.7` routes/workflow) before `authored-expert-guard` (`28.0` human minutes, `8/8` own valid, `0/9` wrong writes) amortizes its authoring + upgrade maintenance cost.
 
 ## Verification ($0, local)
 
@@ -64,6 +84,8 @@ freeze (`../three-arm/` at `gamma@776462de7`, hash `306e6171…`) byte-identical
 node qualification/workflow-generalization/three-arm-next/counterexample-check.mjs
 node qualification/workflow-generalization/three-arm-next/prelearn-decision-rule.mjs
 node qualification/workflow-generalization/op178-target-versions-screen.mjs
+node qualification/workflow-generalization/multi-upgrade-drift-screen.mjs
+node qualification/workflow-generalization/three-arm-next/ablate-relational-vs-authored.mjs
 node qualification/workflow-generalization/three-arm-next/runner.mjs hash
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/score_after_fallback.py --selftest
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/cost_report.py --selftest

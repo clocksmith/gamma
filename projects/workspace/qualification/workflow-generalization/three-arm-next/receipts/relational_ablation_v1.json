@@ -1,0 +1,1254 @@
+{
+  "schema": "gammatron-relational-2x2-ablation/v1",
+  "modelCalls": 0,
+  "costUsd": 0,
+  "workflowCount": 6,
+  "upgradeWorkflowCount": 4,
+  "unprojectedTextHazardGate": {
+    "status": "abstain",
+    "reason": "unprojected-text-hazard"
+  },
+  "arms": {
+    "flat-scalar-min-cover": {
+      "armId": "flat-scalar-min-cover",
+      "humanMinutesTotal": 23,
+      "measuredCodeLocTotal": 92,
+      "workflowsLearnedCount": 3,
+      "validTotal": 8,
+      "validOwnCompleted": 4,
+      "validFallbackAbstentions": 4,
+      "validAfterFallback": 8,
+      "invalidTotal": 9,
+      "wrongWritesCommitted": 5,
+      "perWorkflow": {
+        "op-base-approval-gate": {
+          "status": "learned",
+          "guardPredicateCount": 1,
+          "guardPredicates": [
+            {
+              "kind": "equals-literal",
+              "left": "approval:/statusCode",
+              "value": 16
+            }
+          ],
+          "validOwn": "2/2",
+          "wrongWrites": "2/2",
+          "cases": [
+            {
+              "id": "op-valid-same-prio",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "op-valid-incidental-priority-diff",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "op-inv-wrong-hours",
+              "valid": false,
+              "wrote": true,
+              "wrongWrite": true
+            },
+            {
+              "id": "op-inv-quarantine-proj",
+              "valid": false,
+              "wrote": true,
+              "wrongWrite": true
+            }
+          ]
+        },
+        "erp-base-po-line-items": {
+          "status": "learned",
+          "guardPredicateCount": 2,
+          "guardPredicates": [
+            {
+              "kind": "equals-field",
+              "left": "order:/totalQty",
+              "right": "quotation:/totalQty"
+            },
+            {
+              "kind": "equals-literal",
+              "left": "quotation:/docstatus",
+              "value": 1
+            }
+          ],
+          "validOwn": "1/1",
+          "wrongWrites": "2/2",
+          "cases": [
+            {
+              "id": "erp-valid-unseen-items",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "erp-inv-line-item-swap",
+              "valid": false,
+              "wrote": true,
+              "wrongWrite": true
+            },
+            {
+              "id": "erp-inv-rate-gouge",
+              "valid": false,
+              "wrote": true,
+              "wrongWrite": true
+            }
+          ]
+        },
+        "upgrade-op178-target-versions": {
+          "status": "abstain",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "0/2",
+          "wrongWrites": "0/1",
+          "cases": [
+            {
+              "id": "op178-valid-subset",
+              "valid": true,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "op178-valid-single-in-set",
+              "valid": true,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "op178-inv-unapproved-ver",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-netbox41-vid-ranges": {
+          "status": "abstain",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "0/1",
+          "wrongWrites": "0/1",
+          "cases": [
+            {
+              "id": "nb41-valid-subintervals",
+              "valid": true,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "nb41-inv-overflow-interval",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-netbox42-generic-scope": {
+          "status": "learned",
+          "guardPredicateCount": 2,
+          "guardPredicates": [
+            {
+              "kind": "equals-literal",
+              "left": "approval:/approvedFlag",
+              "value": true
+            },
+            {
+              "kind": "equals-field",
+              "left": "approval:/scopeNum",
+              "right": "intent:/scopeNum"
+            }
+          ],
+          "validOwn": "1/1",
+          "wrongWrites": "1/1",
+          "cases": [
+            {
+              "id": "nb42-valid-site",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "nb42-inv-polymorphic-region-spoof",
+              "valid": false,
+              "wrote": true,
+              "wrongWrite": true
+            }
+          ]
+        },
+        "upgrade-gitlab16-approval-rules": {
+          "status": "abstain",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "0/1",
+          "wrongWrites": "0/2",
+          "cases": [
+            {
+              "id": "gl16-valid-rule",
+              "valid": true,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "gl16-inv-downgraded-required-count",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "gl16-inv-unauthorized-user",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        }
+      }
+    },
+    "scalar-only-lgg-closure": {
+      "armId": "scalar-only-lgg-closure",
+      "humanMinutesTotal": 0,
+      "measuredCodeLocTotal": 0,
+      "workflowsLearnedCount": 0,
+      "validTotal": 8,
+      "validOwnCompleted": 0,
+      "validFallbackAbstentions": 8,
+      "validAfterFallback": 8,
+      "invalidTotal": 9,
+      "wrongWritesCommitted": 0,
+      "perWorkflow": {
+        "op-base-approval-gate": {
+          "status": "abstain",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "0/2",
+          "wrongWrites": "0/2",
+          "cases": [
+            {
+              "id": "op-valid-same-prio",
+              "valid": true,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "op-valid-incidental-priority-diff",
+              "valid": true,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "op-inv-wrong-hours",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "op-inv-quarantine-proj",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "erp-base-po-line-items": {
+          "status": "abstain",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "0/1",
+          "wrongWrites": "0/2",
+          "cases": [
+            {
+              "id": "erp-valid-unseen-items",
+              "valid": true,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "erp-inv-line-item-swap",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "erp-inv-rate-gouge",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-op178-target-versions": {
+          "status": "abstain",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "0/2",
+          "wrongWrites": "0/1",
+          "cases": [
+            {
+              "id": "op178-valid-subset",
+              "valid": true,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "op178-valid-single-in-set",
+              "valid": true,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "op178-inv-unapproved-ver",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-netbox41-vid-ranges": {
+          "status": "abstain",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "0/1",
+          "wrongWrites": "0/1",
+          "cases": [
+            {
+              "id": "nb41-valid-subintervals",
+              "valid": true,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "nb41-inv-overflow-interval",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-netbox42-generic-scope": {
+          "status": "abstain",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "0/1",
+          "wrongWrites": "0/1",
+          "cases": [
+            {
+              "id": "nb42-valid-site",
+              "valid": true,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "nb42-inv-polymorphic-region-spoof",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-gitlab16-approval-rules": {
+          "status": "abstain",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "0/1",
+          "wrongWrites": "0/2",
+          "cases": [
+            {
+              "id": "gl16-valid-rule",
+              "valid": true,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "gl16-inv-downgraded-required-count",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "gl16-inv-unauthorized-user",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        }
+      }
+    },
+    "typed-relational-min-cover": {
+      "armId": "typed-relational-min-cover",
+      "humanMinutesTotal": 0,
+      "measuredCodeLocTotal": 0,
+      "workflowsLearnedCount": 6,
+      "validTotal": 8,
+      "validOwnCompleted": 8,
+      "validFallbackAbstentions": 0,
+      "validAfterFallback": 8,
+      "invalidTotal": 9,
+      "wrongWritesCommitted": 5,
+      "perWorkflow": {
+        "op-base-approval-gate": {
+          "status": "learned",
+          "guardPredicateCount": 1,
+          "guardPredicates": [
+            {
+              "kind": "equals-literal",
+              "left": "approval:/_links/status/href",
+              "valueType": "ref",
+              "value": "/api/v3/statuses/16"
+            }
+          ],
+          "validOwn": "2/2",
+          "wrongWrites": "2/2",
+          "cases": [
+            {
+              "id": "op-valid-same-prio",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "op-valid-incidental-priority-diff",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "op-inv-wrong-hours",
+              "valid": false,
+              "wrote": true,
+              "wrongWrite": true
+            },
+            {
+              "id": "op-inv-quarantine-proj",
+              "valid": false,
+              "wrote": true,
+              "wrongWrite": true
+            }
+          ]
+        },
+        "erp-base-po-line-items": {
+          "status": "learned",
+          "guardPredicateCount": 2,
+          "guardPredicates": [
+            {
+              "kind": "equals-literal",
+              "left": "quotation:/data/docstatus",
+              "valueType": "num",
+              "value": 1
+            },
+            {
+              "kind": "kmap-eq",
+              "left": "order:/data/items[by=item_code]/qty",
+              "right": "quotation:/data/items[by=item_code]/qty"
+            }
+          ],
+          "validOwn": "1/1",
+          "wrongWrites": "1/2",
+          "cases": [
+            {
+              "id": "erp-valid-unseen-items",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "erp-inv-line-item-swap",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "erp-inv-rate-gouge",
+              "valid": false,
+              "wrote": true,
+              "wrongWrite": true
+            }
+          ]
+        },
+        "upgrade-op178-target-versions": {
+          "status": "learned",
+          "guardPredicateCount": 2,
+          "guardPredicates": [
+            {
+              "kind": "equals-literal",
+              "left": "approval:/_links/status/href",
+              "valueType": "ref",
+              "value": "/api/v3/statuses/16"
+            },
+            {
+              "kind": "subset-of",
+              "left": "intent:/_links/targetVersions/*/href",
+              "right": "approval:/_links/targetVersions/*/href"
+            }
+          ],
+          "validOwn": "2/2",
+          "wrongWrites": "0/1",
+          "cases": [
+            {
+              "id": "op178-valid-subset",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "op178-valid-single-in-set",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "op178-inv-unapproved-ver",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-netbox41-vid-ranges": {
+          "status": "learned",
+          "guardPredicateCount": 2,
+          "guardPredicates": [
+            {
+              "kind": "equals-literal",
+              "left": "approval:/status",
+              "valueType": "sym",
+              "value": "approved"
+            },
+            {
+              "kind": "intervals-within",
+              "left": "intent:/vid_ranges",
+              "right": "approval:/authorized_vid_ranges"
+            }
+          ],
+          "validOwn": "1/1",
+          "wrongWrites": "0/1",
+          "cases": [
+            {
+              "id": "nb41-valid-subintervals",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "nb41-inv-overflow-interval",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-netbox42-generic-scope": {
+          "status": "learned",
+          "guardPredicateCount": 2,
+          "guardPredicates": [
+            {
+              "kind": "equals-literal",
+              "left": "approval:/status",
+              "valueType": "sym",
+              "value": "approved"
+            },
+            {
+              "kind": "equals-field",
+              "left": "intent:/scope_id",
+              "right": "approval:/scope_id"
+            }
+          ],
+          "validOwn": "1/1",
+          "wrongWrites": "1/1",
+          "cases": [
+            {
+              "id": "nb42-valid-site",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "nb42-inv-polymorphic-region-spoof",
+              "valid": false,
+              "wrote": true,
+              "wrongWrite": true
+            }
+          ]
+        },
+        "upgrade-gitlab16-approval-rules": {
+          "status": "learned",
+          "guardPredicateCount": 2,
+          "guardPredicates": [
+            {
+              "kind": "equals-literal",
+              "left": "approval:/status",
+              "valueType": "sym",
+              "value": "active"
+            },
+            {
+              "kind": "subset-of",
+              "left": "intent:/user_ids",
+              "right": "approval:/eligible_approver_ids"
+            }
+          ],
+          "validOwn": "1/1",
+          "wrongWrites": "1/2",
+          "cases": [
+            {
+              "id": "gl16-valid-rule",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "gl16-inv-downgraded-required-count",
+              "valid": false,
+              "wrote": true,
+              "wrongWrite": true
+            },
+            {
+              "id": "gl16-inv-unauthorized-user",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        }
+      }
+    },
+    "zero-adapter-relational-lgg": {
+      "armId": "zero-adapter-relational-lgg",
+      "humanMinutesTotal": 0,
+      "measuredCodeLocTotal": 0,
+      "workflowsLearnedCount": 6,
+      "validTotal": 8,
+      "validOwnCompleted": 7,
+      "validFallbackAbstentions": 1,
+      "validAfterFallback": 8,
+      "invalidTotal": 9,
+      "wrongWritesCommitted": 0,
+      "perWorkflow": {
+        "op-base-approval-gate": {
+          "status": "learned",
+          "guardPredicateCount": 4,
+          "guardPredicates": [
+            {
+              "kind": "equals-field",
+              "left": "record:/_links/project/href",
+              "right": "approval:/_links/project/href"
+            },
+            {
+              "kind": "equals-field",
+              "left": "intent:/workDuration",
+              "right": "approval:/estimatedTime"
+            },
+            {
+              "kind": "equals-field",
+              "left": "record:/priority",
+              "right": "approval:/priority"
+            },
+            {
+              "kind": "equals-literal",
+              "left": "approval:/_links/status/href",
+              "valueType": "ref",
+              "value": "/api/v3/statuses/16"
+            }
+          ],
+          "validOwn": "1/2",
+          "wrongWrites": "0/2",
+          "cases": [
+            {
+              "id": "op-valid-same-prio",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "op-valid-incidental-priority-diff",
+              "valid": true,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "op-inv-wrong-hours",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "op-inv-quarantine-proj",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "erp-base-po-line-items": {
+          "status": "learned",
+          "guardPredicateCount": 5,
+          "guardPredicates": [
+            {
+              "kind": "equals-field",
+              "left": "order:/data/company",
+              "right": "quotation:/data/company"
+            },
+            {
+              "kind": "kmap-eq",
+              "left": "order:/data/items[by=item_code]/qty",
+              "right": "quotation:/data/items[by=item_code]/qty"
+            },
+            {
+              "kind": "kmap-lte",
+              "left": "order:/data/items[by=item_code]/qty",
+              "right": "quotation:/data/items[by=item_code]/rate"
+            },
+            {
+              "kind": "kmap-lte",
+              "left": "order:/data/items[by=item_code]/rate",
+              "right": "quotation:/data/items[by=item_code]/rate"
+            },
+            {
+              "kind": "equals-literal",
+              "left": "quotation:/data/docstatus",
+              "valueType": "num",
+              "value": 1
+            }
+          ],
+          "validOwn": "1/1",
+          "wrongWrites": "0/2",
+          "cases": [
+            {
+              "id": "erp-valid-unseen-items",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "erp-inv-line-item-swap",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "erp-inv-rate-gouge",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-op178-target-versions": {
+          "status": "learned",
+          "guardPredicateCount": 2,
+          "guardPredicates": [
+            {
+              "kind": "subset-of",
+              "left": "intent:/_links/targetVersions/*/href",
+              "right": "approval:/_links/targetVersions/*/href"
+            },
+            {
+              "kind": "equals-literal",
+              "left": "approval:/_links/status/href",
+              "valueType": "ref",
+              "value": "/api/v3/statuses/16"
+            }
+          ],
+          "validOwn": "2/2",
+          "wrongWrites": "0/1",
+          "cases": [
+            {
+              "id": "op178-valid-subset",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "op178-valid-single-in-set",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "op178-inv-unapproved-ver",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-netbox41-vid-ranges": {
+          "status": "learned",
+          "guardPredicateCount": 2,
+          "guardPredicates": [
+            {
+              "kind": "intervals-within",
+              "left": "intent:/vid_ranges",
+              "right": "approval:/authorized_vid_ranges"
+            },
+            {
+              "kind": "equals-literal",
+              "left": "approval:/status",
+              "valueType": "sym",
+              "value": "approved"
+            }
+          ],
+          "validOwn": "1/1",
+          "wrongWrites": "0/1",
+          "cases": [
+            {
+              "id": "nb41-valid-subintervals",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "nb41-inv-overflow-interval",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-netbox42-generic-scope": {
+          "status": "learned",
+          "guardPredicateCount": 3,
+          "guardPredicates": [
+            {
+              "kind": "equals-field",
+              "left": "intent:/scope_id",
+              "right": "approval:/scope_id"
+            },
+            {
+              "kind": "equals-field",
+              "left": "intent:/scope_type",
+              "right": "approval:/scope_type"
+            },
+            {
+              "kind": "equals-literal",
+              "left": "approval:/status",
+              "valueType": "sym",
+              "value": "approved"
+            }
+          ],
+          "validOwn": "1/1",
+          "wrongWrites": "0/1",
+          "cases": [
+            {
+              "id": "nb42-valid-site",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "nb42-inv-polymorphic-region-spoof",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-gitlab16-approval-rules": {
+          "status": "learned",
+          "guardPredicateCount": 3,
+          "guardPredicates": [
+            {
+              "kind": "subset-of",
+              "left": "intent:/user_ids",
+              "right": "approval:/eligible_approver_ids"
+            },
+            {
+              "kind": "equals-field",
+              "left": "intent:/approvals_required",
+              "right": "approval:/min_approvals"
+            },
+            {
+              "kind": "equals-literal",
+              "left": "approval:/status",
+              "valueType": "sym",
+              "value": "active"
+            }
+          ],
+          "validOwn": "1/1",
+          "wrongWrites": "0/2",
+          "cases": [
+            {
+              "id": "gl16-valid-rule",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "gl16-inv-downgraded-required-count",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "gl16-inv-unauthorized-user",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        }
+      }
+    },
+    "authored-expert-guard": {
+      "armId": "authored-expert-guard",
+      "humanMinutesTotal": 28,
+      "measuredCodeLocTotal": 40,
+      "workflowsLearnedCount": 6,
+      "validTotal": 8,
+      "validOwnCompleted": 8,
+      "validFallbackAbstentions": 0,
+      "validAfterFallback": 8,
+      "invalidTotal": 9,
+      "wrongWritesCommitted": 0,
+      "perWorkflow": {
+        "op-base-approval-gate": {
+          "status": "authored",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "2/2",
+          "wrongWrites": "0/2",
+          "cases": [
+            {
+              "id": "op-valid-same-prio",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "op-valid-incidental-priority-diff",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "op-inv-wrong-hours",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "op-inv-quarantine-proj",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "erp-base-po-line-items": {
+          "status": "authored",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "1/1",
+          "wrongWrites": "0/2",
+          "cases": [
+            {
+              "id": "erp-valid-unseen-items",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "erp-inv-line-item-swap",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "erp-inv-rate-gouge",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-op178-target-versions": {
+          "status": "authored",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "2/2",
+          "wrongWrites": "0/1",
+          "cases": [
+            {
+              "id": "op178-valid-subset",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "op178-valid-single-in-set",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "op178-inv-unapproved-ver",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-netbox41-vid-ranges": {
+          "status": "authored",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "1/1",
+          "wrongWrites": "0/1",
+          "cases": [
+            {
+              "id": "nb41-valid-subintervals",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "nb41-inv-overflow-interval",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-netbox42-generic-scope": {
+          "status": "authored",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "1/1",
+          "wrongWrites": "0/1",
+          "cases": [
+            {
+              "id": "nb42-valid-site",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "nb42-inv-polymorphic-region-spoof",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        },
+        "upgrade-gitlab16-approval-rules": {
+          "status": "authored",
+          "guardPredicateCount": 0,
+          "guardPredicates": null,
+          "validOwn": "1/1",
+          "wrongWrites": "0/2",
+          "cases": [
+            {
+              "id": "gl16-valid-rule",
+              "valid": true,
+              "wrote": true,
+              "wrongWrite": false
+            },
+            {
+              "id": "gl16-inv-downgraded-required-count",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            },
+            {
+              "id": "gl16-inv-unauthorized-user",
+              "valid": false,
+              "wrote": false,
+              "wrongWrite": false
+            }
+          ]
+        }
+      }
+    }
+  },
+  "billedFallbackCostComparison": [
+    {
+      "ratePerMinuteUsd": 0,
+      "fixedSetupAndMaintenanceUsd": {
+        "always-replan": 0,
+        "zero-adapter-relational-lgg": 0,
+        "authored-expert-guard": 0
+      },
+      "breakEvenTotalRoutesExpertVsZeroAdapter": 0,
+      "breakEvenPerWorkflowRoutesExpertVsZeroAdapter": 0,
+      "byVolume": [
+        {
+          "routesPerWorkflow": 25,
+          "totalRoutes": 150,
+          "totalCostUsd": {
+            "always-replan": 12,
+            "zero-adapter-relational-lgg": 6.75,
+            "authored-expert-guard": 6
+          },
+          "lowestCostSafeArm": "authored-expert-guard"
+        },
+        {
+          "routesPerWorkflow": 100,
+          "totalRoutes": 600,
+          "totalCostUsd": {
+            "always-replan": 48,
+            "zero-adapter-relational-lgg": 27,
+            "authored-expert-guard": 24
+          },
+          "lowestCostSafeArm": "authored-expert-guard"
+        },
+        {
+          "routesPerWorkflow": 250,
+          "totalRoutes": 1500,
+          "totalCostUsd": {
+            "always-replan": 120,
+            "zero-adapter-relational-lgg": 67.5,
+            "authored-expert-guard": 60
+          },
+          "lowestCostSafeArm": "authored-expert-guard"
+        },
+        {
+          "routesPerWorkflow": 500,
+          "totalRoutes": 3000,
+          "totalCostUsd": {
+            "always-replan": 240,
+            "zero-adapter-relational-lgg": 135,
+            "authored-expert-guard": 120
+          },
+          "lowestCostSafeArm": "authored-expert-guard"
+        },
+        {
+          "routesPerWorkflow": 1000,
+          "totalRoutes": 6000,
+          "totalCostUsd": {
+            "always-replan": 480,
+            "zero-adapter-relational-lgg": 270,
+            "authored-expert-guard": 240
+          },
+          "lowestCostSafeArm": "authored-expert-guard"
+        }
+      ]
+    },
+    {
+      "ratePerMinuteUsd": 0.5,
+      "fixedSetupAndMaintenanceUsd": {
+        "always-replan": 0,
+        "zero-adapter-relational-lgg": 0,
+        "authored-expert-guard": 14
+      },
+      "breakEvenTotalRoutesExpertVsZeroAdapter": 2800,
+      "breakEvenPerWorkflowRoutesExpertVsZeroAdapter": 466.7,
+      "byVolume": [
+        {
+          "routesPerWorkflow": 25,
+          "totalRoutes": 150,
+          "totalCostUsd": {
+            "always-replan": 12,
+            "zero-adapter-relational-lgg": 6.75,
+            "authored-expert-guard": 20
+          },
+          "lowestCostSafeArm": "zero-adapter-relational-lgg"
+        },
+        {
+          "routesPerWorkflow": 100,
+          "totalRoutes": 600,
+          "totalCostUsd": {
+            "always-replan": 48,
+            "zero-adapter-relational-lgg": 27,
+            "authored-expert-guard": 38
+          },
+          "lowestCostSafeArm": "zero-adapter-relational-lgg"
+        },
+        {
+          "routesPerWorkflow": 250,
+          "totalRoutes": 1500,
+          "totalCostUsd": {
+            "always-replan": 120,
+            "zero-adapter-relational-lgg": 67.5,
+            "authored-expert-guard": 74
+          },
+          "lowestCostSafeArm": "zero-adapter-relational-lgg"
+        },
+        {
+          "routesPerWorkflow": 500,
+          "totalRoutes": 3000,
+          "totalCostUsd": {
+            "always-replan": 240,
+            "zero-adapter-relational-lgg": 135,
+            "authored-expert-guard": 134
+          },
+          "lowestCostSafeArm": "authored-expert-guard"
+        },
+        {
+          "routesPerWorkflow": 1000,
+          "totalRoutes": 6000,
+          "totalCostUsd": {
+            "always-replan": 480,
+            "zero-adapter-relational-lgg": 270,
+            "authored-expert-guard": 254
+          },
+          "lowestCostSafeArm": "authored-expert-guard"
+        }
+      ]
+    },
+    {
+      "ratePerMinuteUsd": 1,
+      "fixedSetupAndMaintenanceUsd": {
+        "always-replan": 0,
+        "zero-adapter-relational-lgg": 0,
+        "authored-expert-guard": 28
+      },
+      "breakEvenTotalRoutesExpertVsZeroAdapter": 5600,
+      "breakEvenPerWorkflowRoutesExpertVsZeroAdapter": 933.3,
+      "byVolume": [
+        {
+          "routesPerWorkflow": 25,
+          "totalRoutes": 150,
+          "totalCostUsd": {
+            "always-replan": 12,
+            "zero-adapter-relational-lgg": 6.75,
+            "authored-expert-guard": 34
+          },
+          "lowestCostSafeArm": "zero-adapter-relational-lgg"
+        },
+        {
+          "routesPerWorkflow": 100,
+          "totalRoutes": 600,
+          "totalCostUsd": {
+            "always-replan": 48,
+            "zero-adapter-relational-lgg": 27,
+            "authored-expert-guard": 52
+          },
+          "lowestCostSafeArm": "zero-adapter-relational-lgg"
+        },
+        {
+          "routesPerWorkflow": 250,
+          "totalRoutes": 1500,
+          "totalCostUsd": {
+            "always-replan": 120,
+            "zero-adapter-relational-lgg": 67.5,
+            "authored-expert-guard": 88
+          },
+          "lowestCostSafeArm": "zero-adapter-relational-lgg"
+        },
+        {
+          "routesPerWorkflow": 500,
+          "totalRoutes": 3000,
+          "totalCostUsd": {
+            "always-replan": 240,
+            "zero-adapter-relational-lgg": 135,
+            "authored-expert-guard": 148
+          },
+          "lowestCostSafeArm": "zero-adapter-relational-lgg"
+        },
+        {
+          "routesPerWorkflow": 1000,
+          "totalRoutes": 6000,
+          "totalCostUsd": {
+            "always-replan": 480,
+            "zero-adapter-relational-lgg": 270,
+            "authored-expert-guard": 268
+          },
+          "lowestCostSafeArm": "authored-expert-guard"
+        }
+      ]
+    }
+  ],
+  "scopedInterpretation": "2x2 $0 ablation across 6 workflows (including 4 upstream-documented API breaking upgrades) proves both ingredients are necessary: without typed relational extraction (`scalar-only-lgg-closure`), raw REST/HAL links, status symbols, multi-value sets, VLAN intervals, and ERPNext child tables fail to separate (`0/6` workflows learned without hand-written adapters); without Cross-Role LGG closure (`typed-relational-min-cover`), partial negative contrast leaves multi-role bindings unguarded (`5/9` wrong writes across OpenProject, ERPNext rate gouge, NetBox 4.2 polymorphic scope spoof, and GitLab 16.0 approval downgrade). Full `zero-adapter-relational-lgg` achieves 0 wrong writes (`0/9`), 0 human adapter/maintenance minutes, and `7/8` pre-fallback (`8/8` post-fallback) valid completion, winning total billed cost at `r = $0.50/min` below the incidental-abstention crossover where `authored-expert-guard` amortizes its `28.0` human minutes."
+}
