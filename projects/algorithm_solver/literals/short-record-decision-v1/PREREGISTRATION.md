@@ -46,6 +46,20 @@ Two workloads from `../fresh-short-records-v1/`, with a third held as a spare. E
 collection, never by record, so no test record sits next to a training record from the same source. The public
 manifest gives the training and validation sources and, for the test sets, only counts and hashes.
 
+| Role | Workload | Test sources | Test records | Mean record |
+| --- | --- | ---: | ---: | ---: |
+| Decision | `w1-short-files` | 19 | 2,850 | 208 bytes |
+| Decision | `w2-message-entries` | 33 | 4,950 | 83 bytes |
+| Spare | `w3-commit-subjects` | 42 | 6,300 | 61 bytes |
+
+Which two decide was fixed in the custodian's instructions before any data existed.
+
+**Sealing record.** On 2026-11-25 at 13:15:14 UTC the test records, the test source list and the split salt were
+encrypted into one archive (SHA-256 `988dae1c53cf0d00a1c3be4bfd1c9ee795e1787e4ed5b66f875f59b8154dc3de`) and the
+plain copies were deleted. The three test-file hashes in the manifest were checked against the encrypted copy
+first. A scan of the public directory found none of the 94 test source names and none of their pinned commits.
+No freeze owner existed yet at that time.
+
 The spare replaces a workload only for a defect found before scoring and unrelated to any codec result: fewer than
 2,000 test records, a source found in two splits, or records that cannot be rebuilt from the pinned commits.
 
