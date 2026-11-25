@@ -1,0 +1,229 @@
+{
+  "schema": "bits-rung3-vmm-subset-eval/v1",
+  "elapsed_sec": 193.64,
+  "codenet_nash_certificate_and_tokbest_audit": {
+    "streams_audited": 32,
+    "certified_zero_bit_gap_streams": 32,
+    "max_parse_suboptimality_bits": 0,
+    "tokbest_k4096_vmm_rescue": {
+      "primary": {
+        "size_selected_A_bytes": 85560,
+        "tokbest_reparsed_bytes": 101108,
+        "tokbest_dead_pruned_only_bytes": 101023,
+        "dead_entries_removed_only": 14,
+        "tokbest_after_vmm_bytes": 85535,
+        "vmm_selected_entries": 1952,
+        "penalty_gap_closed_pct": 100.16
+      },
+      "secondary": {
+        "size_selected_A_bytes": 88238,
+        "tokbest_reparsed_bytes": 103392,
+        "tokbest_dead_pruned_only_bytes": 103201,
+        "dead_entries_removed_only": 25,
+        "tokbest_after_vmm_bytes": 88495,
+        "vmm_selected_entries": 1997,
+        "penalty_gap_closed_pct": 98.3
+      }
+    }
+  },
+  "mdl_prefix_stop_vs_vmm_suites": [
+    {
+      "label": "codenet_py_js_200_to_200",
+      "arms": {
+        "bpe": {
+          "mdl_prefix_stop": {
+            "entries": 1856,
+            "in_sample_ra_bytes": 93058,
+            "held_out_ra_bytes": 103200,
+            "held_out_ns_per_seek": 1719.68,
+            "held_out_mib_per_sec": 377.34
+          },
+          "vmm_subset": {
+            "entries": 1839,
+            "in_sample_ra_bytes": 87883,
+            "held_out_ra_bytes": 101795,
+            "held_out_ns_per_seek": 1621.8,
+            "held_out_mib_per_sec": 400.11
+          },
+          "vmm_gain_in_sample_bytes": 5175,
+          "vmm_gain_held_out_bytes": 1405
+        },
+        "greedy-byte": {
+          "mdl_prefix_stop": {
+            "entries": 1920,
+            "in_sample_ra_bytes": 89119,
+            "held_out_ra_bytes": 101355,
+            "held_out_ns_per_seek": 1703.38,
+            "held_out_mib_per_sec": 380.95
+          },
+          "vmm_subset": {
+            "entries": 1893,
+            "in_sample_ra_bytes": 85972,
+            "held_out_ra_bytes": 100930,
+            "held_out_ns_per_seek": 1628.94,
+            "held_out_mib_per_sec": 398.36
+          },
+          "vmm_gain_in_sample_bytes": 3147,
+          "vmm_gain_held_out_bytes": 425
+        },
+        "greedy-entry": {
+          "mdl_prefix_stop": {
+            "entries": 1472,
+            "in_sample_ra_bytes": 86075,
+            "held_out_ra_bytes": 100567,
+            "held_out_ns_per_seek": 1607.28,
+            "held_out_mib_per_sec": 403.72
+          },
+          "vmm_subset": {
+            "entries": 1824,
+            "in_sample_ra_bytes": 85749,
+            "held_out_ra_bytes": 103564,
+            "held_out_ns_per_seek": 1609.14,
+            "held_out_mib_per_sec": 403.26
+          },
+          "vmm_gain_in_sample_bytes": 326,
+          "vmm_gain_held_out_bytes": -2997
+        }
+      },
+      "union_bpe_ge_vmm": {
+        "entries": 1885,
+        "in_sample_ra_bytes": 86584,
+        "held_out_ra_bytes": 104782,
+        "held_out_ns_per_seek": 1593.08,
+        "held_out_mib_per_sec": 407.32
+      }
+    },
+    {
+      "label": "short_wgsl_vs_json_80_to_80",
+      "arms": {
+        "bpe": {
+          "mdl_prefix_stop": {
+            "entries": 320,
+            "in_sample_ra_bytes": 11345,
+            "held_out_ra_bytes": 12071,
+            "held_out_ns_per_seek": 228.0,
+            "held_out_mib_per_sec": 624.64
+          },
+          "vmm_subset": {
+            "entries": 332,
+            "in_sample_ra_bytes": 10445,
+            "held_out_ra_bytes": 12020,
+            "held_out_ns_per_seek": 216.16,
+            "held_out_mib_per_sec": 658.86
+          },
+          "vmm_gain_in_sample_bytes": 900,
+          "vmm_gain_held_out_bytes": 51
+        },
+        "greedy-byte": {
+          "mdl_prefix_stop": {
+            "entries": 448,
+            "in_sample_ra_bytes": 10913,
+            "held_out_ra_bytes": 12185,
+            "held_out_ns_per_seek": 209.02,
+            "held_out_mib_per_sec": 681.36
+          },
+          "vmm_subset": {
+            "entries": 366,
+            "in_sample_ra_bytes": 10355,
+            "held_out_ra_bytes": 12294,
+            "held_out_ns_per_seek": 211.4,
+            "held_out_mib_per_sec": 673.69
+          },
+          "vmm_gain_in_sample_bytes": 558,
+          "vmm_gain_held_out_bytes": -109
+        },
+        "greedy-entry": {
+          "mdl_prefix_stop": {
+            "entries": 256,
+            "in_sample_ra_bytes": 10273,
+            "held_out_ra_bytes": 12092,
+            "held_out_ns_per_seek": 223.08,
+            "held_out_mib_per_sec": 638.42
+          },
+          "vmm_subset": {
+            "entries": 258,
+            "in_sample_ra_bytes": 10717,
+            "held_out_ra_bytes": 12650,
+            "held_out_ns_per_seek": 248.38,
+            "held_out_mib_per_sec": 573.39
+          },
+          "vmm_gain_in_sample_bytes": -444,
+          "vmm_gain_held_out_bytes": -558
+        }
+      },
+      "union_bpe_ge_vmm": {
+        "entries": 258,
+        "in_sample_ra_bytes": 10779,
+        "held_out_ra_bytes": 12763,
+        "held_out_ns_per_seek": 254.0,
+        "held_out_mib_per_sec": 560.7
+      }
+    },
+    {
+      "label": "short_ts_vs_mjs_80_to_80",
+      "arms": {
+        "bpe": {
+          "mdl_prefix_stop": {
+            "entries": 448,
+            "in_sample_ra_bytes": 12721,
+            "held_out_ra_bytes": 13387,
+            "held_out_ns_per_seek": 223.22,
+            "held_out_mib_per_sec": 643.6
+          },
+          "vmm_subset": {
+            "entries": 420,
+            "in_sample_ra_bytes": 11474,
+            "held_out_ra_bytes": 12898,
+            "held_out_ns_per_seek": 206.66,
+            "held_out_mib_per_sec": 695.17
+          },
+          "vmm_gain_in_sample_bytes": 1247,
+          "vmm_gain_held_out_bytes": 489
+        },
+        "greedy-byte": {
+          "mdl_prefix_stop": {
+            "entries": 448,
+            "in_sample_ra_bytes": 11672,
+            "held_out_ra_bytes": 12722,
+            "held_out_ns_per_seek": 215.96,
+            "held_out_mib_per_sec": 665.23
+          },
+          "vmm_subset": {
+            "entries": 421,
+            "in_sample_ra_bytes": 11248,
+            "held_out_ra_bytes": 12946,
+            "held_out_ns_per_seek": 209.1,
+            "held_out_mib_per_sec": 687.06
+          },
+          "vmm_gain_in_sample_bytes": 424,
+          "vmm_gain_held_out_bytes": -224
+        },
+        "greedy-entry": {
+          "mdl_prefix_stop": {
+            "entries": 320,
+            "in_sample_ra_bytes": 11206,
+            "held_out_ra_bytes": 13100,
+            "held_out_ns_per_seek": 215.3,
+            "held_out_mib_per_sec": 667.27
+          },
+          "vmm_subset": {
+            "entries": 308,
+            "in_sample_ra_bytes": 11492,
+            "held_out_ra_bytes": 13632,
+            "held_out_ns_per_seek": 255.14,
+            "held_out_mib_per_sec": 563.08
+          },
+          "vmm_gain_in_sample_bytes": -286,
+          "vmm_gain_held_out_bytes": -532
+        }
+      },
+      "union_bpe_ge_vmm": {
+        "entries": 312,
+        "in_sample_ra_bytes": 11525,
+        "held_out_ra_bytes": 13618,
+        "held_out_ns_per_seek": 245.78,
+        "held_out_mib_per_sec": 584.52
+      }
+    }
+  ]
+}
