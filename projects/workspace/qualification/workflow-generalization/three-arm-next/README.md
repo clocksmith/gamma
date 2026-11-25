@@ -47,10 +47,24 @@ freeze (`../three-arm/` at `gamma@776462de7`, hash `306e6171…`) byte-identical
    validates submission shapes and `failureId` independence, creates salted SHA-256 commitments
    (`MANIFEST.tsv`, per-route answer-key salts), verifies openings, and scans builder transcripts
    and artifacts for sealed needles.
+7. **Free ($0) counterexample falsification check first (`counterexample-check.mjs`) & OpenProject 17.8 candidate screen (`../op178-target-versions-screen.mjs`):**
+   - `counterexample-check.mjs` runs at `$0` (`0` model calls) on disposable copies, reproducing
+     the minimal `approval:/statusCode === 16` literal guard and showing that policy-invalid cases
+     satisfying `statusCode === 16` (hours mismatch, quarantine project, `[LEGAL-HOLD]` in
+     `description`) commit `3/3` wrong writes vs `0/3` for `expert-guard`, while free-text clauses
+     hit `no-separating-guard` under scalar projection. Scoped strictly to falsifying that guard
+     instance / identifying `"don't learn here"` blindspots without claiming Rung 2 or ruling out
+     every learned guard.
+   - `../op178-target-versions-screen.mjs` implements the 4-gate x 3-repeat `$0` screen for
+     OpenProject 17.8's opt-in `Version` -> multi-value `Target versions` conversion as a
+     documented candidate for a **new, separately frozen corpus** (keeping voided Stage A `306e6171`
+     and paid Stage A parked).
 
 ## Verification ($0, local)
 
 ```bash
+node qualification/workflow-generalization/three-arm-next/counterexample-check.mjs
+node qualification/workflow-generalization/op178-target-versions-screen.mjs
 node qualification/workflow-generalization/three-arm-next/runner.mjs hash
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/score_after_fallback.py --selftest
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/cost_report.py --selftest

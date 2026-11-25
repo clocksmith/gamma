@@ -11,6 +11,8 @@ import {
   checkRelease as checkErpReleaseWithRefusal,
   freezeLearned as freezeErpScreenLearned,
 } from '../../qualification/workflow-generalization/second-upgrade-read-check-erpnext.mjs';
+import { selftest as op178ScreenSelftest } from '../../qualification/workflow-generalization/op178-target-versions-screen.mjs';
+import { runFreeCounterexampleCheck } from '../../qualification/workflow-generalization/three-arm-next/counterexample-check.mjs';
 import {
   forArm,
   freezeDeterministicArm,
@@ -647,4 +649,22 @@ test('ERPNext drift screen preflight blocks below 25 GiB and records 403 setup r
   } finally {
     refuseErpApproverSetup403 = false;
   }
+});
+
+test('free ($0) counterexample check falsifies literal statusCode === 16 guard and exposes free-text projection blindspot', async () => {
+  const report = await runFreeCounterexampleCheck();
+  assert.equal(report.modelCalls, 0);
+  assert.equal(report.costUsd, 0);
+  assert.deepEqual(report.learnedTerms, [
+    { kind: 'equals-literal', left: 'approval:/statusCode', value: 16 },
+  ]);
+  assert.equal(report.repairBoundarySummary.falsifiedSafetyOnLiteralGuard, true);
+  assert.equal(report.repairBoundarySummary.wrongWritesCommitted, 3);
+  assert.equal(report.expertGuardSummary.wrongWritesCommitted, 0);
+  assert.equal(report.scalarProjectionBlindspotWhenTrained.reason, 'no-separating-guard');
+});
+
+test('OpenProject 17.8 Target versions 3-repeat $0 candidate screen enforces all four qualification gates', async () => {
+  const res = await op178ScreenSelftest();
+  assert.equal(res.ok, true);
 });
