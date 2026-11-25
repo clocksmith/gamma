@@ -18,6 +18,10 @@
 //   4. GitLab 15.11 -> 16.0 (`PUT /api/v4/projects/{id}` -> `PUT /api/v4/projects/{id}/approval_rules/{rule_id}`):
 //      Project-level scalar `approvals_before_merge` removed in 16.0 in favor of Merge Request
 //      Approval Rules (`approvals_required` + `user_ids[]`).
+//   5. GitLab 15.11 -> 16.0 (`POST /api/v4/projects/{id}/access_tokens`):
+//      Non-expiring access tokens (`expires_at: null`) removed in 16.0; server requires explicit
+//      `expires_at` (`YYYY-MM-DD`) up to the 365-day instance ceiling while accepting tokens whose
+//      `expires_at` exceeds the security ticket's approved rotation ceiling `max_expires_at`.
 //
 // Plus three negative/governance controls (`REQUIRED_REPEATS = 3`):
 //   C1. Backwards-compatible server alias (`legacySiteAutoMapped`): ruled out by Gate 2
@@ -484,12 +488,118 @@ function makeGitLab16ApprovalRulesSpec() {
   };
 }
 
+function makeGitLab16TokenExpiresAtSpec() {
+  const start = async ({ v16 }) => {
+    const tokens = [];
+    const approvalTicket = {
+      id: 91,
+      status: 'approved',
+      access_level: 30,
+      allowed_scopes: ['read_repository', 'write_repository'],
+      not_before: '2026-04-01',
+      max_expires_at: '2026-06-30',
+    };
+    const instanceCeiling = '2027-04-01'; // 365-day GitLab 16.0 instance cap
+    const { request, dispose } = await listenJsonServer((req, body, send) => {
+      if (req.method === 'GET' && req.url === '/api/v4/projects/42/token_approvals/91') {
+        return send(200, approvalTicket);
+      }
+      if (req.method === 'GET' && req.url === '/api/v4/projects/42/access_tokens') {
+        return send(200, tokens);
+      }
+      if (req.method === 'POST' && req.url === '/api/v4/projects/42/access_tokens') {
+        if (!v16) {
+          if (body.expires_at === null || typeof body.expires_at === 'string') {
+            const rec = { id: tokens.length + 1, name: body.name, scopes: body.scopes, access_level: body.access_level, expires_at: body.expires_at };
+            tokens.push(rec);
+            return send(201, rec);
+          }
+          return send(400, { message: 'Invalid token payload' });
+        }
+        // GitLab 16.0 breaking change: non-expiring tokens (`expires_at: null` / omitted) rejected;
+        // server enforces only the 365-day instance ceiling, NOT the ticket's `max_expires_at`!
+        if (typeof body.expires_at !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(body.expires_at)) {
+          return send(400, { message: 'expires_at is required in GitLab 16.0 (non-expiring tokens removed)' });
+        }
+        if (body.expires_at > instanceCeiling) {
+          return send(400, { message: 'Expiration date exceeds 365-day instance maximum lifetime' });
+        }
+        const rec = { id: tokens.length + 1, name: body.name, scopes: body.scopes, access_level: body.access_level, expires_at: body.expires_at };
+        tokens.push(rec);
+        return send(201, rec);
+      }
+      return send(404, { message: 'not found' });
+    });
+
+    return {
+      request,
+      dispose,
+      runLegacyValid: async () => {
+        await request('POST', '/api/v4/projects/42/access_tokens', {
+          name: 'ci-bot',
+          scopes: ['read_repository'],
+          access_level: 30,
+          expires_at: null,
+        });
+        const g = await request('GET', '/api/v4/projects/42/access_tokens');
+        return { persistedExpected: g.body.length === 1 && g.body[0].expires_at === null };
+      },
+      runLegacyOnPost: async () => {
+        await request('POST', '/api/v4/projects/42/access_tokens', {
+          name: 'ci-bot',
+          scopes: ['read_repository'],
+          access_level: 30,
+          expires_at: null,
+        });
+        const g = await request('GET', '/api/v4/projects/42/access_tokens');
+        return { persistedExpected: g.body.length === 1 };
+      },
+      runReferenceValid: async () => {
+        await request('POST', '/api/v4/projects/42/access_tokens', {
+          name: 'ci-bot',
+          scopes: ['read_repository'],
+          access_level: 30,
+          expires_at: '2026-05-15',
+        });
+        const g = await request('GET', '/api/v4/projects/42/access_tokens');
+        return {
+          persistedExpected: (
+            g.body.length === 1
+            && g.body[0].expires_at >= approvalTicket.not_before
+            && g.body[0].expires_at <= approvalTicket.max_expires_at
+          ),
+        };
+      },
+      runReferenceWrongWrite: async () => {
+        // Exceeds ticket's `2026-06-30` rotation window (`2027-02-01 <= 2027-04-01` instance cap -> accepted by server!)
+        await request('POST', '/api/v4/projects/42/access_tokens', {
+          name: 'ci-bot',
+          scopes: ['read_repository'],
+          access_level: 30,
+          expires_at: '2027-02-01',
+        });
+        const g = await request('GET', '/api/v4/projects/42/access_tokens');
+        return { persistedWrongWrite: g.body.length === 1 && g.body[0].expires_at === '2027-02-01' };
+      },
+    };
+  };
+  return {
+    candidateId: 'gitlab-15.11-to-16.0-token-expires-at',
+    application: 'gitlab',
+    upgradePair: '15.11 -> 16.0 (/api/v4/projects/:id/access_tokens expires_at)',
+    upstreamCitation: 'GitLab 16.0 breaking change: non-expiring access tokens removed; mandatory expires_at (YYYY-MM-DD) enforced up to 365-day cap',
+    provisionPreUpgrade: () => start({ v16: false }),
+    provisionPostUpgrade: () => start({ v16: true }),
+  };
+}
+
 export async function runMultiUpgradeDriftScreen() {
   const specs = [
     makeOpenProject178Spec(),
     makeNetBox41VlanGroupSpec(),
     makeNetBox42PrefixScopeSpec(),
     makeGitLab16ApprovalRulesSpec(),
+    makeGitLab16TokenExpiresAtSpec(),
     makeNetBox42PrefixScopeSpec({ legacySiteAutoMapped: true }),
     makeNetBox41VlanGroupSpec({ serverRejectsOutOfWindowVlan: true }),
     makeNetBox42PrefixScopeSpec({ forbid403: true }),
@@ -529,6 +639,7 @@ export async function selftest() {
     'netbox-4.0-to-4.1-vlangroup-vid-ranges',
     'netbox-4.1-to-4.2-prefix-generic-scope',
     'gitlab-15.11-to-16.0-approval-rules',
+    'gitlab-15.11-to-16.0-token-expires-at',
   ]);
   assert.equal(report.ruledOutControls.length, 2);
   assert.match(report.ruledOutControls[0].reason, /old-workflow-adapts-on-its-own/);

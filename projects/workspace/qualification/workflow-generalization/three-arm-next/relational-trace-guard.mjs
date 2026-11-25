@@ -28,16 +28,70 @@ const LIMITS = Object.freeze({
 
 const OP_BINDING = /^opbind-v1:[a-f0-9]{64}$/;
 const ROLE = /^[a-z][a-z0-9_-]{0,47}$/;
-const DURATION = /^P(?=.{1,28}$)(?:\d{1,5}D)?(?:T(?:\d{1,5}H)?(?:\d{1,5}M)?(?:\d{1,5}S)?)?$/;
+const DURATION_PARTS = /^P(?=.{1,28}$)(?:(\d{1,5})D)?(?:T(?:(\d{1,5})H)?(?:(\d{1,5})M)?(?:(\d{1,5})S)?)?$/;
+const ISO_DATE_ONLY = /^(\d{4})-(\d{2})-(\d{2})$/;
+const ISO_DATETIME = /^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,6}))?(?:Z|([+-]\d{2}:\d{2}))$/;
 const REL_REF = /^\/[A-Za-z0-9/_.%-]{1,160}$/;
 const SHORT_SYM = /^[A-Za-z0-9_.:/-]{1,48}$/;
 const COMPANY_OR_LABEL = /^[A-Za-z0-9][A-Za-z0-9 _.-]{0,47}$/;
 
-const SECRET_OR_VOLATILE_KEY = /(?:^$|constructor|prototype|password|credential|secret|token|cookie|authorization|auth_token|api_key|lock_?version|modified|created_?at|updated_?at)/i;
+const SECRET_OR_VOLATILE_KEY = /(?:^$|constructor|prototype|password|credential|secret|access_token|refresh_token|csrf_token|api_token|bearer_token|^token$|cookie|authorization|auth_token|api_key|lock_?version|modified|created_?at|updated_?at)/i;
 const FREE_TEXT_KEY = /(?:description|terms|note|notes|comment|comments|hold|embargo|raw|markdown|body_text)/i;
 const RECORD_PK_KEY = /^(?:id|name|slug|url|display|doctype)$/;
 const CHILD_KEY_FIELDS = ['item_code', 'sku', 'code', 'slug', 'key'];
 const ADDITIVE_MAP_COLS = new Set(['qty', 'quantity', 'amount', 'hours', 'count']);
+const TEMPORAL_EXPIRY_DOMAIN = new Set([
+  'expires_at', 'max_expires_at', 'min_expires_at', 'not_before', 'not_after',
+  'valid_from', 'valid_till', 'valid_until', 'schedule_date', 'delivery_date', 'expiry_date',
+]);
+const TEMPORAL_SCHEDULE_DOMAIN = new Set([
+  'start_date', 'due_date', 'end_date', 'effective_date', 'target_date', 'finish_date',
+  'min_start_date', 'max_due_date',
+]);
+const DURATION_BUDGET_DOMAIN = new Set([
+  'work_duration', 'estimated_time', 'approved_duration', 'max_duration', 'min_duration', 'planned_duration',
+]);
+
+function parseDurationSeconds(str) {
+  if (str === 'P' || str === 'PT') return null;
+  const m = DURATION_PARTS.exec(str);
+  if (!m || (!m[1] && !m[2] && !m[3] && !m[4])) return null;
+  return (Number(m[1] ?? 0) * 86400)
+    + (Number(m[2] ?? 0) * 3600)
+    + (Number(m[3] ?? 0) * 60)
+    + Number(m[4] ?? 0);
+}
+
+function tryParseIsoTimestamp(str) {
+  const dm = ISO_DATE_ONLY.exec(str);
+  if (dm) {
+    const y = Number(dm[1]);
+    const mo = Number(dm[2]);
+    const d = Number(dm[3]);
+    if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;
+    const ms = Date.UTC(y, mo - 1, d);
+    const dt = new Date(ms);
+    if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== mo - 1 || dt.getUTCDate() !== d) return null;
+    return ms;
+  }
+  const tm = ISO_DATETIME.exec(str);
+  if (tm) {
+    const y = Number(tm[1]);
+    const mo = Number(tm[2]);
+    const d = Number(tm[3]);
+    const hh = Number(tm[4]);
+    const mm = Number(tm[5]);
+    const ss = Number(tm[6]);
+    if (mo < 1 || mo > 12 || d < 1 || d > 31 || hh > 23 || mm > 59 || ss > 59) return null;
+    const dtCheck = new Date(Date.UTC(y, mo - 1, d));
+    if (dtCheck.getUTCFullYear() !== y || dtCheck.getUTCMonth() !== mo - 1 || dtCheck.getUTCDate() !== d) return null;
+    const frac = tm[7] ? `.${tm[7].slice(0, 3).padEnd(3, '0')}` : '';
+    const tz = tm[8] ?? 'Z';
+    const ms = Date.parse(`${tm[1]}-${tm[2]}-${tm[3]}T${tm[4]}:${tm[5]}:${tm[6]}${frac}${tz}`);
+    return Number.isFinite(ms) ? ms : null;
+  }
+  return null;
+}
 
 const own = (obj, k) => Object.hasOwn(obj, k);
 const plain = v => v !== null && typeof v === 'object' && [Object.prototype, null].includes(Object.getPrototypeOf(v));
@@ -106,7 +160,11 @@ function tryExtractKeyedChildMaps(arr) {
  * Extracts typed relational facts directly from raw GET responses + optional `intent` write body.
  * Supports `featureMode: 'typed-relational'` (default) or `'scalar-only'` (ablation).
  */
-export function extractTypedTraceFacts(responses, intentPayload = null, { featureMode = 'typed-relational' } = {}) {
+export function extractTypedTraceFacts(
+  responses,
+  intentPayload = null,
+  { featureMode = 'typed-relational', enableTemporalOrder = true } = {},
+) {
   if (!Array.isArray(responses) || responses.length > LIMITS.responses) return stop('catalog-budget');
   if (!['typed-relational', 'scalar-only'].includes(featureMode)) return stop('invalid-feature-mode');
 
@@ -148,12 +206,20 @@ export function extractTypedTraceFacts(responses, intentPayload = null, { featur
         if (node.trim().length > 0) freeTextChunks.push(`${role}:${path}=${node.trim()}`);
         return;
       }
-      if (node !== 'PT' && DURATION.test(node)) {
-        putFact(`${role}:${path}`, { type: 'dur', value: node });
+      const durSec = parseDurationSeconds(node);
+      if (durSec !== null) {
+        putFact(`${role}:${path}`, { type: 'dur', value: node, seconds: durSec });
         return;
       }
       if (!relational) return;
       if (depth === 1 && RECORD_PK_KEY.test(leafKey) && role !== 'intent') return;
+      if (enableTemporalOrder) {
+        const tsMs = tryParseIsoTimestamp(node);
+        if (tsMs !== null) {
+          putFact(`${role}:${path}`, { type: 'ts', value: tsMs, raw: node });
+          return;
+        }
+      }
       if (REL_REF.test(node)) {
         // Exclude self-link (`_links/self/href`) so entity URLs are never memorized.
         if (path.endsWith('/_links/self/href')) return;
@@ -232,6 +298,23 @@ const tailToken = key => {
   if (parts.at(-1) === 'href' && parts.length >= 2) return parts.at(-2);
   return parts.at(-1) ?? '';
 };
+const toSnakeStem = key => tailToken(key).replace(/([a-z0-9])([A-Z])/g, '$1_$2').toLowerCase();
+const stripBoundAffix = s => s.replace(/^(?:max_|min_|allowed_|approved_)/, '');
+
+function isComparableOrderedPair(left, right, valType) {
+  const sl = toSnakeStem(left);
+  const sr = toSnakeStem(right);
+  if (!sl || !sr) return false;
+  if (stripBoundAffix(sl) === stripBoundAffix(sr)) return true;
+  if (valType === 'ts') {
+    return (TEMPORAL_EXPIRY_DOMAIN.has(sl) && TEMPORAL_EXPIRY_DOMAIN.has(sr))
+      || (TEMPORAL_SCHEDULE_DOMAIN.has(sl) && TEMPORAL_SCHEDULE_DOMAIN.has(sr));
+  }
+  if (valType === 'dur') {
+    return DURATION_BUDGET_DOMAIN.has(sl) && DURATION_BUDGET_DOMAIN.has(sr);
+  }
+  return false;
+}
 
 function factEquals(a, b) {
   if (!a || !b || a.type !== b.type) return false;
@@ -263,6 +346,17 @@ export function evaluateRelationalPredicate(pred, facts) {
     if (lv.type !== 'intervals' || rv.type !== 'intervals') return null;
     if (lv.value.length === 0) return false;
     return lv.value.every(([a, b]) => rv.value.some(([A, B]) => A <= a && b <= B));
+  }
+  if (pred.kind === 'ts-lte' || pred.kind === 'ts-gte') {
+    if (lv.type !== 'ts' || rv.type !== 'ts') return null;
+    return pred.kind === 'ts-lte' ? lv.value <= rv.value : lv.value >= rv.value;
+  }
+  if (pred.kind === 'dur-lte' || pred.kind === 'dur-gte') {
+    if (lv.type !== 'dur' || rv.type !== 'dur') return null;
+    const ls = typeof lv.seconds === 'number' ? lv.seconds : parseDurationSeconds(lv.value);
+    const rs = typeof rv.seconds === 'number' ? rv.seconds : parseDurationSeconds(rv.value);
+    if (ls === null || rs === null) return null;
+    return pred.kind === 'dur-lte' ? ls <= rs : ls >= rs;
   }
   if (pred.kind === 'kmap-eq' || pred.kind === 'kmap-lte') {
     if (lv.type !== 'kmap' || rv.type !== 'kmap') return null;
@@ -405,7 +499,7 @@ export function learnRelationalTraceGuard({
       if (lv0.type !== rv0.type) continue;
 
       const pairPreds = [];
-      if (['bool', 'num', 'dur', 'sym', 'ref', 'set', 'intervals'].includes(lv0.type)) {
+      if (['bool', 'num', 'dur', 'ts', 'sym', 'ref', 'set', 'intervals'].includes(lv0.type)) {
         const eqPred = Object.freeze({ kind: 'equals-field', left, right });
         if (posFacts.every(pf => evaluateRelationalPredicate(eqPred, pf) === true)) {
           pairPreds.push(eqPred);
@@ -418,6 +512,16 @@ export function learnRelationalTraceGuard({
           const intPred = Object.freeze({ kind: 'intervals-within', left, right });
           if (posFacts.every(pf => evaluateRelationalPredicate(intPred, pf) === true)) {
             pairPreds.push(intPred);
+          }
+        } else if (relational && (lv0.type === 'ts' || lv0.type === 'dur') && isComparableOrderedPair(left, right, lv0.type)) {
+          const lteKind = lv0.type === 'ts' ? 'ts-lte' : 'dur-lte';
+          const gteKind = lv0.type === 'ts' ? 'ts-gte' : 'dur-gte';
+          const ltePred = Object.freeze({ kind: lteKind, left, right });
+          const gtePred = Object.freeze({ kind: gteKind, left, right });
+          if (posFacts.every(pf => evaluateRelationalPredicate(ltePred, pf) === true)) {
+            pairPreds.push(ltePred);
+          } else if (posFacts.every(pf => evaluateRelationalPredicate(gtePred, pf) === true)) {
+            pairPreds.push(gtePred);
           }
         }
       } else if (relational && lv0.type === 'kmap' && tailToken(left) === tailToken(right)) {
@@ -443,9 +547,14 @@ export function learnRelationalTraceGuard({
         //   (c) connects matching domain attribute names across roles (`tailToken(left) === tailToken(right)`
         //       or structured `kmap`/`set`/`intervals`).
         const isStructuredCollection = ['set', 'intervals', 'kmap'].includes(lv0.type);
+        const isOrderedTemporalOrDur = ['ts-lte', 'ts-gte', 'dur-lte', 'dur-gte'].includes(pred.kind);
         const sameAttrName = tailToken(left) !== '' && tailToken(left) === tailToken(right);
-        if (roleOf(left) === 'intent' || variesAcrossPositives(left) || variesAcrossPositives(right)
-            || sameAttrName || isStructuredCollection) {
+        const keepOrderedInSpine = !isOrderedTemporalOrDur
+          || roleOf(left) === 'intent'
+          || (variesAcrossPositives(left) && variesAcrossPositives(right))
+          || cover > 0;
+        if (keepOrderedInSpine && (roleOf(left) === 'intent' || variesAcrossPositives(left) || variesAcrossPositives(right)
+            || sameAttrName || isStructuredCollection || isOrderedTemporalOrDur)) {
           crossRoleLggSpine.push({ pred, reads: [left, right], cover });
         }
       }

@@ -1,0 +1,133 @@
+{
+  "schema": "gammatron-temporal-and-sealed-custody-verification/v1",
+  "actualModelCallsSpent": 0,
+  "actualUsdSpent": 0,
+  "temporalAndDurationAblation": {
+    "gitlab16TokenWindow": {
+      "withoutTemporalOrder": {
+        "status": "abstain",
+        "reason": "unbound-intent-field:intent:/expires_at"
+      },
+      "withTemporalOrder": {
+        "status": "learned",
+        "predicateKinds": [
+          "equals-field(intent:/access_level,approval:/access_level)",
+          "subset-of(intent:/scopes,approval:/allowed_scopes)",
+          "ts-lte(intent:/expires_at,approval:/max_expires_at)",
+          "ts-gte(intent:/expires_at,approval:/not_before)",
+          "equals-literal(approval:/status)"
+        ],
+        "probes": {
+          "validInWindowWithOlderIssuedAt": "eligible-for-review",
+          "invalidAfterMaxExpires": "abstain",
+          "invalidBeforeNotBefore": "abstain",
+          "invalidUnapprovedScope": "abstain"
+        }
+      }
+    },
+    "heterogeneousIsoDurationCeiling": {
+      "status": "learned",
+      "predicateKinds": [
+        "dur-lte(intent:/workDuration,approval:/estimatedTime)",
+        "equals-literal(approval:/_links/status/href)"
+      ],
+      "valid28hUnder32h": "eligible-for-review",
+      "invalid48hOver36h": "abstain"
+    }
+  },
+  "custodyControls": {
+    "numericCloneRejection": {
+      "submittedClones": 60,
+      "normalizedIndependentFailureIds": 1,
+      "rejectedByFullFloor": true
+    },
+    "sealedSubmissionValidation": {
+      "totalUnseenRoutes": 202,
+      "validSureCount": 100,
+      "independentInvalidFailureIds": 100,
+      "byApplicationInvalidFailureIds": {
+        "openproject": 50,
+        "erpnext": 50
+      },
+      "coveredTrainingFailures": 0,
+      "mergedDuplicateFailureReasons": [],
+      "undecidableByApp": {
+        "openproject": 1,
+        "erpnext": 1
+      }
+    },
+    "storeCanarySha256HexLen": 64,
+    "batchCanarySha256HexLen": 64,
+    "saltedCommitmentsVerified": {
+      "ok": true,
+      "filesVerified": 7,
+      "answerKeyRoutesVerified": 202
+    },
+    "cleanBuilderLeakScan": {
+      "clean": true,
+      "needlesChecked": 304,
+      "classification": "blind-holdout-eligible"
+    },
+    "plantedNeedleNegativeControl": {
+      "clean": false,
+      "classification": "Development evaluation only: sealed needle found in builder context"
+    }
+  },
+  "canonicalScorerSummary": {
+    "valid": true,
+    "independentInvalidCases": 100,
+    "validCases": 100,
+    "excludedUnsureRoutesCount": 0,
+    "verdict": "The simple guard holds: expert-guard depends on the price of authoring time.",
+    "arms": {
+      "always-replan": {
+        "voided": false,
+        "wrongFailureIdsAfterFallback": 0,
+        "clopperPearson95UpperPct": 2.951,
+        "meetsSafetyBar": true,
+        "validCount": 100,
+        "validCompletedOwn": 100,
+        "validCompletedAfterFallback": 100,
+        "adapterAuthoringMinutes": "0",
+        "guardAuthoringMinutes": "0",
+        "totalCostAtRateRUsd": "16.16"
+      },
+      "expert-guard": {
+        "voided": false,
+        "wrongFailureIdsAfterFallback": 0,
+        "clopperPearson95UpperPct": 2.951,
+        "meetsSafetyBar": true,
+        "validCount": 100,
+        "validCompletedOwn": 100,
+        "validCompletedAfterFallback": 100,
+        "adapterAuthoringMinutes": "0",
+        "guardAuthoringMinutes": "15.0",
+        "totalCostAtRateRUsd": "15.660"
+      },
+      "repair-boundary": {
+        "voided": false,
+        "wrongFailureIdsAfterFallback": 16,
+        "clopperPearson95UpperPct": 23.282,
+        "meetsSafetyBar": false,
+        "validCount": 100,
+        "validCompletedOwn": 16,
+        "validCompletedAfterFallback": 100,
+        "adapterAuthoringMinutes": "15.0",
+        "guardAuthoringMinutes": "0",
+        "totalCostAtRateRUsd": "21.100"
+      },
+      "repair-boundary-branch-no-graph": {
+        "voided": false,
+        "wrongFailureIdsAfterFallback": 0,
+        "clopperPearson95UpperPct": 2.951,
+        "meetsSafetyBar": true,
+        "validCount": 100,
+        "validCompletedOwn": 68,
+        "validCompletedAfterFallback": 100,
+        "adapterAuthoringMinutes": "0",
+        "guardAuthoringMinutes": "0",
+        "totalCostAtRateRUsd": "10.72"
+      }
+    }
+  }
+}

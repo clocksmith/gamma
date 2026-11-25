@@ -31,7 +31,7 @@ const roleOf = key => key.slice(0, key.indexOf(':'));
 
 const DEFAULT_TARGET_ROLES = new Set(['intent', 'record', 'order']);
 const DEFAULT_AUTH_ROLES = new Set(['approval', 'quotation', 'policy']);
-const STATIC_INTENT_KEYS = new Set(['intent:/doctype']);
+const STATIC_INTENT_KEYS = new Set(['intent:/doctype', 'intent:/name']);
 
 export function verifyTargetBindingSoundness(
   boundary,

@@ -126,6 +126,25 @@ freeze (`../three-arm/` at `gamma@776462de7`, hash `306e6171…`) byte-identical
         own valid (`40/40` post-fallback), `#1` lowest total cost `$8.81` at `r = $0.50/min`**
         (vs. `$10.50` for `rule-selector` [`40/40` own valid, `5.0` min], `$11.20` for `always-replan`,
         and `$14.25` for `expert-guard` [`12.5` min, break-even `V* > 780` routes]).
+12. **Canonical ISO-8601 Temporal (`ts`) & Duration (`dur`) Window Induction + 202-Route Sealed Custodian Pipe (`verify-temporal-and-custody-pipe.mjs`, `receipts/temporal_and_custody_pipe_v1.json`):**
+    - Extends `../multi-upgrade-drift-screen.mjs` to `5` qualifying upstream REST API breaking
+      upgrades (`REQUIRED_REPEATS = 3`), adding GitLab `15.11 -> 16.0` mandatory access-token
+      `expires_at` (`POST /api/v4/projects/:id/access_tokens`, where `expires_at: null` was removed
+      and server validation accepts up to the 365-day instance ceiling even when exceeding the
+      ticket's approved `max_expires_at` rotation window).
+    - Extends `relational-trace-guard.mjs` with validated ISO-8601 date / RFC-3339 timestamp (`ts`)
+      and duration-seconds (`dur`) order predicates (`ts-lte`, `ts-gte`, `dur-lte`, `dur-gte`) under
+      dimensional temporal-domain stem discipline (`isComparableOrderedPair`), closing the `sym`-only
+      inability to bind two-sided `[not_before, max_expires_at]`, `[startDate, effectiveDate]`, and
+      `[valid_from, valid_till]` windows while preventing spurious coincidences against unrelated
+      timestamps (`issued_at`, `transaction_date`).
+    - Exercises the full Dot custodian lifecycle (`scorer/custody.py`: `canary` ->
+      `validate-submission --require-full-floor` -> `seal` -> `verify` -> `leak-scan` ->
+      `scorer/score_after_fallback.py --require-measured-adapter`) across `202` opaque-`routeId`
+      unseen routes (`100` distinct-reason invalid, `100` valid, `2` undecidable; `0` duplicate
+      normalized reasons; `304` leak-scan needles with `0` builder hits; `0/100` wrong commits,
+      `2.951% < 3.0%`, `68/100` own valid / `100/100` post-fallback valid at `$10.72` vs. `$15.66`
+      `expert-guard` and `$16.16` `always-replan` at `r = $0.50/min`).
 
 ## Verification ($0, local)
 
@@ -139,6 +158,7 @@ node qualification/workflow-generalization/three-arm-next/ablate-adaptive-guard.
 node qualification/workflow-generalization/three-arm-next/verify-chromium-pinned-lookahead.mjs
 node qualification/workflow-generalization/three-arm-next/target-binding-soundness.mjs
 node qualification/workflow-generalization/three-arm-next/verify-powered-100-scorer.mjs
+node qualification/workflow-generalization/three-arm-next/verify-temporal-and-custody-pipe.mjs
 node qualification/workflow-generalization/three-arm-next/runner.mjs hash
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/score_after_fallback.py --selftest
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/cost_report.py --selftest

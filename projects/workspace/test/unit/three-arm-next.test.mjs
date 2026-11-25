@@ -18,6 +18,7 @@ import { selftest as relationalAblationSelftest } from '../../qualification/work
 import { selftest as chromiumPinnedLookaheadSelftest } from '../../qualification/workflow-generalization/three-arm-next/verify-chromium-pinned-lookahead.mjs';
 import { selftest as targetBindingSoundnessSelftest } from '../../qualification/workflow-generalization/three-arm-next/target-binding-soundness.mjs';
 import { selftest as powered100ScorerSelftest } from '../../qualification/workflow-generalization/three-arm-next/verify-powered-100-scorer.mjs';
+import { selftest as temporalAndCustodyPipeSelftest } from '../../qualification/workflow-generalization/three-arm-next/verify-temporal-and-custody-pipe.mjs';
 import { runFreeCounterexampleCheck } from '../../qualification/workflow-generalization/three-arm-next/counterexample-check.mjs';
 import { selftest as prelearnRuleSelftest } from '../../qualification/workflow-generalization/three-arm-next/prelearn-decision-rule.mjs';
 import {
@@ -687,7 +688,7 @@ test('OpenProject 17.8 Target versions 3-repeat $0 candidate screen and prelearn
 test('multi-upgrade $0 candidate screen and 2x2 zero-adapter relational LGG ablation verify all safety and cost gates', async () => {
   const upg = await multiUpgradeScreenSelftest();
   assert.equal(upg.ok, true);
-  assert.equal(upg.report.qualifyingCandidateIds.length, 4);
+  assert.equal(upg.report.qualifyingCandidateIds.length, 5);
 
   const abl = relationalAblationSelftest();
   assert.equal(abl.ok, true);
@@ -723,4 +724,14 @@ test('target-binding completeness law and n=100 powered $0 canonical scorer veri
   assert.equal(pow.report.armsSummary['repair-boundary-branch-no-graph'].clopperPearson95UpperPct, 2.951);
   assert.equal(pow.report.armsSummary['rule-selector'].meetsSafetyBar, true);
   assert.equal(pow.report.armsSummary['rule-selector'].wrongFailureIdsAfterFallback, 0);
+});
+
+test('ISO-8601 temporal/duration window induction and 202-route sealed Dot custody pipe pass all commitments, leak scans, and <3% safety bar ($0)', () => {
+  const res = temporalAndCustodyPipeSelftest();
+  assert.equal(res.ok, true);
+  assert.equal(res.report.custodyControls.saltedCommitmentsVerified.answerKeyRoutesVerified, 202);
+  assert.equal(res.report.custodyControls.cleanBuilderLeakScan.clean, true);
+  assert.equal(res.report.canonicalScorerSummary.arms['repair-boundary-branch-no-graph'].wrongFailureIdsAfterFallback, 0);
+  assert.equal(res.report.canonicalScorerSummary.arms['repair-boundary-branch-no-graph'].validCompletedOwn, 68);
+  assert.equal(res.report.canonicalScorerSummary.arms['repair-boundary-branch-no-graph'].validCompletedAfterFallback, 100);
 });
