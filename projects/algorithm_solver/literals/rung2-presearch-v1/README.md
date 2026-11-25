@@ -65,10 +65,52 @@ Evaluated on 12 untouched first-party workspace cells (`Zig vs WGSL`, `C vs Type
   `pred = (A, K=2048)` with `0 B` layout regret and `+679 B` layout gain over `default_B`, while
   ordinary MDL byte-cost stopping saves `11,948 B` over `4,096`-slot token-min filling).
 
+## Iteration 2: Unconfounded Completed-Chain `> 1.0%` Layout Suite & Pre-Compression `BIT3` vs. Tuned `ZST3` Codec Regime Law (`results/completed_chain_and_regime_v1.json`)
+
+With `raw_predictor.py` (`bits-rung2-presearch-v2`, `gamma@788807973`) and `regime_predictor.py`
+(`bits-rung2-codec-regime-v1`, frozen at `gamma@0d1b5e428` prior to execution) both untouched:
+
+### Part 1 — Completed-Chain Equal-Budget Layout & Stopping (`limit_seconds = 15.0`, 8 untouched cells)
+
+- **`8/8` (`100%`) exact layout match (`0 B` layout regret)** and **`5/5` (`100%`) wins on all five
+  cells where `default_always_B` loses by `> 1.0%`**:
+  - `md_vs_md_ctrl_n10`: `default_always_B` loses `+192 B (+2.18%)`; predictor picks `(A, K=256)` (`+192 B` layout gain).
+  - `py_vs_py_ctrl_n12`: `default_always_B` loses `+247 B (+2.41%)`; predictor picks `(A, K=256)` (`+247 B` layout gain).
+  - `json_vs_json_ctrl_n16`: `default_always_B` loses `+136 B (+1.39%)`; predictor picks `(A, K=256)` (`+136 B` layout gain).
+  - `wgsl_vs_wgsl_ctrl_n16`: `default_always_B` loses `+196 B (+3.24%)`; predictor picks `(A, K=256)` (`+196 B` layout gain).
+  - `short_ts_vs_mjs_n50` (cross-language TypeScript vs. JS): `default_always_B` loses **`+146 B (+2.00%)`**; predictor picks `(A, K=256)` (`+146 B` layout gain).
+  - `short_json_vs_wgsl_n50` & `med_css_vs_py_n25`: predictor picks `B`, matching oracle (`0 B` regret).
+  - `med_md_vs_h_n25`: `default_always_B` loses `+35 B (+0.17%)`; predictor picks `A` (`+35 B` layout gain).
+- **Decoupled stopping:** Ordinary two-part MDL byte-cost stopping saves `94,198 B` over filling
+  `K=4,096` slots across the 8 cells, while pre-search `K_hat` truncation costs `161 B` total.
+
+### Part 2 — Blind Pre-Compression Codec Regime (`BIT3` vs. Tuned `zstd -19 --train --no-check`, 12 blind decisions)
+
+Compares serialized `BIT3` (`4 B/file` bit-offset seek index, zero per-file block headers) against
+**tuned `ZST3`** (`zstd -19 --no-check` selecting the training-optimal `maxdict` in
+`{0, 1024, 2048, 4096, 8192}` + matched `4 B/file` frame-offset index), both verified by
+reverse-order single-file random-access decompression:
+
+| Untouched Split (`train -> held-out`) | $\bar{L}_{\text{doc}}$ | In-Sample `BIT3` vs. Tuned `ZST3` | Pred / GT | Held-Out `BIT3` vs. Tuned `ZST3` | Pred / GT |
+|---|---:|---:|---|---:|---|
+| `short_wgsl_vs_json_80_to_80` (`160 -> 160`) | `150.7 B` | **`10,273` vs `13,468 B` (`-23.7%`)** | `BIT3 / BIT3` | **`12,092` vs `14,678 B` (`-17.6%`)** | `BIT3 / BIT3` |
+| `short_ts_vs_mjs_80_to_80` (`160 -> 160`) | `153.7 B` | **`11,202` vs `14,673 B` (`-23.7%`)** | `BIT3 / BIT3` | **`12,390` vs `15,459 B` (`-19.9%`)** | `BIT3 / BIT3` |
+| `short_py_vs_md_20_to_20` (`40 -> 40`) | `192.2 B` | **`4,762` vs `5,369 B` (`-11.3%`)** | `BIT3 / BIT3` | **`6,045` vs `6,077 B` (`-0.5%`)** | `BIT3 / BIT3` |
+| `med_ts_vs_json_50_to_50` (`100 -> 100`) | `582.9 B` | **`25,748` vs `25,906 B` (`-0.6%`)** | `BIT3 / BIT3` | `30,109` vs **`27,426 B` (`ZST3 -8.9%`)** | `ZST3 / ZST3` |
+| `long_py_vs_md_35_to_35` (`70 -> 70`) | `2,066.0 B` | `62,662` vs **`58,392 B` (`ZST3 -6.8%`)** | `ZST3 / ZST3` | `74,113` vs **`64,480 B` (`ZST3 -13.0%`)** | `ZST3 / ZST3` |
+| `long_js_vs_wgsl_40_to_40` (`80 -> 80`) | `2,451.2 B` | `67,142` vs **`59,052 B` (`ZST3 -12.0%`)** | `ZST3 / ZST3` | `77,309` vs **`59,935 B` (`ZST3 -22.5%`)** | `ZST3 / ZST3` |
+
+- **`12/12` (`100%`) blind regime accuracy (`0 B` regret):** Saves **`13,118 B`** relative to
+  `"always tuned ZST3"` and **`42,050 B`** relative to `"always BIT3"` in `< 15 ms` of raw $O(N)$
+  byte scanning, including calling the exact in-sample `BIT3` -> held-out `ZST3` flip at
+  $\bar{L}_{\text{doc}} = 582.9\text{ B}$ (`med_ts_vs_json_50_to_50`) and establishing `BIT3`'s
+  `17.6–19.9%` **held-out** win over tuned `zstd -19 --train --no-check` on `~150 B` random-access
+  records.
+
 ## Verification
 
 ```bash
-/usr/bin/python3 -m py_compile raw_predictor.py equal_budget_eval.py test_rung2_presearch.py audit_saved_codenet.py run_untouched_holdout.py
+/usr/bin/python3 -m py_compile raw_predictor.py regime_predictor.py equal_budget_eval.py test_rung2_presearch.py audit_saved_codenet.py run_untouched_holdout.py run_completed_chain_and_regime_eval.py
 /usr/bin/python3 -B audit_saved_codenet.py
 /usr/bin/python3 -B test_rung2_presearch.py
 ```
