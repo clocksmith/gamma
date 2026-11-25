@@ -1,0 +1,287 @@
+{
+  "schema": "bits-ra-pareto-benchmark/v1",
+  "elapsed_sec": 56.73,
+  "seeks_per_cell": 100000,
+  "suites": [
+    {
+      "label": "codenet_held_out_K1024",
+      "train_docs": 400,
+      "held_out_docs": 400,
+      "train_raw_bytes": 259706,
+      "held_out_raw_bytes": 270994,
+      "mean_held_out_doc_bytes": 677.49,
+      "codecs": {
+        "BIT3": {
+          "layout_used": "B",
+          "selected_entries": 1024,
+          "in_sample_bytes": 87151,
+          "held_out_bytes": 98725,
+          "ns_per_seek": 1635.08,
+          "decoded_mib_per_sec": 395.83
+        },
+        "FSST-255": {
+          "symbols": 255,
+          "in_sample_bytes": 150972,
+          "held_out_bytes": 160982,
+          "ns_per_seek": 223.07,
+          "decoded_mib_per_sec": 2901.37
+        },
+        "DFL3-raw-zdict": {
+          "tuned_dict_kind": "zdict_8192",
+          "dict_bytes": 8192,
+          "in_sample_bytes": 89849,
+          "held_out_bytes": 94637,
+          "ns_per_seek": 1181.13,
+          "decoded_mib_per_sec": 547.96
+        },
+        "ZST3-tuned": {
+          "tuned_maxdict": 8192,
+          "in_sample_bytes": 89455,
+          "held_out_bytes": 93832,
+          "ns_per_seek": 683.15,
+          "decoded_mib_per_sec": 947.39
+        }
+      },
+      "smallest_held_out_codec": "ZST3-tuned",
+      "fastest_held_out_codec": "FSST-255",
+      "pareto_2d_held_out": [
+        "FSST-255",
+        "ZST3-tuned"
+      ]
+    },
+    {
+      "label": "codenet_held_out_K4096",
+      "train_docs": 400,
+      "held_out_docs": 400,
+      "train_raw_bytes": 259706,
+      "held_out_raw_bytes": 270994,
+      "mean_held_out_doc_bytes": 677.49,
+      "codecs": {
+        "BIT3": {
+          "layout_used": "B",
+          "selected_entries": 1424,
+          "in_sample_bytes": 86027,
+          "held_out_bytes": 100184,
+          "ns_per_seek": 1585.1,
+          "decoded_mib_per_sec": 408.31
+        },
+        "FSST-255": {
+          "symbols": 255,
+          "in_sample_bytes": 150972,
+          "held_out_bytes": 160982,
+          "ns_per_seek": 232.05,
+          "decoded_mib_per_sec": 2789.09
+        },
+        "DFL3-raw-zdict": {
+          "tuned_dict_kind": "zdict_8192",
+          "dict_bytes": 8192,
+          "in_sample_bytes": 89849,
+          "held_out_bytes": 94637,
+          "ns_per_seek": 1177.99,
+          "decoded_mib_per_sec": 549.42
+        },
+        "ZST3-tuned": {
+          "tuned_maxdict": 8192,
+          "in_sample_bytes": 89455,
+          "held_out_bytes": 93832,
+          "ns_per_seek": 685.7,
+          "decoded_mib_per_sec": 943.87
+        }
+      },
+      "smallest_held_out_codec": "ZST3-tuned",
+      "fastest_held_out_codec": "FSST-255",
+      "pareto_2d_held_out": [
+        "FSST-255",
+        "ZST3-tuned"
+      ]
+    },
+    {
+      "label": "short_wgsl_vs_json_80_to_80",
+      "train_docs": 160,
+      "held_out_docs": 160,
+      "train_raw_bytes": 24108,
+      "held_out_raw_bytes": 23837,
+      "mean_held_out_doc_bytes": 148.98,
+      "codecs": {
+        "BIT3": {
+          "layout_used": "B",
+          "selected_entries": 256,
+          "in_sample_bytes": 10273,
+          "held_out_bytes": 12092,
+          "random_access_verified": true,
+          "ns_per_seek": 226.69,
+          "decoded_mib_per_sec": 627.35
+        },
+        "FSST-255": {
+          "symbols": 255,
+          "in_sample_bytes": 13616,
+          "held_out_bytes": 14618,
+          "ns_per_seek": 50.05,
+          "decoded_mib_per_sec": 2841.44
+        },
+        "DFL3-raw-zdict": {
+          "tuned_dict_kind": "zdict_2048",
+          "dict_bytes": 2048,
+          "in_sample_bytes": 11583,
+          "held_out_bytes": 12842,
+          "ns_per_seek": 513.23,
+          "decoded_mib_per_sec": 277.1
+        },
+        "ZST3-tuned": {
+          "tuned_maxdict": 2048,
+          "in_sample_bytes": 13468,
+          "held_out_bytes": 14678,
+          "ns_per_seek": 194.48,
+          "decoded_mib_per_sec": 731.25
+        }
+      },
+      "smallest_held_out_codec": "BIT3",
+      "fastest_held_out_codec": "FSST-255",
+      "pareto_2d_held_out": [
+        "BIT3",
+        "FSST-255"
+      ]
+    },
+    {
+      "label": "short_ts_vs_mjs_80_to_80",
+      "train_docs": 160,
+      "held_out_docs": 160,
+      "train_raw_bytes": 24596,
+      "held_out_raw_bytes": 24180,
+      "mean_held_out_doc_bytes": 151.12,
+      "codecs": {
+        "BIT3": {
+          "layout_used": "A",
+          "selected_entries": 256,
+          "in_sample_bytes": 11202,
+          "held_out_bytes": 12390,
+          "random_access_verified": true,
+          "ns_per_seek": 226.17,
+          "decoded_mib_per_sec": 636.47
+        },
+        "FSST-255": {
+          "symbols": 255,
+          "in_sample_bytes": 14558,
+          "held_out_bytes": 14929,
+          "ns_per_seek": 52.69,
+          "decoded_mib_per_sec": 2732.01
+        },
+        "DFL3-raw-zdict": {
+          "tuned_dict_kind": "zdict_2048",
+          "dict_bytes": 2048,
+          "in_sample_bytes": 12611,
+          "held_out_bytes": 13458,
+          "ns_per_seek": 374.26,
+          "decoded_mib_per_sec": 384.62
+        },
+        "ZST3-tuned": {
+          "tuned_maxdict": 2048,
+          "in_sample_bytes": 14673,
+          "held_out_bytes": 15459,
+          "ns_per_seek": 198.11,
+          "decoded_mib_per_sec": 726.61
+        }
+      },
+      "smallest_held_out_codec": "BIT3",
+      "fastest_held_out_codec": "FSST-255",
+      "pareto_2d_held_out": [
+        "BIT3",
+        "FSST-255"
+      ]
+    },
+    {
+      "label": "med_ts_vs_json_50_to_50",
+      "train_docs": 100,
+      "held_out_docs": 100,
+      "train_raw_bytes": 58293,
+      "held_out_raw_bytes": 58759,
+      "mean_held_out_doc_bytes": 587.59,
+      "codecs": {
+        "BIT3": {
+          "layout_used": "B",
+          "selected_entries": 512,
+          "in_sample_bytes": 25748,
+          "held_out_bytes": 30109,
+          "random_access_verified": true,
+          "ns_per_seek": 888.99,
+          "decoded_mib_per_sec": 630.49
+        },
+        "FSST-255": {
+          "symbols": 255,
+          "in_sample_bytes": 36607,
+          "held_out_bytes": 37646,
+          "ns_per_seek": 194.23,
+          "decoded_mib_per_sec": 2885.74
+        },
+        "DFL3-raw-zdict": {
+          "tuned_dict_kind": "zdict_4096",
+          "dict_bytes": 4096,
+          "in_sample_bytes": 25936,
+          "held_out_bytes": 27664,
+          "ns_per_seek": 1386.67,
+          "decoded_mib_per_sec": 404.2
+        },
+        "ZST3-tuned": {
+          "tuned_maxdict": 4096,
+          "in_sample_bytes": 25906,
+          "held_out_bytes": 27426,
+          "ns_per_seek": 749.95,
+          "decoded_mib_per_sec": 747.38
+        }
+      },
+      "smallest_held_out_codec": "ZST3-tuned",
+      "fastest_held_out_codec": "FSST-255",
+      "pareto_2d_held_out": [
+        "FSST-255",
+        "ZST3-tuned"
+      ]
+    },
+    {
+      "label": "long_js_vs_wgsl_40_to_40",
+      "train_docs": 80,
+      "held_out_docs": 80,
+      "train_raw_bytes": 196093,
+      "held_out_raw_bytes": 178574,
+      "mean_held_out_doc_bytes": 2232.18,
+      "codecs": {
+        "BIT3": {
+          "layout_used": "B",
+          "selected_entries": 1030,
+          "in_sample_bytes": 67886,
+          "held_out_bytes": 76696,
+          "random_access_verified": true,
+          "ns_per_seek": 5403.56,
+          "decoded_mib_per_sec": 394.29
+        },
+        "FSST-255": {
+          "symbols": 255,
+          "in_sample_bytes": 127348,
+          "held_out_bytes": 118084,
+          "ns_per_seek": 761.31,
+          "decoded_mib_per_sec": 2798.55
+        },
+        "DFL3-raw-zdict": {
+          "tuned_dict_kind": "zdict_4096",
+          "dict_bytes": 4096,
+          "in_sample_bytes": 60772,
+          "held_out_bytes": 60197,
+          "ns_per_seek": 2694.01,
+          "decoded_mib_per_sec": 790.85
+        },
+        "ZST3-tuned": {
+          "tuned_maxdict": 8192,
+          "in_sample_bytes": 59052,
+          "held_out_bytes": 59935,
+          "ns_per_seek": 2129.3,
+          "decoded_mib_per_sec": 1000.59
+        }
+      },
+      "smallest_held_out_codec": "ZST3-tuned",
+      "fastest_held_out_codec": "FSST-255",
+      "pareto_2d_held_out": [
+        "FSST-255",
+        "ZST3-tuned"
+      ]
+    }
+  ]
+}
