@@ -1,0 +1,1704 @@
+{
+ "schema": "gammatron-real-upgrade-screen-list/v1",
+ "status": "Predictions written before anything was run. No container was started, no model was called, nothing was pulled. Evidence is release notes, changelogs and source read on public hosts, and tag listings on Docker Hub.",
+ "written_at_utc": "2026-11-25T13:12:19Z",
+ "owner_rule": "A case qualifies if the old workflow worked before, still reports success after, and now persists the wrong result; verified against an independently specified database outcome; with the correct path shown to still work. Same role, task and intended business outcome before and after. Setup blocks, explicit rejections and self-healing are separate dispositions.",
+ "dispositions": [
+  "silent-wrong-write",
+  "loud-failure",
+  "setup-block",
+  "self-healing"
+ ],
+ "bounded_list_size": 12,
+ "predicted_dispositions": {
+  "silent-wrong-write": 11,
+  "loud-failure": 0,
+  "setup-block": 1,
+  "self-healing": 0
+ },
+ "predicted_to_qualify_note": "predicted_disposition is the single most likely outcome for each candidate. Ten of the eleven silent predictions can qualify; L5 cannot, because the upgraded release has no correct path for the old outcome. estimated_probability_qualifies is the author's rough judgement, not a measurement; summed over the eleven runnable candidates it gives about 6.5 expected to qualify if all are run.",
+ "proposed_gates_per_candidate": [
+  "A. Old workflow on the from-version: reports success and the database holds the right value, 3 of 3.",
+  "B. Same steps on the to-version: reports success and the database holds a value other than the right one, 3 of 3. Any error or rejection is loud-failure; the right value is self-healing.",
+  "C. Correct path on the to-version, same role: the database holds the right value, 3 of 3.",
+  "A case that cannot be built on either release is setup-block, with the exact request and response recorded."
+ ],
+ "run_conditions_to_record": "The lane's bring-up scripts install each release on a fresh database; they do not upgrade a database in place. For L1, N4 and N6 the two can differ. Record which was run. Pin every image by digest at run time: tags on the registry are re-pushed (frappe/erpnext:v15.126.0 was last pushed on the day this list was written).",
+ "selection_warning": "The earlier screens held one workflow fixed and varied the release, and found nothing. This list starts from documented changes and picks the workflow each one touches. A hit here therefore says nothing about how often an arbitrary workflow meets a silent wrong write, just as 'none found' in 38 pairs said nothing about rarity.",
+ "pattern_note": "Six of the eleven predicted silent cases (L1, L2, L3, N2, N3, N5) are one mechanism: the server accepts a request that carries a property it no longer acts on. Four (N1, N4, N6, L5) are a changed default, and one (N7) a changed reading of the same text. In the first group the new release never errors, and a read of the record after the write shows the miss. For a workflow driven through the page those six upgrades mostly remove or relabel the control, which is loud; N1, N4 and N6 are the ones predicted silent through the page as well.",
+ "lane_five_mock_matches_real": {
+  "L3": false,
+  "L2": false,
+  "L1": false,
+  "L5": false,
+  "L4": false
+ },
+ "earlier_screens": [
+  {
+   "screen": "OpenProject second-upgrade screen",
+   "script": "projects/workspace/qualification/workflow-generalization/second-upgrade-screen.mjs",
+   "receipt": "projects/workspace/qualification/workflow-generalization/receipts/second-upgrade-screen-openproject-receipt.json",
+   "real_software": true,
+   "workflow": "Work field of a work package set to 56 hours through the page, as recorded for 14.0.0",
+   "pairs": "14.0.0 -> each x.y.0 release from 14.1.0 to 17.9.0",
+   "releases_listed": 29,
+   "screened_through_old_workflow_check": 28,
+   "old_workflow_failed_loudly": 0,
+   "silent_wrong_write_attributed_to_a_release": 0,
+   "qualified_under_that_screen_rule": 0,
+   "set_up_blocks": 1,
+   "not_run": 0,
+   "notes": "Old write committed 3 of 3 on 25 releases and 2 of 3 on 15.3.0, 16.5.0 and 16.6.0. The lane traced those misses to its own page-write step after a cold start (a save sent before the form check answered; typed hours joined to the text already in the field), not to a release. 16.4.0 to 17.8.0 were screened with the screening seeder. 17.9.0 could not be seeded."
+  },
+  {
+   "screen": "ERPNext second-upgrade screen, page write",
+   "script": "projects/workspace/qualification/workflow-generalization/second-upgrade-screen-erpnext.mjs",
+   "receipt": "projects/workspace/qualification/workflow-generalization/receipts/second-upgrade-screen-erpnext-receipt.json",
+   "real_software": true,
+   "workflow": "Confirmation reference typed into the Terms of a draft Purchase Order through the page, as recorded for v15.20.0",
+   "pairs": "v15.20.0 -> v15.30.0, v15.40.0, v15.50.0, v15.60.0, v15.70.0, v15.80.0, v15.73.0",
+   "releases_listed": 24,
+   "screened_through_old_workflow_check": 7,
+   "old_workflow_failed_loudly": 1,
+   "silent_wrong_write_attributed_to_a_release": 0,
+   "qualified_under_that_screen_rule": 0,
+   "set_up_blocks": 0,
+   "not_run": 17,
+   "notes": "Listed: 17 stride points and 7 releases inside v15.70.0 to v15.80.0. Run: 6 stride points and v15.73.0. v15.80.0: the Terms tab changed from a link to a button and the old page write failed 3 of 3 by timeout (loud, in the shared write step). Not run under this check: 11 stride points, which moved to the read check below, and 6 interval releases, dropped when the interval search was stopped."
+  },
+  {
+   "screen": "ERPNext second-upgrade screen, read check",
+   "script": "projects/workspace/qualification/workflow-generalization/second-upgrade-read-check-erpnext.mjs",
+   "receipt": "projects/workspace/qualification/workflow-generalization/receipts/second-upgrade-read-check-erpnext-receipt.json",
+   "real_software": true,
+   "workflow": "REST reads a frozen guard depends on (quotation submitted, quantities equal), three labelled cases",
+   "pairs": "v15.20.0 -> v15.30.0 ... v15.110.0 at a stride of ten, then v15.120.0",
+   "releases_listed": 17,
+   "screened_through_old_workflow_check": 9,
+   "old_workflow_failed_loudly": 0,
+   "silent_wrong_write_attributed_to_a_release": 0,
+   "qualified_under_that_screen_rule": 0,
+   "set_up_blocks": 1,
+   "not_run": 7,
+   "notes": "Reads only; a change in what a write does was not measured. v15.120.0 stopped on a 403 during set-up. v15.126.0, v16.0.0, v16.10.0, v16.20.0, v16.30.0, v16.50.0 and v16.60.0 never ran."
+  },
+  {
+   "screen": "Early second-upgrade probes",
+   "script": "the three-arm dry-run pipelines",
+   "receipt": "projects/workspace/qualification/workflow-generalization/receipts/three-arm-second-upgrade-probe-receipt.json and three-arm-erpnext-second-upgrade-probe-receipt.json",
+   "real_software": true,
+   "workflow": "the same two workflows as above",
+   "pairs": "OpenProject 14.0.0 -> 14.6.0, 15.0.0; ERPNext v15.20.0 -> v15.30.0, v15.40.0",
+   "releases_listed": 4,
+   "screened_through_old_workflow_check": 4,
+   "old_workflow_failed_loudly": 0,
+   "silent_wrong_write_attributed_to_a_release": 0,
+   "qualified_under_that_screen_rule": 0,
+   "set_up_blocks": 0,
+   "not_run": 0,
+   "notes": "All four releases are also in the two screens above; they add no new pair to the total."
+  },
+  {
+   "screen": "First upgrades (Gates 3 and 4)",
+   "script": "projects/workspace/qualification/workflow-generalization/gate3-openproject-5arm-runner.mjs, gate4-erpnext-5arm-runner.mjs",
+   "receipt": "projects/workspace/qualification/workflow-generalization/receipts/gate3-openproject-5arm-live-receipt.json, gate4-erpnext-5arm-live-receipt.json",
+   "real_software": true,
+   "workflow": "the same two page writes",
+   "pairs": "OpenProject 13.4.0 -> 14.0.0; ERPNext v15.10.0 -> v15.20.0",
+   "releases_listed": 2,
+   "screened_through_old_workflow_check": 2,
+   "old_workflow_failed_loudly": 2,
+   "silent_wrong_write_attributed_to_a_release": 0,
+   "qualified_under_that_screen_rule": null,
+   "set_up_blocks": 0,
+   "not_run": 0,
+   "notes": "Chosen because the old page selector no longer matched on the new release (count 0): a loud break. Not a screen for silent wrong writes."
+  },
+  {
+   "screen": "ERPNext stride schema audit",
+   "script": "projects/workspace/qualification/workflow-generalization/audit-erpnext-stride-schemas.py",
+   "receipt": "projects/workspace/qualification/workflow-generalization/receipts/erpnext-upstream-stride-schema-audit.json",
+   "real_software": false,
+   "workflow": "static comparison of doctype JSON at 10 tags (v15.20.0, v15.110.0 to v16.60.0); no container",
+   "pairs": "none run",
+   "releases_listed": 10,
+   "screened_through_old_workflow_check": 0,
+   "old_workflow_failed_loudly": 0,
+   "silent_wrong_write_attributed_to_a_release": 0,
+   "qualified_under_that_screen_rule": null,
+   "set_up_blocks": 0,
+   "not_run": 0,
+   "notes": "Found the REST read fields unchanged. Says nothing about write behaviour."
+  },
+  {
+   "screen": "Mock catalogue of five upgrades",
+   "script": "projects/workspace/qualification/workflow-generalization/multi-upgrade-drift-screen.mjs, op178-target-versions-screen.mjs",
+   "receipt": "projects/workspace/qualification/workflow-generalization/three-arm-next/receipts/ (derived benchmarks)",
+   "real_software": false,
+   "workflow": "five upgrades and three controls, each a local HTTP server written from release notes",
+   "pairs": "none on real software",
+   "releases_listed": 5,
+   "screened_through_old_workflow_check": 0,
+   "old_workflow_failed_loudly": 0,
+   "silent_wrong_write_attributed_to_a_release": 0,
+   "qualified_under_that_screen_rule": null,
+   "set_up_blocks": 0,
+   "not_run": 0,
+   "notes": "The script reports five 'qualifying' candidates, all on mocks that answer 4xx to the old request. By source reading the real software answers 2xx in all five (see mock_vs_real on L1 to L5)."
+  },
+  {
+   "screen": "cross-screen rule",
+   "script": "projects/workspace/qualification/workflow-generalization/cross-screen-rule.md, cross-screen-result.md, cross-screen-measures.json",
+   "receipt": "same files",
+   "real_software": false,
+   "workflow": "a matcher rule scored on the lane's own sandbox and form fixtures",
+   "pairs": "none",
+   "releases_listed": 0,
+   "screened_through_old_workflow_check": 0,
+   "old_workflow_failed_loudly": 0,
+   "silent_wrong_write_attributed_to_a_release": 0,
+   "qualified_under_that_screen_rule": null,
+   "set_up_blocks": 0,
+   "not_run": 0,
+   "notes": "Not an upgrade screen. Listed because the request for this list names it; it contributes nothing to the count."
+  }
+ ],
+ "earlier_screen_totals": {
+  "distinct_real_release_pairs_screened_for_one_fixed_workflow": 38,
+  "of_which_openproject": 28,
+  "of_which_erpnext": 10,
+  "erpnext_distinct_releases": [
+   "v15.30.0",
+   "v15.40.0",
+   "v15.50.0",
+   "v15.60.0",
+   "v15.70.0",
+   "v15.73.0",
+   "v15.80.0",
+   "v15.90.0",
+   "v15.100.0",
+   "v15.110.0"
+  ],
+  "silent_wrong_writes_attributed_to_a_release": 0,
+  "loud_breaks_found": 1,
+  "set_up_blocks": 2,
+  "stride_points_listed_but_never_run": 7,
+  "first_upgrade_pairs_outside_that_count": 2,
+  "workflows_per_application": 1,
+  "difference_from_the_brief": "The request for this list recalled the OpenProject screen as 14.1.0 to 16.3.0. The receipt covers 14.1.0 to 17.8.0: 16 releases with the frozen seeder and 12 more (16.4.0 to 17.8.0) with the screening seeder.",
+  "if_this_list_is_run": "11 further (pair, workflow) cases can be run at no cost (L4 is excluded: licence). 38 + 11 = 49 real cases."
+ },
+ "ranking_by_likelihood": [
+  "N1",
+  "N2",
+  "L3",
+  "L2",
+  "N3",
+  "L1",
+  "N5",
+  "N4",
+  "N6",
+  "N7",
+  "L5",
+  "L4"
+ ],
+ "run_first": [
+  "N1",
+  "N3",
+  "N2"
+ ],
+ "run_first_totals": {
+  "candidates": [
+   "N1",
+   "N3",
+   "N2"
+  ],
+  "approx_compressed_download_mb": 2749,
+  "approx_disk_unpacked_gb": 8.0,
+  "bring_up_minutes": "about 8 minutes in total (ERPNext 3, OpenProject 1.5, Dolibarr 3; the Dolibarr figure is an estimate)",
+  "prediction": "At least one of the three qualifies under gates A, B and C. Author's estimate: about 0.95, allowing for a shared error in how the sources were read; expected number about 2.3 of 3.",
+  "machine_time_for_all_gates": "about 30 to 45 minutes for three candidates at three repeats per gate; the requests themselves take seconds",
+  "work_before_any_run": "set-up additions for all three and a new bring-up script for Dolibarr, each frozen and hashed first",
+  "disk_note": "Unpacked sizes are estimated at 2.5 to 3 times the compressed size the registry reports. The lane's own preflight asks for 25 GiB free before pulling."
+ },
+ "candidates": [
+  {
+   "id": "N1",
+   "origin": "new",
+   "app": "ERPNext",
+   "from_version": "v15.53.0",
+   "to_version": "v15.54.0",
+   "images": [
+    {
+     "ref": "frappe/erpnext:v15.53.0",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2025-02-19",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 520,
+       "digest": "sha256:1d06bf1dec818aff74e5ce1f72a10a2f004934162db5da2cbd0444a145ef1ae1"
+      }
+     }
+    },
+    {
+     "ref": "frappe/erpnext:v15.54.0",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2025-03-05",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 520,
+       "digest": "sha256:6cd1e5f2d9e06ee067876c066777eac1e490d50cacb3fbcf4a3e60e064e92db0"
+      }
+     }
+    },
+    {
+     "ref": "mariadb:10.6",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-11-20",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 104,
+       "digest": "sha256:883b61c61aaa82e0d98c909db914ccd107558c9e49e06b6624c2c48ffa3afcda"
+      },
+      "arm64": {
+       "compressed_mb": 98,
+       "digest": "sha256:b65497131ccd25dbb1f7943e61285b3dc5296b3016359f5e033a902547ddd942"
+      }
+     }
+    },
+    {
+     "ref": "redis:6.2-alpine",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-11-12",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 12,
+       "digest": "sha256:b2a56a05598dcfe4703818149ede7248ad2f6d1b1112b6ddd462f065b4189dab"
+      },
+      "arm64": {
+       "compressed_mb": 12,
+       "digest": "sha256:6e8cfedfc77fce5f769643e28d39d60fc3e759f64b6b39f59144a9e722d42ec1"
+      }
+     }
+    }
+   ],
+   "surface": "REST API and the Desk page (both predicted silent)",
+   "role": "Accounts user who may create and submit Sales Invoices and read Projects and Timesheets",
+   "task": "Invoice customer CUST-A for the unbilled time on project PROJ-A",
+   "intended_business_outcome": "A submitted Sales Invoice that carries the project's unbilled timesheet (8 billable hours) and marks that timesheet as billed, so the hours cannot be invoiced twice",
+   "old_workflow_steps": [
+    "POST /api/resource/Sales Invoice with {\"customer\": \"CUST-A\", \"company\": ..., \"project\": \"PROJ-A\", \"items\": [{\"item_code\": ..., \"qty\": 8, \"rate\": 100}], \"docstatus\": 1} (create and submit in one call)",
+    "Treat HTTP 200 as success"
+   ],
+   "page_variant": "New Sales Invoice; choose the customer; choose the project (on v15.53.0 the Time Sheets table then fills by itself); add the item row; Save; Submit. Predicted silent on v15.54.0 as well: the table stays empty and Save and Submit succeed.",
+   "upstream_change": {
+    "summary": "Up to v15.53.0 a Sales Invoice with a project and no timesheet rows fetched the project's unbilled timesheets on its own. From v15.54.0 that happens only if the new Projects Settings checkbox 'Fetch Timesheet in Sales Invoice' is on; its default is off and no patch turns it on for existing sites.",
+    "release_note": {
+     "quote": "If you create Sales Invoices via API, you sometimes want to fetch unbilled timesheets from the linked project. So far, this was the default behavior. Now you'll need to make an additional API call",
+     "url": "https://github.com/frappe/erpnext/wiki/Migration-Guide-To-ERPNext-Version-16"
+    },
+    "source_change": [
+     {
+      "what": "v15.53.0: if not self.timesheets and self.project: self.add_timesheet_data()",
+      "url": "https://github.com/frappe/erpnext/blob/v15.53.0/erpnext/accounts/doctype/sales_invoice/sales_invoice.py"
+     },
+     {
+      "what": "v15.54.0: the same branch also requires self.is_auto_fetch_timesheet_enabled()",
+      "url": "https://github.com/frappe/erpnext/blob/v15.54.0/erpnext/accounts/doctype/sales_invoice/sales_invoice.py"
+     },
+     {
+      "what": "v15.54.0 Projects Settings: fetch_timesheet_in_sales_invoice, Check, default '0'",
+      "url": "https://github.com/frappe/erpnext/blob/v15.54.0/erpnext/projects/doctype/projects_settings/projects_settings.json"
+     },
+     {
+      "what": "v15.54.0 form script: the project trigger asks is_auto_fetch_timesheet_enabled before fetching",
+      "url": "https://github.com/frappe/erpnext/blob/v15.54.0/erpnext/accounts/doctype/sales_invoice/sales_invoice.js"
+     },
+     {
+      "what": "pull request and its version-15 backport",
+      "url": "https://github.com/frappe/erpnext/pull/45908"
+     },
+     {
+      "what": "backport",
+      "url": "https://github.com/frappe/erpnext/pull/46142"
+     }
+    ]
+   },
+   "predicted_disposition": "silent-wrong-write",
+   "prediction_detail": "Every step answers 200 and the invoice is submitted. It carries no timesheet row, its billing hours are 0, and the timesheet stays unbilled.",
+   "prediction_condition": "None known; the setting defaults to off on a fresh site and after an in-place upgrade (no patch in patches.txt between the two tags touches it).",
+   "most_likely_alternative": "setup-block (billing fixtures or permissions not accepted as written)",
+   "database_outcome": {
+    "read_via": "MariaDB in the database container, as the lane's ERPNext write step already does",
+    "on_from_version": "one row in `tabSales Invoice Timesheet` with parent = the invoice, time_sheet = the timesheet, billing_hours = 8; `tabSales Invoice`.total_billing_hours = 8; after submit `tabTimesheet`.per_billed = 100 and status = 'Billed'; `tabTimesheet Detail`.sales_invoice = the invoice",
+    "right_on_to_version": "the same as on the from-version",
+    "predicted_stored_on_to_version": "no row in `tabSales Invoice Timesheet` for the invoice; total_billing_hours = 0; `tabTimesheet`.per_billed = 0 and status = 'Submitted'; `tabTimesheet Detail`.sales_invoice NULL"
+   },
+   "correct_path_on_to_version": "Call the document method add_timesheet_data on the draft invoice before saving (the page's Fetch Timesheet button does this), or pass the timesheets rows explicitly; then submit.",
+   "confidence": "high",
+   "estimated_probability_qualifies": 0.8,
+   "confidence_basis": "Controller, form script and settings source at both exact tags, and upstream's own migration guide names it as a behaviour change for API users. Not run.",
+   "run_requirements": {
+    "bring_up": "projects/workspace/qualification/workflow-generalization/bringup/erpnext-up.sh v15.53.0 v15.54.0",
+    "set_up_additions": "customer, service item, project, activity type, one submitted timesheet with one billable 8-hour row on the project; roles for the acting account (Accounts User and Projects User). To be written and frozen before the run.",
+    "approx_compressed_download_mb": 1156,
+    "approx_disk_unpacked_gb": 3.5,
+    "bring_up_time": "about 3 minutes (3 min 9 s measured for the script's default pair); images are amd64 only, as were the pairs the lane already ran",
+    "licence_or_account": "none"
+   },
+   "overlap_with_earlier_screens": "Neither tag was screened. The earlier ERPNext stride points v15.50.0 and v15.60.0 lie on either side of this change, but those screens used a Purchase Order terms write and supplier-quotation reads, which this change does not touch.",
+   "rank_by_likelihood": 1,
+   "rank_reason": "Documented by upstream as a change of default behaviour for API users; silent on the API and on the page; runs on the lane's ERPNext bring-up.",
+   "run_first": true,
+   "run_first_reason": "Highest confidence, upstream names the behaviour change, existing ERPNext bring-up, silent on both surfaces the lane uses."
+  },
+  {
+   "id": "N2",
+   "origin": "new",
+   "app": "Dolibarr ERP/CRM",
+   "from_version": "18.0.9",
+   "to_version": "19.0.2",
+   "images": [
+    {
+     "ref": "dolibarr/dolibarr:18.0.9",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-10-21",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 350,
+       "digest": "sha256:5d1692c927ae9212af8fa777796f6525427f0a28d633621fdea50d93b110f4d3"
+      },
+      "arm64": {
+       "compressed_mb": 343,
+       "digest": "sha256:f70fa3a28c3951ec69ce843f2afeabbcffbdf2458a98f504e0a7d76a578e93b8"
+      }
+     }
+    },
+    {
+     "ref": "dolibarr/dolibarr:19.0.2",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2024-08-19",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 283,
+       "digest": "sha256:65a41d4117a5db010683d00adefdd57478c33ef7d1f5b45d62cb2178ae0c40e0"
+      },
+      "arm64": {
+       "compressed_mb": 273,
+       "digest": "sha256:aa5421ecb7f402f10662830bd8c53b35565986ba798332fdb5d12ff2ef4a5a9f"
+      }
+     }
+    },
+    {
+     "ref": "mariadb:10.6",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-11-20",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 104,
+       "digest": "sha256:883b61c61aaa82e0d98c909db914ccd107558c9e49e06b6624c2c48ffa3afcda"
+      },
+      "arm64": {
+       "compressed_mb": 98,
+       "digest": "sha256:b65497131ccd25dbb1f7943e61285b3dc5296b3016359f5e033a902547ddd942"
+      }
+     }
+    }
+   ],
+   "surface": "REST API",
+   "role": "Sales user with the right to create customer orders and an API key",
+   "task": "Create a sales order for customer X with planned delivery on 2026-12-15",
+   "intended_business_outcome": "The order exists and its planned delivery date is 2026-12-15",
+   "old_workflow_steps": [
+    "POST /api/index.php/orders with header DOLAPIKEY and body {\"socid\": X, \"date\": 1795478400, \"date_livraison\": 1797292800}",
+    "Treat HTTP 200 and the returned order id as success"
+   ],
+   "upstream_change": {
+    "summary": "19.0 removes the deprecated order property date_livraison. Up to 18.0.x Commande::create() fell back to it when delivery_date was empty; from 19.0 only delivery_date is read. The REST handler copies every posted key onto the object without checking that it exists.",
+    "release_note": {
+     "quote": "The duplicated and deprecated property ->date_livraison that was renamed into ->delivery_date has been completely removed.",
+     "url": "https://github.com/Dolibarr/dolibarr/blob/develop/ChangeLog"
+    },
+    "source_change": [
+     {
+      "what": "18.0.9: $delivery_date = empty($this->delivery_date) ? $this->date_livraison : $this->delivery_date;",
+      "url": "https://github.com/Dolibarr/dolibarr/blob/18.0.9/htdocs/commande/class/commande.class.php#L925"
+     },
+     {
+      "what": "19.0.2: $delivery_date = $this->delivery_date;",
+      "url": "https://github.com/Dolibarr/dolibarr/blob/19.0.2/htdocs/commande/class/commande.class.php#L901"
+     },
+     {
+      "what": "REST post(): foreach ($request_data as $field => $value) { $this->commande->$field = $value; }",
+      "url": "https://github.com/Dolibarr/dolibarr/blob/19.0.2/htdocs/commande/class/api_orders.class.php"
+     }
+    ]
+   },
+   "predicted_disposition": "silent-wrong-write",
+   "prediction_detail": "The POST answers 200 with a new order id. The order is stored without a delivery date.",
+   "prediction_condition": "None known; same on a fresh install and after an in-place upgrade.",
+   "most_likely_alternative": "setup-block (API key or module activation through the image's environment not working as assumed)",
+   "database_outcome": {
+    "read_via": "MariaDB in the database container; GET /api/index.php/orders/{id} as a second witness",
+    "on_from_version": "llx_commande.date_livraison = '2026-12-15 00:00:00' (server time zone UTC)",
+    "right_on_to_version": "llx_commande.date_livraison = '2026-12-15 00:00:00'",
+    "predicted_stored_on_to_version": "llx_commande.date_livraison IS NULL"
+   },
+   "correct_path_on_to_version": "The same POST with \"delivery_date\": 1797292800 in place of date_livraison",
+   "confidence": "high",
+   "estimated_probability_qualifies": 0.8,
+   "confidence_basis": "Source lines at both exact image tags; the removal is in the ChangeLog. Not run. The 19.0.0 and 19.0.1 tags are not on the registry, so 19.0.2 is the first 19.x image.",
+   "run_requirements": {
+    "bring_up": "no script in the lane; one application container per release plus MariaDB; the image installs itself on first start from environment variables",
+    "set_up_additions": "enable the third-party, order and REST API modules; one customer; an API key for the acting user (how the image accepts these is taken from its README and is not verified)",
+    "approx_compressed_download_mb": 714,
+    "approx_disk_unpacked_gb": 2.0,
+    "bring_up_time": "estimated 2 to 3 minutes; not measured",
+    "licence_or_account": "none"
+   },
+   "overlap_with_earlier_screens": "none; the application is new to the lane",
+   "rank_by_likelihood": 2,
+   "rank_reason": "One removed fallback line between the two exact image tags; the REST handler accepts any key.",
+   "run_first": true,
+   "run_first_reason": "Cheapest clean case on a new application; exact source lines at the exact image tags; small images."
+  },
+  {
+   "id": "L3",
+   "origin": "lane-catalogue",
+   "lane_catalogue_id": "netbox-4.1-to-4.2-prefix-generic-scope",
+   "app": "NetBox (network inventory; community-maintained netbox-docker image)",
+   "from_version": "v4.1.11",
+   "to_version": "v4.2.0",
+   "images": [
+    {
+     "ref": "netboxcommunity/netbox:v4.1.11",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2025-01-06",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 224,
+       "digest": "sha256:09d68773f3b3c149d6ca874f140df4f5e4cbdfbee798213c9fafeb3daf99a31e"
+      },
+      "arm64": {
+       "compressed_mb": 221,
+       "digest": "sha256:e3b3fea510491f265e7928d4e06ec87f1f521f4608c9ce0ca24dfa02a7d707ed"
+      }
+     }
+    },
+    {
+     "ref": "netboxcommunity/netbox:v4.2.0",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2025-01-07",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 234,
+       "digest": "sha256:468290739c2b0da24a40eafe1ebf17feec7ca8eaef1f2f8706e179b438e2c458"
+      },
+      "arm64": {
+       "compressed_mb": 232,
+       "digest": "sha256:de88ff3091f93095aa457a76a2171265a4e868e17f5edfc04653eada3f2c642f"
+      }
+     }
+    },
+    {
+     "ref": "postgres:16-alpine",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-11-22",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 116,
+       "digest": "sha256:9d9e487c1bd6413c52ccb3c02f46c8e37fa1e1d1a32a84519eb4e68d0ad1da30"
+      },
+      "arm64": {
+       "compressed_mb": 114,
+       "digest": "sha256:ddc1c45d23db7f0702f5a2727e28f24cbb75746f625c8c5083a190e50cf01740"
+      }
+     }
+    },
+    {
+     "ref": "redis:7-alpine",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-11-12",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 16,
+       "digest": "sha256:e4ee3e03ce8f75471f40937a7c6b2b0e500390b6812fcdf5cb32c01295ded446"
+      },
+      "arm64": {
+       "compressed_mb": 17,
+       "digest": "sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db"
+      }
+     }
+    }
+   ],
+   "surface": "REST API (the page form replaces 'Site' by 'Scope type' and 'Scope'; a label-based page step is predicted loud)",
+   "role": "Network engineer with an API token that may add and change prefixes",
+   "task": "Register prefix 192.0.2.0/24 as active at site HQ",
+   "intended_business_outcome": "The prefix is active and assigned to site HQ",
+   "old_workflow_steps": [
+    "POST /api/ipam/prefixes/ with {\"prefix\": \"192.0.2.0/24\", \"site\": S, \"status\": \"active\"}",
+    "Treat HTTP 201 as success"
+   ],
+   "upstream_change": {
+    "summary": "v4.2.0 replaces Prefix.site by a generic scope (scope_type + scope_id).",
+    "release_note": {
+     "quote": "The `site` foreign key field on `ipam.Prefix` has been replaced by the `scope` generic foreign key.",
+     "url": "https://github.com/netbox-community/netbox/blob/main/docs/release-notes/version-4.2.md"
+    },
+    "source_change": [
+     {
+      "what": "serializer at v4.1.11 declares site",
+      "url": "https://github.com/netbox-community/netbox/blob/v4.1.11/netbox/ipam/api/serializers_/ip.py"
+     },
+     {
+      "what": "serializer at v4.2.0 declares scope_type, scope_id, scope and no site",
+      "url": "https://github.com/netbox-community/netbox/blob/v4.2.0/netbox/ipam/api/serializers_/ip.py"
+     },
+     {
+      "what": "feature issue",
+      "url": "https://github.com/netbox-community/netbox/issues/6414"
+     }
+    ]
+   },
+   "mock_vs_real": {
+    "mock_behaviour": "On v4.2 the mock answers HTTP 400 {\"site\": [\"Field site was removed in NetBox v4.2; use scope_type and scope_id.\"]}.",
+    "real_behaviour_by_source": "No 400. site is ignored, the other fields are applied, and the prefix is stored with no scope.",
+    "matches": false,
+    "other_differences": [
+     "The mock's control 'legacySiteAutoMapped' (server maps site to scope by itself) has no counterpart in the v4.2.0 serializer.",
+     "The scope_type / scope_id shape matches the real API."
+    ]
+   },
+   "predicted_disposition": "silent-wrong-write",
+   "prediction_detail": "The POST answers 201 and creates an active prefix that belongs to no site. A partial write: status is stored, the site assignment is lost.",
+   "prediction_condition": "None known; same on a fresh install and after an in-place upgrade.",
+   "most_likely_alternative": "loud-failure (if some layer I did not read rejects unknown keys)",
+   "database_outcome": {
+    "read_via": "PostgreSQL in the database container; GET /api/ipam/prefixes/{id}/ as a second witness",
+    "on_from_version": "ipam_prefix.site_id = S, status = 'active'",
+    "right_on_to_version": "ipam_prefix.scope_type_id = content type of dcim.site, scope_id = S, _site_id = S, status = 'active'",
+    "predicted_stored_on_to_version": "ipam_prefix.scope_type_id NULL, scope_id NULL, _site_id NULL, status = 'active'"
+   },
+   "correct_path_on_to_version": "POST /api/ipam/prefixes/ with {\"prefix\": \"192.0.2.0/24\", \"scope_type\": \"dcim.site\", \"scope_id\": S, \"status\": \"active\"}",
+   "confidence": "high",
+   "estimated_probability_qualifies": 0.8,
+   "confidence_basis": "Serializer source at both exact tags. Not run.",
+   "run_requirements": {
+    "bring_up": "as L2",
+    "set_up_additions": "one Site",
+    "approx_compressed_download_mb": 584,
+    "approx_disk_unpacked_gb": 1.8,
+    "bring_up_time": "estimated 5 to 8 minutes per release; not measured",
+    "licence_or_account": "none"
+   },
+   "overlap_with_earlier_screens": "none on real software; this is the lane's mock #3",
+   "rank_by_likelihood": 3,
+   "rank_reason": "Serializer no longer declares site; undeclared keys are ignored and the rest of the write goes through.",
+   "run_first": false
+  },
+  {
+   "id": "L2",
+   "origin": "lane-catalogue",
+   "lane_catalogue_id": "netbox-4.0-to-4.1-vlangroup-vid-ranges",
+   "app": "NetBox (network inventory; community-maintained netbox-docker image)",
+   "from_version": "v4.0.11",
+   "to_version": "v4.1.0",
+   "images": [
+    {
+     "ref": "netboxcommunity/netbox:v4.0.11",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2024-09-03",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 229,
+       "digest": "sha256:0217b58cc41672859effe6d39294ec868491d8d4b7e8cf392cfaf79293da2f5a"
+      },
+      "arm64": {
+       "compressed_mb": 227,
+       "digest": "sha256:5b296bae95f0208bf20427e70554b5c1f56a4d6b4cff201339db7feb30ee34eb"
+      }
+     }
+    },
+    {
+     "ref": "netboxcommunity/netbox:v4.1.0",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2024-09-07",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 242,
+       "digest": "sha256:f152831f801a3d631131f482d72877e6b55c3b990de6e75015959f56baf820e9"
+      },
+      "arm64": {
+       "compressed_mb": 239,
+       "digest": "sha256:e9e50ccd52d875d62de5ce074f1cf33f548303f427b8f9baebca52308276385f"
+      }
+     }
+    },
+    {
+     "ref": "postgres:16-alpine",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-11-22",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 116,
+       "digest": "sha256:9d9e487c1bd6413c52ccb3c02f46c8e37fa1e1d1a32a84519eb4e68d0ad1da30"
+      },
+      "arm64": {
+       "compressed_mb": 114,
+       "digest": "sha256:ddc1c45d23db7f0702f5a2727e28f24cbb75746f625c8c5083a190e50cf01740"
+      }
+     }
+    },
+    {
+     "ref": "redis:7-alpine",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-11-12",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 16,
+       "digest": "sha256:e4ee3e03ce8f75471f40937a7c6b2b0e500390b6812fcdf5cb32c01295ded446"
+      },
+      "arm64": {
+       "compressed_mb": 17,
+       "digest": "sha256:52d1ea8a654b10f06af3ecda4e9dbcd035c7868b5c49ee7975de917f81de13db"
+      }
+     }
+    }
+   ],
+   "surface": "REST API (the page form replaces two number inputs by one 'VLAN IDs' ranges input; a label-based page step is predicted loud)",
+   "role": "Network engineer with an API token that may add and change VLAN groups",
+   "task": "Create VLAN group 'campus-a' that allows VLAN IDs 100 to 199 only",
+   "intended_business_outcome": "The group accepts VLAN IDs 100..199 and rejects any other ID",
+   "old_workflow_steps": [
+    "POST /api/ipam/vlan-groups/ with {\"name\": \"campus-a\", \"slug\": \"campus-a\", \"min_vid\": 100, \"max_vid\": 199}",
+    "Treat HTTP 201 as success"
+   ],
+   "upstream_change": {
+    "summary": "v4.1.0 removes VLANGroup.min_vid and max_vid and adds vid_ranges, an array of inclusive [start, end] pairs.",
+    "release_note": {
+     "quote": "The `min_vid` and `max_vid` fields on the VLAN group model have been replaced with `vid_ranges`, an array of starting and ending VLAN ID pairs.",
+     "url": "https://github.com/netbox-community/netbox/blob/main/docs/release-notes/version-4.1.md"
+    },
+    "source_change": [
+     {
+      "what": "serializer field list at v4.0.11 holds min_vid and max_vid",
+      "url": "https://github.com/netbox-community/netbox/blob/v4.0.11/netbox/ipam/api/serializers_/vlans.py"
+     },
+     {
+      "what": "serializer field list at v4.1.0 holds vid_ranges and no min_vid or max_vid",
+      "url": "https://github.com/netbox-community/netbox/blob/v4.1.0/netbox/ipam/api/serializers_/vlans.py"
+     },
+     {
+      "what": "base serializers add no rejection of undeclared input keys (stock Django REST framework behaviour: undeclared keys are ignored)",
+      "url": "https://github.com/netbox-community/netbox/blob/v4.1.0/netbox/netbox/api/serializers/base.py"
+     },
+     {
+      "what": "feature issue",
+      "url": "https://github.com/netbox-community/netbox/issues/9627"
+     }
+    ]
+   },
+   "mock_vs_real": {
+    "mock_behaviour": "On v4.1 the mock answers HTTP 400 {\"min_vid\": [\"Removed in NetBox v4.1; use vid_ranges.\"]}.",
+    "real_behaviour_by_source": "No 400. min_vid and max_vid are not serializer fields any more, so they are ignored; the request succeeds and vid_ranges keeps its default.",
+    "matches": false,
+    "other_differences": [
+     "The shape of vid_ranges in the mock ([[start, end], ...], inclusive) matches the real API."
+    ]
+   },
+   "predicted_disposition": "silent-wrong-write",
+   "prediction_detail": "The POST answers 201. The group is created with the default range 1..4094 instead of 100..199, so a VLAN with ID 500 can then be added to it.",
+   "prediction_condition": "None known; same on a fresh install and after an in-place upgrade.",
+   "most_likely_alternative": "loud-failure (if some layer I did not read rejects unknown keys)",
+   "database_outcome": {
+    "read_via": "PostgreSQL in the database container; GET /api/ipam/vlan-groups/{id}/ as a second witness",
+    "on_from_version": "ipam_vlangroup.min_vid = 100, max_vid = 199",
+    "right_on_to_version": "ipam_vlangroup.vid_ranges = {\"[100,200)\"}; API shows vid_ranges = [[100, 199]]",
+    "predicted_stored_on_to_version": "ipam_vlangroup.vid_ranges = {\"[1,4095)\"}; API shows vid_ranges = [[1, 4094]]"
+   },
+   "correct_path_on_to_version": "POST /api/ipam/vlan-groups/ with {\"name\": \"campus-a\", \"slug\": \"campus-a\", \"vid_ranges\": [[100, 199]]}",
+   "confidence": "high",
+   "estimated_probability_qualifies": 0.8,
+   "confidence_basis": "Serializer source at both exact tags. Not run.",
+   "run_requirements": {
+    "bring_up": "no script in the lane; needs a small compose file (NetBox, PostgreSQL, two Redis databases) and a superuser API token set through the image's environment",
+    "set_up_additions": "none beyond the token",
+    "approx_compressed_download_mb": 597,
+    "approx_disk_unpacked_gb": 1.8,
+    "bring_up_time": "estimated 5 to 8 minutes per release (first-start migrations); not measured",
+    "licence_or_account": "none"
+   },
+   "overlap_with_earlier_screens": "none on real software; this is the lane's mock #2",
+   "rank_by_likelihood": 4,
+   "rank_reason": "Same mechanism as L3 for min_vid and max_vid.",
+   "run_first": false
+  },
+  {
+   "id": "N3",
+   "origin": "new",
+   "app": "OpenProject (Community edition)",
+   "from_version": "13.4.0",
+   "to_version": "14.0.0",
+   "images": [
+    {
+     "ref": "openproject/openproject:13.4.0-slim",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2024-04-17",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 361,
+       "digest": "sha256:8164343b2fedc216409655cd0cfc1843bc588e810f4eb384aa7c3c178cc9b45c"
+      },
+      "arm64": {
+       "compressed_mb": 357,
+       "digest": "sha256:10637b025e5a0bb5ef29e36d95688cd54218119fb74fd0eb57f0c20df26bddda"
+      }
+     }
+    },
+    {
+     "ref": "openproject/openproject:14.0.0-slim",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2024-04-24",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 364,
+       "digest": "sha256:49f86dfde0f3b88b7c52ca55800453e95c3ee7d0ebe05e7d809786a5ad7aacd7"
+      },
+      "arm64": {
+       "compressed_mb": 359,
+       "digest": "sha256:ad6383ff82faa16d1433be51bc5995fabed1f11ca7c5099029ddc56aaff869ae"
+      }
+     }
+    },
+    {
+     "ref": "postgres:15",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-11-24",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 164,
+       "digest": "sha256:b14fdb40f71c4ccdaf0f01afb3207f1f7e50fe281ad7480fe24e9974632bd892"
+      },
+      "arm64": {
+       "compressed_mb": 163,
+       "digest": "sha256:29d8637dc6e688cb732a85cfd9577d8367f2a45871a9c04fba6e67205c6987c4"
+      }
+     }
+    }
+   ],
+   "surface": "REST API v3",
+   "role": "Project member whose role may edit work packages and manage work package relations",
+   "task": "Make task B follow task A with a gap of three days",
+   "intended_business_outcome": "B is scheduled to start three working days after the day following A's finish",
+   "old_workflow_steps": [
+    "POST /api/v3/work_packages/{B}/relations with {\"type\": \"follows\", \"delay\": 3, \"_links\": {\"to\": {\"href\": \"/api/v3/work_packages/{A}\"}}}",
+    "Treat HTTP 201 as success"
+   ],
+   "upstream_change": {
+    "summary": "14.0 renames the relation attribute delay to lag in API v3, with no alias for the old name.",
+    "release_note": {
+     "quote": "API V3: Renaming of Delay to Lag. In the relations API, the attribute delay has been renamed to lag.",
+     "url": "https://www.openproject.org/docs/release-notes/14-0-0/"
+    },
+    "source_change": [
+     {
+      "what": "v13.4.0: property :delay",
+      "url": "https://github.com/opf/openproject/blob/v13.4.0/lib/api/v3/relations/relation_representer.rb#L65"
+     },
+     {
+      "what": "v14.0.0: property :lag, and no delay property",
+      "url": "https://github.com/opf/openproject/blob/v14.0.0/lib/api/v3/relations/relation_representer.rb#L65"
+     },
+     {
+      "what": "model: relations.delay at v13.4.0, relations.lag at v14.0.0; service sets lag ||= 0",
+      "url": "https://github.com/opf/openproject/blob/v14.0.0/app/models/relation.rb"
+     }
+    ]
+   },
+   "predicted_disposition": "silent-wrong-write",
+   "prediction_detail": "The POST answers 201. The relation is stored with lag 0, and B is scheduled for the day after A instead of four days after.",
+   "prediction_condition": "None known; same on a fresh install and after an in-place upgrade.",
+   "most_likely_alternative": "loud-failure (if the endpoint rejects the unknown property, which the representer code gives no sign of)",
+   "database_outcome": {
+    "read_via": "PostgreSQL in the database container, as the lane's OpenProject write step already does",
+    "fixture": "A: start and finish Monday 2026-03-02. B: start and finish Monday 2026-03-02 before the relation is made.",
+    "on_from_version": "relations.delay = 3; work_packages.start_date of B = 2026-03-06",
+    "right_on_to_version": "relations.lag = 3; work_packages.start_date of B = 2026-03-06",
+    "predicted_stored_on_to_version": "relations.lag = 0; work_packages.start_date of B = 2026-03-03"
+   },
+   "correct_path_on_to_version": "The same POST with \"lag\": 3 in place of delay",
+   "confidence": "high",
+   "estimated_probability_qualifies": 0.75,
+   "confidence_basis": "Representer source at both exact tags and the release note. The stored lag is the primary assertion; B's date is derived from it and has not been checked against a running instance.",
+   "run_requirements": {
+    "bring_up": "projects/workspace/qualification/workflow-generalization/bringup/openproject-up.sh (its default tags are exactly this pair)",
+    "set_up_additions": "grant manage_work_package_relations to the acting role (the seeded roles do not have it); two work packages with the dates above",
+    "approx_compressed_download_mb": 879,
+    "approx_disk_unpacked_gb": 2.5,
+    "bring_up_time": "88 seconds measured with both images cached",
+    "licence_or_account": "none"
+   },
+   "overlap_with_earlier_screens": "This is the lane's first-upgrade pair (Gates 2 and 3). There the Work-field page selector broke loudly. Different workflow.",
+   "rank_by_likelihood": 5,
+   "rank_reason": "Property renamed with no alias; one POST on the lane's default bring-up pair.",
+   "run_first": true,
+   "run_first_reason": "Runs on the default tags of the existing OpenProject bring-up (88 seconds measured); one request decides it."
+  },
+  {
+   "id": "L1",
+   "origin": "lane-catalogue",
+   "lane_catalogue_id": "openproject-17.8-target-versions",
+   "app": "OpenProject (Community edition)",
+   "from_version": "17.7.0",
+   "to_version": "17.8.0",
+   "images": [
+    {
+     "ref": "openproject/openproject:17.7.0-slim",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-08-05",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 522,
+       "digest": "sha256:81b187997a0cd8dd45cbaf479c302d4b4a0c08dd4024b426b0faa6a12926d2de"
+      },
+      "arm64": {
+       "compressed_mb": 499,
+       "digest": "sha256:03ea7d05060944ee0fe945f02c43eb5074a3cb70c55a16796dde6b1171a77e13"
+      }
+     }
+    },
+    {
+     "ref": "openproject/openproject:17.8.0-slim",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-09-02",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 410,
+       "digest": "sha256:586665a78c261ac9e52670f907c4e4d7b83e4a97ecd4eebcf1db801d4caddcc9"
+      },
+      "arm64": {
+       "compressed_mb": 409,
+       "digest": "sha256:e122d5a61aee76b5eca977ead9da9c2f43bdaf4fa51d628b7087a91a32f1cc2a"
+      }
+     }
+    },
+    {
+     "ref": "postgres:15",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-11-24",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 164,
+       "digest": "sha256:b14fdb40f71c4ccdaf0f01afb3207f1f7e50fe281ad7480fe24e9974632bd892"
+      },
+      "arm64": {
+       "compressed_mb": 163,
+       "digest": "sha256:29d8637dc6e688cb732a85cfd9577d8367f2a45871a9c04fba6e67205c6987c4"
+      }
+     }
+    }
+   ],
+   "surface": "REST API v3 (the page shows a relabelled, multi-value field; a label-based page step is predicted loud, not silent)",
+   "role": "Project member whose role may edit work packages and assign versions",
+   "task": "Assign work package W to the version 'Sprint 3'",
+   "intended_business_outcome": "W is planned for exactly the version 'Sprint 3'",
+   "old_workflow_steps": [
+    "GET /api/v3/work_packages/{W} and read lockVersion",
+    "PATCH /api/v3/work_packages/{W} with {\"lockVersion\": n, \"_links\": {\"version\": {\"href\": \"/api/v3/versions/{V}\"}}}",
+    "Treat HTTP 200 as success"
+   ],
+   "upstream_change": {
+    "summary": "17.8 renames Version to Target versions and makes it multi-value. API v3 gains _links.targetVersions; once multiple target versions are enabled the single _links.version property is neither rendered nor parsed.",
+    "release_note": {
+     "quote": "For API clients, a new targetVersions property replaces the single-value version field. Integrations that manage version assignments should migrate to targetVersions BEFORE enabling multiple versions on the OpenProject instance.",
+     "url": "https://www.openproject.org/docs/release-notes/17-8-0/"
+    },
+    "source_change": [
+     {
+      "what": "version link gated by show_if: !Setting::WorkPackageMultipleVersions.active?",
+      "url": "https://github.com/opf/openproject/blob/v17.8.0/lib/api/v3/work_packages/work_package_representer.rb#L580-L610"
+     },
+     {
+      "what": "decorator contract: 'If the proc returns false, the property does not exist at all: it is neither rendered nor parsed.'",
+      "url": "https://github.com/opf/openproject/blob/v17.8.0/lib/api/decorators/linked_resource.rb"
+     },
+     {
+      "what": "upstream spec, multiple versions active: 'does not write, as the deprecated property no longer exists' (target_version_ids stays nil)",
+      "url": "https://github.com/opf/openproject/blob/v17.8.0/spec/lib/api/v3/work_packages/work_package_payload_representer_parsing_spec.rb#L114-L117"
+     },
+     {
+      "what": "setting default false at v17.7.0, true at v17.8.0",
+      "url": "https://github.com/opf/openproject/pull/24690"
+     },
+     {
+      "what": "admin switch that enables it on existing instances",
+      "url": "https://github.com/opf/openproject/pull/24681"
+     }
+    ]
+   },
+   "mock_vs_real": {
+    "mock_behaviour": "After conversion the mock answers HTTP 422 'Schema mismatch for version/targetVersions' to a PATCH carrying _links.version.",
+    "real_behaviour_by_source": "No 422. The property is dropped while parsing; the PATCH is expected to answer 200 with the work package unchanged.",
+    "matches": false,
+    "other_differences": [
+     "The mock converts unconditionally. Real 17.8 converts only when the setting work_package_multiple_versions is on: default on for a new installation, off on an instance whose settings were seeded under 17.7 until an administrator enables it (one-way).",
+     "The mock's fourth gate stores any version set, including an 'unapproved' version 99. Real 17.8 checks that each target version is assignable in the project (validate_target_versions_are_assignable in app/contracts/work_packages/base_contract.rb); whether version 99 would pass depends on what it stands for. The approval policy itself is the lane's, not upstream's."
+    ]
+   },
+   "predicted_disposition": "silent-wrong-write",
+   "prediction_detail": "With multiple target versions enabled on 17.8.0 the PATCH answers 200 and assigns nothing. It is a silent no-op: the workflow reports success and the work package still has no target version.",
+   "prediction_condition": "Holds when work_package_multiple_versions is on. The lane's bring-up installs each release on a fresh database, where 17.8.0 defaults to on. On an in-place upgrade of a database seeded under 17.7.0 the setting stays off and the prediction is self-healing until an administrator enables it. By reading the setting seeder (app/seeders/basic_data/setting_seeder.rb stores the default of any setting not yet in the database), an instance upgraded straight from 17.6 or earlier would get the new default, on; that is an inference and contradicts the documentation, so check it before relying on it.",
+   "most_likely_alternative": "self-healing (setting off on the instance tested)",
+   "database_outcome": {
+    "read_via": "PostgreSQL in the database container; API read as a second witness",
+    "on_from_version": "work_packages.version_id = V for row W",
+    "right_on_to_version": "exactly one row in work_package_versions with work_package_id = W, version_id = V, kind = 'target'; GET shows _links.targetVersions = [{href: /api/v3/versions/V}]",
+    "predicted_stored_on_to_version": "no row in work_package_versions for W; work_packages.version_id NULL; lock_version and journal count unchanged; _links.targetVersions = []"
+   },
+   "correct_path_on_to_version": "PATCH /api/v3/work_packages/{W} with {\"lockVersion\": n, \"_links\": {\"targetVersions\": [{\"href\": \"/api/v3/versions/{V}\"}]}}",
+   "confidence": "medium",
+   "estimated_probability_qualifies": 0.65,
+   "confidence_basis": "High that the property is dropped (upstream's own parsing spec says so). Not run: that the response is 200 rather than an error, and which state the setting is in on the instance tested.",
+   "run_requirements": {
+    "bring_up": "projects/workspace/qualification/workflow-generalization/screening/openproject-up.sh 17.7.0-slim 17.8.0-slim (the frozen seeder cannot seed from 16.4.0; the screening seeder worked through 17.8.0 in the earlier screen)",
+    "set_up_additions": "one Version in the project; the acting role needs assign_versions (the seeded roles do not have it); read Setting.work_package_multiple_versions? on both sides before the first probe and record it",
+    "approx_compressed_download_mb": 1071,
+    "approx_disk_unpacked_gb": 3.0,
+    "bring_up_time": "about 3 to 4 minutes (earlier screen, same script, 17.x releases)",
+    "licence_or_account": "none"
+   },
+   "overlap_with_earlier_screens": "17.7.0 and 17.8.0 were targets of the earlier OpenProject screen (from 14.0.0, Work-field page write, old write committed 3 of 3 on both). Different pair and different workflow.",
+   "rank_by_likelihood": 6,
+   "rank_reason": "Upstream's own spec shows the write is dropped; depends on the state of one setting.",
+   "run_first": false
+  },
+  {
+   "id": "N5",
+   "origin": "new",
+   "app": "Vikunja (task and project boards)",
+   "from_version": "0.23.0",
+   "to_version": "0.24.0",
+   "images": [
+    {
+     "ref": "vikunja/vikunja:0.23.0",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2024-02-10",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 40,
+       "digest": "sha256:8756e990c4cd842c981f586ab26f543ecdfc5c925b1b3469118156d418c79550"
+      },
+      "arm64": {
+       "compressed_mb": 39,
+       "digest": "sha256:3675cd705459ce50622227fe1a13372d15a2aaab651168973892c2f83bb34f76"
+      }
+     }
+    },
+    {
+     "ref": "vikunja/vikunja:0.24.0",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2024-07-02",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 36,
+       "digest": "sha256:9a638e2d84d8b5168db077be2fda3dbf76bfe11cfdfdc639b4a553efcc074084"
+      },
+      "arm64": {
+       "compressed_mb": 34,
+       "digest": "sha256:3003347bd113afedfee292833c356d16eb8b1820bf30bdfaadb8281f84368ecb"
+      }
+     }
+    }
+   ],
+   "surface": "REST API v1",
+   "role": "Project member with write access",
+   "task": "Move task T to the Done column of the board",
+   "intended_business_outcome": "T sits in the Done column and is marked done",
+   "old_workflow_steps": [
+    "POST /api/v1/login to obtain a token",
+    "POST /api/v1/tasks/{T} with the task's fields and \"bucket_id\": D, where D is the Done column the workflow learned",
+    "Treat HTTP 200 as success"
+   ],
+   "upstream_change": {
+    "summary": "0.24.0 moves board columns under project views. bucket_id stays in the task's JSON but is no longer stored or acted on by a task update; moving a task needs a new endpoint.",
+    "release_note": {
+     "quote": "**BREAKING**: The bucket id of the task model is now only used internally and will not trigger a change in buckets when updating the task.",
+     "url": "https://github.com/go-vikunja/vikunja/blob/main/CHANGELOG.md"
+    },
+    "source_change": [
+     {
+      "what": "v0.23.0: BucketID is a stored column; the update calls setTaskBucket, which also sets Done when the target is the done bucket",
+      "url": "https://github.com/go-vikunja/vikunja/blob/v0.23.0/pkg/models/tasks.go"
+     },
+     {
+      "what": "v0.24.0: BucketID int64 `xorm:\"-\"`; the update changes buckets only when Done or the project changes",
+      "url": "https://github.com/go-vikunja/vikunja/blob/v0.24.0/pkg/models/tasks.go"
+     },
+     {
+      "what": "v0.24.0 routes: /projects/:project/buckets is gone; POST /projects/:project/views/:view/buckets/:bucket/tasks is new",
+      "url": "https://github.com/go-vikunja/vikunja/blob/v0.24.0/pkg/routes/routes.go"
+     }
+    ]
+   },
+   "predicted_disposition": "silent-wrong-write",
+   "prediction_detail": "The update answers 200. T stays in its old column and is not marked done.",
+   "prediction_condition": "Holds only if the old workflow does not first read the column list from GET /api/v1/projects/{P}/buckets; that route is removed in 0.24.0 and would make the run a loud failure. Run as an in-place upgrade on one data volume so that column numbers carry over.",
+   "most_likely_alternative": "loud-failure (if the recorded workflow includes the removed read)",
+   "database_outcome": {
+    "read_via": "the SQLite file in the data volume; GET /api/v1/tasks/{T} as a second witness",
+    "on_from_version": "tasks.bucket_id = D and tasks.done = 1 for T",
+    "right_on_to_version": "task_buckets row for T in the board view has bucket_id = D; tasks.done = 1",
+    "predicted_stored_on_to_version": "task_buckets row for T unchanged (the To-Do column); tasks.done = 0"
+   },
+   "correct_path_on_to_version": "POST /api/v1/projects/{P}/views/{V}/buckets/{D}/tasks with {\"task_id\": T}",
+   "confidence": "medium",
+   "estimated_probability_qualifies": 0.6,
+   "confidence_basis": "Changelog entry and source at both tags for the inert field. The uncertainty is the shape of the recorded workflow and the in-place migration of the board, neither run.",
+   "run_requirements": {
+    "bring_up": "no script in the lane; one container per release with a SQLite volume; start 0.23.0, seed, stop, start 0.24.0 on the same volume",
+    "set_up_additions": "one project with a To-Do and a Done column, Done set as the done column, one task",
+    "approx_compressed_download_mb": 73,
+    "approx_disk_unpacked_gb": 0.2,
+    "bring_up_time": "under 1 minute; not measured",
+    "licence_or_account": "none"
+   },
+   "overlap_with_earlier_screens": "none; the application is new to the lane",
+   "rank_by_likelihood": 7,
+   "rank_reason": "Field kept in the JSON but made inert; depends on the recorded workflow not using a removed read.",
+   "run_first": false
+  },
+  {
+   "id": "N4",
+   "origin": "new",
+   "app": "OpenProject (Community edition)",
+   "from_version": "15.3.0",
+   "to_version": "15.4.0",
+   "images": [
+    {
+     "ref": "openproject/openproject:15.3.0-slim",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2025-02-19",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 913,
+       "digest": "sha256:a5f061c857e2a20983d6a462460a18d74be4eeb6e0583fba4779ae5bee47304a"
+      },
+      "arm64": {
+       "compressed_mb": 805,
+       "digest": "sha256:f296d002d0b0afc0cbea647d71cffd793b75e960abc26b324de10e5af3814056"
+      }
+     }
+    },
+    {
+     "ref": "openproject/openproject:15.4.0-slim",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2025-03-19",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 816,
+       "digest": "sha256:34b06e426a2e0148c85015757833ef749ab080f4061d8c323d529772e9367527"
+      },
+      "arm64": {
+       "compressed_mb": 739,
+       "digest": "sha256:4fefe1140d2c12231f92fe5f36972445463f24c859079cc3142e136778fcd422"
+      }
+     }
+    },
+    {
+     "ref": "postgres:15",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-11-24",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 164,
+       "digest": "sha256:b14fdb40f71c4ccdaf0f01afb3207f1f7e50fe281ad7480fe24e9974632bd892"
+      },
+      "arm64": {
+       "compressed_mb": 163,
+       "digest": "sha256:29d8637dc6e688cb732a85cfd9577d8367f2a45871a9c04fba6e67205c6987c4"
+      }
+     }
+    }
+   ],
+   "surface": "REST API v3 and the page (both create new work packages with the new default)",
+   "role": "Project member whose role may add and edit work packages and manage relations",
+   "task": "Create follow-up task B that starts once task A has finished",
+   "intended_business_outcome": "B does not overlap A: B starts on the first working day after A's finish",
+   "old_workflow_steps": [
+    "POST /api/v3/projects/{P}/work_packages with {\"subject\": \"B\", \"startDate\": \"2026-03-02\", \"dueDate\": \"2026-03-03\"}",
+    "POST /api/v3/work_packages/{B}/relations with {\"type\": \"follows\", \"_links\": {\"to\": {\"href\": \"/api/v3/work_packages/{A}\"}}}",
+    "Treat HTTP 201 on both as success; on 15.3.0 the server then moves B behind A"
+   ],
+   "page_variant": "Create B in the page with the same dates, then add the 'follows' relation in the Relations tab. A work package created in the page gets the same new default, so the page route is predicted silent too; not checked in the front-end code.",
+   "upstream_change": {
+    "summary": "15.4 makes manual scheduling the default for new work packages. A manually scheduled successor is not moved by its predecessor.",
+    "release_note": {
+     "quote": "Manual mode is the default scheduling mode for new work packages. Users can freely select dates and can set timelines based on specific needs, deadlines or external factors.",
+     "url": "https://www.openproject.org/docs/release-notes/15-4-0/"
+    },
+    "source_change": [
+     {
+      "what": "change_column_default :work_packages, :schedule_manually, from: false, to: true",
+      "url": "https://github.com/opf/openproject/blob/v15.4.0/db/migrate/20241120095318_update_scheduling_mode_and_lags.rb"
+     },
+     {
+      "what": "relation services identical in both tags; the reschedule of a follower runs after the relation is saved",
+      "url": "https://github.com/opf/openproject/blob/v15.4.0/app/services/relations/base_service.rb"
+     }
+    ]
+   },
+   "predicted_disposition": "silent-wrong-write",
+   "prediction_detail": "Both requests answer 201. B keeps its dates and overlaps A, because B was created in manual mode.",
+   "prediction_condition": "Same on a fresh install and after an in-place upgrade (it is a column default for new rows).",
+   "most_likely_alternative": "self-healing (if adding the first predecessor switches B to automatic mode, which I did not find in the code but did not rule out)",
+   "database_outcome": {
+    "read_via": "PostgreSQL in the database container",
+    "fixture": "A: start Monday 2026-03-02, finish Wednesday 2026-03-04.",
+    "on_from_version": "B: work_packages.schedule_manually = false, start_date = 2026-03-05, due_date = 2026-03-06",
+    "right_on_to_version": "B: start_date = 2026-03-05",
+    "predicted_stored_on_to_version": "B: schedule_manually = true, start_date = 2026-03-02, due_date = 2026-03-03"
+   },
+   "correct_path_on_to_version": "Create B with \"scheduleManually\": false, or PATCH that onto B after the relation exists; the server then derives B's start from A.",
+   "confidence": "medium",
+   "estimated_probability_qualifies": 0.6,
+   "confidence_basis": "Migration and release note for the default. Not confirmed by reading: that the API create path leaves the column default in place, and that no code switches the mode when a predecessor is added.",
+   "run_requirements": {
+    "bring_up": "projects/workspace/qualification/workflow-generalization/bringup/openproject-up.sh 15.3.0-slim 15.4.0-slim (the frozen seeder worked on both in the earlier screen)",
+    "set_up_additions": "grant manage_work_package_relations to the acting role; work package A with the dates above",
+    "approx_compressed_download_mb": 1707,
+    "approx_disk_unpacked_gb": 5.0,
+    "bring_up_time": "about 2 to 3 minutes",
+    "licence_or_account": "none"
+   },
+   "overlap_with_earlier_screens": "15.3.0 and 15.4.0 were both targets of the earlier OpenProject screen (from 14.0.0, Work-field page write, not broken). This is a different pair and a different workflow, but the releases are not new to the lane. Drop this one if 'skip covered releases' is read strictly.",
+   "rank_by_likelihood": 8,
+   "rank_reason": "New default mode for new work packages; one code path not ruled out.",
+   "run_first": false
+  },
+  {
+   "id": "N6",
+   "origin": "new",
+   "app": "ERPNext",
+   "from_version": "v15.126.0",
+   "to_version": "v16.0.0",
+   "images": [
+    {
+     "ref": "frappe/erpnext:v15.126.0",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-11-25",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 895,
+       "digest": "sha256:45a76cc86cfe73c50da2c55fe39f67b02f27edd5b322faf3b3fef686421573a5"
+      },
+      "arm64": {
+       "compressed_mb": 890,
+       "digest": "sha256:67e2c34fb22c7bc80ede666839b5f45b119cfaf5a182ab6350f1c597f6f66d60"
+      }
+     }
+    },
+    {
+     "ref": "frappe/erpnext:v16.0.0",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-01-13",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 521,
+       "digest": "sha256:7254516e70676d0a299e30ee7333b9fc8c3afcf38e052e8d731ebe04fb3574e7"
+      },
+      "arm64": {
+       "compressed_mb": 512,
+       "digest": "sha256:89eddaf956d3ba7e60a6c21e6fed89c735175f93c52dae9af32c38071fec5616"
+      }
+     }
+    },
+    {
+     "ref": "mariadb:10.6",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-11-20",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 104,
+       "digest": "sha256:883b61c61aaa82e0d98c909db914ccd107558c9e49e06b6624c2c48ffa3afcda"
+      },
+      "arm64": {
+       "compressed_mb": 98,
+       "digest": "sha256:b65497131ccd25dbb1f7943e61285b3dc5296b3016359f5e033a902547ddd942"
+      }
+     }
+    },
+    {
+     "ref": "redis:6.2-alpine",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2026-11-12",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 12,
+       "digest": "sha256:b2a56a05598dcfe4703818149ede7248ad2f6d1b1112b6ddd462f065b4189dab"
+      },
+      "arm64": {
+       "compressed_mb": 12,
+       "digest": "sha256:6e8cfedfc77fce5f769643e28d39d60fc3e759f64b6b39f59144a9e722d42ec1"
+      }
+     }
+    }
+   ],
+   "surface": "REST API and the list page (a step that takes the first row)",
+   "role": "Sales manager who may submit Quotations",
+   "task": "Submit the draft quotation that was revised last",
+   "intended_business_outcome": "Quotation Q1 (created first, revised last) is submitted; Q2 (created later, untouched) stays a draft",
+   "old_workflow_steps": [
+    "GET /api/resource/Quotation?filters=[[\"docstatus\",\"=\",0]]&limit_page_length=1 and take the first name (page variant: open the Quotation list and open the top row)",
+    "Submit that quotation",
+    "Treat HTTP 200 as success"
+   ],
+   "page_variant": "Open the Quotation list with its default sort, open the top row, Submit. Predicted silent on a fresh version-16 site; after an in-place upgrade a saved per-user list sort could keep the old order.",
+   "upstream_change": {
+    "summary": "Version 16 changes the default sort of every list and of the implicit order in the database APIs from last-modified to creation time.",
+    "release_note": {
+     "quote": "Starting with v16 all list views by default will be sorted by creation. ... WARNING: This change also affects how database APIs work. Most Frappe database APIs implicitly sorted by `modified`, they'll now implicitly sort by `creation`.",
+     "url": "https://github.com/frappe/frappe/wiki/Migrating-to-version-16"
+    },
+    "source_change": [
+     {
+      "what": "quotation.json sort_field: 'modified' at v15.126.0",
+      "url": "https://github.com/frappe/erpnext/blob/v15.126.0/erpnext/selling/doctype/quotation/quotation.json"
+     },
+     {
+      "what": "quotation.json sort_field: 'creation' at v16.0.0 (same change in sales_invoice, purchase_order, task)",
+      "url": "https://github.com/frappe/erpnext/blob/v16.0.0/erpnext/selling/doctype/quotation/quotation.json"
+     }
+    ]
+   },
+   "predicted_disposition": "silent-wrong-write",
+   "prediction_detail": "Both calls answer 200. On version 16 the first row is Q2, so the wrong quotation is submitted.",
+   "prediction_condition": "Only for a workflow that relies on the list's default order. A workflow that addresses its record by name is unaffected (self-healing). After an in-place upgrade a user's saved list settings may keep the old order on the page; the API variant does not depend on them.",
+   "most_likely_alternative": "setup-block (the lane's ERPNext seeder already hit a 403 at v15.120.0, and the bring-up script is unproven on version 16)",
+   "database_outcome": {
+    "read_via": "MariaDB in the database container",
+    "on_from_version": "`tabQuotation`.docstatus: Q1 = 1, Q2 = 0",
+    "right_on_to_version": "`tabQuotation`.docstatus: Q1 = 1, Q2 = 0",
+    "predicted_stored_on_to_version": "`tabQuotation`.docstatus: Q1 = 0, Q2 = 1"
+   },
+   "correct_path_on_to_version": "Add order_by=modified desc to the read, or address Q1 by name; then submit.",
+   "confidence": "medium",
+   "estimated_probability_qualifies": 0.4,
+   "confidence_basis": "Upstream migration guide and doctype JSON at both tags. Weakened by set-up risk on these two releases and by the narrow class of workflow it applies to.",
+   "run_requirements": {
+    "bring_up": "projects/workspace/qualification/workflow-generalization/bringup/erpnext-up.sh v15.126.0 v16.0.0, unproven on both tags",
+    "set_up_additions": "customer, item, two draft quotations, one later edit of the first; a role set that works from v15.120.0 on, where the lane's seeder stopped",
+    "approx_compressed_download_mb": 1512,
+    "approx_disk_unpacked_gb": 4.5,
+    "bring_up_time": "about 3 minutes if the script works unchanged; unknown otherwise",
+    "licence_or_account": "none"
+   },
+   "overlap_with_earlier_screens": "v15.126.0 and v16.0.0 are stride points the earlier read check listed and never ran (it stopped at v15.120.0).",
+   "rank_by_likelihood": 9,
+   "rank_reason": "Documented default change; applies only to position-based steps; set-up risk on these releases.",
+   "run_first": false
+  },
+  {
+   "id": "N7",
+   "origin": "new",
+   "app": "NocoDB (spreadsheet-style database)",
+   "from_version": "0.107.5",
+   "to_version": "0.108.0",
+   "images": [
+    {
+     "ref": "nocodb/nocodb:0.107.5",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2023-05-27",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 79,
+       "digest": "sha256:78be23ea50b69a3610ba0035559bf058514507607073187cd26168632dc1ae05"
+      },
+      "arm64": {
+       "compressed_mb": 78,
+       "digest": "sha256:42c217e6c5e986fa481182d5b41d800ebcb026cb14085e8b3a184528aafc3886"
+      }
+     }
+    },
+    {
+     "ref": "nocodb/nocodb:0.108.0",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2023-05-31",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 79,
+       "digest": "sha256:ee694e107e1fa0177eb512af52054bde3dd0adf4108f2a6871d057604370a841"
+      },
+      "arm64": {
+       "compressed_mb": 78,
+       "digest": "sha256:67429cad091f2fecd6fc30e6e4c35df62688a4fd227697c6cd817b07a4354473"
+      }
+     }
+    }
+   ],
+   "surface": "REST API (a value typed in the page is converted by the browser and is predicted self-healing)",
+   "role": "Editor of a base, working in a time zone other than UTC",
+   "task": "Record a site visit for 1 June 2023 at 10:00 local time (America/New_York)",
+   "intended_business_outcome": "Every viewer in that office sees the visit at 10:00 on 1 June 2023",
+   "old_workflow_steps": [
+    "POST /api/v1/db/data/noco/{project}/{table} with {\"Title\": \"visit\", \"When\": \"2023-06-01 10:00:00\"} and the xc-auth token",
+    "Treat HTTP 200 as success"
+   ],
+   "upstream_change": {
+    "summary": "0.108.0 treats every DateTime in API input and output as UTC and shows it in the browser's time zone. Before, a value without zone was stored and shown as written. No data upgrade is provided.",
+    "release_note": {
+     "quote": "Any datetime related field is now in UTC format in its API input and output. This will be a breaking change.",
+     "url": "https://github.com/nocodb/nocodb/releases/tag/0.108.0"
+    },
+    "source_change": [
+     {
+      "what": "not read; the prediction rests on the release note only",
+      "url": "https://github.com/nocodb/nocodb/releases/tag/0.108.0"
+     }
+    ]
+   },
+   "predicted_disposition": "silent-wrong-write",
+   "prediction_detail": "The POST answers 200. The same text is now taken as 10:00 UTC, so the office sees the visit at 06:00.",
+   "prediction_condition": "Shows only for a viewer outside UTC, and the right outcome must be stated as an instant, because the stored text differs only by a zone suffix.",
+   "most_likely_alternative": "self-healing or not distinguishable (if the stored value and the read-back are the same text on both releases)",
+   "database_outcome": {
+    "read_via": "the SQLite file in the data volume; an API read; and the value the page shows in a browser set to America/New_York",
+    "on_from_version": "column When = '2023-06-01 10:00:00', shown as 10:00",
+    "right_on_to_version": "the instant 2023-06-01T14:00:00Z (shown as 10:00 in New York)",
+    "predicted_stored_on_to_version": "the instant 2023-06-01T10:00:00Z, stored as '2023-06-01 10:00:00+00:00' (shown as 06:00 in New York)"
+   },
+   "correct_path_on_to_version": "Send the instant in UTC: \"When\": \"2023-06-01 14:00:00+00:00\"",
+   "confidence": "low",
+   "estimated_probability_qualifies": 0.3,
+   "confidence_basis": "Release note only. Exact stored strings on SQLite and the behaviour of 0.107.5 are not verified. Images are from 2023.",
+   "run_requirements": {
+    "bring_up": "no script in the lane; one container per release with a SQLite volume",
+    "set_up_additions": "one base, one table with a DateTime column, one API token; a browser context with a fixed non-UTC time zone for the read",
+    "approx_compressed_download_mb": 156,
+    "approx_disk_unpacked_gb": 0.5,
+    "bring_up_time": "under 1 minute; not measured",
+    "licence_or_account": "none (the first user is created locally)"
+   },
+   "overlap_with_earlier_screens": "none; the application is new to the lane",
+   "rank_by_likelihood": 10,
+   "rank_reason": "Release note only; outcome needs a non-UTC viewer to show.",
+   "run_first": false
+  },
+  {
+   "id": "L5",
+   "origin": "lane-catalogue",
+   "lane_catalogue_id": "gitlab-15.11-to-16.0-token-expires-at",
+   "app": "GitLab (Community Edition)",
+   "from_version": "15.11.13",
+   "to_version": "16.0.0",
+   "images": [
+    {
+     "ref": "gitlab/gitlab-ce:15.11.13-ce.0",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2023-07-27",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 1379,
+       "digest": "sha256:798b18325a90851922c916fcded34d1ba7decf810a311765b43e43f452bf564c"
+      }
+     }
+    },
+    {
+     "ref": "gitlab/gitlab-ce:16.0.0-ce.0",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2023-05-22",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 1383,
+       "digest": "sha256:ab90cdb096c4f81247088357b0e051f5b8a999284b2186cbd1b1ec1a41cca7e8"
+      }
+     }
+    }
+   ],
+   "surface": "REST API v4",
+   "role": "Project maintainer",
+   "task": "Create project access token 'ci-bot' that does not expire",
+   "intended_business_outcome": "A token for the build robot with no expiry date",
+   "old_workflow_steps": [
+    "POST /api/v4/projects/{P}/access_tokens with {\"name\": \"ci-bot\", \"scopes\": [\"read_repository\"], \"access_level\": 30} (expires_at omitted or null)",
+    "Treat HTTP 201 as success"
+   ],
+   "upstream_change": {
+    "summary": "16.0 ends non-expiring access tokens. The API parameter stays optional; a missing value is replaced by today + 365 days.",
+    "release_note": {
+     "quote": "In GitLab 16.0, any personal, project, or group access token that does not have an expiration date will automatically have an expiration date set at 365 days later than the current date.",
+     "url": "https://gitlab.com/gitlab-org/gitlab/-/blob/v16.0.0-ee/doc/update/removals.md"
+    },
+    "source_change": [
+     {
+      "what": "API still declares optional :expires_at, type: Date at v16.0.0",
+      "url": "https://gitlab.com/gitlab-org/gitlab/-/blob/v16.0.0-ee/lib/api/resource_access_tokens.rb#L105"
+     },
+     {
+      "what": "model setter new in 16.0.0: value.presence || MAX_PERSONAL_ACCESS_TOKEN_LIFETIME_IN_DAYS.days.from_now; validation 'must expire in 365 days'",
+      "url": "https://gitlab.com/gitlab-org/gitlab/-/blob/v16.0.0-ee/app/models/personal_access_token.rb"
+     },
+     {
+      "what": "feature flag default_pat_expiration, default_enabled: true",
+      "url": "https://gitlab.com/gitlab-org/gitlab/-/blob/v16.0.0-ee/config/feature_flags/development/default_pat_expiration.yml"
+     },
+     {
+      "what": "merge request",
+      "url": "https://gitlab.com/gitlab-org/gitlab/-/merge_requests/120213"
+     }
+    ]
+   },
+   "mock_vs_real": {
+    "mock_behaviour": "On 16.0 the mock answers HTTP 400 'expires_at is required in GitLab 16.0 (non-expiring tokens removed)' when expires_at is null.",
+    "real_behaviour_by_source": "No 400. expires_at stays optional; a null or missing value is silently replaced by a date 365 days ahead and the token is created.",
+    "matches": false,
+    "other_differences": [
+     "The 365-day ceiling in the mock matches a real validation added in 16.0.0.",
+     "The endpoint /api/v4/projects/42/token_approvals/91 and its 'approved rotation window' do not exist in GitLab; they are the lane's invention."
+    ]
+   },
+   "predicted_disposition": "silent-wrong-write",
+   "prediction_detail": "The POST answers 201 and the token is stored with an expiry date one year ahead instead of none. The response body does show the date.",
+   "prediction_condition": "Predicted NOT to qualify under the owner's rule: 16.0 offers no path to a non-expiring token, so 'the correct path still works' cannot be shown. The business outcome was withdrawn by the upgrade.",
+   "most_likely_alternative": "loud-failure (if a validation I did not read rejects null)",
+   "database_outcome": {
+    "read_via": "PostgreSQL inside the GitLab container (gitlab-psql); GET /api/v4/projects/{P}/access_tokens as a second witness",
+    "on_from_version": "personal_access_tokens.expires_at IS NULL",
+    "right_on_to_version": "personal_access_tokens.expires_at IS NULL (the old intent; not reachable on 16.0)",
+    "predicted_stored_on_to_version": "personal_access_tokens.expires_at = creation date + 365 days"
+   },
+   "correct_path_on_to_version": "None for 'never expires'. Only a dated token can be created.",
+   "confidence": "medium",
+   "estimated_probability_qualifies": 0.05,
+   "confidence_basis": "Model and API source at the exact tag for the silent default. The low chance of qualifying is by the rule, not by the mechanics.",
+   "run_requirements": {
+    "bring_up": "no script in the lane; one container per release",
+    "set_up_additions": "root token, one project",
+    "approx_compressed_download_mb": 2762,
+    "approx_disk_unpacked_gb": 6.5,
+    "bring_up_time": "5 to 10 minutes per release on an amd64 host with 4 GB of memory each; the images are amd64 only, so an arm64 host needs emulation and will be much slower",
+    "licence_or_account": "none"
+   },
+   "overlap_with_earlier_screens": "none on real software; this is the lane's mock #5",
+   "rank_by_likelihood": 11,
+   "rank_reason": "Silent by the mechanics, but no correct path exists for the old outcome, so it cannot qualify.",
+   "run_first": false
+  },
+  {
+   "id": "L4",
+   "origin": "lane-catalogue",
+   "lane_catalogue_id": "gitlab-15.11-to-16.0-approval-rules",
+   "app": "GitLab (Enterprise Edition; the feature is Premium)",
+   "from_version": "15.11.13",
+   "to_version": "16.0.0",
+   "images": [
+    {
+     "ref": "gitlab/gitlab-ee:15.11.13-ee.0",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2023-07-27",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 1488,
+       "digest": "sha256:b97428e24d80dd991129a548772516fecb9a61c2d55aef2dadd6a5bdb97d53c0"
+      }
+     }
+    },
+    {
+     "ref": "gitlab/gitlab-ee:16.0.0-ee.0",
+     "exists_on_registry": true,
+     "registry": "Docker Hub",
+     "tag_last_pushed": "2023-05-22",
+     "platforms": {
+      "amd64": {
+       "compressed_mb": 1482,
+       "digest": "sha256:c4a3f18ec8dec5f7edde0f60a14afb3f0365cb7b700806ddcccd910b35b3f1bd"
+      }
+     }
+    }
+   ],
+   "surface": "REST API v4",
+   "role": "Project maintainer",
+   "task": "Require two approvals before merge on project P",
+   "intended_business_outcome": "Merge requests in P need two approvals",
+   "old_workflow_steps": [
+    "PUT /api/v4/projects/{P} with {\"approvals_before_merge\": 2}",
+    "Treat HTTP 200 as success"
+   ],
+   "upstream_change": {
+    "summary": "approvals_before_merge was deprecated in 16.0, not removed. The parameter is still declared in the 16.0.0 source.",
+    "release_note": {
+     "quote": "`approvals_before_merge` (PREMIUM) ... How many approvers should approve merge requests by default. To configure approval rules, see Merge request approvals API. Deprecated in GitLab 16.0.",
+     "url": "https://gitlab.com/gitlab-org/gitlab/-/blob/v16.0.0-ee/doc/api/projects.md"
+    },
+    "source_change": [
+     {
+      "what": "optional :approvals_before_merge, type: Integer is present and identical at v15.11.13-ee and v16.0.0-ee",
+      "url": "https://gitlab.com/gitlab-org/gitlab/-/blob/v16.0.0-ee/ee/lib/ee/api/helpers/projects_helpers.rb#L20"
+     },
+     {
+      "what": "deprecation issue",
+      "url": "https://gitlab.com/gitlab-org/gitlab/-/issues/353097"
+     }
+    ]
+   },
+   "mock_vs_real": {
+    "mock_behaviour": "On 16.0 the mock answers HTTP 400 'approvals_before_merge was removed in GitLab 16.0; use approval_rules API'.",
+    "real_behaviour_by_source": "Not removed in 16.0.0. On a licensed instance the same call is still accepted.",
+    "matches": false,
+    "other_differences": [
+     "The feature needs a Premium licence on both releases, so it cannot be screened at no cost."
+    ]
+   },
+   "predicted_disposition": "setup-block",
+   "prediction_detail": "Cannot be set up without a paid licence. If it were licensed, the prediction is self-healing: the old call still works on 16.0.0.",
+   "prediction_condition": "n/a",
+   "most_likely_alternative": "self-healing (on a licensed instance)",
+   "database_outcome": {
+    "read_via": "not applicable without a licence",
+    "on_from_version": "projects.approvals_before_merge = 2 (licensed instance)",
+    "right_on_to_version": "projects.approvals_before_merge = 2 (licensed instance)",
+    "predicted_stored_on_to_version": "not reachable: the case cannot be set up"
+   },
+   "correct_path_on_to_version": "Merge request approval rules API (also Premium)",
+   "confidence": "high",
+   "estimated_probability_qualifies": 0.0,
+   "confidence_basis": "Docs and source at the exact tag. Behaviour of the unlicensed Community Edition on this parameter was not checked.",
+   "run_requirements": {
+    "bring_up": "not planned",
+    "set_up_additions": "a Premium licence: excluded by the owner's rule",
+    "approx_compressed_download_mb": 2970,
+    "approx_disk_unpacked_gb": 7.0,
+    "bring_up_time": "not planned",
+    "licence_or_account": "Premium licence required: EXCLUDED from any run"
+   },
+   "overlap_with_earlier_screens": "none on real software; this is the lane's mock #4",
+   "rank_by_likelihood": 12,
+   "rank_reason": "Needs a paid licence; and the parameter was not removed.",
+   "run_first": false
+  }
+ ],
+ "considered_and_left_out": [
+  {
+   "what": "Odoo field renames across major versions (for example project.task planned_hours to allocated_hours in 17.0)",
+   "why": "create and write raise 'Invalid field ... on model ...' for an unknown field at 16.0, 17.0 and 18.0 (odoo/models.py): loud."
+  },
+  {
+   "what": "Kimai 1.x to 2.x and 2.x upgrade notes",
+   "why": "Nine version sections read by keyword; changes found are permission and configuration changes or removed endpoints: loud or not a write."
+  },
+  {
+   "what": "ERPNext v15.80.0 Terms tab changed from link to button",
+   "why": "Already found by the lane; loud, in the shared page write."
+  },
+  {
+   "what": "OpenProject 17.8 page label 'Version' to 'Target versions'",
+   "why": "A label-based page step would not find its control: loud. The API variant is L1."
+  },
+  {
+   "what": "Dolibarr 25.0: POST /contracts/{id}/lines no longer reads subprice_excl_tax, which had been used as a price including tax",
+   "why": "The only price-meaning change found. 25.0 has no image on the registry yet. Worth a look when it ships."
+  },
+  {
+   "what": "Dolibarr 22.0: STOCK_ALLOW_NEGATIVE_TRANSFER reversed and renamed",
+   "why": "Turns a rejection into an acceptance, which is the opposite direction; set-up heavy."
+  },
+  {
+   "what": "Frappe 16: a Time field left empty no longer takes the current time",
+   "why": "Real silent default change, but no clear business outcome to specify against."
+  },
+  {
+   "what": "Medusa 1 to 2: prices change from cents to whole units",
+   "why": "Recalled from memory, not re-read for this list. No official container image, and sign-in and payload shapes change, so the old workflow would fail loudly first."
+  },
+  {
+   "what": "GitLab approvals_before_merge (L4)",
+   "why": "Kept on the list because it is the lane's own, but it needs a paid licence and was not removed in 16.0."
+  }
+ ],
+ "what_was_read": {
+  "lane_files": [
+   "projects/workspace/qualification/workflow-generalization/three-arm-next/README.md",
+   "projects/workspace/qualification/workflow-generalization/three-arm-next/receipts/ (file list and top-level keys of three receipts)",
+   "projects/workspace/qualification/workflow-generalization/multi-upgrade-drift-screen.mjs (whole file)",
+   "projects/workspace/qualification/workflow-generalization/op178-target-versions-screen.mjs (header and first functions)",
+   "projects/workspace/qualification/workflow-generalization/second-upgrade-drift-rule.md (whole file)",
+   "projects/workspace/qualification/workflow-generalization/second-upgrade-screen.mjs (first 70 lines)",
+   "projects/workspace/qualification/workflow-generalization/cross-screen-rule.md, cross-screen-result.md, cross-screen-measures.json",
+   "projects/workspace/qualification/workflow-generalization/upstream-release-pairs-audit.md, stage2-real-upgrade-preregistration.md, stage-a-notes.md",
+   "projects/workspace/qualification/workflow-generalization/bringup/README.md, openproject-up.sh, parts of erpnext-up.sh and both seeders; screening/README.md",
+   "projects/workspace/qualification/workflow-generalization/three-arm/write-step.mjs and three-arm-erpnext/erp-write-step.mjs (first 60 lines each)",
+   "projects/workspace/qualification/workflow-generalization/receipts/: second-upgrade-screen-openproject, second-upgrade-screen-erpnext, second-upgrade-read-check-erpnext, three-arm-second-upgrade-probe, three-arm-erpnext-second-upgrade-probe, step2-upstream-probe (keys), erpnext-upstream-stride-schema-audit, write-step-first-write-investigation, gate3 and gate4 (one field each)"
+  ],
+  "upstream_documents": {
+   "OpenProject": "release notes 13.0.0, 14.0.0, 14.6.0, 15.0.0, 15.4.0, 16.0.0, 17.7.0, 17.8.0, 17.9.0 (17.8.0 feature section in full, the others by keyword) and the multiple-target-versions admin page",
+   "NetBox": "release notes 4.1 and 4.2 (15 breaking-change bullets)",
+   "GitLab": "16.0 removals and deprecations pages (two entries), projects API and project access tokens API pages at v16.0.0",
+   "Frappe and ERPNext": "Frappe migration guides for version 15 (35 sections) and version 16 (36 sections); ERPNext version 16 migration guide (6 entries)",
+   "Dolibarr": "ChangeLog 'WARNING' sections for 14.0 to 25.0: 165 entries",
+   "Vikunja": "CHANGELOG, the 27 entries marked BREAKING",
+   "NocoDB": "60 release bodies scanned for time zone wording; 0.108.0 read",
+   "Kimai": "UPGRADING.md for 2.x: nine version sections, by keyword"
+  },
+  "upstream_source": "OpenProject (representers, settings definition, setting seeder, migrations, relation model and services, one spec) at v13.4.0, v14.0.0, v15.3.0, v15.4.0, v17.7.0, v17.8.0, v17.9.0; NetBox serializers and models at v4.0.11, v4.1.0, v4.1.11, v4.2.0; GitLab API, model, service and feature flag at v15.11.13-ee and v16.0.0-ee; ERPNext sales invoice controller at 18 tags, its form script, Projects Settings, timesheet module and patches.txt; Dolibarr order class at 17.0.4, 18.0.5, 18.0.9, 19.0.0, 19.0.2, 20.0.0 and the orders REST class; Vikunja tasks.go and routes.go at v0.23.0 and v0.24.0; Odoo models.py at 16.0, 17.0, 18.0.",
+  "counts": {
+   "release_or_changelog_documents": 23,
+   "changelog_entries_read_in_enumerable_lists": 284,
+   "applications_examined": 9,
+   "applications_yielding_a_candidate": 7
+  }
+ },
+ "what_was_not_read": [
+  "Any directory named scorer, sealed, blind-holdout, blind-holdout-v2, blind-holdout-v3, and any file whose name contains answer, sealed or oracle (including oracle.json in the lane directory).",
+  "The blind-holdout result notes and receipts, the suffix-* files, and the gate runners, which were not needed.",
+  "Changelogs of Redmine, Taiga, Plane, Monica, InvoiceNinja, Leantime and Baserow. They were on the suggested list and were not reached; nothing is claimed about them.",
+  "OpenProject release notes between those listed, and ERPNext release notes for individual version-15 minors other than through the source bisect."
+ ],
+ "not_confirmed": [
+  "Nothing was run. Every disposition is a prediction from reading.",
+  "L1: that the PATCH answers 200 rather than an error when it carries only the dropped link; and the state of work_package_multiple_versions on the instance that will be tested.",
+  "L2, L3: that no NetBox layer outside the serializers rejects undeclared keys.",
+  "N1: that the timesheet fixture is accepted as written and the acting roles suffice on both tags.",
+  "N2: how the official image enables modules and API keys.",
+  "N3: B's rescheduled dates (derived from the stored lag).",
+  "N4: that the API create path leaves the new column default in place and nothing switches the mode when a predecessor is added.",
+  "N5: default board columns on a fresh 0.23.0 project and their in-place migration.",
+  "N6: that the ERPNext bring-up and a workable role set exist for v15.126.0 and v16.0.0.",
+  "N7: everything beyond the release note.",
+  "L4: what the unlicensed Community Edition does with approvals_before_merge.",
+  "Unpacked disk sizes and all bring-up times marked as estimates."
+ ]
+}
