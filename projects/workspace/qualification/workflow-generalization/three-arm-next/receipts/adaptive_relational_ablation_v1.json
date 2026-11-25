@@ -1,0 +1,166 @@
+{
+  "schema": "gammatron-adaptive-relational-ablation/v1",
+  "modelCalls": 0,
+  "costUsd": 0,
+  "totalStreamRoutes": 600,
+  "cleanStreamArms": {
+    "always-replan": {
+      "armId": "always-replan",
+      "humanMinutes": 0,
+      "guardOwnValidCompleted": 0,
+      "validAfterFallback": 300,
+      "guardInducedWrongWrites": 0,
+      "totalWrongWritesAfterFallback": 0,
+      "serverReadsByGuard": 0,
+      "fawnBranchesByGuard": 0,
+      "fallbackInvocations": 600,
+      "falseAbstentionFallbacks": 0,
+      "refinementsApplied": 0,
+      "locksPromoted": 0,
+      "costAt600RoutesUsd": {
+        "fixedHumanUsd": 0,
+        "fallbackSpendUsd": 48,
+        "totalBilledUsd": 48
+      }
+    },
+    "authored-expert-guard": {
+      "armId": "authored-expert-guard",
+      "humanMinutes": 28,
+      "guardOwnValidCompleted": 300,
+      "validAfterFallback": 300,
+      "guardInducedWrongWrites": 0,
+      "totalWrongWritesAfterFallback": 0,
+      "serverReadsByGuard": 1200,
+      "fawnBranchesByGuard": 600,
+      "fallbackInvocations": 300,
+      "falseAbstentionFallbacks": 0,
+      "refinementsApplied": 0,
+      "locksPromoted": 0,
+      "costAt600RoutesUsd": {
+        "fixedHumanUsd": 14,
+        "fallbackSpendUsd": 24,
+        "totalBilledUsd": 38
+      }
+    },
+    "passive-batch-lgg": {
+      "armId": "passive-batch-lgg",
+      "humanMinutes": 0,
+      "guardOwnValidCompleted": 150,
+      "validAfterFallback": 300,
+      "guardInducedWrongWrites": 0,
+      "totalWrongWritesAfterFallback": 0,
+      "serverReadsByGuard": 1200,
+      "fawnBranchesByGuard": 300,
+      "fallbackInvocations": 450,
+      "falseAbstentionFallbacks": 150,
+      "refinementsApplied": 0,
+      "locksPromoted": 0,
+      "costAt600RoutesUsd": {
+        "fixedHumanUsd": 0,
+        "fallbackSpendUsd": 36,
+        "totalBilledUsd": 36
+      }
+    },
+    "adaptive-batch-lgg-k2": {
+      "armId": "adaptive-batch-lgg-k2",
+      "humanMinutes": 0,
+      "guardOwnValidCompleted": 288,
+      "validAfterFallback": 300,
+      "guardInducedWrongWrites": 0,
+      "totalWrongWritesAfterFallback": 0,
+      "serverReadsByGuard": 824,
+      "fawnBranchesByGuard": 576,
+      "fallbackInvocations": 312,
+      "falseAbstentionFallbacks": 12,
+      "refinementsApplied": 6,
+      "locksPromoted": 1,
+      "costAt600RoutesUsd": {
+        "fixedHumanUsd": 0,
+        "fallbackSpendUsd": 24.96,
+        "totalBilledUsd": 24.96
+      }
+    },
+    "adaptive-seq-lgg-k2": {
+      "armId": "adaptive-seq-lgg-k2",
+      "humanMinutes": 0,
+      "guardOwnValidCompleted": 288,
+      "validAfterFallback": 300,
+      "guardInducedWrongWrites": 0,
+      "totalWrongWritesAfterFallback": 0,
+      "serverReadsByGuard": 783,
+      "fawnBranchesByGuard": 576,
+      "fallbackInvocations": 312,
+      "falseAbstentionFallbacks": 12,
+      "refinementsApplied": 6,
+      "locksPromoted": 1,
+      "costAt600RoutesUsd": {
+        "fixedHumanUsd": 0,
+        "fallbackSpendUsd": 24.96,
+        "totalBilledUsd": 24.96
+      }
+    }
+  },
+  "noisyFallbackPoisoningTest": {
+    "unguardedK1": {
+      "guardInducedWrongWrites": 12,
+      "totalWrongWritesAfterFallback": 13
+    },
+    "guardedK2": {
+      "guardInducedWrongWrites": 0,
+      "totalWrongWritesAfterFallback": 1,
+      "locksPromoted": 1
+    }
+  },
+  "horizonCostScalingAtHalfDollarPerMin": [
+    {
+      "totalRoutes": 60,
+      "totalBilledCostUsd": {
+        "always-replan": 4.8,
+        "passive-batch-lgg": 3.6,
+        "authored-expert-guard": 16.4,
+        "adaptive-seq-lgg-k2": 3.36
+      },
+      "lowestCostSafeArm": "adaptive-seq-lgg-k2"
+    },
+    {
+      "totalRoutes": 300,
+      "totalBilledCostUsd": {
+        "always-replan": 24,
+        "passive-batch-lgg": 18,
+        "authored-expert-guard": 26,
+        "adaptive-seq-lgg-k2": 12.96
+      },
+      "lowestCostSafeArm": "adaptive-seq-lgg-k2"
+    },
+    {
+      "totalRoutes": 600,
+      "totalBilledCostUsd": {
+        "always-replan": 48,
+        "passive-batch-lgg": 36,
+        "authored-expert-guard": 38,
+        "adaptive-seq-lgg-k2": 24.96
+      },
+      "lowestCostSafeArm": "adaptive-seq-lgg-k2"
+    },
+    {
+      "totalRoutes": 1800,
+      "totalBilledCostUsd": {
+        "always-replan": 144,
+        "passive-batch-lgg": 108,
+        "authored-expert-guard": 86,
+        "adaptive-seq-lgg-k2": 72.96
+      },
+      "lowestCostSafeArm": "adaptive-seq-lgg-k2"
+    },
+    {
+      "totalRoutes": 6000,
+      "totalBilledCostUsd": {
+        "always-replan": 480,
+        "passive-batch-lgg": 360,
+        "authored-expert-guard": 254,
+        "adaptive-seq-lgg-k2": 240.96
+      },
+      "lowestCostSafeArm": "adaptive-seq-lgg-k2"
+    }
+  ]
+}

@@ -77,6 +77,20 @@ freeze (`../three-arm/` at `gamma@776462de7`, hash `306e6171…`) byte-identical
      - `scalar-only-lgg-closure` (ablation without typed relational extraction): learns **`0/6`** on raw REST/HAL JSON;
      - `typed-relational-min-cover` (ablation without Cross-Role LGG): learns `6/6` (`8/8` valid), **`5/9` wrong writes**;
      - `zero-adapter-relational-lgg` (full prototype): learns **`6/6`**, **`0` human minutes**, **`0/9` wrong writes**, `7/8` own valid (`8/8` post-fallback, honestly billing `1` incidental-coincidence fallback), winning total billed cost at `r = $0.50/min` up to `2,800` total routes (`466.7` routes/workflow) before `authored-expert-guard` (`28.0` human minutes, `8/8` own valid, `0/9` wrong writes) amortizes its authoring + upgrade maintenance cost.
+9. **Adaptive Sequential Role Selection & Anti-Poisoning Online Coincidence Refinement (`adaptive-relational-guard.mjs`, `ablate-adaptive-guard.mjs`, `receipts/adaptive_relational_ablation_v1.json`):**
+   - Eliminates passive LGG's $O(T)$ asymptotic fallback bleed from `n_pos = 2` zero-variance
+     incidental coincidences while defending against noisy fallback hallucinations:
+     - **600-route sequential stream (`6` workflows x `100` routes, `25%` unseen incidental drift):**
+       `adaptive-seq-lgg-k2` cuts false-abstention fallbacks from `150` (`passive-batch-lgg`,
+       `$36.00`) down to `12` (`6 x 2` warmup confirmations, **`$24.96`** total billed cost vs.
+       `$38.00` for `authored-expert-guard` and `$48.00` for `always-replan`), cuts server `GET`
+       reads by **`-34.8%`** (`1,200 -> 824` from coincidence role pruning, `824 -> 783` from
+       authority-first sequential short-circuiting), and wins every horizon `T in {60..6,000}` at
+       `r = $0.50/min` (`0` wrong writes, `300/300` post-fallback valid completion).
+     - **Single-fault noisy fallback poisoning stress test:** Injecting `1` erroneous fallback
+       `write` on `op-i-quarantine-0` poisons `unguarded-k1` (`12` subsequent guard-induced wrong
+       writes), whereas `adaptive-seq-lgg-k2` (`kConfirm = 2` + negative-lock promotion) commits
+       **`0` guard-induced wrong writes**.
 
 ## Verification ($0, local)
 
@@ -86,6 +100,7 @@ node qualification/workflow-generalization/three-arm-next/prelearn-decision-rule
 node qualification/workflow-generalization/op178-target-versions-screen.mjs
 node qualification/workflow-generalization/multi-upgrade-drift-screen.mjs
 node qualification/workflow-generalization/three-arm-next/ablate-relational-vs-authored.mjs
+node qualification/workflow-generalization/three-arm-next/ablate-adaptive-guard.mjs
 node qualification/workflow-generalization/three-arm-next/runner.mjs hash
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/score_after_fallback.py --selftest
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/cost_report.py --selftest
