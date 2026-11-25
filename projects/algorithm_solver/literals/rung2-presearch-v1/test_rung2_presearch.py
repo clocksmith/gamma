@@ -29,6 +29,7 @@ CODENET_DIR = HERE.parent / 'codenet-replication-v1'
 sys.path.insert(0, str(HERE))
 
 import raw_predictor as RP  # noqa: E402
+import regime_predictor as REG  # noqa: E402
 from equal_budget_eval import evaluate_presearch_vs_oracle  # noqa: E402
 
 
@@ -167,6 +168,46 @@ def test_regime_c_disjoint_alphabets_wins_end_to_end() -> None:
     assert abs(res['metrics']['pct_regret']) < 0.5, res['metrics']
 
 
+def test_regime_predictor_isolation_and_crossover() -> None:
+    src = Path(REG.__file__).read_text(encoding='utf-8')
+    tree = ast.parse(src)
+    imported = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                imported.add(alias.name.split('.')[0])
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            imported.add(node.module.split('.')[0])
+    assert 'subprocess' not in imported, f'regime_predictor must never import subprocess: {imported}'
+    assert 'byte_encode' not in imported, f'regime_predictor must never import byte_encode: {imported}'
+
+    # 1. Short cross-document structured snippets (~140B, 160 docs) -> BIT3 predicted both in-sample and held-out
+    short_1 = [
+        f'{{"type":"metric","slot":{i},"status":"ok","unit":"ms"}}\n'.encode('ascii') * 2
+        for i in range(80)
+    ]
+    short_2 = [
+        f'@compute @workgroup_size(64) fn k_{i}() {{ return; }}\n'.encode('ascii') * 2
+        for i in range(80)
+    ]
+    p_short = REG.predict_codec_and_layout_regime(short_1, short_2)
+    assert p_short['in_sample_codec_hat'] == 'BIT3', p_short
+    assert p_short['held_out_codec_hat'] == 'BIT3', p_short
+
+    # 2. Long locally repetitive documents (~2.2 kB, unique per-doc identifiers repeated 24x) -> ZST3 predicted both
+    long_1 = [
+        (f'const local_identifier_alpha_{i:03d}_buffer = init_state({i});\n'.encode('ascii') * 36)
+        for i in range(25)
+    ]
+    long_2 = [
+        (f'fn local_shader_uniform_beta_{i:03d}_matrix() -> f32 {{ return 1.0; }}\n'.encode('ascii') * 32)
+        for i in range(25)
+    ]
+    p_long = REG.predict_codec_and_layout_regime(long_1, long_2)
+    assert p_long['in_sample_codec_hat'] == 'ZST3', p_long
+    assert p_long['held_out_codec_hat'] == 'ZST3', p_long
+
+
 def test_codenet_replication_dir_untouched() -> None:
     out = subprocess.check_output(
         ['git', '-C', str(CODENET_DIR), 'status', '--porcelain', '.'],
@@ -184,6 +225,8 @@ def main() -> None:
     print('  [PASS] Regime B (shared-ASCII divergent keywords -> Design B beats naive 1-byte MI) verified')
     test_regime_c_disjoint_alphabets_wins_end_to_end()
     print('  [PASS] Regime C (disjoint alphabets -> Design C wins under equal search budget, >7 pairs) verified')
+    test_regime_predictor_isolation_and_crossover()
+    print('  [PASS] regime_predictor isolation and short-vs-long BIT3/ZST3 crossover verified')
     test_codenet_replication_dir_untouched()
     print('  [PASS] codenet-replication-v1 directory untouched')
     print('ALL rung2-presearch-v1 tests PASSED.')
