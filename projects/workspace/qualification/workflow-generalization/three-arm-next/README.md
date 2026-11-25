@@ -91,6 +91,18 @@ freeze (`../three-arm/` at `gamma@776462de7`, hash `306e6171…`) byte-identical
        `write` on `op-i-quarantine-0` poisons `unguarded-k1` (`12` subsequent guard-induced wrong
        writes), whereas `adaptive-seq-lgg-k2` (`kConfirm = 2` + negative-lock promotion) commits
        **`0` guard-induced wrong writes**.
+10. **Real Headless Chromium Digest-Pinned Relational Lookahead (`pinned-relational-lookahead.mjs`, `verify-chromium-pinned-lookahead.mjs`, `receipts/chromium_pinned_lookahead_v1.json`):**
+    - Identifies and closes a cross-boundary value-spoofing seam between `src/client/branch-verifier.js`
+      (`bodyFields` key-name checking) and server-side prerequisite guards (`src/client/live-lookahead.js`),
+      without modifying `src/client/*` or exporting raw page values from sealed Fawn branches:
+      - In real headless Chromium (`playwright-core`) across all `4` upstream breaking upgrades
+        (`op178-target-versions`, `netbox41-vid-ranges`, `netbox42-generic-scope`,
+        `gitlab16-approval-rules`), mutating outbound `fetch()` values in JS closure memory under
+        identical JSON field names is certified **`4/4` (`100%` wrong)** by `bodyFields`-only
+        lookahead, whereas `computeExpectedBranchBodyPairs` matches exact `[flattenedPath, 64-bit digest]`
+        multisets and blocks **`4/4` (`branch-body-digest-mismatch`)** while certifying **`4/4` valid
+        `v2` repairs** (`0` escaped server preview mutations) and blocking **`4/4` concurrent
+        pre-to-post-preview `lockVersion` `ABA` races** (`concurrent-version-drift`).
 
 ## Verification ($0, local)
 
@@ -101,6 +113,7 @@ node qualification/workflow-generalization/op178-target-versions-screen.mjs
 node qualification/workflow-generalization/multi-upgrade-drift-screen.mjs
 node qualification/workflow-generalization/three-arm-next/ablate-relational-vs-authored.mjs
 node qualification/workflow-generalization/three-arm-next/ablate-adaptive-guard.mjs
+node qualification/workflow-generalization/three-arm-next/verify-chromium-pinned-lookahead.mjs
 node qualification/workflow-generalization/three-arm-next/runner.mjs hash
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/score_after_fallback.py --selftest
 python3 -B qualification/workflow-generalization/three-arm-next/scorer/cost_report.py --selftest

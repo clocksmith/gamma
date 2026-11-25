@@ -15,6 +15,7 @@ import { selftest as op178ScreenSelftest } from '../../qualification/workflow-ge
 import { selftest as multiUpgradeScreenSelftest } from '../../qualification/workflow-generalization/multi-upgrade-drift-screen.mjs';
 import { selftest as adaptiveAblationSelftest } from '../../qualification/workflow-generalization/three-arm-next/ablate-adaptive-guard.mjs';
 import { selftest as relationalAblationSelftest } from '../../qualification/workflow-generalization/three-arm-next/ablate-relational-vs-authored.mjs';
+import { selftest as chromiumPinnedLookaheadSelftest } from '../../qualification/workflow-generalization/three-arm-next/verify-chromium-pinned-lookahead.mjs';
 import { runFreeCounterexampleCheck } from '../../qualification/workflow-generalization/three-arm-next/counterexample-check.mjs';
 import { selftest as prelearnRuleSelftest } from '../../qualification/workflow-generalization/three-arm-next/prelearn-decision-rule.mjs';
 import {
@@ -695,4 +696,13 @@ test('multi-upgrade $0 candidate screen and 2x2 zero-adapter relational LGG abla
   assert.equal(adp.ok, true);
   assert.equal(adp.report.noisyFallbackPoisoningTest.unguardedK1.guardInducedWrongWrites, 12);
   assert.equal(adp.report.noisyFallbackPoisoningTest.guardedK2.guardInducedWrongWrites, 0);
+});
+
+test('real headless Chromium pinned relational lookahead closes JS body-value spoofing and ABA version races ($0)', async () => {
+  const chr = await chromiumPinnedLookaheadSelftest();
+  assert.equal(chr.ok, true);
+  assert.equal(chr.report.serverPreviewMutationsObserved, 0);
+  assert.equal(chr.report.summary.unpinnedBodyFieldsWrongOnJsSpoof, 4);
+  assert.equal(chr.report.summary.pinnedBlockedOnJsSpoof, 4);
+  assert.equal(chr.report.summary.pinnedBlockedOnAbaRace, 4);
 });
