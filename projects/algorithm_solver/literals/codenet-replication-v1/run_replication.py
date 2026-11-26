@@ -94,6 +94,29 @@ def chain_complete(path):
     return footer is not None and footer.get('stopped') == '0'
 
 
+def chain_header(path):
+    """The fields of the engine's first line: policy, mode, L, K, limit and the receipt it was given."""
+    try:
+        with open(path, 'r', encoding='utf-8', errors='replace') as f:
+            first = f.readline().split()
+    except OSError:
+        return {}
+    return dict(tok.split('=', 1) for tok in first[1:] if '=' in tok) if first[:1] == ['H'] else {}
+
+
+def expected_header(policy, mode, L, kmax, receipt):
+    want = {'policy': policy, 'mode': mode, 'L': str(L), 'K': str(kmax)}
+    want.update(tok.split('=', 1) for tok in receipt.split() if '=' in tok)
+    return want
+
+
+def chain_is(path, want):
+    """Finished, and made by this engine source from this manifest, split and corpus with these settings.
+    A finished chain left by another engine build or another corpus must not be scored under today's hashes."""
+    header = chain_header(path)
+    return chain_complete(path) and all(header.get(k) == v for k, v in want.items())
+
+
 def run_engine(engine_bin, mode, policy, L, kmax, list_path, out_path, env, extra=()):
     """Run one engine job into a temporary name and move it into place only if it finished inside its
     time limit, so that an interrupted or time-limited run can never be taken for a chain."""
@@ -181,7 +204,9 @@ def run_single_engine_job(job):
     engine_bin, split, policy, arm, L, corpus, lists_dir, out_dir, receipt = job
     out_chain = out_dir / split / policy / f'{corpus}-L{L}-{arm}.txt'
     out_chain.parent.mkdir(parents=True, exist_ok=True)
-    if chain_complete(out_chain):  # resume only from a run that finished; a non-empty file is not enough
+    # Resume only from a run that finished and that this engine source made from this corpus;
+    # a non-empty file is not enough, and neither is a finished chain from another build.
+    if chain_is(out_chain, expected_header(policy, arm, L, 4096, receipt)):
         return str(out_chain), 0.0
 
     env = os.environ.copy()
@@ -195,7 +220,7 @@ def run_single_engine_job(job):
         v0_path = out_dir / split / 'v0' / f'{policy}-{corpus}-L{L}.txt'
         v0_path.parent.mkdir(parents=True, exist_ok=True)
         seed_path = v0_path.with_suffix('.seed')
-        if not (seed_path.exists() and chain_complete(v0_path)):
+        if not (seed_path.exists() and chain_is(v0_path, expected_header(policy, 'bpe', L, 32768, receipt))):
             run_engine(engine_bin, 'bpe', policy, L, 32768, lists_dir / f'{corpus}.txt', v0_path, env)
             seeds = []
             with open(v0_path, 'r', encoding='utf-8') as f:
@@ -571,6 +596,12 @@ def analyze_split(split_name, lengths, manifest, chains_dir, dict_export_dir=Non
     if unfinished:
         raise SystemExit(f'{len(unfinished)} of {len(expected)} chains of split {split_name} are missing or unfinished, '
                          f'e.g. {unfinished[:3]}; run the engine jobs again before scoring')
+    binding = {'manifest': sha256_file(HERE / 'manifest.json'), 'impl': sha256_file(V3_DIR / 'engine.c'), 'split': split_name}
+    foreign = [str(p.relative_to(chains_dir)) for policy, L, corpus, arm, p in expected
+               if not chain_is(p, dict(binding, policy=policy, mode=arm, L=str(L), K='4096', pool=corpus))]
+    if foreign:
+        raise SystemExit(f'{len(foreign)} of {len(expected)} chains of split {split_name} were not made by the current engine source from the '
+                         f'current manifest, e.g. {foreign[:3]}; they cannot be scored under today\'s hashes')
     chain_cache = {}
     for policy, L, corpus, arm, cpath in expected:
         _, entries, _ = read_chain(cpath)

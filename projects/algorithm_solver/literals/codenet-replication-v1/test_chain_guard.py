@@ -91,7 +91,14 @@ def main():
         if 'did not return' not in message or chain.exists() or list(chain.parent.glob('*.partial')):
             failed.append('a hung engine left something behind or was not reported')
 
-        # 5. Scoring refuses a grid with a missing chain instead of comparing fewer arms.
+        # 5. A finished chain left by another engine build is not this run's chain.
+        R.run_single_engine_job(job)
+        own = chain.read_bytes()
+        chain.write_bytes(own.replace(f'impl={sha}'.encode(), b'impl=' + b'0' * 64, 1))
+        if R.run_single_engine_job(job)[1] == 0.0 or f'impl={sha}' not in chain.read_text().splitlines()[0]:
+            failed.append('a finished chain from another engine build was reused')
+
+        # 6. Scoring refuses a grid with a missing chain instead of comparing fewer arms.
         manifest = json.loads((HERE / 'manifest.json').read_text())
         message = expect_error(SystemExit, lambda: R.analyze_split('primary', (16,), manifest, td / 'chains'), 'chains are missing', failed)
         if 'missing or unfinished' not in message:
@@ -99,7 +106,7 @@ def main():
     if failed:
         print('\n'.join('FAILED: ' + f for f in failed))
         return 1
-    print('finished chain reused; cut, unterminated, time-limited and hung runs are refused or rebuilt; scoring refuses missing chains')
+    print('finished chain reused; cut, unterminated, time-limited and hung runs are refused or rebuilt; a chain from another engine build is rebuilt; scoring refuses missing chains')
     return 0
 
 

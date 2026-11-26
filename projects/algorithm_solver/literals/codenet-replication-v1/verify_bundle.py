@@ -86,7 +86,7 @@ def verify_manifest_and_corpus():
         assert py_tot + js_tot == sdata['total_bytes']
     print(
         f'[PASS] Manifest & corpus verified: {len(seen_pids)} unique paired problems '
-        f'(800 files, deterministic SHA-256 ranking, 0 split overlap).'
+        f'({2 * len(seen_pids)} files, deterministic SHA-256 ranking, 0 split overlap).'
     )
     return manifest
 
@@ -245,6 +245,9 @@ def verify_codenet_results(manifest):
             assert (pay_a - pay_b) - (len(el_4k) + 5) == row['actual_net_B_saving_bytes']
             kl_checks += 1
 
+    # The counts are part of the claim: a loop that quietly ran fewer times must not print PASS.
+    assert decoded_checks == 40, f'{decoded_checks} cells were verified, not the 40 this bundle promises'
+    assert kl_checks == 22, f'{kl_checks} KL/JS values were recomputed, not the 22 this bundle promises'
     print(
         f'[PASS] CodeNet results, bitstreams & KL/JS crossover verified: {decoded_checks}/44 feasible '
         f'Table I CodeNet cells verified offline via canonical Huffman encode+decode (4 reparsed Design C '
