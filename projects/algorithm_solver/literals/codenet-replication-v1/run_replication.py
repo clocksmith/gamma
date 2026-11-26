@@ -48,6 +48,10 @@ CAPS = (4096, 8192, 16384, 32768, 65536, None)
 POLICIES = ('s1-whole', 's2-nowhole', 'p2-nowhole')
 ARMS = ('greedy-entry', 'greedy-byte', 'greedtok', 'freq-occ', 'freq-doc', 'bpe', 'pathpiece')
 LIMIT_SECONDS = 300
+# The engine reads its own limit only between rounds, and its BPE pair table (2^20 slots) never grows:
+# with a full table it never returns. engine.c is pinned by hash in four freeze records and is not
+# edited, so the driver bounds every run instead. The longest finished run on record took 84 s.
+ENGINE_TIMEOUT_SECONDS = 3 * LIMIT_SECONDS
 _WORKER_DOCS = {}
 
 
@@ -64,8 +68,62 @@ def compile_engine(build_dir):
     return engine_bin, sha256_file(engine_src)
 
 
+def chain_footer(path):
+    """The fields of the engine's last line, `D <mode> ... stopped=0 ...`, or None.
+
+    The engine writes its chain in place and that line last, so it is the only sign that a run
+    finished. A file without it was interrupted; a file with stopped=1 ran into the time limit and
+    is shorter than was asked for."""
+    try:
+        with open(path, 'rb') as f:
+            f.seek(0, os.SEEK_END)
+            f.seek(max(0, f.tell() - 4096))
+            tail = f.read().decode('utf-8', 'replace')
+    except OSError:
+        return None
+    if not tail.endswith('\n'):
+        return None
+    last = tail.rstrip('\n').rsplit('\n', 1)[-1].split()
+    if len(last) < 2 or last[0] != 'D':
+        return None
+    return dict(tok.split('=', 1) for tok in last[2:] if '=' in tok)
+
+
+def chain_complete(path):
+    footer = chain_footer(path)
+    return footer is not None and footer.get('stopped') == '0'
+
+
+def run_engine(engine_bin, mode, policy, L, kmax, list_path, out_path, env, extra=()):
+    """Run one engine job into a temporary name and move it into place only if it finished inside its
+    time limit, so that an interrupted or time-limited run can never be taken for a chain."""
+    out_path = Path(out_path)
+    partial = out_path.with_name(out_path.name + '.partial')
+    partial.unlink(missing_ok=True)
+    try:
+        subprocess.run(
+            [str(engine_bin), mode, policy, str(L), str(kmax), str(LIMIT_SECONDS), str(list_path), str(partial), *extra],
+            env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=ENGINE_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired:
+        partial.unlink(missing_ok=True)
+        raise RuntimeError(f'{out_path.name}: the engine did not return in {ENGINE_TIMEOUT_SECONDS} s and was killed. '
+                           f'Its pair table holds 2^20 pairs and does not grow; the corpus may be too large for it.') from None
+    footer = chain_footer(partial)
+    if footer is None:
+        raise RuntimeError(f'{out_path.name}: the engine exited without its end line')
+    if footer.get('stopped') != '0':
+        raise RuntimeError(f'{out_path.name}: the engine reached its {LIMIT_SECONDS} s limit (stopped={footer.get("stopped")}); '
+                           f'the chain is shorter than the {kmax} entries asked for and is kept as {partial.name}')
+    os.replace(partial, out_path)
+    return out_path
+
+
 def read_chain(path):
-    """Parse an engine.c chain file into (header_dict, entries_list, merges_list)."""
+    """Parse an engine.c chain file into (header_dict, entries_list, merges_list).
+    Refuses a chain that was interrupted or ran into the engine's time limit."""
+    if not chain_complete(path):
+        raise ValueError(f'{path}: not a finished chain (no end line, or stopped=1)')
     entries = []
     merges = []
     header = {}
@@ -123,7 +181,7 @@ def run_single_engine_job(job):
     engine_bin, split, policy, arm, L, corpus, lists_dir, out_dir, receipt = job
     out_chain = out_dir / split / policy / f'{corpus}-L{L}-{arm}.txt'
     out_chain.parent.mkdir(parents=True, exist_ok=True)
-    if out_chain.exists() and out_chain.stat().st_size > 0:
+    if chain_complete(out_chain):  # resume only from a run that finished; a non-empty file is not enough
         return str(out_chain), 0.0
 
     env = os.environ.copy()
@@ -137,30 +195,20 @@ def run_single_engine_job(job):
         v0_path = out_dir / split / 'v0' / f'{policy}-{corpus}-L{L}.txt'
         v0_path.parent.mkdir(parents=True, exist_ok=True)
         seed_path = v0_path.with_suffix('.seed')
-        if not seed_path.exists():
-            subprocess.run(
-                [
-                    str(engine_bin), 'bpe', policy, str(L), '32768', str(LIMIT_SECONDS),
-                    str(lists_dir / f'{corpus}.txt'), str(v0_path),
-                ],
-                env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-            )
+        if not (seed_path.exists() and chain_complete(v0_path)):
+            run_engine(engine_bin, 'bpe', policy, L, 32768, lists_dir / f'{corpus}.txt', v0_path, env)
             seeds = []
             with open(v0_path, 'r', encoding='utf-8') as f:
                 for line in f:
                     p = line.strip().split()
                     if len(p) >= 6 and p[0] == 'E' and len(p[5]) >= 4:
                         seeds.append(p[5])
-            seed_path.write_text('\n'.join(seeds) + '\n', encoding='utf-8')
+            seed_tmp = seed_path.with_name(seed_path.name + '.partial')
+            seed_tmp.write_text('\n'.join(seeds) + '\n', encoding='utf-8')
+            os.replace(seed_tmp, seed_path)
         extra = [str(seed_path)]
 
-    subprocess.run(
-        [
-            str(engine_bin), arm, policy, str(L), '4096', str(LIMIT_SECONDS),
-            str(lists_dir / f'{corpus}.txt'), str(out_chain), *extra,
-        ],
-        env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-    )
+    run_engine(engine_bin, arm, policy, L, 4096, lists_dir / f'{corpus}.txt', out_chain, env, extra)
     elapsed = time.perf_counter() - t0
     return str(out_chain), elapsed
 
@@ -515,39 +563,42 @@ def analyze_split(split_name, lengths, manifest, chains_dir, dict_export_dir=Non
     _WORKER_DOCS['javascript'] = js_docs
 
     cache_path = chains_dir / f'cache_{split_name}_own.json'
+    # Every arm is part of the comparison. A chain that is missing or unfinished is an error, not a
+    # smaller grid: dropping it silently would change which arm wins a cell.
+    expected = [(policy, L, corpus, arm, chains_dir / split_name / policy / f'{corpus}-L{L}-{arm}.txt')
+                for policy in POLICIES for L in lengths for corpus in ('both', 'python', 'javascript') for arm in ARMS]
+    unfinished = [str(p.relative_to(chains_dir)) for *_, p in expected if not chain_complete(p)]
+    if unfinished:
+        raise SystemExit(f'{len(unfinished)} of {len(expected)} chains of split {split_name} are missing or unfinished, '
+                         f'e.g. {unfinished[:3]}; run the engine jobs again before scoring')
     chain_cache = {}
-    for policy in POLICIES:
-        for L in lengths:
-            for corpus in ('both', 'python', 'javascript'):
-                for arm in ARMS:
-                    cpath = chains_dir / split_name / policy / f'{corpus}-L{L}-{arm}.txt'
-                    if cpath.exists():
-                        _, entries, _ = read_chain(cpath)
-                        chain_cache[(policy, L, corpus, arm)] = entries
+    for policy, L, corpus, arm, cpath in expected:
+        _, entries, _ = read_chain(cpath)
+        chain_cache[(policy, L, corpus, arm)] = entries
 
-    if cache_path.exists():
-        raw_own = json.loads(cache_path.read_text(encoding='utf-8'))
-        own = {tuple(k.split('|'))[:1] + (int(k.split('|')[1]), k.split('|')[2]): v for k, v in raw_own.items()}
-        print(f'  Loaded cached prefix scores from {cache_path.name}', flush=True)
+    # The prefix-score cache is valid only for the chains it was computed from.
+    fingerprint = hashlib.sha256(json.dumps(
+        [[str(p.relative_to(chains_dir)), sha256_file(p)] for *_, p in expected] + [list(lengths), STEP_MAIN, STEP_AUX]).encode()).hexdigest()
+    cached = json.loads(cache_path.read_text(encoding='utf-8')) if cache_path.exists() else None
+    if isinstance(cached, dict) and cached.get('chains_fingerprint') == fingerprint:
+        own = {tuple(k.split('|'))[:1] + (int(k.split('|')[1]), k.split('|')[2]): v for k, v in cached['rows'].items()}
+        print(f'  Loaded cached prefix scores from {cache_path.name} (chains unchanged)', flush=True)
     else:
-        score_jobs = []
-        for policy in POLICIES:
-            for L in lengths:
-                for corpus in ('both', 'python', 'javascript'):
-                    for arm in ARMS:
-                        cpath = chains_dir / split_name / policy / f'{corpus}-L{L}-{arm}.txt'
-                        if cpath.exists():
-                            score_jobs.append((policy, L, corpus, arm, str(cpath)))
-
+        if cached is not None:
+            print(f'  Ignoring {cache_path.name}: it was not computed from these chains', flush=True)
+        score_jobs = [(policy, L, corpus, arm, str(cpath)) for policy, L, corpus, arm, cpath in expected]
         own = {(policy, L, corpus): [] for policy in POLICIES for L in lengths for corpus in ('both', 'python', 'javascript')}
         workers = min(8, os.cpu_count() or 4)
         with multiprocessing.get_context('fork').Pool(workers) as pool:
-            for key, entries, rows in pool.imap_unordered(_score_chain_worker, score_jobs, chunksize=1):
+            # In job order, so that the rows do not depend on which worker finishes first.
+            for key, entries, rows in pool.imap(_score_chain_worker, score_jobs, chunksize=1):
                 policy, L, corpus, arm = key
                 chain_cache[key] = entries
                 own[(policy, L, corpus)].extend(rows)
         ser_own = {f'{p}|{L}|{c}': rows for (p, L, c), rows in own.items()}
-        cache_path.write_text(json.dumps(ser_own), encoding='utf-8')
+        cache_tmp = cache_path.with_name(cache_path.name + '.partial')
+        cache_tmp.write_text(json.dumps({'chains_fingerprint': fingerprint, 'rows': ser_own}), encoding='utf-8')
+        os.replace(cache_tmp, cache_path)
         print(f'  Saved prefix score cache to {cache_path.name}', flush=True)
 
     # Apply monotonicity floors (looser policy includes stricter policies' legal chains)
