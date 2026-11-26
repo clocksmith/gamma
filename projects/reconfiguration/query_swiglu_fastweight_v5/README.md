@@ -107,3 +107,55 @@ python3 -I gate_v5.py RECEIPT.json [...]  # the gate, per model
 ```
 
 Results are in [RESULTS.md](RESULTS.md).
+
+### Batched readout compilation on a local CPU
+
+`batch_capture_v5.py` compiles the readout adapter from independent support lines on a locally
+provisioned Hugging Face Qwen3 backbone. It right-pads each batch, keeps one attention mask per
+line and gathers only the requested answer positions. The companion Node entry point calls
+the same `compileReadoutAdapter` as the Doppler runner. It then installs the fitted A and B
+as a temporary last-layer down-projection update and greedily decodes the entire answer.
+
+From this directory, with Gamma's Python environment active and Node on PATH:
+
+```sh
+HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false VECLIB_MAXIMUM_THREADS=2 \
+  python batch_capture_v5.py LOCAL_QWEN3_MODEL result.json \
+    --seed 1105 --tables 2 --shots 20 --queries 4 --batch-size 8 --threads 2
+python -m unittest test_batch_capture_v5
+```
+
+Each run draws development tables only. Its serial reference uses the same model, prompts,
+fit, dtype and decode. It records each generated token alongside the model's answer with
+the table present. Capture parity requires a relative L2 difference at most `1e-4` for
+both captured tensors and both fitted factors, and identical greedy token IDs on every
+question. The complete compile timer includes tokenization, isolated and whole-table
+captures, file interchange, the Node fit and loading the factors back into Torch.
+
+Pass `--first-token-control` to run two further CPU arms. Each reads the support codes'
+first token IDs, allows only those IDs for the first greedy token, then decodes freely.
+The rule is identical for the base model with the table and the adapter with the table
+removed. The receipt records the unrestricted top token, highest-scoring allowed token
+and logit gap. It verifies full-token parity whenever the original first token was allowed.
+The development comparison was fixed before collecting these arms. It uses seeds 1107 and 1108,
+two tables per seed, 20 examples and four queries per group, batch size 8.
+
+In the Doppler runner, `B1_WITH_FIRST_TOKEN_CONTROL=1` adds `ra_first_bare` and
+`kv_first_ctx` on development tables. Enable `B1_WITH_READOUT_ADAPTER=1`,
+`B1_WITH_CONTROLS=1` and `B1_WITH_KV_SNAPSHOT=1` alongside it. Compare each extra
+arm with `ra_bare` or `kv_ctx` on the same questions. A GPU run still needs the
+normal resource check. CPU evidence for the decoder rule is in [RESULTS.md](RESULTS.md).
+
+### MiniCPM4 0.5B transfer
+
+The [locked comparison](minicpm4_confirmation_lock.json) uses the redesigned readout adapter and unmodified greedy decoding on the catalog's F16 MiniCPM4 checkpoint. The 37-group confirmation design contains 96 tables for this run. Each question asks about a noun absent from its own table. Every table contributes equally to the reported difference.
+
+Start with the two development tables in the lock. Enable `B1_WITH_CONTROLS=1`, `B1_WITH_KV_SNAPSHOT=1`, and `B1_WITH_READOUT_ADAPTER=1`. Use the lock's `method.skip_arms`, engine revision and artifact. Run `python3 minicpm4_compare.py compatibility smoke.json --out smoke-summary.json` to check every fresh and restored token and the balanced guessing control before using the confirmation split.
+
+For confirmation, set `B1_ALLOW_CONFIRM` to the SHA-256 of the lock. Generate the same 96-table design for every invocation and set `B1_TABLE_RANGE=start:end` to select consecutive ranges of four. The half-open range controls memory use and preserves the original question identifiers. Run `python3 minicpm4_compare.py confirm RANGE_RECEIPTS... --out summary.json` to check completeness, compare each arm, and report the setup and serving costs. `readout_adapter_compile_ms` charges the adapter for shared preparation and capture as well as its own fit and upload. Word codes and multi-part codes are reported separately.
+
+### Query counts that recover setup time
+
+After the locked study writes `DONE`, run `python3 minicpm4_cost_report.py STUDY_DIRECTORY OUTPUT_DIRECTORY`. The `--wait` option leaves the reporter idle until that marker appears. It verifies the final summary and every range against the study's digest ledger before reading paired timings.
+
+`confirmation/TABLE_COSTS.md` and `confirmation/costs.json` give the positive integer query counts at which each method is at least as fast as its counterpart. Each comparison uses full setup plus the observed mean answer time, including feature acquisition for the classifier and cache restore for warm KV. The report retains all 96 tables. It separates word codes, two-part codes and tokenizer lengths, and flags the four tables whose run spanned the reported build. The secondary outside-range cohort covers the other 92. The command `python3 table_costs.py RECEIPTS...` remains available for already completed development receipts.

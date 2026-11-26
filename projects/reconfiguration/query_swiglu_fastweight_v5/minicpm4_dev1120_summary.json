@@ -1,0 +1,129 @@
+{
+  "scope": "compatibility",
+  "seed": 1120,
+  "model": "minicpm4-0-5b-f16-af32",
+  "lock_sha256": "3034436e29a2f878eaed0d39d900653913d73016727fead590c6d58bc3e7511f",
+  "tables": 2,
+  "questions": 32,
+  "correct_by_arm": {
+    "base_ctx": 27,
+    "kv_ctx": 27,
+    "mfc_bare": 8,
+    "nn_bare": 30,
+    "probe_bare": 29,
+    "ra_bare": 30
+  },
+  "strata": {
+    "word": {
+      "questions": 16,
+      "correct": {
+        "base_ctx": 12,
+        "kv_ctx": 12,
+        "mfc_bare": 4,
+        "nn_bare": 15,
+        "probe_bare": 14,
+        "ra_bare": 14
+      }
+    },
+    "pair": {
+      "questions": 16,
+      "correct": {
+        "base_ctx": 15,
+        "kv_ctx": 15,
+        "mfc_bare": 4,
+        "nn_bare": 15,
+        "probe_bare": 15,
+        "ra_bare": 16
+      }
+    }
+  },
+  "fresh_warm_kv_token_mismatches": [],
+  "constant_control_exactly_one_quarter": true,
+  "ra_minus_kv": {
+    "arms": [
+      "ra_bare",
+      "kv_ctx"
+    ],
+    "tables": 2,
+    "questions": 32,
+    "ra_bare": "30/32",
+    "kv_ctx": "27/32",
+    "mean_difference_points": 9.38,
+    "tables_better_worse_equal": [
+      2,
+      0,
+      0
+    ],
+    "bootstrap_interval_90_points": [
+      6.25,
+      12.5
+    ],
+    "sign_flip_p_two_sided": 0.5,
+    "sign_flip_p_one_sided_a_higher": 0.25
+  },
+  "ra_minus_classifier": {
+    "arms": [
+      "ra_bare",
+      "probe_bare"
+    ],
+    "tables": 2,
+    "questions": 32,
+    "ra_bare": "30/32",
+    "probe_bare": "29/32",
+    "mean_difference_points": 3.12,
+    "tables_better_worse_equal": [
+      1,
+      0,
+      1
+    ],
+    "bootstrap_interval_90_points": [
+      0.0,
+      6.25
+    ],
+    "sign_flip_p_two_sided": 1.0,
+    "sign_flip_p_one_sided_a_higher": 0.5
+  },
+  "noninferiority_p": 0.25,
+  "group_aware": {
+    "mean": 0.09375,
+    "sd": 0.04419417382415922,
+    "se_over_tables_only": 0.03125,
+    "se_group_aware": 0.03125,
+    "covariance_per_shared_group": 0.0,
+    "group_share_of_table_variance": 0.0,
+    "group_share_estimable": false,
+    "pairs_of_tables": 1,
+    "pairs_sharing_a_group": 1,
+    "max_groups_shared": 2,
+    "interval_90": [
+      0.042348324157766494,
+      0.1451516758422335
+    ],
+    "z_against_margin": 4.6,
+    "passes": true
+  },
+  "state_ratio_min": 73.74,
+  "medians": {
+    "adapter_bytes": 153600.0,
+    "kv_used_bytes": 14088192.0,
+    "kv_allocated_bytes": 25165824.0,
+    "adapter_compile_ms": 63092.216,
+    "adapter_fit_only_ms": 901.814,
+    "classifier_compile_ms": 62394.244,
+    "kv_build_ms": 39032.887,
+    "kv_restore_ms": 8.474,
+    "question_ms": {
+      "base_ctx": 43398.953,
+      "kv_ctx": 1111.95,
+      "nn_bare": 234.094,
+      "probe_bare": 234.439,
+      "ra_bare": 392.05
+    }
+  },
+  "valid_controls": true,
+  "confirm_accuracy_and_state_pass": null,
+  "receipt_sha256": {
+    "minicpm4_dev1120.json": "1fa7276c0704b7eef8aec99375df17008535fc5f5fedbd3e3f867e76c8b0ae5f"
+  },
+  "file_note": "Digest is of the decompressed receipt. Only the operator resource note was generalized for publication."
+}

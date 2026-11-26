@@ -47,11 +47,18 @@ import { findAnchors, leaveOneOutProbe, chooseLayer, fitLayer } from './fastweig
 import { dequantizeQ4KRow } from '../../../gamma/fastweight/doppler_fastweight.mjs';
 import { mostFrequentCode, fitSupportClassifier, fitNearestNeighbour } from './controls_v5.mjs';
 import { compileReadoutAdapter } from './readout_adapter_v5.mjs';
+import { firstSupportToken } from './first_token_v5.mjs';
 
 const [dopplerRoot, modelPath, outputPath, split, seedArg, specialtiesArg, shotsArg, queriesArg] = process.argv.slice(2);
 assert.ok(dopplerRoot && modelPath && outputPath && split && seedArg, 'Usage: node run_v5.mjs DOPPLER_ROOT MODEL_DIR OUT_JSON SPLIT SEED SPECIALTIES SHOTS QUERIES');
 assert.ok(process.env.B1_RESOURCE_CHECK, 'Set B1_RESOURCE_CHECK to the record of who confirmed the GPU is free');
 assert.ok(split === 'dev' || process.env.B1_ALLOW_CONFIRM, 'The confirm split needs B1_ALLOW_CONFIRM set to the locked protocol hash');
+const withFirstTokenControl = process.env.B1_WITH_FIRST_TOKEN_CONTROL === '1';
+if (withFirstTokenControl) {
+  assert.equal(split, 'dev', 'The first-token decoder control is development-only');
+  assert.ok(process.env.B1_WITH_READOUT_ADAPTER === '1' && process.env.B1_WITH_KV_SNAPSHOT === '1'
+    && process.env.B1_WITH_CONTROLS === '1', 'First-token control needs readout, controls and the cached-prompt baseline');
+}
 const seed = Number(seedArg);
 const nSpecialties = Number(specialtiesArg ?? 8);
 const shots = Number(shotsArg ?? 3);
@@ -86,7 +93,18 @@ function canonicalizeAnswer(s) {
 
 const py = spawnSync(join(repoRoot, '.venv', 'bin', 'python'), ['-B', join(here, 'tasks_v5.py'), String(seed), split, String(nSpecialties), String(shots), String(queries)], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
 if (py.status !== 0) throw new Error(py.stderr);
-const tasks = JSON.parse(py.stdout);
+const generated = JSON.parse(py.stdout);
+const range = process.env.B1_TABLE_RANGE;
+let tasks = generated;
+if (range != null) {
+  const fields = /^(\d+):(\d+)$/.exec(range);
+  assert.ok(fields, 'B1_TABLE_RANGE uses zero-based start:end, excluding end');
+  const [start, end] = fields.slice(1).map(Number);
+  const tableIds = [...new Set(generated.map(task => task.specialty_id))];
+  assert.ok(start < end && end <= tableIds.length, 'B1_TABLE_RANGE outside generated design');
+  const selected = new Set(tableIds.slice(start, end));
+  tasks = generated.filter(task => selected.has(task.specialty_id));
+}
 
 const mod = p => import(pathToFileURL(join(resolve(dopplerRoot), p)));
 const [
@@ -195,7 +213,7 @@ function dumpRow(layerRows, hiddenRow) {
   out.set(hiddenRow, at);
   return Buffer.from(out.buffer, out.byteOffset, out.byteLength);
 }
-const SKIPPABLE_ARMS = ['base_bare', 'base_ctx', 'top2_bare', 'top2_ctx', 'v5_bare', 'v5_ctx', 'shuf_bare', 'shuf_ctx', 'knn_ctx', 'cad_ctx', 'kv_ctx', 'ra_bare', 'ra_ctx', 'ra_kv'];
+const SKIPPABLE_ARMS = ['base_bare', 'base_ctx', 'top2_bare', 'top2_ctx', 'v5_bare', 'v5_ctx', 'shuf_bare', 'shuf_ctx', 'knn_ctx', 'cad_ctx', 'kv_ctx', 'ra_bare', 'ra_ctx', 'ra_kv', 'ra_first_bare', 'kv_first_ctx'];
 const skipArms = new Set((process.env.B1_SKIP_ARMS ?? '').split(',').map(s => s.trim()).filter(Boolean));
 for (const arm of skipArms) assert.ok(SKIPPABLE_ARMS.includes(arm), `B1_SKIP_ARMS: unknown arm ${arm}`);
 
@@ -348,7 +366,7 @@ function argmaxLogits(arr) {
 // With `kv` ({ snap, prefixLen }) the table's saved prefix state is restored first and only the query tokens
 // are prefilled; the decode that follows is the same. The pipeline's own cache is put back afterwards and the
 // restored copy destroyed, so one question's state never leaks into the next.
-async function greedyDecodeSinglePass(promptIds, maxNewTokens = 5, captureStep0Logits = false, adapterForStep = null, kv = null) {
+async function greedyDecodeSinglePass(promptIds, maxNewTokens = 5, captureStep0Logits = false, adapterForStep = null, kv = null, firstTokens = null) {
   await device.queue.onSubmittedWorkDone();
   if (adapterForStep) pipeline.setLoRAAdapter(adapterForStep(0));
   const t0 = performance.now();
@@ -368,7 +386,7 @@ async function greedyDecodeSinglePass(promptIds, maxNewTokens = 5, captureStep0L
     prefillIds = promptIds.slice(kv.prefixLen);
   }
   try {
-    return { ...(await decodeAfterRestore(promptIds, prefillIds, maxNewTokens, captureStep0Logits, adapterForStep, t0)), restoreMs };
+    return { ...(await decodeAfterRestore(promptIds, prefillIds, maxNewTokens, captureStep0Logits, adapterForStep, t0, firstTokens)), restoreMs };
   } finally {
     if (kv) {
       const restored = pipeline.kvCache;
@@ -378,7 +396,7 @@ async function greedyDecodeSinglePass(promptIds, maxNewTokens = 5, captureStep0L
   }
 }
 
-async function decodeAfterRestore(promptIds, prefillIds, maxNewTokens, captureStep0Logits, adapterForStep, t0) {
+async function decodeAfterRestore(promptIds, prefillIds, maxNewTokens, captureStep0Logits, adapterForStep, t0, firstTokens) {
   const opts = genRtMod.resolvePrefillOptions(genState, { inputIds: prefillIds, useChatTemplate: false });
   const prefill = await pipeline.generator._prefillToHidden(prefillIds, opts);
   if (prefill.currentRecorder) {
@@ -403,7 +421,9 @@ async function decodeAfterRestore(promptIds, prefillIds, maxNewTokens, captureSt
     pool.releaseBuffer(prefill.currentHiddenBuffer);
   }
 
-  const gen = [argmaxLogits(firstLogits)];
+  const rawFirst = argmaxLogits(firstLogits);
+  const firstChoice = firstTokens ? firstSupportToken(firstLogits, rawFirst, firstTokens) : null;
+  const gen = [firstChoice?.best_allowed ?? rawFirst];
   if (!stopTokens.has(gen[0])) {
     const cur = [...promptIds, gen[0]];
     const snaps = [];
@@ -437,6 +457,7 @@ async function decodeAfterRestore(promptIds, prefillIds, maxNewTokens, captureSt
     canonical: canonicalizeAnswer(rawText),
     totalMs,
     step0Logits: captureStep0Logits ? firstLogits : null,
+    firstChoice,
   };
 }
 
@@ -683,6 +704,8 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
   const vocab = [...new Set([...targetToks, ...bareDefault])].sort((x, y) => x - y);
   const lmRows = await readMatrixRowsF32(lmHeadRaw, vocab, dHidden);
   const common = { dHidden, dInter, nlId, bareDefaultToks: [...bareDefault], getLmRow: t => lmRows.get(t), finalNormG };
+  // Charge captures, tokenization and common preparation to every method using them.
+  const sharedSetupMs = performance.now() - t0;
   const BASE_WRITE = 0.30;
 
   // The fixed adapter: top two layers fitted independently, ridge 0.15, half the write strength each.
@@ -730,9 +753,11 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
     const mat = await materializeGpuAdapter(`ra_${task.specialty_id}`, spec);
     setAdapterScale(mat.adapter, 1);
     ra = mat;
+    const fitMs = performance.now() - tr;
     Object.assign(diag, {
+      shared_setup_ms: sharedSetupMs, readout_adapter_compile_ms: sharedSetupMs + fitMs,
       readout_adapter_layer: last, readout_adapter_rank: spec.rank, readout_adapter_bytes: spec.logicalBytes,
-      readout_adapter_rows: spec.rows, readout_adapter_fit_ms: performance.now() - tr,
+      readout_adapter_rows: spec.rows, readout_adapter_fit_ms: fitMs,
     });
   }
   // Controls. They are built after the adapter so that fixed_compile_ms above is the adapter's alone.
@@ -754,6 +779,7 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
     const known = task.codes.map(canonicalizeAnswer);
     assert.ok(new Set(classCodes).size === classCodes.length && classCodes.every(code => known.includes(code)), `classifier control: support answers [${classCodes}] are not this table's codes`);
     const clf = fitSupportClassifier({ examples, nClasses: spans.length, ratio: 0.15 });
+    const classifierFitMs = performance.now() - tp;
     const nn = fitNearestNeighbour({ examples, nClasses: spans.length, temperature: 0.08 });
     probe = { clf, nn, classCodes };
     if (dumpDir) {
@@ -803,6 +829,7 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
     Object.assign(diag, {
       mfc_code: mfc.code, probe_examples: clf.examples, probe_layers: top2Layers, probe_ridge_ratio: clf.ratio,
       probe_leave_one_out_accuracy: clf.leaveOneOutAccuracy, probe_fit_ms: performance.now() - tp,
+      classifier_fit_ms: classifierFitMs, classifier_compile_ms: sharedSetupMs + classifierFitMs,
     });
   }
   const gpuBuffers = [...top2.gpuBuffers, ...(ra ? ra.gpuBuffers : [])];
@@ -844,6 +871,7 @@ async function compileSpecialty(task, { controls = withControls } = {}) {
       compile_ms: performance.now() - t0,
     });
   }
+  if (withFirstTokenControl) diag.support_first_tokens = [...new Set(iso.map(e => e.firstTok))].sort((a, b) => a - b);
   return { v5, top2: top2.adapter, abstain, gpuBuffers, sepTok, diag, probe, mfc, ra: ra ? ra.adapter : null };
 }
 
@@ -1059,6 +1087,7 @@ for (const task of tasks) {
     // For the shuffled-label arms: did the answer match the wrong code that adapter was taught?
     ...(arm.startsWith('shuf_') ? { matches_shuffled_code: r.canonical === taught } : {}),
     ...(r.restoreMs != null ? { restore_ms: r.restoreMs } : {}),
+    ...(r.firstChoice ? { first_choice: r.firstChoice } : {}),
   });
   for (const [arm, adapter] of arms) {
     for (const [regime, ids] of [['bare', bareIds], ['ctx', fullIds]]) {
@@ -1074,6 +1103,18 @@ for (const task of tasks) {
   if (withKvSnapshot && !skipArms.has('kv_ctx')) {
     pipeline.setLoRAAdapter(null);
     record('kv_ctx', fullIds, await greedyDecodeSinglePass(fullIds, Number(task.max_new_tokens), false, null, c.kv));
+  }
+  if (withFirstTokenControl) {
+    const arms = [['ra_first_bare', c.ra, bareIds, null], ['kv_first_ctx', null, fullIds, c.kv]];
+    for (const [arm, adapter, ids, kv] of arms) {
+      if (skipArms.has(arm)) continue;
+      pipeline.setLoRAAdapter(adapter);
+      try {
+        record(arm, ids, await greedyDecodeSinglePass(ids, Number(task.max_new_tokens), false, null, kv, c.diag.support_first_tokens));
+      } finally {
+        pipeline.setLoRAAdapter(null);
+      }
+    }
   }
   if (withReadoutAdapter && withKvSnapshot && !skipArms.has('ra_kv')) {
     // The readout adapter on top of the cached prompt: restore the table's state, then decode with the adapter.
@@ -1128,13 +1169,16 @@ const receipt = {
   scope: split === 'dev' ? 'development only, exploratory' : 'confirmation', split, seed, specialties: nSpecialties, shots_per_group: shots,
   queries_per_group: queries, task_count: tasks.length, model: modelId, num_layers: numLayers, hidden_size: dHidden,
   intermediate_size: dInter, with_selected_adapter: withSelected, with_shuffled_adapter: withShuffled, with_kv_snapshot: withKvSnapshot, with_controls: withControls, with_readout_adapter: withReadoutAdapter, skipped_arms: [...skipArms].sort(),
+  ...(withFirstTokenControl ? { with_first_token_control: true } : {}),
   captured_layers: candidateLayers, resource_check: process.env.B1_RESOURCE_CHECK, doppler_source: dopplerSource,
   confirm_protocol: process.env.B1_ALLOW_CONFIRM ?? null,
+  ...(range == null ? {} : { table_range: range }),
   source_sha256: {
     runner: sha256Hex(await readFile(fileURLToPath(import.meta.url))), compiler: sha256Hex(await readFile(join(here, 'fastweight_v5.mjs'))),
     tasks: sha256Hex(await readFile(join(here, 'tasks_v5.py'))), manifest: sha256Hex(manifestBytes),
     controls: sha256Hex(await readFile(join(here, 'controls_v5.mjs'))),
     readout_adapter: sha256Hex(await readFile(join(here, 'readout_adapter_v5.mjs'))),
+    ...(withFirstTokenControl ? { first_token_control: sha256Hex(await readFile(join(here, 'first_token_v5.mjs'))) } : {}),
   },
   specialties_compiled: [...bySpecialty.values()].map(c => c.diag), rows,
 };

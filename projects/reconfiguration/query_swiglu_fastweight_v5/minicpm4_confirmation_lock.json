@@ -1,0 +1,62 @@
+{
+  "study": "Gamma B1 last-layer readout adapter, first MiniCPM4 0.5B transfer",
+  "status": "prospective lock; independent model and confirmation tables; no outcome observed when locked",
+  "engine": "ec18cb1f9a108e6cee4b705cbc93f3511406f4c2",
+  "model": {
+    "id": "minicpm4-0-5b-f16-af32",
+    "source": "openbmb/MiniCPM4-0.5B@5253c7fcc5e29e1cf3eacb59a58adf1ba4df8630",
+    "rdrr": "clocksmith/rdrr@0a0b58d462a4cee373c793d761bc180d3a1a2a08",
+    "manifest_sha256": "260b71ee894d9f6a62010224e7a8c20f3188f646c5c62d4437fca39ebae5813e",
+    "weight_bytes": 867747840,
+    "shards": 13,
+    "dtype": "F16 weights, F32 activations"
+  },
+  "source_sha256": {
+    "run_v5.mjs": "78a842046839320ab377229f5f7590b66106ee78ecefab505b96137d55c490f5",
+    "tasks_v5.py": "9f314ce30eaace14ff228aed81b73e569fad9f83773425cb8ac82b861a20b396",
+    "controls_v5.mjs": "d71b4c7e98ec31916788e50230e647c55551f379f96fc805ec9e860dd915e374",
+    "fastweight_v5.mjs": "08c9592969820898b6918c87a64f5991d72362c88ddb0486331effa45335e9a3",
+    "readout_adapter_v5.mjs": "1ea0edce7a13a388de12924fb4f52982f977af103f6590e999013ca81e6695e2",
+    "gate_v5.py": "3b5107094dafdcb88e0306f4c908fc7b66c0561ae628d4740cb11aeeb5fb7f0a"
+  },
+  "compatibility": {
+    "split": "dev",
+    "seed": 1120,
+    "tables": 2,
+    "shots_per_group": 20,
+    "queries_per_group": 4,
+    "before_holdout": "Check markers, valid decoded support codes, whole-table length, complete answers and fresh-vs-snapshot greedy token identity. Report incompatibility if a parity error remains; never tune gain, ridge, thresholds, codes or model from this smoke."
+  },
+  "confirm": {
+    "split": "confirm",
+    "seed": 20261120,
+    "tables": 96,
+    "shots_per_group": 20,
+    "queries_per_group": 4,
+    "questions": 1536,
+    "unit": "table in existing 37-group block design",
+    "batching": "identical single seeded design, disjoint ranges of four whole tables per process; preserve table identifiers and one receipt per range, restart failed ranges without replacing any recorded outcome"
+  },
+  "method": {
+    "candidate": "ra_bare; existing last-layer readout, gain 1.0, relative ridge 0.15; isolated and whole-table support contexts; zero support-table tokens in the query",
+    "arms": [
+      "ra_bare",
+      "probe_bare",
+      "nn_bare",
+      "mfc_bare",
+      "kv_ctx",
+      "base_ctx"
+    ],
+    "skip_arms": "base_bare,top2_bare,top2_ctx,ra_ctx,ra_kv,knn_ctx,cad_ctx",
+    "decoding": "unconstrained greedy, existing canonicalization and up to 8 generated tokens for both generative arms; include word and multi-part codes even if their actual token lengths differ by tokenizer. Report both strata. A wrong or truncated code remains counted. No first-token restriction or support-label correction."
+  },
+  "adjudication": {
+    "primary": "paired table accuracy ra_bare minus kv_ctx; one-sided exact sign-flip for non-inferiority at minus 5 points, alpha .05; report 90% paired-table bootstrap interval. Superiority only if one-sided test at zero also passes. Restrict generalization to these groups unless the group-aware lower bound clears the margin.",
+    "classifier": "also compare ra_bare versus probe_bare. An equivalence claim needs the full 90% interval inside +/-5 points. If the plain classifier is at least as accurate, report its practical result.",
+    "controls": "every question has fresh full-table vs warm KV parity on the entire generated token-ID sequence; most-frequent code must score 25%; 96 tables and 1536 unique complete questions required. Any failed validity control is reported, with no confirmed win.",
+    "state": "compare logical adapter bytes with used KV bytes; also report allocated snapshot memory. 10x state reduction and ZST (zero support-table tokens) are separate from accuracy.",
+    "time": "include common preparation, support capture, fit and device materialization for candidate, plus GPU-completed warm-KV build, restore and per-question time. Record full-table plain and plain readout too. Latencies descriptive, fixed arm ordering.",
+    "abstention": "covered-question classification only. No new abstention or document-memory claim.",
+    "failure": "development compatibility failures do not spend the holdout. Any held-out failure remains on record and cannot be repaired by reselecting examples or changing the locked algorithm."
+  }
+}

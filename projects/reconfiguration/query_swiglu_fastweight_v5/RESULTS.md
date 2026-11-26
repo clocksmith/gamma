@@ -542,3 +542,82 @@ stray answers and the gain were not retuned on this seed.
 Nothing is locked. `protocol_v5_draft.json` awaits an independent review and the owner's pin of an
 unseen model. Not built: the cached-prompt comparison. The owner's priority is A1 to A3; B1 uses
 the Mac GPU only when no A lane needs it.
+
+## Batched support compilation on CPU (2026-11-20)
+
+Four fresh development tables used 20 examples per group, 80 support lines per table and 16
+questions per table. The local Qwen3-0.6B-NHS backbone ran under stock Hugging Face Qwen3,
+FP32, on an Apple M3 CPU with two Torch threads. This checkpoint had appeared in earlier Gamma
+studies. Stock Qwen3 ignores its seven additional TTT projection tensors.
+
+| Operation, summed across four tables | Serial | Batch of 8 |
+|---|---:|---:|
+| Isolated support forward calls | 320 | 40 |
+| Isolated capture | 26.30 s | 11.04 s |
+| Complete readout compile, including one full-table pass per table and the Node fitter | 32.31 s | 17.14 s |
+| Table-removed exact answers | 58/64 | 58/64 |
+
+Every greedy token stream matched across the two paths. The largest relative L2 difference
+in the captured activations or the compiled factors was 1.66e-6 or less. The model reading
+the table answered 51/64 exactly. Two of the adapter's misses were outside the table's codes
+(`whites` and `deltas west`). These counts describe four CPU engineering tables.
+The earlier Qwen3.5-0.8B Doppler result remains the development accuracy reference.
+
+The equivalent Doppler change needs separate position, attention-cache and recurrent/convolution
+state for each support line. Its current B1 runner resets one generation state per isolated line.
+The next runtime measurement needs independent-row prefill on the provisioned Qwen3.5 model,
+one available WebGPU device, and paired serial/batch captures, factors, generated tokens and
+end-to-end compile times on fresh development tables.
+
+Receipts and individual answers: [seed 1105](batch_capture_cpu_dev1105.json),
+[seed 1106](batch_capture_cpu_dev1106.json). The CPU run command is in the [README](README.md).
+
+An existing unit test run during this work also regenerated the previously documented
+seed-2000000 confirmation-design fixture in memory for the fixed 25% constant-code control.
+Its only output was test status. The test wrote no cases, and the benchmark and model received
+only the fresh development inputs in the receipts above.
+
+## First-token decoder control on CPU (2026-11-20)
+
+All five off-code answers in the prior Qwen3.5-0.8B development validation started with token
+194805 (`.**`); 24 other errors used valid codes. The new opt-in decoder restricts only its
+first token to starts observed in the support lines. It can still emit any continuation.
+The same rule is applied to the table-removed adapter and to the base model reading the
+table. The adapter weights and unconstrained arms use the existing readout fitter.
+
+On four further development tables from seeds 1107 and 1108, with the local Qwen3-0.6B-NHS
+backbone and the CPU setup above, one of the adapter's 64 greedy decodes changed. The original
+output was `deltas`. At that position `delta` was the highest-scoring permitted token,
+1.303 logits below the unrestricted winner. The restricted decoder emitted `delta` and
+a newline, giving the exact expected code. Every other adapter token stream matched its
+unrestricted reference. The base model with the table always started with an allowed token.
+
+| Full decoded answer | Ordinary greedy | Restricted first token |
+|---|---:|---:|
+| Adapter, table removed | 58/64 | 59/64 |
+| Base model, table present | 50/64 | 50/64 |
+| Off-code answers from adapter | 1 | 0 |
+
+This is one observed recovery on a development checkpoint. A reserved Doppler run on fresh
+Qwen3.5-0.8B development tables is needed to test whether the same rule recovers its stray
+starts. `ra_first_bare` and `kv_first_ctx` are implemented, exercised in CPU selector tests
+and awaiting that runtime measurement. The CPU script executed both full model decodes.
+
+Receipts with every token stream and score gap are available for [seed 1107](first_token_cpu_dev1107.json)
+and [seed 1108](first_token_cpu_dev1108.json).
+
+## MiniCPM4 transfer compatibility (development, 2026-11-20)
+
+The unchanged last-layer readout adapter ran on the independently pinned F16 MiniCPM4 0.5B in Doppler on Apple Metal. All 13 weight files matched the SHA-256 values in the pinned artifact manifest. The [contract](minicpm4_confirmation_lock.json) preceded inference. This compatibility check used two development tables and 32 questions. The 96-table confirmation uses a separate split and seed.
+
+| Method | Word codes (16) | Multi-part codes (16) | Total (32) |
+| --- | ---: | ---: | ---: |
+| Readout adapter, table removed | 14 | 16 | 30 |
+| Plain classifier, table removed | 14 | 15 | 29 |
+| Nearest neighbour, table removed | 15 | 15 | 30 |
+| Warm KV and plain full-table model | 12 | 15 | 27 |
+| Most frequent code | 4 | 4 | 8 |
+
+Warm KV reproduced every generated token for all 32 plain full-table answers. The adapter occupied 102,400 bytes on the word table and 204,800 bytes on the multi-part table. Median used KV state was 14,088,192 bytes, with 25,165,824 bytes allocated on each table. The runner did not measure a serialized classifier or its heap residency.
+
+Median full adapter setup was 63.09 s, including shared support preparation and the model passes, versus a median 0.90 s for the fit and device materialization alone. Shared preparation took 40.84 s and 83.54 s on the two tables. Median classifier setup was 62.39 s, and KV snapshot build was 39.03 s. Median per-question times were 392 ms for the adapter, 234 ms for the classifier including feature acquisition, 1,112 ms for the restored prompt, and 43.40 s for fresh full prefill. These timings were collected on a contended host. The small development sample provides a compatibility check; it establishes neither held-out superiority nor portable speed. [Summary](minicpm4_dev1120_summary.json) · [Per-question receipt (gzip)](minicpm4_dev1120.json.gz)
