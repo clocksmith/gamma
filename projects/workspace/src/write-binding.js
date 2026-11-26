@@ -46,24 +46,31 @@ function payloadDigest(payload) {
  * Builds the approval a person (or trusted host policy) grants for one commit. Called by the
  * approver, never by a guard. `fields` maps each page field to the exact value to fill; `commit`
  * is the control that sends the write; `readBack` is the exact stored state afterwards.
+ * `versionToken` ({ selector, value }), when given, names the page element holding the form's
+ * optimistic-concurrency value (the version the save sends); `value` is the approved record version.
  */
-function approveCommit({ approvalId, target, lock, fields, clicks = [], commit, commitMethod = 'submit', readBack }) {
+function approveCommit({ approvalId, target, lock, fields, clicks = [], commit, commitMethod = 'submit', readBack, versionToken }) {
   const actions = [
     ...Object.entries(fields ?? {}).map(([field, value]) => ({ method: 'fill', field, payloadSha256: payloadDigest({ value }) })),
     ...clicks.map(field => ({ method: 'click', field, payloadSha256: payloadDigest(null) })),
     { method: commitMethod, field: commit, payloadSha256: payloadDigest(null) },
   ];
-  const approval = structuredClone({ approvalId, target: { ...target, url: href(target?.url) }, lock, fields, actions, commit, readBack });
+  const approval = structuredClone({ approvalId, target: { ...target, url: href(target?.url) }, lock, fields, actions, commit, readBack,
+    ...(versionToken !== undefined ? { versionToken } : {}) });
   if (!validApproval(approval)) throw Error('An approval needs a target, a live lock, exact field values, a commit control and a read-back');
   return Object.freeze(approval);
 }
 
 function validApproval(approval) {
   if (!plainObject(approval) || typeof approval.approvalId !== 'string' || !approval.approvalId) return false;
-  const { target, lock, fields, actions, commit, readBack } = approval;
+  const { target, lock, fields, actions, commit, readBack, versionToken } = approval;
   if (!plainObject(target) || href(target.url) !== target.url || typeof target.entity !== 'string' || !target.entity
     || !scalarId(target.rowId)) return false;
   if (!plainObject(lock) || !LOCK_FIELDS.every(key => scalarId(lock[key])) || lock.recordId !== target.rowId) return false;
+  // An optional version token names the page element carrying the form's concurrency value. It must
+  // carry the approved record version itself, so the server's check and the lock name one version.
+  if (versionToken !== undefined && (!plainObject(versionToken) || typeof versionToken.selector !== 'string'
+    || !versionToken.selector || versionToken.value !== String(lock.recordVersion))) return false;
   if (!plainObject(fields) || !Array.isArray(actions) || typeof commit !== 'string'
     || !plainObject(readBack) || Object.keys(readBack).length === 0) return false;
   if (!actions.every(action => plainObject(action) && WRITE_KINDS.has(action.method)
