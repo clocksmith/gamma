@@ -2,7 +2,7 @@
 
 Each entry is written before any result it could affect is read.
 
-## 1. `frozen/train.log` was missing from the freeze commit (2026-11-26, 14:06 UTC)
+## 1. `frozen/train.log` was missing from the freeze commit (2026-11-26, recorded in commit `b82e3a89b` at 14:05:38 UTC)
 
 - **What happened.** `SHA256SUMS-FROZEN` lists `frozen/train.log`, the console log of `train_arms.py`. The
   repository ignores `*.log`, so the file was not in freeze commit `9d7d54b9e`. The scorer exported that commit,

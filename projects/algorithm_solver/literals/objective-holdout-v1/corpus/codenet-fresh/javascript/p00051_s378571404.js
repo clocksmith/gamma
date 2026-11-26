@@ -1,0 +1,1 @@
+for(j=1;c=require("fs").readFileSync("/dev/stdin","utf8").split(/\s/)[j++];)a=c.split(''),console.log(a.sort(function(x,y){return y-x}).join('')-a.sort().join(''));

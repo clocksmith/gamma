@@ -1,0 +1,1 @@
+for(j=0;i=require("fs").readFileSync("/dev/stdin","utf8").split(/\s/)[j++];){for(r=+i,k=10;--k;)r+=(i=k%2?i*2:i/3);console.log(r.toFixed(8))}
