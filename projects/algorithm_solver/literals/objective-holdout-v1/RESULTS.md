@@ -16,9 +16,22 @@ account of what it ran: [`SCORER-LOG.md`](SCORER-LOG.md).
 | **X** single-problem fragments cost bytes | **holds** | Dropping them changes the token-gain archive by -24.1% and its tokens by +2.7% |
 | **Z** BITS beats trained zstd | **fails** | Best BITS archive 95,774 B (archive bytes at 4,096) against 90,271 B (+6.1%); on the project 100,355 B (BPE at 256) against 60,631 B (+65.5%) |
 
-By the preregistered reading: T fails, so the token advantage at the larger cap was an in-sample effect; B holds, so
-the two objectives do diverge on unseen code, and by more than in sample. The token advantage does carry to new
-problems at the 256 cap. It does not carry to the project at either cap.
+By the preregistered reading T fails and B holds. Two reviews after scoring showed what B does and does not mean:
+the byte-selected and token-gain dictionaries code the unseen files in the same number of bytes, and the whole
+difference between their archives is the stored dictionary. See "Where the archive bytes are" below and the
+post-scoring measurements in `out/posthoc-exploration.json`. The token advantage carries to new problems at the
+256 cap and not to the project at either cap.
+
+## Where the archive bytes are (4,096 cap)
+
+| Rule | Fragments | Header | Coded files, training | Coded files, new problems | Complete, new problems |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| BPE | 3,924 | 31,493 | 68,856 | 78,565 | 110,058 |
+| token gain | 3,924 | 48,067 | 53,051 | 81,820 | 129,887 |
+| archive bytes | 1,408 | 13,948 | 71,639 | 81,826 | 95,774 |
+
+The header is fixed, so which archive is smallest depends on how much text shares it. These figures are for a
+test set the size of the training set.
 
 ## Test sets
 

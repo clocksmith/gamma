@@ -86,9 +86,23 @@ def main():
       f'({pct(best("fresh")[0], zf)}); on the project {n(best("project")[0])} B ({best("project")[1]}) against {n(zp)} B '
       f'({pct(best("project")[0], zp)}) |')
     w('')
-    w('By the preregistered reading: T fails, so the token advantage at the larger cap was an in-sample effect; B holds, so')
-    w('the two objectives do diverge on unseen code, and by more than in sample. The token advantage does carry to new')
-    w('problems at the 256 cap. It does not carry to the project at either cap.')
+    w('By the preregistered reading T fails and B holds. Two reviews after scoring showed what B does and does not mean:')
+    w('the byte-selected and token-gain dictionaries code the unseen files in the same number of bytes, and the whole')
+    w('difference between their archives is the stored dictionary. See "Where the archive bytes are" below and the')
+    w('post-scoring measurements in `out/posthoc-exploration.json`. The token advantage carries to new problems at the')
+    w('256 cap and not to the project at either cap.')
+    w('')
+    w('## Where the archive bytes are (4,096 cap)')
+    w('')
+    w('| Rule | Fragments | Header | Coded files, training | Coded files, new problems | Complete, new problems |')
+    w('| --- | ---: | ---: | ---: | ---: | ---: |')
+    for arm in ('bpe', 'token', 'bytes'):
+        tr, fr = H('train', arm, 4096)['bytes'], H('fresh', arm, 4096)['bytes']
+        w(f'| {LABEL[arm]} | {n(H("fresh", arm, 4096)["multi_byte_entries"])} | {n(fr["header"])} | {n(tr["complete"] - tr["header"])} | '
+          f'{n(fr["complete"] - fr["header"])} | {n(fr["complete"])} |')
+    w('')
+    w('The header is fixed, so which archive is smallest depends on how much text shares it. These figures are for a')
+    w('test set the size of the training set.')
     w('')
     w('## Test sets')
     w('')

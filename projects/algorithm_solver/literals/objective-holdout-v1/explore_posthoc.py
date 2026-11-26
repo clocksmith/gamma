@@ -107,7 +107,9 @@ def main():
         for cap in (256, 4096):
             a = sum(int(rows[i][f'token-K{cap}:tokens']) for i in idx)
             b = sum(int(rows[i][f'bpe-K{cap}:tokens']) for i in idx)
-            row[f'token_vs_bpe_percent_K{cap}'] = round(100.0 * (a - b) / b, 2)
+            row[f'token_gain_tokens_K{cap}'] = a
+            row[f'bpe_tokens_K{cap}'] = b
+            row[f'token_vs_bpe_percent_K{cap}'] = round(100.0 * (a - b) / b, 4)
         return row
 
     out['unseen_subsets'] = [
