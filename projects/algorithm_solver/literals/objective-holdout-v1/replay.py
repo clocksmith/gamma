@@ -4,6 +4,7 @@
     python3 replay.py check     # seconds: integrity, split boundaries, a six-file end-to-end run
     python3 replay.py score     # about a minute: rescore all four sets and compare with the committed results
     python3 replay.py train     # about two minutes: retrain every dictionary and compare byte for byte
+    python3 replay.py posthoc   # about two minutes: recompute the exploratory measurements made after scoring
     python3 replay.py all
 
 Add --report FILE for a machine-readable record, --jobs N for workers. Exit status is 0 only if
@@ -25,6 +26,7 @@ What each level is for:
   check  run it after any edit and before any freeze. It reruns no experiment.
   score  run it when the scorer, the format or a result file is in question.
   train  run it when the training code or the engine is in question.
+  posthoc run it when explore_posthoc.py, explore_support.py or a number that comes from them is in question.
 """
 import argparse
 import hashlib
@@ -49,6 +51,8 @@ SETS = {  # name -> (manifest, directory its paths are relative to)
 RANK_SEED = 'bits-codenet-replication-v1:'
 TIMING_KEYS = {'seconds'}
 TRAIN_TIMEOUT_SECONDS = 1800  # the frozen run took 98 s; four engine arms at their 300 s limit would take 1,200 s
+STEP_TIMEOUT_SECONDS = 1800   # scoring one set takes under a minute; a worker that exits inside a pool blocks it forever
+PROBLEMS_PER_SET = 200        # PREREGISTRATION.md: 200 problems, one Python and one JavaScript file each
 ENGINE = LIT / 'fixed-source-v3' / 'engine.c'
 
 
@@ -98,6 +102,20 @@ def need(cond, message):
         raise AssertionError(message)
 
 
+def run_bounded(cmd, cwd, what, seconds=STEP_TIMEOUT_SECONDS):
+    """Run a step in its own session and kill the whole session when it does not return: the frozen
+    scorer raises SystemExit inside pool workers, and a pool whose worker exits waits forever."""
+    proc = subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, start_new_session=True)
+    try:
+        log, _ = proc.communicate(timeout=seconds)
+    except subprocess.TimeoutExpired:
+        os.killpg(proc.pid, signal.SIGKILL)
+        proc.communicate()
+        raise AssertionError(f'{what} did not finish in {seconds} s and was killed')
+    need(proc.returncode == 0, f'{what} failed: {log.strip()[-300:]}')
+    return log
+
+
 def load_set(name):
     manifest, root = SETS[name]
     spec = json.loads(manifest.read_text())
@@ -142,6 +160,20 @@ def sets_match_corpus():
 def split_integrity():
     specs = {name: load_set(name) for name in SETS}
     units = {name: {f['unit'] for f in specs[name][0]['files']} for name in ('train', 'dev', 'fresh')}
+    # Completeness, not only order: a set with problems quietly removed must not pass.
+    for name in ('train', 'dev', 'fresh'):
+        need(len(units[name]) == PROBLEMS_PER_SET, f'{name} has {len(units[name])} problems, not {PROBLEMS_PER_SET}')
+        langs = {}
+        for f in specs[name][0]['files']:
+            langs.setdefault(f['unit'], []).append(f['lang'])
+        odd = [u for u, ls in langs.items() if sorted(ls) != ['javascript', 'python']]
+        need(not odd, f'{name}: problems without exactly one Python and one JavaScript file: {odd[:5]}')
+    sel = specs['fresh'][0]['selection']
+    taken = {f['rank'] for f in specs['fresh'][0]['files']}
+    passed_over = {s['rank'] for s in sel['skipped']}
+    need(not taken & passed_over and taken | passed_over == set(range(sel['first_rank'], sel['last_rank'] + 1)),
+         'the fresh problems and the listed skips do not account for every rank from the first to the last')
+    need(sel['first_rank'] == 2 * PROBLEMS_PER_SET, 'the fresh ranks do not start where the earlier problems end')
     for a, b in (('train', 'dev'), ('train', 'fresh'), ('dev', 'fresh')):
         need(not units[a] & units[b], f'{a} and {b} share problems: {sorted(units[a] & units[b])[:5]}')
     clusters = {}
@@ -209,6 +241,40 @@ def decode_sound(name, results_path, decode_path, manifest_path):
     return len(res['headers'])
 
 
+def scorer_files_pinned():
+    """The scorer logged the SHA-256 of every file it brought back. Nothing else pins the test sets,
+    the results or the decoder, so read that list and hold the files to it."""
+    text = (HERE / 'SCORER-LOG.md').read_text()
+    block = text.split('## SHA-256 of the files brought back', 1)
+    need(len(block) == 2, 'SCORER-LOG.md has no list of the files brought back')
+    pinned = [line.split() for line in block[1].split('```')[1].strip().splitlines()]
+    need(len(pinned) >= 19 and all(len(p) == 2 and len(p[0]) == 64 for p in pinned), 'the list in SCORER-LOG.md is not hashes and paths')
+    for digest, rel in pinned:
+        need((HERE / rel).exists() and sha256((HERE / rel).read_bytes()) == digest, f'{rel} is not the file the scorer brought back')
+    wanted = {f'out/{kind}-{name}.{ext}' for name in SETS for kind, ext in (('results', 'json'), ('decode', 'json'), ('entries', 'json'), ('per-file', 'csv'))}
+    wanted |= {'sets/fresh.json', 'sets/project.json', 'independent_decode.py'}
+    need(wanted <= {rel for _, rel in pinned}, f'the scorer\'s list does not cover {sorted(wanted - {rel for _, rel in pinned})}')
+    return f'{len(pinned)} files (both test-set manifests, results, decoder reports, the decoder itself) are the ones the scorer logged'
+
+
+def near_duplicate_receipt():
+    """The frozen selector skipped no problem as a Python near-duplicate. That is only evidence if it
+    could have: the receipt must show earlier submissions were found in IBM's clusters."""
+    path = HERE / 'out' / 'near-duplicate-audit.json'
+    need(path.exists(), 'out/near-duplicate-audit.json is missing; run audit_near_duplicates.py where IBM\'s cluster file is')
+    a = json.loads(path.read_text())
+    spec, _ = load_set('fresh')
+    fresh = sorted(f['s_id'] for f in spec['files'] if f['lang'] == 'python')
+    need(a['clusters_file_sha256'] == spec['selection']['python_near_duplicate_clusters_sha256'], 'the audit read a different cluster file from the selection')
+    need(a['unseen_python_submissions_sha256'] == sha256('\n'.join(fresh).encode()), 'the audit was made for a different set of unseen submissions')
+    need(a['clusters'] > 0 and a['of_those_shaped_like_a_submission_id'] >= 0.999 * a['submissions_in_clusters'], 'the cluster file did not parse into submission ids')
+    need(a['earlier_python_submissions_found_in_a_cluster'] > 0 and a['clusters_with_an_earlier_submission'] > 0,
+         'no earlier submission was found in any cluster, so the near-duplicate filter could not have excluded anything')
+    need(a['unseen_python_submissions_in_a_cluster_with_an_earlier_one'] == [], 'an unseen Python submission is in a near-duplicate cluster with an earlier one')
+    return (f'{a["clusters"]:,} IBM clusters parsed; {a["earlier_python_submissions_found_in_a_cluster"]} of {a["earlier_python_submissions"]} earlier Python '
+            f'submissions are in one, with {a["other_submissions_in_those_clusters"]:,} near-duplicates between them; none of the {a["unseen_python_submissions"]} unseen ones is among those')
+
+
 def results_consistent():
     archives = sum(decode_sound(name, HERE / 'out' / f'results-{name}.json', HERE / 'out' / f'decode-{name}.json', SETS[name][0]) for name in SETS)
     return (f'{archives} archives: every decoder verdict is true, padding is under a byte and zero, and decoder and scorer '
@@ -264,23 +330,44 @@ def guards_bite():
 
 
 def tiny_fixture(tmp, jobs):
-    """Format tests on hand-made inputs, then six real training files through the frozen scorer
-    and the independent decoder. Fast enough to run after every edit."""
+    """Format tests on hand-made inputs, then six real training files and one made-up file through
+    the frozen scorer and the independent decoder. Fast enough to run after every edit.
+
+    No file in any real set needs the escape, so on the real sets "the escape counts agree" is 0 = 0
+    and the decoder's escape branch never runs. The made-up file holds three byte values that occur
+    in no training file, which only the escape can code."""
     # The format tests read no data files, so they run without isolation and can import their neighbour.
     subprocess.run([sys.executable, 'test_bits_oh.py'], cwd=HERE, check=True, capture_output=True)
     spec, _ = load_set('train')
-    files = [f for f in spec['files'] if f['lang'] == 'python'][:3] + [f for f in spec['files'] if f['lang'] == 'javascript'][:3]
+    alphabet = set()
+    for f in spec['files']:
+        alphabet.update((LIT / f['path']).read_bytes())
+    absent = bytes(b for b in range(256) if b not in alphabet)[:3]
+    need(len(absent) == 3, 'every byte value occurs in training; the escape cannot be exercised')
     out = tmp / 'tiny'
+    root = tmp / 'tiny-root'
     out.mkdir()
+    root.mkdir()
+    files = []
+    for f in [f for f in spec['files'] if f['lang'] == 'python'][:3] + [f for f in spec['files'] if f['lang'] == 'javascript'][:3]:
+        shutil.copy(LIT / f['path'], root / Path(f['path']).name)
+        files.append(dict(f, path=Path(f['path']).name))
+    made_up = b'# a file with three bytes no training file contains: ' + absent[:1] + b' and ' + absent[1:2] + b' and ' + absent[2:3] + b'\nprint(input())\n'
+    (root / 'escape.py').write_bytes(made_up)
+    files.append({'path': 'escape.py', 'unit': 'made-up', 'lang': 'python', 'bytes': len(made_up), 'sha256': sha256(made_up)})
     manifest = out / 'tiny.json'
     manifest.write_text(json.dumps({'set': 'tiny', 'files': files}))
-    subprocess.run([sys.executable, '-I', 'score.py', '--set', str(manifest), '--root', str(LIT), '--out', str(out), '--jobs', str(min(jobs, 4))],
-                   cwd=HERE, check=True, capture_output=True)
-    done = subprocess.run([sys.executable, '-I', 'independent_decode.py', '--set', str(manifest), '--root', str(LIT), '--out', str(out),
+    run_bounded([sys.executable, '-I', 'score.py', '--set', str(manifest), '--root', str(root), '--out', str(out), '--jobs', str(min(jobs, 4))],
+                HERE, 'the frozen scorer on the fixture')
+    done = subprocess.run([sys.executable, '-I', 'independent_decode.py', '--set', str(manifest), '--root', str(root), '--out', str(out),
                            '--frozen', str(HERE / 'frozen')], cwd=HERE, capture_output=True, text=True)
-    need(done.returncode == 0, 'independent decoder failed on the six-file fixture: ' + done.stdout[-300:])
+    need(done.returncode == 0, 'independent decoder failed on the fixture: ' + done.stdout[-300:])
     n = decode_sound('tiny', out / 'results-tiny.json', out / 'decode-tiny.json', manifest)
-    return f'format tests pass; {len(files)} files x {n} dictionaries encoded and independently decoded'
+    headers = json.loads((out / 'results-tiny.json').read_text())['headers']
+    wrong = {h: r['escapes_in_bit_parse'] for h, r in headers.items() if r['escapes_in_bit_parse'] != len(absent)}
+    need(not wrong, f'each archive must escape exactly the {len(absent)} unknown bytes: {wrong}')
+    return (f'format tests pass; {len(files)} files x {n} dictionaries encoded and independently decoded, '
+            f'{len(absent)} escaped bytes in each archive')
 
 
 # ---- score ---------------------------------------------------------------
@@ -297,8 +384,8 @@ def rescore(name, tmp, jobs):
     manifest, root = SETS[name]
     out = tmp / 'score'
     out.mkdir(exist_ok=True)
-    subprocess.run([sys.executable, '-I', 'score.py', '--set', str(manifest), '--root', str(root), '--out', str(out), '--jobs', str(jobs)],
-                   cwd=HERE, check=True, capture_output=True)
+    run_bounded([sys.executable, '-I', 'score.py', '--set', str(manifest), '--root', str(root), '--out', str(out), '--jobs', str(jobs)],
+                HERE, f'the frozen scorer on {name}')
     done = subprocess.run([sys.executable, '-I', 'independent_decode.py', '--set', str(manifest), '--root', str(root), '--out', str(out),
                            '--frozen', str(HERE / 'frozen')], cwd=HERE, capture_output=True, text=True)
     need(done.returncode == 0, f'independent decoder failed: {done.stdout[-300:]}')
@@ -368,14 +455,39 @@ def retrain(tmp, jobs):
         same += 1
     for name in ('train', 'dev'):
         need((exp / 'frozen' / 'sets' / f'{name}.json').read_bytes() == (HERE / 'frozen' / 'sets' / f'{name}.json').read_bytes(), f'set manifest {name} differs')
+    # The summary carries what the dictionaries do not: which problems used each fragment, and the
+    # training curve the byte-selected rule stopped on. Compare all of it except the clock.
+    a, b = strip_timing(old_summary), strip_timing(new_summary)
+    if skipped:
+        a['zstd'] = b['zstd'] = None
+    need(a == b, 'train-summary.json differs from the frozen one outside its timings: '
+         + ', '.join(sorted(k for k in a if a[k] != b.get(k)))[:200])
     text = (f'{same} frozen files (dictionaries with code tables, zstd dictionary) retrained byte for byte from the training files; '
             f'{len(chains)} engine chains complete with {asked} entries each{skipped}')
     return Part(text) if skipped else text
 
 
+# ---- posthoc -------------------------------------------------------------
+
+def reexplore(script, committed, tmp, jobs):
+    """The measurements made after scoring are not frozen, but the paper quotes them: recompute and compare."""
+    target = tmp / committed
+    cmd = [sys.executable, script, '--out', str(target)] + (['--jobs', str(jobs)] if script == 'explore_posthoc.py' else [])
+    run_bounded(cmd, HERE, script)
+    new, old = json.loads(target.read_text()), json.loads((HERE / 'out' / committed).read_text())
+    note = ''
+    lean = 'zstd_lean_framing'
+    if lean in old and (lean not in new or new[lean]['version'] != old[lean]['version']):
+        note = f' (zstd lean frames NOT compared: this machine has {new.get(lean, {}).get("version", "no zstd")})'
+        new[lean] = old[lean] = None
+    need(new == old, f'out/{committed} is not what {script} computes: ' + ', '.join(sorted(k for k in old if old[k] != new.get(k)))[:200])
+    text = f'out/{committed} recomputed and equal in all {len(old)} sections{note}'
+    return Part(text) if note else text
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('level', choices=('check', 'score', 'train', 'all'))
+    ap.add_argument('level', choices=('check', 'score', 'train', 'posthoc', 'all'))
     ap.add_argument('--jobs', type=int, default=min(8, os.cpu_count() or 1))
     ap.add_argument('--report')
     ap.add_argument('--strict', action='store_true', help='count a step that could only be checked in part as a failure')
@@ -389,6 +501,8 @@ def main():
             report.step('frozen files tracked by Git', frozen_tracked)
             report.step('sets match corpus', sets_match_corpus)
             report.step('split integrity', split_integrity)
+            report.step('near-duplicate filter was live', near_duplicate_receipt)
+            report.step('scorer files unchanged', scorer_files_pinned)
             report.step('scorer and decoder agree', results_consistent)
             report.step('frozen training was complete', frozen_training_complete)
             report.step('RESULTS.md regenerates', lambda: results_md(tmp))
@@ -399,6 +513,9 @@ def main():
                 report.step(f'rescore {name}', lambda name=name: rescore(name, tmp, args.jobs))
         if args.level in ('train', 'all'):
             report.step('retrain', lambda: retrain(tmp, args.jobs))
+        if args.level in ('posthoc', 'all'):
+            report.step('post hoc measurements', lambda: reexplore('explore_posthoc.py', 'posthoc-exploration.json', tmp, args.jobs))
+            report.step('post hoc ranking scores', lambda: reexplore('explore_support.py', 'support-exploration.json', tmp, args.jobs))
     total = round(time.perf_counter() - t0, 2)
     if not report.ok:
         verdict = 'FAILED'

@@ -15,11 +15,12 @@ account of what it ran: [`SCORER-LOG.md`](SCORER-LOG.md). The outcome of each ru
 | **C** the negative control behaves as one | **holds** | Length-weighted frequency is worse than token gain on tokens and on bytes at both caps |
 | **R** reuse predicts rent | **holds** | Of token-gain fragments used by four or more training problems, 891 of 1,405 pay rent; of those used by one, 48 of 1,946 |
 | **X** single-problem fragments cost bytes | **holds** | Dropping them changes the token-gain archive by -24.1% and its tokens by +2.7% |
-| **Z** BITS beats trained zstd | **fails** | Best BITS archive 95,774 B (archive bytes at 4,096) against 90,271 B (+6.1%); on the project 100,355 B (BPE at 256) against 60,631 B (+65.5%). It fails under the other two access contracts as well |
+| **Z** BITS beats trained zstd | **fails** | Best BITS arm 95,774 B (archive bytes at 4,096) against 90,271 B (+6.1%); on the project 100,355 B (BPE at 256) against 60,631 B (+65.5%). The rule is about the five arms; the smallest frozen dictionary of any kind is 92,465 B (archive bytes at 4,096 without single-problem fragments, +2.4%) and on the project 100,322 B (BPE at 256 without single-problem fragments). It fails under the other two access contracts as well |
 
 By the preregistered reading T fails and B holds. Two reviews after scoring showed what B does and does not mean:
-the byte-selected and token-gain dictionaries code the unseen files in the same number of bytes, and the whole
-difference between their archives is the stored dictionary. See "Where the archive bytes are" below and the
+on the new problems the byte-selected and token-gain dictionaries code the files in the same number of bytes, and the
+whole difference between their archives is the stored header. On the project the token-gain dictionary also codes the
+files in more bytes (105,620 against 96,929). See "Where the archive bytes are" below and the
 post-scoring measurements in `out/posthoc-exploration.json`. The token advantage carries to new problems at the
 256 cap and not to the project at either cap.
 
@@ -164,6 +165,7 @@ zstd dictionary, and one zstd stream with no dictionary is smaller than either.
 - The new problems come from the same collection as the training problems. The project is one repository in one language.
 - The archive-bytes rule tries prefixes of two greedy orders. The rent measurement removes one fragment at a time with
   code lengths fixed, so it ignores interactions.
-- The format is a flat list of strings and one static prefix code. zstd beats it on every set; nothing here claims a codec.
+- The format is a flat list of strings and one static prefix code. One zstd stream is smaller than every dictionary here on
+  all four sets, and zstd with the trained dictionary is smaller on both test sets; nothing here claims a codec.
 - The scorer was a second session of the same assistant under the same owner. Someone uninvolved still has to check the
   splits, the accounting, the decode and the wording before anything is posted.

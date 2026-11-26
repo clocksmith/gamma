@@ -16,6 +16,7 @@ For each frozen 4,096-cap dictionary it writes, to out/support-exploration.json:
 """
 import bisect
 import json
+import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -77,7 +78,8 @@ def main():
             row['auc'][s] = {name: auc(v, label) for name, v in signals.items()}
         out['dictionaries'][arm] = row
         print(arm, json.dumps(row['auc']))
-    (HERE / 'out' / 'support-exploration.json').write_text(json.dumps(out, indent=1) + '\n')
+    target = Path(sys.argv[sys.argv.index('--out') + 1]) if '--out' in sys.argv else HERE / 'out' / 'support-exploration.json'
+    target.write_text(json.dumps(out, indent=1) + '\n')
 
 
 if __name__ == '__main__':

@@ -12,6 +12,7 @@ To check or reproduce it, one command, no network:
 python3 replay.py check    # 7 s: integrity, split boundaries, receipts, six files end to end
 python3 replay.py score    # 42 s: rescore all four sets, compare with the committed results
 python3 replay.py train    # 62 s: retrain every dictionary, compare byte for byte
+python3 replay.py posthoc  # recompute the measurements made after scoring, compare
 ```
 
 `check` needs Python 3 and zstd; `train` also needs a C compiler. zstd rows are compared only when the local zstd
@@ -28,7 +29,8 @@ identical-problem list and the rank order instead.
 | `select_fresh_codenet.py`, `select_project.py` | Sample rules for the two test sets, run by the scorer |
 | `bits_oh.py`, `test_bits_oh.py` | Format library and its checks |
 | `audit_zero_escape_misses.py` | Separate: classifies the failures of the earlier zero-escape transfer test |
-| `explore_posthoc.py` | Post hoc and exploratory, after two reviews: the token-gain and BPE orders cut at equal sizes, unseen problems split by language and by author, how often chosen fragments occur in training, zstd with lean framing |
+| `explore_posthoc.py` | Post hoc and exploratory, after the reviews: the token-gain and BPE orders cut at equal sizes, unseen problems split by language and by author, how often chosen fragments occur in training, zstd with lean framing, overlap with the closest training file as Jaccard similarity and as a share of the file's own substrings, and which fragments are used under each parse |
+| `audit_near_duplicates.py`, `out/near-duplicate-audit.json` | A receipt written after scoring: the frozen selection dropped no problem as a Python near-duplicate, which only means something if it could have. 219 of the 400 earlier Python submissions are in one of IBM's 367,768 clusters, with 2,379 near-duplicates between them; none of the 200 unseen submissions is among those. Needs IBM's 40 MB cluster file; `check` reads the receipt |
 | `explore_support.py` | Post hoc and exploratory, written after scoring: how a fragment's support in training relates to whether it pays for its storage on the test sets |
 | `make_results.py`, `RESULTS.md`, `out/rule-outcomes.json` | The results, generated from `out/results-*.json`. The six preregistered rules are evaluated in one function; `RESULTS.md` and the paper read the outcomes file. A sentence that states an outcome is built from the data or stops the script when the data no longer supports it |
 | `test_replay.py` | Breaks receipts on purpose and requires every check to refuse; run by `replay.py check` |

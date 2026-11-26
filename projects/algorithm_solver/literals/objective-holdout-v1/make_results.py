@@ -180,9 +180,17 @@ def main():
         other_contracts = 'It fails under the other two access contracts as well'
     else:
         other_contracts = 'Under the other access contracts: ' + '; '.join(f'{c["contract"]}, {"holds" if c["holds"] else "fails"}' for c in others)
-    w(f'| **Z** BITS beats trained zstd | {hold(rules["Z"]["holds"])} | Best BITS archive {n(best("fresh")[0])} B ({best("fresh")[1]}) against {n(zf)} B '
+    def smallest(s):  # of every frozen dictionary, the variants without single-problem fragments included
+        size, name = min((h['bytes']['complete'], name) for name, h in res[s]['headers'].items() if not name.startswith('chars'))
+        arm, cap = name.split('.')[0].split('-K')
+        return size, f'{LABEL[arm]} at {n(int(cap))}' + (' without single-problem fragments' if name.endswith('.xp') else '')
+
+    need(smallest('fresh')[0] > zf and smallest('project')[0] > zp, 'a frozen dictionary now beats trained zstd; rewrite the Z row')
+    w(f'| **Z** BITS beats trained zstd | {hold(rules["Z"]["holds"])} | Best BITS arm {n(best("fresh")[0])} B ({best("fresh")[1]}) against {n(zf)} B '
       f'({pct(best("fresh")[0], zf)}); on the project {n(best("project")[0])} B ({best("project")[1]}) against {n(zp)} B '
-      f'({pct(best("project")[0], zp)}). {other_contracts} |')
+      f'({pct(best("project")[0], zp)}). The rule is about the five arms; the smallest frozen dictionary of any kind is {n(smallest("fresh")[0])} B '
+      f'({smallest("fresh")[1]}, {pct(smallest("fresh")[0], zf)}) and on the project {n(smallest("project")[0])} B ({smallest("project")[1]}). '
+      f'{other_contracts} |')
     w('')
 
     def coded(s, arm):
@@ -197,9 +205,11 @@ def main():
          'the reading "same coded bytes, the difference is the stored dictionary" no longer matches the data; rewrite that paragraph')
     need(t256['holds'] and all(H('project', 'token', c)['min_tokens'] > H('project', 'bpe', c)['min_tokens'] for c in CAPS),
          'the sentence about the 256 cap and the project no longer matches the data; rewrite it')
+    need(coded('project', 'token') > coded('project', 'bytes'), 'the sentence about coded files on the project no longer matches the data; rewrite it')
     w(f'By the preregistered reading T {word(rules["T"]["holds"])} and B {word(rules["B"]["holds"])}. Two reviews after scoring showed what B does and does not mean:')
-    w('the byte-selected and token-gain dictionaries code the unseen files in the same number of bytes, and the whole')
-    w('difference between their archives is the stored dictionary. See "Where the archive bytes are" below and the')
+    w('on the new problems the byte-selected and token-gain dictionaries code the files in the same number of bytes, and the')
+    w('whole difference between their archives is the stored header. On the project the token-gain dictionary also codes the')
+    w(f'files in more bytes ({n(coded("project", "token"))} against {n(coded("project", "bytes"))}). See "Where the archive bytes are" below and the')
     w('post-scoring measurements in `out/posthoc-exploration.json`. The token advantage carries to new problems at the')
     w('256 cap and not to the project at either cap.')
     w('')
@@ -336,14 +346,17 @@ def main():
     w('')
     w('## What this does not show')
     w('')
-    need(all(min(r['complete'] for r in res[s]['zstd']['rows'].values()) < min(h['bytes']['complete'] for h in res[s]['headers'].values()) for s in SETS),
-         '"zstd beats it on every set" no longer matches the data; rewrite that line')
+    smallest_bits = {s: min(h['bytes']['complete'] for h in res[s]['headers'].values()) for s in SETS}
+    need(all(res[s]['zstd']['rows'][ZS]['complete'] < smallest_bits[s] for s in SETS)
+         and all(res[s]['zstd']['rows'][ZD]['complete'] < smallest_bits[s] for s in ('fresh', 'project')),
+         'the line about zstd under "What this does not show" no longer matches the data; rewrite it')
     w('- It is one training set, one entry length, two caps and five rules, scored once. Every dictionary is the outcome of a')
     w('  heuristic search; a token count is the exact minimum for that dictionary, not for the cap.')
     w('- The new problems come from the same collection as the training problems. The project is one repository in one language.')
     w('- The archive-bytes rule tries prefixes of two greedy orders. The rent measurement removes one fragment at a time with')
     w('  code lengths fixed, so it ignores interactions.')
-    w('- The format is a flat list of strings and one static prefix code. zstd beats it on every set; nothing here claims a codec.')
+    w('- The format is a flat list of strings and one static prefix code. One zstd stream is smaller than every dictionary here on')
+    w('  all four sets, and zstd with the trained dictionary is smaller on both test sets; nothing here claims a codec.')
     w('- The scorer was a second session of the same assistant under the same owner. Someone uninvolved still has to check the')
     w('  splits, the accounting, the decode and the wording before anything is posted.')
 

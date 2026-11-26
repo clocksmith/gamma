@@ -4,7 +4,7 @@
 Nothing here was preregistered and no rule was chosen with it. It reads the frozen headers,
 the committed result files and the corpus, and writes out/posthoc-exploration.json.
 
-    python3 explore_posthoc.py [--jobs N]        # needs zstd for part 4
+    python3 explore_posthoc.py [--jobs N] [--out FILE]        # needs zstd for part 4
 
 1. Equal size. The token-gain order and the BPE order, both cut at the same number of
    fragments, on every set. The orders are read from the frozen 4,096-cap headers, whose
@@ -15,6 +15,13 @@ the committed result files and the corpus, and writes out/posthoc-exploration.js
 3. How often the token-selected fragments occur in the training text.
 4. zstd with lean framing: no checksum and no dictionary id in each frame.
 5. What the project sample is made of.
+6. Overlap of each unseen file with its closest training file, two ways. The frozen selection
+   stored the Jaccard similarity of their 8-byte substring sets (shared over union). The share of
+   the unseen file's own substrings that the training file contains (shared over its own) is a
+   different and larger number, and is what "shares x of its substrings" means.
+7. Which fragments the unseen problems use, by parse. The scorer counts a fragment as used when
+   the archive's minimum-bit parse uses it. The minimum-token parse and plain occurrence in the
+   text give slightly different counts.
 """
 import argparse
 import csv
@@ -66,6 +73,7 @@ def _tokens(job):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--jobs', type=int, default=8)
+    ap.add_argument('--out', help='write the JSON here instead of out/posthoc-exploration.json')
     args = ap.parse_args()
     specs, docs = {}, {}
     for name in SETS:
@@ -198,8 +206,66 @@ def main():
     kinds = Counter((f['source_path'].split('/')[0] if '/' in f['source_path'] else f['source_path']) for f in specs['project']['files'])
     out['project_sample_by_top_level'] = dict(sorted(kinds.items(), key=lambda kv: -kv[1]))
 
-    (HERE / 'out' / 'posthoc-exploration.json').write_text(json.dumps(out, indent=1) + '\n')
-    print(json.dumps({k: out[k] for k in ('unseen_subsets', 'most_prolific_training_author', 'token_selected_fragments', 'project_sample_by_top_level')}, indent=1))
+    # 6. overlap with the closest training file of the same language
+    def shingles(raw):
+        return {raw[i:i + 8] for i in range(len(raw) - 7)}
+
+    stored = specs['fresh']['selection']['closest_training_file_shingle_jaccard']
+    overlap = {}
+    for lang in ('python', 'javascript'):
+        train_sets = [shingles(d) for f, d in zip(specs['train']['files'], docs['train']) if f['lang'] == lang]
+        jaccard, contained = [], []
+        for f, d in zip(files, docs['fresh']):
+            if f['lang'] != lang:
+                continue
+            own = shingles(d)
+            shared = [len(own & t) for t in train_sets]
+            jaccard.append(max(sh / len(own | t) for sh, t in zip(shared, train_sets)))
+            contained.append(max(shared) / len(own))
+        jaccard.sort()
+        contained.sort()
+        middle = len(jaccard) // 2  # the frozen selection's median: element n // 2 of the sorted values
+        assert round(jaccard[middle], 4) == stored[lang]['median'] and round(jaccard[-1], 4) == stored[lang]['max'], \
+            f'{lang}: Jaccard recomputed here differs from the value the frozen selection stored'
+        overlap[lang] = {'files': len(jaccard),
+                         'jaccard': {'median': round(jaccard[middle], 4), 'max': round(jaccard[-1], 4)},
+                         'share_of_own_substrings_in_one_training_file': {
+                             'median': round(contained[middle], 4), 'max': round(contained[-1], 4),
+                             'files_at_or_above_half': sum(1 for x in contained if x >= 0.5),
+                             'files_at_or_above_four_fifths': sum(1 for x in contained if x >= 0.8)}}
+    out['closest_training_file_overlap'] = overlap
+
+    # 7. fragments the unseen problems use, by parse
+    fresh_entries = json.loads((HERE / 'out' / 'entries-fresh.json').read_text())
+    by_parse = {}
+    for name in ('token-K4096', 'bpe-K4096'):
+        all_entries, _, _ = B.parse_header((HERE / 'frozen' / f'{name}.boh').read_bytes())
+        d = B.Dictionary(all_entries)
+        multi = {i for i, e in enumerate(all_entries) if len(e) > 1}
+        in_token_parse = set()
+        for raw in docs['fresh']:
+            in_token_parse.update(sym for sym in B.parse_tokens(d.edges(raw)) if sym in multi)
+        frag_list = [bytes.fromhex(h) for h in fresh_entries[name]['entry_hex']]
+        occurring = [any(b in raw for raw in docs['fresh']) for b in frag_list]
+        bit_used = [u > 0 for u in fresh_entries[name]['uses']]
+        token_used = [all_entries.index(b) in in_token_parse for b in frag_list]
+        row = {'fragments': len(frag_list), 'used_in_minimum_bit_parse': sum(bit_used), 'used_in_minimum_token_parse': sum(token_used),
+               'occur_in_the_text': sum(occurring)}
+        if name == 'token-K4096':
+            single = [i for i, u in enumerate(ent['train_units']) if u == 1]
+            row['used_by_one_training_problem'] = {
+                'fragments': len(single),
+                'never_in_minimum_bit_parse': sum(1 for i in single if not bit_used[i]),
+                'never_in_minimum_token_parse': sum(1 for i in single if not token_used[i]),
+                'never_occur_in_the_text': sum(1 for i in single if not occurring[i])}
+        by_parse[name] = row
+    assert by_parse['token-K4096']['used_in_minimum_bit_parse'] == res['fresh']['headers']['token-K4096']['reuse']['multi_byte_entries_used']
+    out['fragments_used_on_unseen_by_parse'] = by_parse
+
+    target = Path(args.out) if args.out else HERE / 'out' / 'posthoc-exploration.json'
+    target.write_text(json.dumps(out, indent=1) + '\n')
+    print(json.dumps({k: out[k] for k in ('unseen_subsets', 'most_prolific_training_author', 'token_selected_fragments', 'project_sample_by_top_level',
+                                          'closest_training_file_overlap', 'fragments_used_on_unseen_by_parse')}, indent=1))
     g = out['equal_size']
     for i, m in enumerate(GRID):
         print(m, ' '.join(f'{s}:{100.0 * (g["tokens"]["token"][s][i] - g["tokens"]["bpe"][s][i]) / g["tokens"]["bpe"][s][i]:+.1f}%' for s in SETS))
