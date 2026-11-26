@@ -18,6 +18,12 @@ Verifies from scratch (Python 3 standard library only, sharing zero code with en
      tables (`../fixed-source-v3/results/encoded.json.gz` et al.), including the
      corrected K=4096 minimum (Design B = 81,079 B; A = 83,440 B; C = 81,841 B;
      token-best A = 100,965 B) and 120/120 Design B dominance.
+
+Fails closed: missing required evidence, a failed check, or disabled assertions
+(`python3 -O`) exit nonzero, and `ALL VERIFICATION CHECKS PASSED` prints only after
+every check above has run. Huffman coding, segmentation and the KL/JS decomposition
+come from `byte_encode.py`, the same module `run_replication.py` uses to produce the
+results, so the totals check is independent of `engine.c` but not of `byte_encode.py`.
 """
 import gzip
 import hashlib
@@ -31,6 +37,16 @@ HERE = Path(__file__).resolve().parent
 V3_RESULTS = HERE.parent / 'fixed-source-v3' / 'results'
 sys.path.insert(0, str(HERE))
 import byte_encode as BE
+
+REQUIRED_EVIDENCE = (
+    HERE / 'manifest.json',
+    HERE / 'results' / 'codenet_results.json',
+    V3_RESULTS / 'encoded.json.gz',
+)
+
+
+class VerificationFailure(Exception):
+    pass
 
 
 def sha256_bytes(data):
@@ -239,8 +255,7 @@ def verify_codenet_results(manifest):
 def verify_v3_background_tables():
     enc_path = V3_RESULTS / 'encoded.json.gz'
     if not enc_path.exists():
-        print(f'[WARN] {enc_path} not found; skipping v3 background check.')
-        return
+        raise VerificationFailure(f'required fixed-source-v3 evidence missing: {enc_path}')
     with gzip.open(enc_path, 'rt', encoding='utf-8') as f:
         data = json.load(f)
     cells = data['cells']
@@ -269,11 +284,30 @@ def verify_v3_background_tables():
 
 
 def main():
-    manifest = verify_manifest_and_corpus()
-    verify_codenet_results(manifest)
-    verify_v3_background_tables()
+    if not __debug__:
+        print('VERIFICATION FAILED: assertions are disabled (python -O); rerun without -O.', file=sys.stderr)
+        return 2
+    missing = [str(path) for path in REQUIRED_EVIDENCE if not path.is_file()]
+    if missing:
+        print('VERIFICATION FAILED: required evidence missing:\n  ' + '\n  '.join(missing), file=sys.stderr)
+        return 1
+    checks = []
+    try:
+        manifest = verify_manifest_and_corpus()
+        checks.append('manifest')
+        verify_codenet_results(manifest)
+        checks.append('codenet')
+        verify_v3_background_tables()
+        checks.append('v3-background')
+    except (AssertionError, VerificationFailure, OSError, KeyError, StopIteration, ValueError) as error:
+        print(f'VERIFICATION FAILED after {checks or "no"} checks: {type(error).__name__}: {error}', file=sys.stderr)
+        return 1
+    if checks != ['manifest', 'codenet', 'v3-background']:
+        print(f'VERIFICATION FAILED: only {checks} ran.', file=sys.stderr)
+        return 1
     print('ALL VERIFICATION CHECKS PASSED.')
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
