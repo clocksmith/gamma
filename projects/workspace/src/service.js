@@ -17,7 +17,7 @@ import {
 import { issueCredential } from './authority.js';
 import { evaluateConditions, validateConditions } from './conditions.js';
 import { REJECTION_CODES, isWorkspaceError, workspaceError } from './errors.js';
-import { Journal } from './journal.js';
+import { Journal, canonicalJson } from './journal.js';
 import { requireChromiumSurfaceV1 } from './surface-contract.js';
 import { UploadStore, checkUploadTarget } from './uploads.js';
 import {
@@ -46,6 +46,27 @@ const KIND_COMPLETION_BASIS = Object.freeze({
 
 // The live-page condition that shows a fill or select took effect.
 const VALUE_CONDITIONS = Object.freeze({ fill: 'input-value-equals', select: 'choice-equals' });
+
+// Kinds that can change a record. navigate and download only read, so the commit gate passes them.
+const WRITE_KINDS = new Set(['fill', 'select', 'click', 'submit', 'upload']);
+// The live lock an approval binds; every field must still equal the approved one at dispatch.
+const LOCK_FIELDS = Object.freeze(['account', 'recordId', 'predicate', 'recordVersion', 'termsSha256']);
+const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
+const plainObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+
+/** A host-held approval: the lock it binds, the exact page values, the commit control and the stored values. */
+function validApproval(approval, approvalId) {
+  return plainObject(approval) && approval.approvalId === approvalId && plainObject(approval.lock)
+    && LOCK_FIELDS.every(key => typeof approval.lock[key] === 'string' || Number.isSafeInteger(approval.lock[key]))
+    && plainObject(approval.fields) && Object.values(approval.fields).every(value => typeof value === 'string')
+    && (approval.clicks === undefined || (Array.isArray(approval.clicks) && approval.clicks.every(value => typeof value === 'string')))
+    && typeof approval.commit === 'string' && plainObject(approval.readBack) && Object.keys(approval.readBack).length > 0;
+}
+
+/** Guard output that recommends stopping. Nothing a guard returns can authorize a write. */
+function adviceAbstains(advice) {
+  return advice === false || advice?.status === 'abstain' || advice?.decision === 'abstain' || advice?.tool === 'ask_human';
+}
 
 const RESTART_RULES = Object.freeze([
   {
@@ -171,12 +192,14 @@ class WorkspaceService {
   #requireConditionalWrite;
   #requireMultiPredicateWrite;
   #verifyExternalIdempotency;
+  #commitAuthority;
+  #adviseWrite;
   #runtime = new Map();
   #ready = false;
 
   constructor({ journal, state, config, adapter, hooks, clock, uploads,
     assertPrerequisite = null, requirePrerequisiteCheck = false, requireConditionalWrite = false,
-    requireMultiPredicateWrite = false, verifyExternalIdempotency = null }) {
+    requireMultiPredicateWrite = false, verifyExternalIdempotency = null, commitAuthority = null, adviseWrite = null }) {
     this.#journal = journal;
     this.#state = state;
     this.#config = config;
@@ -189,6 +212,8 @@ class WorkspaceService {
     this.#requireConditionalWrite = Boolean(requireConditionalWrite);
     this.#requireMultiPredicateWrite = Boolean(requireMultiPredicateWrite);
     this.#verifyExternalIdempotency = typeof verifyExternalIdempotency === 'function' ? verifyExternalIdempotency : null;
+    this.#commitAuthority = commitAuthority;
+    this.#adviseWrite = typeof adviseWrite === 'function' ? adviseWrite : null;
   }
 
   /**
@@ -196,11 +221,18 @@ class WorkspaceService {
    * @param {{stateDir: string, config: object, createAdapter: Function, hooks?: object,
    *   clock?: () => number, assertPrerequisite?: Function|null, requirePrerequisiteCheck?: boolean,
    *   requireConditionalWrite?: boolean, requireMultiPredicateWrite?: boolean,
-   *   verifyExternalIdempotency?: Function|null}} options
+   *   verifyExternalIdempotency?: Function|null, commitAuthority?: object|null,
+   *   adviseWrite?: Function|null}} options
+   *   `commitAuthority` is the trusted host's approval store and system-of-record reader
+   *   ({ approvalFor, readLock, readRecord }); see #commitVerifiedWrite. `adviseWrite` is guard
+   *   output, which can add read-back checks or abstain and never authorizes.
    */
   static async open({ stateDir, config, createAdapter, hooks = NO_HOOKS, clock = Date.now,
     assertPrerequisite = null, requirePrerequisiteCheck = false, requireConditionalWrite = false,
-    requireMultiPredicateWrite = false, verifyExternalIdempotency = null }) {
+    requireMultiPredicateWrite = false, verifyExternalIdempotency = null, commitAuthority = null, adviseWrite = null }) {
+    if (commitAuthority !== null && ['approvalFor', 'readLock', 'readRecord'].some(name => typeof commitAuthority[name] !== 'function')) {
+      throw Error('A commit authority needs approvalFor, readLock and readRecord');
+    }
     if (typeof requirePrerequisiteCheck !== 'boolean') {
       throw Error('Explicit boolean prerequisite-check policy required');
     }
@@ -231,7 +263,7 @@ class WorkspaceService {
       const service = new WorkspaceService({
         journal, state, config, adapter, hooks, clock, uploads,
         assertPrerequisite, requirePrerequisiteCheck, requireConditionalWrite,
-        requireMultiPredicateWrite, verifyExternalIdempotency,
+        requireMultiPredicateWrite, verifyExternalIdempotency, commitAuthority, adviseWrite,
       });
       service.#restore();
       return service;
@@ -723,11 +755,12 @@ class WorkspaceService {
     const begun = await runtime.mutex.run(async () => {
       const action = workspace.actions.get(actionId);
       if (action.status !== ACTION_STATUS.QUEUED) return { settled: this.#describe(workspace, actionId) };
-      let checks;
+      let checks, commit;
       const checkT0 = performance.now();
       try {
         await this.#page(workspaceId);
         checks = await this.#checkLiveDispatch(workspace, action);
+        commit = await this.#commitVerifiedWrite(workspaceId, action.request);
       } catch (error) {
         this.#append(RECORD_TYPES.ACTION_NOT_DISPATCHED, {
           workspaceId,
@@ -750,7 +783,7 @@ class WorkspaceService {
       });
       journalMs += performance.now() - startJ0;
       this.#hooks.afterDispatchStarted?.(action.request);
-      return { action, checks };
+      return { action, checks, commit };
     });
     if (begun.settled) return begun.settled;
     const effectiveRequest = (begun.checks?.writeVersion !== undefined || begun.checks?.predicateVersions?.length)
@@ -760,7 +793,7 @@ class WorkspaceService {
           ...(begun.checks?.predicateVersions?.length ? { predicateVersions: begun.checks.predicateVersions } : {}),
         }
       : begun.action.request;
-    const outcome = await this.#performEffect(workspaceId, effectiveRequest);
+    const outcome = await begun.commit(effectiveRequest);
     const hasMultiPredicateFence = Boolean(begun.checks?.predicateVersions?.length && this.#adapter.supportsMultiPredicateWrites === true);
     const hasSingleVersionFence = Boolean(begun.checks?.writeVersion !== undefined && this.#adapter.supportsConditionalWrites === true);
     if (begun.action.request.kind !== 'navigate' && !hasSingleVersionFence && !hasMultiPredicateFence) {
@@ -847,6 +880,91 @@ class WorkspaceService {
       this.#hooks.afterOutcome?.(begun.action.request);
       return this.#describe(workspace, actionId);
     });
+  }
+
+  /**
+   * The one gate every dispatched action passes, called by #dispatchOne after #checkLiveDispatch.
+   * It returns the effect runner; a refusal throws first, so the action is never dispatched.
+   * Without a commit authority it runs the effect unchanged. With one, each write kind needs the
+   * host-held approval the request names (`approvalId`), and:
+   *  - before the effect, the live lock read from the system of record (account, record id,
+   *    predicate, record version, terms digest) equals the approval's; a fill or select carries
+   *    exactly an approved value; any other control is the approval's commit or one of its clicks;
+   *  - before the commit, every approved page field holds exactly its value, so a value joined to
+   *    one already in the field (8 and 56 typed as 856) is never sent;
+   *  - after the commit, the record is polled until its version moves, read once more after a
+   *    pause, and every approved field must read back exactly. A page or HTTP success alone stays
+   *    unknown.
+   * Guard advice (`adviseWrite`) is read only after an approval matched. It can abstain, or name
+   * record fields that must read back unchanged; it cannot skip a check or authorize a write.
+   */
+  async #commitVerifiedWrite(workspaceId, request) {
+    const run = effective => this.#performEffect(workspaceId, effective);
+    if (!this.#commitAuthority || !WRITE_KINDS.has(request.kind)) return run;
+    const refuse = (reason, details = {}) => {
+      throw workspaceError(REJECTION_CODES.WRITE_NOT_APPROVED, reason, { reason, ...details });
+    };
+    const context = { workspaceId, pageId: request.pageId ?? MAIN_PAGE, actionId: request.actionId,
+      kind: request.kind, selector: request.target?.selector ?? null };
+    const approvalId = typeof request.approvalId === 'string' ? request.approvalId : null;
+    const approval = approvalId ? await this.#commitAuthority.approvalFor({ ...context, approvalId }) : null;
+    if (!validApproval(approval, approvalId)) refuse('no-approval');
+    const isCommit = context.selector === approval.commit;
+    if (VALUE_CONDITIONS[request.kind] === 'input-value-equals') {
+      if (!Object.hasOwn(approval.fields, context.selector) || approval.fields[context.selector] !== request.params.value) {
+        refuse('payload-not-approved', { selector: context.selector });
+      }
+    } else if (!isCommit && !(approval.clicks ?? []).includes(context.selector)) {
+      refuse('action-not-approved', { selector: context.selector });
+    }
+    let advice = null;
+    if (this.#adviseWrite) {
+      try { advice = await this.#adviseWrite({ ...context, approvalId }); } catch { advice = { status: 'abstain' }; }
+    }
+    if (adviceAbstains(advice)) refuse('guard-abstained');
+    const unchangedFields = Array.isArray(advice?.recommendedChecks)
+      ? advice.recommendedChecks.filter(name => typeof name === 'string') : [];
+    let lock;
+    try { lock = await this.#commitAuthority.readLock({ ...context, approval: structuredClone(approval) }); } catch { lock = null; }
+    const changed = LOCK_FIELDS.filter(key => lock?.[key] !== approval.lock[key]);
+    if (changed.length) refuse('approval-lock-changed', { changed });
+    if (!isCommit) return run;
+    const fields = Object.entries(approval.fields).map(([selector, value]) => ({ kind: 'input-value-equals', selector, value }));
+    const held = await evaluateConditions(fields, this.#probe(workspaceId, request.pageId, request));
+    if (!held.allEstablished) refuse('field-read-back-mismatch', { results: held.results });
+    const readRecord = async () => {
+      try { return await this.#commitAuthority.readRecord({ ...context, approval: structuredClone(approval) }); } catch { return null; }
+    };
+    const before = unchangedFields.length ? await readRecord() : null;
+    if (unchangedFields.length && !before) refuse('record-unavailable');
+    return async effective => {
+      const outcome = await run(effective);
+      const { completionTimeoutMs, completionPollMs } = this.#config.dispatch;
+      let record = await readRecord();
+      for (let waitedMs = 0; record?.recordVersion === approval.lock.recordVersion && waitedMs < completionTimeoutMs;
+        waitedMs += completionPollMs) {
+        await pause(completionPollMs);
+        record = await readRecord();
+      }
+      // A write that lands after the version first moved must not be missed: read once more.
+      await pause(completionPollMs);
+      record = await readRecord();
+      const same = (a, b) => canonicalJson(a ?? null) === canonicalJson(b ?? null);
+      const committed = record !== null && record.recordVersion !== approval.lock.recordVersion;
+      const mismatched = [
+        ...['account', 'recordId'].filter(key => record?.[key] !== approval.lock[key]),
+        ...Object.keys(approval.readBack).filter(key => !same(record?.fields?.[key], approval.readBack[key])),
+        ...unchangedFields.filter(key => !same(record?.fields?.[key], before.fields?.[key])),
+      ];
+      const evidence = { ...outcome.evidence, commit: { committed, recordVersion: record?.recordVersion ?? null,
+        mismatched, pageOutcome: outcome.outcome, pageBasis: outcome.basis } };
+      if (committed && mismatched.length === 0 && outcome.outcome === OUTCOMES.COMPLETED) {
+        return { ...outcome, basis: 'commit-verified', evidence };
+      }
+      if (!committed && outcome.outcome === OUTCOMES.FAILED) return { ...outcome, evidence };
+      return { outcome: OUTCOMES.UNKNOWN,
+        basis: !committed ? 'commit-unverified' : mismatched.length ? 'committed-value-mismatch' : 'commit-page-unverified', evidence };
+    };
   }
 
   async #performEffect(workspaceId, request) {

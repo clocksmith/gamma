@@ -21,6 +21,7 @@ const REJECTION_CODES = Object.freeze({
   TARGET_CHANGED: 'target-changed',
   UNSUPPORTED_CONDITION: 'unsupported-condition',
   PRECONDITION_UNESTABLISHED: 'precondition-unestablished',
+  WRITE_NOT_APPROVED: 'write-not-approved',
   EFFECT_UNRESOLVED: 'effect-unresolved',
   EFFECT_ALREADY_COMPLETED: 'effect-already-completed',
   RESUBMISSION_NOT_PERMITTED: 'resubmission-not-permitted',
