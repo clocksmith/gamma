@@ -6,6 +6,7 @@
 
 import { expectedBodyFields } from './client/branch-verifier.js';
 import { canonicalJson, sha256Hex } from './journal.js';
+import { validRequestRule } from './request-guard.js';
 
 // Kinds that can change a record. navigate and download only read.
 const WRITE_KINDS = new Set(['fill', 'select', 'click', 'submit', 'upload']);
@@ -48,22 +49,27 @@ function payloadDigest(payload) {
  * is the control that sends the write; `readBack` is the exact stored state afterwards.
  * `versionToken` ({ selector, value }), when given, names the page element holding the form's
  * optimistic-concurrency value (the version the save sends); `value` is the approved record version.
+ * `request` ({ method, url, fields, versionPath, allowPaths? }), when given, is the one write request
+ * the commit may send; the adapter holds the page's requests and admits only a match, with the
+ * approved record version at `versionPath` in the body.
  */
-function approveCommit({ approvalId, target, lock, fields, clicks = [], commit, commitMethod = 'submit', readBack, versionToken }) {
+function approveCommit({ approvalId, target, lock, fields, clicks = [], commit, commitMethod = 'submit', readBack, versionToken, request }) {
   const actions = [
     ...Object.entries(fields ?? {}).map(([field, value]) => ({ method: 'fill', field, payloadSha256: payloadDigest({ value }) })),
     ...clicks.map(field => ({ method: 'click', field, payloadSha256: payloadDigest(null) })),
     { method: commitMethod, field: commit, payloadSha256: payloadDigest(null) },
   ];
   const approval = structuredClone({ approvalId, target: { ...target, url: href(target?.url) }, lock, fields, actions, commit, readBack,
-    ...(versionToken !== undefined ? { versionToken } : {}) });
+    ...(versionToken !== undefined ? { versionToken } : {}), ...(request !== undefined ? { request } : {}) });
   if (!validApproval(approval)) throw Error('An approval needs a target, a live lock, exact field values, a commit control and a read-back');
   return Object.freeze(approval);
 }
 
 function validApproval(approval) {
   if (!plainObject(approval) || typeof approval.approvalId !== 'string' || !approval.approvalId) return false;
-  const { target, lock, fields, actions, commit, readBack, versionToken } = approval;
+  const { target, lock, fields, actions, commit, readBack, versionToken, request } = approval;
+  // An optional request rule: the one write the commit may send (see request-guard.js).
+  if (request !== undefined && !validRequestRule(request)) return false;
   if (!plainObject(target) || href(target.url) !== target.url || typeof target.entity !== 'string' || !target.entity
     || !scalarId(target.rowId)) return false;
   if (!plainObject(lock) || !LOCK_FIELDS.every(key => scalarId(lock[key])) || lock.recordId !== target.rowId) return false;

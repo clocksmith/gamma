@@ -884,7 +884,10 @@ class WorkspaceService {
    * At dispatch of the commit, an approval's `versionToken` ({ selector, value }: the form's own
    * optimistic-concurrency field, whose value the save sends) must be on the page with exactly the
    * approved version, so the server itself rejects a record that changed after this check. Every
-   * approved page field must also hold exactly its value, so a
+   * approved page field must also hold exactly its value. An approval's `request` rule is handed to
+   * the adapter, which holds the page's requests during the commit and lets through only one write
+   * matching it (method, URL, approved body values, approved version at the named body path); a
+   * blocked write is reported refused with its reason. Every approved page field holds exactly its value, so a
    * value joined to one already in the field (8 and 56 typed as 856) is never sent. After the
    * commit, the record is polled until its version moves, read once more after a pause, and every
    * approved field must read back exactly. A page or HTTP success alone stays unknown.
@@ -924,6 +927,7 @@ class WorkspaceService {
         refuse('version-token-mismatch', { observed: token.count === 1 ? token.value ?? null : null, count: token.count });
       }
     }
+    if (approval.request && this.#adapter.supportsRequestGuard !== true) refuse('request-guard-unavailable');
     const fields = Object.entries(approval.fields).map(([selector, value]) => ({ kind: 'input-value-equals', selector, value }));
     const held = await evaluateConditions(fields, probe);
     if (!held.allEstablished) refuse('field-read-back-mismatch', { results: held.results });
@@ -932,9 +936,11 @@ class WorkspaceService {
     };
     const before = unchangedFields.length ? await readRecord() : null;
     if (unchangedFields.length && !before) refuse('record-unavailable');
+    const { completionTimeoutMs, completionPollMs, valueSettleMs } = this.#config.dispatch;
+    const requestGuard = approval.request ? { rule: structuredClone(approval.request), version: approval.lock.recordVersion,
+      windowMs: completionTimeoutMs, settleMs: valueSettleMs } : null;
     return async effective => {
-      const outcome = await run(effective);
-      const { completionTimeoutMs, completionPollMs } = this.#config.dispatch;
+      const outcome = await run(requestGuard ? { ...effective, requestGuard } : effective);
       let record = await readRecord();
       for (let waitedMs = 0; record?.recordVersion === approval.lock.recordVersion && waitedMs < completionTimeoutMs;
         waitedMs += completionPollMs) {
@@ -953,8 +959,20 @@ class WorkspaceService {
       ];
       // Committed means the approved values are stored under a new version, not merely that the version moved.
       const committed = versionMoved && mismatched.length === 0;
+      const guard = requestGuard ? outcome.evidence?.effect?.requestGuard ?? null : null;
       const evidence = { ...outcome.evidence, commit: { committed, versionMoved, recordVersion: record?.recordVersion ?? null,
-        mismatched, pageOutcome: outcome.outcome, pageBasis: outcome.basis } };
+        mismatched, pageOutcome: outcome.outcome, pageBasis: outcome.basis,
+        ...(guard ? { requestGuard: { admitted: guard.admitted, blocked: guard.blocked } } : {}) } };
+      if (guard?.blocked.length) {
+        // A write the approval does not name was failed in the browser. Nothing continued: refused.
+        // If one write had already continued, the outcome needs review.
+        const reason = guard.blocked[0].reason;
+        if (guard.admitted === 0 && !committed) return { outcome: OUTCOMES.FAILED, basis: reason, evidence };
+        return { outcome: OUTCOMES.UNKNOWN, basis: reason, evidence };
+      }
+      if (requestGuard && !guard && outcome.outcome === OUTCOMES.COMPLETED) {
+        return { outcome: OUTCOMES.UNKNOWN, basis: 'request-guard-unreported', evidence };
+      }
       if (committed && outcome.outcome === OUTCOMES.COMPLETED) return { ...outcome, basis: 'commit-verified', evidence };
       // The page showed the request's declared failure (a server refusal such as a stale-version
       // conflict) and the approved values are not stored: refused, not committed.

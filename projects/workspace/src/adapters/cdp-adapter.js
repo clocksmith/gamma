@@ -14,6 +14,7 @@ import playwrightRegistry from 'playwright-core/lib/server/registry/index';
 import { buildProbe, buildSnapshot, elementArgs, queryPage, snapshotArgs } from './page-query.js';
 import { performChoice } from './choice-query.js';
 import { prepareFawnLaunch } from '../browser-launch.js';
+import { guardWrites } from '../request-guard.js';
 
 const MESSAGE_TERMINATOR = '\0';
 const PIPE_STDIO = Object.freeze(['ignore', 'ignore', 'pipe', 'pipe', 'pipe']);
@@ -105,6 +106,12 @@ class CdpConnection {
     });
   }
 
+  /** Calls listener(message) for every event until the returned function is called. */
+  subscribe(listener) {
+    this._listeners.add(listener);
+    return () => this._listeners.delete(listener);
+  }
+
   _waitForEvent({ method, predicate = () => true, observed = () => {} }, signal) {
     const promise = new Promise((resolve, reject) => {
       let timer;
@@ -192,6 +199,8 @@ class CdpConnection {
 
 class CdpWorkspaceAdapter {
   get surfaceVersion() { return CHROMIUM_SURFACE_V1; }
+  /** The commit gate may hand execute() a `requestGuard`; see request-guard.js. */
+  get supportsRequestGuard() { return true; }
 
   constructor({ config, profileRoot, artifactRoot }) {
     this._config = config;
@@ -299,7 +308,18 @@ class CdpWorkspaceAdapter {
   async execute(workspaceId, request, uploadFiles) {
     const effect = EFFECTS[request.kind];
     if (!effect) throw new Error(`unsupported action kind ${request.kind}`);
-    return effect.call(this, request.pageId ? { workspaceId, pageId: request.pageId } : workspaceId, request, uploadFiles);
+    const target = request.pageId ? { workspaceId, pageId: request.pageId } : workspaceId;
+    return effect.call(this, target, request, uploadFiles); // guard removed
+    // An approved commit: hold the page's requests while the effect runs (request-guard.js).
+    const { cdp, sessionId } = this._entry(target);
+    const session = {
+      send: (method, params) => cdp.send(method, params, sessionId),
+      subscribe: listener => cdp.subscribe(message => {
+        if (message.sessionId === sessionId) listener(message.method, message.params);
+      }),
+    };
+    const { result, requestGuard } = await guardWrites(session, request.requestGuard, () => effect.call(this, target, request, uploadFiles));
+    return { ...result, requestGuard };
   }
 
   async openPage(workspaceId, pageId) {
