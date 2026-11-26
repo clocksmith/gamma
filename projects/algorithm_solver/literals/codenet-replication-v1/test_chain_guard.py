@@ -48,6 +48,9 @@ def main():
         _, entries, _ = R.read_chain(chain)
         if len(entries) < 100:
             failed.append(f'a normal run returned only {len(entries)} entries')
+
+        def rebuilt():  # the end line carries run time and memory, so compare what the chain says, not its bytes
+            return R.chain_complete(chain) and R.read_chain(chain)[1] == entries
         if R.run_single_engine_job(job)[1] != 0.0:
             failed.append('a finished chain was not reused')
 
@@ -56,7 +59,7 @@ def main():
         if R.chain_complete(chain):
             failed.append('a chain cut in half counts as finished')
         expect_error(ValueError, lambda: R.read_chain(chain), 'reading a chain cut in half', failed)
-        if R.run_single_engine_job(job)[1] == 0.0 or chain.read_bytes() != good:
+        if R.run_single_engine_job(job)[1] == 0.0 or not rebuilt():
             failed.append('a chain cut in half was reused instead of rebuilt')
 
         # 2. Cut just before the end line.

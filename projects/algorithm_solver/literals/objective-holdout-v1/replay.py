@@ -458,10 +458,14 @@ def retrain(tmp, jobs):
     # The summary carries what the dictionaries do not: which problems used each fragment, and the
     # training curve the byte-selected rule stopped on. Compare all of it except the clock.
     a, b = strip_timing(old_summary), strip_timing(new_summary)
+    for summary in (a, b):  # set only when the trainer is given earlier chains to compare with, as the frozen run was
+        summary['engine'].pop('matches_earlier_chain', None)
     if skipped:
         a['zstd'] = b['zstd'] = None
-    need(a == b, 'train-summary.json differs from the frozen one outside its timings: '
-         + ', '.join(sorted(k for k in a if a[k] != b.get(k)))[:200])
+    differing = sorted(k for k in a if a[k] != b.get(k))
+    if differing == ['engine']:
+        differing = ['engine.' + k for k in a['engine'] if a['engine'][k] != b['engine'].get(k)]
+    need(a == b, 'train-summary.json differs from the frozen one outside its timings: ' + ', '.join(differing)[:200])
     text = (f'{same} frozen files (dictionaries with code tables, zstd dictionary) retrained byte for byte from the training files; '
             f'{len(chains)} engine chains complete with {asked} entries each{skipped}')
     return Part(text) if skipped else text
