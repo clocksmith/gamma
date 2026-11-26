@@ -57,7 +57,7 @@ Primary rule, longest entry 16 bytes, no storage cap. A is one dictionary and ta
 | 1,024 | 85,049 | 92,174 | 86,116 | 85,944 | 96,575 | 134,595 | 140,795 | 89,827 | 104,236 |
 | 4,096 | 83,440 | 87,238 | 84,997 | 84,893 | 92,597 | 132,010 | 140,316 | 89,827 | 104,236 |
 
-An LP value can come from a smaller solved size, because a smaller dictionary is legal at a larger budget. LP was solved only at 256, 1,024 and 4,096 entries.
+An LP value can come from a smaller solved size, because a smaller dictionary is legal at a larger budget. The LP was run only at 256, 1,024 and 4,096 entries, and no run returned an LP value before its time limit (see "LP solves").
 
 ## Boundary-crossing ablation
 

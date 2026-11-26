@@ -117,7 +117,16 @@ w.append('| ---: |' + ' ---: |' * len(ARMS))
 for budget in (256, 1024, 4096):
     row = cell('s1-whole', 16, budget)['by_arm']
     w.append(f'| {budget:,} | ' + ' | '.join(n(row[a]['bytes']) if a in row else '---' for a in ARMS) + ' |')
-w.append('\nAn LP value can come from a smaller solved size, because a smaller dictionary is legal at a larger budget. LP was solved only at 256, 1,024 and 4,096 entries.\n')
+lp_sizes = [f'{k:,}' for k in sorted({row['K'] for row in score['lp']})]
+lp_sizes = ', '.join(lp_sizes[:-1]) + ' and ' + lp_sizes[-1] if len(lp_sizes) > 1 else ''.join(lp_sizes)
+lp_values = sum(1 for row in score['lp'] if row['objective'] is not None)
+if lp_values == len(score['lp']):
+    lp_note = f'LP was solved only at {lp_sizes} entries.'
+elif lp_values == 0:
+    lp_note = f'The LP was run only at {lp_sizes} entries, and no run returned an LP value before its time limit (see "LP solves").'
+else:
+    lp_note = f'The LP was run only at {lp_sizes} entries; {lp_values} of {len(score["lp"])} runs returned an LP value (see "LP solves").'
+w.append(f'\nAn LP value can come from a smaller solved size, because a smaller dictionary is legal at a larger budget. {lp_note}\n')
 
 base, cut = cell('s1-whole', 16, 1024), cell('s1-whole-cuts', 16, 1024)
 w.append('## Boundary-crossing ablation\n')

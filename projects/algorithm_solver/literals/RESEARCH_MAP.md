@@ -36,14 +36,16 @@ From an external review the owner accepted.
 `objective-holdout-v1` is the worked example. Its `replay.py` is the one entry point for checking and reproducing
 it. It works in a temporary directory and writes nothing into the folder.
 
-| Command | What it reruns | Clean clone, 8 workers |
+| Command | What it reruns | Clean clone, 16 workers |
 | --- | --- | ---: |
-| `python3 replay.py check` | Nothing expensive. Frozen checksums; every frozen file tracked by Git; manifests against the corpus; split boundaries against IBM's cluster file and the rank order; scorer against the independent decoder; `RESULTS.md` against `out/`; six training files end to end | 5 s |
-| `python3 replay.py score` | The frozen scorer and the independent decoder on all four sets, compared with the committed results | 42 s |
-| `python3 replay.py train` | Every dictionary and code table from the training files, compared byte for byte | 62 s |
+| `python3 replay.py check` | Nothing expensive. Frozen checksums; frozen files tracked by Git; manifests against the corpus; the sets complete and split by IBM's clusters and the rank order; the near-duplicate filter shown to have been live; the scorer's files held to the hashes in its log; every verdict of the independent decoder, with padding; the frozen training receipts; `RESULTS.md` and the rule outcomes regenerated; 13 receipts broken on purpose and refused; seven files end to end, one of them needing the escape | 5 s |
+| `python3 replay.py score` | The frozen scorer and the independent decoder on all four sets, compared with the committed results | 36 s |
+| `python3 replay.py train` | Every dictionary, code table and the training summary from the training files, compared byte for byte; each engine chain read for its end line and length | 59 s |
+| `python3 replay.py posthoc` | The two exploratory result files computed after scoring, compared | 9 s |
 
-Measured on 2026-11-26 from a 43 MB sparse clone of the public repository that took 2 s; all three passed. Add
-`--report FILE` for a machine-readable record.
+Measured on 2026-11-26 from a 43 MB sparse clone of the public repository; `replay.py all --strict` passed in 109 s.
+Add `--report FILE` for a machine-readable record. A step that could only be checked in part (no Git checkout, another
+zstd version) prints `PART`, never `PASS`; `--strict` makes it a failure.
 
 **Before.** Reproducing the scored result took twelve commands on two machines, a 568 MB download and a Python
 environment with `pyarrow` (the sequence is in `objective-holdout-v1/SCORER-LOG.md`, 14:04 to 14:10 UTC). There was
@@ -64,9 +66,40 @@ decision.
 - **Order of work:** commit hypotheses and rules; train; write `SHA256SUMS-FROZEN`; run `replay.py check`; commit;
   only then fetch test files. `check` fails if the freeze lists a file Git ignores, which is the one deviation v1
   recorded.
-- **Tiny before full:** `check` pushes six files through the frozen scorer and the independent decoder in five
+- **Tiny before full:** `check` pushes seven files through the frozen scorer and the independent decoder in five
   seconds. Use it while changing code. Spend a full scoring run only to answer a stated question.
 - **Spent test sets stay spent.** A rule designed after looking at `fresh` or `project` needs new test files.
+
+### A check has to be able to fail
+
+Two reviews on 2026-11-26 found 25 places in this lane where a claim of "verified" would have survived a real
+failure. None had changed a result. The patterns, and what to do instead:
+
+| Pattern | Where it was | Instead |
+| --- | --- | --- |
+| A checker promises a check it never performs, or compares a number only with a copy from the same run | `witness-length-sweep-v1/check_unseen_transfer.py` (frozen) | Break a copy of the results on purpose and see the checker fail. `recheck_unseen_transfer.py` does the missing checks; the frozen checker passes on a broken copy and it does not |
+| "All N decoded" claimed by counting reports | `make_results.py`, the paper's scripts | Read every verdict the decoder wrote, and its padding |
+| Resume from any non-empty output | `codenet-replication-v1/run_replication.py` | Write to a temporary name; move into place after the end marker; resume only from output that carries this run's receipt |
+| A time-limit flag or a short result ignored | `train_arms.py` (frozen) | The driver reads the flag and the length; `replay.py check` reads the frozen receipts |
+| A skipped check printed as PASS | `replay.py` | A third status, `PART`, and `--strict` |
+| A branch that never runs on real data, so "they agree" is 0 = 0 | the escape, in all 80 archives | A made-up input that forces the branch |
+| "0 excluded" from a filter that might have parsed nothing | the Python near-duplicate filter | A receipt that shows what the filter found: `audit_near_duplicates.py` |
+| An outcome typed as prose in a generator or in the paper | `make_results.py`, the paper | Evaluate each rule once (`out/rule-outcomes.json`); build the sentence from the data or stop when it stops being true |
+| A number traced by searching for the bare number | the paper's trace script | Search for the number inside its sentence |
+
+`objective-holdout-v1/test_replay.py` and `codenet-replication-v1/test_chain_guard.py` are the two tests that break
+things on purpose. Add a case there when you add a check.
+
+### What is pinned and must not be edited
+
+| File | Pinned by | Known gap, and where it is closed |
+| --- | --- | --- |
+| `fixed-source-v3/engine.c` | `fixed-source-v3/FREEZE.md`, `objective-holdout-v1/frozen/train-summary.json`, `codenet-replication-v1/results/codenet_results.json`, `short-record-decision-v1/FREEZE-PROGRESS.md` | Writes its chain in place; its BPE pair table (2^20 slots) cannot grow and a full table never returns; the time limit is read only between rounds. Closed in the drivers: `run_replication.py`, `replay.py train` |
+| `objective-holdout-v1`: the 34 files of `SHA256SUMS-FROZEN` | that list | See "Known limits of the frozen code" in its README |
+| `witness-length-sweep-v1`: runner, checker, preregistration, results | its three checksum lists | The checker skips four checks; `recheck_unseen_transfer.py` (43 s) does them |
+| `fixed-source-v3`: the ten files listed in its `FREEZE.md` | that list | `run.sh` does not check its PathPiece seed runs; the 36 seed chains kept from the CodeNet run all end with `stopped=0`. No checker exists for the seed chains of the fixed-source run itself, which are not in this repository |
+
+A new experiment that needs different engine behaviour copies `engine.c` under a new name.
 
 ### Friction measured on 2026-11-26 and not yet fixed
 

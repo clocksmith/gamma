@@ -9,10 +9,10 @@ Read [`PREREGISTRATION.md`](PREREGISTRATION.md) first. [`FORMAT.md`](FORMAT.md) 
 To check or reproduce it, one command, no network:
 
 ```
-python3 replay.py check    # 7 s: integrity, split boundaries, receipts, six files end to end
-python3 replay.py score    # 42 s: rescore all four sets, compare with the committed results
-python3 replay.py train    # 62 s: retrain every dictionary, compare byte for byte
-python3 replay.py posthoc  # recompute the measurements made after scoring, compare
+python3 replay.py check    # 5 s: integrity, split boundaries, receipts, seven files end to end
+python3 replay.py score    # 36 s: rescore all four sets, compare with the committed results
+python3 replay.py train    # 59 s: retrain every dictionary, compare byte for byte
+python3 replay.py posthoc  # 9 s: recompute the measurements made after scoring, compare
 ```
 
 `check` needs Python 3 and zstd; `train` also needs a C compiler. zstd rows are compared only when the local zstd
