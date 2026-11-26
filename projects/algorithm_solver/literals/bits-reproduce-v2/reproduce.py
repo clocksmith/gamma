@@ -39,7 +39,7 @@ NEW_FOLDERS = ['bits-reproduce-v1', 'bits-reproduce-v2', 'bits-envelope-v1', 'wi
 ADDED = [
     ('byte envelope: four frozen matched80 packages reconcile with 0 B drift, none is a random-access total',
      'bits-envelope-v1', PY + ['envelope.py', REPO], False),
-    ('byte envelope: uncounted index, 1 B drift, unlisted file and slot swaps are rejected',
+    ('byte envelope: uncounted index, 1 B drift, unlisted file and slot swaps are rejected; a second accountant agrees',
      'bits-envelope-v1', UNITTEST, False),
     ('matched80 compact jobs, solver-free and zero-import (independent-verifier/check.py)',
      os.path.join('sixbit-v1', 'independent-verifier'), PY + ['check.py', REPO], False),

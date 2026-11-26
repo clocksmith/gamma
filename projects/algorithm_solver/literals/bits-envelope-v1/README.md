@@ -9,7 +9,8 @@ from Gamma: no `model.py`, no codec and no other checker.
 ```sh
 python3 -B envelope.py /path/to/gamma                    # the four frozen matched80 packages
 python3 -B envelope.py --bundle DIR CLAIM.json           # one bundle against one claim
-python3 -B -m unittest discover -s . -v                  # 11 tests, a few seconds
+python3 -B envelope.py --emit-artifacts JOB OUT [GAMMA]  # split artifact set + OUT.report.json
+python3 -B -m unittest discover -s . -v                  # 13 tests, about 15 seconds
 ```
 
 ## The frozen matched80 packages (pin `59ff0441`)
@@ -26,6 +27,22 @@ All four reconcile with 0 B drift. Each packet carries a 40- or 41-byte header (
 store one file per program and no index. Their `package_bytes` is therefore reported with
 `random_access_total: null`. In one blob with an offset index, `c-w-compact` is
 13,492 + 4 × 81 = 13,816 bytes, and that is the figure a random-access comparison must use.
+
+## A second, separate accountant agrees
+
+`--emit-artifacts` writes each frozen package as a split random-access set: the dictionary, the fixed
+headers back to back, the code streams back to back, n + 1 little-endian uint32 offsets into the code
+streams and, for the escape arm, the charged decoder as `model`. `../short-record-byte-accounting-v1/byte_accountant.py`
+was written separately. It measures each set and is run as a separate process; neither checker imports the
+other. It accepts all four reports and rejects the `c-w-compact` report with the index left out.
+Random-access totals:
+
+| Job | Frozen `package_bytes` | Index | Random-access total |
+| --- | ---: | ---: | ---: |
+| `b-w-compact` | 12,534 | 260 | 12,794 |
+| `b-u-compact` | 13,100 | 260 | 13,360 |
+| `c-w-compact` | 13,492 | 324 | 13,816 |
+| `c-u-compact` | 23,296 | 324 | 23,620 |
 
 ## What is rejected (`test_uncounted_index_or_slot_swap.py`)
 

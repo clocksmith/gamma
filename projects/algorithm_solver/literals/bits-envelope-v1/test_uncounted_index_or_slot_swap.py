@@ -179,5 +179,55 @@ class UncountedIndexOrSlotSwap(unittest.TestCase):
         self.assertEqual(rows["c-w-compact"]["total"], FROZEN_PACKAGE_BYTES)
 
 
+ACCOUNTANT = HERE.parent / "short-record-byte-accounting-v1" / "byte_accountant.py"
+
+
+class SecondAccountant(unittest.TestCase):
+    """short-record-byte-accounting-v1, written separately, must measure the same bytes (run as a process)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = tempfile.TemporaryDirectory(prefix="bits-envelope-accountant-")
+        cls.root = Path(cls.tmp.name)
+        cls.sets = {}
+        for job in ("b-w-compact", "b-u-compact", "c-w-compact", "c-u-compact"):
+            out = cls.root / job
+            result = subprocess.run([sys.executable, "-B", str(ENVELOPE), "--emit-artifacts", job, str(out), str(GAMMA)],
+                                    capture_output=True, text=True)
+            assert result.returncode == 0, result.stderr
+            cls.sets[job] = (out, Path(str(out) + ".report.json"), json.loads(result.stdout)["envelope"])
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.tmp.cleanup()
+
+    def accountant(self, folder, report):
+        return subprocess.run([sys.executable, "-B", str(ACCOUNTANT), str(folder), "--report", str(report)],
+                              capture_output=True, text=True)
+
+    def test_accountant_agrees_on_every_frozen_package(self):
+        frozen = {"b-w-compact": 12534, "b-u-compact": 13100, "c-w-compact": 13492, "c-u-compact": 23296}
+        for job, (folder, report, env) in self.sets.items():
+            with self.subTest(job=job):
+                result = self.accountant(folder, report)
+                self.assertEqual(result.returncode, 0, result.stdout)
+                measured = json.loads(result.stdout[:result.stdout.rindex("}") + 1])
+                self.assertEqual(measured["total"], env["total"])
+                self.assertEqual(measured["index"], env["index"])
+                # The random-access size is the frozen package plus its index, and nothing else.
+                self.assertEqual(env["total"], frozen[job] + env["index"])
+
+    def test_accountant_rejects_the_report_without_its_index(self):
+        folder, report, env = self.sets["c-w-compact"]
+        bad = json.loads(report.read_text())
+        del bad["index"]
+        bad["total"] -= env["index"]
+        path = self.root / "no-index.report.json"
+        path.write_text(json.dumps(bad))
+        result = self.accountant(folder, path)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("omits index", result.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()

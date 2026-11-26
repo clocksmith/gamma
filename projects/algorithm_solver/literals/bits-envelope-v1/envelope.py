@@ -231,8 +231,64 @@ def _frozen_rows(git_blob, checkout):
     return rows
 
 
+def emit_artifacts(checkout, job, out):
+    """Write one frozen package as a split random-access artifact set for short-record-byte-accounting-v1.
+
+    Files: dictionary.ltd; framing.bin, the fixed packet headers back to back (a reader finds header i at
+    i x header size); payload.bin, the code streams back to back; index.bin, n + 1 little-endian uint32
+    offsets (starts and end) into payload.bin; for the escape arm, the decoder source the package charges
+    for, as `model`. Also writes OUT.report.json, this checker's envelope in the accountant's vocabulary.
+    """
+    run, escape = JOBS[job]
+    base = f"{ROOT}/{run}/{job}"
+    git_blob = PinnedBlobs(checkout)
+    try:
+        m = strict_json(git_blob(f"{base}/manifest.json"))
+        package = m if escape else m["package"]
+        dictionary = git_blob(f"{base}/dictionary.ltd")
+        extension = ".lte" if escape else ".ltv"
+        packets = [git_blob(f"{base}/packets/{pid}{extension}") for pid in package["programs"]]
+        decoder = git_blob(f"{ROOT}/escape6_decoder.py") if escape else b""
+    finally:
+        git_blob.close()
+    require(len(decoder) == (m["decoder_bytes"] if escape else 0), "decoder file is not the charged decoder size")
+    head = len(HEADER[escape]) + 32 + 4
+    starts, payloads = [0], []
+    for packet in packets:
+        split_packet(packet, sha(dictionary), escape)
+        payloads.append(packet[head:])
+        starts.append(starts[-1] + len(payloads[-1]))
+    index = b"".join(o.to_bytes(4, "little") for o in starts)
+    env = measure(dictionary, packets, escape, index, len(decoder))
+    os.makedirs(out)
+    files = {"dictionary.ltd": dictionary, "framing.bin": b"".join(p[:head] for p in packets),
+             "payload.bin": b"".join(payloads), "index.bin": index}
+    roles = [{"path": "dictionary.ltd", "role": "dictionary"}, {"path": "framing.bin", "role": "framing"},
+             {"path": "payload.bin", "role": "payload"},
+             {"path": "index.bin", "role": "index", "offset_width": 4, "offsets": "starts+end", "into": "payload.bin"}]
+    if escape:
+        files["decoder.py"] = decoder
+        roles.append({"path": "decoder.py", "role": "model"})
+    for name, data in files.items():
+        with open(os.path.join(out, name), "wb") as handle:
+            handle.write(data)
+    with open(os.path.join(out, "artifacts.json"), "w") as handle:
+        json.dump({"format": "bits-split-v1", "records": len(packets), "files": roles}, handle, indent=1)
+    report = {"records": len(packets), "header": 0, "dictionary": env["dictionary"], "model": env["decoder"],
+              "index": env["index"], "framing": env["framing"], "payload": env["payload"], "total": env["total"]}
+    with open(out.rstrip(os.sep) + ".report.json", "w") as handle:
+        json.dump(report, handle, indent=1)
+    return env
+
+
 def main(argv):
     try:
+        if argv[:1] == ["--emit-artifacts"]:
+            require(len(argv) in (3, 4), "usage: envelope.py --emit-artifacts JOB OUTDIR [GAMMA_CHECKOUT]")
+            require(argv[1] in JOBS, f"unknown job; one of {', '.join(JOBS)}")
+            env = emit_artifacts(argv[3] if len(argv) == 4 else ".", argv[1], argv[2])
+            print(json.dumps({"job": argv[1], "envelope": env}, indent=2))
+            return 0
         if argv[:1] == ["--bundle"]:
             require(len(argv) == 3, "usage: envelope.py --bundle DIR CLAIM.json")
             env = read_bundle(argv[1])
