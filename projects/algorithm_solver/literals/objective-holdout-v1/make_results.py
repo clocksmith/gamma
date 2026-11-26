@@ -313,7 +313,10 @@ def main():
     w('')
     w('## Mechanism on the new problems')
     w('')
-    w('| Cap | Rule | Fragments | Used | Overlapping matches | Uses in the parse | Repeats inside a file | Mean bytes per token |')
+    w('The scorer counts tokens on the minimum-token parse and everything about use on the parse the archive is coded with')
+    w('(minimum bits under the frozen code). The two differ slightly; each column says which it is.')
+    w('')
+    w('| Cap | Rule | Fragments | Used, archive parse | Overlapping matches | Uses, minimum-token parse | Repeats inside a file, archive parse | Mean bytes per token, minimum-token parse |')
     w('| ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |')
     for cap in CAPS:
         for arm in ARMS[1:]:

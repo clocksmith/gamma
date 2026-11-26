@@ -134,7 +134,10 @@ Dropping every fragment that fewer than two training problems used, and refittin
 
 ## Mechanism on the new problems
 
-| Cap | Rule | Fragments | Used | Overlapping matches | Uses in the parse | Repeats inside a file | Mean bytes per token |
+The scorer counts tokens on the minimum-token parse and everything about use on the parse the archive is coded with
+(minimum bits under the frozen code). The two differ slightly; each column says which it is.
+
+| Cap | Rule | Fragments | Used, archive parse | Overlapping matches | Uses, minimum-token parse | Repeats inside a file, archive parse | Mean bytes per token, minimum-token parse |
 | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | 256 | BPE | 84 | 76 | 137,615 | 46,278 | 71% | 1.65 |
 | 256 | raw frequency | 84 | 66 | 238,846 | 42,170 | 74% | 1.46 |
