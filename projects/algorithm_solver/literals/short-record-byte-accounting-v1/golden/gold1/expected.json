@@ -1,0 +1,17 @@
+{
+  "format": "gold1",
+  "how_derived": "By hand from the format in ../../README.md, not by running any encoder or the accountant.",
+  "records": 3,
+  "raw_record_bytes": {"r0.txt": 12, "r1.txt": 12, "r2.txt": 10, "total": 34},
+  "derivation": {
+    "header": "magic 'GLD1' 4 + version 1 + record count 1 + entry count 1 = 7",
+    "dictionary": "entry 0 'fn ' (1 length + 3) + entry 1 '() {}' (1 length + 5) = 10",
+    "model": "no code or symbol table in this format = 0",
+    "index": "record count + 1 = 4 offsets x 2 bytes = 8 (values 0, 7, 14, 25)",
+    "framing": "one 1-byte length prefix per record x 3 = 3",
+    "payload": "r0 E0 m a i n E1 = 6; r1 E0 i n i t E1 = 6; r2 10 literals = 10; 6 + 6 + 10 = 22",
+    "total": "7 + 10 + 0 + 8 + 3 + 22 = 50"
+  },
+  "bytes": {"header": 7, "dictionary": 10, "model": 0, "index": 8, "framing": 3, "payload": 22, "total": 50},
+  "files": {"dictionary.bin": 10, "header.bin": 7, "index.bin": 8, "units.bin": 25}
+}
