@@ -10,6 +10,7 @@ import { join } from 'node:path';
 import test from 'node:test';
 import { loadServiceConfig } from '../../src/config.js';
 import { WorkspaceService } from '../../src/service.js';
+import { approveCommit } from '../../src/write-binding.js';
 import { createOwnerSession, findElement } from '../../src/workflows/owner-session.js';
 import { FakeAdapter, ORIGIN } from '../support/fake-adapter.js';
 import { FORM_INTENT, WORKSPACE_ID, createClock } from '../support/harness.js';
@@ -67,7 +68,7 @@ function makeDb({ existing, version }) {
   return { current: 'wp-42', commits: [], rows: { 'wp-42': row('wp-42'), 'wp-43': row('wp-43', { recordVersion: version + 3 }) } };
 }
 
-const lockOf = row => ({ account: row.account, recordId: row.recordId, predicate: row.predicate,
+const lockOf = row => ({ entity: 'work-package', account: row.account, recordId: row.recordId, predicate: row.predicate,
   recordVersion: row.recordVersion, termsSha256: row.termsSha256 });
 
 async function openWorkspace({ db, fault = {}, approvals, advice = PROCEED[0], hooks = {} }) {
@@ -106,13 +107,21 @@ async function openWorkspace({ db, fault = {}, approvals, advice = PROCEED[0], h
 }
 
 function approvalFor(db, hours) {
-  return { approvalId: 'approval-1', lock: lockOf(db.rows['wp-42']), fields: { [WORK_FIELD]: String(hours) },
-    commit: SAVE, readBack: { estimatedHours: hours } };
+  const { entity, ...lock } = lockOf(db.rows['wp-42']);
+  return approveCommit({ approvalId: 'approval-1', target: { url: FORM_URL, entity, rowId: lock.recordId }, lock,
+    fields: { [WORK_FIELD]: String(hours) }, commit: SAVE, readBack: { estimatedHours: hours } });
 }
 
+// A refusal at submission rejects the call; one at dispatch settles the action as never dispatched.
+const settle = promise => promise.catch(error => {
+  assert.equal(error.code, 'write-not-approved', error.message);
+  return { rejected: error, dispatchStatus: 'rejected-at-admission' };
+});
+const refusalOf = result => result.rejected?.message ?? result.neverDispatched?.detail ?? '';
+
 async function writeWork(ws, { hours, approvalId = 'approval-1', typed = String(hours) }) {
-  const fill = await ws.act('fill-work', { kind: 'fill', selector: WORK_FIELD, params: { value: typed }, approvalId });
-  const save = await ws.act('save-work', { kind: 'submit', selector: SAVE, completion: DONE, approvalId });
+  const fill = await settle(ws.act('fill-work', { kind: 'fill', selector: WORK_FIELD, params: { value: typed }, approvalId }));
+  const save = await settle(ws.act('save-work', { kind: 'submit', selector: SAVE, completion: DONE, approvalId }));
   return { fill, save };
 }
 
@@ -166,20 +175,23 @@ test('100 randomized first-write trials: zero wrong writes, and a matching write
       assert.notEqual(save.outcome, 'completed', label);
       if (scenario === 'stale-append') {
         assert.equal(fill.outcome, 'unknown', label); // the page shows 856, not 56
-        assert.match(save.neverDispatched.detail, /field-read-back-mismatch/, label);
+        assert.match(refusalOf(save), /field-read-back-mismatch at dispatch/, label);
       } else if (scenario === 'http-200-no-commit') {
         // The server answered 200 and the page moved on, but the record never changed.
         assert.deepEqual(ws.adapter.httpStatuses, [200], label);
         assert.equal(save.outcomeBasis, 'commit-unverified', label);
       } else if (scenario === 'no-approval') {
-        assert.match(fill.neverDispatched.detail, /no-approval/, label);
-        assert.match(save.neverDispatched.detail, /no-approval/, label);
+        assert.match(refusalOf(fill), /no-approval at admission/, label);
+        assert.match(refusalOf(save), /no-approval at admission/, label);
       } else if (scenario === 'payload-changed') {
-        assert.match(fill.neverDispatched.detail, /payload-not-approved/, label);
-        assert.match(save.neverDispatched.detail, /field-read-back-mismatch/, label);
+        assert.match(refusalOf(fill), /approved-payload-changed at admission/, label);
+        assert.match(refusalOf(save), /field-read-back-mismatch at dispatch/, label);
       } else {
-        assert.equal(save.dispatchStatus, 'never-dispatched', label);
-        assert.match(save.neverDispatched.detail, /approval-lock-changed/, label);
+        // Changed before the fill: refused at submission. Changed after Save was admitted: refused at dispatch.
+        const stage = whenChanged === 'before-fill' ? 'admission' : 'dispatch';
+        const reason = scenario === 'target-changed' ? 'approved-target-changed' : 'approval-lock-changed';
+        assert.match(refusalOf(save), new RegExp(`${reason} at ${stage}`), label);
+        if (stage === 'dispatch') assert.equal(save.dispatchStatus, 'never-dispatched', label);
       }
     } finally { await ws.close(); }
   }
@@ -195,7 +207,7 @@ test('guard advice only lowers: abstain refuses a matching write; a recommended 
     const ws = await openWorkspace({ db, approvals: new Map([[approval.approvalId, approval]]), advice });
     try {
       const { save } = await writeWork(ws, { hours: 56 });
-      assert.match(save.neverDispatched.detail, /guard-abstained/);
+      assert.match(refusalOf(save), /guard-abstained at admission/);
       assert.equal(db.commits.length, 0);
     } finally { await ws.close(); }
   }

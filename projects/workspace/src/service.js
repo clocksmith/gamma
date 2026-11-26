@@ -20,6 +20,7 @@ import { REJECTION_CODES, isWorkspaceError, workspaceError } from './errors.js';
 import { Journal, canonicalJson } from './journal.js';
 import { requireChromiumSurfaceV1 } from './surface-contract.js';
 import { UploadStore, checkUploadTarget } from './uploads.js';
+import { WRITE_KINDS, adviceAbstains, checkLiveLock, checkWriteBinding, validApproval } from './write-binding.js';
 import {
   ACTION_STATUS,
   OUTCOMES,
@@ -47,26 +48,7 @@ const KIND_COMPLETION_BASIS = Object.freeze({
 // The live-page condition that shows a fill or select took effect.
 const VALUE_CONDITIONS = Object.freeze({ fill: 'input-value-equals', select: 'choice-equals' });
 
-// Kinds that can change a record. navigate and download only read, so the commit gate passes them.
-const WRITE_KINDS = new Set(['fill', 'select', 'click', 'submit', 'upload']);
-// The live lock an approval binds; every field must still equal the approved one at dispatch.
-const LOCK_FIELDS = Object.freeze(['account', 'recordId', 'predicate', 'recordVersion', 'termsSha256']);
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
-const plainObject = value => value !== null && typeof value === 'object' && !Array.isArray(value);
-
-/** A host-held approval: the lock it binds, the exact page values, the commit control and the stored values. */
-function validApproval(approval, approvalId) {
-  return plainObject(approval) && approval.approvalId === approvalId && plainObject(approval.lock)
-    && LOCK_FIELDS.every(key => typeof approval.lock[key] === 'string' || Number.isSafeInteger(approval.lock[key]))
-    && plainObject(approval.fields) && Object.values(approval.fields).every(value => typeof value === 'string')
-    && (approval.clicks === undefined || (Array.isArray(approval.clicks) && approval.clicks.every(value => typeof value === 'string')))
-    && typeof approval.commit === 'string' && plainObject(approval.readBack) && Object.keys(approval.readBack).length > 0;
-}
-
-/** Guard output that recommends stopping. Nothing a guard returns can authorize a write. */
-function adviceAbstains(advice) {
-  return advice === false || advice?.status === 'abstain' || advice?.decision === 'abstain' || advice?.tool === 'ask_human';
-}
 
 const RESTART_RULES = Object.freeze([
   {
@@ -591,11 +573,15 @@ class WorkspaceService {
   async submitAction(command) {
     const workspace = this.#workspace(command.workspaceId);
     const runtime = this.#runtimeFor(command.workspaceId);
-    const admitted = await runtime.mutex.run(() => {
+    const admitted = await runtime.mutex.run(async () => {
       let grantId;
       let resolved;
       try {
-        ({ grantId, command: resolved } = checkAdmission(pageView(workspace, command.pageId), { ...command, pageId: command.pageId ?? MAIN_PAGE }, this.#config, this.#nowMs()));
+        const view = pageView(workspace, command.pageId);
+        ({ grantId, command: resolved } = checkAdmission(view, { ...command, pageId: command.pageId ?? MAIN_PAGE }, this.#config, this.#nowMs()));
+        // Submission half of the commit gate: the URL is the one the owner's cited observation showed.
+        await this.#commitVerifiedWrite(command.workspaceId, resolved,
+          { stage: 'admission', url: view.observations.get(resolved.observationVersion)?.url ?? null });
       } catch (error) {
         if (isWorkspaceError(error)) {
           this.#append(RECORD_TYPES.COMMAND_REJECTED, {
@@ -760,7 +746,8 @@ class WorkspaceService {
       try {
         await this.#page(workspaceId);
         checks = await this.#checkLiveDispatch(workspace, action);
-        commit = await this.#commitVerifiedWrite(workspaceId, action.request);
+        commit = await this.#commitVerifiedWrite(workspaceId, action.request,
+          { stage: 'dispatch', url: await this.#probe(workspaceId, action.request.pageId, action.request).url() });
       } catch (error) {
         this.#append(RECORD_TYPES.ACTION_NOT_DISPATCHED, {
           workspaceId,
@@ -883,52 +870,48 @@ class WorkspaceService {
   }
 
   /**
-   * The one gate every dispatched action passes, called by #dispatchOne after #checkLiveDispatch.
-   * It returns the effect runner; a refusal throws first, so the action is never dispatched.
-   * Without a commit authority it runs the effect unchanged. With one, each write kind needs the
-   * host-held approval the request names (`approvalId`), and:
-   *  - before the effect, the live lock read from the system of record (account, record id,
-   *    predicate, record version, terms digest) equals the approval's; a fill or select carries
-   *    exactly an approved value; any other control is the approval's commit or one of its clicks;
-   *  - before the commit, every approved page field holds exactly its value, so a value joined to
-   *    one already in the field (8 and 56 typed as 856) is never sent;
-   *  - after the commit, the record is polled until its version moves, read once more after a
-   *    pause, and every approved field must read back exactly. A page or HTTP success alone stays
-   *    unknown.
-   * Guard advice (`adviseWrite`) is read only after an approval matched. It can abstain, or name
-   * record fields that must read back unchanged; it cannot skip a check or authorize a write.
+   * The one commit gate. submitAction calls it at admission (`stage: 'admission'`, with the cited
+   * observation's URL) and #dispatchOne calls it again after #checkLiveDispatch (`stage:
+   * 'dispatch'`, with the live URL); a refusal throws, so the action is rejected or never
+   * dispatched. At dispatch it returns the effect runner. Without a commit authority it runs the
+   * effect unchanged. With one, every write kind needs a host-held approval (see
+   * write-binding.js `approveCommit`); a cited `approvalId` must name the host's. Each stage checks:
+   *  - the write's target URL, field, method and SHA-256 payload binding against the approval;
+   *  - guard advice (`adviseWrite`), read only after the approval matched: it can abstain, or name
+   *    record fields that must read back unchanged, and cannot skip a check or authorize a write;
+   *  - the live record identity and lock from the system of record (entity, row id, account,
+   *    predicate, record version, terms digest).
+   * At dispatch of the commit, every approved page field must also hold exactly its value, so a
+   * value joined to one already in the field (8 and 56 typed as 856) is never sent. After the
+   * commit, the record is polled until its version moves, read once more after a pause, and every
+   * approved field must read back exactly. A page or HTTP success alone stays unknown.
    */
-  async #commitVerifiedWrite(workspaceId, request) {
+  async #commitVerifiedWrite(workspaceId, request, { stage, url }) {
     const run = effective => this.#performEffect(workspaceId, effective);
     if (!this.#commitAuthority || !WRITE_KINDS.has(request.kind)) return run;
     const refuse = (reason, details = {}) => {
-      throw workspaceError(REJECTION_CODES.WRITE_NOT_APPROVED, reason, { reason, ...details });
+      throw workspaceError(REJECTION_CODES.WRITE_NOT_APPROVED, `${reason} at ${stage}`, { ...details, reason, stage });
     };
-    const context = { workspaceId, pageId: request.pageId ?? MAIN_PAGE, actionId: request.actionId,
-      kind: request.kind, selector: request.target?.selector ?? null };
+    const context = { workspaceId, pageId: request.pageId ?? MAIN_PAGE, actionId: request.actionId, stage,
+      kind: request.kind, selector: request.target?.selector ?? null, url };
     const approvalId = typeof request.approvalId === 'string' ? request.approvalId : null;
-    const approval = approvalId ? await this.#commitAuthority.approvalFor({ ...context, approvalId }) : null;
-    if (!validApproval(approval, approvalId)) refuse('no-approval');
-    const isCommit = context.selector === approval.commit;
-    if (VALUE_CONDITIONS[request.kind] === 'input-value-equals') {
-      if (!Object.hasOwn(approval.fields, context.selector) || approval.fields[context.selector] !== request.params.value) {
-        refuse('payload-not-approved', { selector: context.selector });
-      }
-    } else if (!isCommit && !(approval.clicks ?? []).includes(context.selector)) {
-      refuse('action-not-approved', { selector: context.selector });
-    }
+    let approval = null;
+    try { approval = await this.#commitAuthority.approvalFor({ ...context, approvalId }); } catch { approval = null; }
+    if (!validApproval(approval) || (approvalId !== null && approval.approvalId !== approvalId)) refuse('no-approval');
+    const bound = checkWriteBinding(approval, { url, method: request.kind, field: context.selector, payload: request.params ?? null });
+    if (!bound.ok) refuse(bound.reason, bound);
     let advice = null;
     if (this.#adviseWrite) {
-      try { advice = await this.#adviseWrite({ ...context, approvalId }); } catch { advice = { status: 'abstain' }; }
+      try { advice = await this.#adviseWrite({ ...context, approvalId: approval.approvalId }); } catch { advice = { status: 'abstain' }; }
     }
     if (adviceAbstains(advice)) refuse('guard-abstained');
     const unchangedFields = Array.isArray(advice?.recommendedChecks)
       ? advice.recommendedChecks.filter(name => typeof name === 'string') : [];
-    let lock;
+    let lock = null;
     try { lock = await this.#commitAuthority.readLock({ ...context, approval: structuredClone(approval) }); } catch { lock = null; }
-    const changed = LOCK_FIELDS.filter(key => lock?.[key] !== approval.lock[key]);
-    if (changed.length) refuse('approval-lock-changed', { changed });
-    if (!isCommit) return run;
+    const locked = checkLiveLock(approval, lock);
+    if (!locked.ok) refuse(locked.reason, locked);
+    if (stage !== 'dispatch' || context.selector !== approval.commit) return run;
     const fields = Object.entries(approval.fields).map(([selector, value]) => ({ kind: 'input-value-equals', selector, value }));
     const held = await evaluateConditions(fields, this.#probe(workspaceId, request.pageId, request));
     if (!held.allEstablished) refuse('field-read-back-mismatch', { results: held.results });
