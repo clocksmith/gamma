@@ -48,3 +48,35 @@ All seven held.
 One 259,706-byte training corpus, one exact parser, token counts only. The scorer and builder are separate sessions of
 the same model family under one author, so this is a preregistered holdout, not an independent replication. Standard
 BPE merge replay, larger training sets and other closure notions (for example prefix closure) were not tested.
+
+## Post hoc, after scoring: the attribution to closure does not survive
+
+Computed on the already-scored sets, so nothing here is preregistered. Scripts: `explore_rivals.py` (`out/posthoc-rivals.json`)
+and a scoring of the frozen `codenet-replication-v1/chains/primary` chains (same training split, same parser, 3,924 fragments).
+Tokens relative to 16-byte BPE:
+
+| Rule | fresh2 | Express | TheAlgorithms/Python | ramda/ramda | train |
+| --- | --- | --- | --- | --- | --- |
+| token gain, open (L=16) | +7.9% | +19.9% | +21.3% | +19.2% | −22.0% |
+| closed token gain | −1.2% | −1.1% | −0.9% | −1.4% | −2.6% |
+| GreedTok (frozen chain, L=16) | +8.1% | +22.2% | +19.2% | +18.7% | −19.3% |
+| PathPiece (frozen chain, L=16) | +5.6% | +21.2% | +23.0% | +18.0% | −13.3% |
+| greedy-byte, open (gain per stored byte) | −0.7% | +2.5% | −1.0% | −0.8% | −6.7% |
+| greedy-byte, open, two-problem support | −2.7% | +0.3% | −2.6% | −1.0% | −1.0% |
+| token gain, open, two-problem support | −2.9% | +5.7% | +4.1% | +5.2% | −6.2% |
+| closed token gain, two-problem support | −2.8% | −2.2% | −0.8% | −1.6% | +0.2% |
+
+Token gain against BPE at the same length limit on fresh2: +2.0% (L=8), +7.9% (L=16), +17.7% (L=32).
+
+- Closure does not hold the objective fixed. If w = uv with u, v in the dictionary, replacing each use of w by u, v
+  costs one token per use, so a closed candidate's exact gain is at most its number of uses; an open candidate can save
+  up to |w| − 1 per use. Closure therefore also removes token gain's length leverage, and the two are confounded in the
+  `closed` arm.
+- An open rule without that leverage (greedy-byte) removes most of the reversal, and with two-problem support beats
+  `closed` on fresh2 and TheAlgorithms/Python. Its single-byte share is below `closed` on every set, so the fallback
+  plateau is not specific to closure.
+- Every open rule that maximizes raw token count reverses, including GreedTok and PathPiece.
+- `closed` keeps the best result on Express and ramda/ramda (two JavaScript repositories); whether that residual is a
+  closure effect is untested.
+- The greedy engines use lazy (Minoux) evaluation. Exact token gain under shortest-path parsing is not submodular, so the
+  chains are lazy-greedy orders, not guaranteed exact argmax at every step; the size of any divergence is unaudited.
