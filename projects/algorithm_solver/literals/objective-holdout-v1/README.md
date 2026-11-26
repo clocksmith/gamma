@@ -6,7 +6,15 @@ smaller complete archives out of sample. It does not search for a best dictionar
 
 Read [`PREREGISTRATION.md`](PREREGISTRATION.md) first. [`FORMAT.md`](FORMAT.md) defines the archive.
 
-To check or reproduce it, one command, no network:
+To check and reproduce it, copy and paste one command. It needs no network:
+
+```
+python3 replay.py all --strict
+```
+
+It takes 109 s from a clean clone and exits 0 only if every step passes. It needs Python 3, a C compiler and zstd
+1.5.7; with another zstd version `--strict` fails on the steps that could not be compared in full, so drop the flag
+and read the lines marked `PART`. The levels inside it can be run alone:
 
 ```
 python3 replay.py check    # 5 s: integrity, split boundaries, receipts, seven files end to end
@@ -15,9 +23,13 @@ python3 replay.py train    # 59 s: retrain every dictionary, compare byte for by
 python3 replay.py posthoc  # 9 s: recompute the measurements made after scoring, compare
 ```
 
-`check` needs Python 3 and zstd; `train` also needs a C compiler. zstd rows are compared only when the local zstd
-is 1.5.7; a step that could not be checked in full is printed as `PART`, never `PASS`, and `--strict` makes it a
-failure. Replaying the selection of the test files is separate: it needs the 568 MB CodeNet mirror and IBM's
+This command is the verification. The frozen scripts it wraps are not, run alone: see "Known limits of the frozen
+code" below. The same holds for the older standalone checker of the earlier transfer experiment,
+[`../witness-length-sweep-v1/check_unseen_transfer.py`](../witness-length-sweep-v1/check_unseen_transfer.py): it
+is partial, and [`../witness-length-sweep-v1/VERIFY.md`](../witness-length-sweep-v1/VERIFY.md) gives the command
+that completes it.
+
+`check` alone needs only Python 3 and zstd. Replaying the selection of the test files is separate: it needs the 568 MB CodeNet mirror and IBM's
 Python near-duplicate file (see `select_fresh_codenet.py`); `check` verifies the committed selection against IBM's
 identical-problem list and the rank order instead.
 

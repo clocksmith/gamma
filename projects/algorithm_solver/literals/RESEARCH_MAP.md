@@ -34,7 +34,8 @@ From an external review the owner accepted.
 ## Run, check and replay an experiment
 
 `objective-holdout-v1` is the worked example. Its `replay.py` is the one entry point for checking and reproducing
-it. It works in a temporary directory and writes nothing into the folder.
+it. It works in a temporary directory and writes nothing into the folder. The command to copy and paste is
+`python3 replay.py all --strict`; the table shows what it is made of.
 
 | Command | What it reruns | Clean clone, 16 workers |
 | --- | --- | ---: |

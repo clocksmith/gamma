@@ -2,7 +2,7 @@
 
 `README.md`, `RESULTS.md`, the runner and `check_unseen_transfer.py` are frozen by the three checksum lists here
 and are not edited. This note is not frozen. It exists because the frozen README tells you to run
-`check_unseen_transfer.py`, and that checker does less than it says.
+`check_unseen_transfer.py`, and that checker is **partial**: it does less than it says.
 
 Run this instead. It runs the frozen checker and then the checks the frozen one skips:
 
