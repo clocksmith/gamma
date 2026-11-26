@@ -6,8 +6,22 @@ smaller complete archives out of sample. It does not search for a best dictionar
 
 Read [`PREREGISTRATION.md`](PREREGISTRATION.md) first. [`FORMAT.md`](FORMAT.md) defines the archive.
 
+To check or reproduce it, one command, no network:
+
+```
+python3 replay.py check    # 5 s: integrity, split boundaries, six files end to end
+python3 replay.py score    # 42 s: rescore all four sets, compare with the committed results
+python3 replay.py train    # 62 s: retrain every dictionary, compare byte for byte
+```
+
+`check` needs Python 3 and zstd; `train` also needs a C compiler. zstd rows are compared only when the local zstd
+is 1.5.7. Replaying the selection of the test files is separate: it needs the 568 MB CodeNet mirror and IBM's
+Python near-duplicate file (see `select_fresh_codenet.py`); `check` verifies the committed selection against IBM's
+identical-problem list and the rank order instead.
+
 | File | Role |
 | --- | --- |
+| `replay.py` | The entry point for checking and reproducing everything below |
 | `train_arms.py` | Trains every arm on `train` only and writes `frozen/` |
 | `score.py` | Frozen scoring command: tokens, real archive bytes, reuse, rent, paired counts, zstd |
 | `select_fresh_codenet.py`, `select_project.py` | Sample rules for the two test sets, run by the scorer |

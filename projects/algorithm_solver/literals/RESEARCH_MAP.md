@@ -10,6 +10,7 @@ and cohort reports remain the authority for numerical claims.
 | Final measurement, lane closed | [Fixed-source comparison v3](fixed-source-v3/RESULTS.md) | Total encoded size, dictionary and code tables included, for shared and per-language designs against BPE, PathPiece, frequency, GreedTok and LP baselines. The frozen kill bar passed, but the effects are small and predictable from known theory, so BITS closed with a benchmark note. In-sample, no proved optimum. |
 | Representation baseline | [Pure 7/8-bit literal comparison](pure-literal-compare-v1/README.md) | Exact reconstruction of 400 known development programs per language, with separate payload, packet and dictionary accounting. Its exposed validation set is not a fresh holdout. |
 | Transfer evidence | [Witness length and unseen transfer](witness-length-sweep-v1/RESULTS.md) | Frozen byte-level sweep and replay on four train/test pairs. `jointBest` can use singletons; `greedyDP` is fragment-heavy, not singleton-free. No recorded multi-byte transfer lift in these arms. |
+| Held-out selection objectives | [Objective holdout v1](objective-holdout-v1/RESULTS.md) | Five selection rules trained on 400 CodeNet files, frozen, and scored on 200 unseen problems and one untouched project, for tokens and complete archive bytes. `python3 replay.py check` verifies it in seconds; `score` and `train` reproduce it. |
 | Capacity evidence | [Capacity reproduction manifest](bits-reproduce-v1/MANIFEST.md) | Rechecks stored witnesses and certificates; it does not repeat search or establish timings. |
 | Editor and promotion | [Promotion contract](BITS_PROMOTION.md), [legacy Shared7](demo/README.md) | 256one owns the live editor. Gamma owns experiment data and verification. Legacy profiles are needed for replay even after they leave the picker. |
 | Previous research | [Historical index](INDEX.md), [pilot](README.md#historical-pilot-joint-source-and-vocabulary-optimization) | Joint rewriting, counted fragments/macros, staged searches and null results; these are not the active comparator by default. |
@@ -29,6 +30,59 @@ From an external review the owner accepted.
 - **Codec-claim bar.** Any BITS codec claim needs fresh data, lean-framed zstd and FSST baselines, complete
   accounting of every byte the decoder sees, and a measured p95 lookup latency. The short-record harness's
   golden-byte accounting fixture is the required check (`short-record-decision-v1/STATUS.md`).
+
+## Run, check and replay an experiment
+
+`objective-holdout-v1` is the worked example. Its `replay.py` is the one entry point for checking and reproducing
+it. It works in a temporary directory and writes nothing into the folder.
+
+| Command | What it reruns | Clean clone, 8 workers |
+| --- | --- | ---: |
+| `python3 replay.py check` | Nothing expensive. Frozen checksums; every frozen file tracked by Git; manifests against the corpus; split boundaries against IBM's cluster file and the rank order; scorer against the independent decoder; `RESULTS.md` against `out/`; six training files end to end | 5 s |
+| `python3 replay.py score` | The frozen scorer and the independent decoder on all four sets, compared with the committed results | 42 s |
+| `python3 replay.py train` | Every dictionary and code table from the training files, compared byte for byte | 62 s |
+
+Measured on 2026-11-26 from a 43 MB sparse clone of the public repository that took 2 s; all three passed. Add
+`--report FILE` for a machine-readable record.
+
+**Before.** Reproducing the scored result took twelve commands on two machines, a 568 MB download and a Python
+environment with `pyarrow` (the sequence is in `objective-holdout-v1/SCORER-LOG.md`, 14:04 to 14:10 UTC). There was
+no command for retraining: `sha256sum -c SHA256SUMS-FROZEN` fails after a retrain because `train-summary.json`
+records run times. **After.** `python3 replay.py all`, 109 s, no network.
+
+Use the levels in order of cost. Run `check` after any edit and before any freeze. Run `score` only when the scorer,
+the format or a result file is in question, and `train` only when the training code or the engine is. Hosted CI runs
+none of them and should stay that way. Before any run longer than these, write down which result would change the
+decision.
+
+### Starting the next experiment in this lane
+
+- **New folder, new version.** Do not edit a frozen folder; supersede it.
+- **What carries over:** `bits_oh.py` (archive format, exact parsers, code-table fitting), `score.py` and
+  `replay.py`. **What is the experiment:** the hypotheses and decision rules (`PREREGISTRATION.md`), the selection
+  rules (`train_arms.py`), the sample rules for test files, and the table of outcomes (`make_results.py`).
+- **Order of work:** commit hypotheses and rules; train; write `SHA256SUMS-FROZEN`; run `replay.py check`; commit;
+  only then fetch test files. `check` fails if the freeze lists a file Git ignores, which is the one deviation v1
+  recorded.
+- **Tiny before full:** `check` pushes six files through the frozen scorer and the independent decoder in five
+  seconds. Use it while changing code. Spend a full scoring run only to answer a stated question.
+- **Spent test sets stay spent.** A rule designed after looking at `fresh` or `project` needs new test files.
+
+### Friction measured on 2026-11-26 and not yet fixed
+
+- **The harness is rewritten per experiment.** 18 folders here carry their own Huffman or heap coder, three
+  their own shortest-path parser, 20 their own checksum files, and there are 59 separate checker scripts. v1 needed
+  1092 new lines of format, training and scoring code before it could ask its question. Sharing code is safe
+  only for new folders: frozen ones must keep the copies their checksums cover.
+- **Ownership is not recorded per folder.** `OWNERSHIP.md` is a hand-off snapshot from 2026-10-20. It does not say
+  who owns which experiment now, and it names a private host path.
+- **The slowest step was not compute.** Getting IBM's 2 KB identical-problem list meant streaming the 8.3 GB dataset
+  archive for 3.5 minutes. That list is now committed in `objective-holdout-v1/metadata/`. The 40 MB Python
+  near-duplicate file the selection rule also reads is not in the repository, so replaying the selection itself,
+  which `replay.py` does not do, still needs that stream and the 568 MB mirror download.
+- **Lint was linting data.** The hosted lint job was red from 2026-11-24 to 2026-11-26 because it checked frozen
+  third-party corpus files. They are now excluded in `ruff.toml`; hosted CI is otherwise a smoke test and reruns no
+  experiment.
 
 ## Archive in place first
 
