@@ -1,0 +1,1 @@
+a='abcdefghijklmnopqrstuvwxyz';require("fs").readFileSync("/dev/stdin","utf8").split('\n').map(function(i){for(s=26;s--;)r=i.replace(/[a-z]/g,function(j){return a[(a.indexOf(j)+s)%26]}),r.match(/th(e|is|at)/)?console.log(r):0})
