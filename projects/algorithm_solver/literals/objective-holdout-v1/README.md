@@ -23,8 +23,10 @@ python3 replay.py train    # 59 s: retrain every dictionary, compare byte for by
 python3 replay.py posthoc  # 9 s: recompute the measurements made after scoring, compare
 ```
 
-This command is the verification. The frozen scripts it wraps are not, run alone: see "Known limits of the frozen
-code" below. The same holds for the older standalone checker of the earlier transfer experiment,
+This command verifies this folder's artifact: the frozen files, the split, the scoring, the decoding and the
+retraining. It does not verify the proofs in the paper's appendix, and it does not rerun the other experiments of
+this lane. The frozen scripts it wraps are not a verification when run alone: see "Known limits of the frozen code"
+below. The same holds for the older standalone checker of the earlier transfer experiment,
 [`../witness-length-sweep-v1/check_unseen_transfer.py`](../witness-length-sweep-v1/check_unseen_transfer.py): it
 is partial, and [`../witness-length-sweep-v1/VERIFY.md`](../witness-length-sweep-v1/VERIFY.md) gives the command
 that completes it.
