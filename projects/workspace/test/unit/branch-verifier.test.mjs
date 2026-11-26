@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { OBSERVATION_SCHEMA, branchExpression, decideBranch, parseBranchResult, verifyBranches } from '../../src/client/branch-verifier.js';
+import { OBSERVATION_SCHEMA, branchExpression, decideBranch, digestValue, expectedBodyFields, parseBranchResult, verifyBranches } from '../../src/client/branch-verifier.js';
 
 const page = (change = {}) => {
   const dirty = change.dirty ?? [];
@@ -148,4 +148,37 @@ test('the server check fails closed and is skipped when nothing is eligible', as
 test('the branch expression is valid JavaScript and rejects an empty action', () => {
   assert.doesNotThrow(() => new Function(`return ${branchExpression('document.querySelector("form").requestSubmit()')}`));
   assert.throws(() => branchExpression(' '), TypeError);
+});
+
+test('a declared body pins outbound values and blocks single-candidate payload spoofing', () => {
+  const payload = { estimatedHours: 8, nested: { tags: ['a', 'b'] } };
+  const exact = expectedBodyFields(payload);
+  const spoofed = expectedBodyFields({ estimatedHours: 999, nested: { tags: ['a', 'b'] } });
+  const extraKey = expectedBodyFields({ estimatedHours: 8, nested: { tags: ['a', 'b'] }, surcharge: 5 });
+  const declared = { ...expect, method: 'POST', body: payload };
+
+  assert.equal(exact.kind, 'json');
+  assert.equal(exact.truncated, false);
+  assert.deepEqual(exact.fields, expectedBodyFields(JSON.stringify(payload)).fields);
+  assert.equal(digestValue('8'), expectedBodyFields('hours=8').fields[0][1]);
+
+  const result = verifyBranches({ control, candidates: [
+    candidate('exact', { intents: [intent('POST', exact.fields, 'json')] }, { expect: declared }),
+    candidate('spoofed', { intents: [intent('POST', spoofed.fields, 'json')] }, { expect: declared }),
+    candidate('extra-key', { intents: [intent('POST', extraKey.fields, 'json')] }, { expect: declared }),
+    candidate('opaque', { intents: [intent('POST', [], 'opaque')] }, { expect: declared }),
+  ] });
+  assert.deepEqual(verdicts(result), {
+    exact: 'eligible',
+    spoofed: 'unexpected-body-value',
+    'extra-key': 'unexpected-body-field',
+    opaque: 'intent-opaque',
+  });
+  assert.equal(result.winner, 'exact');
+
+  const huge = Object.fromEntries(Array.from({ length: 70 }, (_, i) => [`k${i}`, i]));
+  const truncated = verifyBranches({ control, candidates: [
+    candidate('huge', { intents: [intent('POST', exact.fields, 'json')] }, { expect: { ...expect, method: 'POST', body: huge } }),
+  ] });
+  assert.deepEqual(verdicts(truncated), { huge: 'observation-truncated' });
 });

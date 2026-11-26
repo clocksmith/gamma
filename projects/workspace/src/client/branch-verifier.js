@@ -1,8 +1,79 @@
 // Reads sealed Fawn branches and decides whether one candidate may go to human review.
 // It has no network or write authority. `review` never authorizes an action, and a branch's
 // result is the branch's own claim, so anything uncertain ends in `abstain`.
-const LIMITS = Object.freeze({ branches: 32, attempts: 64, list: 64, text: 200, url: 2048, bytes: 65536 });
+const LIMITS = Object.freeze({ branches: 32, attempts: 64, list: 64, text: 200, url: 2048, bytes: 65536, depth: 8 });
 export const OBSERVATION_SCHEMA = 'gammatron.fawn-branch-observation/v3';
+
+/** Deterministic 64-bit digest shared by page-side branch observation and host-side payload pinning. */
+export function digestValue(value) {
+  let a = 0xdeadbeef, b = 0x41c6ce57;
+  for (let i = 0; i < value.length; i++) { const c = value.charCodeAt(i); a = Math.imul(a ^ c, 2654435761); b = Math.imul(b ^ c, 1597334677); }
+  a = Math.imul(a ^ (a >>> 16), 2246822507) ^ Math.imul(b ^ (b >>> 13), 3266489909);
+  b = Math.imul(b ^ (b >>> 16), 2246822507) ^ Math.imul(a ^ (a >>> 13), 3266489909);
+  return (b >>> 0).toString(16).padStart(8, '0') + (a >>> 0).toString(16).padStart(8, '0');
+}
+
+function flattenBody(value, path, out, depth, limit, maxDepth) {
+  if (out.length > limit) return true;
+  if (value !== null && typeof value === 'object') {
+    if (depth >= maxDepth) { out.push([path || '(body)', JSON.stringify(value)]); return true; }
+    const entries = Array.isArray(value) ? value.map(item => ['[]', item]) : Object.entries(value);
+    if (!entries.length) out.push([path || '(body)', JSON.stringify(value)]);
+    let truncated = false;
+    for (const [key, item] of entries) {
+      if (flattenBody(item, key === '[]' ? path + '[]' : path ? path + '.' + key : key, out, depth + 1, limit, maxDepth)) truncated = true;
+    }
+    return truncated;
+  }
+  out.push([path || '(body)', JSON.stringify(value) ?? String(value)]);
+  return false;
+}
+
+function digestPairs(entries) {
+  const fields = [];
+  for (const [name, value] of entries) {
+    const file = typeof File === 'function' && value instanceof File;
+    fields.push([String(name).slice(0, LIMITS.text), digestValue(file ? 'file:' + value.size : typeof value === 'string' ? value : JSON.stringify(value) ?? String(value))]);
+  }
+  const truncated = fields.length > LIMITS.list;
+  fields.sort((x, y) => x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : x[1] < y[1] ? -1 : x[1] > y[1] ? 1 : 0);
+  return { fields: fields.slice(0, LIMITS.list), truncated };
+}
+
+/** Computes the exact sorted [path, digest] multiset that `branchExpression` emits for an outbound body. */
+export function expectedBodyFields(body) {
+  if (body === null || body === undefined) return { kind: 'none', fields: [], truncated: false };
+  if (typeof body === 'string') {
+    try {
+      const parsed = JSON.parse(body);
+      if (parsed && typeof parsed === 'object') {
+        const out = [];
+        const flatTrunc = flattenBody(parsed, '', out, 0, LIMITS.list, LIMITS.depth);
+        const { fields, truncated } = digestPairs(out);
+        return { kind: 'json', fields, truncated: flatTrunc || truncated };
+      }
+    } catch {}
+    if (/^[^=&\s]+=[^&\s]*(&[^=&\s]+=[^&\s]*)*$/.test(body)) {
+      return { kind: 'urlencoded', ...digestPairs(new URLSearchParams(body)) };
+    }
+    return { kind: 'text', fields: [['(body)', digestValue(body)]], truncated: false };
+  }
+  if (body instanceof URLSearchParams) return { kind: 'urlencoded', ...digestPairs(body) };
+  if (typeof FormData === 'function' && body instanceof FormData) return { kind: 'formdata', ...digestPairs(body) };
+  if ((typeof Blob === 'function' && body instanceof Blob) || body instanceof ArrayBuffer || ArrayBuffer.isView(body)) {
+    return { kind: 'opaque', fields: [], truncated: false };
+  }
+  if (typeof body === 'object') {
+    let normalized;
+    try { normalized = JSON.parse(JSON.stringify(body)); } catch { return { kind: 'opaque', fields: [], truncated: false }; }
+    if (!normalized || typeof normalized !== 'object') return { kind: 'opaque', fields: [], truncated: false };
+    const out = [];
+    const flatTrunc = flattenBody(normalized, '', out, 0, LIMITS.list, LIMITS.depth);
+    const { fields, truncated } = digestPairs(out);
+    return { kind: 'json', fields, truncated: flatTrunc || truncated };
+  }
+  return { kind: 'opaque', fields: [], truncated: false };
+}
 
 const stringList = value => Array.isArray(value) && value.length <= LIMITS.list
   && value.every(entry => typeof entry === 'string' && entry.length <= LIMITS.text);
@@ -35,13 +106,7 @@ export function branchExpression(action) {
   return `(async () => {
   const LIMIT = ${LIMITS.list}, TEXT = ${LIMITS.text};
   const text = element => String(element.innerText ?? element.textContent ?? '').trim().replace(/\\s+/g, ' ').slice(0, TEXT);
-  const digest = value => {
-    let a = 0xdeadbeef, b = 0x41c6ce57;
-    for (let i = 0; i < value.length; i++) { const c = value.charCodeAt(i); a = Math.imul(a ^ c, 2654435761); b = Math.imul(b ^ c, 1597334677); }
-    a = Math.imul(a ^ (a >>> 16), 2246822507) ^ Math.imul(b ^ (b >>> 13), 3266489909);
-    b = Math.imul(b ^ (b >>> 16), 2246822507) ^ Math.imul(a ^ (a >>> 13), 3266489909);
-    return (b >>> 0).toString(16).padStart(8, '0') + (a >>> 0).toString(16).padStart(8, '0');
-  };
+  const digest = ${digestValue};
   const documents = () => {
     const found = [[document, '']];
     for (let i = 0; i < found.length && found.length <= LIMIT; i++) {
@@ -87,19 +152,12 @@ export function branchExpression(action) {
   // What the page's code asked to send. This is the branch's own claim; the browser's attempts stay authoritative.
   // A fetch bound before this wrapper runs is invisible here and ends as intent-missing, which is why a native
   // record in the browser is the stronger source.
-  const URL_LIMIT = ${LIMITS.url}, BYTES = ${LIMITS.bytes}, DEPTH = 8;
+  const URL_LIMIT = ${LIMITS.url}, BYTES = ${LIMITS.bytes}, DEPTH = ${LIMITS.depth};
   const intents = [], pendingForms = [];
   let intentsTruncated = false;
+  const flattenBody = ${flattenBody};
   const flatten = (value, path, out, depth) => {
-    if (out.length > LIMIT) { intentsTruncated = true; return out; }
-    if (value !== null && typeof value === 'object') {
-      if (depth >= DEPTH) { intentsTruncated = true; out.push([path || '(body)', JSON.stringify(value)]); return out; }
-      const entries = Array.isArray(value) ? value.map(item => ['[]', item]) : Object.entries(value);
-      if (!entries.length) out.push([path || '(body)', JSON.stringify(value)]);
-      for (const [key, item] of entries) flatten(item, key === '[]' ? path + '[]' : path ? path + '.' + key : key, out, depth + 1);
-      return out;
-    }
-    out.push([path || '(body)', JSON.stringify(value) ?? String(value)]);
+    if (flattenBody(value, path, out, depth, LIMIT, DEPTH)) intentsTruncated = true;
     return out;
   };
   const pairs = entries => {
@@ -215,7 +273,7 @@ function checkIntent(observation, attempt, expected) {
   const matching = observation.intents.filter(intent => intent.api === attempt.attempt && (intent.target === attempt.target || intent.url === attempt.target));
   if (new Set(matching.map(intentKey)).size > 1) return { verdict: 'unexpected-effect', detail: 'the page recorded different bodies for one write' };
   const intent = matching[0] ?? null;
-  const declared = expected.method !== undefined || expected.bodyFields !== undefined;
+  const declared = expected.method !== undefined || expected.bodyFields !== undefined || expected.body !== undefined;
   if (!declared) return { intent };
   if (observation.intentsTruncated) return { verdict: 'observation-truncated', detail: 'the write could not be recorded in full' };
   if (!intent) return { verdict: 'intent-missing', detail: 'the browser recorded a write the page-side record did not see' };
@@ -225,6 +283,17 @@ function checkIntent(observation, attempt, expected) {
     const names = [...new Set(intent.body.fields.map(field => field[0]))].sort();
     const wanted = [...new Set(expected.bodyFields)].sort();
     if (JSON.stringify(names) !== JSON.stringify(wanted)) return { verdict: 'unexpected-body-field', detail: names.join(', ').slice(0, LIMITS.text) };
+  }
+  if (expected.body !== undefined) {
+    const wantedBody = expectedBodyFields(expected.body);
+    if (wantedBody.truncated) return { verdict: 'observation-truncated', detail: 'the expected write body exceeded observation limits' };
+    if (wantedBody.kind === 'opaque' || intent.body.kind === 'opaque') return { verdict: 'intent-opaque', detail: 'the write body could not be read' };
+    const names = [...new Set(intent.body.fields.map(field => field[0]))].sort();
+    const wantedNames = [...new Set(wantedBody.fields.map(field => field[0]))].sort();
+    if (JSON.stringify(names) !== JSON.stringify(wantedNames)) return { verdict: 'unexpected-body-field', detail: names.join(', ').slice(0, LIMITS.text) };
+    if (JSON.stringify(intent.body.fields) !== JSON.stringify(wantedBody.fields)) {
+      return { verdict: 'unexpected-body-value', detail: 'the write body values did not match the declared payload' };
+    }
   }
   return { intent };
 }
