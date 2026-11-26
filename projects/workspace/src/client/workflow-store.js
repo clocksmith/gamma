@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { PrivateJsonFile } from './private-json-file.js';
 import { canonicalJson, sha256Hex } from '../journal.js';
-import { TraceDag } from './trace-dag.js';
+import { TraceDag, TRACE_DAG_OPTIONAL_KEYS } from './trace-dag.js';
 import { runWorkflow } from './workflow-agent.js';
 import { WorkflowAttempts, attemptErrorCode } from './workflow-attempts.js';
 
@@ -16,7 +16,7 @@ const SOURCE_FILES = ['private-json-file.js', 'workflow-attempts.js', 'workflow-
 const STATIC_SOURCE_HASHES = Object.freeze(Object.fromEntries(SOURCE_FILES.map(path => [path,
   sha256Hex(readFileSync(new URL(path, import.meta.url)))])));
 const VALIDATED_DAG_CACHE = new Map();
-const ALLOWED_DAG_OPTIONAL_KEYS = new Set(['goalTerminals', 'suffixProfiles', 'slotRoles']);
+const ALLOWED_DAG_OPTIONAL_KEYS = new Set(TRACE_DAG_OPTIONAL_KEYS);
 function hasValidDagKeys(dag) {
   if (!dag || typeof dag !== 'object' || Array.isArray(dag)) return false;
   const baseKeys = Object.keys(dag).filter(k => !ALLOWED_DAG_OPTIONAL_KEYS.has(k)).sort().join(',');

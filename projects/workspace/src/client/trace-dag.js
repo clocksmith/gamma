@@ -28,6 +28,8 @@ import {
 } from './suffix-eligibility.js';
 
 const VERSION = 3;
+/** Optional top-level keys a v3 export may carry. workflow-store.js and workflow-store.schema.json follow this list. */
+export const TRACE_DAG_OPTIONAL_KEYS = Object.freeze(['entryRoots', 'goalTerminals', 'suffixProfiles', 'slotRoles']);
 const SUPPORTED_VERSIONS = [1, 2, VERSION];
 const HASH = /^[a-f0-9]{64}$/;
 const KINDS = ['fill', 'select', 'click'];
@@ -116,12 +118,12 @@ export class TraceDag {
   static restore(state, limits) {
     if (!SUPPORTED_VERSIONS.includes(state?.version)) throw Error('Invalid trace cache');
     const stateKeys = state && typeof state === 'object' ? Object.keys(state).filter(
-      k => state.version < VERSION || !['entryRoots', 'goalTerminals', 'suffixProfiles', 'slotRoles'].includes(k),
+      k => state.version < VERSION || !TRACE_DAG_OPTIONAL_KEYS.includes(k),
     ).sort().join() : '';
     const allAllowed = state && typeof state === 'object'
-      && Object.keys(state).every(k => ['version', 'key', 'limits', 'nodes', 'entryRoots', 'goalTerminals', 'suffixProfiles', 'slotRoles'].includes(k));
+      && Object.keys(state).every(k => ['version', 'key', 'limits', 'nodes', ...TRACE_DAG_OPTIONAL_KEYS].includes(k));
     const validStateKeys = allAllowed && stateKeys === 'key,limits,nodes,version'
-      && (state.version >= VERSION || (state.entryRoots === undefined && state.goalTerminals === undefined && state.suffixProfiles === undefined && state.slotRoles === undefined));
+      && (state.version >= VERSION || TRACE_DAG_OPTIONAL_KEYS.every(k => state[k] === undefined));
     const dag = new TraceDag(limits, { version: state.version });
     if (!validStateKeys || !HASH.test(state.key)
       || canonicalJson(state.limits) !== canonicalJson(limits) || !Array.isArray(state.nodes)

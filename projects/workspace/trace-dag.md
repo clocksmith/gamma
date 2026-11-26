@@ -182,8 +182,11 @@ structural target, live handle/digest and disclosure check.
 ## Snapshot format and compatibility
 
 `dag.export()` emits version-3 state by default:
-`{version: 3, key, limits, nodes: [[nodeHash, {depth, edges, repairs, terminal}]], goalTerminals?}`
-(`goalTerminals` is omitted unless goal-scoped sessions were published).
+`{version: 3, key, limits, nodes: [[nodeHash, {depth, edges, repairs, terminal}]], entryRoots?, goalTerminals?, suffixProfiles?, slotRoles?}`.
+Each optional key is omitted when empty; `entryRoots` appears only when the taught
+entries differ from the nodes without incoming edges (multi-entry DAGs). The key list
+is `TRACE_DAG_OPTIONAL_KEYS` in `trace-dag.js`; `workflow-store.js` uses it and
+`workflow-store.schema.json` must match it (checked by `test/unit/workflow-store-dag-keys.test.js`).
 Each edge is `{next, step}` or `{next, step, weight}` where `step` is
 `{kind, locator, slot}` (`slot` is `null` for clicks). Raw labels, input values,
 URLs, selectors, handles and credentials are never stored in the graph. The
