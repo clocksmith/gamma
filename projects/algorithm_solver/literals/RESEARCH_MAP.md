@@ -97,10 +97,26 @@ checked is in [`REVIEW-20261126.md`](REVIEW-20261126.md).
 | --- | --- | --- |
 | `fixed-source-v3/engine.c` | `fixed-source-v3/FREEZE.md`, `objective-holdout-v1/frozen/train-summary.json`, `codenet-replication-v1/results/codenet_results.json`, `short-record-decision-v1/FREEZE-PROGRESS.md` | Writes its chain in place; its BPE pair table (2^20 slots) cannot grow and a full table never returns; the time limit is read only between rounds. Closed in the drivers: `run_replication.py`, `replay.py train` |
 | `objective-holdout-v1`: the 34 files of `SHA256SUMS-FROZEN` | that list | See "Known limits of the frozen code" in its README |
-| `witness-length-sweep-v1`: runner, checker, preregistration, results | its three checksum lists | The checker skips four checks; `recheck_unseen_transfer.py` (43 s) does them |
+| `witness-length-sweep-v1`: runner, checker, preregistration, README, results | its three checksum lists | The checker skips four checks and the frozen README names only that checker. Run `recheck_unseen_transfer.py` (43 s); [`witness-length-sweep-v1/VERIFY.md`](witness-length-sweep-v1/VERIFY.md) says why |
 | `fixed-source-v3`: the ten files listed in its `FREEZE.md` | that list | `run.sh` does not check its PathPiece seed runs; the 36 seed chains kept from the CodeNet run all end with `stopped=0`. No checker exists for the seed chains of the fixed-source run itself, which are not in this repository |
 
 A new experiment that needs different engine behaviour copies `engine.c` under a new name.
+
+**These gaps are closed only for someone who runs the right command.** Run alone, `check_unseen_transfer.py` still
+prints its verdict without the extra checks, `independent_decode.py` still sets `all_ok` with junk after the last
+file, and `train_arms.py` still ignores a time-limited chain and reuses a compiled engine it finds. The commands to
+trust are `replay.py` and `recheck_unseen_transfer.py`. Hosted CI does not run them, by the owner's rule that
+automatic CI is a smoke test.
+
+**Every caller of the engine must bound it.** The engine cannot stop itself once its pair table is full.
+
+| Caller | Bounded |
+| --- | --- |
+| `objective-holdout-v1/replay.py train` (runs the frozen `train_arms.py`) | Yes: the trainer's whole session is killed after 1,800 s |
+| `codenet-replication-v1/run_replication.py` | Yes: 900 s per run, and only a finished chain with this run's receipt is used |
+| `rung2-presearch-v1/equal_budget_eval.py`, `rung3-archive-search-v1/evaluate_rung3.py` | Yes, since 2026-11-26: three times the budget they hand the engine plus 120 s. A chain cut short by the engine's own budget is a result there, not an error |
+| `fixed-source-v3/run.sh`, `pipeline.sh`, `test_small.py`; `objective-holdout-v1/train_arms.py` run directly | No, and frozen. Their corpora are under 2^20 token positions, where the table cannot fill |
+| `fixed-source-v1/engine.c`, `fixed-source-v2/engine.c` | Older copies with the same fixed tables; closed experiments |
 
 ### Friction measured on 2026-11-26 and not yet fixed
 

@@ -53,5 +53,9 @@ which is not frozen, and none changed a frozen result.
 
 A new experiment that needs a different engine should copy `engine.c` under a new name, not edit it.
 
+These gaps are closed only when `replay.py` is what is run. `independent_decode.py` run alone still reports
+`all_ok` with junk after the last file, and `train_arms.py` run alone still accepts a time-limited chain and a stale
+engine binary. Neither is a verification without `replay.py`.
+
 CodeNet files are IBM Project CodeNet v1.0.0 under CDLA-Permissive-2.0; see
 [`../codenet-replication-v1/NOTICE`](../codenet-replication-v1/NOTICE).

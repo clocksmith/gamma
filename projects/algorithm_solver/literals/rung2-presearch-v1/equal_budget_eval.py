@@ -111,13 +111,20 @@ def run_engine_arm(
 
     t0 = time.perf_counter()
     rem = max(0.05, limit_sec)
-    subprocess.run(
-        [
-            str(engine_bin), arm, policy, str(max_entry_len), str(k_max), f'{rem:.4f}',
-            str(list_file), str(out_chain),
-        ],
-        env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-    )
+    # The engine reads its own limit only between rounds, and in `bpe` mode a full pair table
+    # (2^20 slots, never grown) never returns. engine.c is pinned by freeze records and is not
+    # edited, so bound the run here; a chain cut short by the engine's own limit is still a result.
+    bound = 3 * rem + 120
+    try:
+        subprocess.run(
+            [
+                str(engine_bin), arm, policy, str(max_entry_len), str(k_max), f'{rem:.4f}',
+                str(list_file), str(out_chain),
+            ],
+            env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=bound,
+        )
+    except subprocess.TimeoutExpired:
+        raise RuntimeError(f'{arm} on {list_file.name}: the engine did not return {bound:.0f} s after a {rem:.1f} s budget and was killed') from None
     return time.perf_counter() - t0
 
 

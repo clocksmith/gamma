@@ -240,12 +240,14 @@ def evaluate_pair_benchmark(
         env['FSV3_GROUPS'] = str(wdir / 'both.groups')
         env['FSV3_RECEIPT'] = 'manifest=rung3 pool=both cuts=doc impl=v3 run=bench'
 
+        # Each search is given `limit_sec` and reads it only between rounds; none is allowed to run
+        # unbounded (subprocess raises TimeoutExpired 3 * limit_sec + 120 s after launch).
         # 1. Run `greedy-entry` in engine.c and measure exact wall-clock time
         ge_chain_p = wdir / 'greedy-entry.txt'
         t0 = time.perf_counter()
         subprocess.run(
             [str(eng_bin), 'greedy-entry', 's1-whole', '16', str(k_max), f'{limit_sec:.3f}', str(list_f), str(ge_chain_p)],
-            env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=3 * limit_sec + 120,
         )
         ge_sec = time.perf_counter() - t0
         ge_chain, _ = read_entries(ge_chain_p)
@@ -255,7 +257,7 @@ def evaluate_pair_benchmark(
         t0 = time.perf_counter()
         subprocess.run(
             [str(eng_bin), 'greedy-byte', 's1-whole', '16', str(k_max), f'{limit_sec:.3f}', str(list_f), str(gb_chain_p)],
-            env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=3 * limit_sec + 120,
         )
         gb_sec = time.perf_counter() - t0
         gb_chain, _ = read_entries(gb_chain_p)
@@ -265,7 +267,7 @@ def evaluate_pair_benchmark(
         t0 = time.perf_counter()
         subprocess.run(
             [str(arc_bin), '2', 's1-whole', '16', str(k_max), f'{limit_sec:.3f}', str(list_f), str(arc_chain_p)],
-            env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            env=env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=3 * limit_sec + 120,
         )
         arc_sec = time.perf_counter() - t0
         arc_chain, arc_meta = read_entries(arc_chain_p)
