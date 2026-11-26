@@ -1,5 +1,12 @@
 # Match the hosted syntax/undefined-name gate for local runs.
-extend-exclude = ["projects/enwiki9", "*.ipynb"]
+# The two corpus directories hold third-party submissions and project files frozen byte for byte
+# as experiment data (IBM Project CodeNet, express). They are inputs, not code in this repository.
+extend-exclude = [
+    "projects/enwiki9",
+    "*.ipynb",
+    "projects/algorithm_solver/literals/codenet-replication-v1/corpus",
+    "projects/algorithm_solver/literals/objective-holdout-v1/corpus",
+]
 
 [lint]
 select = ["E9", "F63", "F7", "F82"]
