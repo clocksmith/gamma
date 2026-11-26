@@ -21,6 +21,12 @@ Reopening requires explicit user authorization. See the
 [research register](docs/research_register.md). The descriptions below preserve
 the historical objective and workbench; they are not instructions to resume.
 
+**Retired on 2026-11-26.** The track is retired: artifacts stay read-only and no
+new tools get built on it. No tracked result has complete score accounting and
+none verifies a full 1G round-trip decode; the two endpoint428 #1 claims are
+withdrawn. See the `retirement` entry in the
+[retirement record](operations/runtime/project_status.json).
+
 Compression research toward exact reconstruction of canonical enwik9's
 1,000,000,000 bytes with a fully counted score at or below 96,000,000 bytes.
 The stretch target is 95,000,000 complete bytes. Research prioritizes

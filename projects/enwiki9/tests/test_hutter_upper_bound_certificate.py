@@ -20,11 +20,11 @@ class BestForecastRecordTests(unittest.TestCase):
         canonical.start()
         self.addCleanup(canonical.stop)
 
-    def test_falls_back_to_calibrated_baseline(self) -> None:
+    def test_unaccounted_calibrated_baseline_does_not_rank(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             selected = certificate.best_forecast_record(Path(temp_dir))
 
-        self.assertEqual(selected, certificate.BASELINE_FORECAST)
+        self.assertEqual(selected, certificate.NO_RANKED_FORECAST)
 
     def test_selects_exact_counted_10m_projection(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -36,6 +36,7 @@ class BestForecastRecordTests(unittest.TestCase):
                     {
                         "evidence_level": "exact_guarded_10m_archive_screen",
                         "scope": {"raw_bytes": 10_000_000},
+                        "score_accounting_complete": True,
                         "economics": {
                             "candidate_archive_bytes_10m": 1_635_695,
                             "conservative_projected_margin_bytes": -4_557_404,
@@ -78,7 +79,7 @@ class BestForecastRecordTests(unittest.TestCase):
 
             selected = certificate.best_forecast_record(results_dir)
 
-        self.assertEqual(selected, certificate.BASELINE_FORECAST)
+        self.assertEqual(selected, certificate.NO_RANKED_FORECAST)
 
     def test_selects_pair_layer0_terminal_projection(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -90,6 +91,7 @@ class BestForecastRecordTests(unittest.TestCase):
                     {
                         "evidence_level": "guarded_exact_10m_archive_screen",
                         "scope": {"raw_bytes": 10_000_000},
+                        "score_accounting_complete": True,
                         "economics": {
                             "candidate_archive_bytes_10m": 1_635_174,
                             "conservative_provisional_score_bytes": 109_524_268,
@@ -121,6 +123,7 @@ class BestForecastRecordTests(unittest.TestCase):
                     {
                         "evidence_level": "guarded_exact_10m_archive_screen",
                         "scope": {"raw_bytes": 10_000_000},
+                        "score_accounting_complete": True,
                         "economics": {
                             "candidate_archive_bytes_10m": 1_635_174,
                             "conservative_provisional_score_bytes": 109_524_268,
@@ -139,6 +142,7 @@ class BestForecastRecordTests(unittest.TestCase):
                             "counted_lzma_zip_package_plus_guarded_exact_10m_archive"
                         ),
                         "scope": {"raw_bytes": 10_000_000},
+                        "score_accounting_complete": True,
                         "economics": {
                             "candidate_archive_bytes_10m": 1_635_174,
                             "conservative_provisional_score_bytes": 109_452_151,
@@ -159,6 +163,7 @@ class BestForecastRecordTests(unittest.TestCase):
                             "constructive_counted_exact_10m_lzma_package_and_codec_proof"
                         ),
                         "scope": {"raw_bytes": 10_000_000},
+                        "score_accounting_complete": True,
                         "economics": {
                             "candidate_archive_bytes_10m": 1_635_174,
                             "conservative_provisional_score_bytes": 109_452_151,
@@ -182,6 +187,111 @@ class BestForecastRecordTests(unittest.TestCase):
         self.assertEqual(selected["projected_margin_bytes"], certificate.TARGET_10_95 - 109_452_151)
         self.assertEqual(selected["source_projected_margin_bytes"], -4_452_151)
         self.assertIs(selected["codec_replay_complete"], True)
+
+
+class RankingRuleTests(unittest.TestCase):
+    """Only complete, in-repository accounting may rank as a score."""
+
+    def setUp(self) -> None:
+        canonical = mock.patch.object(
+            certificate, "canonical_frontier_forecast_record", return_value=None
+        )
+        canonical.start()
+        self.addCleanup(canonical.stop)
+
+    @staticmethod
+    def forecast_receipt(**fields: object) -> dict:
+        receipt = {
+            "evidence_level": (
+                "constructive_counted_exact_10m_lzma_package_and_codec_proof"
+            ),
+            "scope": {"raw_bytes": 10_000_000},
+            "economics": {
+                "candidate_archive_bytes_10m": 1_634_500,
+                "conservative_projected_score_bytes": 109_389_323,
+            },
+            "proof": {"roundtrip_ok": True, "determinism_ok": True},
+            "decision": {"verdict": "promote"},
+            "artifacts": {"package_receipt": "results/package/receipt.json"},
+        }
+        receipt.update(fields)
+        return receipt
+
+    def select(self, name: str, receipt: dict) -> dict:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            results_dir = Path(temp_dir)
+            (results_dir / name).mkdir()
+            (results_dir / name / "receipt.json").write_text(json.dumps(receipt))
+            return certificate.best_forecast_record(results_dir)
+
+    def test_forecast_without_complete_accounting_does_not_rank(self) -> None:
+        selected = self.select("unaccounted", self.forecast_receipt())
+        self.assertEqual(selected, certificate.NO_RANKED_FORECAST)
+
+    def test_forecast_with_host_local_package_does_not_rank(self) -> None:
+        receipt = self.forecast_receipt(
+            score_accounting_complete=True,
+            artifacts={"package_receipt": "/host/only/package/receipt.json"},
+        )
+        selected = self.select("host_local", receipt)
+        self.assertEqual(selected, certificate.NO_RANKED_FORECAST)
+
+    def test_complete_in_repository_forecast_ranks(self) -> None:
+        selected = self.select(
+            "accounted", self.forecast_receipt(score_accounting_complete=True)
+        )
+        self.assertEqual(selected["program_id"], "accounted")
+
+    def test_withdrawn_canonical_forecast_does_not_rank(self) -> None:
+        withdrawn = {
+            "program_id": "endpoint428_gate_dot_fuse_output_update_loop_v1",
+            "projected_score": 109_389_323,
+            "quality": "source-bound-canonical-forecast",
+            "evidence": "fixture",
+            "score_accounting_complete": True,
+            "host_local_provenance": False,
+        }
+        with (
+            mock.patch.object(
+                certificate, "canonical_frontier_forecast_record", return_value=withdrawn
+            ),
+            tempfile.TemporaryDirectory() as temp_dir,
+        ):
+            selected = certificate.best_forecast_record(Path(temp_dir))
+        self.assertEqual(selected, certificate.NO_RANKED_FORECAST)
+
+    def test_counted_receipt_with_host_local_package_is_unranked(self) -> None:
+        receipt = self.forecast_receipt(
+            artifacts={
+                "input": {"sha256": "fixed"},
+                "package_receipt": "/host/only/package/receipt.json",
+            }
+        )
+        receipt["economics"]["candidate_program_bytes"] = 261_125
+        with tempfile.TemporaryDirectory() as temp_dir:
+            path = Path(temp_dir) / "minified" / "receipt.json"
+            path.parent.mkdir()
+            path.write_text(json.dumps(receipt))
+            row = certificate.load_result(path)
+
+        self.assertIsNotNone(row)
+        self.assertTrue(row.host_local_provenance)
+        self.assertFalse(row.is_ranked_score)
+        self.assertIn("score_accounting_complete is not true", row.rank_exclusions)
+        self.assertEqual(certificate.best_by_size([row]), [])
+        self.assertEqual(certificate.best_unranked_counted_by_size([row]), [row])
+
+    def test_withdrawn_claims_render_in_markdown(self) -> None:
+        with mock.patch.object(certificate, "build_top_status", return_value=[]):
+            cert = certificate.build_certificate([])
+        with tempfile.TemporaryDirectory() as temp_dir:
+            path = Path(temp_dir) / "certificate.md"
+            certificate.write_markdown(cert, path)
+            text = path.read_text()
+        self.assertIn("## Withdrawn Claims", text)
+        self.assertIn("1,895,625", text)
+        self.assertIn("109,389,323", text)
+        self.assertEqual(cert["best_exact_upper_bounds_by_scope"], [])
 
 
 class ActiveCandidateContextTests(unittest.TestCase):

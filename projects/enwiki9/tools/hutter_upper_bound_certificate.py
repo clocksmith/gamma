@@ -77,6 +77,35 @@ COUNTED_10M_FORECAST_EVIDENCE = {
     "guarded_exact_10m_archive_screen",
 }
 
+# Claims that earlier generated certificates ranked #1 and that were later
+# withdrawn.  They stay listed (history is preserved) but never rank again.
+WITHDRAWN_CLAIMS: dict[str, dict[str, Any]] = {
+    "endpoint428_pair_layer0_runtime_successor_minified_package_v1": {
+        "claim": "best exact 10M",
+        "withdrawn_score_bytes": 1_895_625,
+        "withdrawn_utc": "2026-11-26",
+        "reason": (
+            "The 261,125-byte package is grounded only in an untracked "
+            "host-local path the certificate never checked; score accounting "
+            "and independent decode were never established, and the archive is "
+            "329,232 bytes larger than fx2_trim_scale10m_v1 on the same 10M input."
+        ),
+        "evidence": "results/endpoint428_pair_layer0_runtime_successor_minified_package_v1/receipt.json",
+    },
+    "endpoint428_gate_dot_fuse_output_update_loop_v1": {
+        "claim": "best forecast",
+        "withdrawn_score_bytes": 109_389_323,
+        "withdrawn_utc": "2026-11-26",
+        "reason": (
+            "Built on the withdrawn package; 52.4% of its forecast drop came from "
+            "LZMA re-zipping and comment stripping, the linear x66.96 calibration "
+            "is not supported by offset-500M slices, and its parent projects "
+            "88.7 h against a ~15 h runtime cap."
+        ),
+        "evidence": "docs/hutter_frontier.json; results/endpoint428_pair_layer0_runtime_successor_10m_v1/receipt.json",
+    },
+}
+
 ACTIVE_CANDIDATE_ID = "fx2_geometry_sort_dictcmix_xz_zlibpy_min_v1"
 RUNNING_CANDIDATE_GLOB = "*/*rss_guard.json"
 GUARD_SCOPE_RE = re.compile(r"_(?P<scope>[0-9]+).*rss_guard[.]json$")
@@ -144,6 +173,7 @@ class Result:
     independent_decode_ok: bool = False
     license_audit_ok: bool = False
     prize_claimable: bool = False
+    host_local_provenance: bool = False
 
     @property
     def percent(self) -> float | None:
@@ -166,6 +196,29 @@ class Result:
     @property
     def has_counted_score(self) -> bool:
         return self.hutter_score is not None and self.hutter_score >= self.compressed_size
+
+    @property
+    def rank_exclusions(self) -> list[str]:
+        """Reasons a counted constructive row may not be ranked as a score."""
+
+        reasons: list[str] = []
+        if not self.score_accounting_complete:
+            reasons.append("score_accounting_complete is not true")
+        if not self.independent_decode_ok:
+            reasons.append("independent_decode_ok is not true")
+        if self.host_local_provenance:
+            reasons.append("evidence references a path outside the repository")
+        if self.program_id in WITHDRAWN_CLAIMS:
+            reasons.append("claim withdrawn")
+        return reasons
+
+    @property
+    def is_ranked_score(self) -> bool:
+        return (
+            self.is_constructive
+            and self.has_counted_score
+            and not self.rank_exclusions
+        )
 
     @property
     def is_full_corpus_proof(self) -> bool:
@@ -337,7 +390,26 @@ def load_counted_10m_receipt(
         roundtrip_ok=True,
         determinism_ok=True,
         timestamp=str(data.get("generated_at_utc", "")),
+        score_accounting_complete=data.get("score_accounting_complete") is True,
+        independent_decode_ok=proof.get("independent_decode_ok") is True,
+        host_local_provenance=references_host_local_path(artifacts),
     )
+
+
+def references_host_local_path(value: Any) -> bool:
+    """True when any string in ``value`` is an absolute filesystem path.
+
+    Receipt artifacts must be repository-relative; an absolute path names
+    evidence that only exists on one host and cannot back a ranked score.
+    """
+
+    if isinstance(value, str):
+        return value.startswith("/") or value.startswith("~")
+    if isinstance(value, dict):
+        return any(references_host_local_path(item) for item in value.values())
+    if isinstance(value, list):
+        return any(references_host_local_path(item) for item in value)
+    return False
 
 
 def load_result(path: pathlib.Path) -> Result | None:
@@ -446,6 +518,10 @@ def canonical_frontier_forecast_record(
             selected.get("roundtrip_ok") is True
             and selected.get("deterministic_reencode_ok") is True
         ),
+        "score_accounting_complete": selected.get("score_accounting_complete") is True,
+        "host_local_provenance": references_host_local_path(
+            selected.get("source_paths")
+        ),
     }
 
 
@@ -524,14 +600,44 @@ def best_forecast_record(
                     and proof.get("roundtrip_ok") is True
                     and proof.get("determinism_ok") is True
                 ),
+                "score_accounting_complete": (
+                    payload.get("score_accounting_complete") is True
+                ),
+                "host_local_provenance": references_host_local_path(
+                    payload.get("artifacts")
+                ),
             }
         )
+    ranked = [row for row in candidates if forecast_is_rankable(row)]
+    if not ranked:
+        return dict(NO_RANKED_FORECAST)
     return min(
-        candidates,
+        ranked,
         key=lambda row: (
             int(row["projected_score"]),
             0 if row.get("codec_replay_complete") is True else 1,
         ),
+    )
+
+
+NO_RANKED_FORECAST: dict[str, Any] = {
+    "program_id": None,
+    "quality": "no ranked forecast",
+    "evidence": (
+        "no forecast candidate has complete score accounting with in-repository "
+        "provenance; withdrawn claims are listed separately"
+    ),
+    "scope_bytes": None,
+}
+
+
+def forecast_is_rankable(row: dict[str, Any]) -> bool:
+    """A forecast ranks only on complete, in-repository score accounting."""
+
+    return (
+        row.get("score_accounting_complete") is True
+        and row.get("host_local_provenance") is not True
+        and row.get("program_id") not in WITHDRAWN_CLAIMS
     )
 
 
@@ -550,9 +656,28 @@ def iter_results(
 
 
 def best_by_size(rows: list[Result]) -> list[Result]:
+    """Best ranked score per scope: complete accounting and verified decode."""
+
     best: dict[int, Result] = {}
     for row in rows:
-        if not row.is_constructive or not row.has_counted_score:
+        if not row.is_ranked_score:
+            continue
+        current = best.get(row.data_size)
+        if current is None or row.hutter_score < current.hutter_score:
+            best[row.data_size] = row
+    return [best[size] for size in sorted(best)]
+
+
+def best_unranked_counted_by_size(rows: list[Result]) -> list[Result]:
+    """Smallest counted constructive row per scope that may not rank.
+
+    Retained so the generated view keeps the historical counted rows visible
+    without presenting them as scores.
+    """
+
+    best: dict[int, Result] = {}
+    for row in rows:
+        if not row.is_constructive or not row.has_counted_score or row.is_ranked_score:
             continue
         current = best.get(row.data_size)
         if current is None or row.hutter_score < current.hutter_score:
@@ -591,6 +716,7 @@ def result_record(row: Result) -> dict[str, Any]:
         "independent_decode_ok": row.independent_decode_ok,
         "license_audit_ok": row.license_audit_ok,
         "prize_claimable": row.prize_claimable,
+        "host_local_provenance": row.host_local_provenance,
         "timestamp": row.timestamp,
     }
 
@@ -846,7 +972,7 @@ def build_top_status(
             top_status_record(
                 "best exact 10M",
                 "exact artifact-backed",
-                "exact result JSON with roundtrip_ok true",
+                "exact result JSON with roundtrip_ok true, complete score accounting and independent decode",
                 best_10m,
             )
         )
@@ -855,7 +981,7 @@ def build_top_status(
             top_status_record(
                 "best exact 10M",
                 "missing",
-                "no exact 10M result JSON with roundtrip_ok true found",
+                "no exact 10M result has complete score accounting and independent decode; see unranked rows and withdrawn claims",
                 scope_bytes=10_000_000,
             )
         )
@@ -884,7 +1010,7 @@ def build_top_status(
             top_status_record(
                 "best exact 100M",
                 "exact artifact-backed",
-                "exact result JSON with roundtrip_ok true",
+                "exact result JSON with roundtrip_ok true, complete score accounting and independent decode",
                 best_100m,
             )
         )
@@ -1037,7 +1163,7 @@ def build_certificate(
         row for row in full_exact if row.hutter_score <= TARGET_10_95
     ]
     best_constructive = min(
-        (row for row in rows if row.is_constructive and row.has_counted_score),
+        (row for row in rows if row.is_ranked_score),
         key=lambda row: (row.hutter_score / max(1, row.data_size), row.hutter_score),
         default=None,
     )
@@ -1095,7 +1221,18 @@ def build_certificate(
         "best_exact_archive_by_scope": [
             result_record(row) for row in best_archive_by_size(rows)
         ],
+        "unranked_counted_rows_by_scope": [
+            {**result_record(row), "rank_exclusions": row.rank_exclusions}
+            for row in best_unranked_counted_by_size(rows)
+        ],
+        "withdrawn_claims": [
+            {"program_id": program_id, **claim}
+            for program_id, claim in WITHDRAWN_CLAIMS.items()
+        ],
         "notes": [
+            "A counted row ranks as a score only when score_accounting_complete "
+            "and independent_decode_ok are true and its evidence stays inside "
+            "the repository; forecasts rank only on complete in-repository accounting.",
             "Prefix results prove upper bounds only for that prefix, not for enwik9.",
             "Unknown program costs or explicitly unknown totals remain unknown; archive-only rows do not compete in counted-score rankings.",
             "Projected 1GB scores are search evidence and are excluded from proof_status.",
@@ -1219,6 +1356,42 @@ def write_markdown(cert: dict[str, Any], path: pathlib.Path) -> None:
             f"{byte_text(row['program_size'])} | {row['archive_bpb']} | "
             f"`{row['result_path']}` |"
         )
+    lines.extend(
+        [
+            "",
+            "## Unranked Counted Rows (Not Scores)",
+            "",
+            "Smallest counted constructive row per scope that fails the ranking rule.",
+            "",
+            "| data_size | program | counted | archive | program_size | excluded because | result |",
+            "|---:|---|---:|---:|---:|---|---|",
+        ]
+    )
+    for row in cert.get("unranked_counted_rows_by_scope", []):
+        withdrawn = " (WITHDRAWN)" if row["program_id"] in WITHDRAWN_CLAIMS else ""
+        lines.append(
+            f"| {row['data_size']:,} | `{row['program_id']}`{withdrawn} | "
+            f"{byte_text(row['hutter_score'])} | {row['compressed_size']:,} | "
+            f"{byte_text(row['program_size'])} | "
+            f"{'; '.join(row['rank_exclusions'])} | `{row['result_path']}` |"
+        )
+    withdrawn_claims = cert.get("withdrawn_claims", [])
+    if withdrawn_claims:
+        lines.extend(
+            [
+                "",
+                "## Withdrawn Claims",
+                "",
+                "| Claim | Program | Withdrawn value | Withdrawn | Reason | Evidence |",
+                "|---|---|---:|---|---|---|",
+            ]
+        )
+        for claim in withdrawn_claims:
+            lines.append(
+                f"| {claim['claim']} | `{claim['program_id']}` | "
+                f"{claim['withdrawn_score_bytes']:,} | {claim['withdrawn_utc']} | "
+                f"{claim['reason']} | `{claim['evidence']}` |"
+            )
     lines.extend(["", "## Notes", ""])
     for note in cert["notes"]:
         lines.append(f"- {note}")

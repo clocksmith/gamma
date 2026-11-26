@@ -126,7 +126,7 @@ class ReportTargetTests(unittest.TestCase):
                 cert = certificate.build_certificate([row])
                 self.assertFalse(cert["proof_status"]["has_full_corpus_constructive_result"])
                 self.assertFalse(cert["proof_status"]["has_10_95_constructive_upper_bound"])
-                if row.roundtrip_ok:
+                if row.is_ranked_score:
                     recorded, = cert["best_exact_upper_bounds_by_scope"]
                     self.assertEqual(recorded["objective_digest"], row.objective_digest)
 

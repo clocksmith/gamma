@@ -46,7 +46,8 @@ class UnknownCostsTests(unittest.TestCase):
     def test_unpriced_smaller_archive_cannot_displace_counted_upper_bound(self):
         unpriced = self.load(program_size=None, hutter_score=None)
         priced = replace(unpriced, program_id='priced', compressed_size=1400000,
-                         program_size=200, hutter_score=1400200)
+                         program_size=200, hutter_score=1400200,
+                         score_accounting_complete=True, independent_decode_ok=True)
         self.assertEqual(certificate.best_by_size([unpriced, priced]), [priced])
         self.assertEqual(certificate.best_archive_by_size([priced, unpriced]), [unpriced])
         with mock.patch.object(certificate, 'build_top_status', return_value=[]):
