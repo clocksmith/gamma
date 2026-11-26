@@ -88,7 +88,8 @@ failure. None had changed a result. The patterns, and what to do instead:
 | A number traced by searching for the bare number | the paper's trace script | Search for the number inside its sentence |
 
 `objective-holdout-v1/test_replay.py` and `codenet-replication-v1/test_chain_guard.py` are the two tests that break
-things on purpose. Add a case there when you add a check.
+things on purpose. Add a case there when you add a check. Each finding, what was done about it and how it was
+checked is in [`REVIEW-20261126.md`](REVIEW-20261126.md).
 
 ### What is pinned and must not be edited
 
