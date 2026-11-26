@@ -27,6 +27,7 @@ identical-problem list and the rank order instead.
 | `select_fresh_codenet.py`, `select_project.py` | Sample rules for the two test sets, run by the scorer |
 | `bits_oh.py`, `test_bits_oh.py` | Format library and its checks |
 | `audit_zero_escape_misses.py` | Separate: classifies the failures of the earlier zero-escape transfer test |
+| `explore_posthoc.py` | Post hoc and exploratory, after two reviews: the token-gain and BPE orders cut at equal sizes, unseen problems split by language and by author, how often chosen fragments occur in training, zstd with lean framing |
 | `explore_support.py` | Post hoc and exploratory, written after scoring: how a fragment's support in training relates to whether it pays for its storage on the test sets |
 | `make_results.py`, `RESULTS.md` | The results, generated from `out/results-*.json` |
 | `SCORER-LOG.md`, `independent_decode.py`, `DEVIATIONS.md` | What the scorer ran, its own decoder, and the one recorded deviation |
