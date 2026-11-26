@@ -1,0 +1,132 @@
+{
+ "schema": "gamma.bits-objective-holdout.rule-outcomes.v1",
+ "source": "make_results.py, from out/results-*.json; rules as written in PREREGISTRATION.md",
+ "threshold_percent": 1.0,
+ "decided_on": "fresh",
+ "rules": {
+  "T": {
+   "statement": "Token savings transfer",
+   "holds": false,
+   "by_cap": {
+    "256": {
+     "token_gain_tokens": 135694,
+     "bpe_tokens": 154803,
+     "percent": -12.3441,
+     "problems_lower": 200,
+     "problems_higher": 0,
+     "problems_tied": 0,
+     "sign_test_two_sided_p": 1.2446030555722283e-60,
+     "holds": true
+    },
+    "4096": {
+     "token_gain_tokens": 63359,
+     "bpe_tokens": 58803,
+     "percent": 7.7479,
+     "problems_lower": 10,
+     "problems_higher": 185,
+     "problems_tied": 5,
+     "sign_test_two_sided_p": 7.290026360596644e-43,
+     "holds": false
+    }
+   }
+  },
+  "B": {
+   "statement": "The byte objective wins archives",
+   "holds": true,
+   "bytes_archive": 95774,
+   "token_archive": 129887,
+   "bytes_header": 13948,
+   "token_header": 48067,
+   "same_dictionary_at_256": true
+  },
+  "C": {
+   "statement": "The negative control behaves as one",
+   "holds": true,
+   "by_cap": {
+    "256": {
+     "more_tokens": true,
+     "larger_archive": true
+    },
+    "4096": {
+     "more_tokens": true,
+     "larger_archive": true
+    }
+   }
+  },
+  "R": {
+   "statement": "Reuse predicts rent",
+   "holds": true,
+   "share_paying_used_by_four_or_more": 0.634164,
+   "share_paying_used_by_one": 0.024666
+  },
+  "X": {
+   "statement": "Single-problem fragments cost bytes",
+   "holds": true,
+   "archive_without_them": 98643,
+   "token_archive": 129887
+  },
+  "Z": {
+   "statement": "BITS beats trained zstd",
+   "holds": false,
+   "decided_on": "complete archives; the other contracts are reported",
+   "by_contract": {
+    "complete": {
+     "contract": "sequential, everything counted",
+     "fresh": {
+      "best_bits": 95774,
+      "best_bits_dictionary": "bytes-K4096",
+      "zstd_trained_dictionary": 90271,
+      "holds": false
+     },
+     "project": {
+      "best_bits": 100355,
+      "best_bits_dictionary": "bpe-K256",
+      "zstd_trained_dictionary": 60631,
+      "holds": false
+     },
+     "holds": false
+    },
+    "random_access_complete": {
+     "contract": "random access, index counted",
+     "fresh": {
+      "best_bits": 96574,
+      "best_bits_dictionary": "bytes-K4096",
+      "zstd_trained_dictionary": 90936,
+      "holds": false
+     },
+     "project": {
+      "best_bits": 100640,
+      "best_bits_dictionary": "bpe-K256",
+      "zstd_trained_dictionary": 60867,
+      "holds": false
+     },
+     "holds": false
+    },
+    "dictionary_already_held": {
+     "contract": "dictionary already held by the reader",
+     "fresh": {
+      "best_bits": 78565,
+      "best_bits_dictionary": "bpe-K4096",
+      "zstd_trained_dictionary": 82079,
+      "holds": true
+     },
+     "project": {
+      "best_bits": 91175,
+      "best_bits_dictionary": "freq-K4096",
+      "zstd_trained_dictionary": 52439,
+      "holds": false
+     },
+     "holds": false
+    }
+   }
+  }
+ },
+ "context": {
+  "development_problems_ibm_identical_to_training": [
+   "p03195",
+   "p03417"
+  ],
+  "escapes_used_on_any_set": 0,
+  "archives_decoded_byte_for_byte": 80
+ }
+}

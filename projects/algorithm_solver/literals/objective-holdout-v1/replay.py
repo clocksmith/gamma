@@ -7,8 +7,19 @@
     python3 replay.py all
 
 Add --report FILE for a machine-readable record, --jobs N for workers. Exit status is 0 only if
-every step passed. `check` needs Python 3 and zstd; `train` also needs a C compiler. None needs
-the network. Work happens in a temporary directory that is removed afterwards.
+every step passed. A step that could only be checked in part (no Git checkout, a different zstd
+version) is printed as PART, never as PASS, and --strict turns it into a failure. `check` needs
+Python 3 and zstd; `train` also needs a C compiler. None needs the network. Work happens in a
+temporary directory that is removed afterwards.
+
+Three files this script runs are frozen and cannot be repaired in place, so their known gaps are
+closed here instead (see README.md, "Known limits of the frozen code"):
+  train_arms.py does not read the engine's `stopped` flag and reuses a compiled engine it finds
+    in its work directory. `train` gives it an empty work directory, a time bound, and then reads
+    every chain's last line itself; `check` reads the frozen receipts for the same facts.
+  The engine can spin forever when its pair table fills. `train` kills it after a bound.
+  FORMAT.md tells a decoder to ignore padding, so independent_decode.py measures it and accepts
+    it. `check` and `score` require less than one byte of padding, all zero, on every archive.
 
 What each level is for:
   check  run it after any edit and before any freeze. It reruns no experiment.
@@ -20,6 +31,7 @@ import hashlib
 import json
 import os
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
@@ -36,6 +48,8 @@ SETS = {  # name -> (manifest, directory its paths are relative to)
 }
 RANK_SEED = 'bits-codenet-replication-v1:'
 TIMING_KEYS = {'seconds'}
+TRAIN_TIMEOUT_SECONDS = 1800  # the frozen run took 98 s; four engine arms at their 300 s limit would take 1,200 s
+ENGINE = LIT / 'fixed-source-v3' / 'engine.c'
 
 
 def sha256(data):
@@ -46,26 +60,37 @@ def squeezed(raw):
     return sha256(b''.join(raw.split()))
 
 
+class Part(str):
+    """The result of a step that held as far as it could be checked, with part of it not checked.
+    It must never read as a plain PASS."""
+
+
 class Report:
-    def __init__(self):
+    def __init__(self, strict=False):
         self.steps = []
+        self.strict = strict
 
     def step(self, name, fn):
         t0 = time.perf_counter()
         try:
             detail = fn()
-            ok = True
+            status = 'PART' if isinstance(detail, Part) else 'PASS'
         except Exception as exc:  # a failed check is a result, not a crash
             detail = f'{type(exc).__name__}: {exc}'
-            ok = False
+            status = 'FAIL'
         seconds = round(time.perf_counter() - t0, 2)
-        self.steps.append({'step': name, 'ok': ok, 'seconds': seconds, 'detail': detail})
-        print(f'{"PASS" if ok else "FAIL"}  {name:28s} {seconds:7.2f}s  {detail}', flush=True)
+        ok = status == 'PASS' or (status == 'PART' and not self.strict)
+        self.steps.append({'step': name, 'status': status, 'ok': ok, 'seconds': seconds, 'detail': str(detail)})
+        print(f'{status}  {name:28s} {seconds:7.2f}s  {detail}', flush=True)
         return ok
 
     @property
     def ok(self):
         return all(s['ok'] for s in self.steps)
+
+    @property
+    def partial(self):
+        return [s['step'] for s in self.steps if s['status'] == 'PART']
 
 
 def need(cond, message):
@@ -96,7 +121,7 @@ def frozen_tracked():
     listed = [l.split(None, 1)[1].strip() for l in (HERE / 'SHA256SUMS-FROZEN').read_text().splitlines()]
     probe = subprocess.run(['git', '-C', str(HERE), 'rev-parse', '--is-inside-work-tree'], capture_output=True, text=True)
     if probe.returncode != 0:
-        return 'not a Git checkout; skipped'
+        return Part('NOT CHECKED: this is not a Git checkout, so whether Git tracks the frozen files is unknown')
     tracked = set(subprocess.run(['git', '-C', str(HERE), 'ls-files'], capture_output=True, text=True, check=True).stdout.split('\n'))
     missing = [rel for rel in listed if rel not in tracked]
     need(not missing, f'listed in the freeze but not tracked by Git: {missing}')
@@ -154,34 +179,88 @@ def split_integrity():
             f'IBM-identical to training problems')
 
 
+def decode_sound(name, results_path, decode_path, manifest_path):
+    """Read every verdict the independent decoder wrote, not only how many archives it lists.
+    FORMAT.md lets a decoder ignore padding; a verifier must not, or junk after the last file passes."""
+    raw = results_path.read_bytes()
+    res, dec = json.loads(raw), json.loads(decode_path.read_text())
+    need(res['set_manifest_sha256'] == sha256(manifest_path.read_bytes()), f'{name}: results were made from a different set manifest')
+    need(dec['set_manifest_sha256'] == res['set_manifest_sha256'], f'{name}: decoder read a different set manifest')
+    need(dec['compared_with_sha256'] == sha256(raw), f'{name}: the decoder compared itself with a different results file')
+    need(dec['all_ok'] is True and not dec['failures'], f'{name}: the decoder reports failures: {dec["failures"][:3]}')
+    need(dec['source_files_match_manifest_sha256_and_size'] is True, f'{name}: source files did not match the manifest when decoded')
+    for key in ('archives_without_a_results_row', 'results_rows_without_an_archive', 'frozen_headers_without_an_archive'):
+        need(not dec[key], f'{name}: {key.replace("_", " ")}: {dec[key][:3]}')
+    need(sorted(res['headers']) == sorted(dec['headers']) and dec['archives'] == len(dec['headers']), f'{name}: scorer and decoder list different archives')
+    need(dec['manifest_files'] == res['files'] and dec['source_bytes'] == res['source_bytes'], f'{name}: scorer and decoder saw different files')
+    for h, r in res['headers'].items():
+        d = dec['headers'][h]
+        need(d['ok'] is True and d['all_files_equal'] is True and d['files_differing_from_source'] == 0 and d['files_equal_to_source'] == res['files'],
+             f'{name}/{h}: decoder did not reproduce every file')
+        need(d['begins_with_frozen_header'] and d['frozen_file_is_exactly_the_header'] and d['file_count_equals_manifest'],
+             f'{name}/{h}: archive does not begin with the frozen header, or its file count is wrong')
+        need(d['padding_bits'] < 8 and d['padding_all_zero'] is True,
+             f'{name}/{h}: {d["padding_bits"]} bits follow the last file (the format pads with zero bits to one byte)')
+        count_bytes = max(1, (d['files'].bit_length() + 6) // 7)  # the file count is a varint between header and payload
+        need(d['header_bytes'] + count_bytes + d['payload_bytes'] == d['archive_bytes'], f'{name}/{h}: header, file count and payload do not add up to the archive')
+        need(d['payload_bits_used'] + d['padding_bits'] == 8 * d['payload_bytes'], f'{name}/{h}: used and padding bits do not add up to the payload')
+        need(d['archive_bytes'] == r['bytes']['complete'] and d['archive_sha256'] == r['archive_sha256'], f'{name}/{h}: archive differs')
+        need(d['tokens'] == r['bit_parse_tokens'] and d['escapes'] == r['escapes_in_bit_parse'], f'{name}/{h}: counts differ')
+    return len(res['headers'])
+
+
 def results_consistent():
-    archives = 0
-    for name in SETS:
-        res = json.loads((HERE / 'out' / f'results-{name}.json').read_text())
-        dec = json.loads((HERE / 'out' / f'decode-{name}.json').read_text())
-        need(res['set_manifest_sha256'] == sha256(SETS[name][0].read_bytes()), f'{name}: results were made from a different set manifest')
-        need(sorted(res['headers']) == sorted(dec['headers']), f'{name}: scorer and decoder list different archives')
-        for h, r in res['headers'].items():
-            d = dec['headers'][h]
-            need(d['ok'] and d['all_files_equal'], f'{name}/{h}: decoder did not reproduce every file')
-            need(d['archive_bytes'] == r['bytes']['complete'] and d['archive_sha256'] == r['archive_sha256'], f'{name}/{h}: archive differs')
-            need(d['tokens'] == r['bit_parse_tokens'] and d['escapes'] == r['escapes_in_bit_parse'], f'{name}/{h}: counts differ')
-            archives += 1
-    return f'{archives} archives: independent decoder and scorer agree on bytes, hashes, tokens and escapes'
+    archives = sum(decode_sound(name, HERE / 'out' / f'results-{name}.json', HERE / 'out' / f'decode-{name}.json', SETS[name][0]) for name in SETS)
+    return (f'{archives} archives: every decoder verdict is true, padding is under a byte and zero, and decoder and scorer '
+            f'agree on bytes, hashes, tokens and escapes')
+
+
+def frozen_training_complete():
+    """The frozen trainer cannot be edited, so read its receipts: no engine arm may have reached its time
+    limit or returned a short chain, and the engine source must be the one the receipts name."""
+    summary = json.loads((HERE / 'frozen' / 'train-summary.json').read_text())
+    eng = summary['engine']
+    need(sha256(ENGINE.read_bytes()) == eng['source_sha256'], 'fixed-source-v3/engine.c is not the source the frozen run recorded')
+    slow = {k: v for k, v in eng['seconds'].items() if v >= eng['limit_seconds']}
+    need(not slow, f'an engine arm reached its {eng["limit_seconds"]} s limit in the frozen run: {slow}')
+    need(all(v is True for v in eng['matches_earlier_chain'].values()), 'a frozen chain differed from the chain an earlier build produced')
+    full = eng['kmax'] - summary['singleton_bytes']
+    arms = 0
+    for line in (HERE / 'frozen' / 'train.log').read_text().splitlines():
+        if line.startswith('engine '):
+            mode, count = line.split(':')[0].split()[1], int(line.split(':')[1].split()[0])
+            need(count == full, f'engine {mode} returned {count} fragments in the frozen run, not the {full} it was asked for')
+            arms += 1
+    need(arms == len(eng['seconds']), 'the frozen log does not show every engine arm')
+    filled = 0
+    for name, h in summary['headers'].items():
+        if h['variant'] == 'base' and h['arm'] in ('bpe', 'freq', 'length', 'token'):
+            need(h['slots_used_with_escape'] == h['cap'], f'{name} does not fill its cap')
+            filled += 1
+        need(h['slots_used_with_escape'] <= h['cap'], f'{name} exceeds its cap')
+    return (f'{arms} engine arms returned all {full} fragments, the slowest in {max(eng["seconds"].values())} s of a {eng["limit_seconds"]} s limit; '
+            f'{filled} fixed-size dictionaries fill their caps; engine.c is the recorded source')
 
 
 def results_md(tmp):
     work = tmp / 'results-md'
-    (work / 'out').mkdir(parents=True)
-    (work / 'sets').mkdir()
-    shutil.copy(HERE / 'make_results.py', work)
-    for p in (HERE / 'out').glob('*.json'):
-        shutil.copy(p, work / 'out')
-    for p in (HERE / 'sets').glob('*.json'):
-        shutil.copy(p, work / 'sets')
-    subprocess.run([sys.executable, 'make_results.py'], cwd=work, check=True, capture_output=True)
+    work.mkdir()
+    done = subprocess.run([sys.executable, 'make_results.py', '--out', str(work)], cwd=HERE, capture_output=True, text=True)
+    need(done.returncode == 0, 'make_results.py refused to write: ' + (done.stderr or done.stdout).strip()[-300:])
     need((work / 'RESULTS.md').read_bytes() == (HERE / 'RESULTS.md').read_bytes(), 'RESULTS.md is not what make_results.py produces from out/')
-    return 'RESULTS.md regenerates byte for byte from out/'
+    need((work / 'rule-outcomes.json').read_bytes() == (HERE / 'out' / 'rule-outcomes.json').read_bytes(),
+         'out/rule-outcomes.json is not what make_results.py produces from out/')
+    rules = json.loads((work / 'rule-outcomes.json').read_text())['rules']
+    return ('RESULTS.md and out/rule-outcomes.json regenerate byte for byte; every guarded sentence still holds; '
+            + ' '.join(f'{k}={"holds" if v["holds"] else "fails"}' for k, v in rules.items()))
+
+
+def guards_bite():
+    """A check that cannot fail proves nothing: break receipts on purpose and require a refusal."""
+    done = subprocess.run([sys.executable, 'test_replay.py'], cwd=HERE, capture_output=True, text=True)
+    lines = [line for line in done.stdout.strip().splitlines() if not line.startswith(('PASS', 'PART', 'FAIL  probe'))]
+    need(done.returncode == 0, 'a guard let a broken receipt through: ' + ' | '.join(lines)[-400:])
+    return lines[-1]
 
 
 def tiny_fixture(tmp, jobs):
@@ -200,7 +279,7 @@ def tiny_fixture(tmp, jobs):
     done = subprocess.run([sys.executable, '-I', 'independent_decode.py', '--set', str(manifest), '--root', str(LIT), '--out', str(out),
                            '--frozen', str(HERE / 'frozen')], cwd=HERE, capture_output=True, text=True)
     need(done.returncode == 0, 'independent decoder failed on the six-file fixture: ' + done.stdout[-300:])
-    n = len(json.loads((out / 'results-tiny.json').read_text())['headers'])
+    n = decode_sound('tiny', out / 'results-tiny.json', out / 'decode-tiny.json', manifest)
     return f'format tests pass; {len(files)} files x {n} dictionaries encoded and independently decoded'
 
 
@@ -223,6 +302,7 @@ def rescore(name, tmp, jobs):
     done = subprocess.run([sys.executable, '-I', 'independent_decode.py', '--set', str(manifest), '--root', str(root), '--out', str(out),
                            '--frozen', str(HERE / 'frozen')], cwd=HERE, capture_output=True, text=True)
     need(done.returncode == 0, f'independent decoder failed: {done.stdout[-300:]}')
+    decode_sound(name, out / f'results-{name}.json', out / f'decode-{name}.json', manifest)
     new = strip_timing(json.loads((out / f'results-{name}.json').read_text()))
     old = strip_timing(json.loads((HERE / 'out' / f'results-{name}.json').read_text()))
     note = ''
@@ -233,8 +313,9 @@ def rescore(name, tmp, jobs):
     for other in (f'entries-{name}.json', f'per-file-{name}.csv'):
         need((out / other).read_bytes() == (HERE / 'out' / other).read_bytes(), f'{other} differs from the committed file')
     h = old['headers']
-    return (f'{len(h)} dictionaries on {old["files"]} files reproduce the committed results exactly{note}; '
+    text = (f'{len(h)} dictionaries on {old["files"]} files reproduce the committed results exactly{note}; '
             f'e.g. token gain at 4,096: {h["token-K4096"]["min_tokens"]:,} tokens, {h["token-K4096"]["bytes"]["complete"]:,} bytes')
+    return Part(text) if note else text
 
 
 # ---- train ---------------------------------------------------------------
@@ -251,20 +332,45 @@ def retrain(tmp, jobs):
     (lit / 'codenet-replication-v1').mkdir()
     shutil.copy(LIT / 'codenet-replication-v1' / 'manifest.json', lit / 'codenet-replication-v1')
     os.symlink(LIT / 'codenet-replication-v1' / 'corpus', lit / 'codenet-replication-v1' / 'corpus')
-    subprocess.run([sys.executable, 'train_arms.py', '--work', str(tmp / 'train' / 'work'), '--jobs', str(jobs)], cwd=exp, check=True, capture_output=True)
+    work = tmp / 'train' / 'work'  # new and empty, so train_arms.py compiles the engine from the source it then hashes
+    need(not work.exists(), 'the training work directory already exists')
+    # Its own session, so that a spinning engine dies with the trainer when the bound is reached.
+    proc = subprocess.Popen([sys.executable, 'train_arms.py', '--work', str(work), '--jobs', str(jobs)], cwd=exp,
+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, start_new_session=True)
+    try:
+        log, _ = proc.communicate(timeout=TRAIN_TIMEOUT_SECONDS)
+    except subprocess.TimeoutExpired:
+        os.killpg(proc.pid, signal.SIGKILL)
+        proc.communicate()
+        raise AssertionError(f'training did not finish in {TRAIN_TIMEOUT_SECONDS} s and was killed; the engine cannot stop itself once its pair table is full')
+    need(proc.returncode == 0, 'train_arms.py failed: ' + log.strip()[-300:])
+    old_summary = json.loads((HERE / 'frozen' / 'train-summary.json').read_text())
+    new_summary = json.loads((exp / 'frozen' / 'train-summary.json').read_text())
+    need(new_summary['engine']['source_sha256'] == old_summary['engine']['source_sha256'], 'engine.c is not the source the frozen run recorded')
+    chains = sorted((work / 'chains').glob('*.txt'))
+    need(len(chains) == len(old_summary['engine']['seconds']), 'the retrain did not leave one chain per engine arm')
+    asked = old_summary['engine']['kmax']
+    for chain in chains:
+        lines = chain.read_text().splitlines()
+        last = lines[-1].split() if lines else []
+        need(last[:1] == ['D'] and 'stopped=0' in last, f'{chain.name}: the engine did not finish inside its time limit, so the chain is short')
+        got = sum(1 for line in lines if line.startswith('E '))
+        need(got == asked, f'{chain.name}: {got} entries, not the {asked} asked for')
     same = 0
+    skipped = ''
     for path in sorted((HERE / 'frozen').glob('*.boh')) + [HERE / 'frozen' / 'zstd-train-8k.dict']:
         new = exp / 'frozen' / path.name
         if path.suffix == '.dict':
-            old_version = json.loads((HERE / 'frozen' / 'train-summary.json').read_text())['zstd']['version']
-            new_version = json.loads((exp / 'frozen' / 'train-summary.json').read_text())['zstd']['version']
-            if old_version != new_version:
+            if old_summary['zstd']['version'] != new_summary['zstd']['version']:
+                skipped = f' (zstd dictionary NOT compared: this machine has {new_summary["zstd"]["version"]})'
                 continue
         need(new.exists() and new.read_bytes() == path.read_bytes(), f'{path.name} was not reproduced byte for byte')
         same += 1
     for name in ('train', 'dev'):
         need((exp / 'frozen' / 'sets' / f'{name}.json').read_bytes() == (HERE / 'frozen' / 'sets' / f'{name}.json').read_bytes(), f'set manifest {name} differs')
-    return f'{same} frozen files (dictionaries with code tables, zstd dictionary) retrained byte for byte from the training files'
+    text = (f'{same} frozen files (dictionaries with code tables, zstd dictionary) retrained byte for byte from the training files; '
+            f'{len(chains)} engine chains complete with {asked} entries each{skipped}')
+    return Part(text) if skipped else text
 
 
 def main():
@@ -272,8 +378,9 @@ def main():
     ap.add_argument('level', choices=('check', 'score', 'train', 'all'))
     ap.add_argument('--jobs', type=int, default=min(8, os.cpu_count() or 1))
     ap.add_argument('--report')
+    ap.add_argument('--strict', action='store_true', help='count a step that could only be checked in part as a failure')
     args = ap.parse_args()
-    report = Report()
+    report = Report(strict=args.strict)
     t0 = time.perf_counter()
     with tempfile.TemporaryDirectory(prefix='objective-holdout-replay-') as td:
         tmp = Path(td)
@@ -283,7 +390,9 @@ def main():
             report.step('sets match corpus', sets_match_corpus)
             report.step('split integrity', split_integrity)
             report.step('scorer and decoder agree', results_consistent)
+            report.step('frozen training was complete', frozen_training_complete)
             report.step('RESULTS.md regenerates', lambda: results_md(tmp))
+            report.step('checks reject broken receipts', guards_bite)
             report.step('six-file end-to-end fixture', lambda: tiny_fixture(tmp, args.jobs))
         if args.level in ('score', 'all'):
             for name in SETS:
@@ -291,10 +400,16 @@ def main():
         if args.level in ('train', 'all'):
             report.step('retrain', lambda: retrain(tmp, args.jobs))
     total = round(time.perf_counter() - t0, 2)
-    print(f'{"ALL PASSED" if report.ok else "FAILED"} in {total}s')
+    if not report.ok:
+        verdict = 'FAILED'
+    elif report.partial:
+        verdict = f'PASSED IN PART ({len(report.partial)} step(s) not fully checked: {", ".join(report.partial)})'
+    else:
+        verdict = 'ALL PASSED'
+    print(f'{verdict} in {total}s')
     if args.report:
-        Path(args.report).write_text(json.dumps({'schema': 'gamma.bits-objective-holdout.replay.v1', 'level': args.level, 'ok': report.ok,
-                                                'seconds': total, 'steps': report.steps}, indent=1) + '\n')
+        Path(args.report).write_text(json.dumps({'schema': 'gamma.bits-objective-holdout.replay.v2', 'level': args.level, 'ok': report.ok,
+                                                'partial': report.partial, 'seconds': total, 'steps': report.steps}, indent=1) + '\n')
     return 0 if report.ok else 1
 
 

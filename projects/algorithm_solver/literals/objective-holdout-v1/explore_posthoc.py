@@ -141,6 +141,14 @@ def main():
 
     occ = [occurrences(b) for b in frags]
     one = [i for i, u in enumerate(ent['train_units']) if u == 1]
+    # "Used by" counts problems whose shortest parse uses the fragment; "occurs in" counts files that
+    # contain it at all. A rule that asked for a second file would act on the second, not the first.
+    train_units = [f['unit'] for f in specs['train']['files']]
+    in_files = [sum(1 for d in docs['train'] if b in d) for b in frags]
+    in_problems = [len({u for u, d in zip(train_units, docs['train']) if b in d}) for b in frags]
+    unseen_uses = json.loads((HERE / 'out' / 'entries-fresh.json').read_text())['token-K4096']['uses']
+    one_file = [i for i, x in enumerate(in_files) if x == 1]
+    under_two = [i for i, u in enumerate(ent['train_units']) if u < 2]
     out['token_selected_fragments'] = {
         'fragments': len(frags),
         'occur_once_in_training_text': sum(1 for x in occ if x == 1),
@@ -148,6 +156,12 @@ def main():
         'of_those_occur_once': sum(1 for i in one if occ[i] == 1),
         'of_those_median_uses_in_training_parse': statistics.median(ent['uses'][i] for i in one),
         'of_those_median_length': statistics.median(len(frags[i]) for i in one),
+        'occur_in_one_training_file': len(one_file),
+        'occur_in_one_training_file_and_used_by_one_training_problem': sum(1 for i in one_file if ent['train_units'][i] == 1),
+        'occur_in_one_training_file_never_used_on_unseen': sum(1 for i in one_file if unseen_uses[i] == 0),
+        'occur_in_one_training_problem': sum(1 for x in in_problems if x == 1),
+        'used_by_fewer_than_two_training_problems': len(under_two),
+        'used_by_fewer_than_two_never_used_on_unseen': sum(1 for i in under_two if unseen_uses[i] == 0),
     }
 
     # 4. zstd with lean framing
