@@ -1,5 +1,13 @@
 # Next-freeze equal-arms runner, post-fallback scorer, and Dot custody tools
 
+**Owner decision, 2026-11-26:** results from this directory's stand-in servers and fixtures are not field evidence.
+No promotion claim rests on them alone. The independent real-upgrade screen found that the five catalogued stand-in
+upgrades answer the old request differently from the real releases (`../independent-upgrade-screen-v1/STATUS.md`).
+A guard here can only recommend checks. Every write goes through one verified-write gate, which checks the live lock
+at write time and reads the fields back. HTTP 200 alone no longer counts as a right write. The `gammatron-graph` DP
+arm is no longer the default: in the post-v3 diagnostic it tied `attested-modular-skill` at 35 planner turns with 121
+predicate reads against 61 (`../post-v3-modular-revision-result.md`).
+
 Implements the code changes required by `ouroboros/docs/private/gamma/reports/stage-a-decision-sheet.md`
 and `ouroboros/docs/private/gamma/gammatron-holdout-kit-20261124/` while leaving Stage A's voided
 freeze (`../three-arm/` at `gamma@776462de7`, hash `306e6171…`) byte-identical.

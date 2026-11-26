@@ -51,3 +51,24 @@ correction.** Six cases are unfinished or not run, so this is not the screen's f
 4. The screener reruns one repeat of at least one qualifying case by hand before any of this is called confirmed.
 5. Images pulled for the screen are still in the local Docker store. Raw per-repeat evidence is kept outside the
    repository.
+
+## Owner decision, 2026-11-26
+
+From two external reviews the owner accepted. The screen stays paused. This note restarts nothing.
+
+- **What these results support.** Five sealed cases (`N1`, `N2`, `N5`, `L2`, `L3`) stored the wrong value while
+  reporting success, 3 of 3, all run by one operator. That shows such failures exist on real software. It does not
+  show how often they happen, and it is not evidence for any guard, learned or written by hand.
+- **Mocks and fixtures are not field evidence.** No promotion claim may rest only on them. All five catalogued
+  stand-in upgrades answer the old request with an error where the real release accepts it: found by reading the
+  source in five of five, and confirmed on running software for `L2` and `L3`.
+- **Next step, not approved to run.** A second operator who did not run this screen reproduces one of the five
+  cases that followed the sealed steps exactly, under this protocol unchanged. Only after that comes a three-arm
+  decision test on OpenProject 13.4.0 to 14.0.0 and ERPNext v15.20.0 to v15.30.0: a learned modular skill, an
+  authored page object with a predicate guard, and always replan. Each arm repairs one shared route and is then
+  frozen. At least 16 unseen routes are sealed by an independent custodian. The learned arm replaces authored
+  guards only with 0 wrong database writes and at least 30% lower total cost. Nothing runs without the owner's
+  own approval.
+- **Write rule.** There is one verified-write gate. At write time it checks the live lock (account, record,
+  predicate, version, terms hash), reads back the exact fields, and polls the database after the commit. A guard
+  only recommends checks. An HTTP 200 alone is not accepted as a right write.
