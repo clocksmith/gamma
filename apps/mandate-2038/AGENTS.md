@@ -1,7 +1,7 @@
 # Mandate 2038 Org Instructions
 
 These instructions apply to the entire Mandate 2038 project, in addition to
-[Gamma's instructions](../../../AGENTS.md).
+[Gamma's instructions](../../AGENTS.md).
 
 ## Component Intent
 

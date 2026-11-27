@@ -1,6 +1,6 @@
 # CATSCAN: Self-applicable SwiGLU neural proposer heredity study
 
-Parent: [Gamma research projects](../CATSCAN.md)
+Parent: [Self-transform studies](../CATSCAN.md)
 
 ## Target
 
@@ -8,7 +8,7 @@ Test whether a multi-layer SwiGLU neural weight-proposer (`M_Phi`, 1,783 paramet
 
 ## Authority
 
-- Owns the neural proposer, target generators, subprocess worker, baselines, tests, and receipts under `projects/self_transform_neural_proposer_v1/`.
+- Owns the neural proposer, target generators, subprocess worker, baselines, tests, and receipts under `projects/self_transform/self_transform_neural_proposer_v1/`.
 - Preserves prior `projects/self_transform_*` studies unchanged.
 
 ## Scope
@@ -17,7 +17,7 @@ Test whether a multi-layer SwiGLU neural weight-proposer (`M_Phi`, 1,783 paramet
 
 ## Contracts
 
-- Input: [Gamma research projects charter](../CATSCAN.md), disjoint meta-training/calibration/confirmation seeds, and strict forward-backward oracle counters.
+- Input: [Gamma research projects charter](../../CATSCAN.md), disjoint meta-training/calibration/confirmation seeds, and strict forward-backward oracle counters.
 - Output: Subprocess lineage receipts, per-seed confirmation tables, exact paired Wilcoxon/sign-test statistics, and full compute accounting.
 
 ## Invariants

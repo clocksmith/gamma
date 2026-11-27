@@ -17,11 +17,11 @@ mechanism, protocol, source closure and interpretation.
 - Original directory names, cross-version imports and frozen source bytes remain.
 - Reconstruction and oracle checks do not establish autonomous improvement.
 - No GPU, network, model download or new study is part of the test frontdoor.
-- Active untracked work and historical receipts are preserved in place.
+- Retained receipts preserve their original paths and source revisions.
 
 ## Acceptance
 
-`npm test` runs the original ten CPU test entrypoints from a temporary directory.
+The [family index](README.md) lists the Node and Python CPU checks.
 
 ## Non-goals
 

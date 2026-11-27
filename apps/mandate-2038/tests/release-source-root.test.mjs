@@ -16,9 +16,12 @@ test('current and pre-relocation commits verify their own sealed source roots', 
     const historical = commit();
     await mkdir(join(root, 'apps'));
     await rename(join(root, 'games'), join(root, 'apps/games'));
-    const relocated = commit();
+    const previouslyRelocated = commit();
+    await rename(join(root, 'apps/games/2038'), join(root, 'apps/mandate-2038'));
+    const current = commit();
     assert.equal(await releaseSourceRoot(historical, root), 'games/2038');
-    assert.equal(await releaseSourceRoot(relocated, root), 'apps/games/2038');
+    assert.equal(await releaseSourceRoot(previouslyRelocated, root), 'apps/games/2038');
+    assert.equal(await releaseSourceRoot(current, root), 'apps/mandate-2038');
     await mkdir(join(root, 'games/2038/versions'), { recursive: true });
     await writeFile(join(root, 'games/2038/versions/current.json'), '{}');
     await assert.rejects(releaseSourceRoot(commit(), root), /exactly one/);

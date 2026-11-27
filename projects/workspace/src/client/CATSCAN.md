@@ -19,7 +19,7 @@ Controlled investigations and reusable workflows.
 ## Contracts
 
 Inputs:
-- [Protocol](../../../../docs/fawn-workspace-contract.md).
+- [Donor protocol](https://github.com/clocksmith/fawn/blob/9234bc55953c43af7d53c7335d8fe24282e59dc6/docs/fawn-workspace-contract.md).
 - [Configuration](../../config/fawn-workspace-client.json).
 
 Outputs:
@@ -51,7 +51,7 @@ Outputs:
 - [Sync checks](../../workflow-registry.md#focused-evidence): encrypted cross-client reuse.
 - [Scoped replay](../../test/unit/scoped-trace.test.js): aliases, dependencies and safe stops.
 - [Repair replay](../../test/browser/workflow-repair.test.js): separate-process persistence.
-- [Holdout decision](../../../../reports/fawn-workspace/20261109-field-group-reuse/decision.json): bounded reuse.
+- [Holdout decision](https://github.com/clocksmith/fawn/blob/9234bc55953c43af7d53c7335d8fe24282e59dc6/reports/fawn-workspace/20261109-field-group-reuse/decision.json): bounded reuse.
 - [Completion-contract checks](../../test/unit/completion-contract.test.js): bounded required records, disclosure isolation, premature finish and equivalent stock-loop enforcement.
 - Parent comparison remains mandatory.
 

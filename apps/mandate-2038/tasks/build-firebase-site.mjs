@@ -8,7 +8,7 @@ import {
   writeFile
 } from "node:fs/promises";
 import { execFile } from "node:child_process";
-import { dirname, resolve } from "node:path";
+import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { verifyRelease } from "./release-artifacts.mjs";
@@ -16,7 +16,7 @@ import { loadEraSituationLedger } from "./content/validate-era-situation-ledger.
 
 const execFileAsync = promisify(execFile);
 const projectRoot = resolve(import.meta.dirname, "..");
-const gammaRoot = resolve(projectRoot, "../../..");
+const gammaRoot = resolve(projectRoot, "../..");
 const defaultProfileId = "public-playtest";
 const publicBase = "";
 
@@ -158,7 +158,7 @@ async function sourceIdentity() {
   });
   const { stdout: dirtyOutput } = await execFileAsync(
     "git",
-    ["status", "--porcelain", "--", "apps/games/2038", "apps/web", ".gitignore"],
+    ["status", "--porcelain", "--", relative(gammaRoot, projectRoot), "apps/web", ".gitignore"],
     { cwd: gammaRoot }
   );
   return {
@@ -268,8 +268,8 @@ export async function buildFirebaseSite({ outputRoot, profileId = defaultProfile
   if (!profile) throw new TypeError(`Unknown deployment profile: ${profileId}`);
   if (profile.deployable) await verifyRelease(projectRoot);
   outputRoot = outputRoot || resolve(projectRoot, profile.outputRoot);
-  if (outputRoot === gammaRoot || outputRoot === resolve(gammaRoot, "apps") || outputRoot === resolve(gammaRoot, "apps/web")) {
-    throw new RangeError("Refusing to replace a repository or Firebase web root.");
+  if ([gammaRoot, projectRoot, resolve(gammaRoot, "apps"), resolve(gammaRoot, "apps/web")].includes(resolve(outputRoot))) {
+    throw new RangeError("Refusing to replace a repository, application, or Firebase web root.");
   }
   for (const required of [
     "dist/site/docs/index.html",

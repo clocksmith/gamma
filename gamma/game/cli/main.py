@@ -20,6 +20,7 @@ from typing import Optional, List, Dict, Any, Tuple
 
 from gamma.core import config as cfg
 from gamma.core.fallback_telemetry import FallbackTelemetry
+from gamma.core.prompt_templates import STOP_TEXT_MARKERS, should_apply_chat_template
 from gamma.ui import displays as ui
 from gamma.engines.engine_factory import get_engine, SUPPORTED_ENGINES
 from gamma.engines.capability_registry import get_engine_info
@@ -35,15 +36,6 @@ from gamma.game.cli.commands import parse_arguments, apply_word_mode_presets, CL
 
 logger = logging.getLogger(__name__)
 _FALLBACKS = FallbackTelemetry("game_cli", logger)
-
-
-STOP_TEXT_MARKERS = (
-    "<end_of_turn>",
-    "<|eot_id|>",
-    "<|end_of_text|>",
-    "<eos>",
-    "</s>",
-)
 
 
 def _concatenate_tensors(tensor1: Any, tensor2: Any, dim: int = -1, engine: Optional[LLMEngine] = None) -> Optional[Any]:
@@ -466,51 +458,6 @@ def _format_chat_history(history: list, engine: LLMEngine) -> str:
 
     return "\n".join(formatted_parts) + "\nAssistant:"
 
-def _prompt_looks_formatted(prompt: str) -> bool:
-    """Return True if the prompt already looks like a chat template."""
-    if not prompt:
-        return False
-    markers = (
-        "<|im_start|>",
-        "<|assistant|>",
-        "[INST]",
-        "<<SYS>>",
-        "User:",
-        "Assistant:",
-        "System:",
-    )
-    return any(marker in prompt for marker in markers)
-
-
-def _model_is_instruction_tuned(engine: LLMEngine) -> bool:
-    """Heuristic for detecting instruction-tuned models."""
-    model_name = (engine.model_name or "").lower()
-    tokenizer_name = getattr(engine.tokenizer, "name_or_path", "")
-    combined = f"{model_name} {tokenizer_name}".lower()
-    tags = ("-it", "instruct", "instruction", "chat", "assistant")
-    return any(tag in combined for tag in tags)
-
-
-def _should_apply_chat_template(
-    engine: LLMEngine,
-    prompt: str,
-    prompt_chat_template: Optional[bool],
-) -> bool:
-    """Decide whether to apply a chat template to a single prompt."""
-    if prompt_chat_template is False:
-        return False
-    tokenizer = getattr(engine, "tokenizer", None)
-    if tokenizer is None or not hasattr(tokenizer, "apply_chat_template"):
-        return False
-    if prompt_chat_template is True:
-        return True
-    if _prompt_looks_formatted(prompt):
-        return False
-    if getattr(tokenizer, "chat_template", None):
-        return True
-    return _model_is_instruction_tuned(engine)
-
-
 def _resolve_system_prompt(
     prompt_system: Optional[str],
     use_default_system: bool,
@@ -533,7 +480,7 @@ def _format_single_prompt(
     """Format a single prompt with a chat template when requested or inferred."""
     if not prompt:
         return prompt, None, None
-    if not _should_apply_chat_template(engine, prompt, prompt_chat_template):
+    if not should_apply_chat_template(engine, prompt, prompt_chat_template):
         return prompt, None, None
     system_prompt = _resolve_system_prompt(prompt_system, use_default_system)
     try:

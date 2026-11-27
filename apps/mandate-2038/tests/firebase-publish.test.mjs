@@ -15,10 +15,12 @@ import {
 } from "../tasks/build-firebase-site.mjs";
 
 const projectRoot = resolve(import.meta.dirname, "..");
-const gammaRoot = resolve(projectRoot, "../../..");
+const gammaRoot = resolve(projectRoot, "../..");
 
-test("publication cannot replace the application container", async () => {
-  await assert.rejects(buildFirebaseSite({ outputRoot: resolve(gammaRoot, "apps"), profileId: "internal-review" }), /Refusing to replace/);
+test("publication cannot replace the application or its container", async () => {
+  for (const outputRoot of [projectRoot, resolve(gammaRoot, "apps")]) {
+    await assert.rejects(buildFirebaseSite({ outputRoot, profileId: "internal-review" }), /Refusing to replace/);
+  }
 });
 
 test("published HTML carries crawler exclusions", () => {
@@ -112,7 +114,7 @@ test("site index presents one flat list of titles without subtitles", () => {
 test("deployment delegates to the Simulatte World owner", async () => {
   const { scripts } = JSON.parse(await readFile(resolve(projectRoot, "package.json"), "utf8"));
   assert.match(scripts["publish:firebase:build"], /--base-path \/mandate-2038$/);
-  assert.equal(scripts["publish:firebase:deploy"], "npm --prefix ../../../../m3t4 run deploy:hosting");
+  assert.equal(scripts["publish:firebase:deploy"], "npm --prefix ../../../m3t4 run deploy:hosting");
 });
 
 test("public playtest publication is an allowlist with release identity and feedback", async () => {

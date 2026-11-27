@@ -11,7 +11,7 @@ const sourceRoot = resolve(import.meta.dirname, "../..");
 // release or borrowing historical artifacts whose sources no longer match.
 export async function createContentFixture() {
   const directory = await mkdtemp(join(tmpdir(), "mandate-content-"));
-  const root = resolve(directory, "apps/games/2038");
+  const root = resolve(directory, "apps/mandate-2038");
   const dispose = () => rm(directory, {recursive: true, force: true});
   try {
     await mkdir(root, {recursive: true});

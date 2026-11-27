@@ -1,6 +1,6 @@
 # CATSCAN: Multi-lineage self-referential neural proposer study (v3)
 
-Parent: [Gamma research projects](../CATSCAN.md)
+Parent: [Self-transform studies](../CATSCAN.md)
 
 ## Target
 
@@ -28,7 +28,7 @@ This lane isolates two specific empirical questions under strict pass/FLOP accou
 
 ## Contracts
 
-- Input: [Gamma research projects charter](../CATSCAN.md), pre-registered [protocol_v3.json](protocol_v3.json) committed before confirmation task generation, and locally provisioned `Qwen/Qwen3.5-0.8B` (`2fc0636`).
+- Input: [Gamma research projects charter](../../CATSCAN.md), pre-registered [protocol_v3.json](protocol_v3.json) committed before confirmation task generation, and locally provisioned `Qwen/Qwen3.5-0.8B` (`2fc0636`).
 - Output: Complete confirmation receipt JSON retaining all per-task `rows`, candidate ledger, exact FLOP/pass conversions, and lineage-level paired `t`, Wilcoxon signed-rank, and sign tests.
 
 ## Invariants

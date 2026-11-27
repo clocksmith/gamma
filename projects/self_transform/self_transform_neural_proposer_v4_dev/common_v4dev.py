@@ -53,7 +53,7 @@ from proposer_v4dev import (  # noqa: E402
 )
 from tasks_v4dev import DEV_HELDOUT_FAMILIES, build_heldout_task_dev  # noqa: E402
 
-REPO_ROOT = THIS_DIR.parent.parent
+REPO_ROOT = THIS_DIR.parents[2]
 OUTPUT_DIR = REPO_ROOT / ".work" / "self-transform-neural-proposer-v4-dev"
 DEVICE = torch.device("cpu")
 MAX_V3_SEED = 9_863_011

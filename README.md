@@ -1,6 +1,10 @@
 # Gamma
 
-Gamma builds a catalogue of qualified JavaScript and Python programs and studies how compact vocabularies (BITS) encode and compose them. It also provides a Python toolkit (`gamma.py`) for inspecting token probabilities, comparing model runtimes, and running controlled experiments under locked protocols. Today, model and algorithm comparisons routinely blur benchmarks, omit setup costs, and drop failed runs, making it hard to tell whether a new method beats a plain baseline.
+Gamma is a collection of research projects and apps for studying model and
+algorithm behavior. Algorithm Solver builds a catalogue of qualified JavaScript
+and Python programs. BITS studies how compact vocabularies encode and compose
+them. The shared Python toolkit inspects token probabilities, compares model
+runtimes, and runs controlled experiments.
 
 Gamma separates protocols, execution, and reporting—fixing datasets, budgets, and baselines beforehand, charging full costs, and preserving null results alongside wins. Explore the [catalogue roadmap](projects/algorithm_solver/catalogue/ROADMAP-v1.md), [durable goals](GOALS.md), [architecture](docs/ARCHITECTURE.md), and [documentation index](docs/README.md).
 
@@ -30,7 +34,7 @@ Gamma separates protocols, execution, and reporting—fixing datasets, budgets, 
   - **Closed:** Track B2 (self-improving proposer) closed after tying trained constants `4-4`; `enwiki9` compression is retired and archived.
   - **Open:** locked MiniCPM4 B1 confirmation run is in progress (separate from the Qwen 3.5 0.8B development run above); original compact-library `M1` remains unmet.
 
-## CLI surfaces and research tracks
+## Python CLI
 
 The main command is:
 
@@ -45,9 +49,6 @@ python gamma.py [command] [options]
 | Benchmarking | `python gamma.py benchmark` | Measure throughput, latency, output quality, or code generation. |
 | Mind Meld | `python gamma.py mind-meld` | Coordinate and route across active model engines. |
 | State-log context | `python -m gamma.core.state_context events.txt --query 'READ REG_03 =>'` | Keep the requested state's source dependencies while discarding irrelevant events. |
-| SAME-R | [`projects/samer/`](projects/samer/) | Run matched capability-transfer trials. |
-| Interview inventory | [`question bank`](projects/question_bank/README.md) | Browse categorized Hack2Hire entries and review LeetCode overlap. |
-| Domain research | [`projects/`](projects/) | Inspect translation, embedding, WGSL, and compression experiments. |
 | Integrations | [`integration guide`](docs/integration-guide.md) | Connect APIs, MCP, and external backends. |
 
 Use the command help for workload-specific options:
@@ -98,19 +99,12 @@ require local GPU, API, or backend configuration; see
 [`gamma/engines/README.md`](gamma/engines/README.md). Model weights are not
 installed automatically.
 
-## Repository map
+## Projects, applications and shared code
 
-See [code, apps, project and evidence boundaries](docs/REPOSITORY_LAYOUT.md) for
-installation and the relocation/restore contracts.
-
-- [`gamma/`](gamma/) — runtime, engines, game logic, comparison, and benchmarks
-- [`apps/`](apps/) — independently run game, web, MCP and Flux applications
-- [`projects/`](projects/) — distillation, SAME-R, embedding, translation, WGSL, and compression work
-- [`tools/`](tools/) — developer and model-analysis utilities
-- [`requirements/`](requirements/) — dependency manifests by hardware and engine
-- [`docs/`](docs/) — architecture, benchmark, integration, and method guides
-- [`tests/`](tests/) — automated test suites
-- [`gamma.py`](gamma.py) — CLI entrypoint
+- [Research projects](projects/README.md) indexes the maintained studies, their tools and retained evidence.
+- [Applications](apps/README.md) lists each independently runnable app.
+- [Gamma](gamma/) provides the Python CLI, engines and model tools. [Gamma Core](gamma-core/README.md) supplies primitives shared by Gamma and Flux.
+- [Repository layout](docs/REPOSITORY_LAYOUT.md) covers installation, compatibility commands and the path history. [Developer tools](tools/README.md) lists operator commands.
 
 ## Read next
 

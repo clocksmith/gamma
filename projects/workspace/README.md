@@ -17,29 +17,17 @@ Run `npm ci` and `npm start` in this directory. Run `npm run test:boundary`
 for the packaged runtime dependency check. An explicitly supplied workflow
 module is trusted operator code, not part of the default runtime closure.
 
-The following upstream description preserves the migration reference.
+## Contract and qualification
 
-# Blitzen workspace service
+The [component charter](CATSCAN.md) defines Gamma's authority. The donor
+[Fawn workspace contract](https://github.com/clocksmith/fawn/blob/9234bc55953c43af7d53c7335d8fe24282e59dc6/docs/fawn-workspace-contract.md) and
+[status](https://github.com/clocksmith/fawn/blob/9234bc55953c43af7d53c7335d8fe24282e59dc6/docs/status/fawn-workspace.md)
+record the original acceptance rules and results. Older receipts retain
+`fawn-workspace` filenames and `fawnWorkspace` strategy keys for reproducibility.
 
-The browser-agnostic shared observation, action, workflow-memory and recovery
-service above stock Chrome/Chromium (`@doe/blitzen`, formerly "Fawn Workspace").
-Inside [clocksmith/fawn](https://github.com/clocksmith/fawn), three layers have
-distinct names and acceptance boundaries:
-- **Doe** owns the native WebGPU runtime and WGSL compiler (`Dawn -> Doe`).
-- **Fawn** owns the custom Chromium browser build (`Fawn.app`).
-- **Blitzen** (`projects/workspace/`) owns durable browser workspaces, workflow
-  reuse/repair (`TraceDag`), and investigation handoff above stock Chrome by
-  default, with optional hash-pinned `Fawn` browser integration.
-
-The service is JavaScript: an end-to-end C GPU route means selecting Doe's C
-compiler/runtime in the Fawn browser, not rewriting Blitzen or Chromium code in C.
-[The workspace contract](../../docs/fawn-workspace-contract.md) owns requirements
-and acceptance; [status](../../docs/status/fawn-workspace.md) records what is
-established (retaining historical `fawn-workspace` filenames and `fawnWorkspace`
-strategy keys so frozen evidence hashes stay intact). Its behavior is qualified on the frozen case set for a recorded
-commit, browser binary and host. It shows complete-task value over Playwright
-agent tooling only on the frozen differentiation suite, and none over competent
-scripted automation. Development tests are not the behavioral gates.
+Historical qualification is scoped to its recorded commit, browser binary,
+host and frozen cases. That suite showed complete-task value over Playwright
+agent tooling and no advantage over competent scripted automation.
 
 ## Layout
 

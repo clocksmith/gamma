@@ -12,6 +12,11 @@ import numpy as np
 
 from gamma.core import config as cfg
 from gamma.core.fallback_telemetry import FallbackTelemetry
+from gamma.core.prompt_templates import (
+    STOP_TEXT_MARKERS,
+    prompt_looks_formatted,
+    should_apply_chat_template,
+)
 from gamma.engines import sampling_utils
 from gamma.ui import displays as ui
 from gamma.core.engine_interface import LLMEngine
@@ -45,14 +50,6 @@ REPETITION_WINDOW = 64
 # Minimum weight for agreement in ABE (ensures all models have some influence)
 MIN_AGREEMENT_WEIGHT = 0.1
 
-# Tokens that signal end-of-generation in chat templates.
-STOP_TEXT_MARKERS = (
-    "<end_of_turn>",
-    "<|eot_id|>",
-    "<|end_of_text|>",
-    "<eos>",
-    "</s>",
-)
 from gamma.mind_meld.bridges.kv_cache_handler import (
     KVCacheTranslator,
     PyTorchKVCache,
@@ -643,29 +640,6 @@ class MeldEngine:
         logger.warning(f"Unknown alignment strategy '{normalized}', falling back to alignment.")
         return AligningVocabularyTranslator(use_cache=use_cache, verbose=verbose)
 
-    def _prompt_looks_formatted(self, prompt: str) -> bool:
-        """Return True if the prompt already looks like a chat template."""
-        if not prompt:
-            return False
-        markers = (
-            "<|im_start|>",
-            "<|assistant|>",
-            "[INST]",
-            "<<SYS>>",
-            "User:",
-            "Assistant:",
-            "System:",
-        )
-        return any(marker in prompt for marker in markers)
-
-    def _model_is_instruction_tuned(self, engine: LLMEngine) -> bool:
-        """Heuristic for detecting instruction-tuned models."""
-        model_name = (engine.model_name or "").lower()
-        tokenizer_name = getattr(engine.tokenizer, "name_or_path", "")
-        combined = f"{model_name} {tokenizer_name}".lower()
-        tags = ("-it", "instruct", "instruction", "chat", "assistant")
-        return any(tag in combined for tag in tags)
-
     def _cache_prompt_prefix(
         self,
         engine_idx: Optional[int],
@@ -805,12 +779,12 @@ class MeldEngine:
         if self._prompt_chat_template is False:
             return False
         if self._shared_chat_template is True:
-            if self._shared_chat_template_auto and self._prompt_looks_formatted(prompt):
+            if self._shared_chat_template_auto and prompt_looks_formatted(prompt):
                 return False
             return True
         if self._shared_chat_template is False:
             return False
-        if self._prompt_looks_formatted(prompt):
+        if prompt_looks_formatted(prompt):
             return False
         if self._chat_template_engine is None:
             return False
@@ -822,36 +796,11 @@ class MeldEngine:
             return False
         if self._chat_template_engine is None:
             self._chat_template_engine = self._select_chat_template_engine()
-        engine = self._chat_template_engine
-        if engine is None:
-            return False
-        tokenizer = getattr(engine, "tokenizer", None)
-        if tokenizer is None or not hasattr(tokenizer, "apply_chat_template"):
-            return False
-        if self._prompt_chat_template is True:
-            return True
-        if self._prompt_looks_formatted(prompt):
-            return False
-        if getattr(tokenizer, "chat_template", None):
-            return True
-        return self._model_is_instruction_tuned(engine)
+        return self._should_apply_chat_template_for_engine(prompt, self._chat_template_engine)
 
-    def _should_apply_chat_template_for_engine(self, prompt: str, engine: LLMEngine) -> bool:
+    def _should_apply_chat_template_for_engine(self, prompt: str, engine: Optional[LLMEngine]) -> bool:
         """Decide whether to apply a chat template for a specific engine."""
-        if self._prompt_chat_template is False:
-            return False
-        if engine is None:
-            return False
-        tokenizer = getattr(engine, "tokenizer", None)
-        if tokenizer is None or not hasattr(tokenizer, "apply_chat_template"):
-            return False
-        if self._prompt_chat_template is True:
-            return True
-        if self._prompt_looks_formatted(prompt):
-            return False
-        if getattr(tokenizer, "chat_template", None):
-            return True
-        return self._model_is_instruction_tuned(engine)
+        return should_apply_chat_template(engine, prompt, self._prompt_chat_template)
 
     def _set_raw_prompt(self, prompt: str) -> None:
         """Store the base prompt and clear cached prefixes."""
@@ -914,12 +863,12 @@ class MeldEngine:
             return self._shared_prompt_prefix
         if not self._should_apply_chat_template_for_engine(prompt, engine):
             if engine_idx is not None:
-                self._prompt_prefix_special[engine_idx] = bool(self._prompt_looks_formatted(prompt))
+                self._prompt_prefix_special[engine_idx] = prompt_looks_formatted(prompt)
             self._cache_prompt_prefix(
                 engine_idx,
                 engine,
                 prompt,
-                bool(self._prompt_looks_formatted(prompt)),
+                prompt_looks_formatted(prompt),
             )
             return prompt
         formatted, used_system = self._format_prompt_with_engine(prompt, engine)

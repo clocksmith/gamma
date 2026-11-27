@@ -98,8 +98,8 @@ Accepted-proposal rates across `Gen 1 -> Gen 2 -> Gen 3 -> Gen 4` were `60.0% ->
 ## Reproduction
 
 ```bash
-.venv/bin/python -m unittest projects/self_transform_neural_proposer_v3/test_proposer_v3.py -v
-.venv/bin/python projects/self_transform_neural_proposer_v3/run_study_v3.py
-OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 .venv/bin/python projects/self_transform_neural_proposer_v3/run_study_v3.py \
+.venv/bin/python -m unittest projects/self_transform/self_transform_neural_proposer_v3/test_proposer_v3.py -v
+.venv/bin/python projects/self_transform/self_transform_neural_proposer_v3/run_study_v3.py
+OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 .venv/bin/python projects/self_transform/self_transform_neural_proposer_v3/run_study_v3.py \
   --execute --output .work/self-transform-neural-proposer-v3 --workers 6
 ```
