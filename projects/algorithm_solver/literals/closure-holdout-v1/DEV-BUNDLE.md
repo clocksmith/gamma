@@ -42,3 +42,39 @@ gap to exact pair selection bounds how much the lazy trainer costs.
 
 A miss: report the price of this bundle rule at each budget. A match at both sizes of a budget: the bundle rule becomes
 eligible for a held-out comparison, to be preregistered separately; nothing is run on held-out data here.
+
+
+## Results (added after the runs; plan above unchanged)
+
+Chains: `out/bundle/` (closure of every pair and bundle chain checked: each entry is two earlier entries); scores:
+`explore_bundle.py`, `out/dev-bundle.json`. The byte-priced pair arm uses lazy selection (the exact run was stopped
+at 2,586 fragments; at 84 fragments exact and lazy differ by 0.24%). Lazy pair selection is within 0.33% of exact
+pair selection at 3,924 fragments.
+
+Training tokens against the reference (open at equal slots; the better of open and open-byte at equal bytes):
+
+| Arm | 84 slots | 3,924 slots | 566 bytes | 43,480 bytes |
+| --- | ---: | ---: | ---: | ---: |
+| open | +0.0% | +0.0% | +4.6% | +1.2% |
+| pair | +14.6% | +24.8% | +7.3% | +9.7% |
+| bundle | +14.7% | +25.2% | +7.5% | +10.5% |
+| open-byte | +7.8% | +20.2% | +0.0% | +0.0% |
+| pair-byte (lazy) | +16.5% | +31.1% | +4.8% | +7.3% |
+| bundle-byte | +16.2% | +31.2% | +4.8% | +7.4% |
+
+Tolerance: match at +2.0% or less. No pair or bundle arm matches at any budget.
+
+- Prediction 1 (bundle misses at 3,924 slots): holds, +25.2%.
+- Prediction 2 (misses at 84 slots): holds, +14.7%.
+- Prediction 3 (bundle-byte closer at equal bytes, still misses): holds (+4.8% and
+  +7.4%). The pair-byte control is the same distance away (+4.8% and
+  +7.3%), so the narrowing comes from charging for size, not from buying bundles.
+- Prediction 4 (bundle beats pair at 3,924 slots): fails (49,093 against 48,916).
+  Under the plan this makes the test inconclusive about bundles in general. Diagnostic: the bundle rule bought 46
+  entries beyond one per bundle in 5,855 fragments (byte-priced: 42 in 7,276), and its chain is within 0.03% of lazy
+  pair selection (49,077), so as built it reduces to pair selection; a different bundle family or an exact bundle
+  trainer could behave differently.
+
+Reading: this bundle rule pays the closure price measured above at every budget; it does not reach open token gain's
+training fit, so it cannot serve as the matched closure-preserving arm, and it says nothing about what caused the
+held-out reversal. Dev tokens are in `out/dev-bundle.json` as description only.

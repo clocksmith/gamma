@@ -17,7 +17,8 @@
 // engine's tie rule).
 //
 //   engine_exact MODE POLICY L KMAX LIMIT_SECONDS LIST OUT
-// MODE: exact-entry (open), exact-closed (closed), exact-byte (open, gain per stored byte, 1 + |w|).
+// MODE: exact-entry (open), exact-closed (closed), exact-byte (open, gain per stored byte, 1 + |w|),
+// exact-closed-byte (closed, gain per stored byte).
 #define ENGINE_NO_MAIN
 #include "../fixed-source-v3/engine.c"
 
@@ -240,6 +241,7 @@ int main(int argc, char **argv) {
   if (!strcmp(mode, "exact-entry")) { closed_mode = 0; per_byte = 0; }
   else if (!strcmp(mode, "exact-closed")) { closed_mode = 1; per_byte = 0; }
   else if (!strcmp(mode, "exact-byte")) { closed_mode = 0; per_byte = 1; }
+  else if (!strcmp(mode, "exact-closed-byte")) { closed_mode = 1; per_byte = 1; }
   else { fprintf(stderr, "unknown mode\n"); return 2; }
   set_policy(argv[2]);
   int L = atoi(argv[3]), kmax = atoi(argv[4]);
