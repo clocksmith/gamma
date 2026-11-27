@@ -43,12 +43,18 @@ static int span_cost(int p, int l) {
   return b[l];
 }
 
-// Every occurrence of a candidate is the same string, and span_cost only reads entries that end inside
-// the span, so the cost is the same at every occurrence. A parse uses non-overlapping occurrences only,
+// Without boundary cuts every occurrence of a candidate is the same string, and span_cost only reads entries
+// that end inside the span, so the cost is the same at every occurrence. A parse uses non-overlapping occurrences only,
 // at most `used` of them (the engine's maximum non-overlapping count, ub / (len - 1)).
 static double bound_of(const Cand *c) {
-  long used = c->ub / (c->len - 1);
-  long s = used * (span_cost(occ[c->off], c->len) - 1);
+  long s = 0;
+  if (cut_before) {
+    // With FSV3_CUTS the shortcut below is not relied on: sum the bound over every occurrence.
+    for (int i = 0; i < c->nocc; i++) s += span_cost(occ[c->off + i], c->len) - 1;
+  } else {
+    long used = c->ub / (c->len - 1);
+    s = used * (span_cost(occ[c->off], c->len) - 1);
+  }
   return per_byte ? (double)s / (1.0 + c->len) : (double)s;
 }
 

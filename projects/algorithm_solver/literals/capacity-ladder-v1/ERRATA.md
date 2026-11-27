@@ -17,3 +17,26 @@ What stands: on B04 a simple combinatorial bound (30) beats the defect tree (25)
 that the Lagrangian or LP baseline beats the tree there.
 
 The paper was corrected in Ouroboros `fa039e06`.
+
+## 2026-11-26: `check_certificate.py` trusted the certificate's field
+
+The checker took `prime`, `base` and the kernel rows from the certificate without validating them. A composite
+modulus (for example 561) has non-invertible pivots, and `pow(pivot, prime - 2, prime)` then returns a non-inverse
+that can overstate the rank and so certify a bound above a valid dictionary; a kernel row shorter than the alphabet
+was silently truncated by `zip()`. The checker now refuses a certificate unless the modulus is prime (deterministic
+Miller-Rabin), the base is a non-zero field element, every kernel row has one entry per character, every node space
+row has one entry per kernel row, and every child index names a node. `SHA256SUMS` carries the new hash of
+`check_certificate.py`.
+
+No stored result changes. All six stored certificates use the prime 1,000,000,007 with base 2. Rechecked with the
+new code: JS-2 certifies 65, B04 25, P03 73, A08 71, A15 79, unchanged; PY-3 (4,141 nodes) passes every new input
+check, and the rest of the check is the code that certified its 55. A composite modulus, a zero base and a short
+kernel row are each rejected. `capacity-boundary-v1/evaluate.py` has the same arithmetic but uses two fixed primes
+with non-zero bases (1,000,000,007 with 2; 998,244,353 with 3) and builds its own vectors, so it is not affected.
+
+## 2026-11-26: A08 was not found "with no search at all"
+
+`RESULTS.md` line 52 says levels 0 to 3 of A08 "are refuted by a tree of 12 nodes with no search at all", and line
+48 gives only the 2 s check. The certificate is checked in 2 s without any search, but finding it is a tree search:
+rerunning `ladder.analyze` on A08 with the published settings (rule W2, max level 8, 300 s limit) took 224 s on one
+core to reach the bound of 71 (that time includes an undecided level-4 search). The rank paper now gives both times.

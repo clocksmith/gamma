@@ -92,7 +92,10 @@ every 400th step recomputes the exact gain of every candidate whose provable bou
 | `token` (frozen, also objective-holdout-v1's arm) | 10 (`out/audit-lazy-token.tsv`) | 9 (every check from step 400 on) | step 2,000: picked gain 10, best 21 |
 | `closed` (frozen) | 10 (`out/audit-lazy-closed.tsv`); 20 (`out/verify-lazy-closed.tsv`) | 9; 18 | step 400: picked gain 78; `.map(` had gain 90 under a stale key of 68 |
 
-Both chains are lazy-greedy orders, not exact greedy orders. The frozen dictionaries and every token count measured on
+Both chains are lazy-greedy orders, not exact greedy orders. Two mechanisms cause the misses: a cached gain is kept as the
+heap key although gains can grow (`fixed-source-v3/engine.c` `run_greedy`, `engine_closed.c` lines 52-61), and
+`engine_closed.c` line 62 drops a candidate popped with gain 0 or less and never offers it again unless a new
+concatenation produces the same string. Both files are frozen by hash and are left as they are. The frozen dictionaries and every token count measured on
 them are unaffected; any statement about what exact greedy token gain would select is not supported by them.
 `engine_exact.c` keys the heap by a bound that never rises (each use of w saves at most the tokens currently needed to
 spell w, minus one); exact chains are being trained and are not yet part of any result.

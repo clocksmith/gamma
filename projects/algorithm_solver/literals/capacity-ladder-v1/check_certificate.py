@@ -46,13 +46,64 @@ def echelon(rows, prime):
     return tuple(sorted(tuple(row) for row in basis))
 
 
+def is_prime(n):
+    """Deterministic Miller-Rabin; exact for every n below 3.3e24, so for any field a certificate can name."""
+    if not isinstance(n, int) or isinstance(n, bool) or n < 2:
+        return False
+    small = (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41)
+    if n in small:
+        return True
+    if any(n % p == 0 for p in small):
+        return False
+    if n >= 3_317_044_064_679_887_385_961_981:
+        return False  # outside the range where these witnesses are proved sufficient; refuse rather than guess
+    d, s = n - 1, 0
+    while d % 2 == 0:
+        d, s = d // 2, s + 1
+    for a in small:
+        x = pow(a, d, n)
+        if x in (1, n - 1):
+            continue
+        for _ in range(s - 1):
+            x = x * x % n
+            if x == n - 1:
+                break
+        else:
+            return False
+    return True
+
+
+def _rows(rows, width, prime, what):
+    """Every row a list of `width` field elements. zip() would silently truncate a short row."""
+    if not isinstance(rows, list):
+        raise ValueError(f'{what} is not a list of rows')
+    for row in rows:
+        if not isinstance(row, list) or len(row) != width:
+            raise ValueError(f'{what}: a row does not have {width} entries')
+        if any(not isinstance(x, int) or isinstance(x, bool) or not 0 <= x < prime for x in row):
+            raise ValueError(f'{what}: an entry is not an element of the field')
+
+
 def check(programs, certificate):
     c = certificate
     if c.get('schema') != 'bits-defect-tree/v1' or c.get('rule') != 'W2':
         raise ValueError('not a witness-rule defect-tree certificate')
     prime, base, letters, kernel = c['prime'], c['base'], c['letters'], c['kernel']
+    # The rank argument needs a field: a composite modulus has no inverses for some pivots, and
+    # pow(pivot, prime - 2, prime) then returns a non-inverse that can overstate the rank and so the bound.
+    if not is_prime(prime):
+        raise ValueError('the modulus is not a prime')
+    if not isinstance(base, int) or isinstance(base, bool) or not 1 <= base < prime:
+        raise ValueError('the base is not a non-zero element of the field')
+    if not isinstance(c.get('refutes'), int) or isinstance(c.get('refutes'), bool):
+        raise ValueError('refutes is not an integer')
     if sorted(set(''.join(programs))) != letters:
         raise ValueError('the alphabet differs')
+    _rows(kernel, len(letters), prime, 'kernel')
+    for n, node in enumerate(c['nodes']):
+        _rows(node['space'], len(kernel), prime, f'node {n} space')
+        if not isinstance(node.get('children'), list) or any(not isinstance(ch, int) or not 0 <= ch < len(c['nodes']) for ch in node['children']):
+            raise ValueError(f'node {n}: a child index is not a node')
     column = {ch: n for n, ch in enumerate(letters)}
 
     def vector(text):
