@@ -117,6 +117,12 @@ def main():
     ok, (checked, t, f, wins) = randomized(trials, seed)
     print(f'randomized: {trials} corpora, {checked} candidates needing >= 3 tokens; premise holds for {t}, '
           f'proposition held on all of them: {ok}; premise fails for {f}, and {wins} of those beat every two-token candidate')
+    import json
+    from pathlib import Path
+    (Path(__file__).resolve().parent / 'out' / 'normalized-pairs-check.json').write_text(json.dumps({
+        'trials': trials, 'seed': seed, 'candidates_needing_3_or_more': checked, 'premise_holds': t,
+        'proposition_held_on_all': ok, 'premise_fails': f, 'premise_fails_and_beats_every_pair': wins,
+        'counterexample_confirmed': ok_ce}, indent=1) + '\n')
     sys.exit(0 if ok and ok_ce else 1)
 
 

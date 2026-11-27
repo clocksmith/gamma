@@ -42,8 +42,12 @@ Six documents `Xabcd`, `Wabcd`, `abcdY`, `abcdZ`, `Uabcd`, `Vabcd`, with V = all
   every one; the premise failed for 18,702, of which 5 beat every closed candidate. Run time about 10 s.
 - On CodeNet `primary` (policy `s1-whole`), the exact normalized chain and the exact closed chain are identical,
   4,096 of 4,096 entries in order (`out/exact/exact-norm-s1-whole.txt`, `out/exact/exact-closed-s1-whole.txt`).
-  That is an observation: the alignment penalty of the competing candidates was not measured on CodeNet, so it is
-  not a proof that no CodeNet parse straddles.
+  `audit_norm_pairs.c` audits the strongest candidate needing three or more tokens at every 200th step of that chain
+  (exact: scanned in decreasing order of a bound that never rises). Of 20 audited steps, the proposition
+  certifies 19 (the challenger's alignment penalty is 0) and is silent at 1 (step 2,000: penalty 6, the
+  challenger still scores 9 against the best pair's 10); the challenger never beats the best pair. At 9 of the
+  20 steps it ties the best pair exactly, so the identical dictionaries also depend on the tie rule
+  preferring pairs. Output: `out/audit-norm-pairs.tsv`, `out/audit-norm-pairs-summary.json`.
 
 ## What it means for the experiments
 
