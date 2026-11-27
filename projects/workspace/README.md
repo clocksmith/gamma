@@ -525,6 +525,10 @@ disclosure rules (`--workflow-module PATH` or `openWorkspaceApp({ workflowPersis
 When host task definitions are installed, the loopback client UI exposes explicit
 workflow selection (`learn`, `reuse`, `fresh`) and slot inputs without graph
 upload, secret exposure or automatic startup execution.
+The same module (or `openWorkspaceApp({ commitAuthority })`) may supply the host's
+`commitAuthority` (`approvalFor`, `readLock`, `readRecord`); without one the verified
+commit gate does not run. Only the CDP adapter (`--adapter cdp`) holds requests for an
+approval's `request` rule; the Playwright adapter refuses such approvals.
 
 `node qualification/product-compare.js --out <directory>` compares the product
 client with stock Chromium plus the same durable evidence/issue tracker and
