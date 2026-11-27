@@ -463,10 +463,10 @@ function matchNumericDiffComparator(fnNode) {
 }
 
 function extractFreshSortSource(targetNode) {
-  // Match ONLY provably fresh (non-mutating copy) array receivers:
-  //   1. <expr>.slice()  (0 args)          -> <expr>
-  //   2. [...<iterable>] (single spread)   -> <iterable>
-  //   3. [e1, e2, ...]   (dense literal)   -> targetNode
+  // Match ONLY provably fresh (non-mutating copy) array receivers, returning { kind, src }:
+  //   1. <expr>.slice()  (0 args)          -> { kind: "slice", src: <expr> }
+  //   2. [...<iterable>] (single spread)   -> { kind: "spread", src: <iterable> }
+  //   3. [e1, e2, ...]   (dense literal)   -> { kind: "literal", src: targetNode }
   if (!targetNode) return null;
   if (
     targetNode.type === "CallExpression" &&
@@ -478,14 +478,14 @@ function extractFreshSortSource(targetNode) {
     targetNode.callee.property.type === "Identifier" &&
     targetNode.callee.property.name === "slice"
   ) {
-    return targetNode.callee.object;
+    return { kind: "slice", src: targetNode.callee.object };
   }
   if (targetNode.type === "ArrayExpression" && targetNode.elements.length > 0) {
     if (targetNode.elements.length === 1 && targetNode.elements[0] && targetNode.elements[0].type === "SpreadElement") {
-      return targetNode.elements[0].argument;
+      return { kind: "spread", src: targetNode.elements[0].argument };
     }
     if (targetNode.elements.every(e => e !== null && e.type !== "SpreadElement")) {
-      return targetNode;
+      return { kind: "literal", src: targetNode };
     }
   }
   return null;
@@ -568,6 +568,322 @@ function canonicalizeSyntax(ast, opts) {
       computed: true,
       optional: false,
     }));
+  }
+
+  function getGuardedNumericSortHelper(kind, dir) {
+    // Hoisted standalone runtime domain guard inside `__D` (zero external helpers, zero escapes).
+    // Fast-paths to Float64Array sort ONLY when:
+    //   1. Receiver is a true Array with unmodified `.slice` (for slice) or `[Symbol.iterator]` (for spread),
+    //   2. Length >= 8 (avoids O(n) guard overhead on tiny arrays), and
+    //   3. Every element is a finite IEEE-754 number excluding -0 (Number.isFinite(v) && (v !== 0 || 1/v === 1/0)),
+    //      rejecting null, undefined, sparse holes, strings, booleans, BigInt, Symbol, objects, NaN, +/-Infinity, and -0.
+    // Any input outside this sealed numeric domain falls back verbatim to the exact original JS comparator sort.
+    return getDepRef(`NSORT:${kind}:${dir}`, () => {
+      const sId = () => ({ type: "Identifier", name: "__s" });
+      const oId = () => ({ type: "Identifier", name: "__o" });
+      const iId = () => ({ type: "Identifier", name: "__i" });
+      const vId = () => ({ type: "Identifier", name: "__v" });
+      const aId = () => ({ type: "Identifier", name: "__a" });
+      const bId = () => ({ type: "Identifier", name: "__b" });
+
+      const nfRef = getBaseRef("NF:Number.isFinite", () => ({
+        type: "MemberExpression",
+        object: {
+          type: "MemberExpression",
+          object: { type: "ThisExpression" },
+          property: buildFromCharCodeExpr("Number"),
+          computed: true,
+          optional: false,
+        },
+        property: buildFromCharCodeExpr("isFinite"),
+        computed: true,
+        optional: false,
+      }));
+      const isArrayCall = {
+        type: "CallExpression",
+        callee: {
+          type: "MemberExpression",
+          object: { type: "Identifier", name: "Array" },
+          property: lowerStringExpr("isArray", true),
+          computed: true,
+          optional: false,
+        },
+        arguments: [sId()],
+        optional: false,
+      };
+      const arrProtoRef = () => ({
+        type: "MemberExpression",
+        object: { type: "Identifier", name: "Array" },
+        property: lowerStringExpr("prototype", true),
+        computed: true,
+        optional: false,
+      });
+
+      let receiverOk;
+      if (kind === "slice") {
+        receiverOk = {
+          type: "LogicalExpression",
+          operator: "&&",
+          left: isArrayCall,
+          right: {
+            type: "BinaryExpression",
+            operator: "===",
+            left: {
+              type: "MemberExpression",
+              object: sId(),
+              property: lowerStringExpr("slice", true),
+              computed: true,
+              optional: false,
+            },
+            right: {
+              type: "MemberExpression",
+              object: arrProtoRef(),
+              property: lowerStringExpr("slice", true),
+              computed: true,
+              optional: false,
+            },
+          },
+        };
+      } else if (kind === "spread") {
+        const symIterRef = getBaseRef("SYM:Symbol.iterator", () => ({
+          type: "MemberExpression",
+          object: {
+            type: "MemberExpression",
+            object: { type: "ThisExpression" },
+            property: buildFromCharCodeExpr("Symbol"),
+            computed: true,
+            optional: false,
+          },
+          property: buildFromCharCodeExpr("iterator"),
+          computed: true,
+          optional: false,
+        }));
+        receiverOk = {
+          type: "LogicalExpression",
+          operator: "&&",
+          left: isArrayCall,
+          right: {
+            type: "BinaryExpression",
+            operator: "===",
+            left: {
+              type: "MemberExpression",
+              object: sId(),
+              property: cloneAst(symIterRef),
+              computed: true,
+              optional: false,
+            },
+            right: {
+              type: "MemberExpression",
+              object: arrProtoRef(),
+              property: symIterRef,
+              computed: true,
+              optional: false,
+            },
+          },
+        };
+      } else {
+        receiverOk = { type: "UnaryExpression", operator: "!", prefix: true, argument: { type: "Literal", value: 0, raw: "0" } };
+      }
+
+      const lenExpr = () => ({
+        type: "MemberExpression",
+        object: sId(),
+        property: { type: "Identifier", name: "length" },
+        computed: false,
+        optional: false,
+      });
+
+      const elemValid = {
+        type: "LogicalExpression",
+        operator: "&&",
+        left: { type: "CallExpression", callee: nfRef, arguments: [vId()], optional: false },
+        right: {
+          type: "LogicalExpression",
+          operator: "||",
+          left: { type: "BinaryExpression", operator: "!==", left: vId(), right: { type: "Literal", value: 0, raw: "0" } },
+          right: {
+            type: "BinaryExpression",
+            operator: "===",
+            left: { type: "BinaryExpression", operator: "/", left: { type: "Literal", value: 1, raw: "1" }, right: vId() },
+            right: { type: "BinaryExpression", operator: "/", left: { type: "Literal", value: 1, raw: "1" }, right: { type: "Literal", value: 0, raw: "0" } },
+          },
+        },
+      };
+
+      const typedArr = {
+        type: "NewExpression",
+        callee: getGlobalRef("Float64Array"),
+        arguments: [sId()],
+      };
+      let sortedTyped = {
+        type: "CallExpression",
+        callee: {
+          type: "MemberExpression",
+          object: typedArr,
+          property: lowerStringExpr("sort", true),
+          computed: true,
+          optional: false,
+        },
+        arguments: [],
+        optional: false,
+      };
+      if (dir === "desc") {
+        sortedTyped = {
+          type: "CallExpression",
+          callee: {
+            type: "MemberExpression",
+            object: sortedTyped,
+            property: lowerStringExpr("reverse", true),
+            computed: true,
+            optional: false,
+          },
+          arguments: [],
+          optional: false,
+        };
+      }
+      const fastReturn = {
+        type: "ReturnStatement",
+        argument: { type: "ArrayExpression", elements: [{ type: "SpreadElement", argument: sortedTyped }] },
+      };
+
+      let fallbackRecv;
+      if (kind === "slice") {
+        fallbackRecv = {
+          type: "CallExpression",
+          callee: {
+            type: "MemberExpression",
+            object: sId(),
+            property: lowerStringExpr("slice", true),
+            computed: true,
+            optional: false,
+          },
+          arguments: [],
+          optional: false,
+        };
+      } else if (kind === "spread") {
+        fallbackRecv = {
+          type: "ArrayExpression",
+          elements: [{ type: "SpreadElement", argument: sId() }],
+        };
+      } else {
+        fallbackRecv = sId();
+      }
+      const cmpFn = {
+        type: "FunctionExpression",
+        id: null,
+        params: [aId(), bId()],
+        body: {
+          type: "BlockStatement",
+          body: [{
+            type: "ReturnStatement",
+            argument: {
+              type: "BinaryExpression",
+              operator: "-",
+              left: dir === "asc" ? aId() : bId(),
+              right: dir === "asc" ? bId() : aId(),
+            },
+          }],
+        },
+        generator: false,
+      };
+      const fallbackReturn = {
+        type: "ReturnStatement",
+        argument: {
+          type: "CallExpression",
+          callee: {
+            type: "MemberExpression",
+            object: fallbackRecv,
+            property: lowerStringExpr("sort", true),
+            computed: true,
+            optional: false,
+          },
+          arguments: [cmpFn],
+          optional: false,
+        },
+      };
+
+      const loopStmt = {
+        type: "ForStatement",
+        init: {
+          type: "VariableDeclaration",
+          kind: "let",
+          declarations: [{ type: "VariableDeclarator", id: iId(), init: { type: "Literal", value: 0, raw: "0" } }],
+        },
+        test: { type: "BinaryExpression", operator: "<", left: iId(), right: lenExpr() },
+        update: { type: "AssignmentExpression", operator: "+=", left: iId(), right: { type: "Literal", value: 1, raw: "1" } },
+        body: {
+          type: "BlockStatement",
+          body: [
+            {
+              type: "VariableDeclaration",
+              kind: "let",
+              declarations: [{
+                type: "VariableDeclarator",
+                id: vId(),
+                init: { type: "MemberExpression", object: sId(), property: iId(), computed: true, optional: false },
+              }],
+            },
+            {
+              type: "IfStatement",
+              test: { type: "UnaryExpression", operator: "!", prefix: true, argument: elemValid },
+              consequent: {
+                type: "BlockStatement",
+                body: [
+                  {
+                    type: "ExpressionStatement",
+                    expression: {
+                      type: "AssignmentExpression",
+                      operator: "=",
+                      left: oId(),
+                      right: { type: "UnaryExpression", operator: "!", prefix: true, argument: { type: "Literal", value: 1, raw: "1" } },
+                    },
+                  },
+                  { type: "BreakStatement", label: null },
+                ],
+              },
+              alternate: null,
+            },
+          ],
+        },
+      };
+
+      const guardedBlock = {
+        type: "IfStatement",
+        test: {
+          type: "LogicalExpression",
+          operator: "&&",
+          left: oId(),
+          right: { type: "BinaryExpression", operator: "<", left: { type: "Literal", value: 7, raw: "7" }, right: lenExpr() },
+        },
+        consequent: {
+          type: "BlockStatement",
+          body: [
+            loopStmt,
+            { type: "IfStatement", test: oId(), consequent: fastReturn, alternate: null },
+          ],
+        },
+        alternate: null,
+      };
+
+      return {
+        type: "FunctionExpression",
+        id: null,
+        params: [sId()],
+        body: {
+          type: "BlockStatement",
+          body: [
+            {
+              type: "VariableDeclaration",
+              kind: "let",
+              declarations: [{ type: "VariableDeclarator", id: oId(), init: receiverOk }],
+            },
+            guardedBlock,
+            fallbackReturn,
+          ],
+        },
+        generator: false,
+      };
+    });
   }
 
   const scopeInfo = analyzeScopes(ast);
@@ -727,10 +1043,11 @@ function canonicalizeSyntax(ast, opts) {
         return node;
       }
       case "CallExpression": {
-        // General Numeric Copy-Sort Specialization (Pass 2):
-        // Replaces `<freshArray>.sort((a,b)=>a-b)` with `[...new Float64Array(<src>).sort()]`
-        // (and `(a,b)=>b-a` with `.reverse()`), eliminating O(n log n) JS comparator callbacks
-        // while preserving exact IEEE-754 numeric ordering and non-mutating Array output.
+        // General Numeric Copy-Sort Specialization (Pass 2, domain-sealed):
+        // Replaces `<freshArray>.sort((a,b)=>a-b)` (or `b-a`) with a standalone hoisted
+        // runtime-guarded helper that fast-paths to Float64Array sort ONLY for dense
+        // finite non-negative-zero numeric Arrays (length >= 8) and falls back verbatim
+        // to the original JS comparator sort on any input outside that numeric domain.
         if (
           nativeNumericSort &&
           !node.optional &&
@@ -743,43 +1060,15 @@ function canonicalizeSyntax(ast, opts) {
           node.arguments[0].type !== "SpreadElement"
         ) {
           const dir = matchNumericDiffComparator(node.arguments[0]);
-          const freshSrc = dir ? extractFreshSortSource(node.callee.object) : null;
-          if (dir && freshSrc) {
-            const srcTx = txExpr(freshSrc, inLoopDepth);
-            const typedArr = {
-              type: "NewExpression",
-              callee: getGlobalRef("Float64Array"),
-              arguments: [srcTx],
-            };
-            let sortedExpr = {
-              type: "CallExpression",
-              callee: {
-                type: "MemberExpression",
-                object: typedArr,
-                property: lowerStringExpr("sort", true),
-                computed: true,
-                optional: false,
-              },
-              arguments: [],
-              optional: false,
-            };
-            if (dir === "desc") {
-              sortedExpr = {
-                type: "CallExpression",
-                callee: {
-                  type: "MemberExpression",
-                  object: sortedExpr,
-                  property: lowerStringExpr("reverse", true),
-                  computed: true,
-                  optional: false,
-                },
-                arguments: [],
-                optional: false,
-              };
-            }
+          const fresh = dir ? extractFreshSortSource(node.callee.object) : null;
+          if (dir && fresh) {
+            const srcTx = txExpr(fresh.src, inLoopDepth);
+            const helperRef = getGuardedNumericSortHelper(fresh.kind, dir);
             return {
-              type: "ArrayExpression",
-              elements: [{ type: "SpreadElement", argument: sortedExpr }],
+              type: "CallExpression",
+              callee: helperRef,
+              arguments: [srcTx],
+              optional: false,
             };
           }
         }

@@ -200,6 +200,101 @@ def check_negative_control_3_step_ceiling(m80: dict[str, Any]) -> dict[str, Any]
     }
 
 
+def check_negative_control_4_numeric_sort_domain_guard() -> dict[str, Any]:
+    """Negative Control 4: rewritten copy-sort MUST match original JS verbatim outside finite numeric arrays."""
+    orig_asc = "function solve(a){return a.slice().sort((x,y)=>x-y);}"
+    orig_desc = "function solve(a){return [...a].sort((x,y)=>y-x);}"
+    rewritten = rw.rewrite_batch([
+        {"id": "asc", "variant": "fixed", "code": orig_asc, "opts": rw.FIXED_CANONICAL_OPTS},
+        {"id": "desc", "variant": "fixed", "code": orig_desc, "opts": rw.FIXED_CANONICAL_OPTS},
+    ])
+    assert all(r.get("ok") for r in rewritten), f"rewrite failed: {rewritten}"
+    code_asc = rewritten[0]["code"]
+    code_desc = rewritten[1]["code"]
+    # Verify both rewritten guarded functions remain 100% zero-escape spellable under frozen_dict64.json!
+    frozen = json.loads((ARTIFACTS / "frozen_dict64.json").read_text())
+    trie = dt.build_trie(frozen["vocab"])
+    spell_asc = dt.dp_segment_bits(code_asc, trie, frozen["vocab"], frozen["huffman_lengths"]) is not None
+    spell_desc = dt.dp_segment_bits(code_desc, trie, frozen["vocab"], frozen["huffman_lengths"]) is not None
+
+    probe_js = r"""
+import vm from "node:vm";
+const payload = JSON.parse(await new Promise(r => { let d=""; process.stdin.on("data", c=>d+=c); process.stdin.on("end", ()=>r(d)); }));
+function evalFn(code) {
+  const ctx = vm.createContext({});
+  vm.runInContext(code + "\nthis.__fn = solve;", ctx);
+  return ctx.__fn;
+}
+const oAsc = evalFn(payload.orig_asc), rAsc = evalFn(payload.code_asc);
+const oDesc = evalFn(payload.orig_desc), rDesc = evalFn(payload.code_desc);
+function makeCases() {
+  const sparse = [9, 8, 7, 6, 5, 4, 3, 2, 1]; delete sparse[4];
+  const customSlice = { slice() { return [9, 1, 5, 4, 3, 2, 8, 7, 6]; } };
+  const customIter = { [Symbol.iterator]() { return [9, 1, 5, 4, 3, 2, 8, 7, 6][Symbol.iterator](); } };
+  return [
+    ["finite_ge8", [9, -2, 0, 5.5, 1e308, -1e308, 3, 1, 4]],
+    ["neg_zero_ge8", [0, -0, 1, -1, 2, 3, 4, 5, 6]],
+    ["null_ge8", [null, 1, -1, 2, 3, 4, 5, 6, 7]],
+    ["undef_ge8", [3, undefined, 1, 2, 4, 5, 6, 7, 8]],
+    ["strings_ge8", ["10", "2", "1", "9", "8", "7", "6", "5", "4"]],
+    ["nan_ge8", [1, NaN, 0, -2, 3, 4, 5, 6, 7]],
+    ["inf_ge8", [Infinity, -Infinity, 0, Infinity, 1, 2, 3, 4, 5]],
+    ["sparse_ge8", sparse],
+    ["objects_ge8", [{valueOf(){return 9;}}, {valueOf(){return 1;}}, {valueOf(){return 5;}}, {valueOf(){return 2;}}, {valueOf(){return 8;}}, {valueOf(){return 3;}}, {valueOf(){return 7;}}, {valueOf(){return 4;}}, {valueOf(){return 6;}}]],
+    ["custom_slice", customSlice],
+    ["custom_iter", customIter],
+  ];
+}
+function sameArr(x, y) {
+  if (!Array.isArray(x) || !Array.isArray(y) || x.length !== y.length) return false;
+  for (let i = 0; i < x.length; i++) {
+    if ((i in x) !== (i in y)) return false;
+    if (!Object.is(x[i], y[i])) return false;
+  }
+  return true;
+}
+const results = {};
+let allOk = true;
+for (const [name, inp] of makeCases()) {
+  const okAsc = name === "custom_iter" ? true : sameArr(oAsc(inp), rAsc(inp));
+  const okDesc = name === "custom_slice" ? true : sameArr(oDesc(inp), rDesc(inp));
+  results[name] = { asc: okAsc, desc: okDesc };
+  if (!okAsc || !okDesc) allOk = false;
+}
+// Verify BigInt raises the exact same TypeError in both original and rewritten code
+let bigintMatch = false;
+try { oAsc([3n,1n,2n,4n,5n,6n,7n,8n,9n]); } catch (e1) {
+  try { rAsc([3n,1n,2n,4n,5n,6n,7n,8n,9n]); } catch (e2) {
+    bigintMatch = e1.name === e2.name;
+  }
+}
+results.bigint_throws_same = bigintMatch;
+if (!bigintMatch) allOk = false;
+process.stdout.write(JSON.stringify({ all_ok: allOk, results }));
+"""
+    proc = subprocess.run(
+        ["node", "--input-type=module", "-e", probe_js],
+        input=json.dumps({
+            "orig_asc": orig_asc,
+            "code_asc": code_asc,
+            "orig_desc": orig_desc,
+            "code_desc": code_desc,
+        }),
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    out = json.loads(proc.stdout)
+    return {
+        "name": "negative_control_4_numeric_sort_domain_guard",
+        "passed": bool(out["all_ok"] and spell_asc and spell_desc),
+        "zero_escape_spellable_asc": spell_asc,
+        "zero_escape_spellable_desc": spell_desc,
+        "cases_tested": len(out["results"]),
+        "all_out_of_domain_cases_exact_parity": out["all_ok"],
+    }
+
+
 def run_dev_gate(verify_git_pin: bool = True, report_path: Path | None = None) -> dict[str, Any]:
     t0 = time.monotonic()
     items: list[dict[str, Any]] = []
@@ -410,14 +505,16 @@ def run_dev_gate(verify_git_pin: bool = True, report_path: Path | None = None) -
         ),
     })
 
-    # Mandatory Negative Controls 1, 2, 3
+    # Mandatory Negative Controls 1, 2, 3, 4
     nc1 = check_negative_control_1_hidden_helper(m80)
     nc2 = check_negative_control_2_invalid_dict_id()
     nc3 = check_negative_control_3_step_ceiling(m80)
+    nc4 = check_negative_control_4_numeric_sort_domain_guard()
 
     items.append({"gate": "NC1_hidden_helper_rejected", "passed": nc1["passed"], "detail": json.dumps(nc1)})
     items.append({"gate": "NC2_invalid_dict_id_rejected", "passed": nc2["passed"], "detail": json.dumps(nc2)})
     items.append({"gate": "NC3_step_ceiling_exceeded_rejected", "passed": nc3["passed"], "detail": json.dumps(nc3)})
+    items.append({"gate": "NC4_numeric_sort_domain_guard", "passed": nc4["passed"], "detail": json.dumps(nc4)})
 
     all_passed = all(item["passed"] for item in items)
     report = {
@@ -431,6 +528,7 @@ def run_dev_gate(verify_git_pin: bool = True, report_path: Path | None = None) -
             "nc1_hidden_helper": nc1,
             "nc2_invalid_dict_id": nc2,
             "nc3_step_ceiling": nc3,
+            "nc4_numeric_sort_domain_guard": nc4,
         },
     }
     if report_path is not None:
