@@ -63,7 +63,10 @@ MAX_FILES_PER_ORG = 80
 MAX_BYTES_PER_ORG = 200_000
 MIN_FILES_BEFORE_BYTE_SKIP = 12
 
-# 14 independent open-source organizations, fixed deterministically prior to scoring.
+# 19 independent open-source organizations, fixed deterministically prior to scoring.
+# Adding 5 untouched orgs (pallets, pygments, executablebooks, scikit-learn, tqdm) brings
+# n = 14 -> 19 so split-conformal 90% rank k = ceil(0.90 * (19 + 1)) = 18 = n - 1
+# (exact 18/20 = 90.0% distribution-free coverage, no longer the sample maximum).
 CALIBRATION_ORG_SPECS: tuple[dict[str, str], ...] = (
     {
         "lineage_id": "cal_aio_libs_aiohttp",
@@ -162,6 +165,41 @@ CALIBRATION_ORG_SPECS: tuple[dict[str, str], ...] = (
         "upstream_repo": "sympy/sympy",
         "package_name": "sympy",
         "domain": "symbolic-algebra",
+    },
+    {
+        "lineage_id": "cal_pallets_jinja",
+        "org_id": "pallets",
+        "upstream_repo": "pallets/jinja",
+        "package_name": "Jinja2",
+        "domain": "template-engine",
+    },
+    {
+        "lineage_id": "cal_pygments_pygments",
+        "org_id": "pygments",
+        "upstream_repo": "pygments/pygments",
+        "package_name": "Pygments",
+        "domain": "syntax-highlighting",
+    },
+    {
+        "lineage_id": "cal_executablebooks_markdown_it_py",
+        "org_id": "executablebooks",
+        "upstream_repo": "executablebooks/markdown-it-py",
+        "package_name": "markdown-it-py",
+        "domain": "markdown-parsing",
+    },
+    {
+        "lineage_id": "cal_scikit_learn_scikit_learn",
+        "org_id": "scikit-learn",
+        "upstream_repo": "scikit-learn/scikit-learn",
+        "package_name": "scikit-learn",
+        "domain": "machine-learning",
+    },
+    {
+        "lineage_id": "cal_tqdm_tqdm",
+        "org_id": "tqdm",
+        "upstream_repo": "tqdm/tqdm",
+        "package_name": "tqdm",
+        "domain": "cli-progress",
     },
 )
 

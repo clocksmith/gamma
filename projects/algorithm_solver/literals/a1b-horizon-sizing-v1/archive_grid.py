@@ -13,6 +13,7 @@ import heapq
 import json
 import os
 import resource
+import subprocess
 import sys
 import time
 from fractions import Fraction
@@ -773,14 +774,42 @@ def load_spent_lineages() -> list[dict[str, Any]]:
     )
 
     # 7. Gamma core Python package (capacity-boundary-v1 spent repo; org=clocksmith)
-    gamma_py = sorted(p for p in (WORKTREE / "gamma").rglob("*.py") if p.is_file())
+    # Pinned to baseline commit 7e9d8abff so later gamma/ edits never drift Stage-1 locked_predictor.json.
+    GAMMA_CORE_PIN_COMMIT = "7e9d8abff"
+    ls_proc = subprocess.run(
+        ["git", "-C", str(WORKTREE), "ls-tree", "-r", "--name-only", GAMMA_CORE_PIN_COMMIT, "--", "gamma/"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    gamma_rels = sorted(
+        (rel for rel in ls_proc.stdout.splitlines() if rel.endswith(".py")),
+        key=lambda rel: WORKTREE / rel,
+    )
+    cat_input = "".join(f"{GAMMA_CORE_PIN_COMMIT}:{rel}\n" for rel in gamma_rels).encode("utf-8")
+    cat_proc = subprocess.run(
+        ["git", "-C", str(WORKTREE), "cat-file", "--batch"],
+        input=cat_input,
+        capture_output=True,
+        check=True,
+    )
+    buf = cat_proc.stdout
+    pos = 0
+    gamma_docs: list[bytes] = []
+    for _ in gamma_rels:
+        nl = buf.index(b"\n", pos)
+        header_parts = buf[pos:nl].decode("utf-8").split()
+        size = int(header_parts[2])
+        pos = nl + 1
+        gamma_docs.append(buf[pos : pos + size])
+        pos += size + 1  # trailing newline after blob
     _add(
         "clocksmith_gamma_core",
         "clocksmith",
         "dev_disjoint",
         "python",
-        "clocksmith/gamma core package (gamma/**/*.py)",
-        [p.read_bytes() for p in gamma_py],
+        f"clocksmith/gamma core package (gamma/**/*.py @ {GAMMA_CORE_PIN_COMMIT})",
+        gamma_docs,
     )
 
     # In-distribution CodeNet diagnostic strata (same collection as fit; NEVER in repo-disjoint cal!)

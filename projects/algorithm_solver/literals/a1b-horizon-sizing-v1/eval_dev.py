@@ -9,12 +9,16 @@ Implements:
   split-conformal coverage per Barber et al., arXiv:1905.02928.)
 - Stage 2 (Exact Split-Conformal Calibration): Evaluates the EXACT locked
   predictor (`locked_predictor_sha256`, zero refitting) ONCE on each of the
-  14 untouched independent calibration organizations (strictly disjoint from
-  all 59 capacity lineages, all fit/predictor-fit orgs, and all reserved sealed
-  domains). Calibrates against:
+  untouched independent calibration organizations (n_cal = 19, strictly disjoint
+  from all 59 capacity lineages, all fit/predictor-fit orgs, and all reserved
+  sealed domains). Calibrates against:
       s_i = max(full_oracle_regret_100KB(i), full_oracle_regret_100MB(i))
-  at alpha = 0.10 (rank k = ceil(0.90 * (n_cal + 1))) against the 2.0% sealed bar,
-  with exact same-chain budget-choice vs chain-choice regret decomposition.
+  at alpha = 0.10 (rank k = ceil(0.90 * (n_cal + 1)) = 18 / 19, exact 90.00%
+  coverage allowing 1 outlier rather than degenerating to the sample maximum)
+  against the 2.0% sealed bar, with exact same-chain budget-choice vs
+  chain-choice regret decomposition. Never claims unadjusted 90% split-conformal
+  coverage for post-selection switching to a different predictor on the same
+  calibration set.
 - Complete All-In & Amortized Work Accounting: Fixes the denominator flaw by
   charging `shared_chain_build_sec` (chain build from verified receipts + B1RA
   header table fit + Stage-1 predictor lock) alongside `policy_eval_sec`,
@@ -128,6 +132,8 @@ def compute_all_in_and_amortized_work(
     locked_predictor_fit_sec: float,
     cal_arm_work_per_deployment: dict[str, float],
     dev_arm_work_per_deployment: dict[str, float],
+    n_cal_orgs: int,
+    cal_mean_kb: float,
 ) -> dict[str, Any]:
     """Compute honest single-deployment and amortized multi-deployment work tables.
 
@@ -234,8 +240,8 @@ def compute_all_in_and_amortized_work(
             "all_7_chains_b1ra_headers_fit_sec": round(all_7_headers_fit_sec, 3),
             "all_7_chains_build_sec": round(all_7_chains_build_sec, 3),
         },
-        "calibration_14_orgs_basis": _build_schedule(
-            "14 untouched calibration orgs (mean ~188 KB/org, 28 horizon deployments)",
+        "calibration_orgs_basis": _build_schedule(
+            f"{n_cal_orgs} untouched calibration orgs (mean ~{cal_mean_kb:.0f} KB/org, {n_cal_orgs * 2} horizon deployments)",
             cal_arm_work_per_deployment,
         ),
         "dev_7_codebases_basis": _build_schedule(
@@ -1008,6 +1014,8 @@ def run_eval_dev(
             )
 
     # All-in + amortized work accounting including shared chain build!
+    n_cal_orgs = len(cal_orgs_meta)
+    cal_mean_kb = float(np.mean([m["source_bytes"] for m in cal_orgs_meta])) / 1000.0
     chain_build_secs = read_verified_chain_build_seconds()
     all_in_work = compute_all_in_and_amortized_work(
         grid_headers_meta=grid_data["headers"],
@@ -1015,9 +1023,11 @@ def run_eval_dev(
         locked_predictor_fit_sec=locked_fit_wall_s,
         cal_arm_work_per_deployment=cal_mean_per_dep,
         dev_arm_work_per_deployment=dev_mean_per_dep,
+        n_cal_orgs=n_cal_orgs,
+        cal_mean_kb=cal_mean_kb,
     )
 
-    # Lower envelope, codeword widening, near-tie flatness across ALL 14 calibration orgs + 9 dev/diag lineages.
+    # Lower envelope, codeword widening, near-tie flatness across ALL calibration orgs + 9 dev/diag lineages.
     all_lin_metas = [{k: v for k, v in l.items() if k != "docs"} for l in lineages] + cal_orgs_meta
     merged_prim = {**by_lin_prim, **cal_by_lin_prim}
     lower_env = compute_lower_envelope_and_crossovers(merged_prim, all_lin_metas)
@@ -1040,7 +1050,7 @@ def run_eval_dev(
                 if pt["M"] in AG.PRIMARY_HORIZONS:
                     cal_primary_wide_10 += 1
 
-    # Token/RAM variant scored on the 14 untouched calibration orgs using the Stage-1 locked token bias.
+    # Token/RAM variant scored on the untouched calibration orgs using the Stage-1 locked token bias.
     token_ram = evaluate_token_ram_variant_locked(
         predictor_fit_lins=dev_lins,
         cal_orgs_meta=cal_orgs_meta,
@@ -1068,7 +1078,7 @@ def run_eval_dev(
         },
         "complete_bits": {
             "primary_chain": AG.PRIMARY_CHAIN_NAME,
-            "calibration_14_orgs_mean_complete_bits_by_arm_and_M": {
+            "calibration_orgs_mean_complete_bits_by_arm_and_M": {
                 aname: cal_arm_summaries[aname]["complete_bits_mean_by_M"]
                 for aname in cal_arm_summaries
             },
@@ -1076,7 +1086,7 @@ def run_eval_dev(
         "measured_work": {
             "shared_chain_build_sec": all_in_work["shared_chain_build_breakdown_sec"]["shared_chain_build_sec"],
             "all_7_chains_build_sec": all_in_work["full_multichain_build_breakdown_sec"]["all_7_chains_build_sec"],
-            "all_in_and_amortized_summary_cal14": all_in_work["calibration_14_orgs_basis"],
+            "all_in_and_amortized_summary_cal": all_in_work["calibration_orgs_basis"],
         },
         "horizon": {
             "primary_horizons_bytes": list(AG.PRIMARY_HORIZONS),
@@ -1088,7 +1098,7 @@ def run_eval_dev(
     }
 
     summary = {
-        "schema": "gamma.bits-a1b.dev-summary.v2",
+        "schema": "gamma.bits-a1b.dev-summary.v3",
         "primary_chain": AG.PRIMARY_CHAIN_NAME,
         "verified_chains": list(grid_data["chains"].keys()),
         "prefix_grid_K": list(AG.PRIMARY_GRID),
@@ -1100,7 +1110,7 @@ def run_eval_dev(
             "gpu_compute_run": False,
             "llm_compute_run": False,
             "sealed_holdouts_opened": False,
-            "note": "CPU-only development and split-conformal calibration; C5 and C6 remain strictly gated behind explicit user model-compute approval.",
+            "note": "CPU-only development and split-conformal calibration; A1b remains HELD/SEALED and C5/C6 remain gated behind explicit model-compute approval.",
         },
         "shared_spine": shared_spine,
         "two_stage_protocol": {
@@ -1110,7 +1120,11 @@ def run_eval_dev(
                 "exchangeability (Barber et al., arXiv:1905.02928). A1b therefore uses a strict "
                 "two-stage split-conformal protocol: Stage 1 fits and locks ONE predictor strictly on "
                 "the 6 predictor-fit orgs (zero calibration data); Stage 2 evaluates that EXACT locked "
-                "predictor (verified by SHA-256) once on each of 14 untouched independent calibration orgs."
+                f"predictor (verified by SHA-256) once on each of {n_cal_orgs} untouched independent calibration orgs "
+                f"(rank k = {split_conformal['conformal_rank_k']}/{n_cal_orgs}, tolerating "
+                f"{split_conformal['max_outliers_tolerated_at_alpha']} outlier at alpha=0.10 rather than "
+                "degenerating to the sample maximum). Post-selection switching to a different predictor "
+                "on the same calibration set is NOT certified."
             ),
             "stage1_predictor_fit_orgs": stage2_predictor.payload["predictor_fit_orgs"],
             "stage1_predictor_fit_lineages": stage2_predictor.payload["predictor_fit_lineages"],
@@ -1122,7 +1136,7 @@ def run_eval_dev(
             "stage2_live_venv_hash_audit": live_hash_audit,
             "stage2_split_conformal_calibration": split_conformal,
         },
-        "arm_summaries_calibration_14_orgs": cal_arm_summaries,
+        "arm_summaries_calibration_orgs": cal_arm_summaries,
         "arm_summaries_stage1_dev_7_codebases": dev_arm_summaries,
         "stage1_lolo_diagnostic_only_not_conformal": {
             "note": "Diagnostic Stage-1 LOLO-CV on the 6 predictor-fit orgs ONLY; NOT valid for split-conformal coverage (Barber et al., arXiv:1905.02928).",
@@ -1130,18 +1144,19 @@ def run_eval_dev(
             "excess_vs_full_oracle": summarize_excess(lolo_full),
         },
         "all_in_and_amortized_work": all_in_work,
-        "near_tie_flatness_calibration_14_orgs": {
+        "near_tie_flatness_calibration_orgs": {
             "definition": "widely separated prefixes (K_max / K_min >= 4x, or K=0 with K>=64) within tolerance of optimum",
-            "primary_28_queries_within_0_5pct": f"{cal_primary_wide_05}/{len(cal_orgs_meta) * 2}",
-            "primary_28_queries_within_0_5pct_rate": round(cal_primary_wide_05 / max(1, len(cal_orgs_meta) * 2), 4),
-            "primary_28_queries_within_1_0pct": f"{cal_primary_wide_10}/{len(cal_orgs_meta) * 2}",
-            "primary_28_queries_within_1_0pct_rate": round(cal_primary_wide_10 / max(1, len(cal_orgs_meta) * 2), 4),
-            "diagnostic_140_queries_within_0_5pct": f"{cal_sweep_wide_05}/{cal_sweep_total}",
-            "diagnostic_140_queries_within_0_5pct_rate": round(cal_sweep_wide_05 / max(1, cal_sweep_total), 4),
-            "diagnostic_140_queries_within_1_0pct": f"{cal_sweep_wide_10}/{cal_sweep_total}",
-            "diagnostic_140_queries_within_1_0pct_rate": round(cal_sweep_wide_10 / max(1, cal_sweep_total), 4),
+            "n_cal_orgs": n_cal_orgs,
+            "primary_queries_within_0_5pct": f"{cal_primary_wide_05}/{n_cal_orgs * 2}",
+            "primary_queries_within_0_5pct_rate": round(cal_primary_wide_05 / max(1, n_cal_orgs * 2), 4),
+            "primary_queries_within_1_0pct": f"{cal_primary_wide_10}/{n_cal_orgs * 2}",
+            "primary_queries_within_1_0pct_rate": round(cal_primary_wide_10 / max(1, n_cal_orgs * 2), 4),
+            "diagnostic_queries_within_0_5pct": f"{cal_sweep_wide_05}/{cal_sweep_total}",
+            "diagnostic_queries_within_0_5pct_rate": round(cal_sweep_wide_05 / max(1, cal_sweep_total), 4),
+            "diagnostic_queries_within_1_0pct": f"{cal_sweep_wide_10}/{cal_sweep_total}",
+            "diagnostic_queries_within_1_0pct_rate": round(cal_sweep_wide_10 / max(1, cal_sweep_total), 4),
         },
-        "query_records_calibration_14_orgs": cal_query_records,
+        "query_records_calibration_orgs": cal_query_records,
         "codenet_in_distribution_diagnostic": codenet_diag,
         "codeword_widening_and_decomposition": widening,
         "lower_envelope": lower_env,
@@ -1159,10 +1174,11 @@ def run_eval_dev(
 def main() -> int:
     s = run_eval_dev()
     sc = s["two_stage_protocol"]["stage2_split_conformal_calibration"]
-    print("=== A1b Two-Stage Split-Conformal Calibration (n_cal = %d independent orgs) ===" % sc["n_cal_orgs"])
+    n_cal = sc["n_cal_orgs"]
+    print("=== A1b Two-Stage Split-Conformal Calibration (n_cal = %d independent orgs) ===" % n_cal)
     print("  locked_predictor_sha256       :", sc["locked_predictor_sha256"])
-    print("  conformal rank k              : %d / %d (exact coverage >= %.2f%%)" % (
-        sc["conformal_rank_k"], sc["n_cal_orgs"], sc["finite_sample_coverage_guarantee_pct"]
+    print("  conformal rank k              : %d / %d (sample_max=%s, outliers_tolerated=%d, exact coverage >= %.2f%%)" % (
+        sc["conformal_rank_k"], n_cal, sc["conformal_rank_is_sample_max"], sc["max_outliers_tolerated_at_alpha"], sc["finite_sample_coverage_guarantee_pct"]
     ))
     print("  90%% UPB max(100KB,100MB) full : %.4f%% (bar <= %.2f%% -> certifies=%s, decision=%s)" % (
         sc["conformal_90_upb_full_max_pct"],
@@ -1176,9 +1192,12 @@ def main() -> int:
     print("  90%% UPB decomposition (budget / chain): %.4f%% / %.4f%%" % (
         sc["conformal_90_upb_same_chain_budget_max_pct"], sc["conformal_90_upb_chain_choice_max_pct"]
     ))
-    print("  90%% UPB 3-pt pilot (full max) : %.4f%%" % sc["conformal_90_upb_pilot_full_max_pct"])
+    print("  90%% UPB 3-pt pilot comparator : %.4f%% (comparator only; post_selection_pilot_switch_certified=%s)" % (
+        sc["conformal_90_upb_pilot_comparator_only_pct"],
+        sc["conformal_selection_audit"]["post_selection_pilot_switch_certified"],
+    ))
     print("  Sorted s_i%%                   :", sc["sorted_nonconformity_s_i_pct"])
-    print("\n=== Per-Org Split-Conformal Scores (14 untouched calibration orgs) ===")
+    print(f"\n=== Per-Org Split-Conformal Scores ({n_cal} untouched calibration orgs) ===")
     for row in sc["per_org_results"]:
         h1, h2 = row["h_100KB"], row["h_100MB"]
         print(
@@ -1188,8 +1207,8 @@ def main() -> int:
             f"(bud={h2['same_chain_budget_regret_pct']:4.2f}%, ch={h2['chain_choice_regret_pct']:4.2f}% vs {h2['full_oracle_chain']}:K{h2['full_oracle_K']}) | "
             f"s_i={row['nonconformity_s_i_full_max_pct']:5.2f}% [{row['binding_horizon']}]"
         )
-    print("\n=== Calibration-14 Arm Summaries (28 queries) ===")
-    for arm, d in s["arm_summaries_calibration_14_orgs"].items():
+    print(f"\n=== Calibration-{n_cal} Arm Summaries ({n_cal * 2} queries) ===")
+    for arm, d in s["arm_summaries_calibration_orgs"].items():
         es = d["excess_vs_same_chain_oracle"]
         ef = d["excess_vs_full_oracle"]
         wk = d["work_eval_only_excludes_chain_build"]
@@ -1198,8 +1217,8 @@ def main() -> int:
             f"vs_full med={ef['median_pct']:5.2f}% p95={ef['p95_pct']:5.2f}% max={ef['max_pct']:5.2f}% | "
             f"fb={d['fallback_rate_pct']:5.1f}% | eval_wall={wk['total_wall_seconds_mean']:.2f}s/q"
         )
-    print("\n=== All-In + Amortized Work (calibration 14-org basis, including shared_chain_build) ===")
-    w_cal = s["all_in_and_amortized_work"]["calibration_14_orgs_basis"]
+    print(f"\n=== All-In + Amortized Work (calibration {n_cal}-org basis, including shared_chain_build) ===")
+    w_cal = s["all_in_and_amortized_work"]["calibration_orgs_basis"]
     print("  shared_chain_build_sec =", s["all_in_and_amortized_work"]["shared_chain_build_breakdown_sec"]["shared_chain_build_sec"])
     print("  all_7_chains_build_sec =", s["all_in_and_amortized_work"]["full_multichain_build_breakdown_sec"]["all_7_chains_build_sec"])
     for label, sched in (

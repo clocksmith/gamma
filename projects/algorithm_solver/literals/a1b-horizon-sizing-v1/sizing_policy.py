@@ -1069,6 +1069,10 @@ def calibrate_locked_predictor_split_conformal(
     q90_100k = _conformal_quantile(scores_full_100k)
     q90_100m = _conformal_quantile(scores_full_100m)
     q90_pilot_max = _conformal_quantile(pilot_scores_full_max)
+    # Simultaneous selection-safe bound covering both fixed policies on the next exchangeable org.
+    q90_either = _conformal_quantile(
+        [max(direct, pilot) for direct, pilot in zip(scores_full_max, pilot_scores_full_max, strict=True)]
+    )
 
     certifies_2_0 = (q90_full_max is not None) and (q90_full_max <= sealed_regret_bar)
     certifies_2_5 = (q90_full_max is not None) and (q90_full_max <= 0.025)
@@ -1076,7 +1080,7 @@ def calibrate_locked_predictor_split_conformal(
     breach_count_2_0 = sum(1 for x in scores_full_max if x > sealed_regret_bar)
 
     return {
-        "schema": "gamma.bits-a1b.split-conformal-calibration.v1",
+        "schema": "gamma.bits-a1b.split-conformal-calibration.v2",
         "locked_predictor_sha256": locked_predictor.sha256(),
         "alpha": alpha,
         "target_coverage": round(1.0 - alpha, 4),
@@ -1085,8 +1089,20 @@ def calibrate_locked_predictor_split_conformal(
         "nonconformity_definition": "s_i = max(full_oracle_regret_100KB(i), full_oracle_regret_100MB(i)) against full 7-chain selector-by-K oracle",
         "n_cal_orgs": n_cal,
         "conformal_rank_k": rank_k,
+        "conformal_rank_is_sample_max": rank_k == n_cal,
+        "max_outliers_tolerated_at_alpha": max(0, n_cal - rank_k),
         "conformal_support_sufficient": support_ok,
         "finite_sample_coverage_guarantee_pct": round(100.0 * coverage_floor, 4),
+        "conformal_selection_audit": {
+            "single_unconditional_predictor_certified": True,
+            "post_selection_pilot_switch_certified": False,
+            "note": (
+                "Certifies strictly the ONE unconditional Stage-1 locked predictor. "
+                "3-pt pilot UPB is reported solely as a separate non-adaptive benchmark comparator; "
+                "conditionally switching predictors on the same calibration set without multiplicity "
+                "correction breaks unadjusted 90% finite-sample split-conformal validity."
+            ),
+        },
         "sorted_nonconformity_s_i_pct": [round(100.0 * x, 4) for x in sorted(scores_full_max)],
         "conformal_90_upb_full_max": q90_full_max,
         "conformal_90_upb_full_max_pct": round(100.0 * q90_full_max, 4) if q90_full_max is not None else None,
@@ -1094,7 +1110,11 @@ def calibrate_locked_predictor_split_conformal(
         "conformal_90_upb_100MB_pct": round(100.0 * q90_100m, 4) if q90_100m is not None else None,
         "conformal_90_upb_same_chain_budget_max_pct": round(100.0 * q90_same_max, 4) if q90_same_max is not None else None,
         "conformal_90_upb_chain_choice_max_pct": round(100.0 * q90_chain_max, 4) if q90_chain_max is not None else None,
+        "conformal_90_upb_pilot_comparator_only_pct": round(100.0 * q90_pilot_max, 4) if q90_pilot_max is not None else None,
         "conformal_90_upb_pilot_full_max_pct": round(100.0 * q90_pilot_max, 4) if q90_pilot_max is not None else None,
+        "selection_safe_upb": q90_either,
+        "selection_safe_upb_pct": round(100.0 * q90_either, 4) if q90_either is not None else None,
+        "selected_policy_clears_bar": q90_either is not None and q90_either <= sealed_regret_bar,
         "calibration_orgs_breaching_2_0pct_bar": breach_count_2_0,
         "certifies_2_0pct_sealed_bar": certifies_2_0,
         "certifies_2_5pct_legacy_bar": certifies_2_5,

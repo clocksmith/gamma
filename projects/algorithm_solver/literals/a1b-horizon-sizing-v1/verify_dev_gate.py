@@ -156,9 +156,16 @@ def gate_2_exhaustive_reproduction() -> dict[str, Any]:
     # 1. Reproduce every Stage-2 split-conformal calibration org score s_i = max(100KB, 100MB)
     sc = summary["two_stage_protocol"]["stage2_split_conformal_calibration"]
     need(sc["locked_predictor_sha256"] == expected_sha, "split-conformal calibration used different locked predictor hash")
-    need(sc["n_cal_orgs"] >= 10, f"need >= 10 calibration orgs, got {sc['n_cal_orgs']}")
+    need(sc["n_cal_orgs"] >= 19, f"need >= 19 calibration orgs so k < n_cal at alpha=0.10, got {sc['n_cal_orgs']}")
+    need(sc["conformal_rank_is_sample_max"] is False, "conformal rank must not degenerate to sample maximum")
+    need(sc["max_outliers_tolerated_at_alpha"] >= 1, "must tolerate >= 1 outlier at alpha=0.10")
+    need(
+        sc["conformal_selection_audit"]["post_selection_pilot_switch_certified"] is False,
+        "post-selection pilot switching on the same calibration set must never be marked certified",
+    )
 
     repro_s_i: list[float] = []
+    joint_scores: list[float] = []
     for org_row in sc["per_org_results"]:
         lid = org_row["lineage_id"]
         feat = SP.deserialize_sketch_receipt(cal_grid["sketch_receipts"][lid])
@@ -166,6 +173,7 @@ def gate_2_exhaustive_reproduction() -> dict[str, Any]:
         all_cands = by_lin_all[lid]
 
         h_regs = {}
+        pilot_regs: list[float] = []
         for M, hkey in ((100_000, "h_100KB"), (100_000_000, "h_100MB")):
             k_pred, _, _ = locked.predict_k(feat, M)
             need(k_pred == int(org_row[hkey]["chosen_K"]), f"locked predictor K mismatch on ({lid}, M={M})")
@@ -198,25 +206,34 @@ def gate_2_exhaustive_reproduction() -> dict[str, Any]:
             reg = (v_ch / v_fl) - 1.0
             need(abs(reg - float(org_row[hkey]["full_oracle_regret"])) < 1e-9, f"regret mismatch ({lid}, {M})")
             h_regs[M] = reg
+            rates = {k: float(rmap[k]["r_hat"]) for k in SP.PILOT_KS}
+            pilot_k, _ = SP.select_prefix_pilot_3pt(locked.header_bytes_by_k, rates, M, AG.PRIMARY_GRID)
+            pilot_row = rmap[pilot_k]
+            pilot_obj = AG.horizon_objective_exact(pilot_row["header_bytes"], pilot_row["body_bytes"], pilot_row["source_bytes"], M)
+            pilot_regs.append(float(pilot_obj) / v_fl - 1.0)
 
         s_i = max(h_regs[100_000], h_regs[100_000_000])
         need(abs(s_i - float(org_row["nonconformity_s_i_full_max"])) < 1e-9, f"s_i mismatch on {lid}")
         repro_s_i.append(s_i)
+        joint_scores.append(max(s_i, *pilot_regs))
 
     # Verify exact finite-sample split-conformal quantile rank k = ceil(0.90 * (n_cal + 1))
     n_cal = len(repro_s_i)
     rank_k = (9 * (n_cal + 1) + 9) // 10  # exact integer ceil(0.90 * (n_cal + 1))
     need(rank_k == int(sc["conformal_rank_k"]), f"rank_k mismatch: {rank_k} vs {sc['conformal_rank_k']}")
     q90 = sorted(repro_s_i)[rank_k - 1]
+    q_either = sorted(joint_scores)[rank_k - 1]
+    need(abs(q_either - sc["selection_safe_upb"]) < 1e-9, "adaptive policy bound differs from paired maximum")
+    need(sc["selected_policy_clears_bar"] == (q_either <= SP.SEALED_REGRET_BAR), "adaptive certification mismatch")
     need(abs(q90 - float(sc["conformal_90_upb_full_max"])) < 1e-9, "split-conformal 90% UPB mismatch")
     need(
         (q90 <= SP.SEALED_REGRET_BAR) == bool(sc["certifies_2_0pct_sealed_bar"]),
         "2.0% certification verdict mismatch",
     )
 
-    # 2. Reproduce every arm on all 28 calibration queries
+    # 2. Reproduce every arm on all calibration queries
     checked_q = 0
-    for q in summary["query_records_calibration_14_orgs"]:
+    for q in summary["query_records_calibration_orgs"]:
         lid = q["lineage_id"]
         M = int(q["M"])
         rmap = by_lin_prim[lid]
@@ -239,7 +256,7 @@ def gate_2_exhaustive_reproduction() -> dict[str, Any]:
         "conformal_rank_k": rank_k,
         "conformal_90_upb_full_max_pct": round(100.0 * q90, 4),
         "calibration_queries_exhaustively_reproduced": checked_q,
-        "arms_verified_per_query": len(summary["arm_summaries_calibration_14_orgs"]),
+        "arms_verified_per_query": len(summary["arm_summaries_calibration_orgs"]),
     }
 
 
