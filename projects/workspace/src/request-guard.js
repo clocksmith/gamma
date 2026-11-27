@@ -56,7 +56,10 @@ function flatten(value, path, out, depth) {
 /** Body bytes of a paused request, or null when the browser did not hand them over. */
 function bodyBytes(request) {
   if (Array.isArray(request.postDataEntries)) {
-    return Buffer.concat(request.postDataEntries.map(entry => Buffer.from(entry?.bytes ?? '', 'base64')));
+    // A part the browser did not hand over inline (a file or blob reference, or a missing entry) is not
+    // an empty part: the guard cannot see it, so the body counts as unreadable and the write is blocked.
+    if (request.postDataEntries.some(entry => typeof entry?.bytes !== 'string')) return null;
+    return Buffer.concat(request.postDataEntries.map(entry => Buffer.from(entry.bytes, 'base64')));
   }
   if (typeof request.postData === 'string') return Buffer.from(request.postData, 'utf8');
   return null;
