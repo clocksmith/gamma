@@ -1,0 +1,112 @@
+{
+  "schema_version": "bits-paired-switch-contract-v1",
+  "study_id": "paired-switch-v1",
+  "status": "harness_verified_awaiting_provisioned_model",
+  "separate_from_existing_papers": true,
+  "existing_paper_release_order": {
+    "lead": "bits-sixbit-capacity-and-certificates",
+    "companion": "bits-three-objectives"
+  },
+  "arms": [
+    {
+      "name": "frozen_alias",
+      "output_row": "original",
+      "input_embedding": "original",
+      "uses_alias_token": true
+    },
+    {
+      "name": "score_only_alias",
+      "output_row": "adapted",
+      "input_embedding": "original",
+      "uses_alias_token": true
+    },
+    {
+      "name": "score_and_input_alias",
+      "output_row": "adapted",
+      "input_embedding": "adapted",
+      "uses_alias_token": true
+    },
+    {
+      "name": "ordinary_named_fn",
+      "output_row": "none_ordinary_tokens",
+      "input_embedding": "none_ordinary_tokens",
+      "uses_alias_token": false
+    }
+  ],
+  "reserved_token": {
+    "symbol": "<H0>",
+    "bind_once_per_session": true,
+    "require_zero_prefix_occurrences": true
+  },
+  "adaptation_policy": {
+    "optimizer": "AdamW",
+    "learning_rate": 0.05,
+    "weight_decay": 0.0,
+    "grad_clip_norm": 1.0,
+    "setup_budget_steps": 16,
+    "score_only_uses_full_setup_allowance_on_output_row": true,
+    "require_backbone_and_other_rows_bit_exact": true,
+    "allow_only_switch_visible_information": true
+  },
+  "numerical_verification_gates": {
+    "historical_kv_max_abs_diff_max": 0.0,
+    "pre_call_forced_max_abs_diff_max": 0.0,
+    "rebuild_parity_tol_fp32": 0.0001,
+    "rebuild_parity_tol_bf16": 0.01,
+    "require_fresh_boundary_rescoring": true
+  },
+  "search_budgets": {
+    "narrow_attempt_cap": 2,
+    "wide_attempt_cap": 32,
+    "max_new_tokens_per_attempt": 384,
+    "verifier_timeout_seconds": 2.0,
+    "charge_all_phases": [
+      "helper_proposal",
+      "adaptation_setup",
+      "generation",
+      "verification",
+      "retries",
+      "unsuccessful_branches"
+    ],
+    "keep_refusals_and_timeouts_in_denominator": true
+  },
+  "rung2_predictor_policy": {
+    "setup_cost_per_step_attempt_equiv": 0.05,
+    "min_net_benefit_to_adapt": 0.25,
+    "comparators": ["always_adapt", "never_adapt"],
+    "development_families": [
+      "duplicate_handling",
+      "interval_processing",
+      "graph_traversal"
+    ],
+    "utility_regimes": [
+      "useful_once",
+      "repeatedly_useful",
+      "irrelevant_decoy"
+    ]
+  },
+  "rung3_promotion_bar": {
+    "paired_by": ["problem_id", "switch_point_id"],
+    "min_worthwhile_solve_rate_gain": 0.05,
+    "bootstrap_ci_level": 0.95,
+    "require_family_bootstrap_ci_lower_gt_zero": true,
+    "stopping_rule": "Score untouched sealed families once under frozen adaptation_policy and search_budgets; no post-hoc retuning or family additions.",
+    "attribution_rules": {
+      "score_only_beats_frozen": "supports_better_action_selection_only",
+      "input_representation_claim_requires_all": [
+        "score_and_input_beats_equally_funded_score_only_in_free_search",
+        "forced_call_pre_diff_zero_and_post_diff_nonzero",
+        "holds_against_ordinary_named_fn_baseline"
+      ],
+      "if_ordinary_named_fn_matches_installation": "retain_helper_reuse_as_explanation_and_stop"
+    }
+  },
+  "rung4_gate": {
+    "status": "LOCKED_PENDING_RUNG3_WIN",
+    "prerequisite": "Cheaper paired-switch experiment must establish a verified search benefit worth preserving at Rung 3.",
+    "required_comparators_if_unlocked": [
+      "unused_slot_method",
+      "optimized_replay_retaining_completed_verifier_work_and_valid_cached_prefixes"
+    ]
+  }
+}
