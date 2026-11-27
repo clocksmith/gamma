@@ -10,11 +10,13 @@ from __future__ import annotations
 
 import hashlib
 import heapq
+import io
 import json
 import os
 import resource
 import subprocess
 import sys
+import tarfile
 import time
 from fractions import Fraction
 from multiprocessing import Pool
