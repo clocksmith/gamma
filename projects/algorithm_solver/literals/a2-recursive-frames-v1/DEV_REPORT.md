@@ -2,6 +2,8 @@
 
 ## Executive Summary & Honest Verdict
 
+- **Recursive-Frame Grammar Iteration Status:** **`CLOSED`** (`D=3` vs `D=1` achieved `-0.11%` complete bits against the `1.0%` bar -> `FAIL`; not carried forward to sealed fresh code).
+- **Depth-1 Preregistration Status:** **`PREREGISTERED`** — Depth-1 Frames (`Arm 3`) vs Context AST (`Arm 2`) achieved `-6.14%` (`95% CI [-11.34%, -3.25%]`) on dev and is preregistered for head-to-head sealed fresh-code evaluation in [`PREREGISTRATION_DEPTH1.md`](PREREGISTRATION_DEPTH1.md).
 - **Corpus:** Strictly spent local JS sources only, lineage-disjoint split (`762` train files across `527` lineages; `540` dev files across `421` lineages; `0` shared lineages, `0` shared problem IDs, `0` IBM cluster leaks, `0` cross-split duplicates).
 - **Normalization & AST Coverage:** `540/540` (`0.0%` fallback rate); `100.0%` byte-for-byte independent decode across all 4 arms; `20/20` frozen Node behavior programs (`3834/3834` test cases) passed across all 4 arms.
 - **Arm 2 (Context AST) vs Arm 1 (Flat BITS):** `-33.27%` complete bits (`-447,664` bits).
@@ -73,8 +75,7 @@
 | Arm 3 — Depth-1 Frames (D=1) | 32.597 | 3.728 | 1.252 | 5.964 | 66,990,979 | 1,536,474 | 260,562 |
 | Arm 4 — Recursive Frames (D=3) | 51.675 | 4.019 | 1.322 | 5.792 | 72,719,265 | 1,536,474 | 260,653 |
 
-## Scientific Interpretation & Next Decisions
+## Scientific Interpretation & Decisions
 
-- **Learned AST frames decisively outperform the context-coded Binary-AST baseline (`Arm 2`):** across 421 unseen JS lineages, both depth-1 (`Arm 3`) and recursive (`Arm 4`) frames cut complete archive bits substantially even after charging every frame definition, switch, frame ID, and cyclic shift bit.
-- **Exact 8-cyclic-register-shift enumeration (`0..7`, zero FFT/NTT)** actively unifies recurring AST patterns across shifted lexical scopes without approximation.
-- **Recursive frames (`Arm 4`, `D_max=3`) vs Depth-1 (`Arm 3`, `D_max=1`):** Arm 4 genuinely learns nested frame definitions (`def_depth` 2 and 3) that invoke earlier sub-frames with composed mod-8 shifts, reducing per-frame definition header bytes and admitting deeper compositional templates than depth-1 alone. The exact magnitude of Arm 4's net gain over Arm 3 on lineage-disjoint dev is reported honestly above without post-hoc retuning.
+- **Recursive-Frame Grammar Iteration — CLOSED (`FAIL` vs 1.0% bar):** Arm 4 (`D_max=3`) genuinely learns nested frame definitions (`def_depth` 2 and 3) with composed mod-8 shifts, saving `-13.3%` in definition header bytes (`-680` total header bits, `M* = 0`) and `-248` payload bits (`-0.11%` complete bits total, 95% CI `[-0.25%, -0.05%]`). Because a fair uncrippled Arm 3 already supports `<H>` holes and flattened compound templates, recursive frame definitions fall far short of the `1.0%` complete-bit promotion bar. This iteration is **CLOSED** and recorded as a negative result for recursion.
+- **Depth-1 Frames (`Arm 3`) vs Context-Coded AST (`Arm 2`) — PREREGISTERED:** Across 421 unseen JS lineages, Depth-1 frames with exact 8-cyclic-register-shift enumeration (`0..7`, zero FFT/NTT) beat the strong Binary-AST context model by **`-6.14%`** complete bits (`95% CI [-11.34%, -3.25%]`) even after charging every frame definition, switch, frame ID, and cyclic shift bit. A head-to-head sealed fresh-code evaluation comparing frozen Arm 3 vs frozen Arm 2 is preregistered in [`PREREGISTRATION_DEPTH1.md`](PREREGISTRATION_DEPTH1.md).

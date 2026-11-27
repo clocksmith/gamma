@@ -993,5 +993,34 @@
         "beats_by_ge_1pct_ci95_upper": false
       }
     }
+  },
+  "decisions": {
+    "recursive_grammar_iteration": {
+      "status": "CLOSED",
+      "comparison": "arm4_recursive_frames (D=3) vs arm3_depth1_frames (D=1)",
+      "dev_delta_complete_pct": -0.1101,
+      "dev_ci95_pct": [
+        -0.2475,
+        -0.0525
+      ],
+      "target_bar_pct": -1.0,
+      "verdict": "FAIL",
+      "carried_to_sealed": false,
+      "rationale": "Recursive frame definitions (D=3) compress frame definition header bytes (-13.3%, -680 total header bits, M*=0) and save -248 payload bits, but total complete-bit gain (-0.11%) falls far below the 1.0% bar against a fair depth-1 frame codec. Recursive-frame grammar iteration is CLOSED."
+    },
+    "depth1_preregistration": {
+      "status": "PREREGISTERED",
+      "comparison": "arm3_depth1_frames (D=1) vs arm2_context_ast (D=0)",
+      "dev_delta_complete_pct": -6.1362,
+      "dev_ci95_pct": [
+        -11.3407,
+        -3.2509
+      ],
+      "preregistration_doc": "PREREGISTRATION_DEPTH1.md",
+      "frozen_headers": [
+        "frozen/arm2_context_ast.header.a2bits",
+        "frozen/arm3_depth1_frames.header.a2bits"
+      ]
+    }
   }
 }

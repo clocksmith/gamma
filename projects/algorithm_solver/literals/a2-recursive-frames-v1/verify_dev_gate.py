@@ -19,6 +19,7 @@ Checks every mandatory acceptance criterion:
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import subprocess
@@ -346,6 +347,15 @@ def check_equivalence_control() -> dict:
 
 
 def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument(
+        "--report",
+        type=Path,
+        default=None,
+        help="Optional output path for machine-readable JSON gate report (default: read-only, writes no files)",
+    )
+    args = ap.parse_args()
+
     t0 = time.perf_counter()
     gates = [
         ("lineage_disjointness", check_lineage_disjointness),
@@ -376,7 +386,9 @@ def main() -> int:
         "total_seconds": round(time.perf_counter() - t0, 3),
         "gates": results,
     }
-    (HERE / "dev_gate_report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    if args.report is not None:
+        args.report.parent.mkdir(parents=True, exist_ok=True)
+        args.report.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(f"DEV_GATE: {'ALL PASSED' if all_ok else 'FAILED'} in {report['total_seconds']:.2f}s")
     return 0 if all_ok else 1
 

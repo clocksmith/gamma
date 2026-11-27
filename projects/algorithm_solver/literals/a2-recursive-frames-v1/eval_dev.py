@@ -433,6 +433,8 @@ def render_dev_report(summary: dict[str, Any]) -> str:
         "",
         "## Executive Summary & Honest Verdict",
         "",
+        f"- **Recursive-Frame Grammar Iteration Status:** **`{summary['decisions']['recursive_grammar_iteration']['status']}`** (`D=3` vs `D=1` achieved `{a4_vs_a3['delta_complete_pct']:+.2f}%` complete bits against the `1.0%` bar -> `FAIL`; not carried forward to sealed fresh code).",
+        f"- **Depth-1 Preregistration Status:** **`{summary['decisions']['depth1_preregistration']['status']}`** — Depth-1 Frames (`Arm 3`) vs Context AST (`Arm 2`) achieved `{a3_vs_a2['delta_complete_pct']:+.2f}%` (`95% CI [{a3_vs_a2['complete_pct_ci95'][0]:+.2f}%, {a3_vs_a2['complete_pct_ci95'][1]:+.2f}%]`) on dev and is preregistered for head-to-head sealed fresh-code evaluation in [`PREREGISTRATION_DEPTH1.md`](PREREGISTRATION_DEPTH1.md).",
         f"- **Corpus:** Strictly spent local JS sources only, lineage-disjoint split (`{summary['corpus']['train_files']}` train files across `{summary['corpus']['train_lineages']}` lineages; `{summary['corpus']['dev_files']}` dev files across `{summary['corpus']['dev_lineages']}` lineages; `0` shared lineages, `0` shared problem IDs, `0` IBM cluster leaks, `0` cross-split duplicates).",
         f"- **Normalization & AST Coverage:** `{fid['ast_coverage_dev']}` (`{fid['fallback_rate_dev_pct']}%` fallback rate); `100.0%` byte-for-byte independent decode across all 4 arms; `{fid['behavior_checks']['passed_programs']}/{fid['behavior_checks']['total_programs']}` frozen Node behavior programs (`{fid['behavior_checks']['passed_cases']}/{fid['behavior_checks']['total_cases']}` test cases) passed across all 4 arms.",
         f"- **Arm 2 (Context AST) vs Arm 1 (Flat BITS):** `{a2_vs_a1['delta_complete_pct']:+.2f}%` complete bits (`{a2_vs_a1['delta_complete_bits']:+,d}` bits).",
@@ -564,11 +566,10 @@ def render_dev_report(summary: dict[str, Any]) -> str:
 
     lines += [
         "",
-        "## Scientific Interpretation & Next Decisions",
+        "## Scientific Interpretation & Decisions",
         "",
-        "- **Learned AST frames decisively outperform the context-coded Binary-AST baseline (`Arm 2`):** across 421 unseen JS lineages, both depth-1 (`Arm 3`) and recursive (`Arm 4`) frames cut complete archive bits substantially even after charging every frame definition, switch, frame ID, and cyclic shift bit.",
-        "- **Exact 8-cyclic-register-shift enumeration (`0..7`, zero FFT/NTT)** actively unifies recurring AST patterns across shifted lexical scopes without approximation.",
-        "- **Recursive frames (`Arm 4`, `D_max=3`) vs Depth-1 (`Arm 3`, `D_max=1`):** Arm 4 genuinely learns nested frame definitions (`def_depth` 2 and 3) that invoke earlier sub-frames with composed mod-8 shifts, reducing per-frame definition header bytes and admitting deeper compositional templates than depth-1 alone. The exact magnitude of Arm 4's net gain over Arm 3 on lineage-disjoint dev is reported honestly above without post-hoc retuning.",
+        "- **Recursive-Frame Grammar Iteration — CLOSED (`FAIL` vs 1.0% bar):** Arm 4 (`D_max=3`) genuinely learns nested frame definitions (`def_depth` 2 and 3) with composed mod-8 shifts, saving `-13.3%` in definition header bytes (`-680` total header bits, `M* = 0`) and `-248` payload bits (`-0.11%` complete bits total, 95% CI `[-0.25%, -0.05%]`). Because a fair uncrippled Arm 3 already supports `<H>` holes and flattened compound templates, recursive frame definitions fall far short of the `1.0%` complete-bit promotion bar. This iteration is **CLOSED** and recorded as a negative result for recursion.",
+        "- **Depth-1 Frames (`Arm 3`) vs Context-Coded AST (`Arm 2`) — PREREGISTERED:** Across 421 unseen JS lineages, Depth-1 frames with exact 8-cyclic-register-shift enumeration (`0..7`, zero FFT/NTT) beat the strong Binary-AST context model by **`-6.14%`** complete bits (`95% CI [-11.34%, -3.25%]`) even after charging every frame definition, switch, frame ID, and cyclic shift bit. A head-to-head sealed fresh-code evaluation comparing frozen Arm 3 vs frozen Arm 2 is preregistered in [`PREREGISTRATION_DEPTH1.md`](PREREGISTRATION_DEPTH1.md).",
         "",
     ]
     return "\n".join(lines)
@@ -812,6 +813,33 @@ def main() -> None:
             "horizon": {
                 "breakeven": breakeven,
                 "volume_curve": volume_curve,
+            },
+        },
+        "decisions": {
+            "recursive_grammar_iteration": {
+                "status": "CLOSED",
+                "comparison": "arm4_recursive_frames (D=3) vs arm3_depth1_frames (D=1)",
+                "dev_delta_complete_pct": comparisons["arm4_vs_arm3"]["delta_complete_pct"],
+                "dev_ci95_pct": comparisons["arm4_vs_arm3"]["complete_pct_ci95"],
+                "target_bar_pct": -PRIMARY_TARGET_PCT,
+                "verdict": "PASS" if comparisons["arm4_vs_arm3"]["beats_by_ge_1pct_point"] else "FAIL",
+                "carried_to_sealed": False,
+                "rationale": (
+                    "Recursive frame definitions (D=3) compress frame definition header bytes (-13.3%, -680 total header bits, M*=0) "
+                    "and save -248 payload bits, but total complete-bit gain (-0.11%) falls far below the 1.0% bar against a fair "
+                    "depth-1 frame codec. Recursive-frame grammar iteration is CLOSED."
+                ),
+            },
+            "depth1_preregistration": {
+                "status": "PREREGISTERED",
+                "comparison": "arm3_depth1_frames (D=1) vs arm2_context_ast (D=0)",
+                "dev_delta_complete_pct": comparisons["arm3_vs_arm2"]["delta_complete_pct"],
+                "dev_ci95_pct": comparisons["arm3_vs_arm2"]["complete_pct_ci95"],
+                "preregistration_doc": "PREREGISTRATION_DEPTH1.md",
+                "frozen_headers": [
+                    "frozen/arm2_context_ast.header.a2bits",
+                    "frozen/arm3_depth1_frames.header.a2bits",
+                ],
             },
         },
         "frame_diagnostics": frame_diagnostics,
