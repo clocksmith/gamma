@@ -309,7 +309,7 @@ class CdpWorkspaceAdapter {
     const effect = EFFECTS[request.kind];
     if (!effect) throw new Error(`unsupported action kind ${request.kind}`);
     const target = request.pageId ? { workspaceId, pageId: request.pageId } : workspaceId;
-    return effect.call(this, target, request, uploadFiles); // guard removed
+    if (!request.requestGuard) return effect.call(this, target, request, uploadFiles);
     // An approved commit: hold the page's requests while the effect runs (request-guard.js).
     const { cdp, sessionId } = this._entry(target);
     const session = {
