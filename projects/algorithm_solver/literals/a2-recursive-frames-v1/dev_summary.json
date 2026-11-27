@@ -1,0 +1,997 @@
+{
+  "schema": "gamma.bits.a2.dev_summary.v1",
+  "experiment": "A2 \u2014 Recursive frames for normalized JavaScript",
+  "config": {
+    "flat_max_entries": 512,
+    "frame_max_count": 256,
+    "arm3_max_depth": 1,
+    "arm4_max_depth": 3,
+    "min_lineage_support": 2,
+    "cyclic_register_modulus": 8,
+    "shift_method": "exact_8_shift_enumeration_no_fft_ntt",
+    "entropy_coder": "AC32_static_integer_arithmetic_coder",
+    "bootstrap_samples": 10000,
+    "bootstrap_seed": 20261127
+  },
+  "corpus": {
+    "train_files": 762,
+    "train_lineages": 527,
+    "train_raw_bytes": 589478,
+    "train_norm_bytes": 421726,
+    "train_ast_nodes": 121984,
+    "dev_files": 540,
+    "dev_lineages": 421,
+    "dev_raw_bytes": 505890,
+    "dev_norm_bytes": 371778,
+    "dev_ast_nodes": 100605,
+    "train_supported": 762,
+    "train_fallback": 0,
+    "dev_supported": 540,
+    "dev_fallback": 0
+  },
+  "shared_spine": {
+    "fidelity": {
+      "all_arms_byte_exact": true,
+      "by_arm": {
+        "arm1_flat_bits": {
+          "files_matched": 540,
+          "files_total": 540,
+          "byte_exact": true,
+          "archive_sha256": "085db09a3619572a50019785774c60521f699e2b50976b8997e25584cc64867c",
+          "archive_bytes": 168209
+        },
+        "arm2_context_ast": {
+          "files_matched": 540,
+          "files_total": 540,
+          "byte_exact": true,
+          "archive_sha256": "02eac2fdc88cf0da745537181ee1950f06e2e16f742f8dbeb8256cb787188f03",
+          "archive_bytes": 112251
+        },
+        "arm3_depth1_frames": {
+          "files_matched": 540,
+          "files_total": 540,
+          "byte_exact": true,
+          "archive_sha256": "f1bb18f451028500646024d17f322290ddcbab910929b005a8284d2020f25028",
+          "archive_bytes": 105363
+        },
+        "arm4_recursive_frames": {
+          "files_matched": 540,
+          "files_total": 540,
+          "byte_exact": true,
+          "archive_sha256": "c083ad1a41e403417a2b494762423274879ecaf6cde176fb9cedf6885d901903",
+          "archive_bytes": 105247
+        }
+      },
+      "ast_coverage_train": "762/762",
+      "ast_coverage_dev": "540/540",
+      "fallback_rate_dev_pct": 0.0,
+      "behavior_checks": {
+        "all_arms_passed": true,
+        "total_programs": 20,
+        "passed_programs": 20,
+        "total_cases": 3834,
+        "passed_cases": 3834,
+        "by_arm": {
+          "arm1_flat_bits": {
+            "total_programs": 20,
+            "passed_programs": 20,
+            "total_cases": 3834,
+            "passed_cases": 3834,
+            "all_passed": true
+          },
+          "arm2_context_ast": {
+            "total_programs": 20,
+            "passed_programs": 20,
+            "total_cases": 3834,
+            "passed_cases": 3834,
+            "all_passed": true
+          },
+          "arm3_depth1_frames": {
+            "total_programs": 20,
+            "passed_programs": 20,
+            "total_cases": 3834,
+            "passed_cases": 3834,
+            "all_passed": true
+          },
+          "arm4_recursive_frames": {
+            "total_programs": 20,
+            "passed_programs": 20,
+            "total_cases": 3834,
+            "passed_cases": 3834,
+            "all_passed": true
+          }
+        }
+      }
+    },
+    "complete_bits": {
+      "primary_horizon": {
+        "dev_files": 540,
+        "dev_lineages": 421,
+        "dev_norm_bytes": 371778
+      },
+      "arms": {
+        "arm1_flat_bits": {
+          "complete_bits": 1345672,
+          "complete_bytes": 168209,
+          "header_bits": 20632,
+          "header_bytes": 2579,
+          "payload_bits": 1325024,
+          "payload_bytes": 165628,
+          "bits_per_norm_byte": 3.6196,
+          "bits_per_raw_byte": 2.66,
+          "header_breakdown": null,
+          "archive_sha256": "085db09a3619572a50019785774c60521f699e2b50976b8997e25584cc64867c"
+        },
+        "arm2_context_ast": {
+          "complete_bits": 898008,
+          "complete_bytes": 112251,
+          "header_bits": 46848,
+          "header_bytes": 5856,
+          "payload_bits": 851144,
+          "payload_bytes": 106393,
+          "bits_per_norm_byte": 2.4154,
+          "bits_per_raw_byte": 1.7751,
+          "header_breakdown": {
+            "envelope_bytes": 6,
+            "pools_bytes": 4019,
+            "base_tables_bytes": 1831,
+            "frame_tables_bytes": 0,
+            "frame_def_header_bytes": 0,
+            "total_header_bytes": 5856
+          },
+          "archive_sha256": "02eac2fdc88cf0da745537181ee1950f06e2e16f742f8dbeb8256cb787188f03"
+        },
+        "arm3_depth1_frames": {
+          "complete_bits": 842904,
+          "complete_bytes": 105363,
+          "header_bits": 55320,
+          "header_bytes": 6915,
+          "payload_bits": 787568,
+          "payload_bytes": 98446,
+          "bits_per_norm_byte": 2.2672,
+          "bits_per_raw_byte": 1.6662,
+          "header_breakdown": {
+            "envelope_bytes": 6,
+            "pools_bytes": 4019,
+            "base_tables_bytes": 1818,
+            "frame_tables_bytes": 220,
+            "frame_def_header_bytes": 852,
+            "total_header_bytes": 6915
+          },
+          "archive_sha256": "f1bb18f451028500646024d17f322290ddcbab910929b005a8284d2020f25028"
+        },
+        "arm4_recursive_frames": {
+          "complete_bits": 841976,
+          "complete_bytes": 105247,
+          "header_bits": 54640,
+          "header_bytes": 6830,
+          "payload_bits": 787320,
+          "payload_bytes": 98415,
+          "bits_per_norm_byte": 2.2647,
+          "bits_per_raw_byte": 1.6643,
+          "header_breakdown": {
+            "envelope_bytes": 6,
+            "pools_bytes": 4019,
+            "base_tables_bytes": 1818,
+            "frame_tables_bytes": 248,
+            "frame_def_header_bytes": 739,
+            "total_header_bytes": 6830
+          },
+          "archive_sha256": "c083ad1a41e403417a2b494762423274879ecaf6cde176fb9cedf6885d901903"
+        }
+      },
+      "comparisons": {
+        "arm2_vs_arm1": {
+          "n_lineages": 421,
+          "complete_bits_a": 898008,
+          "complete_bits_b": 1345672,
+          "delta_complete_bits": -447664,
+          "delta_complete_pct": -33.2669,
+          "complete_pct_ci95": [
+            -38.7845,
+            -29.6508
+          ],
+          "complete_bits_ci95": [
+            -742084.0,
+            -289004.8
+          ],
+          "payload_delta_bits": -473880.0,
+          "payload_delta_pct": -35.7634,
+          "payload_pct_ci95": [
+            -43.0159,
+            -31.0286
+          ],
+          "lineages_improved": 419,
+          "lineages_tied": 0,
+          "lineages_worse": 2,
+          "beats_by_ge_1pct_point": true,
+          "beats_by_ge_1pct_ci95_upper": true
+        },
+        "arm3_vs_arm2": {
+          "n_lineages": 421,
+          "complete_bits_a": 842904,
+          "complete_bits_b": 898008,
+          "delta_complete_bits": -55104,
+          "delta_complete_pct": -6.1362,
+          "complete_pct_ci95": [
+            -11.3407,
+            -3.2509
+          ],
+          "complete_bits_ci95": [
+            -62157.0,
+            -48556.7
+          ],
+          "payload_delta_bits": -63576.0,
+          "payload_delta_pct": -7.4693,
+          "payload_pct_ci95": [
+            -14.397,
+            -3.8687
+          ],
+          "lineages_improved": 420,
+          "lineages_tied": 0,
+          "lineages_worse": 1,
+          "beats_by_ge_1pct_point": true,
+          "beats_by_ge_1pct_ci95_upper": true
+        },
+        "arm4_vs_arm2": {
+          "n_lineages": 421,
+          "complete_bits_a": 841976,
+          "complete_bits_b": 898008,
+          "delta_complete_bits": -56032,
+          "delta_complete_pct": -6.2396,
+          "complete_pct_ci95": [
+            -11.5354,
+            -3.3084
+          ],
+          "complete_bits_ci95": [
+            -63239.1,
+            -49427.4
+          ],
+          "payload_delta_bits": -63824.0,
+          "payload_delta_pct": -7.4985,
+          "payload_pct_ci95": [
+            -14.4634,
+            -3.8846
+          ],
+          "lineages_improved": 420,
+          "lineages_tied": 0,
+          "lineages_worse": 1,
+          "beats_by_ge_1pct_point": true,
+          "beats_by_ge_1pct_ci95_upper": true
+        },
+        "arm4_vs_arm3": {
+          "n_lineages": 421,
+          "complete_bits_a": 841976,
+          "complete_bits_b": 842904,
+          "delta_complete_bits": -928,
+          "delta_complete_pct": -0.1101,
+          "complete_pct_ci95": [
+            -0.2475,
+            -0.0525
+          ],
+          "complete_bits_ci95": [
+            -1258.9,
+            -585.8
+          ],
+          "payload_delta_bits": -248.0,
+          "payload_delta_pct": -0.0315,
+          "payload_pct_ci95": [
+            -0.1087,
+            0.0168
+          ],
+          "lineages_improved": 239,
+          "lineages_tied": 0,
+          "lineages_worse": 182,
+          "beats_by_ge_1pct_point": false,
+          "beats_by_ge_1pct_ci95_upper": false
+        }
+      }
+    },
+    "measured_work": {
+      "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+      "python_version": "3.14.2",
+      "node_version": "v22.20.0",
+      "total_eval_seconds": 160.884,
+      "normalize_train_seconds": 0.621,
+      "normalize_dev_seconds": 0.569,
+      "behavior_verify_seconds": 0.537,
+      "peak_rss_mb": 468.48,
+      "by_arm": {
+        "arm1_flat_bits": {
+          "train_seconds": 42.2029,
+          "encode_seconds": 1.511,
+          "decode_seconds": 0.986,
+          "decode_p95_ms": 5.9,
+          "decode_mean_ms": 1.8252,
+          "op_counts": {
+            "train_ops": {
+              "bpe_merges": 378,
+              "dp_bytes": 1686904
+            },
+            "encode_ops": {
+              "dp_bytes": 371778,
+              "ac_symbols": 164193
+            },
+            "shift_evaluations_total": 0,
+            "dp_nodes_visited": 0,
+            "dp_bytes": 2058682,
+            "ac_symbols_dev": 164193
+          }
+        },
+        "arm2_context_ast": {
+          "train_seconds": 0.068,
+          "encode_seconds": 1.2723,
+          "decode_seconds": 1.1783,
+          "decode_p95_ms": 5.9304,
+          "decode_mean_ms": 2.1799,
+          "op_counts": {
+            "train_ops": {
+              "shift_evaluations": 0,
+              "dp_nodes_visited": 0
+            },
+            "encode_ops": {
+              "shift_evaluations": 0,
+              "dp_nodes_visited": 99006,
+              "ac_symbols": 306165
+            },
+            "shift_evaluations_total": 0,
+            "dp_nodes_visited": 99006,
+            "dp_bytes": 0,
+            "ac_symbols_dev": 306165
+          }
+        },
+        "arm3_depth1_frames": {
+          "train_seconds": 32.5974,
+          "encode_seconds": 3.7276,
+          "decode_seconds": 1.252,
+          "decode_p95_ms": 5.9638,
+          "decode_mean_ms": 2.3034,
+          "op_counts": {
+            "train_ops": {
+              "shift_evaluations": 61682016,
+              "dp_nodes_visited": 1437468
+            },
+            "encode_ops": {
+              "shift_evaluations": 5308963,
+              "dp_nodes_visited": 99006,
+              "ac_symbols": 260562
+            },
+            "shift_evaluations_total": 66990979,
+            "dp_nodes_visited": 1536474,
+            "dp_bytes": 0,
+            "ac_symbols_dev": 260562
+          }
+        },
+        "arm4_recursive_frames": {
+          "train_seconds": 51.675,
+          "encode_seconds": 4.0186,
+          "decode_seconds": 1.3216,
+          "decode_p95_ms": 5.7917,
+          "decode_mean_ms": 2.4341,
+          "op_counts": {
+            "train_ops": {
+              "shift_evaluations": 66513991,
+              "dp_nodes_visited": 1437468
+            },
+            "encode_ops": {
+              "shift_evaluations": 6205274,
+              "dp_nodes_visited": 99006,
+              "ac_symbols": 260653
+            },
+            "shift_evaluations_total": 72719265,
+            "dp_nodes_visited": 1536474,
+            "dp_bytes": 0,
+            "ac_symbols_dev": 260653
+          }
+        }
+      }
+    },
+    "horizon": {
+      "breakeven": {
+        "arm2_vs_arm1": {
+          "status": "repaid_within_dev",
+          "delta_header_bits": 26216,
+          "dev_payload_saving_bits": 473880,
+          "m_star_dev_fraction": 0.0553,
+          "m_star_norm_bytes": 20567.5,
+          "m_star_files": 29.87,
+          "m_star_lineages": 23.29
+        },
+        "arm3_vs_arm2": {
+          "status": "repaid_within_dev",
+          "delta_header_bits": 8472,
+          "dev_payload_saving_bits": 63576,
+          "m_star_dev_fraction": 0.1333,
+          "m_star_norm_bytes": 49542.3,
+          "m_star_files": 71.96,
+          "m_star_lineages": 56.1
+        },
+        "arm4_vs_arm2": {
+          "status": "repaid_within_dev",
+          "delta_header_bits": 7792,
+          "dev_payload_saving_bits": 63824,
+          "m_star_dev_fraction": 0.1221,
+          "m_star_norm_bytes": 45388.8,
+          "m_star_files": 65.93,
+          "m_star_lineages": 51.4
+        },
+        "arm4_vs_arm3": {
+          "status": "immediate_win_header_and_payload",
+          "delta_header_bits": -680,
+          "dev_payload_saving_bits": 248,
+          "m_star_norm_bytes": 0.0,
+          "m_star_files": 0.0,
+          "m_star_lineages": 0.0
+        }
+      },
+      "volume_curve": [
+        {
+          "lineages": 10,
+          "files": 10,
+          "norm_bytes": 6421,
+          "arms": {
+            "arm1_flat_bits": {
+              "complete_bits": 40335,
+              "payload_bits": 19703,
+              "bits_per_norm_byte": 6.2817
+            },
+            "arm2_context_ast": {
+              "complete_bits": 58408,
+              "payload_bits": 11560,
+              "bits_per_norm_byte": 9.0964
+            },
+            "arm3_depth1_frames": {
+              "complete_bits": 64567,
+              "payload_bits": 9247,
+              "bits_per_norm_byte": 10.0556
+            },
+            "arm4_recursive_frames": {
+              "complete_bits": 63871,
+              "payload_bits": 9231,
+              "bits_per_norm_byte": 9.9472
+            }
+          },
+          "delta_arm3_vs_arm2_pct": 10.5448,
+          "delta_arm4_vs_arm2_pct": 9.3532,
+          "delta_arm4_vs_arm3_pct": -1.078
+        },
+        {
+          "lineages": 25,
+          "files": 144,
+          "norm_bytes": 136926,
+          "arms": {
+            "arm1_flat_bits": {
+              "complete_bits": 604807,
+              "payload_bits": 584175,
+              "bits_per_norm_byte": 4.417
+            },
+            "arm2_context_ast": {
+              "complete_bits": 471549,
+              "payload_bits": 424701,
+              "bits_per_norm_byte": 3.4438
+            },
+            "arm3_depth1_frames": {
+              "complete_bits": 473631,
+              "payload_bits": 418311,
+              "bits_per_norm_byte": 3.459
+            },
+            "arm4_recursive_frames": {
+              "complete_bits": 472847,
+              "payload_bits": 418207,
+              "bits_per_norm_byte": 3.4533
+            }
+          },
+          "delta_arm3_vs_arm2_pct": 0.4415,
+          "delta_arm4_vs_arm2_pct": 0.2753,
+          "delta_arm4_vs_arm3_pct": -0.1655
+        },
+        {
+          "lineages": 50,
+          "files": 169,
+          "norm_bytes": 155874,
+          "arms": {
+            "arm1_flat_bits": {
+              "complete_bits": 666231,
+              "payload_bits": 645599,
+              "bits_per_norm_byte": 4.2742
+            },
+            "arm2_context_ast": {
+              "complete_bits": 507384,
+              "payload_bits": 460536,
+              "bits_per_norm_byte": 3.2551
+            },
+            "arm3_depth1_frames": {
+              "complete_bits": 504365,
+              "payload_bits": 449045,
+              "bits_per_norm_byte": 3.2357
+            },
+            "arm4_recursive_frames": {
+              "complete_bits": 503519,
+              "payload_bits": 448879,
+              "bits_per_norm_byte": 3.2303
+            }
+          },
+          "delta_arm3_vs_arm2_pct": -0.595,
+          "delta_arm4_vs_arm2_pct": -0.7618,
+          "delta_arm4_vs_arm3_pct": -0.1677
+        },
+        {
+          "lineages": 100,
+          "files": 219,
+          "norm_bytes": 185361,
+          "arms": {
+            "arm1_flat_bits": {
+              "complete_bits": 759177,
+              "payload_bits": 738545,
+              "bits_per_norm_byte": 4.0957
+            },
+            "arm2_context_ast": {
+              "complete_bits": 559715,
+              "payload_bits": 512867,
+              "bits_per_norm_byte": 3.0196
+            },
+            "arm3_depth1_frames": {
+              "complete_bits": 549226,
+              "payload_bits": 493906,
+              "bits_per_norm_byte": 2.963
+            },
+            "arm4_recursive_frames": {
+              "complete_bits": 548311,
+              "payload_bits": 493671,
+              "bits_per_norm_byte": 2.9581
+            }
+          },
+          "delta_arm3_vs_arm2_pct": -1.874,
+          "delta_arm4_vs_arm2_pct": -2.0375,
+          "delta_arm4_vs_arm3_pct": -0.1666
+        },
+        {
+          "lineages": 200,
+          "files": 319,
+          "norm_bytes": 241212,
+          "arms": {
+            "arm1_flat_bits": {
+              "complete_bits": 936078,
+              "payload_bits": 915446,
+              "bits_per_norm_byte": 3.8807
+            },
+            "arm2_context_ast": {
+              "complete_bits": 661922,
+              "payload_bits": 615074,
+              "bits_per_norm_byte": 2.7442
+            },
+            "arm3_depth1_frames": {
+              "complete_bits": 637988,
+              "payload_bits": 582668,
+              "bits_per_norm_byte": 2.6449
+            },
+            "arm4_recursive_frames": {
+              "complete_bits": 637067,
+              "payload_bits": 582427,
+              "bits_per_norm_byte": 2.6411
+            }
+          },
+          "delta_arm3_vs_arm2_pct": -3.6158,
+          "delta_arm4_vs_arm2_pct": -3.755,
+          "delta_arm4_vs_arm3_pct": -0.1444
+        },
+        {
+          "lineages": 300,
+          "files": 419,
+          "norm_bytes": 302324,
+          "arms": {
+            "arm1_flat_bits": {
+              "complete_bits": 1124810,
+              "payload_bits": 1104178,
+              "bits_per_norm_byte": 3.7205
+            },
+            "arm2_context_ast": {
+              "complete_bits": 771036,
+              "payload_bits": 724188,
+              "bits_per_norm_byte": 2.5504
+            },
+            "arm3_depth1_frames": {
+              "complete_bits": 731975,
+              "payload_bits": 676655,
+              "bits_per_norm_byte": 2.4212
+            },
+            "arm4_recursive_frames": {
+              "complete_bits": 730978,
+              "payload_bits": 676338,
+              "bits_per_norm_byte": 2.4179
+            }
+          },
+          "delta_arm3_vs_arm2_pct": -5.066,
+          "delta_arm4_vs_arm2_pct": -5.1953,
+          "delta_arm4_vs_arm3_pct": -0.1362
+        },
+        {
+          "lineages": 421,
+          "files": 540,
+          "norm_bytes": 371778,
+          "arms": {
+            "arm1_flat_bits": {
+              "complete_bits": 1345672,
+              "payload_bits": 1325024,
+              "bits_per_norm_byte": 3.6196
+            },
+            "arm2_context_ast": {
+              "complete_bits": 898008,
+              "payload_bits": 851144,
+              "bits_per_norm_byte": 2.4154
+            },
+            "arm3_depth1_frames": {
+              "complete_bits": 842904,
+              "payload_bits": 787568,
+              "bits_per_norm_byte": 2.2672
+            },
+            "arm4_recursive_frames": {
+              "complete_bits": 841976,
+              "payload_bits": 787320,
+              "bits_per_norm_byte": 2.2647
+            }
+          },
+          "delta_arm3_vs_arm2_pct": -6.1362,
+          "delta_arm4_vs_arm2_pct": -6.2396,
+          "delta_arm4_vs_arm3_pct": -0.1101
+        }
+      ]
+    }
+  },
+  "frame_diagnostics": {
+    "arm1_flat_bits": {
+      "total_frames": 0,
+      "nested_frame_defs": 0,
+      "frame_uses": 0,
+      "recursive_frame_uses": 0,
+      "nested_subframe_calls": 0,
+      "switch_bits": 0.0,
+      "frame_id_bits": 0.0,
+      "shift_bits": 0.0,
+      "frame_def_header_bytes": 0,
+      "fallback_files": 0,
+      "actual_nested_uses_decoded": 0,
+      "actual_top_frame_calls_decoded": 0,
+      "net_payload_savings_vs_arm2_bits": -473880.0,
+      "gross_body_savings_bits": -473880.0
+    },
+    "arm2_context_ast": {
+      "total_frames": 0,
+      "expr_frames": 0,
+      "stmt_frames": 0,
+      "nested_frame_defs": 0,
+      "depth_histogram": {},
+      "frame_uses": 0,
+      "recursive_frame_uses": 0,
+      "nested_subframe_calls": 0,
+      "switch_bits": 0.0,
+      "frame_id_bits": 0.0,
+      "shift_bits": 0.0,
+      "frame_def_header_bytes": 0,
+      "frame_tables_header_bytes": 0,
+      "fallback_files": 0,
+      "actual_nested_uses_decoded": 0,
+      "actual_top_frame_calls_decoded": 0,
+      "net_payload_savings_vs_arm2_bits": 0.0,
+      "gross_body_savings_bits": 0.0
+    },
+    "arm3_depth1_frames": {
+      "total_frames": 188,
+      "expr_frames": 153,
+      "stmt_frames": 35,
+      "nested_frame_defs": 0,
+      "depth_histogram": {
+        "1": 188
+      },
+      "frame_uses": 6874,
+      "recursive_frame_uses": 0,
+      "nested_subframe_calls": 0,
+      "switch_bits": 21357.685,
+      "frame_id_bits": 40464.486,
+      "shift_bits": 8835.163,
+      "frame_def_header_bytes": 852,
+      "frame_tables_header_bytes": 220,
+      "fallback_files": 0,
+      "actual_nested_uses_decoded": 0,
+      "actual_top_frame_calls_decoded": 6874,
+      "net_payload_savings_vs_arm2_bits": 63576.0,
+      "gross_body_savings_bits": 134233.3
+    },
+    "arm4_recursive_frames": {
+      "total_frames": 215,
+      "expr_frames": 180,
+      "stmt_frames": 35,
+      "nested_frame_defs": 111,
+      "depth_histogram": {
+        "1": 104,
+        "2": 72,
+        "3": 39
+      },
+      "frame_uses": 6733,
+      "recursive_frame_uses": 2959,
+      "nested_subframe_calls": 3580,
+      "switch_bits": 21085.378,
+      "frame_id_bits": 39724.088,
+      "shift_bits": 8729.929,
+      "frame_def_header_bytes": 739,
+      "frame_tables_header_bytes": 248,
+      "fallback_files": 0,
+      "actual_nested_uses_decoded": 4949,
+      "actual_top_frame_calls_decoded": 6733,
+      "net_payload_savings_vs_arm2_bits": 63824.0,
+      "gross_body_savings_bits": 133363.4
+    }
+  },
+  "slice_breakdown": {
+    "codenet-fresh": {
+      "files": 200,
+      "lineages": 200,
+      "norm_bytes": 129394,
+      "arms": {
+        "arm1_flat_bits": {
+          "complete_bits": 430496,
+          "header_bits": 20632,
+          "payload_bits": 409848,
+          "frame_uses": 0,
+          "nested_subframe_calls": 0
+        },
+        "arm2_context_ast": {
+          "complete_bits": 281496,
+          "header_bits": 46848,
+          "payload_bits": 234632,
+          "frame_uses": 0,
+          "nested_subframe_calls": 0
+        },
+        "arm3_depth1_frames": {
+          "complete_bits": 256808,
+          "header_bits": 55320,
+          "payload_bits": 201472,
+          "frame_uses": 3466,
+          "nested_subframe_calls": 0
+        },
+        "arm4_recursive_frames": {
+          "complete_bits": 255968,
+          "header_bits": 54640,
+          "payload_bits": 201312,
+          "frame_uses": 3391,
+          "nested_subframe_calls": 1871
+        }
+      },
+      "payload_arm3_vs_arm2_pct": -14.1328,
+      "payload_arm4_vs_arm2_pct": -14.201,
+      "payload_arm4_vs_arm3_pct": -0.0794,
+      "complete_arm4_vs_arm3_pct": -0.3271,
+      "paired_ci_arm4_vs_arm3": {
+        "n_lineages": 200,
+        "complete_bits_a": 255968,
+        "complete_bits_b": 256808,
+        "delta_complete_bits": -840,
+        "delta_complete_pct": -0.3271,
+        "complete_pct_ci95": [
+          -0.4258,
+          -0.2275
+        ],
+        "complete_bits_ci95": [
+          -1075.6,
+          -590.9
+        ],
+        "payload_delta_bits": -160.0,
+        "payload_delta_pct": -0.0794,
+        "payload_pct_ci95": [
+          -0.1981,
+          0.0442
+        ],
+        "lineages_improved": 114,
+        "lineages_tied": 0,
+        "lineages_worse": 86,
+        "beats_by_ge_1pct_point": false,
+        "beats_by_ge_1pct_ci95_upper": false
+      }
+    },
+    "codenet-fresh2": {
+      "files": 200,
+      "lineages": 200,
+      "norm_bytes": 115895,
+      "arms": {
+        "arm1_flat_bits": {
+          "complete_bits": 382728,
+          "header_bits": 20632,
+          "payload_bits": 362080,
+          "frame_uses": 0,
+          "nested_subframe_calls": 0
+        },
+        "arm2_context_ast": {
+          "complete_bits": 256760,
+          "header_bits": 46848,
+          "payload_bits": 209896,
+          "frame_uses": 0,
+          "nested_subframe_calls": 0
+        },
+        "arm3_depth1_frames": {
+          "complete_bits": 237056,
+          "header_bits": 55320,
+          "payload_bits": 181720,
+          "frame_uses": 3099,
+          "nested_subframe_calls": 0
+        },
+        "arm4_recursive_frames": {
+          "complete_bits": 236352,
+          "header_bits": 54640,
+          "payload_bits": 181696,
+          "frame_uses": 3034,
+          "nested_subframe_calls": 1650
+        }
+      },
+      "payload_arm3_vs_arm2_pct": -13.4238,
+      "payload_arm4_vs_arm2_pct": -13.4352,
+      "payload_arm4_vs_arm3_pct": -0.0132,
+      "complete_arm4_vs_arm3_pct": -0.297,
+      "paired_ci_arm4_vs_arm3": {
+        "n_lineages": 200,
+        "complete_bits_a": 236352,
+        "complete_bits_b": 237056,
+        "delta_complete_bits": -704,
+        "delta_complete_pct": -0.297,
+        "complete_pct_ci95": [
+          -0.3882,
+          -0.1991
+        ],
+        "complete_bits_ci95": [
+          -910.2,
+          -479.6
+        ],
+        "payload_delta_bits": -24.0,
+        "payload_delta_pct": -0.0132,
+        "payload_pct_ci95": [
+          -0.1264,
+          0.1098
+        ],
+        "lineages_improved": 110,
+        "lineages_tied": 0,
+        "lineages_worse": 90,
+        "beats_by_ge_1pct_point": false,
+        "beats_by_ge_1pct_ci95_upper": false
+      }
+    },
+    "sources-20": {
+      "files": 20,
+      "lineages": 20,
+      "norm_bytes": 5513,
+      "arms": {
+        "arm1_flat_bits": {
+          "complete_bits": 40472,
+          "header_bits": 20632,
+          "payload_bits": 19832,
+          "frame_uses": 0,
+          "nested_subframe_calls": 0
+        },
+        "arm2_context_ast": {
+          "complete_bits": 58120,
+          "header_bits": 46848,
+          "payload_bits": 11264,
+          "frame_uses": 0,
+          "nested_subframe_calls": 0
+        },
+        "arm3_depth1_frames": {
+          "complete_bits": 66064,
+          "header_bits": 55320,
+          "payload_bits": 10736,
+          "frame_uses": 84,
+          "nested_subframe_calls": 0
+        },
+        "arm4_recursive_frames": {
+          "complete_bits": 65368,
+          "header_bits": 54640,
+          "payload_bits": 10720,
+          "frame_uses": 83,
+          "nested_subframe_calls": 27
+        }
+      },
+      "payload_arm3_vs_arm2_pct": -4.6875,
+      "payload_arm4_vs_arm2_pct": -4.8295,
+      "payload_arm4_vs_arm3_pct": -0.149,
+      "complete_arm4_vs_arm3_pct": -1.0535,
+      "paired_ci_arm4_vs_arm3": {
+        "n_lineages": 20,
+        "complete_bits_a": 65368,
+        "complete_bits_b": 66064,
+        "delta_complete_bits": -696,
+        "delta_complete_pct": -1.0535,
+        "complete_pct_ci95": [
+          -1.0957,
+          -1.0184
+        ],
+        "complete_bits_ci95": [
+          -721.0,
+          -682.4
+        ],
+        "payload_delta_bits": -16.0,
+        "payload_delta_pct": -0.1489,
+        "payload_pct_ci95": [
+          -0.3905,
+          -0.0229
+        ],
+        "lineages_improved": 18,
+        "lineages_tied": 0,
+        "lineages_worse": 2,
+        "beats_by_ge_1pct_point": true,
+        "beats_by_ge_1pct_ci95_upper": true
+      }
+    },
+    "express": {
+      "files": 120,
+      "lineages": 1,
+      "norm_bytes": 120976,
+      "arms": {
+        "arm1_flat_bits": {
+          "complete_bits": 553920,
+          "header_bits": 20632,
+          "payload_bits": 533280,
+          "frame_uses": 0,
+          "nested_subframe_calls": 0
+        },
+        "arm2_context_ast": {
+          "complete_bits": 442224,
+          "header_bits": 46848,
+          "payload_bits": 395368,
+          "frame_uses": 0,
+          "nested_subframe_calls": 0
+        },
+        "arm3_depth1_frames": {
+          "complete_bits": 448984,
+          "header_bits": 55320,
+          "payload_bits": 393656,
+          "frame_uses": 225,
+          "nested_subframe_calls": 0
+        },
+        "arm4_recursive_frames": {
+          "complete_bits": 448256,
+          "header_bits": 54640,
+          "payload_bits": 393608,
+          "frame_uses": 225,
+          "nested_subframe_calls": 32
+        }
+      },
+      "payload_arm3_vs_arm2_pct": -0.433,
+      "payload_arm4_vs_arm2_pct": -0.4452,
+      "payload_arm4_vs_arm3_pct": -0.0122,
+      "complete_arm4_vs_arm3_pct": -0.1621
+    },
+    "algo_420_lineages": {
+      "files": 420,
+      "lineages": 420,
+      "norm_bytes": 250802,
+      "complete_arm2_bits": 502640,
+      "complete_arm3_bits": 449248,
+      "complete_arm4_bits": 448376,
+      "delta_arm3_vs_arm2_pct": -10.6223,
+      "delta_arm4_vs_arm2_pct": -10.7958,
+      "paired_ci_arm4_vs_arm3": {
+        "n_lineages": 420,
+        "complete_bits_a": 448376,
+        "complete_bits_b": 449248,
+        "delta_complete_bits": -872,
+        "delta_complete_pct": -0.1941,
+        "complete_pct_ci95": [
+          -0.2659,
+          -0.1193
+        ],
+        "complete_bits_ci95": [
+          -1186.8,
+          -539.7
+        ],
+        "payload_delta_bits": -192.0,
+        "payload_delta_pct": -0.0487,
+        "payload_pct_ci95": [
+          -0.1288,
+          0.0357
+        ],
+        "lineages_improved": 238,
+        "lineages_tied": 0,
+        "lineages_worse": 182,
+        "beats_by_ge_1pct_point": false,
+        "beats_by_ge_1pct_ci95_upper": false
+      }
+    }
+  }
+}

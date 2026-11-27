@@ -1,0 +1,79 @@
+{
+  "schema": "gamma.bits.a2.dev_gate.v1",
+  "all_passed": true,
+  "total_seconds": 55.939,
+  "gates": {
+    "lineage_disjointness": {
+      "status": "PASS",
+      "seconds": 0.003,
+      "ok": true,
+      "train_lineages": 527,
+      "dev_lineages": 421,
+      "leaks": 0
+    },
+    "exact_8_shift_no_fft_ntt": {
+      "status": "PASS",
+      "seconds": 0.021,
+      "ok": true,
+      "shifts_verified": 8,
+      "fft_ntt_present": false
+    },
+    "all_4_arms_decode_and_behavior": {
+      "status": "PASS",
+      "seconds": 5.421,
+      "ok": true,
+      "arms": {
+        "arm1_flat_bits": {
+          "byte_exact": "540/540",
+          "behavior_programs": "20/20",
+          "behavior_cases": "3834/3834"
+        },
+        "arm2_context_ast": {
+          "byte_exact": "540/540",
+          "behavior_programs": "20/20",
+          "behavior_cases": "3834/3834"
+        },
+        "arm3_depth1_frames": {
+          "byte_exact": "540/540",
+          "behavior_programs": "20/20",
+          "behavior_cases": "3834/3834"
+        },
+        "arm4_recursive_frames": {
+          "byte_exact": "540/540",
+          "behavior_programs": "20/20",
+          "behavior_cases": "3834/3834"
+        }
+      }
+    },
+    "charged_raw_fallback": {
+      "status": "PASS",
+      "seconds": 0.089,
+      "ok": true,
+      "fallback_files": 1,
+      "exact_recovery": true
+    },
+    "negative_controls_illegal_transitions": {
+      "status": "PASS",
+      "seconds": 0.042,
+      "ok": true,
+      "controls_rejected": 7,
+      "details": {
+        "illegal_recursion_depth_gt_dmax": "unsupported STMT tag Switch in frame definition",
+        "runtime_depth_gt_dmax": "illegal recursion depth 4 > MaxDepth 3",
+        "invalid_frame_id": "invalid frame ID 99 for group EXPR (count 1)",
+        "mismatched_ast_context_transition": "mismatched AST context transition: frame group STMT in EXPR slot",
+        "bitstream_illegal_frame_switch": "illegal USE_EXPR_FRAME when frames disabled or empty",
+        "bitstream_illegal_for_init_frame": "For init STMT must be VarDecl",
+        "bitstream_illegal_shifted_register": "illegal register index 3 (live env size 0)"
+      }
+    },
+    "equivalence_control_d1_equals_arm3": {
+      "status": "PASS",
+      "seconds": 50.363,
+      "ok": true,
+      "bit_for_bit_identical": true,
+      "archive_bytes": 105363,
+      "archive_sha256": "f1bb18f451028500646024d17f322290ddcbab910929b005a8284d2020f25028"
+    }
+  }
+}
