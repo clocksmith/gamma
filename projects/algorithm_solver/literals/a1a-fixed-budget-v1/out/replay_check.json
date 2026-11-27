@@ -1,0 +1,71 @@
+{
+  "schema": "a1a-fixed-budget-v1.replay-check/1",
+  "ok": true,
+  "strict": true,
+  "total_seconds": 44.061,
+  "steps": [
+    {
+      "step": "dual_headers_roundtrip",
+      "status": "PASS",
+      "ok": true,
+      "seconds": 1.162,
+      "detail": "A1AF/A1AD roundtrip OK (closed hdr 944B->679B, open 1171B->878B, emit_mask 245/255)"
+    },
+    {
+      "step": "negative_corruption_controls",
+      "status": "PASS",
+      "ok": true,
+      "seconds": 0.219,
+      "detail": "all 6 negative corruption controls rejected (DAG edges, ranks, Kraft, payload)"
+    },
+    {
+      "step": "bmax1_identity_check",
+      "status": "PASS",
+      "ok": true,
+      "seconds": 26.438,
+      "detail": "live K=250 OK + full chains 0 diffs (slot 4096/4096 vs exact-closed; byte 2822/2822 vs pair-byte, extended to 8710)"
+    },
+    {
+      "step": "synthetic_shared_bundle",
+      "status": "PASS",
+      "ok": true,
+      "seconds": 0.118,
+      "detail": "synthetic closure OK; single-root accepted 1 multi-node bundle, multi-root accepted 1 shared-ancestor bundle (size=3, roots=2, anc=1)"
+    },
+    {
+      "step": "norm_pruning_equivalence",
+      "status": "PASS",
+      "ok": true,
+      "seconds": 14.262,
+      "detail": "counterexample + 16 synthetic cases + live K=250 U(w) exact + full 4096/4096 0 diffs (wall 302.616s via Phase-1 closed + dirty-doc caching; straddle pruned_u_vs_used=0, dom_viol=0)"
+    },
+    {
+      "step": "hf_tokenizers_runtime",
+      "status": "PASS",
+      "ok": true,
+      "seconds": 0.367,
+      "detail": "tokenizers 0.22.2 live PASS: reachable/shadowed/missing-parent controls OK, dev25 100% byte round-trip + exact replay match"
+    },
+    {
+      "step": "tiktoken_byte_ranks",
+      "status": "PASS",
+      "ok": true,
+      "seconds": 1.41,
+      "detail": "byte-rank validator controls + frozen vocab audits OK (bpe-K4096 3924/3924 reachable, closed-K4096 237 shadowed); live tiktoken 0.14.0 PASS (dev 25 UTF-8 docs round-trip + exact parity, closed-K4096 live shadowed=236)"
+    },
+    {
+      "step": "zstd_lean_framing_decode",
+      "status": "PASS",
+      "ok": true,
+      "seconds": 0.017,
+      "detail": "zstd 1.5.7 lean roundtrip OK (dev20 12094B, p95=2.4us)"
+    },
+    {
+      "step": "artifacts_and_policy",
+      "status": "PASS",
+      "ok": true,
+      "seconds": 0.069,
+      "detail": "all 8 core artifacts present, 5 prereg hashes verified, 0 emojis"
+    }
+  ]
+}
