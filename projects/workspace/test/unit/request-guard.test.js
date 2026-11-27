@@ -10,7 +10,7 @@ import { join } from 'node:path';
 import test from 'node:test';
 import { createCdpAdapter } from '../../src/adapters/cdp-adapter.js';
 import { loadServiceConfig } from '../../src/config.js';
-import { checkWriteRequest, guardWrites } from '../../src/request-guard.js';
+import { checkWriteRequest, guardWrites, matchFollowUp, validRequestRule } from '../../src/request-guard.js';
 import { WorkspaceService } from '../../src/service.js';
 import { approveCommit } from '../../src/write-binding.js';
 import { createOwnerSession, findElement } from '../../src/workflows/owner-session.js';
@@ -334,5 +334,49 @@ test('request guard: a multipart write that does not match fails in the browser 
     assert.equal(report.requestGuard.admitted, admitted);
     assert.equal(session.arrived.length, admitted);
     assert.equal(session.methods().includes('Fetch.failRequest'), admitted === 0);
+  }
+});
+
+// A page that posts a redirect after the write (Forgejo's form-fetch-action posts `redirect` to
+// /-/fetch-redirect once the merge answers): the approval lists it as an exact follow-up.
+const REDIRECT = 'https://forge.test/-/fetch-redirect';
+const redirect = (body = 'redirect=%2Fana%2Frepo%2Fpulls%2F7') => ({ method: 'POST', url: REDIRECT,
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, postData: body });
+const FOLLOW_RULE = { ...MERGE_RULE, followUps: [{ method: 'POST', url: REDIRECT, fields: { redirect: '/ana/repo/pulls/7' } }] };
+
+test('request guard: an exact follow-up continues once, only after the approved write', async () => {
+  assert.equal(validRequestRule(FOLLOW_RULE), true);
+  for (const followUps of [{}, [null], [{ method: 'GET', url: REDIRECT, fields: {} }], [{ method: 'POST', url: 'not a url', fields: {} }],
+    [{ method: 'POST', url: REDIRECT, fields: [] }]]) assert.equal(validRequestRule({ ...MERGE_RULE, followUps }), false);
+  assert.equal(matchFollowUp(FOLLOW_RULE, redirect()), 0);
+  assert.equal(matchFollowUp(FOLLOW_RULE, redirect('redirect=%2Fana%2Frepo%2Fpulls%2F8')), -1);
+  assert.equal(matchFollowUp(FOLLOW_RULE, redirect('redirect=%2Fana%2Frepo%2Fpulls%2F7&x=1')), -1);
+  assert.equal(matchFollowUp(FOLLOW_RULE, { ...redirect(), url: `${REDIRECT}?x=1` }), -1);
+  assert.equal(matchFollowUp(FOLLOW_RULE, redirect(), new Set([0])), -1);
+  // The follow-up is not an approved write on its own.
+  assert.equal(checkWriteRequest(FOLLOW_RULE, 'abc123', redirect()).reason, 'unexpected-write');
+
+  const run = async pauses => {
+    const session = fakeSession();
+    const { requestGuard } = await guardWrites(session, { rule: FOLLOW_RULE, version: 'abc123', windowMs: 30, settleMs: 5 },
+      async () => { for (const request of pauses) session.pause(request); });
+    return { requestGuard, arrived: session.arrived.map(request => request.url) };
+  };
+  // The merge, then its redirect: both continue and nothing is blocked.
+  const ok = await run([multipart(MERGE_PARTS), redirect()]);
+  assert.equal(ok.requestGuard.admitted, 1);
+  assert.deepEqual(ok.requestGuard.blocked, []);
+  assert.deepEqual(ok.arrived, [MERGE, REDIRECT]);
+  assert.deepEqual(ok.requestGuard.decisions.map(entry => entry.followUp ?? null), [null, 0]);
+  // Before the approved write, after a blocked one, with another body, or twice: blocked.
+  for (const [pauses, arrived, reasons] of [
+    [[redirect()], [], ['unexpected-write']],
+    [[multipart([...MERGE_PARTS, ['delete_branch_after_merge', 'on']]), redirect()], [], ['request-payload-mismatch', 'unexpected-write']],
+    [[multipart(MERGE_PARTS), redirect('redirect=%2Fadmin')], [MERGE], ['unexpected-write']],
+    [[multipart(MERGE_PARTS), redirect(), redirect()], [MERGE, REDIRECT], ['unexpected-write']],
+  ]) {
+    const result = await run(pauses);
+    assert.deepEqual(result.arrived, arrived);
+    assert.deepEqual(result.requestGuard.blocked.map(entry => entry.reason), reasons);
   }
 });

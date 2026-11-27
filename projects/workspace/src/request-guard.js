@@ -4,9 +4,9 @@
 // is held at the browser (CDP Fetch domain) and compared with the approval's request rule before
 // it may leave: method and URL, the approved body values, and the approved version at the body
 // path the approval names. JSON, urlencoded and multipart/form-data bodies are read; a body that
-// cannot be read exactly is refused. One matching write continues; anything else fails in the browser with
-// BlockedByClient and is reported. Paths and values are data from the approval; no application
-// is named here.
+// cannot be read exactly is refused. One matching write continues, then each exact follow-up the
+// rule lists at most once; anything else fails in the browser with BlockedByClient and is
+// reported. Paths and values are data from the approval; no application is named here.
 
 import { createHash } from 'node:crypto';
 import { expectedBodyFields } from './client/branch-verifier.js';
@@ -21,13 +21,22 @@ function href(url) {
   try { return new URL(url).href; } catch { return null; }
 }
 
-/** The request rule an approval may carry: { method, url, fields, versionPath, allowPaths? }. */
+const writeMethod = method => typeof method === 'string' && /^[A-Za-z]{1,16}$/.test(method) && !READ_METHODS.has(method.toUpperCase());
+const plainFields = fields => fields !== null && typeof fields === 'object' && !Array.isArray(fields);
+
+/**
+ * The request rule an approval may carry: { method, url, fields, versionPath, allowPaths?, followUps? }.
+ * `followUps` ([{ method, url, fields }]) are requests the page itself sends after the approved write,
+ * such as a redirect it posts to move on to the result page. Each is admitted at most once, only after
+ * the approved write continued, and only with exactly these body fields and no others.
+ */
 function validRequestRule(rule) {
-  return rule !== null && typeof rule === 'object' && typeof rule.method === 'string' && /^[A-Za-z]{1,16}$/.test(rule.method)
-    && !READ_METHODS.has(rule.method.toUpperCase()) && href(rule.url) === rule.url
-    && rule.fields !== null && typeof rule.fields === 'object' && !Array.isArray(rule.fields)
+  return rule !== null && typeof rule === 'object' && writeMethod(rule.method) && href(rule.url) === rule.url
+    && plainFields(rule.fields)
     && typeof rule.versionPath === 'string' && rule.versionPath.length > 0
-    && (rule.allowPaths === undefined || (Array.isArray(rule.allowPaths) && rule.allowPaths.every(path => typeof path === 'string' && path)));
+    && (rule.allowPaths === undefined || (Array.isArray(rule.allowPaths) && rule.allowPaths.every(path => typeof path === 'string' && path)))
+    && (rule.followUps === undefined || (Array.isArray(rule.followUps) && rule.followUps.every(entry => entry !== null
+      && typeof entry === 'object' && writeMethod(entry.method) && href(entry.url) === entry.url && plainFields(entry.fields))));
 }
 
 // A string value that is itself a JSON object or array (a document sent as one form or JSON field)
@@ -169,6 +178,24 @@ function checkWriteRequest(rule, version, request) {
 }
 
 /**
+ * Index of the rule's follow-up that this request is exactly (method, URL, every body field and no
+ * other), skipping indexes in `used`; -1 when none is.
+ */
+function matchFollowUp(rule, request, used = new Set()) {
+  const method = String(request?.method ?? '').toUpperCase();
+  return (rule.followUps ?? []).findIndex((entry, index) => {
+    if (used.has(index) || method !== entry.method.toUpperCase() || href(request?.url) !== entry.url) return false;
+    const pairs = bodyPairs(request);
+    if (!pairs) return false;
+    const keys = Object.keys(entry.fields);
+    return pairs.length === keys.length && keys.every(key => {
+      const values = pairs.filter(([path]) => path === key).map(([, value]) => value);
+      return values.length === 1 && canonicalJson(values[0]) === canonicalJson(entry.fields[key]);
+    });
+  });
+}
+
+/**
  * Holds every request on one CDP page session while `run` performs the commit click, admits at most
  * one write that passes `checkWriteRequest`, and fails every other write with BlockedByClient.
  * After `run`, it keeps holding for `windowMs` (or until a write was decided, then `settleMs`) so a
@@ -178,6 +205,7 @@ function checkWriteRequest(rule, version, request) {
 async function guardWrites(session, { rule, version, windowMs, settleMs, pollMs = 5 }, run) {
   const decisions = [];
   let admitted = 0;
+  const followed = new Set();
   const pending = new Set();
   const decide = async params => {
     const verdict = checkWriteRequest(rule, version, params.request);
@@ -186,6 +214,13 @@ async function guardWrites(session, { rule, version, windowMs, settleMs, pollMs 
     if (verdict.ok && admitted === 0) {
       admitted += 1;
       decisions.push({ outcome: 'continued', method, url });
+      return session.send('Fetch.continueRequest', { requestId: params.requestId });
+    }
+    // A follow-up the approval names, after the approved write continued: exact, and once.
+    const followUp = !verdict.ok && admitted === 1 ? matchFollowUp(rule, params.request, followed) : -1;
+    if (followUp >= 0) {
+      followed.add(followUp);
+      decisions.push({ outcome: 'continued', method, url, followUp });
       return session.send('Fetch.continueRequest', { requestId: params.requestId });
     }
     // Only one write per approval: a second matching write is as unexpected as a wrong one.
@@ -222,4 +257,4 @@ async function guardWrites(session, { rule, version, windowMs, settleMs, pollMs 
   return { result, requestGuard: report };
 }
 
-export { checkWriteRequest, guardWrites, validRequestRule };
+export { checkWriteRequest, guardWrites, matchFollowUp, validRequestRule };
