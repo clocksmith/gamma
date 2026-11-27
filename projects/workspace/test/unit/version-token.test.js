@@ -59,7 +59,7 @@ class VersionedFormAdapter extends FakeAdapter {
   }
 }
 
-const makeDb = () => ({ commits: [], lagging: null,
+const makeDb = () => ({ commits: [], lagging: null, unreadable: 0,
   row: { entity: 'contact', account: 'acct-a', recordId: 'row-1', predicate: 'editable', recordVersion: 7, termsSha256: 'a'.repeat(64), name: 'Old' } });
 
 function approvalOf(db, { token = true } = {}) {
@@ -82,8 +82,9 @@ async function openWorkspace({ db = makeDb(), token = true, hooks = {} } = {}) {
       approvalFor: async () => approval,
       // `lagging` stands for a lock read that has not yet seen a concurrent edit (a replica, a cache).
       readLock: async () => { const { name, ...lock } = db.row; return db.lagging ? { ...lock, ...db.lagging } : lock; },
-      readRecord: async () => ({ account: db.row.account, recordId: db.row.recordId, recordVersion: db.row.recordVersion,
-        fields: { name: db.row.name } }),
+      // `unreadable` counts reads the system of record cannot answer yet (a timeout, a replica gap).
+      readRecord: async () => (db.unreadable > 0 ? (db.unreadable -= 1, null)
+        : { account: db.row.account, recordId: db.row.recordId, recordVersion: db.row.recordVersion, fields: { name: db.row.name } }),
     },
     adviseWrite: async () => ({ status: 'eligible-for-review' }),
   });
@@ -187,4 +188,22 @@ test('(3) the server rejects a stale token past every client check; the gate rep
       } finally { await ws.close(); }
     }
   }
+});
+
+test('(4) a read-back that cannot be answered keeps the poll going; it is not a confirmed absence', async () => {
+  const ws = await openWorkspace();
+  try {
+    const saved = await ws.write({ beforeSave: () => { ws.db.unreadable = 3; } });
+    assert.deepEqual(ws.db.commits, [{ fromVersion: 7, name: 'Ada' }]);
+    assert.equal(ws.db.unreadable, 0);
+    assert.equal(saved.outcome, 'completed');
+    assert.equal(saved.outcomeBasis, 'commit-verified');
+  } finally { await ws.close(); }
+  // A record that stays unreadable is never reported committed.
+  const dark = await openWorkspace();
+  try {
+    const saved = await dark.write({ beforeSave: () => { dark.db.unreadable = Infinity; } });
+    assert.equal(saved.outcome, 'unknown');
+    assert.equal(saved.outcomeBasis, 'commit-unverified');
+  } finally { await dark.close(); }
 });

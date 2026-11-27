@@ -942,7 +942,8 @@ class WorkspaceService {
     return async effective => {
       const outcome = await run(requestGuard ? { ...effective, requestGuard } : effective);
       let record = await readRecord();
-      for (let waitedMs = 0; record?.recordVersion === approval.lock.recordVersion && waitedMs < completionTimeoutMs;
+      // An unanswered read (no record) is not a confirmed absence: keep polling until the version moves.
+      for (let waitedMs = 0; (!record || record.recordVersion === approval.lock.recordVersion) && waitedMs < completionTimeoutMs;
         waitedMs += completionPollMs) {
         await pause(completionPollMs);
         record = await readRecord();
