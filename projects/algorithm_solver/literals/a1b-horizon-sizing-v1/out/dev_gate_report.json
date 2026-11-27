@@ -1,0 +1,112 @@
+{
+  "schema": "gamma.bits-a1b.dev-gate.v2",
+  "all_pass": true,
+  "wall_seconds": 9.311,
+  "gates": {
+    "gate_1_independent_decode_100pct_fidelity": {
+      "pass": true,
+      "dev_grid_archives_verified_100pct": 630,
+      "cal_grid_archives_verified_100pct": 980,
+      "total_grid_archives_verified_100pct": 1610,
+      "live_isolated_subprocess_archives_verified": 5,
+      "escape_bytes_exercised_and_verified": 4,
+      "samples": [
+        {
+          "K": 0,
+          "archive_bytes": 8810,
+          "escapes": 4
+        },
+        {
+          "K": 64,
+          "archive_bytes": 8591,
+          "escapes": 4
+        },
+        {
+          "K": 512,
+          "archive_bytes": 11076,
+          "escapes": 4
+        },
+        {
+          "K": 2048,
+          "archive_bytes": 22730,
+          "escapes": 4
+        },
+        {
+          "K": 4096,
+          "archive_bytes": 39621,
+          "escapes": 4
+        }
+      ]
+    },
+    "gate_2_exhaustive_score_reproduction": {
+      "pass": true,
+      "locked_predictor_sha256_verified": "03fc39cf87d2b79c9c97e0ec24275909c2cbe91621c059832410c81f9b9cd68f",
+      "calibration_orgs_reproduced": 14,
+      "conformal_rank_k": 14,
+      "conformal_90_upb_full_max_pct": 2.1095,
+      "calibration_queries_exhaustively_reproduced": 28,
+      "arms_verified_per_query": 8
+    },
+    "gate_3_negative_control_corrupted_code_table": {
+      "kraft_underflow_increment": "REJECTED (code table fails exact Kraft equality: 131064 != 131072)",
+      "kraft_overflow_decrement": "REJECTED (code table fails exact Kraft equality: 131088 != 131072)",
+      "kraft_preserving_swap": "REJECTED (mismatched_count=8)",
+      "cli_exit_code_on_corruption": 1,
+      "pass": true
+    },
+    "gate_4_negative_control_leakage_and_59_lineage_disjointness": {
+      "fit_lineage_in_calibration": "REJECTED (fit lineage/org leaked into calibration: codenet_primary (org=ibm_codenet) matches fit codenet_primary (org=ibm_codenet))",
+      "fit_org_in_calibration": "REJECTED (fit lineage/org leaked into calibration: codenet_fresh (org=ibm_codenet) matches fit codenet_primary (org=ibm_codenet))",
+      "disguised_single_file_hash_leak_in_cal": "REJECTED (fit file hash leaked into calibration lineage totally_benign_new_repo: 1 shared files)",
+      "three_way_predictor_fit_leaked_into_stage2_cal": "REJECTED (predictor-fit lineage expressjs_express leaked into split-conformal calibration)",
+      "within_repo_resampling_in_calibration": "REJECTED (calibration lineages ex_a and ex_b share exact file hash 62ebf8ac4e00 (resampling/duplication forbidden))",
+      "capacity_59_lineage_ggml_injected": "REJECTED (calibration org ggml-org (ggml-org/ggml) overlaps 59-lineage capacity registry: ['ggml', 'ggml-org', 'gguf'])",
+      "capacity_59_lineage_ajv_injected": "REJECTED (calibration org ajv-validator (ajv-validator/ajv) overlaps 59-lineage capacity registry: ['ajv', 'ajv-validator'])",
+      "reserved_sealed_domain_yaml_injected": "REJECTED (calibration org yaml-org (yaml/pyyaml, domain=yaml-parser) overlaps reserved sealed domain: ['pyyaml', 'yaml'])",
+      "reserved_sealed_domain_sql_injected": "REJECTED (calibration org sqla-org (sqlalchemy/sqlalchemy, domain=sql-orm) overlaps reserved sealed domain: ['sql', 'sqlalchemy'])",
+      "pass": true
+    },
+    "gate_5_adversarial_synthetic_curves": {
+      "pass": true,
+      "flat_curve_exact_tie_break_full_grid_K": 0,
+      "flat_curve_exact_tie_break_pilot_K": 64,
+      "non_convex_bad_intermediate_trap": {
+        "M_100000": {
+          "exhaustive_K": 4096,
+          "pilot_3pt_K": 4096,
+          "sketch_policy_K": 4096
+        },
+        "M_100000000": {
+          "exhaustive_K": 4096,
+          "pilot_3pt_K": 4096,
+          "sketch_policy_K": 4096
+        }
+      }
+    },
+    "gate_6_abstain_and_end_to_end_shipping": {
+      "pass": true,
+      "locked_predictor_sha256": "03fc39cf87d2b79c9c97e0ec24275909c2cbe91621c059832410c81f9b9cd68f",
+      "split_conformal_n_cal_orgs": 14,
+      "split_conformal_90_upb_full_max_pct": 2.1095,
+      "certifies_2_0pct_sealed_bar": false,
+      "end_to_end_shipping_runs": [
+        {
+          "M": 100000,
+          "decision": "SWEEP_REQUIRED",
+          "locked_direct_K": 512,
+          "chosen_K": 1024,
+          "archive_bytes": 9178,
+          "fidelity": 1.0
+        },
+        {
+          "M": 100000000,
+          "decision": "SWEEP_REQUIRED",
+          "locked_direct_K": 4096,
+          "chosen_K": 2048,
+          "archive_bytes": 17088,
+          "fidelity": 1.0
+        }
+      ]
+    }
+  }
+}
