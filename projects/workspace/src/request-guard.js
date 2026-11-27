@@ -3,10 +3,12 @@
 // While the commit gate dispatches an approved commit, every non-GET/HEAD request the page sends
 // is held at the browser (CDP Fetch domain) and compared with the approval's request rule before
 // it may leave: method and URL, the approved body values, and the approved version at the body
-// path the approval names. One matching write continues; anything else fails in the browser with
+// path the approval names. JSON, urlencoded and multipart/form-data bodies are read; a body that
+// cannot be read exactly is refused. One matching write continues; anything else fails in the browser with
 // BlockedByClient and is reported. Paths and values are data from the approval; no application
 // is named here.
 
+import { createHash } from 'node:crypto';
 import { expectedBodyFields } from './client/branch-verifier.js';
 import { canonicalJson } from './journal.js';
 
@@ -51,18 +53,78 @@ function flatten(value, path, out, depth) {
   return true;
 }
 
-/** Body text of a paused request, or null when the browser did not hand it over. */
-function bodyText(request) {
-  if (typeof request.postData === 'string') return request.postData;
+/** Body bytes of a paused request, or null when the browser did not hand them over. */
+function bodyBytes(request) {
   if (Array.isArray(request.postDataEntries)) {
-    return request.postDataEntries.map(entry => Buffer.from(entry?.bytes ?? '', 'base64').toString('utf8')).join('');
+    return Buffer.concat(request.postDataEntries.map(entry => Buffer.from(entry?.bytes ?? '', 'base64')));
   }
+  if (typeof request.postData === 'string') return Buffer.from(request.postData, 'utf8');
   return null;
 }
 
-/** [path, value] pairs of a JSON or form-encoded body, or null when it cannot be read exactly. */
-function bodyPairs(text) {
-  if (typeof text !== 'string' || text.length > MAX_BODY_CHARS) return null;
+function contentType(request) {
+  const headers = request.headers && typeof request.headers === 'object' ? request.headers : {};
+  const entry = Object.entries(headers).find(([name]) => name.toLowerCase() === 'content-type');
+  return typeof entry?.[1] === 'string' ? entry[1] : '';
+}
+
+const MULTIPART = /^multipart\/form-data\s*;(.*)$/i;
+const BOUNDARY = /(?:^|;)\s*boundary=(?:"([^"]{1,70})"|([^\s";]{1,70}))\s*(?:;|$)/i;
+const DISPOSITION = /^form-data\s*;\s*name="([^"]*)"(?:\s*;\s*filename="([^"]*)")?\s*$/i;
+
+/**
+ * [path, value] pairs of a multipart/form-data body (RFC 7578), or null when it cannot be read
+ * exactly. Text parts read like urlencoded fields; a file part (a filename or its own content type)
+ * becomes { file: { filename, contentType, byteLength, sha256 } }, which passes only where the
+ * approval names its path: that exact file in `fields`, or the path in `allowPaths`. Bytes are split
+ * as latin1 so binary parts stay exact.
+ */
+function multipartPairs(params, bytes) {
+  const match = BOUNDARY.exec(params);
+  if (!match) return null;
+  const delimiter = `--${match[1] ?? match[2]}`;
+  const text = bytes.toString('latin1');
+  if (!text.startsWith(delimiter)) return null;
+  const out = [];
+  let at = delimiter.length;
+  for (;;) {
+    if (text.startsWith('--', at)) {
+      const rest = text.slice(at + 2);
+      return rest === '' || rest === '\r\n' ? out : null;
+    }
+    if (!text.startsWith('\r\n', at)) return null;
+    const end = text.indexOf(`\r\n${delimiter}`, at + 2);
+    if (end < 0) return null;
+    const part = text.slice(at + 2, end);
+    at = end + 2 + delimiter.length;
+    const split = part.indexOf('\r\n\r\n');
+    if (split < 0) return null;
+    const headers = new Map();
+    for (const line of part.slice(0, split).split('\r\n')) {
+      const colon = line.indexOf(':');
+      const name = colon > 0 ? line.slice(0, colon).trim().toLowerCase() : '';
+      if (!['content-disposition', 'content-type'].includes(name) || headers.has(name)) return null;
+      headers.set(name, line.slice(colon + 1).trim());
+    }
+    const disposition = DISPOSITION.exec(headers.get('content-disposition') ?? '');
+    if (!disposition || !disposition[1]) return null;
+    const name = Buffer.from(disposition[1], 'latin1').toString('utf8');
+    const raw = Buffer.from(part.slice(split + 4), 'latin1');
+    if (disposition[2] !== undefined || headers.has('content-type')) {
+      out.push([name, { file: { filename: Buffer.from(disposition[2] ?? '', 'latin1').toString('utf8'),
+        contentType: headers.get('content-type') ?? null, byteLength: raw.length,
+        sha256: createHash('sha256').update(raw).digest('hex') } }]);
+    } else if (!flatten(raw.toString('utf8'), name, out, 1)) return null;
+  }
+}
+
+/** [path, value] pairs of a JSON, form-encoded or multipart body, or null when it cannot be read exactly. */
+function bodyPairs(request) {
+  const bytes = bodyBytes(request);
+  if (!bytes || bytes.length > MAX_BODY_CHARS) return null;
+  const multipart = MULTIPART.exec(contentType(request));
+  if (multipart) return multipartPairs(multipart[1], bytes);
+  const text = bytes.toString('utf8');
   const shape = expectedBodyFields(text);
   if (shape.truncated || !['json', 'urlencoded'].includes(shape.kind)) return null;
   const out = [];
@@ -86,7 +148,7 @@ function checkWriteRequest(rule, version, request) {
   if (method !== rule.method.toUpperCase() || href(request.url) !== rule.url) {
     return refusal('unexpected-write', { method, url: href(request?.url) });
   }
-  const pairs = bodyPairs(bodyText(request));
+  const pairs = bodyPairs(request);
   if (!pairs) return refusal('request-payload-mismatch', { detail: 'unreadable body' });
   const at = path => pairs.filter(([key]) => key === path).map(([, value]) => value);
   const versions = at(rule.versionPath);
