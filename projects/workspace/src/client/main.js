@@ -18,7 +18,7 @@ import { createNativePicker } from './native-picker.js';
 import { startWorkspaceServer } from './server.js';
 
 export async function openWorkspaceApp({ stateDir, port, headless = false, adapter = 'playwright', config: supplied, planner: suppliedPlanner,
-  workflowPersistence = null, workflowTasks = new Map(), browserConfig, browserChannel, nativePicker = null } = {}) {
+  workflowPersistence = null, workflowTasks = new Map(), browserConfig, browserChannel, nativePicker = null, commitAuthority = null } = {}) {
   const config = supplied ?? JSON.parse(await readFile(new URL('../../config/fawn-workspace-client.json', import.meta.url), 'utf8'));
   for (const field of ['port', 'maxBodyBytes', 'maxEvidenceBytes', 'maxRepositoryFiles', 'maxTurns', 'maxInputBytes', 'maxOutputTokens', 'modelTimeoutMs', 'pollMs', 'delegationMaxAgeMs', 'shutdownWaitMs', 'cliTerminationGraceMs']) {
     if (!Number.isSafeInteger(config[field]) || config[field] < (field === 'port' ? 0 : 1)) throw Error(`Invalid client config ${field}`);
@@ -40,7 +40,7 @@ export async function openWorkspaceApp({ stateDir, port, headless = false, adapt
   const factory = { playwright: createPlaywrightAdapter, cdp: createCdpAdapter }[adapter];
   if (!factory) throw Error('Choose playwright or cdp');
   const service = await WorkspaceService.open({ stateDir: join(directory, 'service'),
-    config: serviceConfig, createAdapter: factory });
+    config: serviceConfig, createAdapter: factory, commitAuthority });
   let controller, http;
   try {
     const workflowStore = workflowPersistence ? new WorkflowStore({ ...workflowPersistence,
@@ -73,6 +73,8 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       adapter: value('--adapter'), headless: args.includes('--headless'),
       workflowPersistence: workflowConfig.workflowPersistence ?? null,
       workflowTasks: workflowConfig.workflowTasks ?? new Map(),
+      // The trusted workflow module may supply the host's approval store and record reader.
+      commitAuthority: workflowConfig.commitAuthority ?? null,
       browserConfig: value('--browser-config'), browserChannel: value('--browser-channel'), nativePicker });
     console.log(`Gamma workspace (${app.browser.channel}, ${app.browser.fawnBuild?.runtime.mode ?? 'stock provider'}): ${app.loginUrl}`);
     console.log('Start with human control. Model calls occur only after an explicit delegation.');
