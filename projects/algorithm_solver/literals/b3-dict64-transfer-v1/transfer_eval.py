@@ -607,8 +607,8 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
         "pass_comparison": {
             "pass1_initial": PASS1_HISTORICAL_RECEIPT,
             "pass2_single_general_transform": {
-                "pass_name": "pass2_numeric_copy_sort_specialization",
-                "transform_summary": "General AST lowering of non-mutating numeric copy-sort (<expr>.slice().sort((a,b)=>a-b) and fresh [...].sort((a,b)=>a-b)) to [...new Float64Array(<src>).sort()], eliminating JS comparator callback step doubling without changing frozen_dict64.json or the 1.1x step ceiling.",
+                "pass_name": "pass2_guarded_numeric_copy_sort_specialization",
+                "transform_summary": "General AST lowering of non-mutating numeric copy-sort (<expr>.slice().sort((a,b)=>a-b) and fresh [...].sort((a,b)=>a-b)) to a runtime-guarded Float64Array fast path (verifying Array.isArray, pristine .slice / [Symbol.iterator], dense copy c.every(Number.isFinite), and !c.some(Object.is.bind(null,-0)), falling back verbatim to the original JS comparator sort outside finite non-negative-zero numeric arrays) without changing frozen_dict64.json or the 1.1x step ceiling.",
                 "rewriter_mjs_sha256": current_rewriter_fp["rewriter_mjs_sha256"],
                 "frozen_dict64_sha256": frozen_sha256,
                 "step_ceiling": 1.1,

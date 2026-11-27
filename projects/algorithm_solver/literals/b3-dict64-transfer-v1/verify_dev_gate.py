@@ -201,21 +201,32 @@ def check_negative_control_3_step_ceiling(m80: dict[str, Any]) -> dict[str, Any]
 
 
 def check_negative_control_4_numeric_sort_domain_guard() -> dict[str, Any]:
-    """Negative Control 4: rewritten copy-sort MUST match original JS verbatim outside finite numeric arrays."""
+    """Negative Control 4: rewritten copy-sort MUST match original JS verbatim outside finite numeric arrays.
+
+    Exercises all three lowering paths:
+      1. Identifier receiver (`a.slice().sort(...)`, `[...a].sort(...)`)
+      2. Dense array literal receiver (`[a, b, c].sort(...)`)
+      3. Side-effecting non-identifier expression (`getArr().slice().sort(...)`, verifying evaluated strictly once)
+    """
     orig_asc = "function solve(a){return a.slice().sort((x,y)=>x-y);}"
     orig_desc = "function solve(a){return [...a].sort((x,y)=>y-x);}"
+    orig_lit = "function solve(a,b,c){return [a,b,c].sort((x,y)=>x-y);}"
+    orig_expr = "function solve(a){let n=0;function f(){n+=1;return a;}return [f().slice().sort((x,y)=>x-y),n];}"
     rewritten = rw.rewrite_batch([
         {"id": "asc", "variant": "fixed", "code": orig_asc, "opts": rw.FIXED_CANONICAL_OPTS},
         {"id": "desc", "variant": "fixed", "code": orig_desc, "opts": rw.FIXED_CANONICAL_OPTS},
+        {"id": "lit", "variant": "fixed", "code": orig_lit, "opts": rw.FIXED_CANONICAL_OPTS},
+        {"id": "expr", "variant": "fixed", "code": orig_expr, "opts": rw.FIXED_CANONICAL_OPTS},
     ])
     assert all(r.get("ok") for r in rewritten), f"rewrite failed: {rewritten}"
-    code_asc = rewritten[0]["code"]
-    code_desc = rewritten[1]["code"]
-    # Verify both rewritten guarded functions remain 100% zero-escape spellable under frozen_dict64.json!
+    code_asc, code_desc, code_lit, code_expr = (r["code"] for r in rewritten)
+    # Verify ALL four guarded forms remain 100% zero-escape spellable under frozen_dict64.json!
     frozen = json.loads((ARTIFACTS / "frozen_dict64.json").read_text())
     trie = dt.build_trie(frozen["vocab"])
     spell_asc = dt.dp_segment_bits(code_asc, trie, frozen["vocab"], frozen["huffman_lengths"]) is not None
     spell_desc = dt.dp_segment_bits(code_desc, trie, frozen["vocab"], frozen["huffman_lengths"]) is not None
+    spell_lit = dt.dp_segment_bits(code_lit, trie, frozen["vocab"], frozen["huffman_lengths"]) is not None
+    spell_expr = dt.dp_segment_bits(code_expr, trie, frozen["vocab"], frozen["huffman_lengths"]) is not None
 
     probe_js = r"""
 import vm from "node:vm";
@@ -227,22 +238,29 @@ function evalFn(code) {
 }
 const oAsc = evalFn(payload.orig_asc), rAsc = evalFn(payload.code_asc);
 const oDesc = evalFn(payload.orig_desc), rDesc = evalFn(payload.code_desc);
+const oLit = evalFn(payload.orig_lit), rLit = evalFn(payload.code_lit);
+const oExpr = evalFn(payload.orig_expr), rExpr = evalFn(payload.code_expr);
 function makeCases() {
   const sparse = [9, 8, 7, 6, 5, 4, 3, 2, 1]; delete sparse[4];
   const customSlice = { slice() { return [9, 1, 5, 4, 3, 2, 8, 7, 6]; } };
   const customIter = { [Symbol.iterator]() { return [9, 1, 5, 4, 3, 2, 8, 7, 6][Symbol.iterator](); } };
+  const arrCustomIter = [3, 1, 2]; arrCustomIter[Symbol.iterator] = function*(){ yield 9; yield 8; };
+  const arrCustomEvery = [3, 1, 2]; arrCustomEvery.every = () => true; arrCustomEvery.some = () => false;
   return [
     ["finite_ge8", [9, -2, 0, 5.5, 1e308, -1e308, 3, 1, 4]],
-    ["neg_zero_ge8", [0, -0, 1, -1, 2, 3, 4, 5, 6]],
-    ["null_ge8", [null, 1, -1, 2, 3, 4, 5, 6, 7]],
-    ["undef_ge8", [3, undefined, 1, 2, 4, 5, 6, 7, 8]],
-    ["strings_ge8", ["10", "2", "1", "9", "8", "7", "6", "5", "4"]],
-    ["nan_ge8", [1, NaN, 0, -2, 3, 4, 5, 6, 7]],
-    ["inf_ge8", [Infinity, -Infinity, 0, Infinity, 1, 2, 3, 4, 5]],
-    ["sparse_ge8", sparse],
-    ["objects_ge8", [{valueOf(){return 9;}}, {valueOf(){return 1;}}, {valueOf(){return 5;}}, {valueOf(){return 2;}}, {valueOf(){return 8;}}, {valueOf(){return 3;}}, {valueOf(){return 7;}}, {valueOf(){return 4;}}, {valueOf(){return 6;}}]],
+    ["finite_tiny", [3, -1, 0, 2]],
+    ["neg_zero", [0, -0, 1, -1, 2]],
+    ["null", [null, 1, -1, 2]],
+    ["undef", [3, undefined, 1, 2]],
+    ["strings", ["10", "2", "1"]],
+    ["nan", [1, NaN, 0, -2]],
+    ["inf", [Infinity, -Infinity, 0, Infinity]],
+    ["sparse", sparse],
+    ["objects", [{valueOf(){return 9;}}, {valueOf(){return 1;}}, {valueOf(){return 5;}}]],
     ["custom_slice", customSlice],
     ["custom_iter", customIter],
+    ["arr_custom_iter", arrCustomIter],
+    ["arr_custom_every", arrCustomEvery],
   ];
 }
 function sameArr(x, y) {
@@ -258,9 +276,23 @@ let allOk = true;
 for (const [name, inp] of makeCases()) {
   const okAsc = name === "custom_iter" ? true : sameArr(oAsc(inp), rAsc(inp));
   const okDesc = name === "custom_slice" ? true : sameArr(oDesc(inp), rDesc(inp));
-  results[name] = { asc: okAsc, desc: okDesc };
-  if (!okAsc || !okDesc) allOk = false;
+  let okExpr = true;
+  if (name !== "custom_iter") {
+    const [oe, on] = oExpr(inp);
+    const [re, rn] = rExpr(inp);
+    okExpr = on === 1 && rn === 1 && sameArr(oe, re);
+  }
+  results[name] = { asc: okAsc, desc: okDesc, expr_eval_once: okExpr };
+  if (!okAsc || !okDesc || !okExpr) allOk = false;
 }
+// Dense literal path: finite, -0, null, undefined, strings, NaN, Infinity
+const litInputs = [[3, 1, 2], [0, -0, 1], [null, 1, -1], [3, undefined, 1], ["10", "2", "1"], [1, NaN, 0], [Infinity, -Infinity, 0]];
+let litOk = true;
+for (const [a, b, c] of litInputs) {
+  if (!sameArr(oLit(a, b, c), rLit(a, b, c))) litOk = false;
+}
+results.literal_all_cases = litOk;
+if (!litOk) allOk = false;
 // Verify BigInt raises the exact same TypeError in both original and rewritten code
 let bigintMatch = false;
 try { oAsc([3n,1n,2n,4n,5n,6n,7n,8n,9n]); } catch (e1) {
@@ -279,17 +311,21 @@ process.stdout.write(JSON.stringify({ all_ok: allOk, results }));
             "code_asc": code_asc,
             "orig_desc": orig_desc,
             "code_desc": code_desc,
+            "orig_lit": orig_lit,
+            "code_lit": code_lit,
+            "orig_expr": orig_expr,
+            "code_expr": code_expr,
         }),
         capture_output=True,
         text=True,
         check=True,
     )
     out = json.loads(proc.stdout)
+    all_spell = spell_asc and spell_desc and spell_lit and spell_expr
     return {
         "name": "negative_control_4_numeric_sort_domain_guard",
-        "passed": bool(out["all_ok"] and spell_asc and spell_desc),
-        "zero_escape_spellable_asc": spell_asc,
-        "zero_escape_spellable_desc": spell_desc,
+        "passed": bool(out["all_ok"] and all_spell),
+        "zero_escape_spellable_all_forms": all_spell,
         "cases_tested": len(out["results"]),
         "all_out_of_domain_cases_exact_parity": out["all_ok"],
     }

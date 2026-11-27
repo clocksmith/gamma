@@ -3,7 +3,7 @@
   "frozen_dict_sha256": "70166bd0f6b84af31ab9bc5479cab5bae50b6fe3bb000fdeca85b8e0bb87c135",
   "frozen_dict_byte_identical_verified": true,
   "rewriter_fingerprint": {
-    "rewriter_mjs_sha256": "97ec06d7852b03543bf9a619588b904997df19c3cd983f0ced89e520ec494d8e",
+    "rewriter_mjs_sha256": "6bd15a99a6f8c2dda791646504fc8922843b1f4f24ac3808dc854599edac814b",
     "js_ast_mjs_sha256": "71f28888081eba23c521df3591919aa74fe01f7afedc2d990e52eb8b102710de",
     "rewriter_py_sha256": "4dbbb23d09f42fe0160b3de87740fd2a720bac5b09ea38ffbc7bbecbe9366861"
   },
@@ -34,9 +34,9 @@
       "note": "Initial Pass-1 transfer achieved 72/83 (86.75%) < 90.0% minimum bar (75/83); corrected from erroneous PASS label to FAIL under programmatic contract."
     },
     "pass2_single_general_transform": {
-      "pass_name": "pass2_numeric_copy_sort_specialization",
-      "transform_summary": "General AST lowering of non-mutating numeric copy-sort (<expr>.slice().sort((a,b)=>a-b) and fresh [...].sort((a,b)=>a-b)) to [...new Float64Array(<src>).sort()], eliminating JS comparator callback step doubling without changing frozen_dict64.json or the 1.1x step ceiling.",
-      "rewriter_mjs_sha256": "97ec06d7852b03543bf9a619588b904997df19c3cd983f0ced89e520ec494d8e",
+      "pass_name": "pass2_guarded_numeric_copy_sort_specialization",
+      "transform_summary": "General AST lowering of non-mutating numeric copy-sort (<expr>.slice().sort((a,b)=>a-b) and fresh [...].sort((a,b)=>a-b)) to a runtime-guarded Float64Array fast path (verifying Array.isArray, pristine .slice / [Symbol.iterator], dense copy c.every(Number.isFinite), and !c.some(Object.is.bind(null,-0)), falling back verbatim to the original JS comparator sort outside finite non-negative-zero numeric arrays) without changing frozen_dict64.json or the 1.1x step ceiling.",
+      "rewriter_mjs_sha256": "6bd15a99a6f8c2dda791646504fc8922843b1f4f24ac3808dc854599edac814b",
       "frozen_dict64_sha256": "70166bd0f6b84af31ab9bc5479cab5bae50b6fe3bb000fdeca85b8e0bb87c135",
       "step_ceiling": 1.1,
       "accepted_programs": 76,
@@ -44,17 +44,17 @@
       "total_programs": 83,
       "coverage_rate": 0.9157,
       "wrong_acceptances": 0,
-      "b3h1_complete_bits": 163864,
-      "b3h1_package_bits_excluding_decoder": 148256,
-      "b3p1_fixed6_complete_bits": 184288,
-      "b3p1_fixed6_package_bits_excluding_decoder": 168680,
+      "b3h1_complete_bits": 176944,
+      "b3h1_package_bits_excluding_decoder": 161336,
+      "b3p1_fixed6_complete_bits": 198848,
+      "b3p1_fixed6_package_bits_excluding_decoder": 183240,
       "refusal_reasons": {
         "step_ceiling_exceeded": 5,
         "unspellable_zero_escape": 2
       },
       "status": "PASS",
       "delta_accepted_vs_pass1": 4,
-      "delta_b3h1_complete_bits_vs_pass1": -1632
+      "delta_b3h1_complete_bits_vs_pass1": 11448
     }
   },
   "cohort": {
@@ -93,12 +93,12 @@
     "coverage_rate": 0.9157,
     "coverage_meets_90pct_bar": true,
     "zero_wrong_acceptances": true,
-    "complete_bits": 163864,
+    "complete_bits": 176944,
     "baseline_complete_bits": 219656,
     "complete_bits_le_baseline": true,
     "beats_frozen_matched80_bpe255_canonical_huffman_with_decoder": true,
     "beats_frozen_matched80_bpe255_original_huffman_with_decoder": true,
-    "beats_indomain_dev_bpe256_huffman_with_decoder": true,
+    "beats_indomain_dev_bpe256_huffman_with_decoder": false,
     "beats_indomain_dev_bpe256_fixed8_with_decoder": true,
     "earns_sealed_transfer_evaluation": true,
     "b4_gate_note": "PASS on spent dev transfer earns sealed transfer evaluation only; B4 still requires sealed transfer success AND explicit compute approval."
@@ -114,12 +114,12 @@
     "coverage_rate": 0.9157,
     "coverage_meets_90pct_bar": true,
     "zero_wrong_acceptances": true,
-    "complete_bits": 184288,
+    "complete_bits": 198848,
     "baseline_complete_bits": 277152,
     "complete_bits_le_baseline": true,
     "beats_frozen_matched80_bpe255_canonical_fixed8_with_decoder": true,
     "beats_frozen_matched80_bpe255_canonical_huffman_with_decoder": true,
-    "beats_indomain_dev_bpe256_fixed8_with_decoder": true,
+    "beats_indomain_dev_bpe256_fixed8_with_decoder": false,
     "beats_indomain_dev_bpe256_huffman_with_decoder": false
   },
   "shared_spine": {
@@ -132,18 +132,18 @@
       "independent_decode_verified": 83,
       "independent_decode_b3p1_fixed6_verified": 83,
       "step_compliant_accepted": 76,
-      "max_accepted_step_ratio": 1.064563,
-      "p95_accepted_step_ratio": 1.038126,
-      "median_accepted_step_ratio": 0.999918,
+      "max_accepted_step_ratio": 1.093103,
+      "p95_accepted_step_ratio": 1.041645,
+      "median_accepted_step_ratio": 0.999984,
       "changed_algorithms": 0
     },
     "complete_bits": {
-      "b3h1_huffman_transfer_complete_bits": 163864,
-      "b3h1_huffman_transfer_package_bits_excluding_decoder": 148256,
-      "b3p1_fixed6_transfer_complete_bits": 184288,
-      "b3p1_fixed6_transfer_package_bits_excluding_decoder": 168680,
-      "b3p1_fixed6_transfer_raw_utf8_fallback_complete_bits": 189608,
-      "b3p1_fixed6_transfer_bpe255_fallback_complete_bits": 184288,
+      "b3h1_huffman_transfer_complete_bits": 176944,
+      "b3h1_huffman_transfer_package_bits_excluding_decoder": 161336,
+      "b3p1_fixed6_transfer_complete_bits": 198848,
+      "b3p1_fixed6_transfer_package_bits_excluding_decoder": 183240,
+      "b3p1_fixed6_transfer_raw_utf8_fallback_complete_bits": 204168,
+      "b3p1_fixed6_transfer_bpe255_fallback_complete_bits": 198848,
       "b3p1_fixed6_transfer_breakdown": {
         "format": "B3P1-transfer(B3PT)",
         "width_bits": 6,
@@ -156,29 +156,29 @@
         "primary_header_bits": 2208,
         "fallback_table_bits": 3368,
         "selector_bits": 88,
-        "covered_tokens": 23273,
-        "covered_token_payload_bits": 139638,
-        "covered_framing_bits": 1120,
-        "covered_total_bits": 140968,
-        "padding_bits": 210,
+        "covered_tokens": 25697,
+        "covered_token_payload_bits": 154182,
+        "covered_framing_bits": 1128,
+        "covered_total_bits": 155528,
+        "padding_bits": 218,
         "fallback_stream_bits": 22040,
         "fallback_tokens": 2724,
         "fallback_total_bits": 25496,
         "header_bits": 5576,
-        "coded_stream_bits": 163104,
-        "package_bytes_excluding_decoder": 21085,
-        "package_bits_excluding_decoder": 168680,
+        "coded_stream_bits": 177664,
+        "package_bytes_excluding_decoder": 22905,
+        "package_bits_excluding_decoder": 183240,
         "decoder_machinery_file": "b3_ref_decoder.py",
         "decoder_machinery_bytes": 1951,
         "decoder_machinery_bits": 15608,
-        "complete_bits": 184288,
-        "package_sha256": "b90545ac062f0d2f4cefdf2a36702a9f04a00584162d11b49ade98fa2f6d58d2"
+        "complete_bits": 198848,
+        "package_sha256": "80e260b8c0317d72c600d16f51296c3d09b0b120358493cb356debf1334d7232"
       },
-      "b3_transfer_chosen_complete_bits": 163864,
-      "b3_transfer_chosen_package_bits_excluding_decoder": 148256,
+      "b3_transfer_chosen_complete_bits": 176944,
+      "b3_transfer_chosen_package_bits_excluding_decoder": 161336,
       "b3_transfer_chosen_fallback_mode": "frozen_matched80_bpe255_escape",
-      "b3_transfer_raw_utf8_fallback_complete_bits": 169184,
-      "b3_transfer_bpe255_fallback_complete_bits": 163864,
+      "b3_transfer_raw_utf8_fallback_complete_bits": 182264,
+      "b3_transfer_bpe255_fallback_complete_bits": 176944,
       "b3_transfer_breakdown": {
         "format": "B3H1",
         "fallback_mode": "frozen_matched80_bpe255_escape",
@@ -191,22 +191,22 @@
         "primary_header_bits": 2720,
         "fallback_table_bits": 3368,
         "selector_bits": 88,
-        "covered_tokens": 23273,
-        "covered_payload_bits": 120009,
-        "padding_bits": 23,
+        "covered_tokens": 25697,
+        "covered_payload_bits": 133088,
+        "padding_bits": 24,
         "fallback_stream_bits": 22040,
         "fallback_tokens": 2724,
         "fallback_total_bits": 25496,
         "header_bits": 6088,
-        "coded_stream_bits": 142168,
-        "package_bytes_excluding_decoder": 18532,
-        "package_bits_excluding_decoder": 148256,
+        "coded_stream_bits": 155248,
+        "package_bytes_excluding_decoder": 20167,
+        "package_bits_excluding_decoder": 161336,
         "decoder_machinery_file": "b3_ref_decoder.py",
         "decoder_machinery_bytes": 1951,
         "decoder_machinery_bits": 15608,
         "full_transfer_decoder_bits": 15608,
-        "complete_bits": 163864,
-        "complete_bits_with_full_transfer_decoder": 163864,
+        "complete_bits": 176944,
+        "complete_bits_with_full_transfer_decoder": 176944,
         "huffman_lengths": [
           3,
           4,
@@ -274,9 +274,9 @@
           11,
           7
         ],
-        "package_sha256": "489d81e731cfb847a4495e089be0e6a1c08fa095ea96b7e7eddc73d1c106c183"
+        "package_sha256": "50e8f8270117c59353eadc1009643faf4e4394442b925eaa18689589521b5932"
       },
-      "explicit_hoisted_source_bytes_accepted": 15337,
+      "explicit_hoisted_source_bytes_accepted": 18879,
       "hidden_helper_bits": 0,
       "baseline_frozen_matched80_bpe255_canonical_huffman": {
         "format": "B3B1-huffman",
@@ -388,70 +388,70 @@
       }
     },
     "measured_work": {
-      "orig_verify_seconds": 2.2676,
-      "rewrite_seconds": 0.5591,
-      "selection_seconds": 0.119,
-      "verify_candidates_seconds": 2.2883,
-      "decode_seconds": 0.053293,
-      "decode_p95_ms_per_program": 0.3177,
-      "reexec_decoded_seconds": 2.4571,
-      "total_wall_seconds": 12.3162,
-      "peak_rss_bytes": 144949248,
+      "orig_verify_seconds": 3.1136,
+      "rewrite_seconds": 0.7834,
+      "selection_seconds": 0.1679,
+      "verify_candidates_seconds": 2.6652,
+      "decode_seconds": 0.068401,
+      "decode_p95_ms_per_program": 0.412,
+      "reexec_decoded_seconds": 2.6332,
+      "total_wall_seconds": 14.5512,
+      "peak_rss_bytes": 143441920,
       "measured_step_counts": {
         "total_original_steps": 32154741,
         "accepted_original_steps": 31950456,
-        "accepted_rewritten_steps": 32156933,
-        "max_accepted_step_ratio": 1.064563
+        "accepted_rewritten_steps": 32159865,
+        "max_accepted_step_ratio": 1.093103
       }
     },
     "horizon": {
       "vs_frozen_matched80_bpe255_canonical_huffman": {
         "fixed_overhead_bits": 21696,
-        "b3_marginal_bits_per_program": 1712.87,
+        "b3_marginal_bits_per_program": 1870.46,
         "baseline_bits_per_program": 2646.46,
-        "marginal_savings_bits_per_program": 933.59,
-        "break_even_programs": 24,
-        "break_even_raw_bytes": 14657.1
+        "marginal_savings_bits_per_program": 776.0,
+        "break_even_programs": 28,
+        "break_even_raw_bytes": 17099.9
       },
       "vs_indomain_dev_bpe256_huffman": {
         "fixed_overhead_bits": 21696,
-        "b3_marginal_bits_per_program": 1712.87,
+        "b3_marginal_bits_per_program": 1870.46,
         "baseline_bits_per_program": 2116.34,
-        "marginal_savings_bits_per_program": 403.47,
-        "break_even_programs": 54,
-        "break_even_raw_bytes": 32978.4
+        "marginal_savings_bits_per_program": 245.88,
+        "break_even_programs": 89,
+        "break_even_raw_bytes": 54353.3
       },
       "vs_raw_utf8": {
         "fixed_overhead_bits": 21696,
-        "b3_marginal_bits_per_program": 1712.87,
+        "b3_marginal_bits_per_program": 1870.46,
         "baseline_bits_per_program": 4885.69,
-        "marginal_savings_bits_per_program": 3172.82,
-        "break_even_programs": 7,
-        "break_even_raw_bytes": 4275.0
+        "marginal_savings_bits_per_program": 3015.23,
+        "break_even_programs": 8,
+        "break_even_raw_bytes": 4885.7
       },
       "b3p1_fixed6_vs_frozen_matched80_bpe255_canonical_fixed8": {
         "fixed_overhead_bits": 21184,
-        "b3_marginal_bits_per_program": 1965.11,
+        "b3_marginal_bits_per_program": 2140.53,
         "baseline_bits_per_program": 3339.18,
-        "marginal_savings_bits_per_program": 1374.07,
-        "break_even_programs": 16,
-        "break_even_raw_bytes": 9771.4
+        "marginal_savings_bits_per_program": 1198.65,
+        "break_even_programs": 18,
+        "break_even_raw_bytes": 10992.8
       },
       "b3p1_fixed6_vs_frozen_matched80_bpe255_canonical_huffman": {
         "fixed_overhead_bits": 21184,
-        "b3_marginal_bits_per_program": 1965.11,
+        "b3_marginal_bits_per_program": 2140.53,
         "baseline_bits_per_program": 2646.46,
-        "marginal_savings_bits_per_program": 681.35,
-        "break_even_programs": 32,
-        "break_even_raw_bytes": 19542.7
+        "marginal_savings_bits_per_program": 505.93,
+        "break_even_programs": 42,
+        "break_even_raw_bytes": 25649.9
       },
       "b3p1_fixed6_vs_indomain_dev_bpe256_fixed8": {
         "fixed_overhead_bits": 21184,
-        "b3_marginal_bits_per_program": 1965.11,
+        "b3_marginal_bits_per_program": 2140.53,
         "baseline_bits_per_program": 2347.28,
-        "marginal_savings_bits_per_program": 382.17,
-        "break_even_programs": 56,
-        "break_even_raw_bytes": 34199.8
+        "marginal_savings_bits_per_program": 206.75,
+        "break_even_programs": 103,
+        "break_even_raw_bytes": 62903.2
       }
     }
   },
@@ -533,6 +533,44 @@
     "runtime_tails_accepted": {
       "top_5_step_ratios": [
         {
+          "id": 3899,
+          "slug": "angles-of-a-triangle",
+          "cohort": "continuation-n-20261028-v1",
+          "family": "geometry_matrix_graph",
+          "raw_bytes": 349,
+          "accepted": true,
+          "refusal_reason": null,
+          "fixed_canonical_spellable": true,
+          "chosen_variant": "pfirst_pluseq_push2a_min",
+          "rewritten_bytes": 1316,
+          "tokens": 699,
+          "fixed6_tokens": 699,
+          "cases_passed": 64,
+          "cases_total": 64,
+          "original_steps": 870,
+          "rewritten_steps": 951,
+          "step_ratio": 1.093103
+        },
+        {
+          "id": 3934,
+          "slug": "smallest-unique-subarray",
+          "cohort": "continuation-o-20261028-v1",
+          "family": "string_window_sequence",
+          "raw_bytes": 1754,
+          "accepted": true,
+          "refusal_reason": null,
+          "fixed_canonical_spellable": true,
+          "chosen_variant": "pfirst_pp_push2a_min",
+          "rewritten_bytes": 2225,
+          "tokens": 1326,
+          "fixed6_tokens": 1326,
+          "cases_passed": 64,
+          "cases_total": 64,
+          "original_steps": 51372,
+          "rewritten_steps": 54762,
+          "step_ratio": 1.065989
+        },
+        {
           "id": 3836,
           "slug": "maximum-score-using-exactly-k-pairs",
           "cohort": "continuation-j-20261028-v1",
@@ -550,25 +588,6 @@
           "original_steps": 20120,
           "rewritten_steps": 21419,
           "step_ratio": 1.064563
-        },
-        {
-          "id": 3934,
-          "slug": "smallest-unique-subarray",
-          "cohort": "continuation-o-20261028-v1",
-          "family": "string_window_sequence",
-          "raw_bytes": 1754,
-          "accepted": true,
-          "refusal_reason": null,
-          "fixed_canonical_spellable": true,
-          "chosen_variant": "pfirst_pp_push2a_min",
-          "rewritten_bytes": 1524,
-          "tokens": 968,
-          "fixed6_tokens": 968,
-          "cases_passed": 64,
-          "cases_total": 64,
-          "original_steps": 51372,
-          "rewritten_steps": 54204,
-          "step_ratio": 1.055127
         },
         {
           "id": 3625,
@@ -607,25 +626,6 @@
           "original_steps": 8944,
           "rewritten_steps": 9285,
           "step_ratio": 1.038126
-        },
-        {
-          "id": 3867,
-          "slug": "sum-of-gcd-of-formed-pairs",
-          "cohort": "continuation-l-20261028-v1",
-          "family": "math_bitwise_combinatorics",
-          "raw_bytes": 468,
-          "accepted": true,
-          "refusal_reason": null,
-          "fixed_canonical_spellable": true,
-          "chosen_variant": "pfirst_pp_push2a_min",
-          "rewritten_bytes": 381,
-          "tokens": 201,
-          "fixed6_tokens": 201,
-          "cases_passed": 64,
-          "cases_total": 64,
-          "original_steps": 16098,
-          "rewritten_steps": 16370,
-          "step_ratio": 1.016897
         }
       ]
     }
@@ -678,15 +678,15 @@
       "accepted": true,
       "refusal_reason": null,
       "fixed_canonical_spellable": true,
-      "chosen_variant": "freq_pp_push2a_min",
-      "rewritten_bytes": 232,
-      "tokens": 120,
-      "fixed6_tokens": 120,
+      "chosen_variant": "pfirst_pp_push2a_min",
+      "rewritten_bytes": 965,
+      "tokens": 496,
+      "fixed6_tokens": 496,
       "cases_passed": 22,
       "cases_total": 22,
       "original_steps": 462,
-      "rewritten_steps": 245,
-      "step_ratio": 0.530303
+      "rewritten_steps": 324,
+      "step_ratio": 0.701299
     },
     {
       "id": 3628,
@@ -736,14 +736,14 @@
       "refusal_reason": null,
       "fixed_canonical_spellable": true,
       "chosen_variant": "freq_pp_push2a_min",
-      "rewritten_bytes": 308,
-      "tokens": 167,
-      "fixed6_tokens": 167,
+      "rewritten_bytes": 1043,
+      "tokens": 545,
+      "fixed6_tokens": 545,
       "cases_passed": 23,
       "cases_total": 23,
       "original_steps": 1158,
-      "rewritten_steps": 885,
-      "step_ratio": 0.764249
+      "rewritten_steps": 967,
+      "step_ratio": 0.83506
     },
     {
       "id": 3635,
@@ -1191,15 +1191,15 @@
       "accepted": true,
       "refusal_reason": null,
       "fixed_canonical_spellable": true,
-      "chosen_variant": "freq_pp_push2a_min",
-      "rewritten_bytes": 322,
-      "tokens": 166,
-      "fixed6_tokens": 166,
+      "chosen_variant": "pfirst_pp_push2a_min",
+      "rewritten_bytes": 1057,
+      "tokens": 544,
+      "fixed6_tokens": 544,
       "cases_passed": 64,
       "cases_total": 64,
       "original_steps": 1259,
-      "rewritten_steps": 950,
-      "step_ratio": 0.754567
+      "rewritten_steps": 1104,
+      "step_ratio": 0.876886
     },
     {
       "id": 3781,
@@ -1420,14 +1420,14 @@
       "refusal_reason": null,
       "fixed_canonical_spellable": true,
       "chosen_variant": "freq_pp_push2a_min",
-      "rewritten_bytes": 875,
-      "tokens": 504,
-      "fixed6_tokens": 504,
+      "rewritten_bytes": 1271,
+      "tokens": 697,
+      "fixed6_tokens": 697,
       "cases_passed": 64,
       "cases_total": 64,
       "original_steps": 28774,
-      "rewritten_steps": 26221,
-      "step_ratio": 0.911274
+      "rewritten_steps": 27541,
+      "step_ratio": 0.957149
     },
     {
       "id": 3821,
@@ -1856,15 +1856,15 @@
       "accepted": true,
       "refusal_reason": null,
       "fixed_canonical_spellable": true,
-      "chosen_variant": "freq_pluseq_push2a_min",
-      "rewritten_bytes": 572,
-      "tokens": 312,
-      "fixed6_tokens": 312,
+      "chosen_variant": "pfirst_pluseq_push2a_min",
+      "rewritten_bytes": 1316,
+      "tokens": 699,
+      "fixed6_tokens": 699,
       "cases_passed": 64,
       "cases_total": 64,
       "original_steps": 870,
-      "rewritten_steps": 746,
-      "step_ratio": 0.857471
+      "rewritten_steps": 951,
+      "step_ratio": 1.093103
     },
     {
       "id": 3900,
@@ -2047,14 +2047,14 @@
       "refusal_reason": null,
       "fixed_canonical_spellable": true,
       "chosen_variant": "freq_pp_push2a_min",
-      "rewritten_bytes": 975,
-      "tokens": 588,
-      "fixed6_tokens": 588,
+      "rewritten_bytes": 1672,
+      "tokens": 942,
+      "fixed6_tokens": 942,
       "cases_passed": 64,
       "cases_total": 64,
       "original_steps": 11052,
-      "rewritten_steps": 10399,
-      "step_ratio": 0.940916
+      "rewritten_steps": 10933,
+      "step_ratio": 0.989233
     },
     {
       "id": 3918,
@@ -2142,14 +2142,14 @@
       "refusal_reason": null,
       "fixed_canonical_spellable": true,
       "chosen_variant": "pfirst_pp_push2a_min",
-      "rewritten_bytes": 1524,
-      "tokens": 968,
-      "fixed6_tokens": 968,
+      "rewritten_bytes": 2225,
+      "tokens": 1326,
+      "fixed6_tokens": 1326,
       "cases_passed": 64,
       "cases_total": 64,
       "original_steps": 51372,
-      "rewritten_steps": 54204,
-      "step_ratio": 1.055127
+      "rewritten_steps": 54762,
+      "step_ratio": 1.065989
     },
     {
       "id": 3937,

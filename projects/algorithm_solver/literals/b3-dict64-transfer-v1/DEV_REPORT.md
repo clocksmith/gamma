@@ -4,9 +4,9 @@
 
 - **matched80 Witness Decision:** `PASS` (80/80 zero-escape, 8,412/8,412 tests, max `1.0331x` steps)
 - **Dev Transfer Decision (Pass 1, initial rewriter):** `FAIL` (`72/83` = `86.75%` < `90.0%` minimum bar; previous `PASS` label corrected to `FAIL`)
-- **Dev Transfer Decision (Pass 2, single general transform, `B3H1` Huffman):** `PASS` (`76/83` = `91.57%`, `wrong_acceptances=0`, complete bits `163864` vs `219656`)
-- **Dev Transfer Decision (Pass 2, `B3P1` Fixed-6-bit):** `PASS` (`76/83` = `91.57%`, complete bits `184288` vs `277152` fixed-8 and `219656` Huffman)
-- **dev_gate Verification:** `PASS` (9/9 gates & negative controls passed)
+- **Dev Transfer Decision (Pass 2, single general transform, `B3H1` Huffman):** `PASS` (`76/83` = `91.57%`, `wrong_acceptances=0`, complete bits `176944` vs `219656`)
+- **Dev Transfer Decision (Pass 2, `B3P1` Fixed-6-bit):** `PASS` (`76/83` = `91.57%`, complete bits `198848` vs `277152` fixed-8 and `219656` Huffman)
+- **dev_gate Verification:** `PASS` (10/10 gates & negative controls passed)
 - **Frozen Dictionary SHA-256 (`artifacts/frozen_dict64.json`):** `70166bd0f6b84af31ab9bc5479cab5bae50b6fe3bb000fdeca85b8e0bb87c135` (byte-for-byte unchanged across Pass 1 and Pass 2; step ceiling fixed at `1.1x`)
 - **Next-Stage Gate Note:** PASS on spent dev transfer earns sealed transfer evaluation only; B4 still requires sealed transfer success AND explicit compute approval.
 
@@ -38,8 +38,8 @@
 
 | Package / Comparator | Coding Regime | Package Bits (excl. dec) | Decoder Bits | Complete Bits | Delta vs Frozen `m80` BPE-255 Huff | Delta vs Frozen `m80` BPE-255 Fixed-8 |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| **B3 Transfer `B3H1` (Huffman)** | Frozen Huff 64-entry + charged fallback (`frozen_matched80_bpe255_escape`) | **148256** | **15608** | **163864** | **-55792** | **-113288** |
-| **B3 Transfer `B3P1` (Fixed-6-bit)** | Fixed 6 bits/token + charged fallback (`frozen_matched80_bpe255_escape`) | **168680** | **15608** | **184288** | **-35368** | **-92864** |
+| **B3 Transfer `B3H1` (Huffman)** | Frozen Huff 64-entry + charged fallback (`frozen_matched80_bpe255_escape`) | **161336** | **15608** | **176944** | **-42712** | **-100208** |
+| **B3 Transfer `B3P1` (Fixed-6-bit)** | Fixed 6 bits/token + charged fallback (`frozen_matched80_bpe255_escape`) | **183240** | **15608** | **198848** | **-20808** | **-78304** |
 | Frozen `matched80` BPE-255+esc (`canonical` Huff) | Frozen raw BPE + Huffman | 219656 | 0 (free) | 219656 | +0 | -57496 |
 | Frozen `matched80` BPE-255+esc (`canonical` F8) | Frozen raw BPE + Fixed-8 | 277152 | 0 (free) | 277152 | +57496 | +0 |
 | Frozen `matched80` BPE-255+esc (`original` Huff / F8) | Frozen raw BPE (`original`) | 221056 / 266720 | 0 (free) | 221056 / 266720 | +1400 | -10432 |
@@ -61,13 +61,13 @@
 
 ## 4. Dev Transfer Pass 1 vs Pass 2 (Fixed Dict64 + Fixed 1.1x Step Ceiling)
 
-- **Single General Pass-2 Rewriter Transformation:** General AST lowering of non-mutating numeric copy-sort (<expr>.slice().sort((a,b)=>a-b) and fresh [...].sort((a,b)=>a-b)) to [...new Float64Array(<src>).sort()], eliminating JS comparator callback step doubling without changing frozen_dict64.json or the 1.1x step ceiling.
+- **Single General Pass-2 Rewriter Transformation:** General AST lowering of non-mutating numeric copy-sort (<expr>.slice().sort((a,b)=>a-b) and fresh [...].sort((a,b)=>a-b)) to a runtime-guarded Float64Array fast path (verifying Array.isArray, pristine .slice / [Symbol.iterator], dense copy c.every(Number.isFinite), and !c.some(Object.is.bind(null,-0)), falling back verbatim to the original JS comparator sort outside finite non-negative-zero numeric arrays) without changing frozen_dict64.json or the 1.1x step ceiling.
 - **Frozen Dictionary Check:** `artifacts/frozen_dict64.json` SHA-256 = `70166bd0f6b84af31ab9bc5479cab5bae50b6fe3bb000fdeca85b8e0bb87c135` (identical before and after Pass 2; 0 dictionary entries changed).
 
 | Pass | Rewriter `rewriter.mjs` SHA-256 | Accepted / Total | Coverage | Wrong Acceptances | Refusal Breakdown | `B3H1` Complete Bits | `B3P1` Fixed-6 Complete Bits | Decision (`>=90%` Bar) |
 | --- | --- | ---: | ---: | ---: | --- | ---: | ---: | --- |
 | Pass 1 (initial) | `3dd7d6e114ee` | 72/83 | 86.75% | 0 | `{"step_ceiling_exceeded": 9, "unspellable_zero_escape": 2}` | 165496 | n/a (added in Pass 2) | **`FAIL`** |
-| **Pass 2 (numeric copy-sort)** | `97ec06d7852b` | **76/83** (`+4`) | **91.57%** | **0** | `{"step_ceiling_exceeded": 5, "unspellable_zero_escape": 2}` | **163864** (`-1632`) | **184288** | **`PASS`** |
+| **Pass 2 (numeric copy-sort)** | `6bd15a99a6f8` | **76/83** (`+4`) | **91.57%** | **0** | `{"step_ceiling_exceeded": 5, "unspellable_zero_escape": 2}` | **176944** (`+11448`) | **198848** | **`PASS`** |
 
 ### Problem Family Transfer Breakdown (Pass 2, Every Uncovered Family Reported)
 
@@ -91,15 +91,15 @@
 - **fidelity:** 80/80 covered (0 escapes), 8412/8412 frozen tests passed, 80/80 <= 1.1x steps (median=0.938093x, p95=1.001011x, max=1.033086x), independent decode=80/80, wrong_acceptances=0, changed_algorithms=0.
 - **complete_bits (`B3H1` Huffman):** `81480` bits (`header=2720`, `stream=68920`, `decoder=9840`, `hidden_helpers=0`, explicit hoisted constants inside stream=`14259` bits across 50 programs).
 - **complete_bits (`B3P1` Fixed-6-bit):** `93048` bits (`header=2200`, `stream=81008`, `decoder=9840`).
-- **measured_work:** total wall=69.1564s (rewrite=0.2704s, arm2_build=5.4866s, arm3_selection=1.4651s, cand_verify=1.2124s, witness_reexec=0.2403s, decode=0.038935s, decode_p95=0.1702 ms/prog), peak RSS=144,949,248 B, measured steps=780,590 vs original 831,226 (agg ratio=0.939083x).
+- **measured_work:** total wall=62.8098s (rewrite=0.2989s, arm2_build=6.3239s, arm3_selection=1.6601s, cand_verify=1.3495s, witness_reexec=0.2767s, decode=0.047393s, decode_p95=0.2198 ms/prog), peak RSS=143,441,920 B, measured steps=780,590 vs original 831,226 (agg ratio=0.939083x).
 - **horizon H*:** `B3H1` vs Arm 4 `canonical` Huff BPE-256 = `73` programs (36926.1 raw B), vs `original` Huff = `11` programs; `B3P1` fixed-6 vs Arm 4 `canonical` Fixed-8 = `102` programs, vs `original` Fixed-8 = `10` programs.
 
 ### Dev Transfer (Disjoint 83 Spent JS Problems, Pass 2)
-- **fidelity:** 76/83 accepted (0 escapes), 7 refused -> charged raw fallback, wrong_acceptances=0, accepted step ratio median=0.999918x / p95=1.038126x / max=1.064563x.
-- **complete_bits (`B3H1` Huffman):** `163864` bits (`primary_header=2720`, `fallback_total=25496`, `covered_stream=120009`, `decoder=15608`; raw-UTF8 fallback option = `169184` bits).
-- **complete_bits (`B3P1` Fixed-6-bit):** `184288` bits (`primary_header=2208`, `fallback_total=25496`, `covered_total=140968`, `decoder=15608`; raw-UTF8 fallback option = `189608` bits).
-- **measured_work:** total wall=12.3162s (rewrite=0.5591s, selection=0.119s, verify=2.2883s, decode=0.053293s, decode_p95=0.3177 ms/prog, reexec=2.4571s), peak RSS=144,949,248 B, measured steps=32,156,933 vs original 31,950,456 on accepted programs.
-- **horizon H*:** `B3H1` vs frozen `matched80` BPE-255 `canonical` Huff = `24` programs, vs in-domain dev BPE-256 Huff = `54` programs; `B3P1` fixed-6 vs frozen `matched80` BPE-255 `canonical` Fixed-8 = `16` programs, vs `canonical` Huff = `32` programs.
+- **fidelity:** 76/83 accepted (0 escapes), 7 refused -> charged raw fallback, wrong_acceptances=0, accepted step ratio median=0.999984x / p95=1.041645x / max=1.093103x.
+- **complete_bits (`B3H1` Huffman):** `176944` bits (`primary_header=2720`, `fallback_total=25496`, `covered_stream=133088`, `decoder=15608`; raw-UTF8 fallback option = `182264` bits).
+- **complete_bits (`B3P1` Fixed-6-bit):** `198848` bits (`primary_header=2208`, `fallback_total=25496`, `covered_total=155528`, `decoder=15608`; raw-UTF8 fallback option = `204168` bits).
+- **measured_work:** total wall=14.5512s (rewrite=0.7834s, selection=0.1679s, verify=2.6652s, decode=0.068401s, decode_p95=0.412 ms/prog, reexec=2.6332s), peak RSS=143,441,920 B, measured steps=32,159,865 vs original 31,950,456 on accepted programs.
+- **horizon H*:** `B3H1` vs frozen `matched80` BPE-255 `canonical` Huff = `28` programs, vs in-domain dev BPE-256 Huff = `89` programs; `B3P1` fixed-6 vs frozen `matched80` BPE-255 `canonical` Fixed-8 = `18` programs, vs `canonical` Huff = `42` programs.
 
 ## 6. Diagnostics: Rewrite Yield, Dictionary Utilization & Runtime Tails
 
@@ -107,7 +107,7 @@
 - **Dictionary utilization:** `matched80` uses 64/64 entries (100.0%); min multi-char fit support = 3 programs (>=2 enforced). On dev transfer, 62/64 entries are used (96.9%); unused on transfer: `[' in ', 'throw(']`.
 - **Changed algorithms:** `0` across both cohorts (strictly semantics-preserving AST canonicalization).
 - **Witness top-5 runtime-step ratios:** #1046=1.0331x, #9=1.0075x, #14=1.0031x, #3=1.0011x, #58=1.0010x
-- **Transfer top-5 accepted runtime-step ratios:** #3836=1.0646x, #3934=1.0551x, #3625=1.0416x, #3742=1.0381x, #3867=1.0169x
+- **Transfer top-5 accepted runtime-step ratios:** #3899=1.0931x, #3934=1.0660x, #3836=1.0646x, #3625=1.0416x, #3742=1.0381x
 
 ## 7. `dev_gate` Verification & Mandatory Negative Controls
 
@@ -122,6 +122,7 @@
 | `NC1_hidden_helper_rejected` | **PASS** | {"name": "negative_control_1_hidden_helper", "passed": true, "subcheck_undeclared_free_helper_rejected": true, "subcheck_undeclared_reason": "undeclared_or_hidden_helper", "subcheck_injected_helper_rejected": true, "subcheck_injected_reason": "injected_hidden_helper_forbidden"} |
 | `NC2_invalid_dict_id_rejected` | **PASS** | {"name": "negative_control_2_invalid_dict_id", "passed": true, "subcheck_b3p1_invalid_id_rejected": true, "subcheck_b3p1_error": "invalid dictionary ID 63 (vocab_len=5)", "subcheck_b3h1_over64_rejected_independent": true, "subcheck_b3h1_over64_rejected_ref_decoder": true, "subcheck_b3h1_error": "dictionary size 65 outside [1, 64]", "subcheck_b3h1_corrupt_huffman_rejected": true} |
 | `NC3_step_ceiling_exceeded_rejected` | **PASS** | {"name": "negative_control_3_step_ceiling", "passed": true, "problem_id": 136, "all_outputs_correct": true, "original_steps": 3679, "slow_steps": 18232, "step_ratio": 4.9557, "rejected_by_1_1x_ceiling": true} |
+| `NC4_numeric_sort_domain_guard` | **PASS** | {"name": "negative_control_4_numeric_sort_domain_guard", "passed": true, "zero_escape_spellable_all_forms": true, "cases_tested": 16, "all_out_of_domain_cases_exact_parity": true} |
 
 ## Reproduce
 

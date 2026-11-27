@@ -506,6 +506,8 @@ function canonicalizeSyntax(ast, opts) {
   // ZERO per-element `h[0]=...;h[1]=...;` assignment boilerplate!
   const HOIST_BASE = "__H";
   const HOIST_DEP = "__D";
+  const HOIST_SCRATCH = "__C";
+  let usesSortScratch = false;
   const baseExprs = [];
   const baseIndex = new Map();
   const depExprs = [];
@@ -570,203 +572,169 @@ function canonicalizeSyntax(ast, opts) {
     }));
   }
 
-  function getGuardedNumericSortHelper(kind, dir) {
-    // Hoisted standalone runtime domain guard inside `__D` (zero external helpers, zero escapes).
+  function buildGuardedNumericSortExpr(kind, dir, srcTx) {
+    // Sealed O(1)-step runtime domain guard (zero external helpers, zero escapes under frozen_dict64.json).
     // Fast-paths to Float64Array sort ONLY when:
-    //   1. Receiver is a true Array with unmodified `.slice` (for slice) or `[Symbol.iterator]` (for spread),
-    //   2. Length >= 8 (avoids O(n) guard overhead on tiny arrays), and
-    //   3. Every element is a finite IEEE-754 number excluding -0 (Number.isFinite(v) && (v !== 0 || 1/v === 1/0)),
-    //      rejecting null, undefined, sparse holes, strings, booleans, BigInt, Symbol, objects, NaN, +/-Infinity, and -0.
-    // Any input outside this sealed numeric domain falls back verbatim to the exact original JS comparator sort.
-    return getDepRef(`NSORT:${kind}:${dir}`, () => {
-      const sId = () => ({ type: "Identifier", name: "__s" });
-      const oId = () => ({ type: "Identifier", name: "__o" });
-      const iId = () => ({ type: "Identifier", name: "__i" });
-      const vId = () => ({ type: "Identifier", name: "__v" });
-      const aId = () => ({ type: "Identifier", name: "__a" });
-      const bId = () => ({ type: "Identifier", name: "__b" });
-
-      const nfRef = getBaseRef("NF:Number.isFinite", () => ({
+    //   1. For slice/spread: receiver is a true Array with pristine `[Symbol.iterator]` (and `.slice` for `slice`),
+    //      and dense copy `c = [...s]` passes `c.every(Number.isFinite)` && `!c.some(Object.is.bind(null, -0))`.
+    //   2. For dense array literal: fresh literal `c = [e1,...]` passes `c.every(Number.isFinite)` && `!c.some(Object.is.bind(null, -0))`.
+    // Rejects sparse holes, null, undefined, strings, booleans, BigInt, Symbol, objects, NaN, +/-Infinity, -0,
+    // custom iterators, custom .slice, and custom own .every/.some without coercing or changing error behavior,
+    // falling back verbatim to the exact original JS comparator sort.
+    const nfRef = () => getBaseRef("NF:Number.isFinite", () => ({
+      type: "MemberExpression",
+      object: {
+        type: "MemberExpression",
+        object: { type: "ThisExpression" },
+        property: buildFromCharCodeExpr("Number"),
+        computed: true,
+        optional: false,
+      },
+      property: buildFromCharCodeExpr("isFinite"),
+      computed: true,
+      optional: false,
+    }));
+    const isNegZeroRef = () => getBaseRef("NZ:Object.is.bind(-0)", () => ({
+      type: "CallExpression",
+      callee: {
         type: "MemberExpression",
         object: {
-          type: "MemberExpression",
-          object: { type: "ThisExpression" },
-          property: buildFromCharCodeExpr("Number"),
-          computed: true,
-          optional: false,
-        },
-        property: buildFromCharCodeExpr("isFinite"),
-        computed: true,
-        optional: false,
-      }));
-      const isArrayCall = {
-        type: "CallExpression",
-        callee: {
-          type: "MemberExpression",
-          object: { type: "Identifier", name: "Array" },
-          property: lowerStringExpr("isArray", true),
-          computed: true,
-          optional: false,
-        },
-        arguments: [sId()],
-        optional: false,
-      };
-      const arrProtoRef = () => ({
-        type: "MemberExpression",
-        object: { type: "Identifier", name: "Array" },
-        property: lowerStringExpr("prototype", true),
-        computed: true,
-        optional: false,
-      });
-
-      let receiverOk;
-      if (kind === "slice") {
-        receiverOk = {
-          type: "LogicalExpression",
-          operator: "&&",
-          left: isArrayCall,
-          right: {
-            type: "BinaryExpression",
-            operator: "===",
-            left: {
-              type: "MemberExpression",
-              object: sId(),
-              property: lowerStringExpr("slice", true),
-              computed: true,
-              optional: false,
-            },
-            right: {
-              type: "MemberExpression",
-              object: arrProtoRef(),
-              property: lowerStringExpr("slice", true),
-              computed: true,
-              optional: false,
-            },
-          },
-        };
-      } else if (kind === "spread") {
-        const symIterRef = getBaseRef("SYM:Symbol.iterator", () => ({
           type: "MemberExpression",
           object: {
             type: "MemberExpression",
             object: { type: "ThisExpression" },
-            property: buildFromCharCodeExpr("Symbol"),
+            property: buildFromCharCodeExpr("Object"),
             computed: true,
             optional: false,
           },
-          property: buildFromCharCodeExpr("iterator"),
+          property: buildFromCharCodeExpr("is"),
           computed: true,
           optional: false,
-        }));
-        receiverOk = {
-          type: "LogicalExpression",
-          operator: "&&",
-          left: isArrayCall,
-          right: {
-            type: "BinaryExpression",
-            operator: "===",
-            left: {
-              type: "MemberExpression",
-              object: sId(),
-              property: cloneAst(symIterRef),
-              computed: true,
-              optional: false,
-            },
-            right: {
-              type: "MemberExpression",
-              object: arrProtoRef(),
-              property: symIterRef,
-              computed: true,
-              optional: false,
-            },
-          },
-        };
-      } else {
-        receiverOk = { type: "UnaryExpression", operator: "!", prefix: true, argument: { type: "Literal", value: 0, raw: "0" } };
-      }
-
-      const lenExpr = () => ({
-        type: "MemberExpression",
-        object: sId(),
-        property: { type: "Identifier", name: "length" },
-        computed: false,
+        },
+        property: buildFromCharCodeExpr("bind"),
+        computed: true,
         optional: false,
-      });
+      },
+      arguments: [
+        { type: "Literal", value: null, raw: "null" },
+        { type: "UnaryExpression", operator: "-", prefix: true, argument: { type: "Literal", value: 0, raw: "0" } },
+      ],
+      optional: false,
+    }));
+    const symIterRef = () => getBaseRef("SYM:Symbol.iterator", () => ({
+      type: "MemberExpression",
+      object: {
+        type: "MemberExpression",
+        object: { type: "ThisExpression" },
+        property: buildFromCharCodeExpr("Symbol"),
+        computed: true,
+        optional: false,
+      },
+      property: buildFromCharCodeExpr("iterator"),
+      computed: true,
+      optional: false,
+    }));
+    const arrProtoRef = () => ({
+      type: "MemberExpression",
+      object: { type: "Identifier", name: "Array" },
+      property: lowerStringExpr("prototype", true),
+      computed: true,
+      optional: false,
+    });
 
-      const elemValid = {
-        type: "LogicalExpression",
-        operator: "&&",
-        left: { type: "CallExpression", callee: nfRef, arguments: [vId()], optional: false },
-        right: {
-          type: "LogicalExpression",
-          operator: "||",
-          left: { type: "BinaryExpression", operator: "!==", left: vId(), right: { type: "Literal", value: 0, raw: "0" } },
-          right: {
-            type: "BinaryExpression",
-            operator: "===",
-            left: { type: "BinaryExpression", operator: "/", left: { type: "Literal", value: 1, raw: "1" }, right: vId() },
-            right: { type: "BinaryExpression", operator: "/", left: { type: "Literal", value: 1, raw: "1" }, right: { type: "Literal", value: 0, raw: "0" } },
-          },
+    function makeConditional(makeS, makeC, assignCExpr) {
+      const aId = () => ({ type: "Identifier", name: "__a" });
+      const bId = () => ({ type: "Identifier", name: "__b" });
+      const cAssign = { type: "AssignmentExpression", operator: "=", left: makeC(), right: assignCExpr };
+      const everyCall = {
+        type: "CallExpression",
+        callee: { type: "MemberExpression", object: cAssign, property: lowerStringExpr("every", true), computed: true, optional: false },
+        arguments: [nfRef()],
+        optional: false,
+      };
+      const notNegZero = {
+        type: "UnaryExpression",
+        operator: "!",
+        prefix: true,
+        argument: {
+          type: "CallExpression",
+          callee: { type: "MemberExpression", object: makeC(), property: lowerStringExpr("some", true), computed: true, optional: false },
+          arguments: [isNegZeroRef()],
+          optional: false,
         },
       };
+      let testExpr = { type: "LogicalExpression", operator: "&&", left: everyCall, right: notNegZero };
+
+      if (kind !== "literal") {
+        const isArrayCall = {
+          type: "CallExpression",
+          callee: {
+            type: "MemberExpression",
+            object: { type: "Identifier", name: "Array" },
+            property: lowerStringExpr("isArray", true),
+            computed: true,
+            optional: false,
+          },
+          arguments: [makeS()],
+          optional: false,
+        };
+        const iterPristine = {
+          type: "BinaryExpression",
+          operator: "===",
+          left: { type: "MemberExpression", object: makeS(), property: symIterRef(), computed: true, optional: false },
+          right: { type: "MemberExpression", object: arrProtoRef(), property: symIterRef(), computed: true, optional: false },
+        };
+        let recvOk = { type: "LogicalExpression", operator: "&&", left: isArrayCall, right: iterPristine };
+        if (kind === "slice") {
+          const slicePristine = {
+            type: "BinaryExpression",
+            operator: "===",
+            left: { type: "MemberExpression", object: makeS(), property: lowerStringExpr("slice", true), computed: true, optional: false },
+            right: { type: "MemberExpression", object: arrProtoRef(), property: lowerStringExpr("slice", true), computed: true, optional: false },
+          };
+          recvOk = {
+            type: "LogicalExpression",
+            operator: "&&",
+            left: { type: "LogicalExpression", operator: "&&", left: isArrayCall, right: slicePristine },
+            right: iterPristine,
+          };
+        }
+        testExpr = { type: "LogicalExpression", operator: "&&", left: recvOk, right: testExpr };
+      }
 
       const typedArr = {
         type: "NewExpression",
         callee: getGlobalRef("Float64Array"),
-        arguments: [sId()],
+        arguments: [makeC()],
       };
       let sortedTyped = {
         type: "CallExpression",
-        callee: {
-          type: "MemberExpression",
-          object: typedArr,
-          property: lowerStringExpr("sort", true),
-          computed: true,
-          optional: false,
-        },
+        callee: { type: "MemberExpression", object: typedArr, property: lowerStringExpr("sort", true), computed: true, optional: false },
         arguments: [],
         optional: false,
       };
       if (dir === "desc") {
         sortedTyped = {
           type: "CallExpression",
-          callee: {
-            type: "MemberExpression",
-            object: sortedTyped,
-            property: lowerStringExpr("reverse", true),
-            computed: true,
-            optional: false,
-          },
+          callee: { type: "MemberExpression", object: sortedTyped, property: lowerStringExpr("reverse", true), computed: true, optional: false },
           arguments: [],
           optional: false,
         };
       }
-      const fastReturn = {
-        type: "ReturnStatement",
-        argument: { type: "ArrayExpression", elements: [{ type: "SpreadElement", argument: sortedTyped }] },
-      };
+      const fastExpr = { type: "ArrayExpression", elements: [{ type: "SpreadElement", argument: sortedTyped }] };
 
       let fallbackRecv;
       if (kind === "slice") {
         fallbackRecv = {
           type: "CallExpression",
-          callee: {
-            type: "MemberExpression",
-            object: sId(),
-            property: lowerStringExpr("slice", true),
-            computed: true,
-            optional: false,
-          },
+          callee: { type: "MemberExpression", object: makeS(), property: lowerStringExpr("slice", true), computed: true, optional: false },
           arguments: [],
           optional: false,
         };
       } else if (kind === "spread") {
-        fallbackRecv = {
-          type: "ArrayExpression",
-          elements: [{ type: "SpreadElement", argument: sId() }],
-        };
+        fallbackRecv = { type: "ArrayExpression", elements: [{ type: "SpreadElement", argument: makeS() }] };
       } else {
-        fallbackRecv = sId();
+        fallbackRecv = makeC();
       }
       const cmpFn = {
         type: "FunctionExpression",
@@ -786,104 +754,46 @@ function canonicalizeSyntax(ast, opts) {
         },
         generator: false,
       };
-      const fallbackReturn = {
-        type: "ReturnStatement",
-        argument: {
-          type: "CallExpression",
-          callee: {
-            type: "MemberExpression",
-            object: fallbackRecv,
-            property: lowerStringExpr("sort", true),
-            computed: true,
-            optional: false,
-          },
-          arguments: [cmpFn],
-          optional: false,
-        },
+      const fallbackExpr = {
+        type: "CallExpression",
+        callee: { type: "MemberExpression", object: fallbackRecv, property: lowerStringExpr("sort", true), computed: true, optional: false },
+        arguments: [cmpFn],
+        optional: false,
       };
 
-      const loopStmt = {
-        type: "ForStatement",
-        init: {
-          type: "VariableDeclaration",
-          kind: "let",
-          declarations: [{ type: "VariableDeclarator", id: iId(), init: { type: "Literal", value: 0, raw: "0" } }],
-        },
-        test: { type: "BinaryExpression", operator: "<", left: iId(), right: lenExpr() },
-        update: { type: "AssignmentExpression", operator: "+=", left: iId(), right: { type: "Literal", value: 1, raw: "1" } },
-        body: {
-          type: "BlockStatement",
-          body: [
-            {
-              type: "VariableDeclaration",
-              kind: "let",
-              declarations: [{
-                type: "VariableDeclarator",
-                id: vId(),
-                init: { type: "MemberExpression", object: sId(), property: iId(), computed: true, optional: false },
-              }],
-            },
-            {
-              type: "IfStatement",
-              test: { type: "UnaryExpression", operator: "!", prefix: true, argument: elemValid },
-              consequent: {
-                type: "BlockStatement",
-                body: [
-                  {
-                    type: "ExpressionStatement",
-                    expression: {
-                      type: "AssignmentExpression",
-                      operator: "=",
-                      left: oId(),
-                      right: { type: "UnaryExpression", operator: "!", prefix: true, argument: { type: "Literal", value: 1, raw: "1" } },
-                    },
-                  },
-                  { type: "BreakStatement", label: null },
-                ],
-              },
-              alternate: null,
-            },
-          ],
-        },
-      };
+      return { type: "ConditionalExpression", test: testExpr, consequent: fastExpr, alternate: fallbackExpr };
+    }
 
-      const guardedBlock = {
-        type: "IfStatement",
-        test: {
-          type: "LogicalExpression",
-          operator: "&&",
-          left: oId(),
-          right: { type: "BinaryExpression", operator: "<", left: { type: "Literal", value: 7, raw: "7" }, right: lenExpr() },
-        },
-        consequent: {
-          type: "BlockStatement",
-          body: [
-            loopStmt,
-            { type: "IfStatement", test: oId(), consequent: fastReturn, alternate: null },
-          ],
-        },
-        alternate: null,
-      };
-
+    // Inline directly (zero function-call overhead: 4-5 steps total) when receiver is a dense literal
+    // or a local Identifier; fall back to a hoisted single-expression helper (8 steps) for arbitrary expressions.
+    if (kind === "literal") {
+      usesSortScratch = true;
+      const makeC = () => ({ type: "Identifier", name: HOIST_SCRATCH });
+      return makeConditional(makeC, makeC, srcTx);
+    }
+    if (srcTx.type === "Identifier") {
+      usesSortScratch = true;
+      const makeS = () => cloneAst(srcTx);
+      const makeC = () => ({ type: "Identifier", name: HOIST_SCRATCH });
+      const copyExpr = { type: "ArrayExpression", elements: [{ type: "SpreadElement", argument: makeS() }] };
+      return makeConditional(makeS, makeC, copyExpr);
+    }
+    const helperRef = getDepRef(`NSORT:${kind}:${dir}`, () => {
+      const makeS = () => ({ type: "Identifier", name: "__s" });
+      const makeC = () => ({ type: "Identifier", name: "__c" });
+      const copyExpr = { type: "ArrayExpression", elements: [{ type: "SpreadElement", argument: makeS() }] };
       return {
         type: "FunctionExpression",
         id: null,
-        params: [sId()],
+        params: [makeS(), makeC()],
         body: {
           type: "BlockStatement",
-          body: [
-            {
-              type: "VariableDeclaration",
-              kind: "let",
-              declarations: [{ type: "VariableDeclarator", id: oId(), init: receiverOk }],
-            },
-            guardedBlock,
-            fallbackReturn,
-          ],
+          body: [{ type: "ReturnStatement", argument: makeConditional(makeS, makeC, copyExpr) }],
         },
         generator: false,
       };
     });
+    return { type: "CallExpression", callee: helperRef, arguments: [srcTx], optional: false };
   }
 
   const scopeInfo = analyzeScopes(ast);
@@ -1063,13 +973,7 @@ function canonicalizeSyntax(ast, opts) {
           const fresh = dir ? extractFreshSortSource(node.callee.object) : null;
           if (dir && fresh) {
             const srcTx = txExpr(fresh.src, inLoopDepth);
-            const helperRef = getGuardedNumericSortHelper(fresh.kind, dir);
-            return {
-              type: "CallExpression",
-              callee: helperRef,
-              arguments: [srcTx],
-              optional: false,
-            };
+            return buildGuardedNumericSortExpr(fresh.kind, dir, srcTx);
           }
         }
         if (
@@ -1488,6 +1392,13 @@ function canonicalizeSyntax(ast, opts) {
       type: "VariableDeclarator",
       id: { type: "Identifier", name: HOIST_DEP },
       init: { type: "ArrayExpression", elements: depExprs },
+    });
+  }
+  if (usesSortScratch) {
+    topDecls.push({
+      type: "VariableDeclarator",
+      id: { type: "Identifier", name: HOIST_SCRATCH },
+      init: { type: "Literal", value: 0, raw: "0" },
     });
   }
   if (topDecls.length > 0) {
