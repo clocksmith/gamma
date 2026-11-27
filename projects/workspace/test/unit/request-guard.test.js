@@ -319,6 +319,10 @@ test('request guard: a multipart merge matching the approval passes; a changed o
   const noName = Buffer.from(good.postDataEntries[0].bytes, 'base64').toString('utf8').replace('name="do"', 'id="do"');
   assert.equal(unreadable({ ...good, postDataEntries: [{ bytes: Buffer.from(noName).toString('base64') }] }), 'request-payload-mismatch');
   assert.equal(unreadable({ ...good, postDataEntries: undefined }), 'request-payload-mismatch');
+  // A part not handed over inline (no bytes, or a missing entry) is unreadable, never an empty part.
+  assert.equal(unreadable({ ...good, postDataEntries: [...good.postDataEntries, {}] }), 'request-payload-mismatch');
+  assert.equal(unreadable({ ...good, postDataEntries: [...good.postDataEntries, null] }), 'request-payload-mismatch');
+  assert.equal(unreadable({ ...good, postDataEntries: [{ ...good.postDataEntries[0], bytes: undefined }] }), 'request-payload-mismatch');
 });
 
 test('request guard: a multipart write that does not match fails in the browser before it leaves', async () => {
