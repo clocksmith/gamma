@@ -3,6 +3,7 @@
 // approval's method, URL, body values and version may continue. Fake CDP sessions only; the
 // real-browser check is test/unit/request-guard-browser.test.mjs.
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -268,4 +269,66 @@ test('request guard: array items are checked in order, and an unreadable body is
   // More leaf fields than the body classifier holds is refused, not passed.
   const wide = Object.fromEntries(Array.from({ length: 70 }, (_, i) => [`k${i}`, i]));
   assert.equal(checkWriteRequest({ ...RULE, allowPaths: ['k*'] }, 7, patch({ lockVersion: 7, estimatedTime: 'PT56H', ...wide })).reason, 'request-payload-mismatch');
+});
+
+// A Forgejo-style merge form: multipart/form-data with text fields and the CSRF token.
+const MERGE = 'https://app.test/org/repo/pulls/7/merge';
+const MERGE_RULE = Object.freeze({ method: 'POST', url: MERGE, versionPath: 'head_commit_id',
+  fields: { do: 'merge', merge_title_field: 'Merge pull request #7' }, allowPaths: ['_csrf'] });
+const BOUNDARY = '----formdata-guard-7';
+function multipart(parts, boundary = BOUNDARY) {
+  const body = parts.map(([name, value, file]) => `--${boundary}\r\nContent-Disposition: form-data; name="${name}"`
+    + (file ? `; filename="${file}"\r\nContent-Type: application/octet-stream` : '') + `\r\n\r\n${value}\r\n`).join('') + `--${boundary}--\r\n`;
+  return { method: 'POST', url: MERGE, headers: { 'Content-Type': `multipart/form-data; boundary=${boundary}` },
+    postDataEntries: [{ bytes: Buffer.from(body).toString('base64') }] };
+}
+const MERGE_PARTS = [['_csrf', 'token-1'], ['head_commit_id', 'abc123'], ['do', 'merge'], ['merge_title_field', 'Merge pull request #7']];
+
+test('request guard: a multipart merge matching the approval passes; a changed or extra field or a file part is blocked', () => {
+  assert.deepEqual(checkWriteRequest(MERGE_RULE, 'abc123', multipart(MERGE_PARTS)), { ok: true, write: true });
+  // The same body as postData text, and a quoted boundary, read the same way.
+  const asText = multipart(MERGE_PARTS);
+  assert.equal(checkWriteRequest(MERGE_RULE, 'abc123', { ...asText, postDataEntries: undefined,
+    postData: Buffer.from(asText.postDataEntries[0].bytes, 'base64').toString('utf8') }).ok, true);
+  const quoted = multipart(MERGE_PARTS);
+  quoted.headers['Content-Type'] = `multipart/form-data; boundary="${BOUNDARY}"`;
+  assert.equal(checkWriteRequest(MERGE_RULE, 'abc123', quoted).ok, true);
+
+  const changed = MERGE_PARTS.map(([name, value]) => [name, name === 'do' ? 'squash' : value]);
+  assert.equal(checkWriteRequest(MERGE_RULE, 'abc123', multipart(changed)).reason, 'request-payload-mismatch');
+  assert.deepEqual(checkWriteRequest(MERGE_RULE, 'abc123', multipart([...MERGE_PARTS, ['delete_branch_after_merge', 'on']])).extra,
+    ['delete_branch_after_merge']);
+  assert.equal(checkWriteRequest(MERGE_RULE, 'abcdef', multipart(MERGE_PARTS)).reason, 'request-version-mismatch');
+  const withFile = [...MERGE_PARTS, ['attachment', 'binary\u0000bytes', 'notes.bin']];
+  assert.equal(checkWriteRequest(MERGE_RULE, 'abc123', multipart(withFile)).reason, 'request-payload-mismatch');
+  // A file part passes only where the approval names that exact file.
+  const file = { filename: 'notes.bin', contentType: 'application/octet-stream', byteLength: 12,
+    sha256: createHash('sha256').update('binary\u0000bytes').digest('hex') };
+  const naming = { ...MERGE_RULE, fields: { ...MERGE_RULE.fields, attachment: { file } } };
+  assert.equal(checkWriteRequest(naming, 'abc123', multipart(withFile)).ok, true);
+  const otherBytes = [...MERGE_PARTS, ['attachment', 'binary\u0000BYTES', 'notes.bin']];
+  assert.equal(checkWriteRequest(naming, 'abc123', multipart(otherBytes)).reason, 'request-payload-mismatch');
+
+  // Anything the guard cannot parse is blocked, never passed.
+  const unreadable = request => checkWriteRequest(MERGE_RULE, 'abc123', request).reason;
+  const good = multipart(MERGE_PARTS);
+  assert.equal(unreadable({ ...good, headers: { 'Content-Type': 'multipart/form-data' } }), 'request-payload-mismatch');
+  assert.equal(unreadable({ ...good, headers: { 'Content-Type': 'multipart/form-data; boundary=other' } }), 'request-payload-mismatch');
+  const unterminated = Buffer.from(good.postDataEntries[0].bytes, 'base64').toString('utf8').replace(`--${BOUNDARY}--\r\n`, '');
+  assert.equal(unreadable({ ...good, postDataEntries: [{ bytes: Buffer.from(unterminated).toString('base64') }] }), 'request-payload-mismatch');
+  const noName = Buffer.from(good.postDataEntries[0].bytes, 'base64').toString('utf8').replace('name="do"', 'id="do"');
+  assert.equal(unreadable({ ...good, postDataEntries: [{ bytes: Buffer.from(noName).toString('base64') }] }), 'request-payload-mismatch');
+  assert.equal(unreadable({ ...good, postDataEntries: undefined }), 'request-payload-mismatch');
+});
+
+test('request guard: a multipart write that does not match fails in the browser before it leaves', async () => {
+  for (const [parts, admitted] of [[MERGE_PARTS, 1], [[...MERGE_PARTS, ['delete_branch_after_merge', 'on']], 0],
+    [[...MERGE_PARTS, ['attachment', 'x', 'a.bin']], 0]]) {
+    const session = fakeSession();
+    const report = await guardWrites(session, { rule: MERGE_RULE, version: 'abc123', windowMs: 30, settleMs: 5 },
+      async () => { session.pause(multipart(parts)); });
+    assert.equal(report.requestGuard.admitted, admitted);
+    assert.equal(session.arrived.length, admitted);
+    assert.equal(session.methods().includes('Fetch.failRequest'), admitted === 0);
+  }
 });
