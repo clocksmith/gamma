@@ -29,8 +29,7 @@ row has one entry per kernel row, and every child index names a node. `SHA256SUM
 `check_certificate.py`.
 
 No stored result changes. All six stored certificates use the prime 1,000,000,007 with base 2. Rechecked with the
-new code: JS-2 certifies 65, B04 25, P03 73, A08 71, A15 79, unchanged; PY-3 (4,141 nodes) passes every new input
-check, and the rest of the check is the code that certified its 55. A composite modulus, a zero base and a short
+new code: JS-2 certifies 65, B04 25, P03 73, A08 71, A15 79 and PY-3 (4,141 nodes) 55, all unchanged. A composite modulus, a zero base and a short
 kernel row are each rejected. `capacity-boundary-v1/evaluate.py` has the same arithmetic but uses two fixed primes
 with non-zero bases (1,000,000,007 with 2; 998,244,353 with 3) and builds its own vectors, so it is not affected.
 
