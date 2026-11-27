@@ -40,7 +40,7 @@ firebase deploy
 ```
 
 The generated Mandate 2038 review index is published under `/mandate-2038/`.
-Build and deploy it from `apps/games/2038`:
+Build and deploy it from `apps/mandate-2038`:
 
 ```bash
 npm run publish:firebase:deploy

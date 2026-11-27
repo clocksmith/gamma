@@ -98,8 +98,8 @@ On predictive task metrics (classification accuracy across all three classificat
 ## Reproduction
 
 ```bash
-.venv/bin/python -m unittest projects/self_transform_neural_proposer_v2/test_proposer_v2.py -v
-OMP_NUM_THREADS=1 .venv/bin/python projects/self_transform_neural_proposer_v2/run_study_v2.py \
+.venv/bin/python -m unittest projects/self_transform/self_transform_neural_proposer_v2/test_proposer_v2.py -v
+OMP_NUM_THREADS=1 .venv/bin/python projects/self_transform/self_transform_neural_proposer_v2/run_study_v2.py \
   --output-json .work/self-transform-neural-proposer-v2/confirmation_receipt_v2.json \
   --confirmation-seed-base 850000 --seeds 101 202 303 404 505 --generations 4 --confirmation-tasks-per-family 16
 ```

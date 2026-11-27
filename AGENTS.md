@@ -20,11 +20,11 @@ failure.
 
 ### Code and documentation map
 
-- `README.md` describes the CLI; `EMOJI.md` records the Unicode convention.
-- `docs/COMPONENT_INDEX.md` locates component owners and contracts.
-- `gamma/engines/README.md` documents engine interfaces; `gamma/game/README.md`
-  documents the token game. Consult the owner relevant to the change.
-- These documents are searchable references, not a checklist before editing.
+- [Projects](projects/README.md), [applications](apps/README.md) and the
+  [repository layout](docs/REPOSITORY_LAYOUT.md) map the runnable surfaces and
+  shared packages. [Component index](docs/COMPONENT_INDEX.md) locates charters.
+- [README](README.md) describes the CLI. [EMOJI.md](EMOJI.md) records the
+  Unicode convention.
 
 ### Distillation Process Rules (critical)
 Before any distillation run or checkpoint sweep:
@@ -84,14 +84,6 @@ to fold fresh `compare_eval_summary.json` outputs into the leaderboards under `p
 - Do not kill an idea from global average lift when the user asks for conditional attribution; separate current implementation weakness from the concept being tested.
 - Report distillation and other live jobs from the run contract, artifacts, checkpoints, scoreboards, process owners, logs, and GPU activity, never from a launched command alone. Base ETAs on measured counters (bytes, samples, log steps); state basis and uncertainty.
 - If a reporting artifact is the source of truth, encode gaps and next commands inside it, not in chat prose.
-
-### Key Paths
-- `gamma/game/` - Game logic and UI
-- `gamma/engines/` - Engine backends (llamacpp, pytorch, vllm, ollama)
-- `gamma/mind_meld/` - Multi-model collaboration
-- `gamma/benchmarks/` - Performance testing
-- `gamma/comparison/` - Model comparison tools
-- `apps/games/2038/` - Mandate 2038 spec, browser prototype, and simulation lab
 
 ### Guardrails
 - Enforce `EMOJI.md`; use only approved Unicode symbols, no emojis

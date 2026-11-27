@@ -1,6 +1,6 @@
 # CATSCAN: Mandate 2038
 
-Parent: [Gamma games](../CATSCAN.md)
+Parent: [Gamma](../../CATSCAN.md)
 
 ## Target
 
@@ -24,7 +24,7 @@ Deliver a coherent, replayable institutional strategy game whose authored rules,
 
 - One ruleset; no retired module or rules profile is selectable. The 2026-10-12 movement and setup-objective selection needs fresh balance and human-play evidence.
 - `rules.md`, `components/`, and `world.md` keep single authored homes; generated graph targets are never hand-edited.
-- Fictional identities remain fictional, simulated sessions remain labeled, and old releases remain immutable.
+- Fictional identities remain fictional, simulated sessions are never presented as human playtests, and old releases remain immutable.
 - Canonical rule changes update every affected authority and evidence surface together.
 - [Retained details](GOVERNANCE_DETAILS.md) keep every detailed and dated boundary from the prior charter.
 

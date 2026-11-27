@@ -91,7 +91,7 @@ test("historical world releases retain their first committed bytes", async () =>
   }
 });
 
-test("current teaching materials declare five holdings and fixed Reputation Review", async () => {
+test("teaching materials explain the five holdings and the end-of-Era Reputation penalty", async () => {
   const readme = await read("README.md");
   const protocol = await read("docs/playtesting-and-evidence.md");
   assert.match(readme, /versions\/current-release\.json/);
@@ -101,9 +101,8 @@ test("current teaching materials declare five holdings and fixed Reputation Revi
   assert.deepEqual(Object.keys(config.resources), ["runway", "compute", "capability", "reputation", "customers"]);
   for (const path of ["rules.md", "dist/docs/core-rules.md"]) {
     const source = await read(path);
-    assert.match(source, /Reputation Review/);
     assert.match(source, /two through five/i);
-    assert.match(source, /Reputation.*(?:1|one).*(?:2|two) Runway/);
+    assert.match(source, /after (?:all )?production,.*reputation 0 or 1.*loses 2 runway.*zero/i);
     assert.doesNotMatch(source, /\| Era \| 2 players/);
   }
 });

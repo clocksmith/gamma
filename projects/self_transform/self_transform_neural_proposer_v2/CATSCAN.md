@@ -1,6 +1,6 @@
 # CATSCAN: Multi-seed cumulative neural proposer heredity study (v2)
 
-Parent: [Gamma research projects](../CATSCAN.md)
+Parent: [Self-transform studies](../CATSCAN.md)
 
 ## Target
 
@@ -8,7 +8,7 @@ Demonstrate repeatable, multi-generational cold-target self-improvement across `
 
 ## Authority
 
-- Owns the `v1` plateau investigation, `v2` neural proposer, multi-seed subprocess lineage runner, candidate ledger, tests, and receipts under `projects/self_transform_neural_proposer_v2/`.
+- Owns the `v1` plateau investigation, `v2` neural proposer, multi-seed subprocess lineage runner, candidate ledger, tests, and receipts under `projects/self_transform/self_transform_neural_proposer_v2/`.
 - Preserves prior `projects/self_transform_*` artifacts unchanged.
 
 ## Scope
@@ -17,7 +17,7 @@ Demonstrate repeatable, multi-generational cold-target self-improvement across `
 
 ## Contracts
 
-- Input: [Gamma research projects charter](../CATSCAN.md), `v1` diagnostic evidence, and frozen protocol locks written before confirmation.
+- Input: [Gamma research projects charter](../../CATSCAN.md), `v1` diagnostic evidence, and frozen protocol locks written before confirmation.
 - Output: Complete candidate ledger JSON, per-generation/per-seed held-out curves, paired statistical tests, and reproduction scripts.
 
 ## Invariants

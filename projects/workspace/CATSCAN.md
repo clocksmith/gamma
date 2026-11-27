@@ -1,6 +1,6 @@
 # CATSCAN: Gamma workspace
 
-Parent: [Gamma](../../CATSCAN.md)
+Parent: [Gamma research projects](../CATSCAN.md)
 
 ## Target
 

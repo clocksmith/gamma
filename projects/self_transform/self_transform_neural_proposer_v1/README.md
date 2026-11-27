@@ -4,7 +4,7 @@
 
 This study evaluates **Gamma Track B2** (hereditary self-improvement) on fresh, cold neural network targets under matched forward-backward pass budgets (`B = 10` passes per cold target, `state = None` at step 0).
 
-Unlike `projects/self_transform_secant_regen_v1/` (which wrapped a hand-coded Barzilai-Borwein secant step in a small scalar-gate parameterization and passed `1/6` proposer gates), `self_transform_neural_proposer_v1` constructs a genuine multi-layer **SwiGLU neural weight-proposer** `M_Phi` (`1,783` float64 parameters across `W_gate [48x15]`, `W_up [48x15]`, `W_out [7x49]`) with zero hand-coded secant formulas:
+Unlike `projects/self_transform/self_transform_secant_regen_v1/` (which wrapped a hand-coded Barzilai-Borwein secant step in a small scalar-gate parameterization and passed `1/6` proposer gates), `self_transform_neural_proposer_v1` constructs a genuine multi-layer **SwiGLU neural weight-proposer** `M_Phi` (`1,783` float64 parameters across `W_gate [48x15]`, `W_up [48x15]`, `W_out [7x49]`) with zero hand-coded secant formulas:
 
 1. **Equivariant Neural Proposal**: Given any multi-layer neural network target `{W_l}` on a support batch `(X_sup, Y_sup)`, one charged forward-backward pass yields layer input activations `A_{l-1}`, pre-activation errors `E_l`, weight gradients `G_l`, and input activation covariance `Sigma_l = A_{l-1}^T A_{l-1} / N`. `M_Phi` maps `14` scale-free per-row structural features to `7` neural controls blending normalized gradient, momentum, diagonal RMS, and activation-preconditioned Kronecker natural-gradient directions (`(Sigma_norm + lambda * I)^{-1}`), row step sizes, and weight-shrinkage gates.
 2. **Model-Level Self-Modification**: Across `G = 4` generations (`g = 0 -> 1 -> 2 -> 3 -> 4`), no external SGD or Adam optimizer updates `Phi`. Instead, `M_Phi_g` unrolls `B = 10` adaptation steps on disjoint 2-layer `Tanh`/`GELU` meta-training tasks (`seed_base = 510000`), differentiates held-out query loss through the unrolled graph to extract `M_Phi_g`'s **own** layer input activations `(A_0^Phi, A_1^Phi)` and pre-activation meta-gradients `(E_gate^Phi, E_up^Phi, E_out^Phi)`, and applies `propose_network_update(phi=Phi_g, layers=Phi_g, ...)` to modify its own `1,783` parameters.
@@ -14,7 +14,7 @@ Unlike `projects/self_transform_secant_regen_v1/` (which wrapped a hand-coded Ba
 
 ## Artifacts and Hashes
 
-- Charter: `projects/self_transform_neural_proposer_v1/CATSCAN.md`
+- Charter: `projects/self_transform/self_transform_neural_proposer_v1/CATSCAN.md`
 - Implementation:
   - `proposer.py` (`sha256: 4474d1faf24abca6cca16a4ea4a856ec4145dba0f1f6f808d57bd021a7583031`)
   - `targets.py` (`sha256: 5572ce645327f554f9f6eaccb789974d2eb3f4e809bfee800416cb141d5e1f18`)
@@ -74,8 +74,8 @@ None of the three confirmation architectures appeared in the 2-layer `Tanh`/`GEL
    - Add an explicit final-layer temperature / output-norm calibration head to `M_Phi` and expand generational meta-tasks progressively (`2-layer -> 3-layer -> 4-layer` curriculum with cross-generation anchor acceptance) to test whether `Gen 4 > Gen 2 > Gen 1` holds strictly without saturation.
    - Reproduce unit tests and confirmation study:
      ```bash
-     .venv/bin/python -m unittest projects/self_transform_neural_proposer_v1/test_neural_proposer.py -v
-     OMP_NUM_THREADS=1 .venv/bin/python projects/self_transform_neural_proposer_v1/run_study.py \
+     .venv/bin/python -m unittest projects/self_transform/self_transform_neural_proposer_v1/test_neural_proposer.py -v
+     OMP_NUM_THREADS=1 .venv/bin/python projects/self_transform/self_transform_neural_proposer_v1/run_study.py \
        --output-json .work/self-transform-neural-proposer-v1/confirmation_receipt.json \
        --generations 4 --confirmation-seeds 16 --meta-steps 12
      ```

@@ -101,10 +101,10 @@ compute. Otherwise B2 stays closed.
 ## Rerun
 
 ```
-.venv/bin/python -m unittest projects/self_transform_neural_proposer_v4_dev/test_identity_v4dev.py -v
-.venv/bin/python projects/self_transform_neural_proposer_v4_dev/run_dev_v4.py stage1
-.venv/bin/python projects/self_transform_neural_proposer_v4_dev/run_dev_v4.py stage2
-.venv/bin/python projects/self_transform_neural_proposer_v4_dev/analyze_v4dev.py
+.venv/bin/python -m unittest projects/self_transform/self_transform_neural_proposer_v4_dev/test_identity_v4dev.py -v
+.venv/bin/python projects/self_transform/self_transform_neural_proposer_v4_dev/run_dev_v4.py stage1
+.venv/bin/python projects/self_transform/self_transform_neural_proposer_v4_dev/run_dev_v4.py stage2
+.venv/bin/python projects/self_transform/self_transform_neural_proposer_v4_dev/analyze_v4dev.py
 ```
 
 Outputs are in `.work/self-transform-neural-proposer-v4-dev/`. Limits: 250 meta-steps, 8

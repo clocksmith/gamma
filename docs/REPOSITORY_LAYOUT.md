@@ -31,20 +31,17 @@ not imply a self-contained wheel: Algorithm Solver needs its adjacent catalogue
 and contracts, while distillation and reconfiguration retain different pipelines
 and frozen mechanisms. Active experiments retain their own namespaces.
 
-`apps/` contains the game, web client, MCP server and Flux. Flux's `src` package
-belongs to Flux; it is not the toolkit's former `src` namespace. The toolkit's
-Python wheel excludes all applications, research projects and run output.
+[Apps](../apps/README.md) has one directory per runnable application, including
+[Mandate 2038](../apps/mandate-2038/README.md). The toolkit wheel includes
+`gamma/`; each application packages its own source and resources.
 
-The [self-transform family](../projects/self_transform/README.md) keeps distinct
-experiment directories and versions under `projects/self_transform/`;
-mechanisms and sealed evidence are not merged
-into interchangeable configurations.
+The [self-transform family](../projects/self_transform/README.md) contains the Node
+and Python studies in sibling version directories. Each version owns its
+implementation and protocol.
 
-Current commands and navigation use the new paths. The separate
-[relocation map](path-relocations-20261116.json)
-records original prefixes; historical receipts, source revisions, digests and
-path strings remain evidence of the original run. It does not rewrite them.
-Original versions remain available at the map's published source revision.
+The [relocation map](path-relocations-20261116.json) records earlier paths and
+the revisions where they existed. Historical receipts preserve the original
+paths, source revisions and digests.
 
 The [enwiki9 pilot](../projects/enwiki9/docs/archive-maintenance/README.md)
 separates verified retained outputs from maintained source. Its catalog records
