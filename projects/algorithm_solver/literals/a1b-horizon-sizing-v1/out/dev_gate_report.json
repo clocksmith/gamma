@@ -1,0 +1,101 @@
+{
+  "schema": "gamma.bits-a1b.dev-gate.v1",
+  "all_pass": true,
+  "wall_seconds": 7.039,
+  "gates": {
+    "gate_1_independent_decode_100pct_fidelity": {
+      "pass": true,
+      "grid_archives_verified_100pct": 630,
+      "live_isolated_subprocess_archives_verified": 5,
+      "escape_bytes_exercised_and_verified": 4,
+      "samples": [
+        {
+          "K": 0,
+          "archive_bytes": 8810,
+          "escapes": 4
+        },
+        {
+          "K": 64,
+          "archive_bytes": 8591,
+          "escapes": 4
+        },
+        {
+          "K": 512,
+          "archive_bytes": 11076,
+          "escapes": 4
+        },
+        {
+          "K": 2048,
+          "archive_bytes": 22730,
+          "escapes": 4
+        },
+        {
+          "K": 4096,
+          "archive_bytes": 39621,
+          "escapes": 4
+        }
+      ]
+    },
+    "gate_2_exhaustive_score_reproduction": {
+      "pass": true,
+      "queries_exhaustively_reproduced": 14,
+      "arms_verified_per_query": 8
+    },
+    "gate_3_negative_control_corrupted_code_table": {
+      "kraft_underflow_increment": "REJECTED (code table fails exact Kraft equality: 131064 != 131072)",
+      "kraft_overflow_decrement": "REJECTED (code table fails exact Kraft equality: 131088 != 131072)",
+      "kraft_preserving_swap": "REJECTED (mismatched_count=8)",
+      "cli_exit_code_on_corruption": 1,
+      "pass": true
+    },
+    "gate_4_negative_control_fit_leakage_guard": {
+      "fit_lineage_in_calibration": "REJECTED (fit lineage/org leaked into calibration: codenet_primary (org=ibm_codenet) matches fit codenet_primary (org=ibm_codenet))",
+      "fit_org_in_calibration": "REJECTED (fit lineage/org leaked into calibration: codenet_fresh (org=ibm_codenet) matches fit codenet_primary (org=ibm_codenet))",
+      "disguised_single_file_hash_leak_in_cal": "REJECTED (fit file hash leaked into calibration lineage totally_benign_new_repo: 1 shared files)",
+      "disguised_single_file_hash_leak_in_eval": "REJECTED (fit file hash leaked into evaluation lineage totally_benign_new_repo: 1 shared files)",
+      "within_repo_resampling_in_calibration": "REJECTED (calibration lineages express_resample_a and express_resample_b share exact file hash 62ebf8ac4e00 (resampling/duplication forbidden))",
+      "same_org_cal_to_eval_leak": "REJECTED (calibration organization clocksmith leaked into evaluation lineage clocksmith_gamma_core)",
+      "pass": true
+    },
+    "gate_5_adversarial_synthetic_curves": {
+      "pass": true,
+      "flat_curve_exact_tie_break_full_grid_K": 0,
+      "flat_curve_exact_tie_break_pilot_K": 64,
+      "non_convex_bad_intermediate_trap": {
+        "M_100000": {
+          "exhaustive_K": 4096,
+          "pilot_3pt_K": 4096,
+          "sketch_policy_K": 4096
+        },
+        "M_100000000": {
+          "exhaustive_K": 4096,
+          "pilot_3pt_K": 4096,
+          "sketch_policy_K": 4096
+        }
+      }
+    },
+    "gate_6_abstain_and_end_to_end_shipping": {
+      "pass": true,
+      "final_refit_n_cal_orgs": 6,
+      "strict_conformal_abstain_on_6_orgs": "SWEEP_REQUIRED",
+      "high_uncertainty_abstain": "SWEEP_REQUIRED",
+      "synthetic_10_org_conformal_finite_upb90": 1.1403,
+      "end_to_end_shipping_runs": [
+        {
+          "M": 100000,
+          "decision": "DIRECT_PICK",
+          "chosen_K": 512,
+          "archive_bytes": 5561,
+          "fidelity": 1.0
+        },
+        {
+          "M": 100000000,
+          "decision": "DIRECT_PICK",
+          "chosen_K": 4096,
+          "archive_bytes": 33903,
+          "fidelity": 1.0
+        }
+      ]
+    }
+  }
+}
