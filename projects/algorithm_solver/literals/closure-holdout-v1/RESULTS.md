@@ -80,3 +80,19 @@ Token gain against BPE at the same length limit on fresh2: +2.0% (L=8), +7.9% (L
   closure effect is untested.
 - The greedy engines use lazy (Minoux) evaluation. Exact token gain under shortest-path parsing is not submodular, so the
   chains are lazy-greedy orders, not guaranteed exact argmax at every step; the size of any divergence is unaudited.
+
+## Post hoc trainer audit
+
+`audit_lazy.c` replays each lazy trainer, checks that it reproduces the frozen chain entry for entry (both do), and at
+every 400th step recomputes the exact gain of every candidate whose provable bound could beat the lazy pick.
+`verify_greedy.c` checks a given chain against brute force without using the trainer's selection code.
+
+| Chain | Steps checked | Lazy pick not the best | Example |
+| --- | --- | --- | --- |
+| `token` (frozen, also objective-holdout-v1's arm) | 10 (`out/audit-lazy-token.tsv`) | 9 (every check from step 400 on) | step 2,000: picked gain 10, best 21 |
+| `closed` (frozen) | 10 (`out/audit-lazy-closed.tsv`); 20 (`out/verify-lazy-closed.tsv`) | 9; 18 | step 400: picked gain 78; `.map(` had gain 90 under a stale key of 68 |
+
+Both chains are lazy-greedy orders, not exact greedy orders. The frozen dictionaries and every token count measured on
+them are unaffected; any statement about what exact greedy token gain would select is not supported by them.
+`engine_exact.c` keys the heap by a bound that never rises (each use of w saves at most the tokens currently needed to
+spell w, minus one); exact chains are being trained and are not yet part of any result.
