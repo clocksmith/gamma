@@ -42,14 +42,15 @@
         "ref_replay_exact_match_5docs": 5
       }
     },
-    "seconds": 0.115
+    "seconds": 0.118
   },
   "tiktoken_byte_ranks": {
-    "status": "PART",
-    "tiktoken_installed": false,
-    "tiktoken_version": null,
-    "missing_package": "tiktoken",
-    "note": "Pure-Python tiktoken byte-rank reachability validator passed all controls and audits; live tiktoken runtime check skipped because `tiktoken` package is not installed in .venv or system Python",
+    "status": "PASS",
+    "tiktoken_installed": true,
+    "tiktoken_python": "/Users/xyz/deco/gamma/.venv-tiktoken/bin/python",
+    "tiktoken_version": "0.14.0",
+    "missing_package": null,
+    "note": "Live tiktoken 0.14.0 verified via /Users/xyz/deco/gamma/.venv-tiktoken/bin/python: encode/decode byte-exact round-trip on 25 CodeNet dev docs, 100% token-stream parity with pure-Python validator, and live byte_pair_merge rank-shadowing verified on synthetic + frozen vocabularies.",
     "positive_control_ok": true,
     "shadowed_dead_token_caught": true,
     "unclosed_token_caught": true,
@@ -64,6 +65,9 @@
         "unclosed_count": 0,
         "reachable_count": 84,
         "unreachable_count": 0,
+        "utf8_unreachable_count": 0,
+        "prefix_monotone_reachable_count": 84,
+        "prefix_monotone_unreachable_count": 0,
         "sample_unreachable_hex": [],
         "all_valid_and_reachable": true
       },
@@ -76,6 +80,9 @@
         "unclosed_count": 0,
         "reachable_count": 82,
         "unreachable_count": 2,
+        "utf8_unreachable_count": 2,
+        "prefix_monotone_reachable_count": 82,
+        "prefix_monotone_unreachable_count": 2,
         "sample_unreachable_hex": [
           "20696e20",
           "293b0a20202020"
@@ -89,11 +96,13 @@
         "duplicate_ranks": false,
         "negative_ranks": false,
         "unclosed_count": 56,
-        "reachable_count": 22,
-        "unreachable_count": 62,
+        "reachable_count": 23,
+        "unreachable_count": 61,
+        "utf8_unreachable_count": 61,
+        "prefix_monotone_reachable_count": 22,
+        "prefix_monotone_unreachable_count": 62,
         "sample_unreachable_hex": [
           "20202020",
-          "203d20",
           "0a2020",
           "76617220",
           "0a20202020",
@@ -101,7 +110,8 @@
           "66756e6374696f6e",
           "636f6e736f6c652e6c6f6728",
           "20696e2072616e676528",
-          "72657475726e20"
+          "72657475726e20",
+          "696e707574"
         ],
         "all_valid_and_reachable": false
       },
@@ -114,6 +124,9 @@
         "unclosed_count": 0,
         "reachable_count": 3924,
         "unreachable_count": 0,
+        "utf8_unreachable_count": 0,
+        "prefix_monotone_reachable_count": 3924,
+        "prefix_monotone_unreachable_count": 0,
         "sample_unreachable_hex": [],
         "all_valid_and_reachable": true
       },
@@ -124,19 +137,22 @@
         "duplicate_ranks": false,
         "negative_ranks": false,
         "unclosed_count": 0,
-        "reachable_count": 3650,
-        "unreachable_count": 274,
+        "reachable_count": 3687,
+        "unreachable_count": 237,
+        "utf8_unreachable_count": 236,
+        "prefix_monotone_reachable_count": 3650,
+        "prefix_monotone_unreachable_count": 274,
         "sample_unreachable_hex": [
-          "20696e20",
-          "293b0a20202020",
-          "20696e2072616e676528",
           "696e7075742829",
           "6c696e65",
-          "666f72206920696e2072616e676528",
           "696e70757428292e73706c697428",
-          "2b2b297b0a202020202020",
           "696e70757428292e73706c6974282929",
-          "203d20696e7428696e7075742829"
+          "203d20696e7428696e7075742829",
+          "732e737464696e",
+          "203d20696e7428696e7075742829290a",
+          "70726f636573732e737464696e",
+          "6c696e6573",
+          "29202b20"
         ],
         "all_valid_and_reachable": false
       },
@@ -147,23 +163,85 @@
         "duplicate_ranks": false,
         "negative_ranks": false,
         "unclosed_count": 2762,
-        "reachable_count": 740,
-        "unreachable_count": 3184,
+        "reachable_count": 848,
+        "unreachable_count": 3076,
+        "utf8_unreachable_count": 3035,
+        "prefix_monotone_reachable_count": 740,
+        "prefix_monotone_unreachable_count": 3184,
         "sample_unreachable_hex": [
-          "20202020",
-          "203d20",
-          "0a2020",
-          "76617220",
-          "0a20202020",
           "2e73706c697428",
           "66756e6374696f6e",
           "636f6e736f6c652e6c6f6728",
           "20696e2072616e676528",
-          "72657475726e20"
+          "72657475726e20",
+          "292e7265616446696c6553796e6328",
+          "2e6c656e677468",
+          "2f6465762f737464696e",
+          "7265717569726528",
+          "7072696e7428"
         ],
         "all_valid_and_reachable": false
       }
     },
-    "seconds": 0.129
+    "live_tiktoken_receipt": {
+      "tiktoken_version": "0.14.0",
+      "positive_live_ok": true,
+      "shadowing_live_ok": true,
+      "shadowing_whole_piece_short_circuit_observed": true,
+      "utf8_dev_docs_checked": 25,
+      "live_vocabs": {
+        "bpe-K256": {
+          "utf8_dev_docs_roundtrip_ok": 25,
+          "dev_utf8_total_tokens": 7606,
+          "pure_python_parity_5docs": "5/5",
+          "pure_python_parity_all_match": true,
+          "utf8_multi_tokens_checked": 84,
+          "live_byte_pair_merge_reachable": 84,
+          "live_byte_pair_merge_shadowed": 0,
+          "sample_live_shadowed_hex": []
+        },
+        "closed-K256": {
+          "utf8_dev_docs_roundtrip_ok": 25,
+          "dev_utf8_total_tokens": 7805,
+          "pure_python_parity_5docs": "5/5",
+          "pure_python_parity_all_match": true,
+          "utf8_multi_tokens_checked": 84,
+          "live_byte_pair_merge_reachable": 82,
+          "live_byte_pair_merge_shadowed": 2,
+          "sample_live_shadowed_hex": [
+            "20696e20",
+            "293b0a20202020"
+          ]
+        },
+        "bpe-K4096": {
+          "utf8_dev_docs_roundtrip_ok": 25,
+          "dev_utf8_total_tokens": 3478,
+          "pure_python_parity_5docs": "5/5",
+          "pure_python_parity_all_match": true,
+          "utf8_multi_tokens_checked": 3843,
+          "live_byte_pair_merge_reachable": 3843,
+          "live_byte_pair_merge_shadowed": 0,
+          "sample_live_shadowed_hex": []
+        },
+        "closed-K4096": {
+          "utf8_dev_docs_roundtrip_ok": 25,
+          "dev_utf8_total_tokens": 3813,
+          "pure_python_parity_5docs": "5/5",
+          "pure_python_parity_all_match": true,
+          "utf8_multi_tokens_checked": 3861,
+          "live_byte_pair_merge_reachable": 3625,
+          "live_byte_pair_merge_shadowed": 236,
+          "sample_live_shadowed_hex": [
+            "696e7075742829",
+            "6c696e65",
+            "696e70757428292e73706c697428",
+            "696e70757428292e73706c6974282929",
+            "203d20696e7428696e7075742829",
+            "732e737464696e"
+          ]
+        }
+      }
+    },
+    "seconds": 0.402
   }
 }

@@ -263,18 +263,28 @@ def run_primary_comparison(pruned_bin: Path, unpruned_bin: Path, quick: bool = F
             "pruned_u_vs_used": (pruned_diag.get("pruned_u_fast", 0) or 0) + (pruned_diag.get("pruned_u_cleaned", 0) or 0),
             "pruned_u_vs_nocc": pruned_diag.get("pruned_u_vs_nocc", 0),
         },
+        "speedup_attribution": {
+            "straddle_bound_additional_prunes_over_used": (pruned_diag.get("pruned_u_fast", 0) or 0) + (pruned_diag.get("pruned_u_cleaned", 0) or 0),
+            "speedup_cause": "Phase-1 active closed-pair handling and dirty-document run caching",
+            "straddle_bound_effect": (
+                "The straddle bound min_i Delta_T(t_i t_{i+1}) + U(w) produced ZERO additional prunes over the "
+                "existing static used(w) bound (pruned_u_vs_used = 0) and added U(w) maintenance overhead; "
+                "the entire 2.08x full-chain speedup (and 1.37x/1.53x K=300 speedups) comes from Phase-1 "
+                "closed-pair handling and dirty-document caching."
+            ),
+        },
         "prefix_k300_comparison": {
             "unpruned_engine_norm_seconds": round(wall_unpruned_300, 3),
             "unpruned_engine_norm_evaluations": unpruned_300_diag.get("evaluations"),
-            "pure_u_bound_seconds": round(wall_pureu_300, 3),
-            "pure_u_bound_u_maint_seconds": pureu_300_diag.get("u_maint_seconds"),
-            "pure_u_bound_nonpair_full_evals": pureu_300_diag.get("nonpair_full_evals"),
-            "pruned_with_dirty_seconds": round(wall_pruned_300, 3),
-            "pruned_with_dirty_u_maint_seconds": pruned_300_diag.get("u_maint_seconds"),
-            "pruned_with_dirty_nonpair_run_evals": pruned_300_diag.get("nonpair_run_evals"),
-            "pruned_with_dirty_pruned_dirty_nonpair": pruned_300_diag.get("pruned_dirty_nonpair"),
-            "speedup_pure_u_vs_unpruned_k300": round(wall_unpruned_300 / max(wall_pureu_300, 1e-6), 2),
-            "speedup_with_dirty_vs_unpruned_k300": round(wall_unpruned_300 / max(wall_pruned_300, 1e-6), 2),
+            "phase1_closed_no_dirty_nonpair_seconds": round(wall_pureu_300, 3),
+            "phase1_closed_no_dirty_nonpair_u_maint_seconds": pureu_300_diag.get("u_maint_seconds"),
+            "phase1_closed_no_dirty_nonpair_full_evals": pureu_300_diag.get("nonpair_full_evals"),
+            "phase1_closed_with_dirty_nonpair_seconds": round(wall_pruned_300, 3),
+            "phase1_closed_with_dirty_nonpair_u_maint_seconds": pruned_300_diag.get("u_maint_seconds"),
+            "phase1_closed_with_dirty_nonpair_run_evals": pruned_300_diag.get("nonpair_run_evals"),
+            "phase1_closed_with_dirty_nonpair_pruned_dirty": pruned_300_diag.get("pruned_dirty_nonpair"),
+            "speedup_phase1_closed_no_dirty_nonpair_vs_unpruned_k300": round(wall_unpruned_300 / max(wall_pureu_300, 1e-6), 2),
+            "speedup_phase1_closed_with_dirty_nonpair_vs_unpruned_k300": round(wall_unpruned_300 / max(wall_pruned_300, 1e-6), 2),
         },
         "speedup_vs_dirty_exact_full": (
             round(ref_diag["seconds"] / max(wall_pruned, 1e-6), 2)

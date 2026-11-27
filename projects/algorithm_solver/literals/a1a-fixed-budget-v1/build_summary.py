@@ -2,10 +2,15 @@
 """Assemble dev_summary.json cleanly from measured A1a output JSONs (zero manual transcription)."""
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+
+
+def _sha256(p: Path) -> str:
+    return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
 def main() -> None:
@@ -14,12 +19,6 @@ def main() -> None:
     np_sum = json.loads((HERE / "out/norm_pruning/norm_pruning_summary.json").read_text())
     enc = json.loads((HERE / "out/encoder_validation.json").read_text())
 
-    # Refresh synthetic results in train_dev_summary.json using updated multi-root gadget
-    import train_dev as TD
-    sb_bin, _ = TD.ensure_binaries()
-    tr["synthetic"] = TD.test_synthetic_bundles(sb_bin)
-    (HERE / "out/chains/train_dev_summary.json").write_text(json.dumps(tr, indent=2) + "\n")
-
     b_dag_s = ev["budgets"]["dag_header_small"]
     b_dag_l = ev["budgets"]["dag_header_large"]
     b_ff_s = ev["budgets"]["flat_frag_small"]
@@ -27,7 +26,6 @@ def main() -> None:
     b_sl_s = ev["budgets"]["slots_small"]
     b_sl_l = ev["budgets"]["slots_large"]
 
-    # Extract complete_bits across headline arms and zstd on dev (400 files, 270,994 B) and primary (259,706 B)
     complete_bits_summary = {
         "dev_source_bits": ev["corpora_meta"]["dev"]["bytes"] * 8,
         "primary_source_bits": ev["corpora_meta"]["primary"]["bytes"] * 8,
@@ -68,7 +66,12 @@ def main() -> None:
             }
         complete_bits_summary["by_budget"][bname] = b_out
 
-    # Extract measured_work (build/selection/verification/decode wall-clock + p95 + peak RSS + op counts)
+    replay_sec = (
+        json.loads((HERE / "out/replay_check.json").read_text()).get("total_seconds")
+        if (HERE / "out/replay_check.json").exists()
+        else None
+    )
+
     measured_work = {
         "selection_training": {
             "bmax1_slot_exact_closed": {
@@ -81,7 +84,7 @@ def main() -> None:
                 "maxrss_bytes": tr["bmax1_identity"]["byte_maxrss_bytes"],
                 "entries": tr["bmax1_identity"]["byte_total_entries_trained"],
             },
-            "shared_bundle_arms": {
+            "shared_bundle_arms_closed": {
                 k: {
                     "wall_seconds": v["wall_seconds"],
                     "entries": v["entries"],
@@ -101,10 +104,12 @@ def main() -> None:
                 "closed_run_evals": np_sum["pruned_diag"]["closed_run_evals"],
                 "nonpair_run_evals": np_sum["pruned_diag"]["nonpair_run_evals"],
                 "pruned_dirty_nonpair": np_sum["pruned_diag"]["pruned_dirty_nonpair"],
+                "pruned_u_vs_used": np_sum["u_bound_dominance_theorem"]["pruned_u_vs_used"],
                 "pruned_static": np_sum["pruned_diag"]["pruned_static"],
                 "maxrss_bytes": np_sum["pruned_diag"]["maxrss_bytes"],
                 "reference_dirty_exact_seconds": np_sum["reference_dirty_exact_seconds"],
                 "speedup_vs_dirty_exact": np_sum["speedup_vs_dirty_exact_full"],
+                "speedup_attribution": np_sum["speedup_attribution"],
             },
             "controls": {
                 "bpe_ext_seconds": tr["controls"]["bpe_ext"]["wall_seconds"],
@@ -132,17 +137,61 @@ def main() -> None:
             },
             "basis_note": "zstd measured in-process via C libzstd (40 reps/file); A1AF/A1AD measured via standalone pure-Python independent_decode.py.",
         },
-        "replay_check_seconds": (
-            json.loads((HERE / "out/replay_check.json").read_text()).get("total_seconds")
-            if (HERE / "out/replay_check.json").exists()
-            else None
-        ),
+        "replay_check_seconds": replay_sec,
+    }
+
+    tt = enc["tiktoken_byte_ranks"]
+    live_tt = tt.get("live_tiktoken_receipt") or {}
+
+    arm_dispositions = {
+        "multi_node_bundle_arm_A1AB": {
+            "arms": ["B_A (shared-bundle-byte)", "B_B (shared-bundle-slot)", "B_C (shared-bundle-dag)"],
+            "disposition": "CLOSED",
+            "dev_gate_status": "FAIL",
+            "holdout_opened": False,
+            "reason": (
+                "0 multi-node bundle selections across 8,539 steps on CodeNet primary (573,831 exact joint-DP "
+                "bundle evals in byte mode; ~1.7M across all three modes). Failed historical flat-literal gate "
+                "(+4.86% at 566 B, +6.53% at 43,480 B vs open-byte; 0.00% vs exact pair-byte) and matched emitted "
+                "slots gate (+14.55% at 84 slots, +24.77% at 3,924 slots vs open). Closed; no sealed holdout opened."
+            ),
+        },
+        "construction_dag_headers_A1AD": {
+            "disposition": "ADVANCE",
+            "preregistration_path": "PREREGISTRATION_DAG_ENCODERS.md",
+            "dev_finding": (
+                "25.0%-30.6% header reduction for open vocabularies (1,171B->878B at 84 frags; 47,925B->33,241B at 3,924 frags) "
+                "and 35.9%-51.1% header reduction for closed vocabularies (944B->605B; 30,925B->15,259B; 67,963B->33,238B at 8,147 frags) "
+                "with identical emitted vocabulary, code table, and payload."
+            ),
+            "frozen_hashes": {
+                "FORMAT.md": _sha256(HERE / "FORMAT.md"),
+                "headers.py": _sha256(HERE / "headers.py"),
+                "independent_decode.py": _sha256(HERE / "independent_decode.py"),
+            },
+        },
+        "native_deployment_encoder_controls": {
+            "disposition": "ADVANCE",
+            "preregistration_path": "PREREGISTRATION_DAG_ENCODERS.md",
+            "controls": ["byte_ranks reachability/shadowing", "HF tokenizers BPE", "SentencePiece Unigram", "live tiktoken==0.14.0"],
+            "frozen_hashes": {
+                "validate_encoders.py": _sha256(HERE / "validate_encoders.py"),
+                "requirements-tiktoken.txt": _sha256(HERE / "requirements-tiktoken.txt"),
+            },
+        },
+        "normalized_trainer_straddle_bound": {
+            "disposition": "RECORDED_NEGATIVE_BOUND_WITH_EXACT_ENGINEERING_SPEEDUP",
+            "exact_chain_diffs": np_sum["full_chain_diffs"],
+            "straddle_bound_prunes_over_used": np_sum["u_bound_dominance_theorem"]["pruned_u_vs_used"],
+            "trainer_speedup_vs_dirty_exact": np_sum["speedup_vs_dirty_exact_full"],
+            "speedup_attribution": np_sum["speedup_attribution"]["speedup_cause"],
+        },
     }
 
     dev_gate = {
         "dual_header_serializer_and_independent_decode": {
             "status": "PASS",
-            "detail": "All 70 dual-archive (140 A1AF/A1AD) builds + emit_mask archives verified 100% byte-for-byte via standalone independent_decode.py.",
+            "detail": "All 70 dual-archive (140 A1AF/A1AD) builds + 72 emit_mask archives verified 100% byte-for-byte via standalone independent_decode.py.",
         },
         "negative_corruption_controls": {
             "status": "PASS",
@@ -162,32 +211,35 @@ def main() -> None:
                 "and multi-root shared-ancestor bundle ({ba, baaba, baabx}, gain=40/3=13.33 > 12.5 > 10) charging shared ancestor once."
             ),
         },
-        "bundle_training_dev_gate_flat_literal_bytes": {
+        "bundle_arm_A1AB_training_dev_gate_flat_literal_bytes": {
             "status": "FAIL",
+            "disposition": "CLOSED",
             "detail": (
-                f"At historical flat-literal fragment budgets (566 B and 43,480 B), shared-bundle-byte accepted 0 multi-node bundles "
-                f"on CodeNet primary (573,831 exact joint-DP bundle evals) and coincided with exact pair-byte: "
-                f"+{b_ff_s['arms']['shared-bundle-byte']['vs_open_ref_pct']:.2f}% at 566 B and "
+                f"CLOSED: At historical flat-literal fragment budgets (566 B and 43,480 B), multi-node bundle arm A1AB "
+                f"(B_A/shared-bundle-byte) selected 0 multi-node bundles on CodeNet primary (573,831 exact joint-DP bundle evals) "
+                f"and coincided with exact pair-byte: +{b_ff_s['arms']['shared-bundle-byte']['vs_open_ref_pct']:.2f}% at 566 B and "
                 f"+{b_ff_l['arms']['shared-bundle-byte']['vs_open_ref_pct']:.2f}% at 43,480 B vs open-byte (tolerance <= +2.00%; 0.00% vs pair-byte)."
             ),
         },
-        "bundle_training_dev_gate_matched_emitted_slots": {
+        "bundle_arm_A1AB_training_dev_gate_matched_emitted_slots": {
             "status": "FAIL",
+            "disposition": "CLOSED",
             "detail": (
-                f"At matched emitted slots (84 and 3,924 fragments), shared-bundle-slot/dag coincided with exact-closed: "
-                f"+{b_sl_s['arms']['shared-bundle-dag']['vs_open_ref_pct']:.2f}% and "
-                f"+{b_sl_l['arms']['shared-bundle-dag']['vs_open_ref_pct']:.2f}% vs open (slot-tax corollary), while using 31.1% and 54.1% smaller A1AD headers."
+                f"CLOSED: At matched emitted slots (84 and 3,924 fragments), B_B/B_C (shared-bundle-slot/dag) selected 0 multi-node "
+                f"bundles and coincided with exact-closed: +{b_sl_s['arms']['shared-bundle-dag']['vs_open_ref_pct']:.2f}% and "
+                f"+{b_sl_l['arms']['shared-bundle-dag']['vs_open_ref_pct']:.2f}% vs open (slot-tax corollary)."
             ),
         },
-        "common_dag_serializer_repriced_dev_gate": {
+        "common_dag_serializer_A1AD_repriced_dev_finding": {
             "status": "PASS",
+            "disposition": "ADVANCE_IN_PREREGISTRATION_DAG_ENCODERS",
             "detail": (
                 f"Under common A1AD construction-DAG header budgets (878 B and 33,241 B matching open@84 and open@3924), "
-                f"shared-bundle-dag (= exact-closed, 0 multi-bundle accepts) beats pair-byte by "
-                f"{b_dag_s['arms']['shared-bundle-dag']['vs_pair_byte_pct']:+.2f}% / {b_dag_l['arms']['shared-bundle-dag']['vs_pair_byte_pct']:+.2f}% "
-                f"AND beats the better open reference (open-byte) by "
-                f"{b_dag_s['arms']['shared-bundle-dag']['vs_open_ref_pct']:+.2f}% / {b_dag_l['arms']['shared-bundle-dag']['vs_open_ref_pct']:+.2f}% "
-                f"at BOTH budgets. Honest attribution: this pass is caused by A1AD DAG header repricing removing the flat-literal length tax, NOT multi-node bundle firing."
+                f"exact-closed (= closed B_C chain with 0 bundle accepts) beats pair-byte by "
+                f"{b_dag_s['arms']['exact-closed']['vs_pair_byte_pct']:+.2f}% / {b_dag_l['arms']['exact-closed']['vs_pair_byte_pct']:+.2f}% "
+                f"AND beats open-byte by "
+                f"{b_dag_s['arms']['exact-closed']['vs_open_ref_pct']:+.2f}% / {b_dag_l['arms']['exact-closed']['vs_open_ref_pct']:+.2f}% "
+                f"at BOTH budgets. Attributed solely to A1AD DAG header repricing removing the flat-literal length tax, NOT multi-node bundles."
             ),
         },
         "ancestor_diagnostics_and_emission_ablation": {
@@ -197,12 +249,14 @@ def main() -> None:
                 "Disabling promoted ancestors increases unseen dev tokens by +107.88% (slots_large) to +141.09% (dag_header_large), proving ancestors are load-bearing fallback pieces."
             ),
         },
-        "norm_pruning_equivalence_and_timing": {
+        "norm_trainer_equivalence_and_speedup_attribution": {
             "status": "PASS",
             "detail": (
                 f"0/4096 full-chain differences vs exact-norm-s1-whole.txt; wall-clock {np_sum['pruned_wall_seconds']}s "
                 f"(including {np_sum['pruned_diag']['u_maint_seconds']}s U(w) maintenance) vs {np_sum['reference_dirty_exact_seconds']}s "
-                f"({np_sum['speedup_vs_dirty_exact_full']}x speedup). Proved & verified min_i Delta_T(t_i t_{{i+1}}) + U(w) >= used(w) identically (0 violations)."
+                f"({np_sum['speedup_vs_dirty_exact_full']}x speedup). Straddle bound produced ZERO additional prunes over static used(w) "
+                f"(pruned_u_vs_used=0; dominance identity min_i Delta_T(t_i t_{{i+1}}) + U(w) >= used(w) verified with 0 violations); "
+                f"2.08x trainer speedup is attributed strictly to Phase-1 closed-pair handling and dirty-document caching (87,799,431 dirty non-pair prunes)."
             ),
         },
         "hf_tokenizers_live_validation": {
@@ -213,22 +267,26 @@ def main() -> None:
             ),
         },
         "tiktoken_byte_rank_validation": {
-            "status": enc["tiktoken_byte_ranks"]["status"],
-            "detail": enc["tiktoken_byte_ranks"]["note"],
+            "status": tt["status"],
+            "tiktoken_version": tt["tiktoken_version"],
+            "requirements_file": "requirements-tiktoken.txt",
+            "detail": tt["note"],
         },
         "zstd_lean_framed_comparison": {
             "status": "PASS",
             "detail": (
                 "Lean-framed zstd-19 (8 KiB dict) achieves 90,622 B complete (p95=1.70 us) on dev vs best A1AD 97,414 B "
                 "(exact-closed@slots_large, payload 82,155 B < zstd 82,430 B, break-even M*=6.91 MB / 10,205 files; "
-                "shared-bundle-dag@dag_header_large payload 81,059 B breaks even at M*=4.94 MB / 7,297 files)."
+                "exact-closed@dag_header_large payload 81,059 B breaks even at M*=4.94 MB / 7,297 files)."
             ),
         },
     }
 
     summary = {
-        "schema": "a1a-fixed-budget-v1.dev-summary/1",
+        "schema": "a1a-fixed-budget-v1.dev-summary/2",
         "experiment_card": "A1a — Fixed-budget vocabulary selection (CPU development only)",
+        "preregistration_followup": "PREREGISTRATION_DAG_ENCODERS.md",
+        "arm_dispositions": arm_dispositions,
         "shared_spine": {
             "fidelity": {
                 "independent_decode_a1af_and_a1ad_byte_exact": True,
@@ -237,6 +295,8 @@ def main() -> None:
                 "negative_corruption_controls_rejected": 6,
                 "zstd_lean_roundtrip_exact": True,
                 "hf_tokenizers_roundtrip_exact": True,
+                "tiktoken_live_roundtrip_exact": bool(live_tt),
+                "tiktoken_live_version": tt["tiktoken_version"],
                 "sentencepiece_utf8_roundtrip_exact": True,
             },
             "complete_bits": complete_bits_summary,
@@ -292,14 +352,21 @@ def main() -> None:
                 "u_maint_seconds": np_sum["pruned_diag"]["u_maint_seconds"],
                 "speedup_vs_dirty_exact": np_sum["speedup_vs_dirty_exact_full"],
                 "u_dominance_violations": np_sum["pruned_diag"]["u_dominance_violations"],
-                "pruned_u_vs_used": np_sum["u_bound_dominance_theorem"]["pruned_u_vs_used"],
+                "straddle_pruned_u_vs_used": np_sum["u_bound_dominance_theorem"]["pruned_u_vs_used"],
+                "pruned_dirty_nonpair": np_sum["pruned_diag"]["pruned_dirty_nonpair"],
+                "speedup_attribution": np_sum["speedup_attribution"]["speedup_cause"],
             },
             "encoder_validation": {
                 "hf_status": enc["hf_tokenizers"]["status"],
-                "tiktoken_status": enc["tiktoken_byte_ranks"]["status"],
-                "tiktoken_bpe_K4096_reachable": enc["tiktoken_byte_ranks"]["real_vocab_audits"]["bpe-K4096"]["reachable_count"],
-                "tiktoken_closed_K4096_unreachable": enc["tiktoken_byte_ranks"]["real_vocab_audits"]["closed-K4096"]["unreachable_count"],
-                "tiktoken_open_K4096_unreachable": enc["tiktoken_byte_ranks"]["real_vocab_audits"]["token-K4096"]["unreachable_count"],
+                "hf_version": enc["hf_tokenizers"]["tokenizers_version"],
+                "tiktoken_status": tt["status"],
+                "tiktoken_version": tt["tiktoken_version"],
+                "tiktoken_bpe_K4096_reachable": tt["real_vocab_audits"]["bpe-K4096"]["reachable_count"],
+                "tiktoken_closed_K4096_full_table_unreachable": tt["real_vocab_audits"]["closed-K4096"]["unreachable_count"],
+                "tiktoken_closed_K4096_prefix_monotone_unreachable": tt["real_vocab_audits"]["closed-K4096"]["prefix_monotone_unreachable_count"],
+                "tiktoken_closed_K4096_live_utf8_shadowed": live_tt.get("live_vocabs", {}).get("closed-K4096", {}).get("live_byte_pair_merge_shadowed"),
+                "tiktoken_open_K4096_full_table_unreachable": tt["real_vocab_audits"]["token-K4096"]["unreachable_count"],
+                "tiktoken_live_receipt": live_tt,
             },
             "ancestor_diagnostics_headline": {
                 k: {

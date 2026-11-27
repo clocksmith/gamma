@@ -1,6 +1,51 @@
 {
-  "schema": "a1a-fixed-budget-v1.dev-summary/1",
+  "schema": "a1a-fixed-budget-v1.dev-summary/2",
   "experiment_card": "A1a \u2014 Fixed-budget vocabulary selection (CPU development only)",
+  "preregistration_followup": "PREREGISTRATION_DAG_ENCODERS.md",
+  "arm_dispositions": {
+    "multi_node_bundle_arm_A1AB": {
+      "arms": [
+        "B_A (shared-bundle-byte)",
+        "B_B (shared-bundle-slot)",
+        "B_C (shared-bundle-dag)"
+      ],
+      "disposition": "CLOSED",
+      "dev_gate_status": "FAIL",
+      "holdout_opened": false,
+      "reason": "0 multi-node bundle selections across 8,539 steps on CodeNet primary (573,831 exact joint-DP bundle evals in byte mode; ~1.7M across all three modes). Failed historical flat-literal gate (+4.86% at 566 B, +6.53% at 43,480 B vs open-byte; 0.00% vs exact pair-byte) and matched emitted slots gate (+14.55% at 84 slots, +24.77% at 3,924 slots vs open). Closed; no sealed holdout opened."
+    },
+    "construction_dag_headers_A1AD": {
+      "disposition": "ADVANCE",
+      "preregistration_path": "PREREGISTRATION_DAG_ENCODERS.md",
+      "dev_finding": "25.0%-30.6% header reduction for open vocabularies (1,171B->878B at 84 frags; 47,925B->33,241B at 3,924 frags) and 35.9%-51.1% header reduction for closed vocabularies (944B->605B; 30,925B->15,259B; 67,963B->33,238B at 8,147 frags) with identical emitted vocabulary, code table, and payload.",
+      "frozen_hashes": {
+        "FORMAT.md": "1be36803ea554b16f46a1db95225b56ec832c5e843ef9cf2519b2eafde3203f3",
+        "headers.py": "5a14f0d5d2e46b20060c8b4b2541c804a0f0b95b465789730c30f7e45a4e6a53",
+        "independent_decode.py": "03ec092b5dad49cc33531af5dea72ef2fcc80f402860b947904256ad57fbe114"
+      }
+    },
+    "native_deployment_encoder_controls": {
+      "disposition": "ADVANCE",
+      "preregistration_path": "PREREGISTRATION_DAG_ENCODERS.md",
+      "controls": [
+        "byte_ranks reachability/shadowing",
+        "HF tokenizers BPE",
+        "SentencePiece Unigram",
+        "live tiktoken==0.14.0"
+      ],
+      "frozen_hashes": {
+        "validate_encoders.py": "a689744e473a15818b7342a280b7233b2c5dddfd56d69991e9fab24e97ccd5f9",
+        "requirements-tiktoken.txt": "5ef7c35fecdb702f6b599aa7b096e6e891143258aadd7bf1df0389c6d40d0020"
+      }
+    },
+    "normalized_trainer_straddle_bound": {
+      "disposition": "RECORDED_NEGATIVE_BOUND_WITH_EXACT_ENGINEERING_SPEEDUP",
+      "exact_chain_diffs": 0,
+      "straddle_bound_prunes_over_used": 0,
+      "trainer_speedup_vs_dirty_exact": 2.08,
+      "speedup_attribution": "Phase-1 active closed-pair handling and dirty-document run caching (87,799,431 dirty non-pair prunes)"
+    }
+  },
   "shared_spine": {
     "fidelity": {
       "independent_decode_a1af_and_a1ad_byte_exact": true,
@@ -9,6 +54,8 @@
       "negative_corruption_controls_rejected": 6,
       "zstd_lean_roundtrip_exact": true,
       "hf_tokenizers_roundtrip_exact": true,
+      "tiktoken_live_roundtrip_exact": true,
+      "tiktoken_live_version": "0.14.0",
       "sentencepiece_utf8_roundtrip_exact": true
     },
     "complete_bits": {
@@ -777,7 +824,7 @@
           "maxrss_bytes": 236978176,
           "entries": 8710
         },
-        "shared_bundle_arms": {
+        "shared_bundle_arms_closed": {
           "shared-bundle-byte": {
             "wall_seconds": 878.976,
             "entries": 8710,
@@ -812,10 +859,16 @@
           "closed_run_evals": 60067435,
           "nonpair_run_evals": 72250429,
           "pruned_dirty_nonpair": 87799431,
+          "pruned_u_vs_used": 0,
           "pruned_static": 6101146059,
           "maxrss_bytes": 283443200,
           "reference_dirty_exact_seconds": 628.49,
-          "speedup_vs_dirty_exact": 2.08
+          "speedup_vs_dirty_exact": 2.08,
+          "speedup_attribution": {
+            "straddle_bound_additional_prunes_over_used": 0,
+            "speedup_cause": "Phase-1 active closed-pair handling and dirty-document run caching (87,799,431 dirty non-pair prunes)",
+            "straddle_bound_effect": "The straddle bound min_i Delta_T(t_i t_{i+1}) + U(w) produced ZERO additional prunes over the existing static used(w) bound (pruned_u_vs_used = 0) and added 0.279s of U(w) maintenance overhead; the entire 2.08x full-chain speedup (and 1.37x/1.53x K=300 speedups) is attributed to Phase-1 closed-pair handling and dirty-document caching."
+          }
         },
         "controls": {
           "bpe_ext_seconds": 18.8,
@@ -1083,7 +1136,7 @@
         },
         "basis_note": "zstd measured in-process via C libzstd (40 reps/file); A1AF/A1AD measured via standalone pure-Python independent_decode.py."
       },
-      "replay_check_seconds": 7.194
+      "replay_check_seconds": 44.061
     },
     "horizon": {
       "dag_header_small": {
@@ -1895,7 +1948,7 @@
   "dev_gate": {
     "dual_header_serializer_and_independent_decode": {
       "status": "PASS",
-      "detail": "All 70 dual-archive (140 A1AF/A1AD) builds + emit_mask archives verified 100% byte-for-byte via standalone independent_decode.py."
+      "detail": "All 70 dual-archive (140 A1AF/A1AD) builds + 72 emit_mask archives verified 100% byte-for-byte via standalone independent_decode.py."
     },
     "negative_corruption_controls": {
       "status": "PASS",
@@ -1909,37 +1962,42 @@
       "status": "PASS",
       "detail": "Verified exact engine_shared_bundle accepts single-root straddled bundle ({ba, baaba}, gain=15/2=7.5 > 5) and multi-root shared-ancestor bundle ({ba, baaba, baabx}, gain=40/3=13.33 > 12.5 > 10) charging shared ancestor once."
     },
-    "bundle_training_dev_gate_flat_literal_bytes": {
+    "bundle_arm_A1AB_training_dev_gate_flat_literal_bytes": {
       "status": "FAIL",
-      "detail": "At historical flat-literal fragment budgets (566 B and 43,480 B), shared-bundle-byte accepted 0 multi-node bundles on CodeNet primary (573,831 exact joint-DP bundle evals) and coincided with exact pair-byte: +4.86% at 566 B and +6.53% at 43,480 B vs open-byte (tolerance <= +2.00%; 0.00% vs pair-byte)."
+      "disposition": "CLOSED",
+      "detail": "CLOSED: At historical flat-literal fragment budgets (566 B and 43,480 B), multi-node bundle arm A1AB (B_A/shared-bundle-byte) selected 0 multi-node bundles on CodeNet primary (573,831 exact joint-DP bundle evals) and coincided with exact pair-byte: +4.86% at 566 B and +6.53% at 43,480 B vs open-byte (tolerance <= +2.00%; 0.00% vs pair-byte)."
     },
-    "bundle_training_dev_gate_matched_emitted_slots": {
+    "bundle_arm_A1AB_training_dev_gate_matched_emitted_slots": {
       "status": "FAIL",
-      "detail": "At matched emitted slots (84 and 3,924 fragments), shared-bundle-slot/dag coincided with exact-closed: +14.55% and +24.77% vs open (slot-tax corollary), while using 31.1% and 54.1% smaller A1AD headers."
+      "disposition": "CLOSED",
+      "detail": "CLOSED: At matched emitted slots (84 and 3,924 fragments), B_B/B_C (shared-bundle-slot/dag) selected 0 multi-node bundles and coincided with exact-closed: +14.55% and +24.77% vs open (slot-tax corollary)."
     },
-    "common_dag_serializer_repriced_dev_gate": {
+    "common_dag_serializer_A1AD_repriced_dev_finding": {
       "status": "PASS",
-      "detail": "Under common A1AD construction-DAG header budgets (878 B and 33,241 B matching open@84 and open@3924), shared-bundle-dag (= exact-closed, 0 multi-bundle accepts) beats pair-byte by -2.54% / -5.42% AND beats the better open reference (open-byte) by -1.30% / -1.87% at BOTH budgets. Honest attribution: this pass is caused by A1AD DAG header repricing removing the flat-literal length tax, NOT multi-node bundle firing."
+      "disposition": "ADVANCE_IN_PREREGISTRATION_DAG_ENCODERS",
+      "detail": "Under common A1AD construction-DAG header budgets (878 B and 33,241 B matching open@84 and open@3924), exact-closed (= closed B_C chain with 0 bundle accepts) beats pair-byte by -2.54% / -5.42% AND beats open-byte by -1.30% / -1.87% at BOTH budgets. Attributed solely to A1AD DAG header repricing removing the flat-literal length tax, NOT multi-node bundles."
     },
     "ancestor_diagnostics_and_emission_ablation": {
       "status": "PASS",
       "detail": "Measured purchased/shared/emitted/unused ancestors and individual+joint emission disabling retaining the storage DAG (A1AD emit_mask verified). Disabling promoted ancestors increases unseen dev tokens by +107.88% (slots_large) to +141.09% (dag_header_large), proving ancestors are load-bearing fallback pieces."
     },
-    "norm_pruning_equivalence_and_timing": {
+    "norm_trainer_equivalence_and_speedup_attribution": {
       "status": "PASS",
-      "detail": "0/4096 full-chain differences vs exact-norm-s1-whole.txt; wall-clock 302.627s (including 0.279s U(w) maintenance) vs 628.49s (2.08x speedup). Proved & verified min_i Delta_T(t_i t_{i+1}) + U(w) >= used(w) identically (0 violations)."
+      "detail": "0/4096 full-chain differences vs exact-norm-s1-whole.txt; wall-clock 302.627s (including 0.279s U(w) maintenance) vs 628.49s (2.08x speedup). Straddle bound produced ZERO additional prunes over static used(w) (pruned_u_vs_used=0; dominance identity min_i Delta_T(t_i t_{i+1}) + U(w) >= used(w) verified with 0 violations); 2.08x trainer speedup is attributed strictly to Phase-1 closed-pair handling and dirty-document caching (87,799,431 dirty non-pair prunes)."
     },
     "hf_tokenizers_live_validation": {
       "status": "PASS",
       "detail": "Live tokenizers 0.22.2 verified: reachable, shadowed-unreachable, missing-parent controls, and 100% byte round-trip + exact merge replay match on CodeNet dev."
     },
     "tiktoken_byte_rank_validation": {
-      "status": "PART",
-      "detail": "Pure-Python tiktoken byte-rank reachability validator passed all controls and audits; live tiktoken runtime check skipped because `tiktoken` package is not installed in .venv or system Python"
+      "status": "PASS",
+      "tiktoken_version": "0.14.0",
+      "requirements_file": "requirements-tiktoken.txt",
+      "detail": "Live tiktoken 0.14.0 verified via /Users/xyz/deco/gamma/.venv-tiktoken/bin/python: encode/decode byte-exact round-trip on 25 CodeNet dev docs, 100% token-stream parity with pure-Python validator, and live byte_pair_merge rank-shadowing verified on synthetic + frozen vocabularies."
     },
     "zstd_lean_framed_comparison": {
       "status": "PASS",
-      "detail": "Lean-framed zstd-19 (8 KiB dict) achieves 90,622 B complete (p95=1.70 us) on dev vs best A1AD 97,414 B (exact-closed@slots_large, payload 82,155 B < zstd 82,430 B, break-even M*=6.91 MB / 10,205 files; shared-bundle-dag@dag_header_large payload 81,059 B breaks even at M*=4.94 MB / 7,297 files)."
+      "detail": "Lean-framed zstd-19 (8 KiB dict) achieves 90,622 B complete (p95=1.70 us) on dev vs best A1AD 97,414 B (exact-closed@slots_large, payload 82,155 B < zstd 82,430 B, break-even M*=6.91 MB / 10,205 files; exact-closed@dag_header_large payload 81,059 B breaks even at M*=4.94 MB / 7,297 files)."
     }
   },
   "key_metrics": {
@@ -2305,14 +2363,79 @@
       "u_maint_seconds": 0.279,
       "speedup_vs_dirty_exact": 2.08,
       "u_dominance_violations": 0,
-      "pruned_u_vs_used": 0
+      "straddle_pruned_u_vs_used": 0,
+      "pruned_dirty_nonpair": 87799431,
+      "speedup_attribution": "Phase-1 active closed-pair handling and dirty-document run caching (87,799,431 dirty non-pair prunes)"
     },
     "encoder_validation": {
       "hf_status": "PASS",
-      "tiktoken_status": "PART",
+      "hf_version": "0.22.2",
+      "tiktoken_status": "PASS",
+      "tiktoken_version": "0.14.0",
       "tiktoken_bpe_K4096_reachable": 3924,
-      "tiktoken_closed_K4096_unreachable": 274,
-      "tiktoken_open_K4096_unreachable": 3184
+      "tiktoken_closed_K4096_full_table_unreachable": 237,
+      "tiktoken_closed_K4096_prefix_monotone_unreachable": 274,
+      "tiktoken_closed_K4096_live_utf8_shadowed": 236,
+      "tiktoken_open_K4096_full_table_unreachable": 3076,
+      "tiktoken_live_receipt": {
+        "tiktoken_version": "0.14.0",
+        "positive_live_ok": true,
+        "shadowing_live_ok": true,
+        "shadowing_whole_piece_short_circuit_observed": true,
+        "utf8_dev_docs_checked": 25,
+        "live_vocabs": {
+          "bpe-K256": {
+            "utf8_dev_docs_roundtrip_ok": 25,
+            "dev_utf8_total_tokens": 7606,
+            "pure_python_parity_5docs": "5/5",
+            "pure_python_parity_all_match": true,
+            "utf8_multi_tokens_checked": 84,
+            "live_byte_pair_merge_reachable": 84,
+            "live_byte_pair_merge_shadowed": 0,
+            "sample_live_shadowed_hex": []
+          },
+          "closed-K256": {
+            "utf8_dev_docs_roundtrip_ok": 25,
+            "dev_utf8_total_tokens": 7805,
+            "pure_python_parity_5docs": "5/5",
+            "pure_python_parity_all_match": true,
+            "utf8_multi_tokens_checked": 84,
+            "live_byte_pair_merge_reachable": 82,
+            "live_byte_pair_merge_shadowed": 2,
+            "sample_live_shadowed_hex": [
+              "20696e20",
+              "293b0a20202020"
+            ]
+          },
+          "bpe-K4096": {
+            "utf8_dev_docs_roundtrip_ok": 25,
+            "dev_utf8_total_tokens": 3478,
+            "pure_python_parity_5docs": "5/5",
+            "pure_python_parity_all_match": true,
+            "utf8_multi_tokens_checked": 3843,
+            "live_byte_pair_merge_reachable": 3843,
+            "live_byte_pair_merge_shadowed": 0,
+            "sample_live_shadowed_hex": []
+          },
+          "closed-K4096": {
+            "utf8_dev_docs_roundtrip_ok": 25,
+            "dev_utf8_total_tokens": 3813,
+            "pure_python_parity_5docs": "5/5",
+            "pure_python_parity_all_match": true,
+            "utf8_multi_tokens_checked": 3861,
+            "live_byte_pair_merge_reachable": 3625,
+            "live_byte_pair_merge_shadowed": 236,
+            "sample_live_shadowed_hex": [
+              "696e7075742829",
+              "6c696e65",
+              "696e70757428292e73706c697428",
+              "696e70757428292e73706c6974282929",
+              "203d20696e7428696e7075742829",
+              "732e737464696e"
+            ]
+          }
+        }
+      }
     },
     "ancestor_diagnostics_headline": {
       "shared-bundle-byte@dag_header_large": {

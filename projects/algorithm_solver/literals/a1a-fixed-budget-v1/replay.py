@@ -2,13 +2,17 @@
 """Verification entrypoint for BITS Experiment Card A1a (`a1a-fixed-budget-v1`).
 
 Usage:
-    python replay.py check [--strict] [--report FILE]
+    python replay.py check [--strict] [--report FILE] [--tiktoken-python PYTHON]
 
 Runs all unit checks, independent decode checks (A1AF & A1AD), negative corruption controls,
-b_max=1 equivalence (live prefix + full committed chains), normalized pruning equivalence
-(live counterexamples + U(w) exactness + full 4,096 committed chain), HF tokenizers live
-runtime validation, tiktoken byte-rank reachability validation (PASS or PART if `tiktoken`
-package is absent), lean-framed zstd round-trip check, and artifact/no-emoji integrity checks.
+b_max=1 equivalence (live prefix + full committed chains), synthetic multi-root shared-ancestor
+bundle check, normalized pruning equivalence (live counterexamples + U(w) exactness + full
+4,096 committed chain), HF tokenizers live runtime validation, live tiktoken byte-rank
+reachability validation (PASS with pinned tiktoken venv; graceful PART only if absent),
+lean-framed zstd round-trip check, and artifact/no-emoji/preregistration-hash checks.
+
+By default, writes the JSON receipt to a temporary file (printed to stdout) and NEVER
+modifies any git-tracked file. Only writes to `--report <path>` when explicitly passed.
 """
 from __future__ import annotations
 
@@ -22,6 +26,7 @@ import sys
 import tempfile
 import time
 from pathlib import Path
+from typing import Optional
 
 HERE = Path(__file__).resolve().parent
 LIT = HERE.parent
@@ -30,8 +35,6 @@ CL = LIT / "closure-holdout-v1"
 BIN_DIR = HERE / "bin"
 
 sys.path.insert(0, str(HERE))
-import headers as H
-import independent_decode as ID
 import test_headers as TH
 import test_norm_pruning as TNP
 import train_dev as TD
@@ -77,6 +80,10 @@ def need(cond: bool, msg: str) -> None:
         raise AssertionError(msg)
 
 
+def _sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def _check_dual_headers() -> str:
     res = TH.test_roundtrip_closed_and_open()
     return (
@@ -94,7 +101,6 @@ def _check_negative_controls() -> str:
 
 def _check_bmax1_identity() -> str:
     sb_bin, _ = TD.ensure_binaries()
-    # 1. Live quick check on primary (K=250)
     with tempfile.TemporaryDirectory() as td:
         lst, _, _ = TD.write_train_list(Path(td))
         env = dict(os.environ, FSV3_RECEIPT="manifest=primary pool=both cuts=none impl=replay run=replay-bmax1")
@@ -112,7 +118,6 @@ def _check_bmax1_identity() -> str:
         need(got_s == ref_closed[:250], "live b_max=1 slot mismatch on K=250")
         need(got_b == ref_pb[:250], "live b_max=1 byte mismatch on K=250")
 
-    # 2. Full committed chain verification
     full_slot = HERE / "out/chains/bmax1-slot-exact-closed.txt"
     full_byte = HERE / "out/chains/pair-byte-exact-full.txt"
     need(full_slot.exists() and full_byte.exists(), "full b_max=1 chains missing; run train_dev.py --mode all")
@@ -144,10 +149,9 @@ def _check_synthetic_bundles() -> str:
 def _check_norm_pruning() -> str:
     pruned_bin = TNP.compile_bin(HERE / "engine_norm_pruned.c", BIN_DIR / "engine_norm_pruned")
     unpruned_bin = TNP.compile_bin(CL / "engine_norm.c", BIN_DIR / "engine_norm_ref")
-    ce = TNP.test_direct_bound_with_forced_nonpair_win()
+    TNP.test_direct_bound_with_forced_nonpair_win()
     syn = TNP.test_synthetic_counterexamples(pruned_bin, unpruned_bin)
 
-    # Live K=250 primary verification with exact U(w) self-check every 25 steps
     ref_e, _ = TNP.parse_chain_e_lines(CL / "out/exact/exact-norm-s1-whole.txt")
     with tempfile.TemporaryDirectory() as td:
         lst, _, _ = TD.write_train_list(Path(td))
@@ -163,16 +167,16 @@ def _check_norm_pruning() -> str:
         got250, d250 = TNP.parse_chain_e_lines(o250)
         need(got250 == ref_e[:250], "live K=250 norm_pruned mismatch")
         need(d250.get("u_dominance_violations", -1) == 0, "unexpected dominance violation")
+        need(d250.get("pruned_u_fast", -1) == 0 and d250.get("pruned_u_cleaned", -1) == 0, "unexpected u-prune over used(w)")
 
-    # Full committed 4,096 chain verification
     full_path = HERE / "out/norm_pruning/exact-norm-pruned-s1-whole.txt"
     need(full_path.exists(), "full 4096 pruned chain missing; run test_norm_pruning.py")
     full_e, full_d = TNP.parse_chain_e_lines(full_path)
-    need(full_e == ref_e, f"full 4096 pruned chain differs from exact-norm-s1-whole.txt")
+    need(full_e == ref_e, "full 4096 pruned chain differs from exact-norm-s1-whole.txt")
     return (
         f"counterexample + {syn['synthetic_cases']} synthetic cases + live K=250 U(w) exact + "
-        f"full {len(full_e)}/{len(ref_e)} 0 diffs (wall {full_d.get('seconds')}s, "
-        f"u_maint {full_d.get('u_maint_seconds')}s, dom_viol={full_d.get('u_dominance_violations')})"
+        f"full {len(full_e)}/{len(ref_e)} 0 diffs (wall {full_d.get('seconds')}s via Phase-1 closed + "
+        f"dirty-doc caching; straddle pruned_u_vs_used=0, dom_viol={full_d.get('u_dominance_violations')})"
     )
 
 
@@ -185,19 +189,29 @@ def _check_hf_tokenizers() -> str:
     )
 
 
-def _check_tiktoken_validator() -> str:
-    res = VE.check_tiktoken_runtime()
-    need(res["positive_control_ok"] and res["shadowed_dead_token_caught"]
-         and res["unclosed_token_caught"] and res["rank_inversion_caught"],
-         "tiktoken byte-rank validator controls failed")
+def _check_tiktoken_validator(tiktoken_python: Optional[str] = None) -> str:
+    res = VE.check_tiktoken_runtime(tiktoken_python=tiktoken_python)
+    need(
+        res["positive_control_ok"]
+        and res["shadowed_dead_token_caught"]
+        and res["unclosed_token_caught"]
+        and res["rank_inversion_caught"],
+        "tiktoken byte-rank validator controls failed",
+    )
     msg = (
-        f"byte-rank validator controls + real vocab audits OK "
+        f"byte-rank validator controls + frozen vocab audits OK "
         f"(bpe-K4096 {res['real_vocab_audits']['bpe-K4096']['reachable_count']}/3924 reachable, "
         f"closed-K4096 {res['real_vocab_audits']['closed-K4096']['unreachable_count']} shadowed); "
     )
     if res["status"] == "PASS":
-        return msg + f"live tiktoken {res['tiktoken_version']} verified"
-    return Part(msg + "missing package `tiktoken` in .venv and system Python (live tiktoken runtime not installed)")
+        live = res["live_tiktoken_receipt"]
+        return (
+            msg
+            + f"live tiktoken {res['tiktoken_version']} PASS "
+            + f"(dev {live['utf8_dev_docs_checked']} UTF-8 docs round-trip + exact parity, "
+            + f"closed-K4096 live shadowed={live['live_vocabs']['closed-K4096']['live_byte_pair_merge_shadowed']})"
+        )
+    return Part(msg + "missing package `tiktoken` (live tiktoken runtime not installed on this host)")
 
 
 def _check_zstd_lean() -> str:
@@ -223,6 +237,8 @@ def _check_artifacts_and_policy() -> str:
     required = [
         HERE / "FORMAT.md",
         HERE / "DEV_REPORT.md",
+        HERE / "PREREGISTRATION_DAG_ENCODERS.md",
+        HERE / "requirements-tiktoken.txt",
         HERE / "dev_summary.json",
         HERE / "out/eval_dev.json",
         HERE / "out/encoder_validation.json",
@@ -231,31 +247,41 @@ def _check_artifacts_and_policy() -> str:
     missing = [str(p.relative_to(HERE)) for p in required if not p.exists()]
     need(not missing, f"missing artifacts: {missing}")
 
-    # Verify dev_summary.json has shared_spine and dev_gate fields
     summary = json.loads((HERE / "dev_summary.json").read_text())
-    for k in ("shared_spine", "dev_gate"):
+    for k in ("shared_spine", "dev_gate", "arm_dispositions"):
         need(k in summary, f"dev_summary.json missing key {k}")
     for k in ("fidelity", "complete_bits", "measured_work", "horizon"):
         need(k in summary["shared_spine"], f"shared_spine missing key {k}")
 
-    # Enforce EMOJI.md: no emoji characters (U+1F000..U+1FAFF or common dingbat emojis) in text files
+    # Verify frozen SHA-256 hashes recorded in PREREGISTRATION_DAG_ENCODERS.md match files on disk
+    prereg_text = (HERE / "PREREGISTRATION_DAG_ENCODERS.md").read_text(encoding="utf-8")
+    hash_rows = re.findall(r"`([A-Za-z0-9_.\-/]+)`\s*\|\s*`([0-9a-f]{64})`", prereg_text)
+    need(len(hash_rows) >= 4, f"expected >= 4 frozen SHA-256 rows in PREREGISTRATION_DAG_ENCODERS.md, found {len(hash_rows)}")
+    for rel_name, want_sha in hash_rows:
+        fp = HERE / rel_name
+        need(fp.exists(), f"preregistered file missing: {rel_name}")
+        got_sha = _sha256_file(fp)
+        need(got_sha == want_sha, f"preregistered hash mismatch for {rel_name}: {got_sha} != {want_sha}")
+
+    # Enforce EMOJI.md: zero emoji characters in text files
     emoji_re = re.compile(r"[\U0001F000-\U0001FAFF\u2705\u274C\u26A0\u2B50\U0001F300-\U0001F9FF]")
     for p in HERE.rglob("*"):
-        if p.is_file() and p.suffix in (".py", ".c", ".md", ".json"):
+        if p.is_file() and p.suffix in (".py", ".c", ".md", ".json", ".txt"):
             if "bin" in p.parts or "work" in p.parts:
                 continue
             txt = p.read_text(encoding="utf-8", errors="ignore")
             m = emoji_re.search(txt)
             if m is not None:
                 raise AssertionError(f"emoji found in {p.relative_to(HERE)}: {m.group(0)!r}")
-    return f"all {len(required)} core artifacts present, shared_spine/dev_gate valid, 0 emojis"
+    return f"all {len(required)} core artifacts present, {len(hash_rows)} prereg hashes verified, 0 emojis"
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="A1a verification entrypoint")
     ap.add_argument("command", choices=("check",), help="verification level")
     ap.add_argument("--strict", action="store_true", help="treat PART as failure")
-    ap.add_argument("--report", help="optional JSON output report path")
+    ap.add_argument("--report", default=None, help="explicit JSON output report path (default: temp file)")
+    ap.add_argument("--tiktoken-python", default=None, help="optional path to Python with tiktoken installed")
     args = ap.parse_args()
 
     t0 = time.perf_counter()
@@ -266,7 +292,7 @@ def main() -> int:
     rep.step("synthetic_shared_bundle", _check_synthetic_bundles)
     rep.step("norm_pruning_equivalence", _check_norm_pruning)
     rep.step("hf_tokenizers_runtime", _check_hf_tokenizers)
-    rep.step("tiktoken_byte_ranks", _check_tiktoken_validator)
+    rep.step("tiktoken_byte_ranks", lambda: _check_tiktoken_validator(args.tiktoken_python))
     rep.step("zstd_lean_framing_decode", _check_zstd_lean)
     rep.step("artifacts_and_policy", _check_artifacts_and_policy)
 
@@ -279,9 +305,18 @@ def main() -> int:
         "steps": rep.steps,
     }
     if args.report:
-        Path(args.report).write_text(json.dumps(out, indent=2) + "\n")
-    statuses = {s["status"] for s in rep.steps}
-    print(f"\nreplay.py check: {'OK' if rep.ok else 'FAILED'} in {total_s}s (statuses={sorted(statuses)})")
+        report_path = Path(args.report)
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(json.dumps(out, indent=2) + "\n")
+    else:
+        with tempfile.NamedTemporaryFile(
+            mode="w", prefix="a1a-replay-check-", suffix=".json", delete=False, encoding="utf-8"
+        ) as tf:
+            json.dump(out, tf, indent=2)
+            tf.write("\n")
+            report_path = Path(tf.name)
+    statuses = sorted({s["status"] for s in rep.steps})
+    print(f"\nreplay.py check: {'OK' if rep.ok else 'FAILED'} in {total_s}s (statuses={statuses}) report={report_path}")
     return 0 if rep.ok else 1
 
 

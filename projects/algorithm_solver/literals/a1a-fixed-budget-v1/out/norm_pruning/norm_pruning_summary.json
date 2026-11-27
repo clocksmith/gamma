@@ -37,18 +37,23 @@
     "pruned_u_vs_used": 0,
     "pruned_u_vs_nocc": 0
   },
+  "speedup_attribution": {
+    "straddle_bound_additional_prunes_over_used": 0,
+    "speedup_cause": "Phase-1 active closed-pair handling and dirty-document run caching (87,799,431 dirty non-pair prunes)",
+    "straddle_bound_effect": "The straddle bound min_i Delta_T(t_i t_{i+1}) + U(w) produced ZERO additional prunes over the existing static used(w) bound (pruned_u_vs_used = 0) and added 0.279s of U(w) maintenance overhead; the entire 2.08x full-chain speedup (and 1.37x/1.53x K=300 speedups) is attributed to Phase-1 closed-pair handling and dirty-document caching."
+  },
   "prefix_k300_comparison": {
     "unpruned_engine_norm_seconds": 13.733,
     "unpruned_engine_norm_evaluations": 25010,
-    "pure_u_bound_seconds": 10.005,
-    "pure_u_bound_u_maint_seconds": 0.114,
-    "pure_u_bound_nonpair_full_evals": 6451,
-    "pruned_with_dirty_seconds": 8.989,
-    "pruned_with_dirty_u_maint_seconds": 0.133,
-    "pruned_with_dirty_nonpair_run_evals": 400509,
-    "pruned_with_dirty_pruned_dirty_nonpair": 3339,
-    "speedup_pure_u_vs_unpruned_k300": 1.37,
-    "speedup_with_dirty_vs_unpruned_k300": 1.53
+    "phase1_closed_no_dirty_nonpair_seconds": 10.005,
+    "phase1_closed_no_dirty_nonpair_u_maint_seconds": 0.114,
+    "phase1_closed_no_dirty_nonpair_full_evals": 6451,
+    "phase1_closed_with_dirty_nonpair_seconds": 8.989,
+    "phase1_closed_with_dirty_nonpair_u_maint_seconds": 0.133,
+    "phase1_closed_with_dirty_nonpair_run_evals": 400509,
+    "phase1_closed_with_dirty_nonpair_pruned_dirty": 3339,
+    "speedup_phase1_closed_no_dirty_nonpair_vs_unpruned_k300": 1.37,
+    "speedup_phase1_closed_with_dirty_nonpair_vs_unpruned_k300": 1.53
   },
   "speedup_vs_dirty_exact_full": 2.08,
   "pruned_chain_sha256": "c3c026e9e80e21ceac3ff8496d5a3b758681c251dde52945bef959027ffccc82"
