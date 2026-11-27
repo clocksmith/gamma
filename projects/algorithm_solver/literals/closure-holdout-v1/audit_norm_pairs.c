@@ -10,7 +10,7 @@
 // engine's maximum non-overlapping count, a bound that never rises, so candidates are scanned in decreasing
 // used(w) until the bound falls below the best challenger found.
 //
-//   audit_norm_pairs L EVERY LIST CHAIN OUT_TSV
+//   audit_norm_pairs L EVERY LIST CHAIN OUT_TSV [OFFSET]   (audits steps with step % EVERY == OFFSET)
 #define ENGINE_NO_MAIN
 #include "../fixed-source-v3/engine.c"
 
@@ -109,8 +109,8 @@ static int used_cmp(const void *a, const void *b) {
 }
 
 int main(int argc, char **argv) {
-  if (argc != 6) { fprintf(stderr, "usage: audit_norm_pairs L EVERY LIST CHAIN OUT_TSV\n"); return 2; }
-  int L = atoi(argv[1]), every = atoi(argv[2]);
+  if (argc != 6 && argc != 7) { fprintf(stderr, "usage: audit_norm_pairs L EVERY LIST CHAIN OUT_TSV [OFFSET]\n"); return 2; }
+  int L = atoi(argv[1]), every = atoi(argv[2]), offset = argc == 7 ? atoi(argv[6]) : 0;
   set_policy("s1-whole");
   load(argv[3]);
   load_side_files();
@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
     for (int i = 0; i < l; i++) sscanf(hex + 2 * i, "%2hhx", &e[i]);
     int c = find_candidate(e, l);
     if (c < 0) { fprintf(stderr, "chain entry is not a candidate\n"); return 1; }
-    if (every > 0 && step % every == 0) {
+    if (every > 0 && step % every == offset) {
       int chain_gain = gain_fast(&cands[c]);
       // Best closed candidate by Delta, and the strongest challenger by Delta / (s - 1), both exactly.
       int best_pair = 0;

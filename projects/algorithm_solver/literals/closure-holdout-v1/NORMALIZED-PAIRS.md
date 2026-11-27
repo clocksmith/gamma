@@ -42,12 +42,13 @@ Six documents `Xabcd`, `Wabcd`, `abcdY`, `abcdZ`, `Uabcd`, `Vabcd`, with V = all
   every one; the premise failed for 18,702, of which 5 beat every closed candidate. Run time about 10 s.
 - On CodeNet `primary` (policy `s1-whole`), the exact normalized chain and the exact closed chain are identical,
   4,096 of 4,096 entries in order (`out/exact/exact-norm-s1-whole.txt`, `out/exact/exact-closed-s1-whole.txt`).
-  `audit_norm_pairs.c` audits the strongest candidate needing three or more tokens at every 200th step of that chain
-  (exact: scanned in decreasing order of a bound that never rises). Of 20 audited steps, the proposition
-  certifies 19 (the challenger's alignment penalty is 0) and is silent at 1 (step 2,000: penalty 6, the
-  challenger still scores 9 against the best pair's 10); the challenger never beats the best pair. At 9 of the
-  20 steps it ties the best pair exactly, so the identical dictionaries also depend on the tie rule
-  preferring pairs. Output: `out/audit-norm-pairs.tsv`, `out/audit-norm-pairs-summary.json`.
+  `audit_norm_pairs.c` audits every step of that chain (3,925 steps): the strongest candidate needing three
+  or more tokens, found exactly (scanned in decreasing order of a bound that never rises), its alignment penalty, and
+  the best closed candidate. The proposition certifies 3,529 steps (the challenger's penalty is 0) and is
+  silent at 396; the challenger never beats the best pair. It ties the best pair exactly at 2,334 steps. At
+  certified ties the challenger's own adjacent pair, which is shorter and so has a lower candidate index, wins the tie;
+  at the 38 silent ties the outcome rests on candidate indices alone. Output: `out/audit-norm-pairs.tsv`,
+  `out/audit-norm-pairs-summary.json`.
 
 ## What it means for the experiments
 
