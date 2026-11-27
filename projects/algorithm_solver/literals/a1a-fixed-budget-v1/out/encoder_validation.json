@@ -1,0 +1,169 @@
+{
+  "hf_tokenizers": {
+    "status": "PASS",
+    "tokenizers_version": "0.22.2",
+    "reachable_test_passed": true,
+    "shadowed_unreachable_test_passed": true,
+    "missing_parent_test_passed": true,
+    "missing_parent_detail": "constructor_rejected: Exception: Error while initializing BPE: Token `ab` out of vocabulary",
+    "open_K4096_non_closed_entries": 2762,
+    "open_K4096_closed_entries": 1162,
+    "real_vocab_checks": {
+      "bpe-K256": {
+        "merges": 84,
+        "reachable_merges_self": 81,
+        "unreachable_merges_self": 3,
+        "dev25_roundtrip_ok": true,
+        "dev25_hf_tokens": 7678,
+        "ref_replay_exact_match_5docs": 5
+      },
+      "closed-K256": {
+        "merges": 84,
+        "reachable_merges_self": 80,
+        "unreachable_merges_self": 4,
+        "dev25_roundtrip_ok": true,
+        "dev25_hf_tokens": 7805,
+        "ref_replay_exact_match_5docs": 5
+      },
+      "bpe-K4096": {
+        "merges": 3924,
+        "reachable_merges_self": 3166,
+        "unreachable_merges_self": 758,
+        "dev25_roundtrip_ok": true,
+        "dev25_hf_tokens": 4020,
+        "ref_replay_exact_match_5docs": 5
+      },
+      "closed-K4096": {
+        "merges": 3924,
+        "reachable_merges_self": 3146,
+        "unreachable_merges_self": 778,
+        "dev25_roundtrip_ok": true,
+        "dev25_hf_tokens": 4256,
+        "ref_replay_exact_match_5docs": 5
+      }
+    },
+    "seconds": 0.115
+  },
+  "tiktoken_byte_ranks": {
+    "status": "PART",
+    "tiktoken_installed": false,
+    "tiktoken_version": null,
+    "missing_package": "tiktoken",
+    "note": "Pure-Python tiktoken byte-rank reachability validator passed all controls and audits; live tiktoken runtime check skipped because `tiktoken` package is not installed in .venv or system Python",
+    "positive_control_ok": true,
+    "shadowed_dead_token_caught": true,
+    "unclosed_token_caught": true,
+    "rank_inversion_caught": true,
+    "real_vocab_audits": {
+      "bpe-K256": {
+        "total_tokens": 340,
+        "multi_byte_tokens": 84,
+        "missing_single_bytes": 0,
+        "duplicate_ranks": false,
+        "negative_ranks": false,
+        "unclosed_count": 0,
+        "reachable_count": 84,
+        "unreachable_count": 0,
+        "sample_unreachable_hex": [],
+        "all_valid_and_reachable": true
+      },
+      "closed-K256": {
+        "total_tokens": 340,
+        "multi_byte_tokens": 84,
+        "missing_single_bytes": 0,
+        "duplicate_ranks": false,
+        "negative_ranks": false,
+        "unclosed_count": 0,
+        "reachable_count": 82,
+        "unreachable_count": 2,
+        "sample_unreachable_hex": [
+          "20696e20",
+          "293b0a20202020"
+        ],
+        "all_valid_and_reachable": false
+      },
+      "token-K256": {
+        "total_tokens": 340,
+        "multi_byte_tokens": 84,
+        "missing_single_bytes": 0,
+        "duplicate_ranks": false,
+        "negative_ranks": false,
+        "unclosed_count": 56,
+        "reachable_count": 22,
+        "unreachable_count": 62,
+        "sample_unreachable_hex": [
+          "20202020",
+          "203d20",
+          "0a2020",
+          "76617220",
+          "0a20202020",
+          "2e73706c697428",
+          "66756e6374696f6e",
+          "636f6e736f6c652e6c6f6728",
+          "20696e2072616e676528",
+          "72657475726e20"
+        ],
+        "all_valid_and_reachable": false
+      },
+      "bpe-K4096": {
+        "total_tokens": 4180,
+        "multi_byte_tokens": 3924,
+        "missing_single_bytes": 0,
+        "duplicate_ranks": false,
+        "negative_ranks": false,
+        "unclosed_count": 0,
+        "reachable_count": 3924,
+        "unreachable_count": 0,
+        "sample_unreachable_hex": [],
+        "all_valid_and_reachable": true
+      },
+      "closed-K4096": {
+        "total_tokens": 4180,
+        "multi_byte_tokens": 3924,
+        "missing_single_bytes": 0,
+        "duplicate_ranks": false,
+        "negative_ranks": false,
+        "unclosed_count": 0,
+        "reachable_count": 3650,
+        "unreachable_count": 274,
+        "sample_unreachable_hex": [
+          "20696e20",
+          "293b0a20202020",
+          "20696e2072616e676528",
+          "696e7075742829",
+          "6c696e65",
+          "666f72206920696e2072616e676528",
+          "696e70757428292e73706c697428",
+          "2b2b297b0a202020202020",
+          "696e70757428292e73706c6974282929",
+          "203d20696e7428696e7075742829"
+        ],
+        "all_valid_and_reachable": false
+      },
+      "token-K4096": {
+        "total_tokens": 4180,
+        "multi_byte_tokens": 3924,
+        "missing_single_bytes": 0,
+        "duplicate_ranks": false,
+        "negative_ranks": false,
+        "unclosed_count": 2762,
+        "reachable_count": 740,
+        "unreachable_count": 3184,
+        "sample_unreachable_hex": [
+          "20202020",
+          "203d20",
+          "0a2020",
+          "76617220",
+          "0a20202020",
+          "2e73706c697428",
+          "66756e6374696f6e",
+          "636f6e736f6c652e6c6f6728",
+          "20696e2072616e676528",
+          "72657475726e20"
+        ],
+        "all_valid_and_reachable": false
+      }
+    },
+    "seconds": 0.129
+  }
+}
