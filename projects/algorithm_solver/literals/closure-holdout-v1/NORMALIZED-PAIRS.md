@@ -50,6 +50,24 @@ Six documents `Xabcd`, `Wabcd`, `abcdY`, `abcdZ`, `Uabcd`, `Vabcd`, with V = all
   at the 38 silent ties the outcome rests on candidate indices alone. Output: `out/audit-norm-pairs.tsv`,
   `out/audit-norm-pairs-summary.json`.
 
+## Slot cost of closure (corollary)
+
+Adding a closed candidate e = ab (a, b in V, e not in V) costs exactly s_V(e) = 2 tokens to spell under V, so in any
+parse of a string x with V + e, replacing each use of e by a b gives a V-parse at most one token longer per use:
+s_V(x) - s_{V+e}(x) <= (uses of e in an optimal (V+e)-parse of x).
+
+**Corollary.** Let w have s_{V0}(w) = k and suppose no string of length >= 2 occurs twice without overlap inside w.
+Then any sequence of closed additions V0 c V1 c ... c Vm with w in Vm has m >= k - 1.
+
+*Proof.* Each added entry has length >= 2, so it is used at most once in any parse of w, and each step lowers
+s(w) by at most 1; s must fall from k to 1. QED. The condition is needed: a^(2^r) has s = 2^r over {a} but is
+reached in r doublings.
+
+So a closure-preserving rule pays at least k - 1 slots for a fragment that an open rule buys with one. On the
+training files, 47% of the exact open chain's savings at 3,924 fragments come from uses that save more than one token
+(`out/dev-predictors.json`, leverage share 0.471), which is where this tax applies. That predicts that a
+closure-preserving selector will not match open token gain's training savings at equal slots; DEV-BUNDLE.md tests it.
+
 ## What it means for the experiments
 
 On this training set the normalized rule and the closed rule build the same dictionary, so no held-out comparison of
