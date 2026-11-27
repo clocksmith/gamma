@@ -15,3 +15,20 @@ Use the existing A2 manifest to select 64 fit and 64 disjoint spent development 
 Report signed complete-byte differences for both mechanistic controls and the selected libraries. Record a positive development result for the purchase hypothesis only if the hierarchical library beats both baselines on complete bytes, buys a distinct macro, and its extra purchases reduce the dev payload. Record the measured direction and size even when the hypothesis fails. One-time dictionary and probability tables count once for the whole batch. Treat size crossovers computed from assumed rates as illustrations.
 
 This experiment uses previously inspected inputs. The separate [frozen depth-one study](../a2-recursive-frames-v1/PREREGISTRATION_DEPTH1.md) has its own input contract and decision.
+
+## Development result
+
+Shared definitions saved **73 bytes** when both formats could evaluate the same 97 candidate libraries. Each selected the same 13 definitions and general dispatch prior on fit data. Both encoded 801 nested calls on the 64 development programs. The two tested library budgets, 512 and 2,048 bytes, admitted the same winner. Plain AST consumed 20,671 complete bytes.
+
+| Fixed calls and library | Library bytes | Probability tables | Payload bytes | Complete bytes |
+| --- | ---: | ---: | ---: | ---: |
+| Expanded definitions, general prior | 398 | 495 | 18,585 | 19,493 |
+| Shared definitions, general prior | 325 | 495 | 18,585 | 19,420 |
+| Expanded definitions, hole prior | 398 | 757 | 18,334 | 19,504 |
+| Shared definitions, hole prior | 325 | 757 | 18,334 | 19,431 |
+
+Each archive also pays 15 framing bytes. Hole conditioning saved 251 payload bytes and cost 262 extra table bytes. Under the initial greedy search, expanded definitions stopped after 30 candidate-library trials and shared definitions after 84. The resulting 475-byte advantage included nine extra macros that were used on 62 of 64 development problems. Inlining all nine and refunding their definitions added 680 complete bytes. On the common candidate list the flat trainer also purchased all nine. The distinct-purchase hypothesis missed its development gate.
+
+Scopes and nested arguments were checked against named normalized ASTs and normalized bytes. Both arm formats use the same DEFLATE side stream for auxiliary data. The sample contains 64 fit and 64 spent development problem lineages. The [receipt](dev_receipt.json) records actual archive hashes, candidate order, per-lineage usage, ablations and measured work.
+
+Run `python3 -m unittest discover` for the codec and binder checks and `python3 replay.py check` to reproduce the complete receipt apart from wall-clock time.
