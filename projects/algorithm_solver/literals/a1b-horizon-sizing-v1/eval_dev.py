@@ -1,18 +1,33 @@
 #!/usr/bin/env python3
-"""Full A1b development evaluation across all required arms, work accounting,
-token/RAM variant, lower envelope, codeword widening, and shared_spine reporting.
+"""Full A1b development + two-stage split-conformal calibration evaluator.
 
-Reads verified grid data from out/prefix_grid.json (building it if absent),
-re-extracts real micro-sketch features with exact wall-clock / op / RSS charging,
-evaluates strict org-disjoint LOLO-CV across local spent lineages, and writes
-out/dev_summary.json.
+Implements:
+- Stage 1 (Fit & Lock): Fits ONE exact predictor strictly on the 6 Stage-1
+  predictor-fit orgs (7 codebases), serializes canonical parameters to
+  `out/locked_predictor.json`, and pins `locked_predictor_sha256`.
+  (Also reports Stage-1 LOLO-CV diagnostics, explicitly labeled NOT valid for
+  split-conformal coverage per Barber et al., arXiv:1905.02928.)
+- Stage 2 (Exact Split-Conformal Calibration): Evaluates the EXACT locked
+  predictor (`locked_predictor_sha256`, zero refitting) ONCE on each of the
+  14 untouched independent calibration organizations (strictly disjoint from
+  all 59 capacity lineages, all fit/predictor-fit orgs, and all reserved sealed
+  domains). Calibrates against:
+      s_i = max(full_oracle_regret_100KB(i), full_oracle_regret_100MB(i))
+  at alpha = 0.10 (rank k = ceil(0.90 * (n_cal + 1))) against the 2.0% sealed bar,
+  with exact same-chain budget-choice vs chain-choice regret decomposition.
+- Complete All-In & Amortized Work Accounting: Fixes the denominator flaw by
+  charging `shared_chain_build_sec` (chain build from verified receipts + B1RA
+  header table fit + Stage-1 predictor lock) alongside `policy_eval_sec`,
+  `same_chain_pilot_sec`, `same_chain_grid_sec`, and `full_multichain_grid_sec`
+  (building + grid-searching all 7 chains), for N in {1, 2, 5, 10, 50} and
+  exact break-even N*.
+- Explicit C5/C6 compute-approval gate (zero GPU/LLM compute).
 """
 
 from __future__ import annotations
 
 import json
 import math
-import statistics
 import sys
 import time
 from fractions import Fraction
@@ -26,23 +41,19 @@ if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
 import archive_grid as AG  # noqa: E402
+import calibration_corpora as CC  # noqa: E402
 import sizing_policy as SP  # noqa: E402
 
 # Frozen Token/RAM variant parameters (never tuned per evaluation lineage).
 TOKEN_RAM_PRICES_LAMBDA: tuple[float, ...] = (0.5, 0.05, 0.005)
 TOKEN_RAM_CAPS_BYTES: tuple[int, ...] = (16_384, 65_536)
+AMORTIZATION_NS: tuple[int, ...] = (1, 2, 5, 10, 50)
 
 
 def exact_obj_float(row: dict[str, Any], M: int) -> float:
     return float(
         Fraction(int(row["header_bytes"]))
         + Fraction(int(M) * int(row["body_bytes"]), int(row["source_bytes"]))
-    )
-
-
-def exact_obj_fraction(row: dict[str, Any], M: int) -> Fraction:
-    return Fraction(int(row["header_bytes"])) + Fraction(
-        int(M) * int(row["body_bytes"]), int(row["source_bytes"])
     )
 
 
@@ -88,6 +99,152 @@ def summarize_work(
     }
 
 
+def read_verified_chain_build_seconds() -> dict[str, float]:
+    """Read exact upstream chain-construction wall-clock seconds from verified footers/receipts."""
+    out: dict[str, float] = {}
+    for cname, spec in AG.CHAIN_SPECS.items():
+        path = AG.LITERALS / spec["path"]
+        if spec["kind"] == "chain_txt":
+            last_line = path.read_text().splitlines()[-1]
+            found = None
+            for tok in last_line.split():
+                if tok.startswith("seconds="):
+                    found = float(tok.split("=", 1)[1])
+                    break
+            if found is None:
+                raise AssertionError(f"could not parse seconds= from footer of {path}")
+            out[cname] = found
+        elif spec["kind"] == "closure_frozen_json":
+            ts = json.loads((AG.LITERALS / "objective-holdout-v1/frozen/train-summary.json").read_text())
+            out[cname] = float(ts["engine"]["seconds"]["bpe"])
+        else:
+            raise ValueError(f"unsupported chain kind: {spec['kind']}")
+    return out
+
+
+def compute_all_in_and_amortized_work(
+    grid_headers_meta: dict[str, Any],
+    chain_build_sec_by_chain: dict[str, float],
+    locked_predictor_fit_sec: float,
+    cal_arm_work_per_deployment: dict[str, float],
+    dev_arm_work_per_deployment: dict[str, float],
+) -> dict[str, Any]:
+    """Compute honest single-deployment and amortized multi-deployment work tables.
+
+    Explicitly corrects the prior `0.112x` denominator flaw (which omitted the
+    shared chain-build cost and used only same-chain grid as denominator).
+    """
+    # Exact B1RA Huffman header-table fit times summed from verified prefix_grid.json
+    # (note: K=0 is shared across all 7 chains so count K=0 once in all-7 total).
+    header_fit_by_chain: dict[str, float] = {}
+    k0_fit_sec = 0.0
+    for key, meta in grid_headers_meta.items():
+        cname, k_str = key.split(":K", 1)
+        K = int(k_str)
+        ws = float(meta["fit_work"]["wall_seconds"])
+        header_fit_by_chain[cname] = header_fit_by_chain.get(cname, 0.0) + ws
+        if K == 0 and cname == AG.PRIMARY_CHAIN_NAME:
+            k0_fit_sec = ws
+
+    prim_chain_build_sec = chain_build_sec_by_chain[AG.PRIMARY_CHAIN_NAME]
+    prim_headers_fit_sec = header_fit_by_chain[AG.PRIMARY_CHAIN_NAME]
+    shared_chain_build_sec = prim_chain_build_sec + prim_headers_fit_sec + locked_predictor_fit_sec
+
+    all_7_chains_raw_build_sec = sum(chain_build_sec_by_chain.values())
+    all_7_headers_fit_sec = sum(header_fit_by_chain.values()) - (len(chain_build_sec_by_chain) - 1) * k0_fit_sec
+    all_7_chains_build_sec = all_7_chains_raw_build_sec + all_7_headers_fit_sec
+
+    def _build_schedule(label: str, per_dep: dict[str, float]) -> dict[str, Any]:
+        p_direct = per_dep["locked_predictor_direct_sec"]
+        p_strict = per_dep["strict_conformal_effective_sec"]
+        pilot_s = per_dep["same_chain_pilot_sec"]
+        grid_s = per_dep["same_chain_grid_sec"]
+        full_grid_eval_s = per_dep["all_7_chains_grid_eval_sec"]
+
+        def _ratios_for(policy_s: float) -> dict[str, Any]:
+            rows = []
+            for N in AMORTIZATION_NS:
+                num = shared_chain_build_sec + N * policy_s
+                den_same_grid = shared_chain_build_sec + N * grid_s
+                den_same_pilot = shared_chain_build_sec + N * pilot_s
+                den_full_mc = all_7_chains_build_sec + N * full_grid_eval_s
+                rows.append(
+                    {
+                        "N_deployments": N,
+                        "policy_all_in_sec": round(num, 3),
+                        "same_chain_pilot_all_in_sec": round(den_same_pilot, 3),
+                        "same_chain_grid_all_in_sec": round(den_same_grid, 3),
+                        "full_multichain_grid_all_in_sec": round(den_full_mc, 3),
+                        "ratio_vs_same_chain_pilot": round(num / max(1e-9, den_same_pilot), 4),
+                        "ratio_vs_same_chain_grid": round(num / max(1e-9, den_same_grid), 4),
+                        "ratio_vs_full_multichain_grid": round(num / max(1e-9, den_full_mc), 4),
+                    }
+                )
+
+            # Closed-form break-even N* where (B + N*p)/(B + N*d) <= tau:
+            # B*(1 - tau) <= N*(tau*d - p)  =>  N* = ceil(B*(1 - tau) / (tau*d - p)) if p < tau*d
+            def _breakeven(denom_per_dep: float, tau: float) -> int | None:
+                margin = tau * denom_per_dep - policy_s
+                if margin <= 0:
+                    return None
+                return int(math.ceil((shared_chain_build_sec * (1.0 - tau)) / margin))
+
+            return {
+                "policy_eval_sec_per_deployment": round(policy_s, 4),
+                "asymptotic_ratio_vs_same_chain_pilot": round(policy_s / max(1e-9, pilot_s), 4),
+                "asymptotic_ratio_vs_same_chain_grid": round(policy_s / max(1e-9, grid_s), 4),
+                "asymptotic_ratio_vs_full_multichain_grid": round(policy_s / max(1e-9, full_grid_eval_s), 4),
+                "breakeven_N_for_half_same_chain_pilot": _breakeven(pilot_s, 0.5),
+                "breakeven_N_for_sixth_same_chain_grid": _breakeven(grid_s, 1.0 / 6.0),
+                "single_deployment_N1": rows[0],
+                "amortized_table": rows,
+            }
+
+        return {
+            "cohort": label,
+            "per_deployment_components_sec": {
+                "locked_predictor_direct_eval_sec": round(p_direct, 4),
+                "strict_conformal_effective_eval_sec": round(p_strict, 4),
+                "same_chain_pilot_eval_sec": round(pilot_s, 4),
+                "same_chain_grid_eval_sec": round(grid_s, 4),
+                "all_7_chains_grid_eval_sec": round(full_grid_eval_s, 4),
+            },
+            "locked_predictor_direct_schedule": _ratios_for(p_direct),
+            "strict_conformal_effective_schedule": _ratios_for(p_strict),
+        }
+
+    return {
+        "denominator_flaw_note": (
+            "The prior headline 0.112x wall ratio used only per-query same-chain grid evaluation "
+            "as denominator and omitted `shared_chain_build_sec` (~266 s to build the deployed "
+            "exact_closed chain + fit its 10 B1RA code tables + lock the Stage-1 predictor). "
+            "This table reports honest single-deployment (N=1) and amortized multi-deployment "
+            "(N in {1, 2, 5, 10, 50}) all-in ratios against BOTH same-chain grid/pilot AND "
+            "full_multichain_grid (building + grid-searching all 7 selector chains)."
+        ),
+        "shared_chain_build_breakdown_sec": {
+            "primary_chain_engine_build_sec": round(prim_chain_build_sec, 3),
+            "primary_chain_b1ra_headers_fit_sec": round(prim_headers_fit_sec, 3),
+            "stage1_locked_predictor_fit_sec": round(locked_predictor_fit_sec, 4),
+            "shared_chain_build_sec": round(shared_chain_build_sec, 3),
+        },
+        "full_multichain_build_breakdown_sec": {
+            "per_chain_engine_build_sec": {k: round(v, 3) for k, v in sorted(chain_build_sec_by_chain.items())},
+            "all_7_chains_engine_build_sec": round(all_7_chains_raw_build_sec, 3),
+            "all_7_chains_b1ra_headers_fit_sec": round(all_7_headers_fit_sec, 3),
+            "all_7_chains_build_sec": round(all_7_chains_build_sec, 3),
+        },
+        "calibration_14_orgs_basis": _build_schedule(
+            "14 untouched calibration orgs (mean ~188 KB/org, 28 horizon deployments)",
+            cal_arm_work_per_deployment,
+        ),
+        "dev_7_codebases_basis": _build_schedule(
+            "7 Stage-1 predictor-fit codebases (mean ~549 KB/codebase, 14 horizon deployments)",
+            dev_arm_work_per_deployment,
+        ),
+    }
+
+
 def compute_lower_envelope_and_crossovers(
     by_lin_prim: dict[str, dict[int, dict[str, Any]]],
     lineages: list[dict[str, Any]],
@@ -102,7 +259,6 @@ def compute_lower_envelope_and_crossovers(
         for M in AG.DIAGNOSTIC_HORIZONS:
             best = AG.select_best_prefix_exact(cands, M)
             best_obj = exact_obj_float(best, M)
-            # Check widely separated K pairs (>= 4x ratio) within 0.5% and 1.0% of optimum.
             within_05 = [
                 r["K"] for r in cands if (exact_obj_float(r, M) / best_obj - 1.0) <= 0.005
             ]
@@ -134,13 +290,11 @@ def compute_lower_envelope_and_crossovers(
                 }
             )
 
-        # Exact break-even crossover horizons M* between key prefix pairs:
-        # H_a + M * r_a = H_b + M * r_b  =>  M* = (H_b - H_a) / (r_a - r_b) if r_a > r_b.
         def breakeven(k_small: int, k_large: int) -> float | None:
             ra = Fraction(rmap[k_small]["body_bytes"], rmap[k_small]["source_bytes"])
             rb = Fraction(rmap[k_large]["body_bytes"], rmap[k_large]["source_bytes"])
             if ra <= rb:
-                return None  # larger prefix NEVER catches up (codeword widening!)
+                return None
             ha = Fraction(rmap[k_small]["header_bytes"])
             hb = Fraction(rmap[k_large]["header_bytes"])
             return round(float((hb - ha) / (ra - rb)), 1)
@@ -212,50 +366,45 @@ def compute_codeword_widening_and_decomp(
     return per_lineage
 
 
-def evaluate_token_ram_variant(
-    lineages: list[dict[str, Any]],
-    by_lin_prim: dict[str, dict[int, dict[str, Any]]],
-    by_lin_all: dict[str, list[dict[str, Any]]],
-    sketch_feats: dict[str, dict[str, Any]],
+def evaluate_token_ram_variant_locked(
+    predictor_fit_lins: list[dict[str, Any]],
+    cal_orgs_meta: list[dict[str, Any]],
+    by_lin_prim_pf: dict[str, dict[int, dict[str, Any]]],
+    sketch_feats_pf: dict[str, dict[str, Any]],
+    cal_by_lin_prim: dict[str, dict[int, dict[str, Any]]],
+    cal_by_lin_all: dict[str, list[dict[str, Any]]],
+    cal_sketch_feats: dict[str, dict[str, Any]],
     ram_by_k: dict[int, int],
 ) -> dict[str, Any]:
-    """Score the separate Token/RAM variant (frozen RAM price lambda and hard RAM caps)."""
-    dev_lins = [l for l in lineages if l["role"] == "dev_disjoint"]
+    """Fit ONE locked token-rate bias on the 6 predictor-fit orgs, then score on 14 calibration orgs."""
     Ks = AG.PRIMARY_GRID
+    pf_orgs = sorted({l["org_id"] for l in predictor_fit_lins})
+    locked_bias_tok: dict[int, float] = {}
+    for K in Ks:
+        org_means = []
+        for o in pf_orgs:
+            errs = []
+            for cl in predictor_fit_lins:
+                if cl["org_id"] != o:
+                    continue
+                cid = cl["lineage_id"]
+                raw_t = SP.interpolate_from_probes(sketch_feats_pf[cid]["probes_tok"], Ks)
+                true_t = by_lin_prim_pf[cid][K]["tokens"] / by_lin_prim_pf[cid][K]["source_bytes"]
+                errs.append(true_t - raw_t[K])
+            org_means.append(float(np.mean(errs)))
+        locked_bias_tok[K] = round(float(np.mean(org_means)), 8)
 
-    # 1. Priced variant: lambda * RAM_K + M * tau_K
-    priced_rows = []
     arm_regrets_same: dict[str, list[float]] = {
-        a: [] for a in ("shipped_token_policy", "fixed_K512", "fixed_K2048", "fixed_K4096", "pilot_3pt_token")
+        a: [] for a in ("locked_token_policy", "fixed_K512", "fixed_K2048", "fixed_K4096", "pilot_3pt_token")
     }
     arm_regrets_full: dict[str, list[float]] = {k: [] for k in arm_regrets_same}
+    priced_rows = []
 
-    for test_lin in dev_lins:
-        tid = test_lin["lineage_id"]
-        torg = test_lin["org_id"]
-        cal_lins = [l for l in dev_lins if l["org_id"] != torg]
-        # Org-weighted token-rate calibration bias per K
-        cal_orgs = sorted({l["org_id"] for l in cal_lins})
-        cal_bias_tok: dict[int, float] = {}
-        for K in Ks:
-            org_means = []
-            for o in cal_orgs:
-                errs = []
-                for cl in cal_lins:
-                    if cl["org_id"] != o:
-                        continue
-                    cid = cl["lineage_id"]
-                    raw_t = SP.interpolate_from_probes(sketch_feats[cid]["probes_tok"], Ks)
-                    true_t = by_lin_prim[cid][K]["tokens"] / by_lin_prim[cid][K]["source_bytes"]
-                    errs.append(true_t - raw_t[K])
-                org_means.append(float(np.mean(errs)))
-            cal_bias_tok[K] = float(np.mean(org_means))
-
-        pred_tau = SP.interpolate_from_probes(
-            sketch_feats[tid]["probes_tok"], Ks, cal_bias=cal_bias_tok
-        )
+    for meta in cal_orgs_meta:
+        lid = meta["lineage_id"]
+        pred_tau = SP.interpolate_from_probes(cal_sketch_feats[lid]["probes_tok"], Ks, cal_bias=locked_bias_tok)
         true_tau = {
-            K: Fraction(by_lin_prim[tid][K]["tokens"], by_lin_prim[tid][K]["source_bytes"])
+            K: Fraction(cal_by_lin_prim[lid][K]["tokens"], cal_by_lin_prim[lid][K]["source_bytes"])
             for K in Ks
         }
         pilot_tau = {K: float(true_tau[K]) for K in SP.PILOT_KS}
@@ -271,26 +420,23 @@ def evaluate_token_ram_variant(
                     )
 
                 same_opt_k = SP.select_prefix_token_ram_priced(ram_by_k, true_tau, M, lam, Ks)
-                same_opt_val = float(obj_t(by_lin_prim[tid][same_opt_k]))
+                same_opt_val = float(obj_t(cal_by_lin_prim[lid][same_opt_k]))
                 full_opt_row = min(
-                    by_lin_all[tid],
+                    cal_by_lin_all[lid],
                     key=lambda r: (obj_t(r), int(r["dict_ram_bytes"]), int(r["K"]), r["chain"]),
                 )
                 full_opt_val = float(obj_t(full_opt_row))
 
                 picks = {
-                    "shipped_token_policy": SP.select_prefix_token_ram_priced(
-                        ram_by_k, pred_tau, M, lam, Ks
-                    ),
+                    "locked_token_policy": SP.select_prefix_token_ram_priced(ram_by_k, pred_tau, M, lam, Ks),
                     "fixed_K512": 512,
                     "fixed_K2048": 2048,
                     "fixed_K4096": 4096,
-                    "pilot_3pt_token": SP.select_prefix_token_ram_priced(
-                        ram_by_k, pilot_curve_tau, M, lam, Ks
-                    ),
+                    "pilot_3pt_token": SP.select_prefix_token_ram_priced(ram_by_k, pilot_curve_tau, M, lam, Ks),
                 }
                 row_entry: dict[str, Any] = {
-                    "lineage_id": tid,
+                    "lineage_id": lid,
+                    "org_id": meta["org_id"],
                     "lambda": lam,
                     "M": M,
                     "same_oracle_K": same_opt_k,
@@ -299,7 +445,7 @@ def evaluate_token_ram_variant(
                     "arms": {},
                 }
                 for arm_name, k_pick in picks.items():
-                    val = float(obj_t(by_lin_prim[tid][k_pick]))
+                    val = float(obj_t(cal_by_lin_prim[lid][k_pick]))
                     reg_s = (val / same_opt_val) - 1.0
                     reg_f = (val / full_opt_val) - 1.0
                     arm_regrets_same[arm_name].append(reg_s)
@@ -312,73 +458,39 @@ def evaluate_token_ram_variant(
                     }
                 priced_rows.append(row_entry)
 
-    # 2. Hard RAM-cap variant: minimize tokens subject to dict_ram_bytes <= R_max
     capped_summary = {}
     for cap in TOKEN_RAM_CAPS_BYTES:
         elig_ks = [K for K in Ks if ram_by_k[K] <= cap]
         cap_reg_same: list[float] = []
         cap_reg_full: list[float] = []
-        cap_details = []
-        for test_lin in dev_lins:
-            tid = test_lin["lineage_id"]
-            torg = test_lin["org_id"]
-            cal_lins = [l for l in dev_lins if l["org_id"] != torg]
-            cal_orgs = sorted({l["org_id"] for l in cal_lins})
-            cal_bias_tok = {}
-            for K in elig_ks:
-                org_means = []
-                for o in cal_orgs:
-                    errs = [
-                        (by_lin_prim[cl["lineage_id"]][K]["tokens"] / by_lin_prim[cl["lineage_id"]][K]["source_bytes"])
-                        - SP.interpolate_from_probes(sketch_feats[cl["lineage_id"]]["probes_tok"], Ks)[K]
-                        for cl in cal_lins
-                        if cl["org_id"] == o
-                    ]
-                    org_means.append(float(np.mean(errs)))
-                cal_bias_tok[K] = float(np.mean(org_means))
-            pred_tau = SP.interpolate_from_probes(
-                sketch_feats[tid]["probes_tok"], Ks, cal_bias=cal_bias_tok
-            )
+        for meta in cal_orgs_meta:
+            lid = meta["lineage_id"]
+            pred_tau = SP.interpolate_from_probes(cal_sketch_feats[lid]["probes_tok"], Ks, cal_bias=locked_bias_tok)
             true_tau = {
-                K: Fraction(by_lin_prim[tid][K]["tokens"], by_lin_prim[tid][K]["source_bytes"])
+                K: Fraction(cal_by_lin_prim[lid][K]["tokens"], cal_by_lin_prim[lid][K]["source_bytes"])
                 for K in Ks
             }
             k_pick = SP.select_prefix_token_ram_capped(ram_by_k, pred_tau, cap, Ks)
             k_same = SP.select_prefix_token_ram_capped(ram_by_k, true_tau, cap, Ks)
-            elig_all = [r for r in by_lin_all[tid] if r["dict_ram_bytes"] <= cap]
+            elig_all = [r for r in cal_by_lin_all[lid] if r["dict_ram_bytes"] <= cap]
             best_all = min(elig_all, key=lambda r: (r["tokens"], r["dict_ram_bytes"], r["K"]))
-            tok_pick = by_lin_prim[tid][k_pick]["tokens"]
-            tok_same = by_lin_prim[tid][k_same]["tokens"]
-            tok_full = best_all["tokens"]
-            rs = (tok_pick / tok_same) - 1.0
-            rf = (tok_pick / tok_full) - 1.0
-            cap_reg_same.append(rs)
-            cap_reg_full.append(rf)
-            cap_details.append(
-                {
-                    "lineage_id": tid,
-                    "picked_K": k_pick,
-                    "same_oracle_K": k_same,
-                    "full_oracle_chain": best_all["chain"],
-                    "full_oracle_K": best_all["K"],
-                    "regret_vs_same_pct": round(100.0 * rs, 4),
-                    "regret_vs_full_pct": round(100.0 * rf, 4),
-                }
-            )
+            cap_reg_same.append((cal_by_lin_prim[lid][k_pick]["tokens"] / cal_by_lin_prim[lid][k_same]["tokens"]) - 1.0)
+            cap_reg_full.append((cal_by_lin_prim[lid][k_pick]["tokens"] / best_all["tokens"]) - 1.0)
         capped_summary[f"ram_cap_{cap}B"] = {
             "ram_cap_bytes": cap,
             "eligible_primary_ks": elig_ks,
-            "shipped_token_policy_vs_same": summarize_excess(cap_reg_same),
-            "shipped_token_policy_vs_full": summarize_excess(cap_reg_full),
-            "per_lineage": cap_details,
+            "locked_token_policy_vs_same": summarize_excess(cap_reg_same),
+            "locked_token_policy_vs_full": summarize_excess(cap_reg_full),
         }
 
     return {
+        "evaluation_cohort": f"{len(cal_orgs_meta)} untouched independent calibration orgs (locked token bias from 6 Stage-1 predictor-fit orgs)",
         "ram_model": "frozen deterministic LUT+hash+entries bytes (Dictionary.ram_footprint_bytes)",
         "ram_by_k_primary_chain": {str(k): ram_by_k[k] for k in Ks},
         "priced_variant": {
             "frozen_lambdas_tokens_per_ram_byte": list(TOKEN_RAM_PRICES_LAMBDA),
             "horizons": list(AG.PRIMARY_HORIZONS),
+            "query_count": len(priced_rows),
             "arm_summaries": {
                 arm: {
                     "vs_same_chain_oracle": summarize_excess(arm_regrets_same[arm]),
@@ -386,28 +498,317 @@ def evaluate_token_ram_variant(
                 }
                 for arm in arm_regrets_same
             },
-            "queries": priced_rows,
         },
         "hard_ram_cap_variant": capped_summary,
     }
 
 
-def run_eval_dev(grid_path: Path | None = None, out_path: Path | None = None) -> dict[str, Any]:
-    """Execute complete A1b dev evaluation and write dev_summary.json."""
+def _evaluate_arms_on_cohort(
+    cohort_metas: list[dict[str, Any]],
+    by_lin_prim: dict[str, dict[int, dict[str, Any]]],
+    by_lin_all: dict[str, list[dict[str, Any]]],
+    sketch_feats: dict[str, dict[str, Any]],
+    locked_predictor: SP.LockedHorizonPredictor,
+    strict_conformal_certifies_2_0: bool,
+    extra_locked_fit_wall_s: float = 0.0,
+) -> tuple[dict[str, Any], list[dict[str, Any]], dict[str, float]]:
+    """Evaluate all deployment arms cleanly on a cohort using the EXACT locked predictor."""
+    header_bytes_by_k = locked_predictor.header_bytes_by_k
+    arm_names = (
+        "locked_predictor_direct",
+        "strict_conformal_2_0pct_bar",
+        "fixed_K512",
+        "fixed_K2048",
+        "fixed_K4096",
+        "pilot_3pt_geometric",
+        "same_chain_oracle",
+        "full_selector_by_K_oracle",
+    )
+    per_arm_same: dict[str, list[float]] = {a: [] for a in arm_names}
+    per_arm_full: dict[str, list[float]] = {a: [] for a in arm_names}
+    per_arm_work: dict[str, list[dict[str, Any]]] = {a: [] for a in arm_names}
+    per_arm_complete_bits: dict[str, dict[str, list[float]]] = {
+        a: {str(M): [] for M in AG.PRIMARY_HORIZONS} for a in arm_names
+    }
+    query_records: list[dict[str, Any]] = []
+
+    def encode_work(lid: str, K: int) -> tuple[float, int, int]:
+        w = by_lin_prim[lid][K]["work"]
+        return float(w["wall_seconds"]), int(w["total_ops"]), int(w["peak_rss_bytes"])
+
+    for meta in cohort_metas:
+        lid = meta["lineage_id"]
+        rmap = by_lin_prim[lid]
+        all_cands = by_lin_all[lid]
+        feat = sketch_feats[lid]
+
+        for M in AG.PRIMARY_HORIZONS:
+            same_opt_row = AG.select_best_prefix_exact(list(rmap.values()), M)
+            same_opt_val = exact_obj_float(same_opt_row, M)
+            full_opt_row = AG.select_best_prefix_exact(all_cands, M)
+            full_opt_val = exact_obj_float(full_opt_row, M)
+
+            # 3-point geometric pilot with identical prefix reuse
+            r_pilot = {K: float(rmap[K]["r_hat"]) for K in SP.PILOT_KS}
+            k_pilot, _ = SP.select_prefix_pilot_3pt(header_bytes_by_k, r_pilot, M, AG.PRIMARY_GRID)
+            p_sel_w, p_sel_ops, p_rss = 0.0, 0, 0
+            for pk in SP.PILOT_KS:
+                ws, ops, rb = encode_work(lid, pk)
+                p_sel_w += ws
+                p_sel_ops += ops
+                p_rss = max(p_rss, rb)
+            if k_pilot in SP.PILOT_KS:
+                p_dep_w, p_dep_ops = 0.0, 0
+            else:
+                p_dep_w, p_dep_ops, rb = encode_work(lid, k_pilot)
+                p_rss = max(p_rss, rb)
+            w_pilot = {
+                "selection_wall_s": p_sel_w,
+                "selection_ops": p_sel_ops,
+                "deployment_wall_s": p_dep_w,
+                "deployment_ops": p_dep_ops,
+                "total_wall_s": p_sel_w + p_dep_w,
+                "total_ops": p_sel_ops + p_dep_ops,
+                "peak_rss_bytes": p_rss,
+                "fallback_used": False,
+            }
+
+            # 10-point same-chain grid (prefix reuse of winner)
+            g_w, g_ops, g_rss = 0.0, 0, 0
+            for K in AG.PRIMARY_GRID:
+                ws, ops, rb = encode_work(lid, K)
+                g_w += ws
+                g_ops += ops
+                g_rss = max(g_rss, rb)
+            w_grid = {
+                "selection_wall_s": g_w,
+                "selection_ops": g_ops,
+                "deployment_wall_s": 0.0,
+                "deployment_ops": 0,
+                "total_wall_s": g_w,
+                "total_ops": g_ops,
+                "peak_rss_bytes": g_rss,
+                "fallback_used": False,
+            }
+
+            # Full 7-chain oracle evaluation work
+            f_w = sum(float(r["work"]["wall_seconds"]) for r in all_cands)
+            f_ops = sum(int(r["work"]["total_ops"]) for r in all_cands)
+            f_rss = max(int(r["work"]["peak_rss_bytes"]) for r in all_cands)
+            w_full = {
+                "selection_wall_s": f_w,
+                "selection_ops": f_ops,
+                "deployment_wall_s": 0.0,
+                "deployment_ops": 0,
+                "total_wall_s": f_w,
+                "total_ops": f_ops,
+                "peak_rss_bytes": f_rss,
+                "fallback_used": False,
+            }
+
+            # Locked predictor direct
+            t_p0 = time.perf_counter()
+            k_direct, _, _ = locked_predictor.predict_k(feat, M)
+            pred_wall = time.perf_counter() - t_p0
+            sk_w = float(feat["work"]["wall_seconds"]) + pred_wall
+            sk_ops = int(feat["work"]["total_ops"])
+            sk_rss = int(feat["work"]["peak_rss_bytes"])
+            d_w, d_ops, d_rss = encode_work(lid, k_direct)
+            w_direct = {
+                "selection_wall_s": sk_w,
+                "selection_ops": sk_ops,
+                "deployment_wall_s": d_w,
+                "deployment_ops": d_ops,
+                "total_wall_s": sk_w + d_w,
+                "total_ops": sk_ops + d_ops,
+                "peak_rss_bytes": max(sk_rss, d_rss),
+                "fallback_used": False,
+            }
+
+            # Strict split-conformal deployment arm against 2.0% sealed bar:
+            # If split-conformal 90% UPB > 2.0%, emits SWEEP_REQUIRED and falls back to 3-pt pilot.
+            if strict_conformal_certifies_2_0:
+                k_strict = k_direct
+                w_strict = dict(w_direct)
+            else:
+                k_strict = k_pilot
+                w_strict = {
+                    "selection_wall_s": sk_w + w_pilot["selection_wall_s"],
+                    "selection_ops": sk_ops + w_pilot["selection_ops"],
+                    "deployment_wall_s": w_pilot["deployment_wall_s"],
+                    "deployment_ops": w_pilot["deployment_ops"],
+                    "total_wall_s": sk_w + w_pilot["total_wall_s"],
+                    "total_ops": sk_ops + w_pilot["total_ops"],
+                    "peak_rss_bytes": max(sk_rss, w_pilot["peak_rss_bytes"]),
+                    "fallback_used": True,
+                }
+
+            def _fixed_work(K: int) -> dict[str, Any]:
+                ws, ops, rb = encode_work(lid, K)
+                return {
+                    "selection_wall_s": 0.0,
+                    "selection_ops": 0,
+                    "deployment_wall_s": ws,
+                    "deployment_ops": ops,
+                    "total_wall_s": ws,
+                    "total_ops": ops,
+                    "peak_rss_bytes": rb,
+                    "fallback_used": False,
+                }
+
+            arm_map = {
+                "locked_predictor_direct": (rmap[k_direct], w_direct),
+                "strict_conformal_2_0pct_bar": (rmap[k_strict], w_strict),
+                "fixed_K512": (rmap[512], _fixed_work(512)),
+                "fixed_K2048": (rmap[2048], _fixed_work(2048)),
+                "fixed_K4096": (rmap[4096], _fixed_work(4096)),
+                "pilot_3pt_geometric": (rmap[k_pilot], w_pilot),
+                "same_chain_oracle": (same_opt_row, w_grid),
+                "full_selector_by_K_oracle": (full_opt_row, w_full),
+            }
+
+            q_arms: dict[str, Any] = {}
+            for aname, (row, wd) in arm_map.items():
+                val = exact_obj_float(row, M)
+                ex_s = (val / same_opt_val) - 1.0
+                ex_f = (val / full_opt_val) - 1.0
+                per_arm_same[aname].append(ex_s)
+                per_arm_full[aname].append(ex_f)
+                per_arm_work[aname].append(wd)
+                per_arm_complete_bits[aname][str(M)].append(val * 8.0)
+                q_arms[aname] = {
+                    "chain": row["chain"],
+                    "K": int(row["K"]),
+                    "header_bytes": int(row["header_bytes"]),
+                    "r_hat": round(float(row["r_hat"]), 6),
+                    "complete_bytes": round(val, 2),
+                    "complete_bits": round(val * 8.0, 2),
+                    "excess_vs_same_pct": round(100.0 * ex_s, 4),
+                    "excess_vs_full_pct": round(100.0 * ex_f, 4),
+                    "total_wall_s": round(wd["total_wall_s"], 6),
+                    "total_ops": int(wd["total_ops"]),
+                }
+            query_records.append(
+                {
+                    "lineage_id": lid,
+                    "org_id": meta["org_id"],
+                    "M": M,
+                    "arms": q_arms,
+                }
+            )
+
+    pilot_ws = summarize_work(per_arm_work["pilot_3pt_geometric"])
+    grid_ws = summarize_work(per_arm_work["same_chain_oracle"])
+    full_ws = summarize_work(per_arm_work["full_selector_by_K_oracle"])
+
+    summaries: dict[str, Any] = {}
+    for aname in arm_names:
+        extra = extra_locked_fit_wall_s if aname in ("locked_predictor_direct", "strict_conformal_2_0pct_bar") else 0.0
+        ws = summarize_work(per_arm_work[aname], extra_refit_wall_s=extra)
+        ws["eval_only_ops_ratio_vs_same_chain_pilot"] = round(
+            ws["total_ops_total"] / max(1, pilot_ws["total_ops_total"]), 4
+        )
+        ws["eval_only_ops_ratio_vs_same_chain_grid"] = round(
+            ws["total_ops_total"] / max(1, grid_ws["total_ops_total"]), 4
+        )
+        ws["eval_only_wall_ratio_vs_same_chain_pilot"] = round(
+            ws["total_wall_seconds_total"] / max(1e-9, pilot_ws["total_wall_seconds_total"]), 4
+        )
+        ws["eval_only_wall_ratio_vs_same_chain_grid"] = round(
+            ws["total_wall_seconds_total"] / max(1e-9, grid_ws["total_wall_seconds_total"]), 4
+        )
+        ws["eval_only_wall_ratio_vs_full_multichain_grid_eval"] = round(
+            ws["total_wall_seconds_total"] / max(1e-9, full_ws["total_wall_seconds_total"]), 4
+        )
+        fb_count = sum(1 for w in per_arm_work[aname] if w.get("fallback_used"))
+        indexed = sorted(
+            [
+                (
+                    q["arms"][aname]["excess_vs_full_pct"],
+                    q["lineage_id"],
+                    q["M"],
+                    q["arms"][aname]["K"],
+                    q["arms"]["full_selector_by_K_oracle"]["chain"],
+                    q["arms"]["full_selector_by_K_oracle"]["K"],
+                )
+                for q in query_records
+            ],
+            reverse=True,
+        )
+        summaries[aname] = {
+            "excess_vs_same_chain_oracle": summarize_excess(per_arm_same[aname]),
+            "excess_vs_full_oracle": summarize_excess(per_arm_full[aname]),
+            "fallback_count": fb_count,
+            "fallback_rate_pct": round(100.0 * fb_count / max(1, len(per_arm_work[aname])), 2),
+            "complete_bits_mean_by_M": {
+                m_str: round(float(np.mean(vals)), 2)
+                for m_str, vals in per_arm_complete_bits[aname].items()
+            },
+            "work_eval_only_excludes_chain_build": ws,
+            "worst_misses_vs_full_oracle": [
+                {
+                    "lineage_id": lid,
+                    "M": M,
+                    "chosen_K": ck,
+                    "oracle_chain": oc,
+                    "oracle_K": ok,
+                    "excess_vs_full_pct": ex,
+                }
+                for ex, lid, M, ck, oc, ok in indexed[:3]
+            ],
+        }
+
+    mean_per_dep_sec = {
+        "locked_predictor_direct_sec": summaries["locked_predictor_direct"]["work_eval_only_excludes_chain_build"]["total_wall_seconds_mean"],
+        "strict_conformal_effective_sec": summaries["strict_conformal_2_0pct_bar"]["work_eval_only_excludes_chain_build"]["total_wall_seconds_mean"],
+        "same_chain_pilot_sec": pilot_ws["total_wall_seconds_mean"],
+        "same_chain_grid_sec": grid_ws["total_wall_seconds_mean"],
+        "all_7_chains_grid_eval_sec": full_ws["total_wall_seconds_mean"],
+    }
+    return summaries, query_records, mean_per_dep_sec
+
+
+def run_eval_dev(
+    grid_path: Path | None = None,
+    cal_manifest_path: Path | None = None,
+    cal_grid_path: Path | None = None,
+    locked_predictor_path: Path | None = None,
+    out_path: Path | None = None,
+    write_locked_predictor: bool = True,
+) -> dict[str, Any]:
+    """Execute complete two-stage split-conformal A1b evaluation and write dev_summary.json."""
     t_all0 = time.perf_counter()
     if grid_path is None:
         grid_path = HERE / "out" / "prefix_grid.json"
+    if cal_manifest_path is None:
+        cal_manifest_path = HERE / "out" / "calibration_manifest.json"
+    if cal_grid_path is None:
+        cal_grid_path = HERE / "out" / "calibration_grid.json"
+    if locked_predictor_path is None:
+        locked_predictor_path = HERE / "out" / "locked_predictor.json"
+
     if not grid_path.exists():
         AG.main()
+    if not cal_manifest_path.exists() or not cal_grid_path.exists():
+        CC.main()
 
     grid_data = json.loads(grid_path.read_text())
-    rows = grid_data["rows"]
+    cal_manifest = json.loads(cal_manifest_path.read_text())
+    cal_grid_data = json.loads(cal_grid_path.read_text())
+
+    # 1. Verify calibration manifest disjointness against all 59 capacity lineages + fit orgs + reserved domains.
+    disjoint_audit = CC.assert_calibration_disjoint_from_excluded(cal_manifest["calibration_orgs"])
+    live_hash_audit = CC.verify_live_site_packages_hashes(cal_manifest)
+    cal_manifest_sha = AG.sha256_bytes(cal_manifest_path.read_bytes())
+    if cal_grid_data["calibration_manifest_sha256"] != cal_manifest_sha:
+        raise AssertionError("calibration_grid.json was built from a different calibration_manifest.json")
+
     fit_corpus = AG.load_fit_corpus()
     fit_meta = {k: v for k, v in fit_corpus.items() if k != "docs"}
     lineages = AG.load_spent_lineages()
     primary_chain = AG.load_verified_chain(AG.PRIMARY_CHAIN_NAME)
 
-    # Fit primary chain headers (fast, ~1.5-7s) so we can run live micro-sketch probes with real timings.
+    # Fit primary chain headers to extract live Stage-1 micro-sketch features on the 7 dev codebases.
     primary_headers = AG.fit_all_prefix_headers(
         {AG.PRIMARY_CHAIN_NAME: primary_chain}, fit_corpus, jobs=1
     )
@@ -427,500 +828,255 @@ def run_eval_dev(grid_path: Path | None = None, out_path: Path | None = None) ->
         for K in AG.PRIMARY_GRID
     }
 
-    # Index pre-verified archive grid rows.
+    # Index Stage-1 dev grid rows + verify 100% independent decode fidelity.
+    dev_rows = grid_data["rows"]
+    cal_rows = cal_grid_data["rows"]
+    all_decoded_ok = all(
+        r.get("independent_decode_ok") is True and r.get("fidelity") == 1.0
+        for r in dev_rows + cal_rows
+    )
+    if not all_decoded_ok:
+        raise AssertionError("archive without 100% independent decode fidelity found in grid")
+
     by_lin_all: dict[str, list[dict[str, Any]]] = {}
     by_lin_prim: dict[str, dict[int, dict[str, Any]]] = {}
-    for r in rows:
+    for r in dev_rows:
         by_lin_all.setdefault(r["lineage_id"], []).append(r)
         if r["chain"] == AG.PRIMARY_CHAIN_NAME:
             by_lin_prim.setdefault(r["lineage_id"], {})[int(r["K"])] = r
 
-    # Verify 100% independent decode fidelity across the entire grid.
-    all_decoded_ok = all(r.get("independent_decode_ok") is True and r.get("fidelity") == 1.0 for r in rows)
-    if not all_decoded_ok:
-        raise AssertionError("prefix_grid.json contains an archive without 100% independent decode fidelity")
+    cal_by_lin_all: dict[str, list[dict[str, Any]]] = {}
+    cal_by_lin_prim: dict[str, dict[int, dict[str, Any]]] = {}
+    for r in cal_rows:
+        cal_by_lin_all.setdefault(r["lineage_id"], []).append(r)
+        if r["chain"] == AG.PRIMARY_CHAIN_NAME:
+            cal_by_lin_prim.setdefault(r["lineage_id"], {})[int(r["K"])] = r
 
-    # Run real micro-sketch feature extraction with exact wall-clock & op accounting for every lineage.
-    sketch_feats: dict[str, dict[str, Any]] = {}
+    # Extract micro-sketch features for Stage-1 dev + CodeNet diagnostic lineages.
+    sketch_feats_dev: dict[str, dict[str, Any]] = {}
     for lin in lineages:
-        lid = lin["lineage_id"]
-        sketch_feats[lid] = SP.extract_micro_sketch_features(
+        sketch_feats_dev[lin["lineage_id"]] = SP.extract_micro_sketch_features(
             lin["docs"], dicts_by_k, lengths_by_k, probe_ks=SP.PROBE_KS
         )
+    # Deserialize verified micro-sketch feature receipts for the 14 untouched calibration orgs.
+    cal_sketch_feats: dict[str, dict[str, Any]] = {
+        lid: SP.deserialize_sketch_receipt(rec)
+        for lid, rec in cal_grid_data["sketch_receipts"].items()
+    }
 
     dev_lins = [l for l in lineages if l["role"] == "dev_disjoint"]
     diag_lins = [l for l in lineages if l["role"] == "in_dist_codenet_diag"]
-    third_party_lids = {l["lineage_id"] for l in dev_lins if l["org_id"] != "clocksmith"}
+    pf_metas = [{k: v for k, v in l.items() if k != "docs"} for l in dev_lins]
 
-    # Build calibration records for all dev_disjoint lineages (only used inside org-disjoint folds!).
-    def make_cal_record(lin: dict[str, Any]) -> dict[str, Any]:
-        lid = lin["lineage_id"]
+    # ---- STAGE 1: FIT & LOCK ONE EXACT PREDICTOR ON THE 6 PREDICTOR-FIT ORGS ONLY ----
+    pf_records = []
+    for l in dev_lins:
+        lid = l["lineage_id"]
         rmap = by_lin_prim[lid]
         all_cands = by_lin_all[lid]
-        return {
-            "meta": {k: v for k, v in lin.items() if k != "docs"},
-            "feat": sketch_feats[lid],
-            "true_r_by_k": {K: rmap[K]["r_hat"] for K in AG.PRIMARY_GRID},
-            "oracle_obj_by_M": {
-                M: exact_obj_float(AG.select_best_prefix_exact(all_cands, M), M)
-                for M in AG.PRIMARY_HORIZONS
-            },
-            "same_oracle_obj_by_M": {
-                M: exact_obj_float(AG.select_best_prefix_exact(list(rmap.values()), M), M)
-                for M in AG.PRIMARY_HORIZONS
-            },
-        }
+        pf_records.append(
+            {
+                "meta": {k: v for k, v in l.items() if k != "docs"},
+                "feat": sketch_feats_dev[lid],
+                "true_r_by_k": {K: rmap[K]["r_hat"] for K in AG.PRIMARY_GRID},
+                "oracle_obj_by_M": {
+                    M: exact_obj_float(AG.select_best_prefix_exact(all_cands, M), M)
+                    for M in AG.PRIMARY_HORIZONS
+                },
+                "same_oracle_obj_by_M": {
+                    M: exact_obj_float(AG.select_best_prefix_exact(list(rmap.values()), M), M)
+                    for M in AG.PRIMARY_HORIZONS
+                },
+            }
+        )
 
-    cal_record_by_lid = {l["lineage_id"]: make_cal_record(l) for l in dev_lins}
-
-    # Helper to construct exact work dict for an arm on (lid, M) with identical prefix reuse.
-    def encode_work(lid: str, K: int) -> tuple[float, int, int]:
-        w = by_lin_prim[lid][K]["work"]
-        return float(w["wall_seconds"]), int(w["total_ops"]), int(w["peak_rss_bytes"])
-
-    def eval_pilot_on_query(lid: str, M: int) -> tuple[int, dict[str, Any]]:
-        rmap = by_lin_prim[lid]
-        r_pilot = {K: rmap[K]["r_hat"] for K in SP.PILOT_KS}
-        k_pick, _ = SP.select_prefix_pilot_3pt(header_bytes_by_k, r_pilot, M, AG.PRIMARY_GRID)
-        # Charge the 3 pilot full-corpus encodes; reuse archive if k_pick is one of the 3 pilot points!
-        sel_w, sel_ops, rss = 0.0, 0, 0
-        for pk in SP.PILOT_KS:
-            w_s, ops, r_b = encode_work(lid, pk)
-            sel_w += w_s
-            sel_ops += ops
-            rss = max(rss, r_b)
-        if k_pick in SP.PILOT_KS:
-            dep_w, dep_ops = 0.0, 0  # exact prefix reuse!
-        else:
-            dep_w, dep_ops, r_b = encode_work(lid, k_pick)
-            rss = max(rss, r_b)
-        return k_pick, {
-            "selection_wall_s": sel_w,
-            "selection_ops": sel_ops,
-            "deployment_wall_s": dep_w,
-            "deployment_ops": dep_ops,
-            "total_wall_s": sel_w + dep_w,
-            "total_ops": sel_ops + dep_ops,
-            "peak_rss_bytes": rss,
-            "reused_pilot_archive": k_pick in SP.PILOT_KS,
-        }
-
-    def eval_grid_on_query(lid: str, M: int) -> tuple[int, dict[str, Any]]:
-        rmap = by_lin_prim[lid]
-        best = AG.select_best_prefix_exact(list(rmap.values()), M)
-        k_pick = int(best["K"])
-        tot_w, tot_ops, rss = 0.0, 0, 0
-        for K in AG.PRIMARY_GRID:
-            w_s, ops, r_b = encode_work(lid, K)
-            tot_w += w_s
-            tot_ops += ops
-            rss = max(rss, r_b)
-        return k_pick, {
-            "selection_wall_s": tot_w,
-            "selection_ops": tot_ops,
-            "deployment_wall_s": 0.0,  # exact prefix reuse of grid's winning archive
-            "deployment_ops": 0,
-            "total_wall_s": tot_w,
-            "total_ops": tot_ops,
-            "peak_rss_bytes": rss,
-        }
-
-    def eval_fixed_on_query(lid: str, K: int) -> tuple[int, dict[str, Any]]:
-        w_s, ops, rss = encode_work(lid, K)
-        return K, {
-            "selection_wall_s": 0.0,
-            "selection_ops": 0,
-            "deployment_wall_s": w_s,
-            "deployment_ops": ops,
-            "total_wall_s": w_s,
-            "total_ops": ops,
-            "peak_rss_bytes": rss,
-        }
-
-    # Run strict org-disjoint LOLO-CV across all 7 dev_disjoint lineages x 2 horizons = 14 queries!
-    arm_names = (
-        "shipped_policy_dev_calibrated",
-        "shipped_policy_strict_conformal",
-        "fixed_K512",
-        "fixed_K2048",
-        "fixed_K4096",
-        "pilot_3pt_geometric",
-        "same_chain_oracle",
-        "full_selector_by_K_oracle",
+    locked_predictor, locked_fit_wall_s = SP.LockedHorizonPredictor.fit_and_lock(
+        fit_meta=fit_meta,
+        predictor_fit_records=pf_records,
+        header_bytes_by_k=header_bytes_by_k,
+        primary_chain_sha256=primary_chain["source_sha256"],
+        grid_ks=AG.PRIMARY_GRID,
+        probe_ks=SP.PROBE_KS,
+        pilot_ks=SP.PILOT_KS,
     )
-    per_arm_same: dict[str, list[float]] = {a: [] for a in arm_names}
-    per_arm_full: dict[str, list[float]] = {a: [] for a in arm_names}
-    per_arm_full_3p: dict[str, list[float]] = {a: [] for a in arm_names}
-    per_arm_work: dict[str, list[dict[str, Any]]] = {a: [] for a in arm_names}
-    per_arm_complete_bits: dict[str, dict[str, list[float]]] = {
-        a: {str(M): [] for M in AG.PRIMARY_HORIZONS} for a in arm_names
-    }
-    query_records: list[dict[str, Any]] = []
-    fold_refit_wall_dev = 0.0
-    fold_refit_wall_strict = 0.0
+    if write_locked_predictor:
+        locked_sha = locked_predictor.save(locked_predictor_path)
+    else:
+        locked_sha = locked_predictor.sha256()
+        if locked_predictor_path.exists():
+            on_disk = SP.LockedHorizonPredictor.load(locked_predictor_path, expected_sha256=locked_sha)
+            assert on_disk.sha256() == locked_sha
 
+    # Reload exact locked predictor from canonical bytes/disk for Stage 2 (zero refitting!).
+    stage2_predictor = (
+        SP.LockedHorizonPredictor.load(locked_predictor_path, expected_sha256=locked_sha)
+        if locked_predictor_path.exists()
+        else locked_predictor
+    )
+
+    # ---- STAGE 2: EXACT SPLIT-CONFORMAL CALIBRATION ON 14 UNTOUCHED INDEPENDENT ORGS ----
+    cal_orgs_meta = cal_manifest["calibration_orgs"]
+    cal_records_stage2 = []
+    for meta in cal_orgs_meta:
+        lid = meta["lineage_id"]
+        cal_records_stage2.append(
+            {
+                "meta": meta,
+                "feat": cal_sketch_feats[lid],
+                "primary_rows_by_k": cal_by_lin_prim[lid],
+                "all_chain_rows": cal_by_lin_all[lid],
+            }
+        )
+
+    split_conformal = SP.calibrate_locked_predictor_split_conformal(
+        locked_predictor=stage2_predictor,
+        fit_meta=fit_meta,
+        predictor_fit_metas=pf_metas,
+        calibration_records=cal_records_stage2,
+        alpha=SP.UPB_ALPHA,
+        sealed_regret_bar=SP.SEALED_REGRET_BAR,
+    )
+    certifies_2_0 = bool(split_conformal["certifies_2_0pct_sealed_bar"])
+
+    # Full arm comparison on the 14 untouched calibration orgs (28 horizon queries)
+    cal_arm_summaries, cal_query_records, cal_mean_per_dep = _evaluate_arms_on_cohort(
+        cohort_metas=cal_orgs_meta,
+        by_lin_prim=cal_by_lin_prim,
+        by_lin_all=cal_by_lin_all,
+        sketch_feats=cal_sketch_feats,
+        locked_predictor=stage2_predictor,
+        strict_conformal_certifies_2_0=certifies_2_0,
+        extra_locked_fit_wall_s=locked_fit_wall_s,
+    )
+
+    # Stage-1 predictor-fit cohort diagnostics (explicitly NOT valid for split-conformal coverage!)
+    dev_arm_summaries, dev_query_records, dev_mean_per_dep = _evaluate_arms_on_cohort(
+        cohort_metas=pf_metas,
+        by_lin_prim=by_lin_prim,
+        by_lin_all=by_lin_all,
+        sketch_feats=sketch_feats_dev,
+        locked_predictor=stage2_predictor,
+        strict_conformal_certifies_2_0=certifies_2_0,
+        extra_locked_fit_wall_s=locked_fit_wall_s,
+    )
+
+    # Also compute Stage-1 org-disjoint LOLO-CV reference (explicitly flagged per Barber et al. arXiv:1905.02928)
+    lolo_same, lolo_full = [], []
     for test_lin in dev_lins:
         tid = test_lin["lineage_id"]
         torg = test_lin["org_id"]
-        eval_meta = {k: v for k, v in test_lin.items() if k != "docs"}
-        cal_recs = [
-            cal_record_by_lid[l["lineage_id"]]
-            for l in dev_lins
-            if l["org_id"] != torg
-        ]
-
-        # Fit both dev-calibrated and strict-conformal policies strictly on org-disjoint cal_recs.
-        pol_dev = SP.HorizonSizingPolicy(header_bytes_by_k, AG.PRIMARY_GRID, strict_conformal=False)
-        cal_info_dev = pol_dev.fit_calibration(fit_meta, cal_recs, AG.PRIMARY_HORIZONS)
-        fold_refit_wall_dev += cal_info_dev["fit_wall_seconds"]
-
-        pol_strict = SP.HorizonSizingPolicy(header_bytes_by_k, AG.PRIMARY_GRID, strict_conformal=True)
-        cal_info_strict = pol_strict.fit_calibration(fit_meta, cal_recs, AG.PRIMARY_HORIZONS)
-        fold_refit_wall_strict += cal_info_strict["fit_wall_seconds"]
-
-        feat = sketch_feats[tid]
+        cal_fold_recs = [r for r in pf_records if r["meta"]["org_id"] != torg]
+        fold_pred, _ = SP.LockedHorizonPredictor.fit_and_lock(
+            fit_meta, cal_fold_recs, header_bytes_by_k, primary_chain["source_sha256"]
+        )
         rmap = by_lin_prim[tid]
         all_cands = by_lin_all[tid]
-
         for M in AG.PRIMARY_HORIZONS:
-            same_opt_row = AG.select_best_prefix_exact(list(rmap.values()), M)
-            same_opt_val = exact_obj_float(same_opt_row, M)
-            full_opt_row = AG.select_best_prefix_exact(all_cands, M)
-            full_opt_val = exact_obj_float(full_opt_row, M)
+            k_p, _, _ = fold_pred.predict_k(sketch_feats_dev[tid], M)
+            v_p = exact_obj_float(rmap[k_p], M)
+            v_s = exact_obj_float(AG.select_best_prefix_exact(list(rmap.values()), M), M)
+            v_f = exact_obj_float(AG.select_best_prefix_exact(all_cands, M), M)
+            lolo_same.append((v_p / v_s) - 1.0)
+            lolo_full.append((v_p / v_f) - 1.0)
 
-            k_pilot, w_pilot = eval_pilot_on_query(tid, M)
-            k_grid, w_grid = eval_grid_on_query(tid, M)
-            assert k_grid == int(same_opt_row["K"])
-
-            # Shipped policy evaluation (both regimes), including fallback work & excess!
-            def run_shipped(pol: SP.HorizonSizingPolicy) -> tuple[int, dict[str, Any], dict[str, Any]]:
-                t_p0 = time.perf_counter()
-                pred = pol.predict(eval_meta, feat, M)
-                pred_wall = time.perf_counter() - t_p0
-                sk_w = float(feat["work"]["wall_seconds"]) + pred_wall
-                sk_ops = int(feat["work"]["total_ops"])
-                rss = int(feat["work"]["peak_rss_bytes"])
-                if pred["decision"] == "SWEEP_REQUIRED":
-                    final_k = k_pilot
-                    w_dict = {
-                        "selection_wall_s": sk_w + w_pilot["selection_wall_s"],
-                        "selection_ops": sk_ops + w_pilot["selection_ops"],
-                        "deployment_wall_s": w_pilot["deployment_wall_s"],
-                        "deployment_ops": w_pilot["deployment_ops"],
-                        "total_wall_s": sk_w + w_pilot["total_wall_s"],
-                        "total_ops": sk_ops + w_pilot["total_ops"],
-                        "peak_rss_bytes": max(rss, w_pilot["peak_rss_bytes"]),
-                        "fallback_used": True,
-                    }
-                else:
-                    final_k = int(pred["predicted_K"])
-                    dep_w, dep_ops, dep_rss = encode_work(tid, final_k)
-                    w_dict = {
-                        "selection_wall_s": sk_w,
-                        "selection_ops": sk_ops,
-                        "deployment_wall_s": dep_w,
-                        "deployment_ops": dep_ops,
-                        "total_wall_s": sk_w + dep_w,
-                        "total_ops": sk_ops + dep_ops,
-                        "peak_rss_bytes": max(rss, dep_rss),
-                        "fallback_used": False,
-                    }
-                return final_k, w_dict, pred
-
-            k_dev, w_dev, pred_dev = run_shipped(pol_dev)
-            k_str, w_str, pred_str = run_shipped(pol_strict)
-
-            # Full selector-by-K oracle work = sum across all 7 chains x eligible prefixes.
-            full_oracle_w = sum(float(r["work"]["wall_seconds"]) for r in all_cands)
-            full_oracle_ops = sum(int(r["work"]["total_ops"]) for r in all_cands)
-            full_oracle_rss = max(int(r["work"]["peak_rss_bytes"]) for r in all_cands)
-            w_full_oracle = {
-                "selection_wall_s": full_oracle_w,
-                "selection_ops": full_oracle_ops,
-                "deployment_wall_s": 0.0,
-                "deployment_ops": 0,
-                "total_wall_s": full_oracle_w,
-                "total_ops": full_oracle_ops,
-                "peak_rss_bytes": full_oracle_rss,
-            }
-
-            arm_results: dict[str, tuple[dict[str, Any], dict[str, Any]]] = {
-                "shipped_policy_dev_calibrated": (rmap[k_dev], w_dev),
-                "shipped_policy_strict_conformal": (rmap[k_str], w_str),
-                "fixed_K512": (rmap[512], eval_fixed_on_query(tid, 512)[1]),
-                "fixed_K2048": (rmap[2048], eval_fixed_on_query(tid, 2048)[1]),
-                "fixed_K4096": (rmap[4096], eval_fixed_on_query(tid, 4096)[1]),
-                "pilot_3pt_geometric": (rmap[k_pilot], w_pilot),
-                "same_chain_oracle": (same_opt_row, w_grid),
-                "full_selector_by_K_oracle": (full_opt_row, w_full_oracle),
-            }
-
-            q_arms: dict[str, Any] = {}
-            for aname, (chosen_row, w_dict) in arm_results.items():
-                val = exact_obj_float(chosen_row, M)
-                ex_s = (val / same_opt_val) - 1.0
-                ex_f = (val / full_opt_val) - 1.0
-                per_arm_same[aname].append(ex_s)
-                per_arm_full[aname].append(ex_f)
-                if tid in third_party_lids:
-                    per_arm_full_3p[aname].append(ex_f)
-                per_arm_work[aname].append(w_dict)
-                per_arm_complete_bits[aname][str(M)].append(val * 8.0)
-                q_arms[aname] = {
-                    "chain": chosen_row["chain"],
-                    "K": int(chosen_row["K"]),
-                    "header_bytes": int(chosen_row["header_bytes"]),
-                    "r_hat": round(float(chosen_row["r_hat"]), 6),
-                    "complete_bytes": round(val, 2),
-                    "complete_bits": round(val * 8.0, 2),
-                    "excess_vs_same_pct": round(100.0 * ex_s, 4),
-                    "excess_vs_full_pct": round(100.0 * ex_f, 4),
-                    "total_wall_s": round(w_dict["total_wall_s"], 6),
-                    "total_ops": int(w_dict["total_ops"]),
-                }
-
-            # Realized pre-fallback excess of predicted_K (for UPB coverage check on BOTH same-chain and full oracle!)
-            pred_k_only = int(pred_dev["predicted_K"])
-            pred_only_ex_same = (exact_obj_float(rmap[pred_k_only], M) / same_opt_val) - 1.0
-            pred_only_ex_full = (exact_obj_float(rmap[pred_k_only], M) / full_opt_val) - 1.0
-            upb_dev_same = pred_dev["upb_90_dev_t"]
-            upb_dev_full = pred_dev["upb_90_dev_t_full"]
-            query_records.append(
-                {
-                    "lineage_id": tid,
-                    "org_id": torg,
-                    "is_third_party_org": tid in third_party_lids,
-                    "M": M,
-                    "n_cal_orgs": pred_dev["n_cal_orgs"],
-                    "dev_policy_decision": pred_dev["decision"],
-                    "dev_policy_reason": pred_dev["reason"],
-                    "dev_policy_predicted_K": pred_k_only,
-                    "dev_policy_final_K": k_dev,
-                    "dev_policy_upb90_same_pct": round(100.0 * upb_dev_same, 4) if upb_dev_same is not None else None,
-                    "dev_policy_upb90_full_pct": round(100.0 * upb_dev_full, 4) if upb_dev_full is not None else None,
-                    "dev_policy_pred_only_excess_vs_same_pct": round(100.0 * pred_only_ex_same, 4),
-                    "dev_policy_pred_only_excess_vs_full_pct": round(100.0 * pred_only_ex_full, 4),
-                    "dev_upb90_same_covers_realized": (upb_dev_same is not None and pred_only_ex_same <= upb_dev_same),
-                    "dev_upb90_full_covers_realized": (upb_dev_full is not None and pred_only_ex_full <= upb_dev_full),
-                    "strict_policy_decision": pred_str["decision"],
-                    "strict_policy_reason": pred_str["reason"],
-                    "arms": q_arms,
-                }
-            )
-
-    # Final shipping refit on ALL 7 dev_disjoint lineages (explicitly timed & charged!).
-    final_pol_dev = SP.HorizonSizingPolicy(header_bytes_by_k, AG.PRIMARY_GRID, strict_conformal=False)
-    final_refit_dev = final_pol_dev.fit_calibration(
-        fit_meta, list(cal_record_by_lid.values()), AG.PRIMARY_HORIZONS
-    )
-    final_pol_strict = SP.HorizonSizingPolicy(header_bytes_by_k, AG.PRIMARY_GRID, strict_conformal=True)
-    final_refit_strict = final_pol_strict.fit_calibration(
-        fit_meta, list(cal_record_by_lid.values()), AG.PRIMARY_HORIZONS
-    )
-
-    # Segregated in-distribution CodeNet diagnostic strata (calibrated strictly on non-CodeNet repos ONLY!).
-    codenet_diag_records = []
+    # Segregated in-distribution CodeNet diagnostic strata (evaluated under EXACT locked predictor).
+    codenet_diag = []
     for lin in diag_lins:
         lid = lin["lineage_id"]
-        eval_meta = {k: v for k, v in lin.items() if k != "docs"}
-        feat = sketch_feats[lid]
         rmap = by_lin_prim[lid]
         all_cands = by_lin_all[lid]
+        feat = sketch_feats_dev[lid]
         for M in AG.PRIMARY_HORIZONS:
+            k_pred, _, _ = stage2_predictor.predict_k(feat, M)
             same_opt = AG.select_best_prefix_exact(list(rmap.values()), M)
             full_opt = AG.select_best_prefix_exact(all_cands, M)
-            pred_d = final_pol_dev.predict(
-                eval_meta, feat, M, allow_same_collection_eval_diagnostic=True
-            )
-            k_pilot, _ = eval_pilot_on_query(lid, M)
-            k_final = k_pilot if pred_d["decision"] == "SWEEP_REQUIRED" else int(pred_d["predicted_K"])
-            val_final = exact_obj_float(rmap[k_final], M)
-            val_same = exact_obj_float(same_opt, M)
-            val_full = exact_obj_float(full_opt, M)
-            codenet_diag_records.append(
+            v_p = exact_obj_float(rmap[k_pred], M)
+            v_s = exact_obj_float(same_opt, M)
+            v_f = exact_obj_float(full_opt, M)
+            codenet_diag.append(
                 {
                     "lineage_id": lid,
                     "M": M,
-                    "note": "In-distribution same-collection CodeNet stratum; NEVER included in calibration or primary dev metrics",
-                    "decision": pred_d["decision"],
-                    "predicted_K": int(pred_d["predicted_K"]),
-                    "final_K": k_final,
+                    "note": "In-distribution CodeNet stratum; NEVER included in Stage-1 fit or Stage-2 calibration",
+                    "locked_predictor_K": int(k_pred),
                     "same_oracle_K": int(same_opt["K"]),
                     "full_oracle_chain": full_opt["chain"],
                     "full_oracle_K": int(full_opt["K"]),
-                    "excess_vs_same_pct": round(100.0 * (val_final / val_same - 1.0), 4),
-                    "excess_vs_full_pct": round(100.0 * (val_final / val_full - 1.0), 4),
-                    "upb90_dev_pct": round(100.0 * pred_d["upb_90_dev_t"], 4),
+                    "excess_vs_same_pct": round(100.0 * (v_p / v_s - 1.0), 4),
+                    "excess_vs_full_pct": round(100.0 * (v_p / v_f - 1.0), 4),
                 }
             )
 
-    # Aggregate arm summaries + exact work ratios vs pilot and grid.
-    pilot_work_summary = summarize_work(per_arm_work["pilot_3pt_geometric"])
-    grid_work_summary = summarize_work(per_arm_work["same_chain_oracle"])
-    pilot_tot_ops = pilot_work_summary["total_ops_total"]
-    grid_tot_ops = grid_work_summary["total_ops_total"]
-    pilot_tot_wall = pilot_work_summary["total_wall_seconds_total"]
-    grid_tot_wall = grid_work_summary["total_wall_seconds_total"]
+    # All-in + amortized work accounting including shared chain build!
+    chain_build_secs = read_verified_chain_build_seconds()
+    all_in_work = compute_all_in_and_amortized_work(
+        grid_headers_meta=grid_data["headers"],
+        chain_build_sec_by_chain=chain_build_secs,
+        locked_predictor_fit_sec=locked_fit_wall_s,
+        cal_arm_work_per_deployment=cal_mean_per_dep,
+        dev_arm_work_per_deployment=dev_mean_per_dep,
+    )
 
-    arm_summaries: dict[str, Any] = {}
-    for aname in arm_names:
-        extra_refit = 0.0
-        if aname == "shipped_policy_dev_calibrated":
-            extra_refit = fold_refit_wall_dev + final_refit_dev["fit_wall_seconds"]
-        elif aname == "shipped_policy_strict_conformal":
-            extra_refit = fold_refit_wall_strict + final_refit_strict["fit_wall_seconds"]
-        ws = summarize_work(per_arm_work[aname], extra_refit_wall_s=extra_refit)
-        ws["total_ops_ratio_vs_pilot"] = round(ws["total_ops_total"] / max(1, pilot_tot_ops), 4)
-        ws["total_ops_ratio_vs_grid"] = round(ws["total_ops_total"] / max(1, grid_tot_ops), 4)
-        ws["total_wall_ratio_vs_pilot"] = round(ws["total_wall_seconds_total"] / max(1e-9, pilot_tot_wall), 4)
-        ws["total_wall_ratio_vs_grid"] = round(ws["total_wall_seconds_total"] / max(1e-9, grid_tot_wall), 4)
-        ws["selection_ops_ratio_vs_pilot"] = round(
-            ws["selection_ops_total"] / max(1, pilot_work_summary["selection_ops_total"]), 4
-        )
-        ws["selection_ops_ratio_vs_grid"] = round(
-            ws["selection_ops_total"] / max(1, grid_work_summary["selection_ops_total"]), 4
-        )
+    # Lower envelope, codeword widening, near-tie flatness across ALL 14 calibration orgs + 9 dev/diag lineages.
+    all_lin_metas = [{k: v for k, v in l.items() if k != "docs"} for l in lineages] + cal_orgs_meta
+    merged_prim = {**by_lin_prim, **cal_by_lin_prim}
+    lower_env = compute_lower_envelope_and_crossovers(merged_prim, all_lin_metas)
+    widening = compute_codeword_widening_and_decomp(merged_prim, all_lin_metas)
 
-        # Fallback stats (for shipped policies)
-        fb_count = sum(1 for w in per_arm_work[aname] if w.get("fallback_used"))
-        fb_rate = fb_count / max(1, len(per_arm_work[aname]))
-
-        # Worst 3 misses vs full oracle
-        indexed = [
-            (
-                q["arms"][aname]["excess_vs_full_pct"],
-                q["lineage_id"],
-                q["M"],
-                q["arms"][aname]["K"],
-                q["arms"]["full_selector_by_K_oracle"]["chain"],
-                q["arms"]["full_selector_by_K_oracle"]["K"],
-            )
-            for q in query_records
-        ]
-        indexed.sort(reverse=True)
-        worst = [
-            {
-                "lineage_id": lid,
-                "M": M,
-                "chosen_K": ck,
-                "oracle_chain": oc,
-                "oracle_K": ok,
-                "excess_vs_full_pct": ex,
-            }
-            for ex, lid, M, ck, oc, ok in indexed[:3]
-        ]
-
-        arm_summaries[aname] = {
-            "excess_vs_same_chain_oracle": summarize_excess(per_arm_same[aname]),
-            "excess_vs_full_oracle": summarize_excess(per_arm_full[aname]),
-            "excess_vs_full_oracle_third_party_5orgs_only": summarize_excess(per_arm_full_3p[aname]),
-            "fallback_count": fb_count,
-            "fallback_rate_pct": round(100.0 * fb_rate, 2),
-            "complete_bits_mean_by_M": {
-                M_str: round(float(np.mean(vals)), 2)
-                for M_str, vals in per_arm_complete_bits[aname].items()
-            },
-            "work": ws,
-            "worst_misses_vs_full_oracle": worst,
-        }
-
-    # Proposed A1b pass targets check on dev_disjoint (evaluated honestly for BOTH shipped policy modes!).
-    def check_targets(arm_key: str) -> dict[str, Any]:
-        s = arm_summaries[arm_key]
-        ex = s["excess_vs_full_oracle"]
-        wk = s["work"]
-        checks = {
-            "median_excess_le_1_0pct": ex["median_pct"] <= 1.0,
-            "p95_excess_le_2_5pct": ex["p95_pct"] <= 2.5,
-            "fallback_rate_le_15pct": s["fallback_rate_pct"] <= 15.0,
-            "total_ops_le_half_pilot": wk["total_ops_ratio_vs_pilot"] <= 0.5,
-            "total_ops_le_sixth_grid": wk["total_ops_ratio_vs_grid"] <= (1.0 / 6.0),
-            "total_wall_le_half_pilot": wk["total_wall_ratio_vs_pilot"] <= 0.5,
-            "total_wall_le_sixth_grid": wk["total_wall_ratio_vs_grid"] <= (1.0 / 6.0),
-            "conformal_lineage_support_ge_9_orgs": final_refit_strict["conformal_support_sufficient"],
-        }
-        return {
-            "checks": checks,
-            "dev_performance_targets_pass": all(
-                v for k, v in checks.items() if k != "conformal_lineage_support_ge_9_orgs"
-            ),
-            "freeze_ready_all_targets_pass": all(checks.values()),
-        }
-
-    # Lower envelope, near-tie flatness, codeword widening, token/RAM variant.
-    lower_env = compute_lower_envelope_and_crossovers(by_lin_prim, lineages)
-    widening = compute_codeword_widening_and_decomp(by_lin_prim, lineages)
-    token_ram = evaluate_token_ram_variant(lineages, by_lin_prim, by_lin_all, sketch_feats, ram_by_k)
-
-    # Aggregate near-tie frequency across dev_disjoint diagnostic sweep and primary horizons.
-    dev_primary_wide_05 = 0
-    dev_primary_wide_10 = 0
-    dev_sweep_wide_05 = 0
-    dev_sweep_wide_10 = 0
-    dev_sweep_total = 0
-    for lin in dev_lins:
-        for pt in lower_env[lin["lineage_id"]]["horizon_sweep"]:
-            dev_sweep_total += 1
+    cal_primary_wide_05 = 0
+    cal_primary_wide_10 = 0
+    cal_sweep_wide_05 = 0
+    cal_sweep_wide_10 = 0
+    cal_sweep_total = 0
+    for meta in cal_orgs_meta:
+        for pt in lower_env[meta["lineage_id"]]["horizon_sweep"]:
+            cal_sweep_total += 1
             if pt["wide_near_tie_0_5pct"]:
-                dev_sweep_wide_05 += 1
+                cal_sweep_wide_05 += 1
                 if pt["M"] in AG.PRIMARY_HORIZONS:
-                    dev_primary_wide_05 += 1
+                    cal_primary_wide_05 += 1
             if pt["wide_near_tie_1_0pct"]:
-                dev_sweep_wide_10 += 1
+                cal_sweep_wide_10 += 1
                 if pt["M"] in AG.PRIMARY_HORIZONS:
-                    dev_primary_wide_10 += 1
+                    cal_primary_wide_10 += 1
 
-    # UPB calibration coverage diagnostic on dev_disjoint.
-    upb_same_covered = sum(1 for q in query_records if q["dev_upb90_same_covers_realized"])
-    upb_full_covered = sum(1 for q in query_records if q["dev_upb90_full_covers_realized"])
-    upb_same_coverage_pct = round(100.0 * upb_same_covered / max(1, len(query_records)), 2)
-    upb_full_coverage_pct = round(100.0 * upb_full_covered / max(1, len(query_records)), 2)
+    # Token/RAM variant scored on the 14 untouched calibration orgs using the Stage-1 locked token bias.
+    token_ram = evaluate_token_ram_variant_locked(
+        predictor_fit_lins=dev_lins,
+        cal_orgs_meta=cal_orgs_meta,
+        by_lin_prim_pf=by_lin_prim,
+        sketch_feats_pf=sketch_feats_dev,
+        cal_by_lin_prim=cal_by_lin_prim,
+        cal_by_lin_all=cal_by_lin_all,
+        cal_sketch_feats=cal_sketch_feats,
+        ram_by_k=ram_by_k,
+    )
 
-    # Calibration support audit (explicit honest verdict).
-    distinct_dev_orgs = sorted({l["org_id"] for l in dev_lins})
-    third_party_orgs = sorted({l["org_id"] for l in dev_lins if l["org_id"] != "clocksmith"})
-    cal_support_audit = {
-        "local_spent_dev_disjoint_codebases": len(dev_lins),
-        "local_spent_dev_disjoint_distinct_orgs": len(distinct_dev_orgs),
-        "distinct_dev_orgs": distinct_dev_orgs,
-        "strict_third_party_orgs_count": len(third_party_orgs),
-        "strict_third_party_orgs": third_party_orgs,
-        "lolo_cal_orgs_per_fold": min(q["n_cal_orgs"] for q in query_records),
-        "min_orgs_required_for_finite_90pct_conformal_upb": SP.MIN_CONFORMAL_ORGS,
-        "recommended_sealed_independent_orgs_before_freeze": 16,
-        "additional_independent_orgs_needed_minimum": max(0, SP.MIN_CONFORMAL_ORGS - len(distinct_dev_orgs)),
-        "additional_independent_orgs_needed_recommended": max(0, 16 - len(distinct_dev_orgs)),
-        "sufficient_for_conformal_freeze": len(distinct_dev_orgs) >= SP.MIN_CONFORMAL_ORGS,
-        "verdict": (
-            "INSUFFICIENT FOR FREEZE: local spent worktree has 7 non-CodeNet codebases across 6 distinct "
-            "organizations (5 strictly external third-party repos + clocksmith/gamma), yielding n_cal_orgs=5 "
-            "per org-disjoint LOLO fold. Distribution-free 90% conformal UPB requires ceil(0.90*(n+1)) <= n, "
-            "i.e., n >= 9 independent calibration organizations (at least 4 more independent repos minimum, "
-            "and ~16-20 recommended for stable tail calibration before freezing A1b)."
-        ),
-    }
-
-    # Shared spine summary block.
+    # Shared spine block
+    total_verified_archives = len(dev_rows) + len(cal_rows)
     shared_spine = {
         "fidelity": {
             "all_archives_independent_decode_ok": all_decoded_ok,
-            "verified_archive_count": len(rows),
+            "verified_archive_count_total": total_verified_archives,
+            "verified_archive_count_stage1_dev_and_diag": len(dev_rows),
+            "verified_archive_count_stage2_calibration": len(cal_rows),
             "byte_exact_fidelity": 1.0,
             "byte_accounting_drift_bytes": 0,
-            "random_access_spot_checks_passed": all(r["random_access_spot_check_ok"] for r in rows),
+            "random_access_spot_checks_passed": all(
+                r["random_access_spot_check_ok"] for r in dev_rows + cal_rows
+            ),
         },
         "complete_bits": {
             "primary_chain": AG.PRIMARY_CHAIN_NAME,
-            "mean_complete_bits_by_arm_and_M": {
-                aname: arm_summaries[aname]["complete_bits_mean_by_M"]
-                for aname in arm_names
+            "calibration_14_orgs_mean_complete_bits_by_arm_and_M": {
+                aname: cal_arm_summaries[aname]["complete_bits_mean_by_M"]
+                for aname in cal_arm_summaries
             },
         },
         "measured_work": {
-            "primary_chain_headers_fit_wall_seconds": round(
-                sum(h["fit_work"]["wall_seconds"] for h in primary_headers.values()), 4
-            ),
-            "arm_work_summary": {aname: arm_summaries[aname]["work"] for aname in arm_names},
+            "shared_chain_build_sec": all_in_work["shared_chain_build_breakdown_sec"]["shared_chain_build_sec"],
+            "all_7_chains_build_sec": all_in_work["full_multichain_build_breakdown_sec"]["all_7_chains_build_sec"],
+            "all_in_and_amortized_summary_cal14": all_in_work["calibration_14_orgs_basis"],
         },
         "horizon": {
             "primary_horizons_bytes": list(AG.PRIMARY_HORIZONS),
@@ -932,42 +1088,61 @@ def run_eval_dev(grid_path: Path | None = None, out_path: Path | None = None) ->
     }
 
     summary = {
-        "schema": "gamma.bits-a1b.dev-summary.v1",
+        "schema": "gamma.bits-a1b.dev-summary.v2",
         "primary_chain": AG.PRIMARY_CHAIN_NAME,
         "verified_chains": list(grid_data["chains"].keys()),
         "prefix_grid_K": list(AG.PRIMARY_GRID),
         "pilot_grid_K": list(SP.PILOT_KS),
         "sketch_probe_K": list(SP.PROBE_KS),
+        "compute_gate_policy": {
+            "C5_status": "GATED_BEHIND_EXPLICIT_MODEL_COMPUTE_APPROVAL",
+            "C6_status": "GATED_BEHIND_EXPLICIT_MODEL_COMPUTE_APPROVAL",
+            "gpu_compute_run": False,
+            "llm_compute_run": False,
+            "sealed_holdouts_opened": False,
+            "note": "CPU-only development and split-conformal calibration; C5 and C6 remain strictly gated behind explicit user model-compute approval.",
+        },
         "shared_spine": shared_spine,
-        "calibration_support_audit": cal_support_audit,
-        "pass_target_evaluation": {
-            "shipped_policy_dev_calibrated": check_targets("shipped_policy_dev_calibrated"),
-            "shipped_policy_strict_conformal": check_targets("shipped_policy_strict_conformal"),
+        "two_stage_protocol": {
+            "barber_et_al_pitfall_note": (
+                "Leave-one-organization-out (LOLO) residuals evaluate a different refitted predictor "
+                "on each fold rather than the single shipped predictor, breaking split-conformal "
+                "exchangeability (Barber et al., arXiv:1905.02928). A1b therefore uses a strict "
+                "two-stage split-conformal protocol: Stage 1 fits and locks ONE predictor strictly on "
+                "the 6 predictor-fit orgs (zero calibration data); Stage 2 evaluates that EXACT locked "
+                "predictor (verified by SHA-256) once on each of 14 untouched independent calibration orgs."
+            ),
+            "stage1_predictor_fit_orgs": stage2_predictor.payload["predictor_fit_orgs"],
+            "stage1_predictor_fit_lineages": stage2_predictor.payload["predictor_fit_lineages"],
+            "locked_predictor_path": "out/locked_predictor.json",
+            "locked_predictor_sha256": locked_sha,
+            "stage1_locked_fit_wall_seconds": round(locked_fit_wall_s, 6),
+            "stage2_calibration_manifest_sha256": cal_manifest_sha,
+            "stage2_disjointness_audit": disjoint_audit,
+            "stage2_live_venv_hash_audit": live_hash_audit,
+            "stage2_split_conformal_calibration": split_conformal,
         },
-        "arm_summaries_dev_disjoint": arm_summaries,
-        "upb_calibration_diagnostics": {
-            "dev_t_upb90_same_realized_coverage_count": upb_same_covered,
-            "dev_t_upb90_same_realized_coverage_total": len(query_records),
-            "dev_t_upb90_same_realized_coverage_pct": upb_same_coverage_pct,
-            "dev_t_upb90_full_realized_coverage_count": upb_full_covered,
-            "dev_t_upb90_full_realized_coverage_total": len(query_records),
-            "dev_t_upb90_full_realized_coverage_pct": upb_full_coverage_pct,
-            "final_refit_dev_calibrated": final_refit_dev,
-            "final_refit_strict_conformal": final_refit_strict,
+        "arm_summaries_calibration_14_orgs": cal_arm_summaries,
+        "arm_summaries_stage1_dev_7_codebases": dev_arm_summaries,
+        "stage1_lolo_diagnostic_only_not_conformal": {
+            "note": "Diagnostic Stage-1 LOLO-CV on the 6 predictor-fit orgs ONLY; NOT valid for split-conformal coverage (Barber et al., arXiv:1905.02928).",
+            "excess_vs_same_chain_oracle": summarize_excess(lolo_same),
+            "excess_vs_full_oracle": summarize_excess(lolo_full),
         },
-        "near_tie_flatness": {
+        "all_in_and_amortized_work": all_in_work,
+        "near_tie_flatness_calibration_14_orgs": {
             "definition": "widely separated prefixes (K_max / K_min >= 4x, or K=0 with K>=64) within tolerance of optimum",
-            "dev_primary_14_queries_within_0_5pct": f"{dev_primary_wide_05}/{len(query_records)}",
-            "dev_primary_14_queries_within_0_5pct_rate": round(dev_primary_wide_05 / max(1, len(query_records)), 4),
-            "dev_primary_14_queries_within_1_0pct": f"{dev_primary_wide_10}/{len(query_records)}",
-            "dev_primary_14_queries_within_1_0pct_rate": round(dev_primary_wide_10 / max(1, len(query_records)), 4),
-            "dev_diagnostic_70_queries_within_0_5pct": f"{dev_sweep_wide_05}/{dev_sweep_total}",
-            "dev_diagnostic_70_queries_within_0_5pct_rate": round(dev_sweep_wide_05 / max(1, dev_sweep_total), 4),
-            "dev_diagnostic_70_queries_within_1_0pct": f"{dev_sweep_wide_10}/{dev_sweep_total}",
-            "dev_diagnostic_70_queries_within_1_0pct_rate": round(dev_sweep_wide_10 / max(1, dev_sweep_total), 4),
+            "primary_28_queries_within_0_5pct": f"{cal_primary_wide_05}/{len(cal_orgs_meta) * 2}",
+            "primary_28_queries_within_0_5pct_rate": round(cal_primary_wide_05 / max(1, len(cal_orgs_meta) * 2), 4),
+            "primary_28_queries_within_1_0pct": f"{cal_primary_wide_10}/{len(cal_orgs_meta) * 2}",
+            "primary_28_queries_within_1_0pct_rate": round(cal_primary_wide_10 / max(1, len(cal_orgs_meta) * 2), 4),
+            "diagnostic_140_queries_within_0_5pct": f"{cal_sweep_wide_05}/{cal_sweep_total}",
+            "diagnostic_140_queries_within_0_5pct_rate": round(cal_sweep_wide_05 / max(1, cal_sweep_total), 4),
+            "diagnostic_140_queries_within_1_0pct": f"{cal_sweep_wide_10}/{cal_sweep_total}",
+            "diagnostic_140_queries_within_1_0pct_rate": round(cal_sweep_wide_10 / max(1, cal_sweep_total), 4),
         },
-        "query_records_dev_disjoint": query_records,
-        "codenet_in_distribution_diagnostic": codenet_diag_records,
+        "query_records_calibration_14_orgs": cal_query_records,
+        "codenet_in_distribution_diagnostic": codenet_diag,
         "codeword_widening_and_decomposition": widening,
         "lower_envelope": lower_env,
         "token_ram_variant": token_ram,
@@ -982,34 +1157,62 @@ def run_eval_dev(grid_path: Path | None = None, out_path: Path | None = None) ->
 
 
 def main() -> int:
-    summary = run_eval_dev()
-    print("=== A1b Dev Evaluation Summary (14 dev_disjoint queries: 7 lineages x 2 horizons) ===")
-    for arm, s in summary["arm_summaries_dev_disjoint"].items():
-        ex_s = s["excess_vs_same_chain_oracle"]
-        ex_f = s["excess_vs_full_oracle"]
-        wk = s["work"]
+    s = run_eval_dev()
+    sc = s["two_stage_protocol"]["stage2_split_conformal_calibration"]
+    print("=== A1b Two-Stage Split-Conformal Calibration (n_cal = %d independent orgs) ===" % sc["n_cal_orgs"])
+    print("  locked_predictor_sha256       :", sc["locked_predictor_sha256"])
+    print("  conformal rank k              : %d / %d (exact coverage >= %.2f%%)" % (
+        sc["conformal_rank_k"], sc["n_cal_orgs"], sc["finite_sample_coverage_guarantee_pct"]
+    ))
+    print("  90%% UPB max(100KB,100MB) full : %.4f%% (bar <= %.2f%% -> certifies=%s, decision=%s)" % (
+        sc["conformal_90_upb_full_max_pct"],
+        sc["sealed_regret_bar_pct"],
+        sc["certifies_2_0pct_sealed_bar"],
+        sc["strict_conformal_decision_at_2_0pct_bar"],
+    ))
+    print("  90%% UPB per-horizon (100K/100M): %.4f%% / %.4f%%" % (
+        sc["conformal_90_upb_100KB_pct"], sc["conformal_90_upb_100MB_pct"]
+    ))
+    print("  90%% UPB decomposition (budget / chain): %.4f%% / %.4f%%" % (
+        sc["conformal_90_upb_same_chain_budget_max_pct"], sc["conformal_90_upb_chain_choice_max_pct"]
+    ))
+    print("  90%% UPB 3-pt pilot (full max) : %.4f%%" % sc["conformal_90_upb_pilot_full_max_pct"])
+    print("  Sorted s_i%%                   :", sc["sorted_nonconformity_s_i_pct"])
+    print("\n=== Per-Org Split-Conformal Scores (14 untouched calibration orgs) ===")
+    for row in sc["per_org_results"]:
+        h1, h2 = row["h_100KB"], row["h_100MB"]
         print(
-            f"  {arm:32s} | vs_same med={ex_s['median_pct']:5.2f}% p95={ex_s['p95_pct']:5.2f}% | "
-            f"vs_full med={ex_f['median_pct']:5.2f}% p95={ex_f['p95_pct']:5.2f}% max={ex_f['max_pct']:5.2f}% | "
-            f"fb={s['fallback_rate_pct']:5.1f}% | ops/pilot={wk['total_ops_ratio_vs_pilot']:.3f} ops/grid={wk['total_ops_ratio_vs_grid']:.3f} | "
-            f"wall/pilot={wk['total_wall_ratio_vs_pilot']:.3f} wall/grid={wk['total_wall_ratio_vs_grid']:.3f}"
+            f"  {row['org_id']:14s} | 100KB: K{h1['chosen_K']:4d} full={h1['full_oracle_regret_pct']:5.2f}% "
+            f"(bud={h1['same_chain_budget_regret_pct']:4.2f}%, ch={h1['chain_choice_regret_pct']:4.2f}% vs {h1['full_oracle_chain']}:K{h1['full_oracle_K']}) | "
+            f"100MB: K{h2['chosen_K']:4d} full={h2['full_oracle_regret_pct']:5.2f}% "
+            f"(bud={h2['same_chain_budget_regret_pct']:4.2f}%, ch={h2['chain_choice_regret_pct']:4.2f}% vs {h2['full_oracle_chain']}:K{h2['full_oracle_K']}) | "
+            f"s_i={row['nonconformity_s_i_full_max_pct']:5.2f}% [{row['binding_horizon']}]"
         )
-    print("\nPass-target checks (dev_calibrated):", summary["pass_target_evaluation"]["shipped_policy_dev_calibrated"])
-    print("Pass-target checks (strict_conformal):", summary["pass_target_evaluation"]["shipped_policy_strict_conformal"])
-    print(
-        "UPB coverage (same-chain / full-oracle):",
-        summary["upb_calibration_diagnostics"]["dev_t_upb90_same_realized_coverage_pct"],
-        "% /",
-        summary["upb_calibration_diagnostics"]["dev_t_upb90_full_realized_coverage_pct"],
-        "%",
-    )
-    print("Near-tie flatness:", summary["near_tie_flatness"])
-    print("Token/RAM priced variant arm summaries:")
-    for arm, s in summary["token_ram_variant"]["priced_variant"]["arm_summaries"].items():
+    print("\n=== Calibration-14 Arm Summaries (28 queries) ===")
+    for arm, d in s["arm_summaries_calibration_14_orgs"].items():
+        es = d["excess_vs_same_chain_oracle"]
+        ef = d["excess_vs_full_oracle"]
+        wk = d["work_eval_only_excludes_chain_build"]
         print(
-            f"  {arm:24s}: vs_same med={s['vs_same_chain_oracle']['median_pct']:5.2f}% p95={s['vs_same_chain_oracle']['p95_pct']:5.2f}% | "
-            f"vs_full med={s['vs_full_oracle']['median_pct']:5.2f}% p95={s['vs_full_oracle']['p95_pct']:5.2f}%"
+            f"  {arm:30s} | vs_same med={es['median_pct']:5.2f}% p95={es['p95_pct']:5.2f}% | "
+            f"vs_full med={ef['median_pct']:5.2f}% p95={ef['p95_pct']:5.2f}% max={ef['max_pct']:5.2f}% | "
+            f"fb={d['fallback_rate_pct']:5.1f}% | eval_wall={wk['total_wall_seconds_mean']:.2f}s/q"
         )
+    print("\n=== All-In + Amortized Work (calibration 14-org basis, including shared_chain_build) ===")
+    w_cal = s["all_in_and_amortized_work"]["calibration_14_orgs_basis"]
+    print("  shared_chain_build_sec =", s["all_in_and_amortized_work"]["shared_chain_build_breakdown_sec"]["shared_chain_build_sec"])
+    print("  all_7_chains_build_sec =", s["all_in_and_amortized_work"]["full_multichain_build_breakdown_sec"]["all_7_chains_build_sec"])
+    for label, sched in (
+        ("locked_direct", w_cal["locked_predictor_direct_schedule"]),
+        ("strict_conformal", w_cal["strict_conformal_effective_schedule"]),
+    ):
+        print(f"  [{label}] break-even N*(1/2 pilot)={sched['breakeven_N_for_half_same_chain_pilot']}, N*(1/6 grid)={sched['breakeven_N_for_sixth_same_chain_grid']}")
+        for r in sched["amortized_table"]:
+            print(
+                f"    N={r['N_deployments']:2d}: vs_pilot={r['ratio_vs_same_chain_pilot']:.4f}x | "
+                f"vs_same_grid={r['ratio_vs_same_chain_grid']:.4f}x | "
+                f"vs_full_7chain={r['ratio_vs_full_multichain_grid']:.4f}x"
+            )
     return 0
 
 

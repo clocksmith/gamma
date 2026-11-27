@@ -19,9 +19,11 @@ Implements:
 
 from __future__ import annotations
 
+import json
 import math
 import time
 from fractions import Fraction
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -36,7 +38,8 @@ SKETCH_MIN_BYTES = 4_096
 PROBE_KS: tuple[int, ...] = (64, 512, 2048, 4096)
 PILOT_KS: tuple[int, ...] = AG.PILOT_GRID_K  # (64, 512, 4096)
 UPB_ALPHA = 0.10  # 90% upper prediction bound
-EXCESS_ABSTAIN_THRESHOLD = 0.025  # 2.5% excess archive bytes
+SEALED_REGRET_BAR = 0.020  # 2.0% sealed breach bar on max(full_oracle_regret_100KB, full_oracle_regret_100MB)
+EXCESS_ABSTAIN_THRESHOLD = 0.025  # Legacy dev-mode threshold kept for Stage-1 diagnostic continuity
 MIN_CONFORMAL_ORGS = 9  # ceil(0.90 * (n + 1)) <= n  <=>  n >= 9
 FRAMING_EOF_BYTES_EST = 1.5  # ~1 B varint + ~0.5 B byte-alignment/EOF overhead per record
 
@@ -718,3 +721,385 @@ def select_prefix_token_ram_capped(
         return (t_frac, int(ram_by_k[K]), int(K))
 
     return min(eligible, key=key)
+
+
+# ---- Strict Two-Stage Split-Conformal Protocol (Fixes Barber et al. LOO Pitfall) ----
+
+def deserialize_sketch_receipt(receipt: dict[str, Any]) -> dict[str, Any]:
+    """Convert JSON-serialized calibration sketch receipt back to integer-keyed feature dict."""
+    probes_r = {int(k): float(v) for k, v in receipt["probes_r"].items()}
+    probes_tok = {int(k): float(v) for k, v in receipt["probes_tok"].items()}
+    paired_se_r = {}
+    for pair_key, val in receipt["paired_se_r"].items():
+        k1, k2 = pair_key.split(":")
+        paired_se_r[(int(k1), int(k2))] = float(val)
+    paired_se_tok = {}
+    for pair_key, val in receipt["paired_se_tok"].items():
+        k1, k2 = pair_key.split(":")
+        paired_se_tok[(int(k1), int(k2))] = float(val)
+    return {
+        "sketch_bytes": int(receipt["sketch_bytes"]),
+        "sketch_records": int(receipt["sketch_records"]),
+        "sketch_fraction": float(receipt["sketch_fraction"]),
+        "full_bytes": int(receipt["full_bytes"]),
+        "full_records": int(receipt["full_records"]),
+        "probe_ks": [int(k) for k in receipt["probe_ks"]],
+        "probes_r": probes_r,
+        "probes_tok": probes_tok,
+        "paired_se_r": paired_se_r,
+        "paired_se_tok": paired_se_tok,
+        "work": dict(receipt["work"]),
+    }
+
+
+def assert_three_way_disjoint(
+    fit_meta: dict[str, Any],
+    predictor_fit_metas: list[dict[str, Any]],
+    calibration_metas: list[dict[str, Any]],
+) -> None:
+    """Enforce strict 3-way separation: chain-fit vs predictor-fit vs split-conformal calibration."""
+    # 1. Chain-fit vs predictor-fit (also checks no duplicates/hash overlap inside predictor-fit)
+    assert_disjoint_lineages(fit_meta, predictor_fit_metas, eval_meta=None)
+    # 2. Chain-fit vs calibration (also checks no duplicates/hash overlap inside calibration)
+    assert_disjoint_lineages(fit_meta, calibration_metas, eval_meta=None)
+
+    # 3. Predictor-fit vs calibration: zero overlap on org_id, lineage_id, OR file SHA-256!
+    pf_lids = {m["lineage_id"] for m in predictor_fit_metas}
+    pf_orgs = {m["org_id"].lower() for m in predictor_fit_metas}
+    pf_hashes: set[str] = set()
+    for m in predictor_fit_metas:
+        pf_hashes.update(m["file_hashes"])
+
+    seen_cal_orgs: set[str] = set()
+    for cm in calibration_metas:
+        clid = cm["lineage_id"]
+        corg_l = cm["org_id"].lower()
+        if corg_l in seen_cal_orgs:
+            raise LeakageError(
+                f"duplicate calibration organization {cm['org_id']} (each calibration unit must be an independent org)"
+            )
+        seen_cal_orgs.add(corg_l)
+        if clid in pf_lids:
+            raise LeakageError(f"predictor-fit lineage {clid} leaked into split-conformal calibration")
+        if corg_l in pf_orgs:
+            raise LeakageError(f"predictor-fit org {cm['org_id']} leaked into split-conformal calibration")
+        shared = set(cm["file_hashes"]) & pf_hashes
+        if shared:
+            raise LeakageError(
+                f"predictor-fit file hash leaked into calibration lineage {clid}: {len(shared)} shared files"
+            )
+
+
+class LockedHorizonPredictor:
+    """Stage-1 locked predictor fitted strictly on predictor-fit orgs (zero calibration data).
+
+    Serialized canonically without volatile timing fields so its SHA-256 hash
+    (`locked_predictor_sha256`) uniquely pins the exact deployed function evaluated
+    in Stage 2 split-conformal calibration.
+    """
+
+    def __init__(self, payload: dict[str, Any]) -> None:
+        self.payload = payload
+        self.primary_chain: str = str(payload["primary_chain"])
+        self.grid_ks: tuple[int, ...] = tuple(int(k) for k in payload["grid_ks"])
+        self.probe_ks: tuple[int, ...] = tuple(int(k) for k in payload["probe_ks"])
+        self.pilot_ks: tuple[int, ...] = tuple(int(k) for k in payload["pilot_ks"])
+        self.header_bytes_by_k: dict[int, int] = {
+            int(k): int(v) for k, v in payload["header_bytes_by_k"].items()
+        }
+        self.cal_bias_by_k: dict[int, float] = {
+            int(k): float(v) for k, v in payload["cal_bias_by_k"].items()
+        }
+
+    @classmethod
+    def fit_and_lock(
+        cls,
+        fit_meta: dict[str, Any],
+        predictor_fit_records: list[dict[str, Any]],
+        header_bytes_by_k: dict[int, int],
+        primary_chain_sha256: str,
+        grid_ks: tuple[int, ...] = AG.PRIMARY_GRID,
+        probe_ks: tuple[int, ...] = PROBE_KS,
+        pilot_ks: tuple[int, ...] = PILOT_KS,
+    ) -> tuple["LockedHorizonPredictor", float]:
+        """Stage 1: fit ONE exact predictor on predictor-fit orgs only and lock its weights."""
+        t0 = time.perf_counter()
+        pf_metas = [rec["meta"] for rec in predictor_fit_records]
+        assert_disjoint_lineages(fit_meta, pf_metas, eval_meta=None)
+
+        orgs = sorted({rec["meta"]["org_id"] for rec in predictor_fit_records})
+        org_to_recs: dict[str, list[dict[str, Any]]] = {o: [] for o in orgs}
+        for rec in predictor_fit_records:
+            org_to_recs[rec["meta"]["org_id"]].append(rec)
+
+        bias: dict[str, float] = {}
+        for K in grid_ks:
+            org_means = []
+            for o in orgs:
+                errs = []
+                for rec in org_to_recs[o]:
+                    raw_p = interpolate_from_probes(rec["feat"]["probes_r"], grid_ks)
+                    errs.append(float(rec["true_r_by_k"][K]) - raw_p[K])
+                org_means.append(float(np.mean(errs)))
+            # Round to 8 decimal places for cross-platform canonical JSON determinism.
+            bias[str(K)] = round(float(np.mean(org_means)), 8)
+
+        all_pf_hashes = sorted({h for m in pf_metas for h in m["file_hashes"]})
+        pf_hashes_digest = AG.sha256_bytes("\n".join(all_pf_hashes).encode("utf-8"))
+
+        payload = {
+            "schema": "gamma.bits-a1b.locked-predictor.v1",
+            "primary_chain": AG.PRIMARY_CHAIN_NAME,
+            "primary_chain_sha256": primary_chain_sha256,
+            "chain_fit_lineage_id": fit_meta["lineage_id"],
+            "chain_fit_org_id": fit_meta["org_id"],
+            "predictor_fit_orgs": orgs,
+            "predictor_fit_lineages": sorted(m["lineage_id"] for m in pf_metas),
+            "predictor_fit_file_count": len(all_pf_hashes),
+            "predictor_fit_file_hashes_sha256": pf_hashes_digest,
+            "grid_ks": [int(k) for k in grid_ks],
+            "probe_ks": [int(k) for k in probe_ks],
+            "pilot_ks": [int(k) for k in pilot_ks],
+            "sketch_config": {
+                "frac": SKETCH_FRAC,
+                "max_bytes": SKETCH_MAX_BYTES,
+                "min_bytes": SKETCH_MIN_BYTES,
+                "target_min_records": 12,
+                "framing_eof_bytes_est": FRAMING_EOF_BYTES_EST,
+            },
+            "header_bytes_by_k": {str(int(k)): int(header_bytes_by_k[k]) for k in grid_ks},
+            "cal_bias_by_k": bias,
+        }
+        elapsed = time.perf_counter() - t0
+        return cls(payload), elapsed
+
+    def to_canonical_bytes(self) -> bytes:
+        return (json.dumps(self.payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+    def sha256(self) -> str:
+        return AG.sha256_bytes(self.to_canonical_bytes())
+
+    def save(self, path: Path) -> str:
+        raw = self.to_canonical_bytes()
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(raw)
+        return AG.sha256_bytes(raw)
+
+    @classmethod
+    def load(cls, path: Path, expected_sha256: str | None = None) -> "LockedHorizonPredictor":
+        raw = path.read_bytes()
+        digest = AG.sha256_bytes(raw)
+        if expected_sha256 is not None and digest != expected_sha256:
+            raise AssertionError(
+                f"locked predictor SHA-256 mismatch: file={digest}, expected={expected_sha256}"
+            )
+        return cls(json.loads(raw.decode("utf-8")))
+
+    def predict_k(self, feat: dict[str, Any], M: int) -> tuple[int, dict[int, float], float]:
+        """Evaluate the exact locked predictor (zero refitting). Returns (k_pred, pred_r, sketch_margin)."""
+        pred_r = interpolate_from_probes(
+            feat["probes_r"], self.grid_ks, cal_bias=self.cal_bias_by_k
+        )
+        k_pred = select_prefix_from_curve(
+            self.header_bytes_by_k, pred_r, M, grid_ks=self.grid_ks
+        )
+        margin = compute_sketch_uncertainty_margin(
+            feat, self.header_bytes_by_k, pred_r, k_pred, M, self.grid_ks
+        )
+        return k_pred, pred_r, margin
+
+
+def calibrate_locked_predictor_split_conformal(
+    locked_predictor: LockedHorizonPredictor,
+    fit_meta: dict[str, Any],
+    predictor_fit_metas: list[dict[str, Any]],
+    calibration_records: list[dict[str, Any]],
+    alpha: float = UPB_ALPHA,
+    sealed_regret_bar: float = SEALED_REGRET_BAR,
+) -> dict[str, Any]:
+    """Stage 2: exact split-conformal calibration of ONE locked predictor on untouched orgs.
+
+    Nonconformity score per independent calibration organization i:
+        s_i = max(full_oracle_regret_100KB(i), full_oracle_regret_100MB(i))
+    computed strictly against the FULL multi-chain selector-by-K oracle.
+    """
+    t0 = time.perf_counter()
+    cal_metas = [rec["meta"] for rec in calibration_records]
+    assert_three_way_disjoint(fit_meta, predictor_fit_metas, cal_metas)
+
+    M_SMALL, M_LARGE = 100_000, 100_000_000
+    per_org_rows: list[dict[str, Any]] = []
+    scores_full_max: list[float] = []
+    scores_same_max: list[float] = []
+    scores_chain_max: list[float] = []
+    scores_full_100k: list[float] = []
+    scores_full_100m: list[float] = []
+    pilot_scores_full_max: list[float] = []
+
+    for rec in calibration_records:
+        meta = rec["meta"]
+        feat = rec["feat"]
+        rmap = rec["primary_rows_by_k"]
+        all_cands = rec["all_chain_rows"]
+
+        def _score_horizon(M: int) -> dict[str, Any]:
+            k_pred, _, sk_margin = locked_predictor.predict_k(feat, M)
+            chosen_row = rmap[k_pred]
+            same_opt_row = AG.select_best_prefix_exact(list(rmap.values()), M)
+            full_opt_row = AG.select_best_prefix_exact(all_cands, M)
+
+            val_chosen = float(
+                AG.horizon_objective_exact(
+                    int(chosen_row["header_bytes"]),
+                    int(chosen_row["body_bytes"]),
+                    int(chosen_row["source_bytes"]),
+                    M,
+                )
+            )
+            val_same = float(
+                AG.horizon_objective_exact(
+                    int(same_opt_row["header_bytes"]),
+                    int(same_opt_row["body_bytes"]),
+                    int(same_opt_row["source_bytes"]),
+                    M,
+                )
+            )
+            val_full = float(
+                AG.horizon_objective_exact(
+                    int(full_opt_row["header_bytes"]),
+                    int(full_opt_row["body_bytes"]),
+                    int(full_opt_row["source_bytes"]),
+                    M,
+                )
+            )
+
+            full_reg = (val_chosen / val_full) - 1.0
+            same_reg = (val_chosen / val_same) - 1.0
+            chain_reg = (val_same / val_full) - 1.0
+
+            # Also evaluate frozen 3-point geometric pilot fallback on this calibration org.
+            r_pilot = {K: float(rmap[K]["r_hat"]) for K in locked_predictor.pilot_ks}
+            k_pilot, _ = select_prefix_pilot_3pt(
+                locked_predictor.header_bytes_by_k, r_pilot, M, locked_predictor.grid_ks
+            )
+            pilot_row = rmap[k_pilot]
+            val_pilot = float(
+                AG.horizon_objective_exact(
+                    int(pilot_row["header_bytes"]),
+                    int(pilot_row["body_bytes"]),
+                    int(pilot_row["source_bytes"]),
+                    M,
+                )
+            )
+            pilot_full_reg = (val_pilot / val_full) - 1.0
+            pilot_same_reg = (val_pilot / val_same) - 1.0
+
+            return {
+                "M": M,
+                "chosen_K": int(k_pred),
+                "same_chain_oracle_K": int(same_opt_row["K"]),
+                "full_oracle_chain": str(full_opt_row["chain"]),
+                "full_oracle_K": int(full_opt_row["K"]),
+                "full_oracle_regret": full_reg,
+                "same_chain_budget_regret": same_reg,
+                "chain_choice_regret": chain_reg,
+                "full_oracle_regret_pct": round(100.0 * full_reg, 4),
+                "same_chain_budget_regret_pct": round(100.0 * same_reg, 4),
+                "chain_choice_regret_pct": round(100.0 * chain_reg, 4),
+                "sketch_margin_pct": round(100.0 * sk_margin, 4),
+                "pilot_K": int(k_pilot),
+                "pilot_full_oracle_regret": pilot_full_reg,
+                "pilot_full_oracle_regret_pct": round(100.0 * pilot_full_reg, 4),
+                "pilot_same_chain_regret_pct": round(100.0 * pilot_same_reg, 4),
+            }
+
+        h100k = _score_horizon(M_SMALL)
+        h100m = _score_horizon(M_LARGE)
+
+        s_i = max(h100k["full_oracle_regret"], h100m["full_oracle_regret"])
+        s_i_same = max(h100k["same_chain_budget_regret"], h100m["same_chain_budget_regret"])
+        s_i_chain = max(h100k["chain_choice_regret"], h100m["chain_choice_regret"])
+        p_s_i = max(h100k["pilot_full_oracle_regret"], h100m["pilot_full_oracle_regret"])
+        binding_horizon = (
+            "100KB" if h100k["full_oracle_regret"] >= h100m["full_oracle_regret"] else "100MB"
+        )
+
+        scores_full_max.append(s_i)
+        scores_same_max.append(s_i_same)
+        scores_chain_max.append(s_i_chain)
+        scores_full_100k.append(h100k["full_oracle_regret"])
+        scores_full_100m.append(h100m["full_oracle_regret"])
+        pilot_scores_full_max.append(p_s_i)
+
+        per_org_rows.append(
+            {
+                "lineage_id": meta["lineage_id"],
+                "org_id": meta["org_id"],
+                "upstream_repo": meta["upstream_repo"],
+                "package_name": meta["package_name"],
+                "version": meta["version"],
+                "domain": meta["domain"],
+                "record_count": meta["record_count"],
+                "source_bytes": meta["source_bytes"],
+                "h_100KB": h100k,
+                "h_100MB": h100m,
+                "nonconformity_s_i_full_max": s_i,
+                "nonconformity_s_i_full_max_pct": round(100.0 * s_i, 4),
+                "binding_horizon": binding_horizon,
+                "s_i_same_chain_budget_max_pct": round(100.0 * s_i_same, 4),
+                "s_i_chain_choice_max_pct": round(100.0 * s_i_chain, 4),
+                "breaches_2_0pct_bar": s_i > sealed_regret_bar,
+                "pilot_s_i_full_max_pct": round(100.0 * p_s_i, 4),
+            }
+        )
+
+    n_cal = len(scores_full_max)
+    rank_k = math.ceil((1.0 - alpha) * (n_cal + 1))
+    support_ok = rank_k <= n_cal
+    coverage_floor = (rank_k / (n_cal + 1)) if support_ok else 0.0
+
+    def _conformal_quantile(vals: list[float]) -> float | None:
+        if not support_ok or not vals:
+            return None
+        return float(sorted(vals)[rank_k - 1])
+
+    q90_full_max = _conformal_quantile(scores_full_max)
+    q90_same_max = _conformal_quantile(scores_same_max)
+    q90_chain_max = _conformal_quantile(scores_chain_max)
+    q90_100k = _conformal_quantile(scores_full_100k)
+    q90_100m = _conformal_quantile(scores_full_100m)
+    q90_pilot_max = _conformal_quantile(pilot_scores_full_max)
+
+    certifies_2_0 = (q90_full_max is not None) and (q90_full_max <= sealed_regret_bar)
+    certifies_2_5 = (q90_full_max is not None) and (q90_full_max <= 0.025)
+    certifies_same_2_0 = (q90_same_max is not None) and (q90_same_max <= sealed_regret_bar)
+    breach_count_2_0 = sum(1 for x in scores_full_max if x > sealed_regret_bar)
+
+    return {
+        "schema": "gamma.bits-a1b.split-conformal-calibration.v1",
+        "locked_predictor_sha256": locked_predictor.sha256(),
+        "alpha": alpha,
+        "target_coverage": round(1.0 - alpha, 4),
+        "sealed_regret_bar": sealed_regret_bar,
+        "sealed_regret_bar_pct": round(100.0 * sealed_regret_bar, 2),
+        "nonconformity_definition": "s_i = max(full_oracle_regret_100KB(i), full_oracle_regret_100MB(i)) against full 7-chain selector-by-K oracle",
+        "n_cal_orgs": n_cal,
+        "conformal_rank_k": rank_k,
+        "conformal_support_sufficient": support_ok,
+        "finite_sample_coverage_guarantee_pct": round(100.0 * coverage_floor, 4),
+        "sorted_nonconformity_s_i_pct": [round(100.0 * x, 4) for x in sorted(scores_full_max)],
+        "conformal_90_upb_full_max": q90_full_max,
+        "conformal_90_upb_full_max_pct": round(100.0 * q90_full_max, 4) if q90_full_max is not None else None,
+        "conformal_90_upb_100KB_pct": round(100.0 * q90_100k, 4) if q90_100k is not None else None,
+        "conformal_90_upb_100MB_pct": round(100.0 * q90_100m, 4) if q90_100m is not None else None,
+        "conformal_90_upb_same_chain_budget_max_pct": round(100.0 * q90_same_max, 4) if q90_same_max is not None else None,
+        "conformal_90_upb_chain_choice_max_pct": round(100.0 * q90_chain_max, 4) if q90_chain_max is not None else None,
+        "conformal_90_upb_pilot_full_max_pct": round(100.0 * q90_pilot_max, 4) if q90_pilot_max is not None else None,
+        "calibration_orgs_breaching_2_0pct_bar": breach_count_2_0,
+        "certifies_2_0pct_sealed_bar": certifies_2_0,
+        "certifies_2_5pct_legacy_bar": certifies_2_5,
+        "certifies_same_chain_budget_2_0pct_bar": certifies_same_2_0,
+        "strict_conformal_decision_at_2_0pct_bar": "DIRECT_PICK" if certifies_2_0 else "SWEEP_REQUIRED",
+        "per_org_results": per_org_rows,
+        "calibration_eval_wall_seconds": round(time.perf_counter() - t0, 6),
+    }
