@@ -1069,6 +1069,12 @@ def calibrate_locked_predictor_split_conformal(
     q90_100k = _conformal_quantile(scores_full_100k)
     q90_100m = _conformal_quantile(scores_full_100m)
     q90_pilot_max = _conformal_quantile(pilot_scores_full_max)
+    # A bound for choosing between the two fixed methods must cover both methods
+    # on the same next organization, including both deployment horizons.
+    q90_either = _conformal_quantile([
+        max(direct, pilot)
+        for direct, pilot in zip(scores_full_max, pilot_scores_full_max, strict=True)
+    ])
 
     certifies_2_0 = (q90_full_max is not None) and (q90_full_max <= sealed_regret_bar)
     certifies_2_5 = (q90_full_max is not None) and (q90_full_max <= 0.025)
@@ -1095,6 +1101,8 @@ def calibrate_locked_predictor_split_conformal(
         "conformal_90_upb_same_chain_budget_max_pct": round(100.0 * q90_same_max, 4) if q90_same_max is not None else None,
         "conformal_90_upb_chain_choice_max_pct": round(100.0 * q90_chain_max, 4) if q90_chain_max is not None else None,
         "conformal_90_upb_pilot_full_max_pct": round(100.0 * q90_pilot_max, 4) if q90_pilot_max is not None else None,
+        "selection_safe_upb": q90_either,
+        "selected_policy_clears_bar": q90_either is not None and q90_either <= sealed_regret_bar,
         "calibration_orgs_breaching_2_0pct_bar": breach_count_2_0,
         "certifies_2_0pct_sealed_bar": certifies_2_0,
         "certifies_2_5pct_legacy_bar": certifies_2_5,

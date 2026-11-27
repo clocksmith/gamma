@@ -159,6 +159,7 @@ def gate_2_exhaustive_reproduction() -> dict[str, Any]:
     need(sc["n_cal_orgs"] >= 10, f"need >= 10 calibration orgs, got {sc['n_cal_orgs']}")
 
     repro_s_i: list[float] = []
+    joint_scores = []
     for org_row in sc["per_org_results"]:
         lid = org_row["lineage_id"]
         feat = SP.deserialize_sketch_receipt(cal_grid["sketch_receipts"][lid])
@@ -166,6 +167,7 @@ def gate_2_exhaustive_reproduction() -> dict[str, Any]:
         all_cands = by_lin_all[lid]
 
         h_regs = {}
+        pilot_regs = []
         for M, hkey in ((100_000, "h_100KB"), (100_000_000, "h_100MB")):
             k_pred, _, _ = locked.predict_k(feat, M)
             need(k_pred == int(org_row[hkey]["chosen_K"]), f"locked predictor K mismatch on ({lid}, M={M})")
@@ -198,16 +200,25 @@ def gate_2_exhaustive_reproduction() -> dict[str, Any]:
             reg = (v_ch / v_fl) - 1.0
             need(abs(reg - float(org_row[hkey]["full_oracle_regret"])) < 1e-9, f"regret mismatch ({lid}, {M})")
             h_regs[M] = reg
+            rates = {k: float(rmap[k]["r_hat"]) for k in SP.PILOT_KS}
+            pilot_k, _ = SP.select_prefix_pilot_3pt(locked.header_bytes_by_k, rates, M, AG.PRIMARY_GRID)
+            pilot_row = rmap[pilot_k]
+            pilot_obj = AG.horizon_objective_exact(pilot_row["header_bytes"], pilot_row["body_bytes"], pilot_row["source_bytes"], M)
+            pilot_regs.append(float(pilot_obj) / v_fl - 1.0)
 
         s_i = max(h_regs[100_000], h_regs[100_000_000])
         need(abs(s_i - float(org_row["nonconformity_s_i_full_max"])) < 1e-9, f"s_i mismatch on {lid}")
         repro_s_i.append(s_i)
+        joint_scores.append(max(s_i, *pilot_regs))
 
     # Verify exact finite-sample split-conformal quantile rank k = ceil(0.90 * (n_cal + 1))
     n_cal = len(repro_s_i)
     rank_k = (9 * (n_cal + 1) + 9) // 10  # exact integer ceil(0.90 * (n_cal + 1))
     need(rank_k == int(sc["conformal_rank_k"]), f"rank_k mismatch: {rank_k} vs {sc['conformal_rank_k']}")
     q90 = sorted(repro_s_i)[rank_k - 1]
+    q_either = sorted(joint_scores)[rank_k - 1]
+    need(abs(q_either - sc["selection_safe_upb"]) < 1e-9, "adaptive policy bound differs from paired maximum")
+    need(sc["selected_policy_clears_bar"] == (q_either <= SP.SEALED_REGRET_BAR), "adaptive certification mismatch")
     need(abs(q90 - float(sc["conformal_90_upb_full_max"])) < 1e-9, "split-conformal 90% UPB mismatch")
     need(
         (q90 <= SP.SEALED_REGRET_BAR) == bool(sc["certifies_2_0pct_sealed_bar"]),

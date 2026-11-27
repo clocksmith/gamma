@@ -1,7 +1,7 @@
 # BITS Experiment Card A1b — Horizon-Dependent Vocabulary Sizing (Development & Split-Conformal Calibration Report)
 
 Status: **CPU development & strict two-stage split-conformal calibration complete (`n_cal = 14` untouched independent organizations; 1,610 independently decoded `B1RA` archives at 100% fidelity / 0 B drift; all 6 `dev_gate` checks + `replay.py all` PASS).**
-- **Strict Split-Conformal Verdict at the 2.0% Sealed Bar:** **DOES NOT CERTIFY DIRECT PICK** — exact finite-sample split-conformal 90% UPB on `max(full_oracle_regret_100KB, full_oracle_regret_100MB)` is **2.1095% > 2.00%** (13/14 orgs <= 1.91%, 1 breach on `networkx` @ 100 KB at 2.11%). `strict_conformal_2_0pct_bar` honestly emits **`SWEEP_REQUIRED`** and falls back to the frozen 3-point geometric pilot, whose own split-conformal 90% UPB on the same 14 orgs is **1.9509% <= 2.00%**.
+- **Sealed decision at 2.00%: HOLD.** The frozen Stage-1 predictor has a one-sided upper prediction bound of **2.1095%**. The three-point pilot has a standalone bound of **1.9509%** across the same 14 organizations. The policy that chooses between them has a selection-safe bound of **2.1095%**. Running the pilot after abstention is charged in the work table.
 - **C5 / C6 Compute Gate:** C5 and C6 remain strictly gated behind explicit model-compute approval (**zero GPU/LLM compute executed**, zero sealed holdouts opened, zero files modified outside `a1b-horizon-sizing-v1/`).
 
 ---
@@ -34,7 +34,9 @@ This revision implements five critical methodological and accounting corrections
 | Legacy 2.50% bar check (continuity only) | **PASS (2.11% <= 2.50%)** | Reported for continuity; primary sealed bar remains 2.00% |
 | Per-horizon 90% UPB (`100 KB` / `100 MB`) | **2.1095% / 1.9081%** | 100 MB alone clears 2.00%; 100 KB drives the single breach |
 | Regret decomposition 90% UPB (`budget` / `chain`) | **2.1095% / 1.5306%** | Budget choice drives 100 KB worst case; chain choice drives 100 MB |
-| Frozen 3-pt geometric pilot 90% UPB (full max) | **1.9509%** | **CLEARS 2.00% sealed bar** on all 14/14 calibration orgs! |
+| Frozen 3-pt geometric pilot 90% UPB (full max) | **1.9509%** | Standalone fixed pilot only. Choosing it after seeing calibration needs a simultaneous bound. |
+
+For the two fixed candidate policies, take the maximum over policies and horizons within each organization, then take the 14th order statistic. This simultaneously covers either choice on the next exchangeable organization. The marginal coverage floor is 14/15. The guarantee relies on exchangeability with the calibration organizations. Additional organizations would require a new, independently fixed sampling plan.
 
 Sorted nonconformity scores $s_i$ (%) across the 14 untouched calibration orgs:
 `[0.4526, 0.5851, 0.6490, 0.6983, 0.7556, 0.8944, 0.9708, 1.0228, 1.0718, 1.0765, 1.2896, 1.8182, 1.9081, 2.1095]`.

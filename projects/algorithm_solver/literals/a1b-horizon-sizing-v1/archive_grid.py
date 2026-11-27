@@ -10,10 +10,13 @@ from __future__ import annotations
 
 import hashlib
 import heapq
+import io
 import json
 import os
 import resource
+import subprocess
 import sys
+import tarfile
 import time
 from fractions import Fraction
 from multiprocessing import Pool
@@ -773,14 +776,23 @@ def load_spent_lineages() -> list[dict[str, Any]]:
     )
 
     # 7. Gamma core Python package (capacity-boundary-v1 spent repo; org=clocksmith)
-    gamma_py = sorted(p for p in (WORKTREE / "gamma").rglob("*.py") if p.is_file())
+    # This calibration lineage is the Gamma package used to fit the locked predictor.
+    # Reading the current checkout quietly changes its examples after a package edit.
+    fit_revision = "7e9d8abffd4bec0395002171110c2195571a6b78"
+    snapshot = subprocess.check_output(["git", "-C", str(WORKTREE), "archive", fit_revision, "gamma"])
+    with tarfile.open(fileobj=io.BytesIO(snapshot)) as archive:
+        members = sorted(
+            (m for m in archive.getmembers() if m.isfile() and m.name.endswith(".py")),
+            key=lambda m: Path(m.name),
+        )
+        gamma_docs = [archive.extractfile(m).read() for m in members]
     _add(
         "clocksmith_gamma_core",
         "clocksmith",
         "dev_disjoint",
         "python",
         "clocksmith/gamma core package (gamma/**/*.py)",
-        [p.read_bytes() for p in gamma_py],
+        gamma_docs,
     )
 
     # In-distribution CodeNet diagnostic strata (same collection as fit; NEVER in repo-disjoint cal!)
