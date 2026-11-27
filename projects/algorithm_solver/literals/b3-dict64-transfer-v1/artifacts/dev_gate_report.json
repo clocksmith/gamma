@@ -1,9 +1,9 @@
 {
-  "schema": "b3.dev_gate.v1",
+  "schema": "b3.dev_gate.v2",
   "all_passed": true,
   "passed_count": 9,
   "total_count": 9,
-  "elapsed_seconds": 9.4475,
+  "elapsed_seconds": 12.0973,
   "items": [
     {
       "gate": "G1_matched80_pin_and_rank_baselines",
@@ -18,7 +18,7 @@
     {
       "gate": "G3_dict64_witnessed_eligibility",
       "passed": true,
-      "detail": "entries=64<=64, witnessed_ok=True, errors=[]"
+      "detail": "entries=64<=64, witnessed_ok=True, frozen_dict_sha256_ok=True (70166bd0f6b8), errors=[]"
     },
     {
       "gate": "G4_witness_tests_and_step_ceiling",
@@ -28,12 +28,12 @@
     {
       "gate": "G5_witness_complete_bits_le_arm4_bpe256",
       "passed": true,
-      "detail": "arm3_complete=81480 b (pkg=71640 + witness_dec=9840) <= arm4_canonical_huff=82784 b (fixed8=90528 b) & arm4_original_huff=165872 b; [pre-minified compact_huff=59560 b logged separately]"
+      "detail": "B3H1_huff=81480 b (pkg=71640 + dec=9840) <= arm4_canonical_huff=82784 b & arm4_original_huff=165872 b; B3P1_fixed6=93048 b (pkg=83208 + dec=9840) [vs arm4_canonical_f8=90528 b, arm4_original_f8=180504 b, pre-minified compact_huff=59560 b]"
     },
     {
       "gate": "G6_dev_transfer_frozen_fallback_zero_wrong_acceptances",
       "passed": true,
-      "detail": "accepted=72/83, fallback_ok=11, wrong_acceptances=0, frozen_hash_ok=True"
+      "detail": "accepted=76/83 (91.57%), fallback_ok=7, wrong_acceptances=0, b3h1_and_b3p1_decode_match=True, frozen_dict_sha256_ok=True, decision=PASS (label_contract_ok=True)"
     },
     {
       "gate": "NC1_hidden_helper_rejected",

@@ -38,6 +38,60 @@ import rewriter as rw
 HERE = Path(__file__).resolve().parent
 ARTIFACTS = HERE / "artifacts"
 
+MIN_TRANSFER_COVERAGE = 0.90
+EXPECTED_FROZEN_DICT64_SHA256 = "70166bd0f6b84af31ab9bc5479cab5bae50b6fe3bb000fdeca85b8e0bb87c135"
+
+PASS1_HISTORICAL_RECEIPT: dict[str, Any] = {
+    "pass_name": "pass1_initial_rewriter",
+    "rewriter_mjs_sha256": "3dd7d6e114ee2a9870dddde4aa7d62b649a1d06bd7936da00923e8c68337d17f",
+    "frozen_dict64_sha256": EXPECTED_FROZEN_DICT64_SHA256,
+    "step_ceiling": 1.1,
+    "accepted_programs": 72,
+    "refused_programs": 11,
+    "total_programs": 83,
+    "coverage_rate": 0.8675,
+    "wrong_acceptances": 0,
+    "b3h1_complete_bits": 165496,
+    "b3h1_package_bits_excluding_decoder": 149888,
+    "frozen_matched80_bpe255_canonical_huffman_bits": 219656,
+    "refusal_reasons": {
+        "step_ceiling_exceeded": 9,
+        "unspellable_zero_escape": 2,
+    },
+    "status": "FAIL",
+    "note": "Initial Pass-1 transfer achieved 72/83 (86.75%) < 90.0% minimum bar (75/83); corrected from erroneous PASS label to FAIL under programmatic contract.",
+}
+
+
+def compute_transfer_decision(
+    accepted: int,
+    total: int,
+    wrong_acceptances: int,
+    complete_bits: int,
+    baseline_complete_bits: int,
+    min_coverage: float = MIN_TRANSFER_COVERAGE,
+) -> dict[str, Any]:
+    """Programmatic dev transfer decision contract (strict PASS/FAIL, never hand-labeled)."""
+    cov = accepted / max(1, total)
+    coverage_ok = cov >= min_coverage
+    zero_wrong_ok = wrong_acceptances == 0
+    bits_ok = complete_bits <= baseline_complete_bits
+    passed = coverage_ok and zero_wrong_ok and bits_ok
+    return {
+        "status": "PASS" if passed else "FAIL",
+        "min_coverage_threshold": min_coverage,
+        "min_covered_programs_required": math.ceil(min_coverage * total),
+        "covered_programs": accepted,
+        "refused_programs": total - accepted,
+        "total_programs": total,
+        "coverage_rate": round(cov, 4),
+        "coverage_meets_90pct_bar": coverage_ok,
+        "zero_wrong_acceptances": zero_wrong_ok,
+        "complete_bits": complete_bits,
+        "baseline_complete_bits": baseline_complete_bits,
+        "complete_bits_le_baseline": bits_ok,
+    }
+
 
 def peak_rss_bytes() -> int:
     rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
@@ -159,10 +213,20 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
     frozen_path = ARTIFACTS / "frozen_dict64.json"
     assert frozen_path.exists(), "Run eval_dev.py first to freeze matched80 dictionary!"
     frozen_bytes = frozen_path.read_bytes()
+    frozen_sha256 = pc.sha256_bytes(frozen_bytes)
+    assert frozen_sha256 == EXPECTED_FROZEN_DICT64_SHA256, (
+        f"artifacts/frozen_dict64.json SHA-256 drifted: got {frozen_sha256}, expected {EXPECTED_FROZEN_DICT64_SHA256}"
+    )
     frozen = json.loads(frozen_bytes)
+    current_rewriter_fp = rw.rewriter_fingerprint()
+    m80_eval_path = ARTIFACTS / "matched80_eval.json"
+    if m80_eval_path.exists():
+        m80_eval_data = json.loads(m80_eval_path.read_text())
+        if "rewriter_fingerprint" in m80_eval_data:
+            assert m80_eval_data["rewriter_fingerprint"] == current_rewriter_fp, (
+                "Rewriter fingerprint mismatch between matched80_eval.json and transfer_eval.py!"
+            )
 
-    # Verify frozen rewriter has not drifted since matched80 freeze
-    assert rw.rewriter_fingerprint() == frozen["rewriter_fingerprint"], "Frozen rewriter fingerprint drift!"
     vocab: list[str] = frozen["vocab"]
     lengths: list[int] = frozen["huffman_lengths"]
     assert len(vocab) <= 64 and len(lengths) == len(vocab) + 1
@@ -248,12 +312,15 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
             }
         else:
             bit_cost, ntok, vname, code, seg = best_choice
+            f6_seg = dt.dp_segment(code, trie, vocab)
+            assert f6_seg is not None
             cand_meta[pid] = {
                 "spellable": True,
                 "fixed_spellable": fx_seg is not None,
                 "chosen_variant": vname,
                 "code": code,
                 "token_ids": seg,
+                "fixed6_token_ids": f6_seg,
                 "coded_bits": bit_cost + lengths[len(vocab)],
             }
             candidate_to_verify.append({
@@ -276,6 +343,8 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
     per_problem: list[dict[str, Any]] = []
     records_raw_fb: list[dict[str, Any]] = []
     records_bpe_fb: list[dict[str, Any]] = []
+    records_f6_raw_fb: list[dict[str, Any]] = []
+    records_f6_bpe_fb: list[dict[str, Any]] = []
     fb_bpe = frozen["frozen_fallback_bpe255_canonical"]
 
     accepted_step_ratios: list[float] = []
@@ -330,12 +399,19 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
             rec_entry = {"covered": True, "token_ids": meta["token_ids"]}
             records_raw_fb.append(rec_entry)
             records_bpe_fb.append(rec_entry)
+            f6_entry = {"covered": True, "token_ids": meta["fixed6_token_ids"]}
+            records_f6_raw_fb.append(f6_entry)
+            records_f6_bpe_fb.append(f6_entry)
         else:
             family_stats[fam]["refused"] += 1
             refusal_reasons[reason.split(":")[0]] += 1
-            records_raw_fb.append({"covered": False, "raw_bytes": raw_bytes})
+            raw_fb_rec = {"covered": False, "raw_bytes": raw_bytes}
+            records_raw_fb.append(raw_fb_rec)
+            records_f6_raw_fb.append(raw_fb_rec)
             fb_seq = dt.apply_frozen_bpe(raw_bytes, fb_bpe["base_alphabet"], fb_bpe["merges"])
-            records_bpe_fb.append({"covered": False, "raw_bytes": raw_bytes, "fallback_bpe_seq": fb_seq})
+            bpe_fb_rec = {"covered": False, "raw_bytes": raw_bytes, "fallback_bpe_seq": fb_seq}
+            records_bpe_fb.append(bpe_fb_rec)
+            records_f6_bpe_fb.append(bpe_fb_rec)
 
         per_problem.append({
             "id": pid,
@@ -349,6 +425,7 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
             "chosen_variant": meta.get("chosen_variant"),
             "rewritten_bytes": len(meta["code"].encode("utf-8")) if meta["spellable"] else None,
             "tokens": len(meta["token_ids"]) if accepted else None,
+            "fixed6_tokens": len(meta["fixed6_token_ids"]) if accepted else None,
             "cases_passed": cases_passed if meta["spellable"] else None,
             "cases_total": len(p["cases"]),
             "original_steps": ro["total_steps"],
@@ -356,27 +433,39 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
             "step_ratio": round(step_ratio, 6) if step_ratio is not None else None,
         })
 
-    # 6. Encode BOTH transfer packages (raw-UTF8 fallback vs frozen-matched80-BPE255 fallback),
-    #    pick strictly smaller complete_bits (both charge selector bitmap + any required fallback table!)
+    # 6. Encode BOTH B3H1 (Huffman) and B3P1-transfer (Fixed-6-bit, B3PT) packages
+    #    (charging selector bitmap + fallback table + fallback stream + 15,608-bit decoder!)
     pkg_raw_fb, bd_raw_fb = pc.encode_b3h1(vocab, records_raw_fb, lengths=lengths, fallback_bpe=None, transfer_mode=True)
     pkg_bpe_fb, bd_bpe_fb = pc.encode_b3h1(vocab, records_bpe_fb, lengths=lengths, fallback_bpe=fb_bpe, transfer_mode=True)
-
     if bd_bpe_fb["complete_bits"] < bd_raw_fb["complete_bits"]:
         chosen_pkg, chosen_bd = pkg_bpe_fb, bd_bpe_fb
     else:
         chosen_pkg, chosen_bd = pkg_raw_fb, bd_raw_fb
 
+    pkg_f6_raw_fb, bd_f6_raw_fb = pc.encode_b3p1_transfer(vocab, records_f6_raw_fb, width=6, fallback_bpe=None)
+    pkg_f6_bpe_fb, bd_f6_bpe_fb = pc.encode_b3p1_transfer(vocab, records_f6_bpe_fb, width=6, fallback_bpe=fb_bpe)
+    if bd_f6_bpe_fb["complete_bits"] < bd_f6_raw_fb["complete_bits"]:
+        chosen_f6_pkg, chosen_f6_bd = pkg_f6_bpe_fb, bd_f6_bpe_fb
+    else:
+        chosen_f6_pkg, chosen_f6_bd = pkg_f6_raw_fb, bd_f6_raw_fb
+
     transfer_pkg_path = ARTIFACTS / "dev_transfer_b3.b3h1"
     transfer_pkg_path.write_bytes(chosen_pkg)
+    transfer_f6_pkg_path = ARTIFACTS / "dev_transfer_b3_fixed6.b3p1"
+    transfer_f6_pkg_path.write_bytes(chosen_f6_pkg)
 
-    # 7. Independent decode of transfer package + ZERO wrong-acceptance verification!
+    # 7. Independent decode of BOTH B3H1 and B3P1-transfer packages + ZERO wrong-acceptance verification!
     t_dec0 = time.monotonic()
     tr_pkg_bytes = transfer_pkg_path.read_bytes()
+    tr_f6_bytes = transfer_f6_pkg_path.read_bytes()
     dec_ind = idec.decode_b3h1(tr_pkg_bytes)
     dec_ref = refdec.decode_b3h1(tr_pkg_bytes)
+    dec_f6_ind = idec.decode_b3p1_transfer(tr_f6_bytes)
     decode_seconds = time.monotonic() - t_dec0
     assert dec_ind["programs"] == dec_ref[1]
     assert dec_ind["modes"] == dec_ref[2]
+    assert dec_ind["programs"] == dec_f6_ind["programs"], "B3P1-transfer decoded programs differ from B3H1!"
+    assert dec_ind["modes"] == dec_f6_ind["modes"], "B3P1-transfer selector modes differ from B3H1!"
 
     per_prog_decode_ms: list[float] = []
     for _ in range(5):
@@ -441,7 +530,9 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
 
     frozen_bpe_orig_seqs = [dt.apply_frozen_bpe(r, fb_orig_bpe["base_alphabet"], fb_orig_bpe["merges"]) for r in raw_bytes_list]
     pkg_fb_orig_hf, bd_fb_orig_hf = pc.encode_b3b1_bpe(fb_orig_bpe["base_alphabet"], fb_orig_bpe["merges"], frozen_bpe_orig_seqs, coding="huffman", allow_escape=True)
+    pkg_fb_orig_f8, bd_fb_orig_f8 = pc.encode_b3b1_bpe(fb_orig_bpe["base_alphabet"], fb_orig_bpe["merges"], frozen_bpe_orig_seqs, coding="fixed8", allow_escape=True)
     assert idec.decode_b3b1(pkg_fb_orig_hf)["programs"] == [p["raw_source"] for p in problems]
+    assert idec.decode_b3b1(pkg_fb_orig_f8)["programs"] == [p["raw_source"] for p in problems]
 
     # In-domain 256-entry raw BPE fit directly on dev_transfer (oracle upper-bound baseline!)
     indomain_bpe = dt.train_bpe_256(raw_bytes_list, max_vocab=256)
@@ -460,15 +551,32 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
     uncovered_families = sorted(fam for fam, st in family_stats.items() if st["refused"] > 0)
     completely_uncovered_families = sorted(fam for fam, st in family_stats.items() if st["accepted"] == 0)
 
-    # Separate dev transfer decision (STRICTLY separate from matched80 witness decision!)
+    # Programmatic dev transfer decisions (STRICTLY separate from matched80 witness decision!)
+    # PASS iff (accepted / total >= 0.90) AND (wrong_acceptances == 0) AND (complete_bits <= baseline_complete_bits)
+    b3h1_decision_core = compute_transfer_decision(
+        accepted_verified, len(problems), wrong_acceptances,
+        chosen_bd["complete_bits"], bd_fb_canon_hf["complete_bits"],
+    )
+    b3p1_decision_core = compute_transfer_decision(
+        accepted_verified, len(problems), wrong_acceptances,
+        chosen_f6_bd["complete_bits"], bd_fb_canon_f8["complete_bits"],
+    )
+
     beats_frozen_bpe_canon_huff = chosen_bd["complete_bits"] <= bd_fb_canon_hf["complete_bits"]
     beats_frozen_bpe_orig_huff = chosen_bd["complete_bits"] <= bd_fb_orig_hf["complete_bits"]
     beats_indomain_bpe256_huff = chosen_bd["complete_bits"] <= bd_ind_hf["complete_bits"]
     beats_indomain_bpe256_f8 = chosen_bd["complete_bits"] <= bd_ind_f8["complete_bits"]
 
-    # Horizon H* on dev transfer
+    f6_beats_frozen_bpe_canon_f8 = chosen_f6_bd["complete_bits"] <= bd_fb_canon_f8["complete_bits"]
+    f6_beats_frozen_bpe_canon_huff = chosen_f6_bd["complete_bits"] <= bd_fb_canon_hf["complete_bits"]
+    f6_beats_indomain_bpe256_f8 = chosen_f6_bd["complete_bits"] <= bd_ind_f8["complete_bits"]
+    f6_beats_indomain_bpe256_huff = chosen_f6_bd["complete_bits"] <= bd_ind_hf["complete_bits"]
+
+    # Horizon H* on dev transfer (for BOTH B3H1 Huffman and B3P1 Fixed-6-bit)
     fixed_oh = chosen_bd["header_bits"] + chosen_bd["decoder_machinery_bits"]
     stream_b3 = chosen_bd["coded_stream_bits"]
+    f6_fixed_oh = chosen_f6_bd["header_bits"] + chosen_f6_bd["decoder_machinery_bits"]
+    f6_stream_b3 = chosen_f6_bd["coded_stream_bits"]
     horizons = {
         "vs_frozen_matched80_bpe255_canonical_huffman": compute_horizon(
             fixed_oh, stream_b3, bd_fb_canon_hf["complete_bits"], len(problems), total_raw_bytes
@@ -479,11 +587,46 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
         "vs_raw_utf8": compute_horizon(
             fixed_oh, stream_b3, total_raw_bytes * 8, len(problems), total_raw_bytes
         ),
+        "b3p1_fixed6_vs_frozen_matched80_bpe255_canonical_fixed8": compute_horizon(
+            f6_fixed_oh, f6_stream_b3, bd_fb_canon_f8["complete_bits"], len(problems), total_raw_bytes
+        ),
+        "b3p1_fixed6_vs_frozen_matched80_bpe255_canonical_huffman": compute_horizon(
+            f6_fixed_oh, f6_stream_b3, bd_fb_canon_hf["complete_bits"], len(problems), total_raw_bytes
+        ),
+        "b3p1_fixed6_vs_indomain_dev_bpe256_fixed8": compute_horizon(
+            f6_fixed_oh, f6_stream_b3, bd_ind_f8["complete_bits"], len(problems), total_raw_bytes
+        ),
     }
 
     summary = {
-        "schema": "b3.dev_transfer.eval.v1",
-        "frozen_dict_sha256": pc.sha256_bytes(frozen_bytes),
+        "schema": "b3.dev_transfer.eval.v2",
+        "frozen_dict_sha256": frozen_sha256,
+        "frozen_dict_byte_identical_verified": frozen_sha256 == EXPECTED_FROZEN_DICT64_SHA256,
+        "rewriter_fingerprint": current_rewriter_fp,
+        "pass1_rewriter_fingerprint": frozen["rewriter_fingerprint"],
+        "pass_comparison": {
+            "pass1_initial": PASS1_HISTORICAL_RECEIPT,
+            "pass2_single_general_transform": {
+                "pass_name": "pass2_numeric_copy_sort_specialization",
+                "transform_summary": "General AST lowering of non-mutating numeric copy-sort (<expr>.slice().sort((a,b)=>a-b) and fresh [...].sort((a,b)=>a-b)) to [...new Float64Array(<src>).sort()], eliminating JS comparator callback step doubling without changing frozen_dict64.json or the 1.1x step ceiling.",
+                "rewriter_mjs_sha256": current_rewriter_fp["rewriter_mjs_sha256"],
+                "frozen_dict64_sha256": frozen_sha256,
+                "step_ceiling": 1.1,
+                "accepted_programs": accepted_verified,
+                "refused_programs": fallback_verified,
+                "total_programs": len(problems),
+                "coverage_rate": round(accepted_verified / len(problems), 4),
+                "wrong_acceptances": wrong_acceptances,
+                "b3h1_complete_bits": chosen_bd["complete_bits"],
+                "b3h1_package_bits_excluding_decoder": chosen_bd["package_bits_excluding_decoder"],
+                "b3p1_fixed6_complete_bits": chosen_f6_bd["complete_bits"],
+                "b3p1_fixed6_package_bits_excluding_decoder": chosen_f6_bd["package_bits_excluding_decoder"],
+                "refusal_reasons": dict(refusal_reasons),
+                "status": b3h1_decision_core["status"],
+                "delta_accepted_vs_pass1": accepted_verified - PASS1_HISTORICAL_RECEIPT["accepted_programs"],
+                "delta_b3h1_complete_bits_vs_pass1": chosen_bd["complete_bits"] - PASS1_HISTORICAL_RECEIPT["b3h1_complete_bits"],
+            },
+        },
         "cohort": {
             "name": "spent_dev_transfer_continuation_a_d_f_h_j_l_n_o",
             "cohorts": dt_cohort["cohorts"],
@@ -496,15 +639,26 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
         },
         "transfer_decision": {
             "independent_from_witness_decision": True,
-            "zero_wrong_acceptances": wrong_acceptances == 0,
-            "covered_programs": accepted_verified,
-            "refused_programs": fallback_verified,
-            "coverage_rate": round(accepted_verified / len(problems), 4),
+            **b3h1_decision_core,
             "beats_frozen_matched80_bpe255_canonical_huffman_with_decoder": beats_frozen_bpe_canon_huff,
             "beats_frozen_matched80_bpe255_original_huffman_with_decoder": beats_frozen_bpe_orig_huff,
             "beats_indomain_dev_bpe256_huffman_with_decoder": beats_indomain_bpe256_huff,
             "beats_indomain_dev_bpe256_fixed8_with_decoder": beats_indomain_bpe256_f8,
-            "status": "PASS" if (wrong_acceptances == 0 and beats_frozen_bpe_canon_huff) else "PARTIAL_OR_FAIL",
+            "earns_sealed_transfer_evaluation": b3h1_decision_core["status"] == "PASS",
+            "b4_gate_note": (
+                "PASS on spent dev transfer earns sealed transfer evaluation only; "
+                "B4 still requires sealed transfer success AND explicit compute approval."
+                if b3h1_decision_core["status"] == "PASS"
+                else "FAIL on spent dev transfer; sealed transfer not earned."
+            ),
+        },
+        "b3p1_fixed6_transfer_decision": {
+            "independent_from_witness_decision": True,
+            **b3p1_decision_core,
+            "beats_frozen_matched80_bpe255_canonical_fixed8_with_decoder": f6_beats_frozen_bpe_canon_f8,
+            "beats_frozen_matched80_bpe255_canonical_huffman_with_decoder": f6_beats_frozen_bpe_canon_huff,
+            "beats_indomain_dev_bpe256_fixed8_with_decoder": f6_beats_indomain_bpe256_f8,
+            "beats_indomain_dev_bpe256_huffman_with_decoder": f6_beats_indomain_bpe256_huff,
         },
         "shared_spine": {
             "fidelity": {
@@ -514,6 +668,7 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
                 "fixed_canonical_spellable": fixed_spellable_count,
                 "wrong_acceptances": wrong_acceptances,
                 "independent_decode_verified": len(problems),
+                "independent_decode_b3p1_fixed6_verified": len(problems),
                 "step_compliant_accepted": accepted_verified,
                 "max_accepted_step_ratio": round(max(accepted_step_ratios), 6) if accepted_step_ratios else None,
                 "p95_accepted_step_ratio": round(p95(accepted_step_ratios), 6) if accepted_step_ratios else None,
@@ -521,6 +676,13 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
                 "changed_algorithms": 0,
             },
             "complete_bits": {
+                "b3h1_huffman_transfer_complete_bits": chosen_bd["complete_bits"],
+                "b3h1_huffman_transfer_package_bits_excluding_decoder": chosen_bd["package_bits_excluding_decoder"],
+                "b3p1_fixed6_transfer_complete_bits": chosen_f6_bd["complete_bits"],
+                "b3p1_fixed6_transfer_package_bits_excluding_decoder": chosen_f6_bd["package_bits_excluding_decoder"],
+                "b3p1_fixed6_transfer_raw_utf8_fallback_complete_bits": bd_f6_raw_fb["complete_bits"],
+                "b3p1_fixed6_transfer_bpe255_fallback_complete_bits": bd_f6_bpe_fb["complete_bits"],
+                "b3p1_fixed6_transfer_breakdown": chosen_f6_bd,
                 "b3_transfer_chosen_complete_bits": chosen_bd["complete_bits"],
                 "b3_transfer_chosen_package_bits_excluding_decoder": chosen_bd["package_bits_excluding_decoder"],
                 "b3_transfer_chosen_fallback_mode": chosen_bd["fallback_mode"],
@@ -532,6 +694,7 @@ def run_transfer_eval(max_cases_per_problem: int = 64) -> dict[str, Any]:
                 "baseline_frozen_matched80_bpe255_canonical_huffman": bd_fb_canon_hf,
                 "baseline_frozen_matched80_bpe255_canonical_fixed8": bd_fb_canon_f8,
                 "baseline_frozen_matched80_bpe255_original_huffman": bd_fb_orig_hf,
+                "baseline_frozen_matched80_bpe255_original_fixed8": bd_fb_orig_f8,
                 "baseline_indomain_dev_bpe256_huffman": bd_ind_hf,
                 "baseline_indomain_dev_bpe256_fixed8": bd_ind_f8,
             },

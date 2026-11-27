@@ -1,5 +1,10 @@
 {
   "schema": "b3.matched80.eval_dev.v1",
+  "rewriter_fingerprint": {
+    "rewriter_mjs_sha256": "97ec06d7852b03543bf9a619588b904997df19c3cd983f0ced89e520ec494d8e",
+    "js_ast_mjs_sha256": "71f28888081eba23c521df3591919aa74fe01f7afedc2d990e52eb8b102710de",
+    "rewriter_py_sha256": "4dbbb23d09f42fe0160b3de87740fd2a720bac5b09ea38ffbc7bbecbe9366861"
+  },
   "host": {
     "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
     "python": "3.14.2",
@@ -198,9 +203,12 @@
         "coded_stream_bits": 83384,
         "package_bytes_excluding_decoder": 10698,
         "package_bits_excluding_decoder": 85584,
-        "decoder_machinery_bytes": 1951,
-        "decoder_machinery_bits": 15608,
-        "complete_bits": 101192,
+        "decoder_machinery_file": "b3_witness_decoder.py",
+        "decoder_machinery_bytes": 1230,
+        "decoder_machinery_bits": 9840,
+        "full_transfer_decoder_bits": 15608,
+        "complete_bits": 95424,
+        "complete_bits_with_full_transfer_decoder": 101192,
         "package_sha256": "d9a9466f0e2010a5e1ba79c1f302b6d0704c5a6cd94494b9f8ec9703963fa121"
       }
     },
@@ -350,15 +358,20 @@
         "coded_stream_bits": 81008,
         "package_bytes_excluding_decoder": 10401,
         "package_bits_excluding_decoder": 83208,
-        "decoder_machinery_bytes": 1951,
-        "decoder_machinery_bits": 15608,
-        "complete_bits": 98816,
+        "decoder_machinery_file": "b3_witness_decoder.py",
+        "decoder_machinery_bytes": 1230,
+        "decoder_machinery_bits": 9840,
+        "full_transfer_decoder_bits": 15608,
+        "complete_bits": 93048,
+        "complete_bits_with_full_transfer_decoder": 98816,
         "package_sha256": "6b003f865292db1009239c027557699b214e629d6270f73bac97e2dc1284dac4"
       },
       "beats_arm4_canonical_huffman_with_decoder": true,
       "beats_arm4_canonical_fixed8_with_decoder": true,
       "beats_arm4_original_huffman_with_decoder": true,
-      "beats_arm4_compact_huffman_with_decoder": false
+      "beats_arm4_compact_huffman_with_decoder": false,
+      "b3p1_fixed6_beats_arm4_canonical_fixed8_with_decoder": false,
+      "b3p1_fixed6_beats_arm4_original_fixed8_with_decoder": true
     },
     "arm4_frozen_bpe256_raw": {
       "canonical": {
@@ -512,6 +525,13 @@
       "changed_algorithms": 0
     },
     "complete_bits": {
+      "arm3_b3h1_huffman_complete_bits": 81480,
+      "arm3_b3h1_huffman_package_bits_excluding_decoder": 71640,
+      "arm3_b3p1_fixed6_complete_bits": 93048,
+      "arm3_b3p1_fixed6_package_bits_excluding_decoder": 83208,
+      "arm3_b3p1_fixed6_header_bits": 2200,
+      "arm3_b3p1_fixed6_coded_stream_bits": 81008,
+      "arm3_b3p1_fixed6_decoder_machinery_bits": 9840,
       "arm3_witness_complete_bits": 81480,
       "arm3_witness_package_bits_excluding_decoder": 71640,
       "arm3_header_bits": 2720,
@@ -529,22 +549,24 @@
       "arm4_canonical_huffman_complete_bits": 82784,
       "arm4_canonical_fixed8_complete_bits": 90528,
       "arm4_original_huffman_complete_bits": 165872,
-      "arm4_compact_huffman_complete_bits": 59560
+      "arm4_original_fixed8_complete_bits": 180504,
+      "arm4_compact_huffman_complete_bits": 59560,
+      "arm4_compact_fixed8_complete_bits": 64392
     },
     "measured_work": {
-      "load_seconds": 3.4362,
-      "rewrite_seconds": 0.5158,
-      "arm1_seconds": 45.6789,
-      "arm2_build_seconds": 5.6261,
-      "arm3_selection_seconds": 1.7992,
-      "arm4_build_seconds": 4.4812,
-      "verification_orig_seconds": 0.2602,
-      "verification_candidates_seconds": 1.4331,
-      "verification_decoded_witness_seconds": 0.6168,
-      "decode_seconds": 0.078846,
-      "decode_p95_ms_per_program": 0.3532,
-      "total_wall_seconds": 64.2107,
-      "peak_rss_bytes": 145915904,
+      "load_seconds": 8.7958,
+      "rewrite_seconds": 0.2704,
+      "arm1_seconds": 44.9013,
+      "arm2_build_seconds": 5.4866,
+      "arm3_selection_seconds": 1.4651,
+      "arm4_build_seconds": 6.063,
+      "verification_orig_seconds": 0.5047,
+      "verification_candidates_seconds": 1.2124,
+      "verification_decoded_witness_seconds": 0.2403,
+      "decode_seconds": 0.038935,
+      "decode_p95_ms_per_program": 0.1702,
+      "total_wall_seconds": 69.1564,
+      "peak_rss_bytes": 144949248,
       "measured_step_counts": {
         "total_original_steps": 831226,
         "total_rewritten_steps": 780590,
@@ -592,6 +614,30 @@
         "b3_marginal_bits_per_program": 861.5,
         "baseline_bits_per_program": 4046.7,
         "marginal_savings_bits_per_program": 3185.2,
+        "break_even_programs": 4,
+        "break_even_raw_bytes": 2023.3
+      },
+      "b3p1_fixed6_vs_arm4_bpe256_canonical_fixed8": {
+        "fixed_overhead_bits": 12040,
+        "b3_marginal_bits_per_program": 1012.6,
+        "baseline_bits_per_program": 1131.6,
+        "marginal_savings_bits_per_program": 119.0,
+        "break_even_programs": 102,
+        "break_even_raw_bytes": 51595.4
+      },
+      "b3p1_fixed6_vs_arm4_bpe256_original_fixed8": {
+        "fixed_overhead_bits": 12040,
+        "b3_marginal_bits_per_program": 1012.6,
+        "baseline_bits_per_program": 2256.3,
+        "marginal_savings_bits_per_program": 1243.7,
+        "break_even_programs": 10,
+        "break_even_raw_bytes": 7154.5
+      },
+      "b3p1_fixed6_vs_raw_canonical_utf8": {
+        "fixed_overhead_bits": 12040,
+        "b3_marginal_bits_per_program": 1012.6,
+        "baseline_bits_per_program": 4046.7,
+        "marginal_savings_bits_per_program": 3034.1,
         "break_even_programs": 4,
         "break_even_raw_bytes": 2023.3
       }

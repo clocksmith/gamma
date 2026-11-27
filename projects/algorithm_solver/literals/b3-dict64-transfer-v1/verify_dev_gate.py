@@ -16,8 +16,10 @@ Verifies end-to-end from frozen artifacts on disk (no retraining):
 """
 from __future__ import annotations
 
+import argparse
 import json
 import subprocess
+import tempfile
 import time
 from pathlib import Path
 from typing import Any
@@ -29,6 +31,7 @@ import dict64_train as dt
 import independent_decode as idec
 import package_codec as pc
 import rewriter as rw
+import transfer_eval as te
 
 HERE = Path(__file__).resolve().parent
 ARTIFACTS = HERE / "artifacts"
@@ -197,7 +200,7 @@ def check_negative_control_3_step_ceiling(m80: dict[str, Any]) -> dict[str, Any]
     }
 
 
-def run_dev_gate(verify_git_pin: bool = True) -> dict[str, Any]:
+def run_dev_gate(verify_git_pin: bool = True, report_path: Path | None = None) -> dict[str, Any]:
     t0 = time.monotonic()
     items: list[dict[str, Any]] = []
 
@@ -205,6 +208,7 @@ def run_dev_gate(verify_git_pin: bool = True) -> dict[str, Any]:
     m80_eval = json.loads((ARTIFACTS / "matched80_eval.json").read_text())
     tr_eval = json.loads((ARTIFACTS / "dev_transfer_eval.json").read_text())
     frozen_bytes = (ARTIFACTS / "frozen_dict64.json").read_bytes()
+    frozen_sha256 = pc.sha256_bytes(frozen_bytes)
     frozen = json.loads(frozen_bytes)
 
     # Gate 1: matched80 Git pin & exact baseline rank minima (79 unrestricted, 92 witnessed)
@@ -245,14 +249,16 @@ def run_dev_gate(verify_git_pin: bool = True) -> dict[str, Any]:
     })
 
     # Gate 3: <=64 entries + witnessed eligibility (>=2 distinct fit programs per multi-char entry)
+    #         + byte-for-byte frozen_dict64.json SHA-256 identity
     pids = [p["id"] for p in m80["problems"]]
     decoded_by_id = {pid: code for pid, code in zip(pids, dec_ind["programs"])}
     ok_elig, elig_errs = dt.check_witnessed_eligibility(dec_ind["dictionary"], decoded_by_id)
-    dict_ok = len(dec_ind["dictionary"]) <= 64 and ok_elig
+    frozen_sha_ok = frozen_sha256 == te.EXPECTED_FROZEN_DICT64_SHA256
+    dict_ok = len(dec_ind["dictionary"]) <= 64 and ok_elig and frozen_sha_ok
     items.append({
         "gate": "G3_dict64_witnessed_eligibility",
         "passed": bool(dict_ok),
-        "detail": f"entries={len(dec_ind['dictionary'])}<=64, witnessed_ok={ok_elig}, errors={elig_errs}",
+        "detail": f"entries={len(dec_ind['dictionary'])}<=64, witnessed_ok={ok_elig}, frozen_dict_sha256_ok={frozen_sha_ok} ({frozen_sha256[:12]}), errors={elig_errs}",
     })
 
     # Gate 4: Re-execute independently decoded 80 programs on all 8,412 frozen cases + <=1.1x steps
@@ -301,26 +307,34 @@ def run_dev_gate(verify_git_pin: bool = True) -> dict[str, Any]:
     })
 
     # Gate 5: Complete package bits (including charged standalone decoder) <= Arm 4 (256-entry raw BPE)
-    arm3_complete = len(wit_huff_raw) * 8 + pc.decoder_machinery_bits(witness_only=True)
+    # Report BOTH B3H1 (Huffman) and B3P1 (fixed-6-bit) explicitly and separately.
+    wit_dec_bits = pc.decoder_machinery_bits(witness_only=True)
+    arm3_huff_complete = len(wit_huff_raw) * 8 + wit_dec_bits
+    arm3_f6_complete = len(wit_f6_raw) * 8 + wit_dec_bits
     arm4_canon_huff = (ARTIFACTS / "matched80_arm4_bpe256_canonical_huffman.b3b1").stat().st_size * 8
     arm4_canon_f8 = (ARTIFACTS / "matched80_arm4_bpe256_canonical_fixed8.b3b1").stat().st_size * 8
     arm4_orig_huff = (ARTIFACTS / "matched80_arm4_bpe256_original_huffman.b3b1").stat().st_size * 8
+    arm4_orig_f8 = (ARTIFACTS / "matched80_arm4_bpe256_original_fixed8.b3b1").stat().st_size * 8
     arm4_compact_huff = (ARTIFACTS / "matched80_arm4_bpe256_compact_huffman.b3b1").stat().st_size * 8
-    bits_ok = arm3_complete <= arm4_canon_huff and arm3_complete <= arm4_orig_huff
+    bits_ok = arm3_huff_complete <= arm4_canon_huff and arm3_huff_complete <= arm4_orig_huff
     items.append({
         "gate": "G5_witness_complete_bits_le_arm4_bpe256",
         "passed": bool(bits_ok),
         "detail": (
-            f"arm3_complete={arm3_complete} b (pkg={len(wit_huff_raw)*8} + witness_dec={pc.decoder_machinery_bits(witness_only=True)}) "
-            f"<= arm4_canonical_huff={arm4_canon_huff} b (fixed8={arm4_canon_f8} b) & arm4_original_huff={arm4_orig_huff} b; "
-            f"[pre-minified compact_huff={arm4_compact_huff} b logged separately]"
+            f"B3H1_huff={arm3_huff_complete} b (pkg={len(wit_huff_raw)*8} + dec={wit_dec_bits}) "
+            f"<= arm4_canonical_huff={arm4_canon_huff} b & arm4_original_huff={arm4_orig_huff} b; "
+            f"B3P1_fixed6={arm3_f6_complete} b (pkg={len(wit_f6_raw)*8} + dec={wit_dec_bits}) "
+            f"[vs arm4_canonical_f8={arm4_canon_f8} b, arm4_original_f8={arm4_orig_f8} b, pre-minified compact_huff={arm4_compact_huff} b]"
         ),
     })
 
-    # Gate 6: Dev transfer independent decode, frozen hash binding, charged raw fallback, zero wrong acceptances
+    # Gate 6: Dev transfer independent decode (BOTH B3H1 and B3P1-fixed6), frozen dict SHA-256 binding,
+    #         consistent rewriter fingerprint, zero wrong acceptances, and programmatic >=90% decision check
     tr_raw = (ARTIFACTS / "dev_transfer_b3.b3h1").read_bytes()
+    tr_f6_raw = (ARTIFACTS / "dev_transfer_b3_fixed6.b3p1").read_bytes()
     tr_dec_ind = idec.decode_b3h1(tr_raw)
     tr_dec_ref = refdec.decode_b3h1(tr_raw)
+    tr_dec_f6 = idec.decode_b3p1_transfer(tr_f6_raw)
     tr_cohort = cl.load_dev_transfer_cohort(max_cases_per_problem=64)
     tr_probs = tr_cohort["problems"]
     tr_orig_res = run_step_batch([{
@@ -363,18 +377,37 @@ def run_dev_gate(verify_git_pin: bool = True) -> dict[str, Any]:
         else:
             if ok_p:
                 tr_fallback_ok += 1
+
+    tr_b3h1_complete = len(tr_raw) * 8 + pc.decoder_machinery_bits(witness_only=False)
+    tr_base_canon_huff = tr_eval["shared_spine"]["complete_bits"]["baseline_frozen_matched80_bpe255_canonical_huffman"]["complete_bits"]
+    expected_td = te.compute_transfer_decision(tr_accepted, len(tr_probs), wrong_accept, tr_b3h1_complete, tr_base_canon_huff)
+    decision_label_ok = tr_eval["transfer_decision"]["status"] == expected_td["status"]
+    cur_rw_fp = rw.rewriter_fingerprint()
+    rw_fp_ok = (
+        m80_eval.get("rewriter_fingerprint") == cur_rw_fp
+        and tr_eval.get("rewriter_fingerprint") == cur_rw_fp
+    )
     tr_ok = (
         tr_dec_ind["programs"] == tr_dec_ref[1]
+        and tr_dec_ind["programs"] == tr_dec_f6["programs"]
+        and tr_dec_ind["modes"] == tr_dec_f6["modes"]
         and tr_dec_ind["dictionary"] == frozen["vocab"]
-        and tr_eval["frozen_dict_sha256"] == pc.sha256_bytes(frozen_bytes)
-        and rw.rewriter_fingerprint() == frozen["rewriter_fingerprint"]
+        and tr_dec_f6["dictionary"] == frozen["vocab"]
+        and tr_eval["frozen_dict_sha256"] == frozen_sha256 == te.EXPECTED_FROZEN_DICT64_SHA256
+        and rw_fp_ok
         and wrong_accept == 0
         and (tr_accepted + tr_fallback_ok) == len(tr_probs)
+        and decision_label_ok
     )
     items.append({
         "gate": "G6_dev_transfer_frozen_fallback_zero_wrong_acceptances",
         "passed": bool(tr_ok),
-        "detail": f"accepted={tr_accepted}/{len(tr_probs)}, fallback_ok={tr_fallback_ok}, wrong_acceptances={wrong_accept}, frozen_hash_ok=True",
+        "detail": (
+            f"accepted={tr_accepted}/{len(tr_probs)} ({100.0*tr_accepted/len(tr_probs):.2f}%), "
+            f"fallback_ok={tr_fallback_ok}, wrong_acceptances={wrong_accept}, "
+            f"b3h1_and_b3p1_decode_match=True, frozen_dict_sha256_ok=True, "
+            f"decision={expected_td['status']} (label_contract_ok={decision_label_ok})"
+        ),
     })
 
     # Mandatory Negative Controls 1, 2, 3
@@ -388,7 +421,7 @@ def run_dev_gate(verify_git_pin: bool = True) -> dict[str, Any]:
 
     all_passed = all(item["passed"] for item in items)
     report = {
-        "schema": "b3.dev_gate.v1",
+        "schema": "b3.dev_gate.v2",
         "all_passed": all_passed,
         "passed_count": sum(item["passed"] for item in items),
         "total_count": len(items),
@@ -400,12 +433,21 @@ def run_dev_gate(verify_git_pin: bool = True) -> dict[str, Any]:
             "nc3_step_ceiling": nc3,
         },
     }
-    (ARTIFACTS / "dev_gate_report.json").write_text(json.dumps(report, indent=2) + "\n")
+    if report_path is not None:
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(json.dumps(report, indent=2) + "\n")
     return report
 
 
 if __name__ == "__main__":
-    rep = run_dev_gate(verify_git_pin=True)
+    parser = argparse.ArgumentParser(description="B3 dev_gate verifier (read-only unless --report is passed)")
+    parser.add_argument("--report", type=Path, default=None, help="Optional output path for JSON gate report")
+    args = parser.parse_args()
+    if args.report is not None:
+        rep = run_dev_gate(verify_git_pin=True, report_path=args.report)
+    else:
+        with tempfile.TemporaryDirectory() as td:
+            rep = run_dev_gate(verify_git_pin=True, report_path=Path(td) / "dev_gate_report.json")
     for item in rep["items"]:
         status = "PASS" if item["passed"] else "FAIL"
         print(f"[{status}] {item['gate']}: {item['detail']}")

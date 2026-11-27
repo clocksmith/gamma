@@ -145,7 +145,9 @@ def encode_b3p1(vocab: list[str], sequences: list[list[int]], width: int = 6) ->
         padding_bits += len(packed) * 8 - len(seq) * width
 
     package = bytes(header) + bytes(stream)
-    dec_bits = decoder_machinery_bits()
+    wit_dec_bytes = decoder_machinery_bytes(witness_only=True)
+    wit_dec_bits = wit_dec_bytes * 8
+    full_dec_bits = decoder_machinery_bits(witness_only=False)
     breakdown = {
         "format": "B3P1",
         "width_bits": width,
@@ -160,7 +162,144 @@ def encode_b3p1(vocab: list[str], sequences: list[list[int]], width: int = 6) ->
         "coded_stream_bits": len(stream) * 8,
         "package_bytes_excluding_decoder": len(package),
         "package_bits_excluding_decoder": len(package) * 8,
-        "decoder_machinery_bytes": decoder_machinery_bytes(),
+        "decoder_machinery_file": WITNESS_DECODER_PATH.name,
+        "decoder_machinery_bytes": wit_dec_bytes,
+        "decoder_machinery_bits": wit_dec_bits,
+        "full_transfer_decoder_bits": full_dec_bits,
+        "complete_bits": len(package) * 8 + wit_dec_bits,
+        "complete_bits_with_full_transfer_decoder": len(package) * 8 + full_dec_bits,
+        "package_sha256": sha256_bytes(package),
+    }
+    return package, breakdown
+
+
+def encode_b3p1_transfer(
+    vocab: list[str],
+    records: list[dict[str, Any]],
+    width: int = 6,
+    fallback_bpe: dict[str, Any] | None = None,
+) -> tuple[bytes, dict[str, Any]]:
+    """Encode fixed-width (6-bit) transfer package B3PT with charged selector + fallback.
+
+    Covered programs use fixed-width 6-bit packed dictionary IDs (zero escapes, NO Huffman
+    coding); refused programs use charged raw UTF-8 (mode 1) or frozen matched80 BPE-255+escape
+    (mode 2). Conservatively charges the full `b3_ref_decoder.py` (15,608 bits).
+    """
+    n = len(vocab)
+    if not (1 <= n <= (1 << width)):
+        raise ValueError(f"vocab size {n} exceeds width {width} capacity {1 << width}")
+    if len(set(vocab)) != n:
+        raise ValueError("duplicate dictionary entries")
+
+    refused_count = sum(1 for r in records if not r["covered"])
+    fb_mode = 2 if (fallback_bpe is not None and refused_count > 0) else 1
+
+    header = bytearray(b"B3PT")
+    header.append(width)
+    header.append(fb_mode)
+    header.extend(encode_varint(n))
+    dict_utf8_bytes = 0
+    for entry in vocab:
+        raw = entry.encode("utf-8")
+        if not raw:
+            raise ValueError("empty entry")
+        header.extend(encode_varint(len(raw)))
+        header.extend(raw)
+        dict_utf8_bytes += len(raw)
+    primary_header_bits = len(header) * 8
+
+    fb_table_start = len(header)
+    if fb_mode == 2:
+        assert fallback_bpe is not None
+        base_alpha = fallback_bpe["base_alphabet"]
+        merges = fallback_bpe["merges"]
+        header.extend(encode_varint(len(base_alpha)))
+        header.extend(bytes(base_alpha))
+        header.extend(encode_varint(len(merges)))
+        for a, b in merges:
+            header.append(a)
+            header.append(b)
+    fallback_table_bits = (len(header) - fb_table_start) * 8
+
+    stream = bytearray()
+    stream.extend(encode_varint(len(records)))
+    sel = bytearray((len(records) + 7) // 8)
+    for k, rec in enumerate(records):
+        if not rec["covered"]:
+            sel[k >> 3] |= 1 << (7 - (k & 7))
+    stream.extend(sel)
+    selector_bits = len(sel) * 8
+
+    covered_tokens = 0
+    covered_framing_bytes = 0
+    covered_packed_bytes = 0
+    padding_bits = 0
+    fallback_bytes = 0
+    fallback_tokens = 0
+
+    for rec in records:
+        if rec["covered"]:
+            seq = rec["token_ids"]
+            for tok in seq:
+                if tok < 0 or tok >= n:
+                    raise ValueError(f"invalid token id {tok}")
+            cnt_var = encode_varint(len(seq))
+            packed = pack_fixed_ids(seq, width)
+            stream.extend(cnt_var)
+            stream.extend(packed)
+            covered_framing_bytes += len(cnt_var)
+            covered_packed_bytes += len(packed)
+            covered_tokens += len(seq)
+            padding_bits += len(packed) * 8 - len(seq) * width
+        else:
+            if fb_mode == 1:
+                raw = rec["raw_bytes"]
+                chunk = encode_varint(len(raw)) + raw
+                stream.extend(chunk)
+                fallback_bytes += len(chunk)
+            else:
+                assert fallback_bpe is not None
+                seq = rec["fallback_bpe_seq"]
+                esc = len(fallback_bpe["base_alphabet"]) + len(fallback_bpe["merges"])
+                chunk = bytearray(encode_varint(len(seq)))
+                for sym, raw_b in seq:
+                    chunk.append(sym)
+                    if sym == esc:
+                        assert raw_b is not None
+                        chunk.append(raw_b)
+                stream.extend(chunk)
+                fallback_bytes += len(chunk)
+                fallback_tokens += len(seq)
+
+    package = bytes(header) + bytes(stream)
+    dec_bytes = decoder_machinery_bytes(witness_only=False)
+    dec_bits = dec_bytes * 8
+    breakdown = {
+        "format": "B3P1-transfer(B3PT)",
+        "width_bits": width,
+        "fallback_mode": ["none", "raw_utf8", "frozen_matched80_bpe255_escape"][fb_mode],
+        "entries": n,
+        "programs": len(records),
+        "covered_programs": len(records) - refused_count,
+        "refused_programs": refused_count,
+        "dictionary_utf8_bytes": dict_utf8_bytes,
+        "primary_header_bits": primary_header_bits,
+        "fallback_table_bits": fallback_table_bits,
+        "selector_bits": selector_bits,
+        "covered_tokens": covered_tokens,
+        "covered_token_payload_bits": covered_tokens * width,
+        "covered_framing_bits": covered_framing_bytes * 8,
+        "covered_total_bits": (covered_framing_bytes + covered_packed_bytes) * 8,
+        "padding_bits": padding_bits,
+        "fallback_stream_bits": fallback_bytes * 8,
+        "fallback_tokens": fallback_tokens,
+        "fallback_total_bits": fallback_table_bits + selector_bits + fallback_bytes * 8,
+        "header_bits": len(header) * 8,
+        "coded_stream_bits": len(stream) * 8,
+        "package_bytes_excluding_decoder": len(package),
+        "package_bits_excluding_decoder": len(package) * 8,
+        "decoder_machinery_file": REF_DECODER_PATH.name,
+        "decoder_machinery_bytes": dec_bytes,
         "decoder_machinery_bits": dec_bits,
         "complete_bits": len(package) * 8 + dec_bits,
         "package_sha256": sha256_bytes(package),

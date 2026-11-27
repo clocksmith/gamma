@@ -434,6 +434,63 @@ function simplifyControlFlowBlock(stmts, isLoopTail) {
   return out;
 }
 
+function matchNumericDiffComparator(fnNode) {
+  // General AST check for pure 2-parameter numeric difference comparators:
+  //   (a, b) => a - b  |  function(a, b) { return a - b; }  -> "asc"
+  //   (a, b) => b - a  |  function(a, b) { return b - a; }  -> "desc"
+  if (!fnNode) return null;
+  if (fnNode.type !== "ArrowFunctionExpression" && fnNode.type !== "FunctionExpression") return null;
+  if (!fnNode.params || fnNode.params.length !== 2) return null;
+  const [p1, p2] = fnNode.params;
+  if (p1.type !== "Identifier" || p2.type !== "Identifier" || p1.name === p2.name) return null;
+  let expr = null;
+  if (fnNode.type === "ArrowFunctionExpression" && fnNode.body.type !== "BlockStatement") {
+    expr = fnNode.body;
+  } else if (
+    fnNode.body &&
+    fnNode.body.type === "BlockStatement" &&
+    fnNode.body.body.length === 1 &&
+    fnNode.body.body[0].type === "ReturnStatement" &&
+    fnNode.body.body[0].argument
+  ) {
+    expr = fnNode.body.body[0].argument;
+  }
+  if (!expr || expr.type !== "BinaryExpression" || expr.operator !== "-") return null;
+  if (expr.left.type !== "Identifier" || expr.right.type !== "Identifier") return null;
+  if (expr.left.name === p1.name && expr.right.name === p2.name) return "asc";
+  if (expr.left.name === p2.name && expr.right.name === p1.name) return "desc";
+  return null;
+}
+
+function extractFreshSortSource(targetNode) {
+  // Match ONLY provably fresh (non-mutating copy) array receivers:
+  //   1. <expr>.slice()  (0 args)          -> <expr>
+  //   2. [...<iterable>] (single spread)   -> <iterable>
+  //   3. [e1, e2, ...]   (dense literal)   -> targetNode
+  if (!targetNode) return null;
+  if (
+    targetNode.type === "CallExpression" &&
+    !targetNode.optional &&
+    targetNode.arguments.length === 0 &&
+    targetNode.callee.type === "MemberExpression" &&
+    !targetNode.callee.computed &&
+    !targetNode.callee.optional &&
+    targetNode.callee.property.type === "Identifier" &&
+    targetNode.callee.property.name === "slice"
+  ) {
+    return targetNode.callee.object;
+  }
+  if (targetNode.type === "ArrayExpression" && targetNode.elements.length > 0) {
+    if (targetNode.elements.length === 1 && targetNode.elements[0] && targetNode.elements[0].type === "SpreadElement") {
+      return targetNode.elements[0].argument;
+    }
+    if (targetNode.elements.every(e => e !== null && e.type !== "SpreadElement")) {
+      return targetNode;
+    }
+  }
+  return null;
+}
+
 function canonicalizeSyntax(ast, opts) {
   const elimGt = opts.eliminateGt !== false;
   const elimXor = opts.eliminateXor !== false;
@@ -441,6 +498,7 @@ function canonicalizeSyntax(ast, opts) {
   const inlineMath = opts.inlineMath !== false;
   const pushToAssign = opts.pushToAssign !== false;
   const lowerDirectBuiltins = opts.lowerDirectBuiltins === true;
+  const nativeNumericSort = opts.nativeNumericSort !== false;
 
   // Two-tier top-level hoist:
   //   baseHoist (`__H`): pure independent literals/globals/properties in ONE compact array literal `let __H=[...]`!
@@ -669,6 +727,62 @@ function canonicalizeSyntax(ast, opts) {
         return node;
       }
       case "CallExpression": {
+        // General Numeric Copy-Sort Specialization (Pass 2):
+        // Replaces `<freshArray>.sort((a,b)=>a-b)` with `[...new Float64Array(<src>).sort()]`
+        // (and `(a,b)=>b-a` with `.reverse()`), eliminating O(n log n) JS comparator callbacks
+        // while preserving exact IEEE-754 numeric ordering and non-mutating Array output.
+        if (
+          nativeNumericSort &&
+          !node.optional &&
+          node.callee.type === "MemberExpression" &&
+          !node.callee.computed &&
+          !node.callee.optional &&
+          node.callee.property.type === "Identifier" &&
+          node.callee.property.name === "sort" &&
+          node.arguments.length === 1 &&
+          node.arguments[0].type !== "SpreadElement"
+        ) {
+          const dir = matchNumericDiffComparator(node.arguments[0]);
+          const freshSrc = dir ? extractFreshSortSource(node.callee.object) : null;
+          if (dir && freshSrc) {
+            const srcTx = txExpr(freshSrc, inLoopDepth);
+            const typedArr = {
+              type: "NewExpression",
+              callee: getGlobalRef("Float64Array"),
+              arguments: [srcTx],
+            };
+            let sortedExpr = {
+              type: "CallExpression",
+              callee: {
+                type: "MemberExpression",
+                object: typedArr,
+                property: lowerStringExpr("sort", true),
+                computed: true,
+                optional: false,
+              },
+              arguments: [],
+              optional: false,
+            };
+            if (dir === "desc") {
+              sortedExpr = {
+                type: "CallExpression",
+                callee: {
+                  type: "MemberExpression",
+                  object: sortedExpr,
+                  property: lowerStringExpr("reverse", true),
+                  computed: true,
+                  optional: false,
+                },
+                arguments: [],
+                optional: false,
+              };
+            }
+            return {
+              type: "ArrayExpression",
+              elements: [{ type: "SpreadElement", argument: sortedExpr }],
+            };
+          }
+        }
         if (
           inlineMath &&
           node.callee.type === "MemberExpression" &&

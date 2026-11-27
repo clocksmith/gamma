@@ -1,11 +1,108 @@
 {
-  "schema": "b3.dev_summary.v1",
+  "schema": "b3.dev_summary.v2",
   "experiment_card": "B3 - One transferable 64-entry dictionary",
+  "frozen_constraints": {
+    "frozen_dict64_sha256": "70166bd0f6b84af31ab9bc5479cab5bae50b6fe3bb000fdeca85b8e0bb87c135",
+    "frozen_dict64_byte_identical_verified": true,
+    "step_ceiling": 1.1,
+    "min_transfer_coverage_bar": 0.9,
+    "rewriter_fingerprint": {
+      "rewriter_mjs_sha256": "97ec06d7852b03543bf9a619588b904997df19c3cd983f0ced89e520ec494d8e",
+      "js_ast_mjs_sha256": "71f28888081eba23c521df3591919aa74fe01f7afedc2d990e52eb8b102710de",
+      "rewriter_py_sha256": "4dbbb23d09f42fe0160b3de87740fd2a720bac5b09ea38ffbc7bbecbe9366861"
+    }
+  },
   "decisions": {
     "matched80_witness": "PASS",
+    "dev_transfer_b3h1_huffman": "PASS",
+    "dev_transfer_b3p1_fixed6": "PASS",
     "dev_transfer": "PASS",
+    "dev_transfer_pass1_initial": "FAIL",
     "dev_gate": "PASS",
-    "witness_and_transfer_reported_separately": true
+    "witness_and_transfer_reported_separately": true,
+    "earns_sealed_transfer_evaluation": true,
+    "b4_gate_note": "PASS on spent dev transfer earns sealed transfer evaluation only; B4 still requires sealed transfer success AND explicit compute approval."
+  },
+  "coding_regime_summary": {
+    "witness_matched80": {
+      "b3h1_huffman": {
+        "package_bits_excluding_decoder": 71640,
+        "decoder_bits": 9840,
+        "complete_bits": 81480,
+        "comparator_arm4_canonical_huffman_bits": 82784,
+        "comparator_arm4_original_huffman_bits": 165872
+      },
+      "b3p1_fixed6": {
+        "package_bits_excluding_decoder": 83208,
+        "decoder_bits": 9840,
+        "complete_bits": 93048,
+        "comparator_arm4_canonical_fixed8_bits": 90528,
+        "comparator_arm4_canonical_huffman_bits": 82784,
+        "comparator_arm4_original_fixed8_bits": 180504
+      }
+    },
+    "dev_transfer_83": {
+      "b3h1_huffman": {
+        "package_bits_excluding_decoder": 148256,
+        "decoder_bits": 15608,
+        "complete_bits": 163864,
+        "comparator_frozen_matched80_bpe255_canonical_huffman_bits": 219656,
+        "comparator_indomain_dev_bpe256_huffman_bits": 175656
+      },
+      "b3p1_fixed6": {
+        "package_bits_excluding_decoder": 168680,
+        "decoder_bits": 15608,
+        "complete_bits": 184288,
+        "comparator_frozen_matched80_bpe255_canonical_fixed8_bits": 277152,
+        "comparator_frozen_matched80_bpe255_canonical_huffman_bits": 219656,
+        "comparator_indomain_dev_bpe256_fixed8_bits": 194824
+      }
+    }
+  },
+  "pass_comparison": {
+    "pass1_initial": {
+      "pass_name": "pass1_initial_rewriter",
+      "rewriter_mjs_sha256": "3dd7d6e114ee2a9870dddde4aa7d62b649a1d06bd7936da00923e8c68337d17f",
+      "frozen_dict64_sha256": "70166bd0f6b84af31ab9bc5479cab5bae50b6fe3bb000fdeca85b8e0bb87c135",
+      "step_ceiling": 1.1,
+      "accepted_programs": 72,
+      "refused_programs": 11,
+      "total_programs": 83,
+      "coverage_rate": 0.8675,
+      "wrong_acceptances": 0,
+      "b3h1_complete_bits": 165496,
+      "b3h1_package_bits_excluding_decoder": 149888,
+      "frozen_matched80_bpe255_canonical_huffman_bits": 219656,
+      "refusal_reasons": {
+        "step_ceiling_exceeded": 9,
+        "unspellable_zero_escape": 2
+      },
+      "status": "FAIL",
+      "note": "Initial Pass-1 transfer achieved 72/83 (86.75%) < 90.0% minimum bar (75/83); corrected from erroneous PASS label to FAIL under programmatic contract."
+    },
+    "pass2_single_general_transform": {
+      "pass_name": "pass2_numeric_copy_sort_specialization",
+      "transform_summary": "General AST lowering of non-mutating numeric copy-sort (<expr>.slice().sort((a,b)=>a-b) and fresh [...].sort((a,b)=>a-b)) to [...new Float64Array(<src>).sort()], eliminating JS comparator callback step doubling without changing frozen_dict64.json or the 1.1x step ceiling.",
+      "rewriter_mjs_sha256": "97ec06d7852b03543bf9a619588b904997df19c3cd983f0ced89e520ec494d8e",
+      "frozen_dict64_sha256": "70166bd0f6b84af31ab9bc5479cab5bae50b6fe3bb000fdeca85b8e0bb87c135",
+      "step_ceiling": 1.1,
+      "accepted_programs": 76,
+      "refused_programs": 7,
+      "total_programs": 83,
+      "coverage_rate": 0.9157,
+      "wrong_acceptances": 0,
+      "b3h1_complete_bits": 163864,
+      "b3h1_package_bits_excluding_decoder": 148256,
+      "b3p1_fixed6_complete_bits": 184288,
+      "b3p1_fixed6_package_bits_excluding_decoder": 168680,
+      "refusal_reasons": {
+        "step_ceiling_exceeded": 5,
+        "unspellable_zero_escape": 2
+      },
+      "status": "PASS",
+      "delta_accepted_vs_pass1": 4,
+      "delta_b3h1_complete_bits_vs_pass1": -1632
+    }
   },
   "shared_spine": {
     "witness": {
@@ -25,6 +122,13 @@
         "changed_algorithms": 0
       },
       "complete_bits": {
+        "arm3_b3h1_huffman_complete_bits": 81480,
+        "arm3_b3h1_huffman_package_bits_excluding_decoder": 71640,
+        "arm3_b3p1_fixed6_complete_bits": 93048,
+        "arm3_b3p1_fixed6_package_bits_excluding_decoder": 83208,
+        "arm3_b3p1_fixed6_header_bits": 2200,
+        "arm3_b3p1_fixed6_coded_stream_bits": 81008,
+        "arm3_b3p1_fixed6_decoder_machinery_bits": 9840,
         "arm3_witness_complete_bits": 81480,
         "arm3_witness_package_bits_excluding_decoder": 71640,
         "arm3_header_bits": 2720,
@@ -42,22 +146,24 @@
         "arm4_canonical_huffman_complete_bits": 82784,
         "arm4_canonical_fixed8_complete_bits": 90528,
         "arm4_original_huffman_complete_bits": 165872,
-        "arm4_compact_huffman_complete_bits": 59560
+        "arm4_original_fixed8_complete_bits": 180504,
+        "arm4_compact_huffman_complete_bits": 59560,
+        "arm4_compact_fixed8_complete_bits": 64392
       },
       "measured_work": {
-        "load_seconds": 3.4362,
-        "rewrite_seconds": 0.5158,
-        "arm1_seconds": 45.6789,
-        "arm2_build_seconds": 5.6261,
-        "arm3_selection_seconds": 1.7992,
-        "arm4_build_seconds": 4.4812,
-        "verification_orig_seconds": 0.2602,
-        "verification_candidates_seconds": 1.4331,
-        "verification_decoded_witness_seconds": 0.6168,
-        "decode_seconds": 0.078846,
-        "decode_p95_ms_per_program": 0.3532,
-        "total_wall_seconds": 64.2107,
-        "peak_rss_bytes": 145915904,
+        "load_seconds": 8.7958,
+        "rewrite_seconds": 0.2704,
+        "arm1_seconds": 44.9013,
+        "arm2_build_seconds": 5.4866,
+        "arm3_selection_seconds": 1.4651,
+        "arm4_build_seconds": 6.063,
+        "verification_orig_seconds": 0.5047,
+        "verification_candidates_seconds": 1.2124,
+        "verification_decoded_witness_seconds": 0.2403,
+        "decode_seconds": 0.038935,
+        "decode_p95_ms_per_program": 0.1702,
+        "total_wall_seconds": 69.1564,
+        "peak_rss_bytes": 144949248,
         "measured_step_counts": {
           "total_original_steps": 831226,
           "total_rewritten_steps": 780590,
@@ -107,57 +213,118 @@
           "marginal_savings_bits_per_program": 3185.2,
           "break_even_programs": 4,
           "break_even_raw_bytes": 2023.3
+        },
+        "b3p1_fixed6_vs_arm4_bpe256_canonical_fixed8": {
+          "fixed_overhead_bits": 12040,
+          "b3_marginal_bits_per_program": 1012.6,
+          "baseline_bits_per_program": 1131.6,
+          "marginal_savings_bits_per_program": 119.0,
+          "break_even_programs": 102,
+          "break_even_raw_bytes": 51595.4
+        },
+        "b3p1_fixed6_vs_arm4_bpe256_original_fixed8": {
+          "fixed_overhead_bits": 12040,
+          "b3_marginal_bits_per_program": 1012.6,
+          "baseline_bits_per_program": 2256.3,
+          "marginal_savings_bits_per_program": 1243.7,
+          "break_even_programs": 10,
+          "break_even_raw_bytes": 7154.5
+        },
+        "b3p1_fixed6_vs_raw_canonical_utf8": {
+          "fixed_overhead_bits": 12040,
+          "b3_marginal_bits_per_program": 1012.6,
+          "baseline_bits_per_program": 4046.7,
+          "marginal_savings_bits_per_program": 3034.1,
+          "break_even_programs": 4,
+          "break_even_raw_bytes": 2023.3
         }
       }
     },
     "dev_transfer": {
       "fidelity": {
-        "accepted_programs": 72,
-        "refused_fallback_programs": 11,
+        "accepted_programs": 76,
+        "refused_fallback_programs": 7,
         "total_programs": 83,
         "fixed_canonical_spellable": 81,
         "wrong_acceptances": 0,
         "independent_decode_verified": 83,
-        "step_compliant_accepted": 72,
+        "independent_decode_b3p1_fixed6_verified": 83,
+        "step_compliant_accepted": 76,
         "max_accepted_step_ratio": 1.064563,
         "p95_accepted_step_ratio": 1.038126,
-        "median_accepted_step_ratio": 1.0,
+        "median_accepted_step_ratio": 0.999918,
         "changed_algorithms": 0
       },
       "complete_bits": {
-        "b3_transfer_chosen_complete_bits": 165496,
-        "b3_transfer_chosen_package_bits_excluding_decoder": 149888,
+        "b3h1_huffman_transfer_complete_bits": 163864,
+        "b3h1_huffman_transfer_package_bits_excluding_decoder": 148256,
+        "b3p1_fixed6_transfer_complete_bits": 184288,
+        "b3p1_fixed6_transfer_package_bits_excluding_decoder": 168680,
+        "b3p1_fixed6_transfer_raw_utf8_fallback_complete_bits": 189608,
+        "b3p1_fixed6_transfer_bpe255_fallback_complete_bits": 184288,
+        "b3p1_fixed6_transfer_breakdown": {
+          "format": "B3P1-transfer(B3PT)",
+          "width_bits": 6,
+          "fallback_mode": "frozen_matched80_bpe255_escape",
+          "entries": 64,
+          "programs": 83,
+          "covered_programs": 76,
+          "refused_programs": 7,
+          "dictionary_utf8_bytes": 205,
+          "primary_header_bits": 2208,
+          "fallback_table_bits": 3368,
+          "selector_bits": 88,
+          "covered_tokens": 23273,
+          "covered_token_payload_bits": 139638,
+          "covered_framing_bits": 1120,
+          "covered_total_bits": 140968,
+          "padding_bits": 210,
+          "fallback_stream_bits": 22040,
+          "fallback_tokens": 2724,
+          "fallback_total_bits": 25496,
+          "header_bits": 5576,
+          "coded_stream_bits": 163104,
+          "package_bytes_excluding_decoder": 21085,
+          "package_bits_excluding_decoder": 168680,
+          "decoder_machinery_file": "b3_ref_decoder.py",
+          "decoder_machinery_bytes": 1951,
+          "decoder_machinery_bits": 15608,
+          "complete_bits": 184288,
+          "package_sha256": "b90545ac062f0d2f4cefdf2a36702a9f04a00584162d11b49ade98fa2f6d58d2"
+        },
+        "b3_transfer_chosen_complete_bits": 163864,
+        "b3_transfer_chosen_package_bits_excluding_decoder": 148256,
         "b3_transfer_chosen_fallback_mode": "frozen_matched80_bpe255_escape",
-        "b3_transfer_raw_utf8_fallback_complete_bits": 175000,
-        "b3_transfer_bpe255_fallback_complete_bits": 165496,
+        "b3_transfer_raw_utf8_fallback_complete_bits": 169184,
+        "b3_transfer_bpe255_fallback_complete_bits": 163864,
         "b3_transfer_breakdown": {
           "format": "B3H1",
           "fallback_mode": "frozen_matched80_bpe255_escape",
           "entries": 64,
           "programs": 83,
-          "covered_programs": 72,
-          "refused_programs": 11,
+          "covered_programs": 76,
+          "refused_programs": 7,
           "dictionary_utf8_bytes": 205,
           "code_table_bits": 520,
           "primary_header_bits": 2720,
           "fallback_table_bits": 3368,
           "selector_bits": 88,
-          "covered_tokens": 22411,
-          "covered_payload_bits": 115251,
-          "padding_bits": 29,
-          "fallback_stream_bits": 28424,
-          "fallback_tokens": 3510,
-          "fallback_total_bits": 31880,
+          "covered_tokens": 23273,
+          "covered_payload_bits": 120009,
+          "padding_bits": 23,
+          "fallback_stream_bits": 22040,
+          "fallback_tokens": 2724,
+          "fallback_total_bits": 25496,
           "header_bits": 6088,
-          "coded_stream_bits": 143800,
-          "package_bytes_excluding_decoder": 18736,
-          "package_bits_excluding_decoder": 149888,
+          "coded_stream_bits": 142168,
+          "package_bytes_excluding_decoder": 18532,
+          "package_bits_excluding_decoder": 148256,
           "decoder_machinery_file": "b3_ref_decoder.py",
           "decoder_machinery_bytes": 1951,
           "decoder_machinery_bits": 15608,
           "full_transfer_decoder_bits": 15608,
-          "complete_bits": 165496,
-          "complete_bits_with_full_transfer_decoder": 165496,
+          "complete_bits": 163864,
+          "complete_bits_with_full_transfer_decoder": 163864,
           "huffman_lengths": [
             3,
             4,
@@ -225,9 +392,9 @@
             11,
             7
           ],
-          "package_sha256": "54b4f1e88965a49ff5aaf96bcc75be4c482e99321b1696d6032809c6a8bf1923"
+          "package_sha256": "489d81e731cfb847a4495e089be0e6a1c08fa095ea96b7e7eddc73d1c106c183"
         },
-        "explicit_hoisted_source_bytes_accepted": 14350,
+        "explicit_hoisted_source_bytes_accepted": 15337,
         "hidden_helper_bits": 0,
         "baseline_frozen_matched80_bpe255_canonical_huffman": {
           "format": "B3B1-huffman",
@@ -284,6 +451,23 @@
           "complete_bits": 221056,
           "package_sha256": "a5c43d3d5c2538ce370b94bc7e8074ea82e4da6642163a847f8ac9cd20e51e46"
         },
+        "baseline_frozen_matched80_bpe255_original_fixed8": {
+          "format": "B3B1-fixed8",
+          "coding": "fixed8",
+          "allow_escape": true,
+          "base_alphabet": 93,
+          "merges": 162,
+          "entries": 256,
+          "programs": 83,
+          "total_tokens": 32738,
+          "total_escapes": 11,
+          "header_bits": 3408,
+          "coded_stream_bits": 263312,
+          "package_bytes_excluding_decoder": 33340,
+          "package_bits_excluding_decoder": 266720,
+          "complete_bits": 266720,
+          "package_sha256": "17f9674d62753e5c6150d4e293de339ec748859b2698fafce1be23b4b17b84e9"
+        },
         "baseline_indomain_dev_bpe256_huffman": {
           "format": "B3B1-huffman",
           "coding": "huffman",
@@ -322,46 +506,70 @@
         }
       },
       "measured_work": {
-        "orig_verify_seconds": 2.1062,
-        "rewrite_seconds": 0.4407,
-        "selection_seconds": 0.0951,
-        "verify_candidates_seconds": 2.0387,
-        "decode_seconds": 0.042556,
-        "decode_p95_ms_per_program": 0.2763,
-        "reexec_decoded_seconds": 1.916,
-        "total_wall_seconds": 10.6412,
-        "peak_rss_bytes": 76611584,
+        "orig_verify_seconds": 2.2676,
+        "rewrite_seconds": 0.5591,
+        "selection_seconds": 0.119,
+        "verify_candidates_seconds": 2.2883,
+        "decode_seconds": 0.053293,
+        "decode_p95_ms_per_program": 0.3177,
+        "reexec_decoded_seconds": 2.4571,
+        "total_wall_seconds": 12.3162,
+        "peak_rss_bytes": 144949248,
         "measured_step_counts": {
           "total_original_steps": 32154741,
-          "accepted_original_steps": 31946707,
-          "accepted_rewritten_steps": 32158196,
+          "accepted_original_steps": 31950456,
+          "accepted_rewritten_steps": 32156933,
           "max_accepted_step_ratio": 1.064563
         }
       },
       "horizon": {
         "vs_frozen_matched80_bpe255_canonical_huffman": {
           "fixed_overhead_bits": 21696,
-          "b3_marginal_bits_per_program": 1732.53,
+          "b3_marginal_bits_per_program": 1712.87,
           "baseline_bits_per_program": 2646.46,
-          "marginal_savings_bits_per_program": 913.93,
+          "marginal_savings_bits_per_program": 933.59,
           "break_even_programs": 24,
           "break_even_raw_bytes": 14657.1
         },
         "vs_indomain_dev_bpe256_huffman": {
           "fixed_overhead_bits": 21696,
-          "b3_marginal_bits_per_program": 1732.53,
+          "b3_marginal_bits_per_program": 1712.87,
           "baseline_bits_per_program": 2116.34,
-          "marginal_savings_bits_per_program": 383.81,
-          "break_even_programs": 57,
-          "break_even_raw_bytes": 34810.5
+          "marginal_savings_bits_per_program": 403.47,
+          "break_even_programs": 54,
+          "break_even_raw_bytes": 32978.4
         },
         "vs_raw_utf8": {
           "fixed_overhead_bits": 21696,
-          "b3_marginal_bits_per_program": 1732.53,
+          "b3_marginal_bits_per_program": 1712.87,
           "baseline_bits_per_program": 4885.69,
-          "marginal_savings_bits_per_program": 3153.16,
+          "marginal_savings_bits_per_program": 3172.82,
           "break_even_programs": 7,
           "break_even_raw_bytes": 4275.0
+        },
+        "b3p1_fixed6_vs_frozen_matched80_bpe255_canonical_fixed8": {
+          "fixed_overhead_bits": 21184,
+          "b3_marginal_bits_per_program": 1965.11,
+          "baseline_bits_per_program": 3339.18,
+          "marginal_savings_bits_per_program": 1374.07,
+          "break_even_programs": 16,
+          "break_even_raw_bytes": 9771.4
+        },
+        "b3p1_fixed6_vs_frozen_matched80_bpe255_canonical_huffman": {
+          "fixed_overhead_bits": 21184,
+          "b3_marginal_bits_per_program": 1965.11,
+          "baseline_bits_per_program": 2646.46,
+          "marginal_savings_bits_per_program": 681.35,
+          "break_even_programs": 32,
+          "break_even_raw_bytes": 19542.7
+        },
+        "b3p1_fixed6_vs_indomain_dev_bpe256_fixed8": {
+          "fixed_overhead_bits": 21184,
+          "b3_marginal_bits_per_program": 1965.11,
+          "baseline_bits_per_program": 2347.28,
+          "marginal_savings_bits_per_program": 382.17,
+          "break_even_programs": 56,
+          "break_even_raw_bytes": 34199.8
         }
       }
     }
@@ -531,9 +739,12 @@
         "coded_stream_bits": 83384,
         "package_bytes_excluding_decoder": 10698,
         "package_bits_excluding_decoder": 85584,
-        "decoder_machinery_bytes": 1951,
-        "decoder_machinery_bits": 15608,
-        "complete_bits": 101192,
+        "decoder_machinery_file": "b3_witness_decoder.py",
+        "decoder_machinery_bytes": 1230,
+        "decoder_machinery_bits": 9840,
+        "full_transfer_decoder_bits": 15608,
+        "complete_bits": 95424,
+        "complete_bits_with_full_transfer_decoder": 101192,
         "package_sha256": "d9a9466f0e2010a5e1ba79c1f302b6d0704c5a6cd94494b9f8ec9703963fa121"
       }
     },
@@ -683,15 +894,20 @@
         "coded_stream_bits": 81008,
         "package_bytes_excluding_decoder": 10401,
         "package_bits_excluding_decoder": 83208,
-        "decoder_machinery_bytes": 1951,
-        "decoder_machinery_bits": 15608,
-        "complete_bits": 98816,
+        "decoder_machinery_file": "b3_witness_decoder.py",
+        "decoder_machinery_bytes": 1230,
+        "decoder_machinery_bits": 9840,
+        "full_transfer_decoder_bits": 15608,
+        "complete_bits": 93048,
+        "complete_bits_with_full_transfer_decoder": 98816,
         "package_sha256": "6b003f865292db1009239c027557699b214e629d6270f73bac97e2dc1284dac4"
       },
       "beats_arm4_canonical_huffman_with_decoder": true,
       "beats_arm4_canonical_fixed8_with_decoder": true,
       "beats_arm4_original_huffman_with_decoder": true,
-      "beats_arm4_compact_huffman_with_decoder": false
+      "beats_arm4_compact_huffman_with_decoder": false,
+      "b3p1_fixed6_beats_arm4_canonical_fixed8_with_decoder": false,
+      "b3p1_fixed6_beats_arm4_original_fixed8_with_decoder": true
     },
     "arm4_frozen_bpe256_raw": {
       "canonical": {
@@ -1664,15 +1880,43 @@
   },
   "dev_transfer_decision": {
     "independent_from_witness_decision": true,
+    "status": "PASS",
+    "min_coverage_threshold": 0.9,
+    "min_covered_programs_required": 75,
+    "covered_programs": 76,
+    "refused_programs": 7,
+    "total_programs": 83,
+    "coverage_rate": 0.9157,
+    "coverage_meets_90pct_bar": true,
     "zero_wrong_acceptances": true,
-    "covered_programs": 72,
-    "refused_programs": 11,
-    "coverage_rate": 0.8675,
+    "complete_bits": 163864,
+    "baseline_complete_bits": 219656,
+    "complete_bits_le_baseline": true,
     "beats_frozen_matched80_bpe255_canonical_huffman_with_decoder": true,
     "beats_frozen_matched80_bpe255_original_huffman_with_decoder": true,
     "beats_indomain_dev_bpe256_huffman_with_decoder": true,
     "beats_indomain_dev_bpe256_fixed8_with_decoder": true,
-    "status": "PASS"
+    "earns_sealed_transfer_evaluation": true,
+    "b4_gate_note": "PASS on spent dev transfer earns sealed transfer evaluation only; B4 still requires sealed transfer success AND explicit compute approval."
+  },
+  "dev_transfer_b3p1_fixed6_decision": {
+    "independent_from_witness_decision": true,
+    "status": "PASS",
+    "min_coverage_threshold": 0.9,
+    "min_covered_programs_required": 75,
+    "covered_programs": 76,
+    "refused_programs": 7,
+    "total_programs": 83,
+    "coverage_rate": 0.9157,
+    "coverage_meets_90pct_bar": true,
+    "zero_wrong_acceptances": true,
+    "complete_bits": 184288,
+    "baseline_complete_bits": 277152,
+    "complete_bits_le_baseline": true,
+    "beats_frozen_matched80_bpe255_canonical_fixed8_with_decoder": true,
+    "beats_frozen_matched80_bpe255_canonical_huffman_with_decoder": true,
+    "beats_indomain_dev_bpe256_fixed8_with_decoder": true,
+    "beats_indomain_dev_bpe256_huffman_with_decoder": false
   },
   "dev_transfer_diagnostics": {
     "family_breakdown": {
@@ -1683,34 +1927,33 @@
       },
       "general_algorithmic": {
         "total": 15,
-        "accepted": 12,
-        "refused": 3
+        "accepted": 13,
+        "refused": 2
       },
       "geometry_matrix_graph": {
         "total": 10,
-        "accepted": 6,
-        "refused": 4
+        "accepted": 7,
+        "refused": 3
       },
       "math_bitwise_combinatorics": {
         "total": 19,
-        "accepted": 18,
-        "refused": 1
+        "accepted": 19,
+        "refused": 0
       },
       "string_window_sequence": {
         "total": 33,
-        "accepted": 30,
-        "refused": 3
+        "accepted": 31,
+        "refused": 2
       }
     },
     "uncovered_problem_families_any_refusal": [
       "general_algorithmic",
       "geometry_matrix_graph",
-      "math_bitwise_combinatorics",
       "string_window_sequence"
     ],
     "completely_uncovered_problem_families": [],
     "refusal_reason_counts": {
-      "step_ceiling_exceeded": 9,
+      "step_ceiling_exceeded": 5,
       "unspellable_zero_escape": 2
     },
     "unspellable_syntax_and_literals_top_blockers": {
@@ -1764,6 +2007,7 @@
           "chosen_variant": "freq_pp_push2a_min",
           "rewritten_bytes": 637,
           "tokens": 376,
+          "fixed6_tokens": 376,
           "cases_passed": 64,
           "cases_total": 64,
           "original_steps": 20120,
@@ -1780,13 +2024,14 @@
           "refusal_reason": null,
           "fixed_canonical_spellable": true,
           "chosen_variant": "pfirst_pp_push2a_min",
-          "rewritten_bytes": 1472,
-          "tokens": 936,
+          "rewritten_bytes": 1524,
+          "tokens": 968,
+          "fixed6_tokens": 968,
           "cases_passed": 64,
           "cases_total": 64,
           "original_steps": 51372,
-          "rewritten_steps": 54493,
-          "step_ratio": 1.060753
+          "rewritten_steps": 54204,
+          "step_ratio": 1.055127
         },
         {
           "id": 3625,
@@ -1800,6 +2045,7 @@
           "chosen_variant": "freq_pp_push2a_min",
           "rewritten_bytes": 740,
           "tokens": 526,
+          "fixed6_tokens": 526,
           "cases_passed": 22,
           "cases_total": 22,
           "original_steps": 20987,
@@ -1818,6 +2064,7 @@
           "chosen_variant": "freq_pp_push2a_min",
           "rewritten_bytes": 835,
           "tokens": 490,
+          "fixed6_tokens": 490,
           "cases_passed": 64,
           "cases_total": 64,
           "original_steps": 8944,
@@ -1825,32 +2072,33 @@
           "step_ratio": 1.038126
         },
         {
-          "id": 3820,
-          "slug": "pythagorean-distance-nodes-in-a-tree",
-          "cohort": "continuation-j-20261028-v1",
-          "family": "geometry_matrix_graph",
-          "raw_bytes": 798,
+          "id": 3867,
+          "slug": "sum-of-gcd-of-formed-pairs",
+          "cohort": "continuation-l-20261028-v1",
+          "family": "math_bitwise_combinatorics",
+          "raw_bytes": 468,
           "accepted": true,
           "refusal_reason": null,
           "fixed_canonical_spellable": true,
-          "chosen_variant": "freq_pp_push2a_min",
-          "rewritten_bytes": 822,
-          "tokens": 471,
+          "chosen_variant": "pfirst_pp_push2a_min",
+          "rewritten_bytes": 381,
+          "tokens": 201,
+          "fixed6_tokens": 201,
           "cases_passed": 64,
           "cases_total": 64,
-          "original_steps": 28774,
-          "rewritten_steps": 29756,
-          "step_ratio": 1.034128
+          "original_steps": 16098,
+          "rewritten_steps": 16370,
+          "step_ratio": 1.016897
         }
       ]
     }
   },
   "dev_gate": {
-    "schema": "b3.dev_gate.v1",
+    "schema": "b3.dev_gate.v2",
     "all_passed": true,
     "passed_count": 9,
     "total_count": 9,
-    "elapsed_seconds": 9.4475,
+    "elapsed_seconds": 12.0973,
     "items": [
       {
         "gate": "G1_matched80_pin_and_rank_baselines",
@@ -1865,7 +2113,7 @@
       {
         "gate": "G3_dict64_witnessed_eligibility",
         "passed": true,
-        "detail": "entries=64<=64, witnessed_ok=True, errors=[]"
+        "detail": "entries=64<=64, witnessed_ok=True, frozen_dict_sha256_ok=True (70166bd0f6b8), errors=[]"
       },
       {
         "gate": "G4_witness_tests_and_step_ceiling",
@@ -1875,12 +2123,12 @@
       {
         "gate": "G5_witness_complete_bits_le_arm4_bpe256",
         "passed": true,
-        "detail": "arm3_complete=81480 b (pkg=71640 + witness_dec=9840) <= arm4_canonical_huff=82784 b (fixed8=90528 b) & arm4_original_huff=165872 b; [pre-minified compact_huff=59560 b logged separately]"
+        "detail": "B3H1_huff=81480 b (pkg=71640 + dec=9840) <= arm4_canonical_huff=82784 b & arm4_original_huff=165872 b; B3P1_fixed6=93048 b (pkg=83208 + dec=9840) [vs arm4_canonical_f8=90528 b, arm4_original_f8=180504 b, pre-minified compact_huff=59560 b]"
       },
       {
         "gate": "G6_dev_transfer_frozen_fallback_zero_wrong_acceptances",
         "passed": true,
-        "detail": "accepted=72/83, fallback_ok=11, wrong_acceptances=0, frozen_hash_ok=True"
+        "detail": "accepted=76/83 (91.57%), fallback_ok=7, wrong_acceptances=0, b3h1_and_b3p1_decode_match=True, frozen_dict_sha256_ok=True, decision=PASS (label_contract_ok=True)"
       },
       {
         "gate": "NC1_hidden_helper_rejected",

@@ -124,7 +124,7 @@ def compute_horizon(
     }
 
 
-def run_eval_dev() -> dict[str, Any]:
+def run_eval_dev(freeze_dict: bool = False) -> dict[str, Any]:
     ARTIFACTS.mkdir(parents=True, exist_ok=True)
     t_total0 = time.monotonic()
 
@@ -399,35 +399,47 @@ def run_eval_dev() -> dict[str, Any]:
     assert len(vocab) <= 64
 
     # Freeze dictionary & BPE fallback models for transfer_eval.py (with SHA-256 commitment!)
-    frozen_dict_payload = {
-        "schema": "b3.frozen_dict64.v1",
-        "fit_cohort": "matched80",
-        "fit_pin_commit": cl.MATCHED80_PIN,
-        "rewriter_fingerprint": rw.rewriter_fingerprint(),
-        "fixed_canonical_opts": rw.FIXED_CANONICAL_OPTS,
-        "joint_variant_names": [v for v, _ in rw.JOINT_VARIANT_SPECS],
-        "entries": len(vocab),
-        "vocab": vocab,
-        "huffman_lengths": arm3["huffman_lengths"],
-        "dict_entries_audit": dict_entries_audit,
-        "witness_package_sha256": arm3_huff_bd["package_sha256"],
-        "frozen_fallback_bpe255_canonical": {
-            "base_alphabet": bpe255_canon["base_alphabet"],
-            "merges": bpe255_canon["merges"],
-        },
-        "frozen_fallback_bpe255_original": {
-            "base_alphabet": bpe255_orig["base_alphabet"],
-            "merges": bpe255_orig["merges"],
-        },
-    }
-    frozen_dict_bytes = (json.dumps(frozen_dict_payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
-    (ARTIFACTS / "frozen_dict64.json").write_bytes(frozen_dict_bytes)
+    # When frozen_dict64.json already exists and freeze_dict=False, keep it BYTE-FOR-BYTE IDENTICAL
+    # and assert exact dictionary / Huffman-table / witness-package identity.
+    frozen_dict_path = ARTIFACTS / "frozen_dict64.json"
+    if frozen_dict_path.exists() and not freeze_dict:
+        frozen_dict_bytes = frozen_dict_path.read_bytes()
+        existing_frozen = json.loads(frozen_dict_bytes)
+        assert existing_frozen["vocab"] == vocab, "Re-run Arm 3 vocab drifted from frozen_dict64.json!"
+        assert existing_frozen["huffman_lengths"] == arm3["huffman_lengths"], "Huffman lengths drifted from frozen_dict64.json!"
+        assert existing_frozen["witness_package_sha256"] == arm3_huff_bd["package_sha256"], "Witness B3H1 package drifted!"
+    else:
+        frozen_dict_payload = {
+            "schema": "b3.frozen_dict64.v1",
+            "fit_cohort": "matched80",
+            "fit_pin_commit": cl.MATCHED80_PIN,
+            "rewriter_fingerprint": rw.rewriter_fingerprint(),
+            "fixed_canonical_opts": rw.FIXED_CANONICAL_OPTS,
+            "joint_variant_names": [v for v, _ in rw.JOINT_VARIANT_SPECS],
+            "entries": len(vocab),
+            "vocab": vocab,
+            "huffman_lengths": arm3["huffman_lengths"],
+            "dict_entries_audit": dict_entries_audit,
+            "witness_package_sha256": arm3_huff_bd["package_sha256"],
+            "frozen_fallback_bpe255_canonical": {
+                "base_alphabet": bpe255_canon["base_alphabet"],
+                "merges": bpe255_canon["merges"],
+            },
+            "frozen_fallback_bpe255_original": {
+                "base_alphabet": bpe255_orig["base_alphabet"],
+                "merges": bpe255_orig["merges"],
+            },
+        }
+        frozen_dict_bytes = (json.dumps(frozen_dict_payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
+        frozen_dict_path.write_bytes(frozen_dict_bytes)
 
     helper_accounting = measure_helper_bits_in_sources(arm3["texts"], vocab, arm3["huffman_lengths"])
 
-    # Compute break-even horizons H* against Arm 4 (canonical primary, original, compact) and raw UTF-8
+    # Compute break-even horizons H* for BOTH B3H1 (Huffman) and B3P1 (Fixed-6-bit)
     fixed_overhead = arm3_huff_bd["header_bits"] + arm3_huff_bd["decoder_machinery_bits"]
     stream_bits = arm3_huff_bd["coded_stream_bits"]
+    fixed6_overhead = arm3_f6_bd["header_bits"] + arm3_f6_bd["decoder_machinery_bits"]
+    fixed6_stream_bits = arm3_f6_bd["coded_stream_bits"]
     horizons = {
         "vs_arm4_bpe256_canonical_huffman": compute_horizon(
             fixed_overhead, stream_bits, arm4_variants["canonical"]["huffman"]["complete_bits"], 80, arm4_variants["canonical"]["raw_bytes"]
@@ -444,6 +456,15 @@ def run_eval_dev() -> dict[str, Any]:
         "vs_raw_canonical_utf8": compute_horizon(
             fixed_overhead, stream_bits, arm4_variants["canonical"]["raw_bytes"] * 8, 80, arm4_variants["canonical"]["raw_bytes"]
         ),
+        "b3p1_fixed6_vs_arm4_bpe256_canonical_fixed8": compute_horizon(
+            fixed6_overhead, fixed6_stream_bits, arm4_variants["canonical"]["fixed8"]["complete_bits"], 80, arm4_variants["canonical"]["raw_bytes"]
+        ),
+        "b3p1_fixed6_vs_arm4_bpe256_original_fixed8": compute_horizon(
+            fixed6_overhead, fixed6_stream_bits, arm4_variants["original"]["fixed8"]["complete_bits"], 80, arm4_variants["original"]["raw_bytes"]
+        ),
+        "b3p1_fixed6_vs_raw_canonical_utf8": compute_horizon(
+            fixed6_overhead, fixed6_stream_bits, arm4_variants["canonical"]["raw_bytes"] * 8, 80, arm4_variants["canonical"]["raw_bytes"]
+        ),
     }
 
     # Check Arm 3 witness decision against Arm 4 primary raw control (canonical matched80 79/92) & original
@@ -451,6 +472,8 @@ def run_eval_dev() -> dict[str, Any]:
     arm3_beats_arm4_canonical_f8 = arm3_huff_bd["complete_bits"] <= arm4_variants["canonical"]["fixed8"]["complete_bits"]
     arm3_beats_arm4_original_huff = arm3_huff_bd["complete_bits"] <= arm4_variants["original"]["huffman"]["complete_bits"]
     arm3_beats_arm4_compact_huff = arm3_huff_bd["complete_bits"] <= arm4_variants["compact"]["huffman"]["complete_bits"]
+    arm3_f6_beats_arm4_canonical_f8 = arm3_f6_bd["complete_bits"] <= arm4_variants["canonical"]["fixed8"]["complete_bits"]
+    arm3_f6_beats_arm4_original_f8 = arm3_f6_bd["complete_bits"] <= arm4_variants["original"]["fixed8"]["complete_bits"]
 
     # Rewrite yield & diagnostics
     canon_total_bytes = sum(len(canon_by_id[pid].encode("utf-8")) for pid in pids)
@@ -459,6 +482,7 @@ def run_eval_dev() -> dict[str, Any]:
 
     summary = {
         "schema": "b3.matched80.eval_dev.v1",
+        "rewriter_fingerprint": rw.rewriter_fingerprint(),
         "host": {
             "platform": platform.platform(),
             "python": platform.python_version(),
@@ -521,6 +545,8 @@ def run_eval_dev() -> dict[str, Any]:
                 "beats_arm4_canonical_fixed8_with_decoder": arm3_beats_arm4_canonical_f8,
                 "beats_arm4_original_huffman_with_decoder": arm3_beats_arm4_original_huff,
                 "beats_arm4_compact_huffman_with_decoder": arm3_beats_arm4_compact_huff,
+                "b3p1_fixed6_beats_arm4_canonical_fixed8_with_decoder": arm3_f6_beats_arm4_canonical_f8,
+                "b3p1_fixed6_beats_arm4_original_fixed8_with_decoder": arm3_f6_beats_arm4_original_f8,
             },
             "arm4_frozen_bpe256_raw": arm4_variants,
         },
@@ -541,6 +567,13 @@ def run_eval_dev() -> dict[str, Any]:
                 "changed_algorithms": 0,
             },
             "complete_bits": {
+                "arm3_b3h1_huffman_complete_bits": arm3_huff_bd["complete_bits"],
+                "arm3_b3h1_huffman_package_bits_excluding_decoder": arm3_huff_bd["package_bits_excluding_decoder"],
+                "arm3_b3p1_fixed6_complete_bits": arm3_f6_bd["complete_bits"],
+                "arm3_b3p1_fixed6_package_bits_excluding_decoder": arm3_f6_bd["package_bits_excluding_decoder"],
+                "arm3_b3p1_fixed6_header_bits": arm3_f6_bd["header_bits"],
+                "arm3_b3p1_fixed6_coded_stream_bits": arm3_f6_bd["coded_stream_bits"],
+                "arm3_b3p1_fixed6_decoder_machinery_bits": arm3_f6_bd["decoder_machinery_bits"],
                 "arm3_witness_complete_bits": arm3_huff_bd["complete_bits"],
                 "arm3_witness_package_bits_excluding_decoder": arm3_huff_bd["package_bits_excluding_decoder"],
                 "arm3_header_bits": arm3_huff_bd["header_bits"],
@@ -551,7 +584,9 @@ def run_eval_dev() -> dict[str, Any]:
                 "arm4_canonical_huffman_complete_bits": arm4_variants["canonical"]["huffman"]["complete_bits"],
                 "arm4_canonical_fixed8_complete_bits": arm4_variants["canonical"]["fixed8"]["complete_bits"],
                 "arm4_original_huffman_complete_bits": arm4_variants["original"]["huffman"]["complete_bits"],
+                "arm4_original_fixed8_complete_bits": arm4_variants["original"]["fixed8"]["complete_bits"],
                 "arm4_compact_huffman_complete_bits": arm4_variants["compact"]["huffman"]["complete_bits"],
+                "arm4_compact_fixed8_complete_bits": arm4_variants["compact"]["fixed8"]["complete_bits"],
             },
             "measured_work": {
                 "load_seconds": round(load_seconds, 4),

@@ -275,6 +275,102 @@ def decode_b3p1(buf: bytes, max_width: int = 8) -> dict[str, Any]:
     }
 
 
+def decode_b3p1_transfer(buf: bytes, max_width: int = 8) -> dict[str, Any]:
+    if len(buf) < 7 or buf[:4] != b"B3PT":
+        raise DecodeError("bad B3PT magic")
+    width = buf[4]
+    fb_mode = buf[5]
+    if width < 1 or width > max_width:
+        raise DecodeError(f"invalid B3PT width {width}")
+    if fb_mode not in (1, 2):
+        raise DecodeError(f"invalid B3PT fallback mode {fb_mode}")
+    entries, pos = _read_dictionary(buf, 6, 1 << width)
+
+    fb_vocab: list[bytes] | None = None
+    if fb_mode == 2:
+        n_base, pos = _read_varint(buf, pos)
+        if pos + n_base > len(buf):
+            raise DecodeError("truncated B3PT fallback base alphabet")
+        fb_vocab = [bytes([buf[pos + i]]) for i in range(n_base)]
+        pos += n_base
+        n_merges, pos = _read_varint(buf, pos)
+        if pos + 2 * n_merges > len(buf):
+            raise DecodeError("truncated B3PT fallback merges")
+        for _ in range(n_merges):
+            a, b = buf[pos], buf[pos + 1]
+            pos += 2
+            if a >= len(fb_vocab) or b >= len(fb_vocab):
+                raise DecodeError("invalid B3PT fallback merge")
+            fb_vocab.append(fb_vocab[a] + fb_vocab[b])
+
+    n_programs, pos = _read_varint(buf, pos)
+    sel_bytes = (n_programs + 7) // 8
+    if pos + sel_bytes > len(buf):
+        raise DecodeError("truncated B3PT selector bitmap")
+    sel_raw = buf[pos : pos + sel_bytes]
+    pos += sel_bytes
+    for k in range(n_programs, sel_bytes * 8):
+        if (sel_raw[k >> 3] >> (7 - (k & 7))) & 1:
+            raise DecodeError("non-zero padding bit in B3PT selector bitmap")
+    modes = [(sel_raw[k >> 3] >> (7 - (k & 7))) & 1 for k in range(n_programs)]
+
+    programs: list[str] = []
+    token_counts: list[int] = []
+    used_ids: set[int] = set()
+    for m in modes:
+        if m == 0:
+            n_tok, pos = _read_varint(buf, pos)
+            ids, pos = _unpack_fixed(buf, pos, n_tok, width, len(entries))
+            used_ids.update(ids)
+            programs.append(b"".join(entries[i] for i in ids).decode("utf-8"))
+            token_counts.append(n_tok)
+        elif fb_mode == 1:
+            ln, pos = _read_varint(buf, pos)
+            if pos + ln > len(buf):
+                raise DecodeError("truncated B3PT raw fallback record")
+            programs.append(buf[pos : pos + ln].decode("utf-8"))
+            pos += ln
+            token_counts.append(ln)
+        else:
+            assert fb_vocab is not None
+            nt, pos = _read_varint(buf, pos)
+            esc = len(fb_vocab)
+            cur = bytearray()
+            for _ in range(nt):
+                if pos >= len(buf):
+                    raise DecodeError("truncated B3PT BPE fallback record")
+                sym = buf[pos]
+                pos += 1
+                if sym == esc:
+                    if pos >= len(buf):
+                        raise DecodeError("truncated B3PT BPE fallback escape")
+                    cur.append(buf[pos])
+                    pos += 1
+                elif sym < esc:
+                    cur.extend(fb_vocab[sym])
+                else:
+                    raise DecodeError(f"invalid B3PT fallback ID {sym} >= {esc}")
+            programs.append(cur.decode("utf-8"))
+            token_counts.append(nt)
+
+    if pos != len(buf):
+        raise DecodeError(f"trailing bytes after B3PT stream: {len(buf) - pos}")
+    return {
+        "format": "B3PT",
+        "width": width,
+        "fallback_mode": fb_mode,
+        "dictionary": [e.decode("utf-8") for e in entries],
+        "programs": programs,
+        "modes": modes,
+        "token_counts": token_counts,
+        "used_entries": len(used_ids),
+        "covered_count": sum(m == 0 for m in modes),
+        "fallback_count": sum(m == 1 for m in modes),
+        "package_bytes": len(buf),
+        "package_sha256": hashlib.sha256(buf).hexdigest(),
+    }
+
+
 def decode_b3b1(buf: bytes) -> dict[str, Any]:
     if len(buf) < 8 or buf[:4] != b"B3B1":
         raise DecodeError("bad B3B1 magic")
@@ -399,6 +495,8 @@ def decode_package(buf: bytes) -> dict[str, Any]:
         return decode_b3h1(buf)
     if magic == b"B3P1":
         return decode_b3p1(buf)
+    if magic == b"B3PT":
+        return decode_b3p1_transfer(buf)
     if magic == b"B3B1":
         return decode_b3b1(buf)
     raise DecodeError(f"unknown package magic {magic!r}")
