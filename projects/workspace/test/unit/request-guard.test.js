@@ -258,3 +258,14 @@ test('commit gate: an approval with a request rule is refused before Save on an 
     assert.equal(ws.server.writes, 0);
   } finally { await ws.close(); }
 });
+
+test('request guard: array items are checked in order, and an unreadable body is refused', () => {
+  const lines = { method: 'POST', url: API, fields: { 'lines[]': 'a' }, versionPath: 'lockVersion' };
+  // Fields name single values; a multi-item array cannot be approved item by item and is refused.
+  assert.equal(checkWriteRequest(lines, 7, { method: 'POST', url: API, postData: JSON.stringify({ lockVersion: 7, lines: ['a'] }) }).ok, true);
+  assert.equal(checkWriteRequest(lines, 7, { method: 'POST', url: API, postData: JSON.stringify({ lockVersion: 7, lines: ['a', 'b'] }) }).reason,
+    'request-payload-mismatch');
+  // More leaf fields than the body classifier holds is refused, not passed.
+  const wide = Object.fromEntries(Array.from({ length: 70 }, (_, i) => [`k${i}`, i]));
+  assert.equal(checkWriteRequest({ ...RULE, allowPaths: ['k*'] }, 7, patch({ lockVersion: 7, estimatedTime: 'PT56H', ...wide })).reason, 'request-payload-mismatch');
+});

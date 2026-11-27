@@ -68,6 +68,10 @@ test('pure decision: the approval binds target, field, method and payload; advic
   // Equivalent encodings share a digest; opaque bodies cannot be approved.
   assert.equal(payloadDigest('{"b":2,"a":1}'), payloadDigest({ a: 1, b: 2 }));
   assert.notEqual(payloadDigest({ value: 'Ada' }), payloadDigest({ value: 'Eve' }));
+  // Array items and a repeated form key keep their order in the binding.
+  assert.notEqual(payloadDigest({ value: ['a', 'b'] }), payloadDigest({ value: ['b', 'a'] }));
+  assert.notEqual(payloadDigest('tag=a&tag=b'), payloadDigest('tag=b&tag=a'));
+  assert.equal(payloadDigest('b=2&a=1'), payloadDigest('a=1&b=2'));
   assert.equal(payloadDigest(new Uint8Array([1])), null);
 });
 
