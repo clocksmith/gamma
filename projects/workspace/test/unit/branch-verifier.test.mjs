@@ -182,3 +182,20 @@ test('a declared body pins outbound values and blocks single-candidate payload s
   ] });
   assert.deepEqual(verdicts(truncated), { huge: 'observation-truncated' });
 });
+
+test('a declared body pins array order: swapped items or values are a different body', () => {
+  const payload = { lines: [{ id: 1, role: 'owner' }, { id: 2, role: 'viewer' }] };
+  const swappedRoles = { lines: [{ id: 1, role: 'viewer' }, { id: 2, role: 'owner' }] };
+  const swappedItems = { lines: [{ id: 2, role: 'viewer' }, { id: 1, role: 'owner' }] };
+  assert.notDeepEqual(expectedBodyFields(swappedRoles).fields, expectedBodyFields(payload).fields);
+  assert.notDeepEqual(expectedBodyFields(swappedItems).fields, expectedBodyFields(payload).fields);
+  assert.notDeepEqual(expectedBodyFields('tag=a&tag=b').fields, expectedBodyFields('tag=b&tag=a').fields);
+  // Object key order is not part of a JSON body.
+  assert.deepEqual(expectedBodyFields({ b: 2, a: 1 }).fields, expectedBodyFields({ a: 1, b: 2 }).fields);
+  const declared = { ...expect, method: 'POST', body: payload };
+  const result = verifyBranches({ control, candidates: [
+    candidate('exact', { intents: [intent('POST', expectedBodyFields(payload).fields, 'json')] }, { expect: declared }),
+    candidate('swapped', { intents: [intent('POST', expectedBodyFields(swappedRoles).fields, 'json')] }, { expect: declared }),
+  ] });
+  assert.deepEqual(verdicts(result), { exact: 'eligible', swapped: 'unexpected-body-value' });
+});

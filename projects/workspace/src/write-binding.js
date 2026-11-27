@@ -28,7 +28,8 @@ function canonicalBody(payload, kind) {
   if (kind === 'json') return typeof payload === 'string' ? JSON.parse(payload) : JSON.parse(JSON.stringify(payload));
   const entries = [...(typeof payload === 'string' ? new URLSearchParams(payload) : payload).entries()];
   if (entries.some(([, value]) => typeof value !== 'string')) return undefined;
-  return entries.sort((x, y) => (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : x[1] < y[1] ? -1 : x[1] > y[1] ? 1 : 0));
+  // Stable by key: a key sent twice keeps its values' order.
+  return entries.sort((x, y) => (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));
 }
 
 /**

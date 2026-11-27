@@ -69,7 +69,8 @@ export function computeExpectedBranchBodyPairs(intentPayload) {
     fawnBranchDigest(typeof val === 'string' ? val : (JSON.stringify(val) ?? String(val))),
   ]);
   if (fields.length > LIMIT) truncated = true;
-  fields.sort((x, y) => (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : x[1] < y[1] ? -1 : x[1] > y[1] ? 1 : 0));
+  // Stable by path, as branchExpression sorts: repeated paths keep their send order.
+  fields.sort((x, y) => (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));
   return { truncated, fields: fields.slice(0, LIMIT) };
 }
 

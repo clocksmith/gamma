@@ -29,6 +29,10 @@ function flattenBody(value, path, out, depth, limit, maxDepth) {
   return false;
 }
 
+// Sorts [path, digest] pairs by path only. The sort is stable, so repeated paths (array items, a
+// form key sent twice) keep the order they were sent in: a swapped list is a different body.
+function byName(x, y) { return x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0; }
+
 function digestPairs(entries) {
   const fields = [];
   for (const [name, value] of entries) {
@@ -36,7 +40,7 @@ function digestPairs(entries) {
     fields.push([String(name).slice(0, LIMITS.text), digestValue(file ? 'file:' + value.size : typeof value === 'string' ? value : JSON.stringify(value) ?? String(value))]);
   }
   const truncated = fields.length > LIMITS.list;
-  fields.sort((x, y) => x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : x[1] < y[1] ? -1 : x[1] > y[1] ? 1 : 0);
+  fields.sort(byName);
   return { fields: fields.slice(0, LIMITS.list), truncated };
 }
 
@@ -167,7 +171,7 @@ export function branchExpression(action) {
       fields.push([String(name).slice(0, TEXT), digest(file ? 'file:' + value.size : typeof value === 'string' ? value : JSON.stringify(value) ?? String(value))]);
     }
     if (fields.length > LIMIT) intentsTruncated = true;
-    return fields.sort((x, y) => x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : x[1] < y[1] ? -1 : x[1] > y[1] ? 1 : 0).slice(0, LIMIT);
+    return fields.sort(${byName}).slice(0, LIMIT);
   };
   const summarize = body => {
     if (body === null || body === undefined) return { kind: 'none', bytes: 0, fields: [] };

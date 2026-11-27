@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { chromium } from 'playwright-core';
-import { branchExpression } from '../../src/client/branch-verifier.js';
+import { branchExpression, expectedBodyFields } from '../../src/client/branch-verifier.js';
 
 // Runs the page-side observation in a real browser when BRANCH_VERIFIER_BROWSER names a Chromium binary.
 const executablePath = process.env.BRANCH_VERIFIER_BROWSER;
@@ -90,6 +90,11 @@ test('records what the page tried to send in a real browser', { skip: !executabl
 
     const nested = await run(`fetch('/graphql', { method: 'POST', body: JSON.stringify({ query: 'mutation', variables: { input: { hours: 12, surcharge: 90 }, lines: [{ price: 1 }, { price: 2 }] } }) })`);
     assert.deepEqual(names(nested.intents[0]), ['query', 'variables.input.hours', 'variables.input.surcharge', 'variables.lines[].price', 'variables.lines[].price']);
+    // The page record keeps array order, the same as the host-side expectedBodyFields.
+    const ordered = await run(`fetch('/bulk', { method: 'POST', body: JSON.stringify({ lines: [{ id: 1, role: 'owner' }, { id: 2, role: 'viewer' }] }) })`);
+    const swapped = await run(`fetch('/bulk', { method: 'POST', body: JSON.stringify({ lines: [{ id: 1, role: 'viewer' }, { id: 2, role: 'owner' }] }) })`);
+    assert.notDeepEqual(ordered.intents[0].body.fields, swapped.intents[0].body.fields);
+    assert.deepEqual(ordered.intents[0].body.fields, expectedBodyFields({ lines: [{ id: 1, role: 'owner' }, { id: 2, role: 'viewer' }] }).fields);
     const list = await run(`fetch('/bulk', { method: 'POST', body: JSON.stringify([{ id: 1 }]) })`);
     assert.equal(list.intents[0].body.kind, 'json');
     assert.deepEqual(names(list.intents[0]), ['[].id']);
