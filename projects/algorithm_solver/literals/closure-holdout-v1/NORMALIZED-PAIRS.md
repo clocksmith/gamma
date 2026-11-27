@@ -63,10 +63,12 @@ Then any sequence of closed additions V0 c V1 c ... c Vm with w in Vm has m >= k
 s(w) by at most 1; s must fall from k to 1. QED. The condition is needed: a^(2^r) has s = 2^r over {a} but is
 reached in r doublings.
 
-So a closure-preserving rule pays at least k - 1 slots for a fragment that an open rule buys with one. On the
-training files, 47% of the exact open chain's savings at 3,924 fragments come from uses that save more than one token
-(`out/dev-predictors.json`, leverage share 0.471), which is where this tax applies. That predicts that a
-closure-preserving selector will not match open token gain's training savings at equal slots; DEV-BUNDLE.md tests it.
+So a closure-preserving rule pays at least k - 1 slots for a fragment that an open rule buys with one. A description
+of the final vocabulary only: in the exact open chain's 3,924-fragment vocabulary, comparing each use of a fragment in
+the training parse with spelling it from the rest of that vocabulary, 47% of those local savings come from uses that
+save more than one token (`out/dev-predictors.json`, leverage share 0.471). That is neither the gain accumulated during
+training nor the share of fragments that meet the corollary's condition. DEV-BUNDLE.md tests one closure-preserving
+rule against open token gain's training fit.
 
 ## What it means for the experiments
 
