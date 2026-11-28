@@ -18,6 +18,7 @@ import json
 import re
 import sys
 import time
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -33,10 +34,10 @@ from predictor import predict_switch_benefit, summarize_paired_search_outcomes
 from switch_engine import (
     ByteLevelTestTokenizer,
     PairedSwitchAdapter,
+    PrefillState,
     adapt_arm_equal_budget,
     build_switch_adaptation_sequences,
     build_synthetic_transformer,
-    clone_kv_cache,
     get_peak_rss_bytes,
     run_forced_call_check,
     verify_cache_reuse_and_rebuild_parity,
@@ -48,6 +49,7 @@ from switch_point import (
     verify_switch_point_snapshot,
 )
 from verifier import HELPER_TOKEN_SYMBOL, SingleBindRegistry, verify_candidate
+from work_budget import ArmBudget, OutOfBudget, positive_nanoseconds
 
 
 FIXTURE_PATH = HERE / "fixtures" / "skip_equal_switch_point.json"
@@ -272,6 +274,7 @@ def _sample_continuation_from_cache(
     max_new_tokens: int,
     eos_token_id: int | None,
     temperature: float,
+    budget: ArmBudget,
 ) -> tuple[list[int], int]:
     """Generate one candidate attempt forward-only from a cloned KV cache."""
     if prompt_suffix_ids:
@@ -286,6 +289,7 @@ def _sample_continuation_from_cache(
     generated: list[int] = []
     with torch.no_grad():
         for _ in range(max_new_tokens):
+            budget.checkpoint()
             if temperature <= 0.0:
                 tok_id = int(next_logits.argmax(dim=-1).item())
             else:
@@ -296,6 +300,7 @@ def _sample_continuation_from_cache(
                 break
             inp = torch.tensor([[tok_id]], dtype=torch.long, device=adapter.device)
             pos_ids = torch.tensor([[pos]], dtype=torch.long, device=adapter.device)
+            budget.checkpoint()
             out = adapter.model(
                 input_ids=inp,
                 position_ids=pos_ids,
@@ -308,6 +313,122 @@ def _sample_continuation_from_cache(
     return generated, len(prompt_suffix_ids) + len(generated)
 
 
+def _device_synchronizer(device: torch.device) -> Callable[[], None]:
+    if device.type == "cuda":
+        return lambda: torch.cuda.synchronize(device)
+    if device.type == "mps":
+        return torch.mps.synchronize
+    return lambda: None
+
+
+def _run_live_arm(
+    arm: str,
+    problem: dict[str, Any],
+    snapshot: dict[str, Any],
+    prefill: PrefillState | None,
+    adapter: PairedSwitchAdapter,
+    tokenizer: Any,
+    budget: ArmBudget,
+    *,
+    attempt_cap: int,
+    setup_steps: int,
+    learning_rate: float,
+    max_new_tokens: int,
+    verifier_timeout: float,
+) -> tuple[dict[str, Any], dict[str, Any] | None]:
+    alias = arm != "ordinary_named_fn"
+    verify_ns = positive_nanoseconds(verifier_timeout)
+    state = None
+    solved = False
+    status = "attempt_cap"
+    blocked_phase = None
+    attempts = checks = calls = generation_tokens = 0
+    verifier_statuses: dict[str, int] = {}
+    partial_generation = False
+
+    try:
+        budget.enter("setup")
+        binding = (
+            SingleBindRegistry().bind_once(problem["helper_name"], adapter.helper_token_id)
+            if alias else None
+        )
+
+        def encode(text: str) -> list[int]:
+            return tokenizer.encode(text, add_special_tokens=False)
+
+        examples = (
+            build_switch_adaptation_sequences(snapshot, encode)
+            if arm in ("score_only_alias", "score_and_input_alias") else []
+        )
+        budget.checkpoint()
+        state = adapt_arm_equal_budget(
+            adapter, arm_name=arm, adaptation_examples=examples, setup_budget_steps=setup_steps,
+            lr=learning_rate, checkpoint=budget.checkpoint,
+        )
+        budget.checkpoint()
+        adapter.set_deltas(state["delta_out"], state["delta_in"])
+        restore_rng_state(snapshot["rng_state"])
+        exposure_key = "alias_arms" if alias else "ordinary_named_fn_arm"
+        exposure = snapshot["switch_exposure"][exposure_key]
+        suffix = encode(f"[SYSTEM_SWITCH]\n{exposure}\n[ASSISTANT]\n```python\n")
+        cases = problem["public_cases"] + problem["hidden_cases"]
+        for attempt in range(attempt_cap):
+            # An attempt cannot yield a verified solution without one full verifier window.
+            budget.enter("generation", reserve_ns=verify_ns)
+            attempts += 1
+            partial_generation = True
+            ids, tokens = _sample_continuation_from_cache(
+                adapter, past_key_values=prefill.past_key_values,
+                start_pos=len(snapshot["prefix_token_ids"]), prompt_suffix_ids=suffix,
+                max_new_tokens=max_new_tokens, eos_token_id=tokenizer.eos_token_id,
+                temperature=0.0 if attempt == 0 else 0.7, budget=budget,
+            )
+            generation_tokens += tokens
+            partial_generation = False
+            source = _extract_python_code(tokenizer.decode(ids, skip_special_tokens=False))
+            budget.enter("verification", reserve_ns=verify_ns)
+            checks += 1
+            verdict = verify_candidate(
+                source, entry_point=problem["entry_point"], cases=cases, helper_name=problem["helper_name"],
+                binding=binding, arm_uses_alias=alias, timeout_seconds=verifier_timeout,
+                deadline_ns=budget.deadline,
+            )
+            calls += int(verdict.get("syntactic_helper_calls", 0))
+            status = verdict["status"]
+            verifier_statuses[status] = verifier_statuses.get(status, 0) + 1
+            if verdict["passed"]:
+                solved = True
+                break
+    except OutOfBudget as exc:
+        blocked_phase = str(exc)
+
+    spent_ns = budget.finish()
+    if spent_ns > budget.limit_ns:
+        blocked_phase = blocked_phase or budget.phase
+    if blocked_phase is not None:
+        solved = False
+        status = "budget_exhausted"
+
+    seconds = spent_ns / 1e9
+    record = {
+        "problem_id": problem["problem_id"], "family": problem["family"],
+        "utility_regime": problem["utility_regime"],
+        "switch_point_id": f"{problem['problem_id']}@cap{attempt_cap}", "attempt_cap": attempt_cap,
+        "arm": arm, "solved": solved, "status": status, "attempts_started": attempts,
+        "failed_attempts": attempts - int(solved),
+        "verifier_calls": checks, "verifier_statuses": verifier_statuses, "helper_calls": calls,
+        "setup_tokens": state["tokens_processed"] if state is not None else None,
+        "generation_tokens_completed_attempts": generation_tokens, "interrupted_generation": partial_generation,
+        "total_work_units": seconds, "elapsed_seconds": seconds,
+        "work_to_first_verified": seconds if solved else None,
+        "budget_limit_ns": budget.limit_ns, "phase_ns": budget.phase_ns,
+        "remaining_ns": max(0, budget.limit_ns - spent_ns),
+        "overrun_ns": max(0, spent_ns - budget.limit_ns), "blocked_phase": blocked_phase,
+        "peak_memory_bytes": get_peak_rss_bytes(),
+    }
+    return record, state
+
+
 def cmd_run_live(args: argparse.Namespace) -> int:
     """Run live free-search paired comparison on a user-provisioned HF causal LM."""
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -318,12 +439,8 @@ def cmd_run_live(args: argparse.Namespace) -> int:
 
     local_only = not args.allow_download
     dtype = torch.bfloat16 if args.dtype == "bfloat16" else torch.float32
-    tol = (
-        contract["numerical_verification_gates"]["rebuild_parity_tol_bf16"]
-        if dtype == torch.bfloat16
-        else contract["numerical_verification_gates"]["rebuild_parity_tol_fp32"]
-    )
-
+    limit_ns = positive_nanoseconds(args.arm_budget_seconds)
+    preparation_start = time.perf_counter()
     tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=local_only)
     if HELPER_TOKEN_SYMBOL not in tokenizer.get_vocab():
         raise SystemExit(
@@ -355,12 +472,16 @@ def cmd_run_live(args: argparse.Namespace) -> int:
     timeout_s = float(contract["search_budgets"]["verifier_timeout_seconds"])
 
     adapter = PairedSwitchAdapter(model, helper_token_id=helper_token_id)
+    sync = _device_synchronizer(adapter.device)
+    sync()
+    preparation_seconds = time.perf_counter() - preparation_start
     records: list[dict[str, Any]] = []
     gate_receipts: list[dict[str, Any]] = []
 
     try:
         for prob in problems:
             for cap in caps:
+                snapshot_start = time.perf_counter()
                 snap = build_switch_point(
                     problem=prob,
                     tokenizer_encode=lambda s: tokenizer.encode(s, add_special_tokens=False),
@@ -370,148 +491,69 @@ def cmd_run_live(args: argparse.Namespace) -> int:
                     setup_budget_steps=setup_steps,
                     seed=20261127,
                 )
+                # The snapshot supplies the completed search history and the fixed helper.
+                # Measure shared switch work once and debit its full cost to every continuation.
+                snapshot_seconds = time.perf_counter() - snapshot_start
+                shared = ArmBudget(limit_ns, synchronize=sync)
                 pred = predict_switch_benefit(snap)
-                adapt_examples = build_switch_adaptation_sequences(
-                    snap, lambda s: tokenizer.encode(s, add_special_tokens=False)
-                )
-
-                # Prefill saved prefix once (verified absent of helper_token_id).
-                adapter.set_deltas(None, None)
-                prefill = adapter.prefill_prefix(snap["prefix_token_ids"])
-
-                # Adapt score_only and score_and_input under equal budget.
-                arm_states: dict[str, dict[str, Any]] = {}
-                for arm in ("frozen_alias", "score_only_alias", "score_and_input_alias", "ordinary_named_fn"):
-                    arm_states[arm] = adapt_arm_equal_budget(
-                        adapter,
-                        arm_name=arm,
-                        adaptation_examples=adapt_examples,
-                        setup_budget_steps=setup_steps,
-                        lr=float(contract["adaptation_policy"]["learning_rate"]),
+                prefill = None
+                try:
+                    adapter.set_deltas(None, None)
+                    shared.checkpoint()
+                    prefill = adapter.prefill_prefix(snap["prefix_token_ids"])
+                except OutOfBudget:
+                    pass
+                shared_ns = shared.finish()
+                joint_state = None
+                for entry in contract["arms"]:
+                    arm = entry["name"]
+                    budget = ArmBudget(limit_ns, shared_setup_ns=shared_ns, synchronize=sync)
+                    record, state = _run_live_arm(
+                        arm, prob, snap, prefill, adapter, tokenizer, budget,
+                        attempt_cap=cap, setup_steps=setup_steps,
+                        learning_rate=float(contract["adaptation_policy"]["learning_rate"]),
+                        max_new_tokens=max_new_tokens, verifier_timeout=timeout_s,
                     )
+                    records.append(record)
+                    if arm == "score_and_input_alias":
+                        joint_state = state
 
-                # Mandatory Section 3 gates on this live model & switch point before free search.
-                pre_call_ids = tokenizer.encode(
-                    snap["switch_exposure"]["alias_arms"].replace(HELPER_TOKEN_SYMBOL, "HELPER_OP")
-                    + "\nj = ",
-                    add_special_tokens=False,
-                )
-                forced_ops_ids = tokenizer.encode("(xs, i)\n", add_special_tokens=False)
-                forced_ver_ids = tokenizer.encode("\n[TOOL]\nVERIFIER: retry\n", add_special_tokens=False)
-                fc = run_forced_call_check(
-                    adapter,
-                    prefix_token_ids=snap["prefix_token_ids"],
-                    pre_call_tokens=pre_call_ids,
-                    forced_operands_and_body_tokens=forced_ops_ids,
-                    forced_verifier_response_tokens=forced_ver_ids,
-                    shared_delta_out=arm_states["score_and_input_alias"]["delta_out"],
-                    adapted_delta_in=arm_states["score_and_input_alias"]["delta_in"],
-                )
-                if not fc["fixture_passed"]:
-                    raise RuntimeError(
-                        f"Forced-call pre-call gate FAILED on {prob['problem_id']}: {fc}"
-                    )
-                gate_receipts.append(
-                    {
-                        "problem_id": prob["problem_id"],
-                        "attempt_cap": cap,
-                        "forced_call": fc,
-                        "switch_prediction": pred.decision,
-                    }
-                )
-
-                # Free search across all four arms, paired by (problem_id, switch_point_id).
-                switch_point_id = f"{prob['problem_id']}@cap{cap}"
-                all_cases = prob["public_cases"] + prob["hidden_cases"]
-                for arm in ("frozen_alias", "score_only_alias", "score_and_input_alias", "ordinary_named_fn"):
-                    arm_uses_alias = arm != "ordinary_named_fn"
-                    reg = SingleBindRegistry()
-                    binding = (
-                        reg.bind_once(prob["helper_name"], helper_token_id, HELPER_TOKEN_SYMBOL)
-                        if arm_uses_alias
-                        else None
-                    )
-                    st = arm_states[arm]
-                    adapter.set_deltas(st["delta_out"], st["delta_in"])
-                    restore_rng_state(snap["rng_state"])
-
-                    exposure = (
-                        snap["switch_exposure"]["alias_arms"]
-                        if arm_uses_alias
-                        else snap["switch_exposure"]["ordinary_named_fn_arm"]
-                    )
-                    suffix_ids = tokenizer.encode(
-                        f"[SYSTEM_SWITCH]\n{exposure}\n[ASSISTANT]\n```python\n",
-                        add_special_tokens=False,
-                    )
-
+                # Offline diagnostic, performed only after paired search outcomes are fixed.
+                gate = {
+                    "problem_id": prob["problem_id"], "attempt_cap": cap,
+                    "switch_prediction": pred.decision,
+                    "snapshot_preparation_seconds": snapshot_seconds,
+                    "forced_call": {"status": "joint_setup_incomplete", "fixture_passed": False},
+                }
+                if joint_state is not None:
                     started = time.perf_counter()
-                    solved = False
-                    status = "budget_exhausted"
-                    failed_attempts = 0
-                    helper_calls = 0
-                    gen_tokens = 0
-                    work_to_first = None
-                    setup_work_tokens = int(st["tokens_processed"])
-
-                    for att_idx in range(1, cap + 1):
-                        temp = 0.0 if att_idx == 1 else 0.7
-                        gen_ids, step_toks = _sample_continuation_from_cache(
-                            adapter,
-                            past_key_values=prefill.past_key_values,
-                            start_pos=len(snap["prefix_token_ids"]),
-                            prompt_suffix_ids=suffix_ids,
-                            max_new_tokens=max_new_tokens,
-                            eos_token_id=tokenizer.eos_token_id,
-                            temperature=temp,
-                        )
-                        gen_tokens += step_toks
-                        cand_text = tokenizer.decode(gen_ids, skip_special_tokens=False)
-                        cand_src = _extract_python_code(cand_text)
-                        verdict = verify_candidate(
-                            cand_src,
-                            entry_point=prob["entry_point"],
-                            cases=all_cases,
-                            helper_name=prob["helper_name"],
-                            binding=binding,
-                            arm_uses_alias=arm_uses_alias,
-                            timeout_seconds=timeout_s,
-                        )
-                        helper_calls += int(verdict.get("syntactic_helper_calls", 0))
-                        if verdict["passed"]:
-                            solved = True
-                            status = "pass"
-                            work_to_first = setup_work_tokens + gen_tokens
-                            break
-                        failed_attempts += 1
-                        status = str(verdict["status"])
-
-                    records.append(
-                        {
-                            "problem_id": prob["problem_id"],
-                            "family": prob["family"],
-                            "utility_regime": prob["utility_regime"],
-                            "switch_point_id": switch_point_id,
-                            "attempt_cap": cap,
-                            "arm": arm,
-                            "solved": solved,
-                            "status": status,
-                            "failed_attempts": failed_attempts,
-                            "helper_calls": helper_calls,
-                            "setup_tokens": setup_work_tokens,
-                            "generation_tokens": gen_tokens,
-                            "total_work_units": setup_work_tokens + gen_tokens,
-                            "work_to_first_verified": work_to_first,
-                            "elapsed_seconds": round(time.perf_counter() - started + st["wall_seconds"], 4),
-                            "peak_memory_bytes": get_peak_rss_bytes(),
-                        }
+                    fc = run_forced_call_check(
+                        adapter, prefix_token_ids=snap["prefix_token_ids"],
+                        pre_call_tokens=tokenizer.encode(
+                            snap["switch_exposure"]["alias_arms"].replace(HELPER_TOKEN_SYMBOL, "HELPER_OP")
+                            + "\nj = ", add_special_tokens=False,
+                        ),
+                        forced_operands_and_body_tokens=tokenizer.encode("(xs, i)\n", add_special_tokens=False),
+                        forced_verifier_response_tokens=tokenizer.encode(
+                            "\n[TOOL]\nVERIFIER: retry\n", add_special_tokens=False,
+                        ),
+                        shared_delta_out=joint_state["delta_out"], adapted_delta_in=joint_state["delta_in"],
                     )
+                    sync()
+                    gate.update(forced_call=fc, diagnostic_seconds=time.perf_counter() - started)
+                    if not fc["fixture_passed"]:
+                        raise RuntimeError(f"Forced-call pre-call gate FAILED on {prob['problem_id']}: {fc}")
+                gate_receipts.append(gate)
     finally:
         adapter.close()
 
     summary = summarize_paired_search_outcomes(records)
     payload = {
-        "schema_version": "bits-paired-switch-live-receipt-v1",
+        "schema_version": "bits-paired-switch-live-receipt-v2",
+        "work_unit": "synchronized_elapsed_seconds",
+        "resident_model_preparation_seconds": preparation_seconds,
+        "budget_limit_ns_per_arm": limit_ns,
+        "verifier_reservation_ns": positive_nanoseconds(timeout_s),
         "model": args.model,
         "device": args.device,
         "dtype": args.dtype,
@@ -553,6 +595,8 @@ def main() -> int:
     p_live.add_argument("--reserved-token-id", type=int, default=None)
     p_live.add_argument("--attempt-caps", default="2,32")
     p_live.add_argument("--setup-steps", type=int, default=16)
+    p_live.add_argument("--arm-budget-seconds", required=True, type=float,
+                        help="Identical total elapsed-time allowance per arm, from switch through verification")
     p_live.add_argument("--allow-download", action="store_true", help="Explicitly authorize HF download")
     p_live.add_argument("--output", required=True)
     p_live.set_defaults(func=cmd_run_live)

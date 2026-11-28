@@ -2,9 +2,15 @@
 
 from __future__ import annotations
 
+import io
 import json
 import sys
+import time
 import unittest
+from argparse import Namespace
+from contextlib import redirect_stdout
+from tempfile import TemporaryDirectory
+from unittest.mock import Mock, patch
 from pathlib import Path
 
 import torch
@@ -16,7 +22,7 @@ if str(HERE) not in sys.path:
 from dev_families import DEV_PROBLEMS, get_problem, verify_dev_family_suite
 from helpers import HELPER_SPECS, skip_equal, verify_all_helpers
 from predictor import predict_switch_benefit, summarize_paired_search_outcomes
-from run_experiment import CONTRACT_PATH, run_engine_verification
+from run_experiment import CONTRACT_PATH, _run_live_arm, cmd_run_live, run_engine_verification
 from switch_engine import (
     ByteLevelTestTokenizer,
     PairedSwitchAdapter,
@@ -30,6 +36,153 @@ from switch_point import (
     verify_switch_point_snapshot,
 )
 from verifier import HELPER_TOKEN_SYMBOL, SingleBindRegistry, verify_candidate
+from work_budget import ArmBudget
+
+
+class LiveBudgetTests(unittest.TestCase):
+    """Exercise the admission check on the same arm loop that run-live executes."""
+
+    def run_arm(self, *, setup_ns, generation_ns=0, verification_ns=0, verdicts=(True,)):
+        now = 0
+        window = 50_000_000
+        budget = ArmBudget(100_000_000, shared_setup_ns=10_000_000,
+                           synchronize=lambda: None, clock=lambda: now)
+
+        def adapt(*_args, **kwargs):
+            nonlocal now
+            now += setup_ns
+            return {"tokens_processed": 11, "delta_in": None, "delta_out": None}
+
+        def generate(*_args, **kwargs):
+            nonlocal now
+            now += generation_ns
+            return [7], 1
+
+        answers = iter(verdicts)
+
+        def verify(*_args, **kwargs):
+            nonlocal now
+            now += verification_ns
+            passed = next(answers)
+            return {"passed": passed, "status": "pass" if passed else "fail"}
+
+        snap = {"prefix_token_ids": [1], "rng_state": {},
+                "switch_exposure": {"alias_arms": "skip_equal(xs, i)"}}
+        with (
+            patch("run_experiment.build_switch_adaptation_sequences", return_value=[]),
+            patch("run_experiment.adapt_arm_equal_budget", side_effect=adapt),
+            patch("run_experiment.restore_rng_state"),
+            patch("run_experiment._sample_continuation_from_cache", side_effect=generate) as generator,
+            patch("run_experiment.verify_candidate", side_effect=verify) as verifier,
+        ):
+            record, _ = _run_live_arm(
+                "score_and_input_alias", DEV_PROBLEMS[0], snap, Mock(), Mock(helper_token_id=259),
+                Mock(decode=Mock(return_value="pass")), budget, attempt_cap=2, setup_steps=1,
+                learning_rate=.05, max_new_tokens=8, verifier_timeout=window / 1e9,
+            )
+        self.assertEqual(record["verifier_calls"], verifier.call_count)
+        self.assertAlmostEqual(sum(record["phase_ns"].values()) / 1e9, record["total_work_units"])
+        return record, generator, verifier
+
+    def test_setup_leaves_one_nanosecond_short_of_one_verification(self):
+        record, generator, verifier = self.run_arm(setup_ns=40_000_001)
+        verifier.assert_not_called()
+        generator.assert_not_called()
+        self.assertFalse(record["solved"])
+        self.assertEqual(record["status"], "budget_exhausted")
+        self.assertEqual(record["remaining_ns"], 49_999_999)
+        self.assertEqual(record["phase_ns"]["shared_setup"], 10_000_000)
+        self.assertEqual(record["phase_ns"]["setup"], 40_000_001)
+
+    def test_generation_can_spend_the_verifier_window(self):
+        record, generator, verifier = self.run_arm(setup_ns=0, generation_ns=40_000_001)
+        generator.assert_called_once()
+        verifier.assert_not_called()
+        self.assertEqual(record["blocked_phase"], "verification")
+        self.assertIsNone(record["work_to_first_verified"])
+
+    def test_verifier_admits_exact_reservation_and_charges_actual_use(self):
+        record, _, verifier = self.run_arm(setup_ns=40_000_000, verification_ns=50_000_000)
+        verifier.assert_called_once()
+        self.assertTrue(record["solved"])
+        self.assertEqual(record["remaining_ns"], 0)
+        self.assertEqual(record["work_to_first_verified"], .1)
+        self.assertEqual(record["phase_ns"]["verification"], 50_000_000)
+
+        retry, _, verifier = self.run_arm(setup_ns=10_000_000, verification_ns=15_000_000,
+                                          verdicts=(False, True))
+        self.assertEqual(verifier.call_count, 2)
+        self.assertEqual(retry["failed_attempts"], 1)
+        self.assertEqual(retry["work_to_first_verified"], .05)
+
+    def test_late_verifier_pass_is_rejected_and_overrun_recorded(self):
+        record, _, verifier = self.run_arm(setup_ns=40_000_000, verification_ns=50_000_001)
+        verifier.assert_called_once()
+        self.assertFalse(record["solved"])
+        self.assertEqual(record["status"], "budget_exhausted")
+        self.assertEqual(record["overrun_ns"], 1)
+        self.assertIsNone(record["work_to_first_verified"])
+
+    def test_verifier_process_stops_at_arm_deadline(self):
+        result = verify_candidate(
+            "def f():\n    import time\n    time.sleep(5)\n    return 1",
+            "f", [{"args": [], "expected": 1}], timeout_seconds=10,
+            deadline_ns=time.perf_counter_ns() + 100_000_000,
+        )
+        self.assertEqual(result["status"], "timeout")
+        self.assertLess(result["elapsed_seconds"], 3)
+
+    def test_live_entry_records_all_arms_on_exhausted_and_admitted_budgets(self):
+        # Use in-memory untrained weights and two one-token attempts, entirely on CPU.
+        self.addCleanup(torch.set_num_threads, torch.get_num_threads())
+        torch.set_num_threads(1)
+        tok = ByteLevelTestTokenizer(helper_token_id=259)
+        tokenizer = Mock(
+            get_vocab=lambda: {HELPER_TOKEN_SYMBOL: 259},
+            convert_tokens_to_ids=lambda _: 259, eos_token_id=tok.eos_token_id,
+            encode=lambda text, **_: tok.encode(text), decode=lambda ids, **_: tok.decode(ids),
+        )
+        model = build_synthetic_transformer(hidden_size=16, num_hidden_layers=1, num_attention_heads=2)
+        contract = json.loads(CONTRACT_PATH.read_text())
+        contract["search_budgets"]["max_new_tokens_per_attempt"] = 1
+        with TemporaryDirectory() as directory:
+            contract_path = Path(directory) / "contract.json"
+            contract_path.write_text(json.dumps(contract))
+            output = Path(directory) / "receipt.json"
+            for limit in (1e-9, 30):
+                with (
+                    self.subTest(seconds=limit),
+                    patch("run_experiment.CONTRACT_PATH", contract_path),
+                    patch("transformers.AutoTokenizer.from_pretrained", return_value=tokenizer),
+                    patch("transformers.AutoModelForCausalLM.from_pretrained", return_value=model),
+                    patch("run_experiment.DEV_PROBLEMS", [DEV_PROBLEMS[0]]),
+                    patch("run_experiment.verify_candidate", wraps=verify_candidate) as verifier,
+                    redirect_stdout(io.StringIO()),
+                ):
+                    args = Namespace(model="in-memory-fixture", allow_download=False, split="dev",
+                                     dtype="float32", device="cpu", reserved_token_id=None,
+                                     attempt_caps="2", setup_steps=1, arm_budget_seconds=limit,
+                                     output=str(output))
+                    self.assertEqual(cmd_run_live(args), 0)
+                    receipt = json.loads(output.read_text())
+                    rows = receipt["records"]
+                    self.assertEqual(len(rows), 4)
+                    self.assertEqual(len({r["phase_ns"]["shared_setup"] for r in rows}), 1)
+                    self.assertTrue(all(r["budget_limit_ns"] == round(limit * 1e9) for r in rows))
+                    self.assertEqual(verifier.call_count, sum(r["verifier_calls"] for r in rows))
+                    if limit == 30:
+                        self.assertEqual(verifier.call_count, 8)
+                        for row in rows:
+                            self.assertGreater(row["phase_ns"]["setup"], 0)
+                            self.assertGreater(row["phase_ns"]["generation"], 0)
+                            self.assertGreater(row["phase_ns"]["verification"], 0)
+                            self.assertGreater(row["remaining_ns"], 0)
+                        self.assertTrue(receipt["gate_receipts"][0]["forced_call"]["fixture_passed"])
+                    else:
+                        verifier.assert_not_called()
+                        for arm in receipt["summary"]["arms"].values():
+                            self.assertEqual(arm["total_in_denominator"], 1)
+                            self.assertEqual(arm["budget_exhaustions"], 1)
 
 
 class Section1SwitchPointTests(unittest.TestCase):

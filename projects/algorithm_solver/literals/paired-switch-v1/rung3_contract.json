@@ -1,7 +1,7 @@
 {
-  "schema_version": "bits-paired-switch-contract-v1",
+  "schema_version": "bits-paired-switch-contract-v2",
   "study_id": "paired-switch-v1",
-  "status": "harness_verified_awaiting_provisioned_model",
+  "status": "mechanical_checks_only",
   "separate_from_existing_papers": true,
   "existing_paper_release_order": {
     "lead": "bits-sixbit-capacity-and-certificates",
@@ -60,6 +60,14 @@
     "wide_attempt_cap": 32,
     "max_new_tokens_per_attempt": 384,
     "verifier_timeout_seconds": 2.0,
+    "total_budget": {
+      "cli_argument": "--arm-budget-seconds",
+      "unit": "synchronized_elapsed_seconds_on_one_fixed_device",
+      "scope": "one_identical_limit_per_problem_cap_and_arm",
+      "shared_prefix_prefill": "measure_once_charge_in_full_to_each_arm",
+      "verifier_admission": "reserve_full_verifier_timeout_charge_actual_elapsed",
+      "late_result": "unsolved_record_actual_overrun"
+    },
     "charge_all_phases": [
       "helper_proposal",
       "adaptation_setup",

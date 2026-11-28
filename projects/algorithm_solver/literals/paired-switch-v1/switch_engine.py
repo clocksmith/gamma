@@ -19,6 +19,7 @@ import hashlib
 import math
 import resource
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
@@ -252,10 +253,14 @@ class PairedSwitchAdapter:
             return base + self.delta_out.detach().to(base.device, dtype=torch.float32)
         return base
 
-    def verify_parameter_invariance(self, arm_name: str) -> dict[str, Any]:
+    def verify_parameter_invariance(
+        self, arm_name: str, checkpoint: Callable[[], None] | None = None,
+    ) -> dict[str, Any]:
         """Verify backbone and all non-<H0> rows retain bit-exact original values."""
         mismatched_params = []
         for name, param in self.model.named_parameters():
+            if checkpoint is not None:
+                checkpoint()
             if _tensor_sha256(param) != self._baseline_checksums[name]:
                 mismatched_params.append(name)
 
@@ -411,13 +416,14 @@ def adapt_arm_equal_budget(
     setup_budget_steps: int,
     lr: float = 5e-2,
     weight_decay: float = 0.0,
+    checkpoint: Callable[[], None] | None = None,
 ) -> dict[str, Any]:
     """Run equal-budget adaptation for one arm and log exact actual spend."""
     started = time.perf_counter()
     adapter.set_deltas(None, None)
 
     if arm_name in ("frozen_alias", "ordinary_named_fn") or setup_budget_steps <= 0:
-        inv = adapter.verify_parameter_invariance(arm_name)
+        inv = adapter.verify_parameter_invariance(arm_name, checkpoint=checkpoint)
         return {
             "arm": arm_name,
             "setup_budget_steps": setup_budget_steps,
@@ -459,6 +465,8 @@ def adapt_arm_equal_budget(
         step_loss = torch.tensor(0.0, device=adapter.device, dtype=torch.float32)
         ex_count = 0
         for ex in adaptation_examples:
+            if checkpoint is not None:
+                checkpoint()
             ids = ex["token_ids"]
             if len(ids) < 2:
                 continue
@@ -502,16 +510,22 @@ def adapt_arm_equal_budget(
             ex_count += 1
 
         step_loss = step_loss / max(1, ex_count)
+        if checkpoint is not None:
+            checkpoint()
         step_loss.backward()
         backward_passes += 1
         torch.nn.utils.clip_grad_norm_(params, max_norm=1.0)
+        if checkpoint is not None:
+            checkpoint()
         optimizer.step()
         loss_trace.append(float(step_loss.detach().item()))
 
     adapter.delta_out.requires_grad_(False)
     adapter.delta_in.requires_grad_(False)
 
-    inv = adapter.verify_parameter_invariance(arm_name)
+    if checkpoint is not None:
+        checkpoint()
+    inv = adapter.verify_parameter_invariance(arm_name, checkpoint=checkpoint)
     return {
         "arm": arm_name,
         "setup_budget_steps": setup_budget_steps,

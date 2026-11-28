@@ -18,6 +18,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from helpers import HELPER_SPECS, HelperSpec
+from work_budget import OutOfBudget
 
 
 HELPER_TOKEN_SYMBOL = "<H0>"
@@ -212,6 +213,7 @@ def verify_candidate(
     binding: SessionBinding | None = None,
     arm_uses_alias: bool = False,
     timeout_seconds: float = 2.0,
+    deadline_ns: int | None = None,
 ) -> dict[str, Any]:
     """Execute candidate_source against deterministic cases in an isolated subprocess.
 
@@ -277,10 +279,17 @@ def verify_candidate(
         "cases": copy.deepcopy(cases),
     }
 
+    input_json = json.dumps(payload)
+    if deadline_ns is not None:
+        remaining = (deadline_ns - time.perf_counter_ns()) / 1e9
+        if remaining <= 0:
+            raise OutOfBudget("verification")
+        timeout_seconds = min(timeout_seconds, remaining)
+
     try:
         proc = subprocess.run(
             [sys.executable, "-I", "-c", _RUNNER_SNIPPET],
-            input=json.dumps(payload),
+            input=input_json,
             capture_output=True,
             text=True,
             timeout=timeout_seconds,

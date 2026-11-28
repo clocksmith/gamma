@@ -40,8 +40,9 @@ ordinary named function baseline?
 | `score_and_input_alias` | Adapted (shared setup budget) | Adapted (shared setup budget) |
 | `ordinary_named_fn` | Ordinary tokens (0 adaptation) | Ordinary tokens (0 adaptation) |
 
-- Both adapted arms receive the exact same setup budget and access only to
-  information visible at the switch point.
+- Both adapted arms receive the same maximum optimizer steps and the same total
+  elapsed-time allowance. Their actual setup time reduces the time left to
+  search. Adaptation uses only information visible at the switch point.
 - When `tie_word_embeddings=True`, `PairedSwitchAdapter` decouples `delta_out`
   and `delta_in` via non-invasive forward hooks without mutating backbone
   weights or any non-`<H0>` row (`max_abs_diff == 0.0` verified by SHA-256).
@@ -84,6 +85,23 @@ ordinary named function baseline?
 - Keep refusals and timeouts in the denominator; report solve rate at fixed
   total compute and verifier limits, family-clustered paired uncertainty,
   elapsed time, and peak memory.
+- Set one positive `--arm-budget-seconds` for every arm before running either
+  search width. Run arms serially on the same device. Charge the measured
+  switch-time prediction and historical prefix prefill once in full to each arm,
+  then start its remaining clock before binding, tokenizing or adapting. The
+  helper is supplied at the switch. Model loading and recreating the two
+  already-completed attempts precede the switch and have separate receipt
+  timings. The forced-call diagnostic runs after search, outside the decision
+  path; its time is reported separately.
+- Synchronize device work at billing boundaries and between model operations.
+  Before generating a candidate and again before invoking its verifier, require
+  the whole configured verifier timeout to fit in the remaining allowance.
+  Charge the actual duration of each call, including process startup and
+  teardown. The subprocess timeout is capped by the same absolute deadline.
+  Timeouts, refusals and retries consume the same clock. Record an in-flight
+  operation's actual overrun and score a late verdict as unsolved. The
+  receipt's `total_work_units` and `work_to_first_verified` are elapsed seconds.
+  A comparison in FLOPs requires separate instrumentation.
 - **Claim boundaries:**
   - `score_only > frozen`: supports better action selection only.
   - Useful input representation: claimed **only** if `score_and_input` beats

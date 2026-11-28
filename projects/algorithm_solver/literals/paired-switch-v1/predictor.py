@@ -202,6 +202,8 @@ def summarize_paired_search_outcomes(
             "solve_rate": solved / total if total else 0.0,
             "refusals": refusals,
             "timeouts": timeouts,
+            "budget_exhaustions": sum(x["status"] == "budget_exhausted" for x in items),
+            "verifier_calls": sum(x.get("verifier_calls", 0) for x in items),
             "total_work_units": round(total_work, 4),
             "mean_work_to_first_verified": round(sum(solved_work) / len(solved_work), 4) if solved_work else None,
             "total_helper_calls": helper_calls,

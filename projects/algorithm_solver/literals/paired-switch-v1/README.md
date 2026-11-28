@@ -54,5 +54,13 @@ default). Once a local HuggingFace model directory is provisioned and authorized
   --device mps \
   --split dev \
   --attempt-caps 2,32 \
+  --arm-budget-seconds 60 \
   --output out/live-dev-receipt.json
 ```
+
+The example gives **each arm 60 seconds total** on the same device. Freeze the
+value before comparison. The clock covers shared prefix prefill, arm setup,
+every generation attempt and its verifier. Each verification requires room for
+its full timeout (2 seconds by default). Finishing early returns the unused
+time to search. The receipt gives phase times in nanoseconds and counts a solve
+only when verification finishes within the allowance.
