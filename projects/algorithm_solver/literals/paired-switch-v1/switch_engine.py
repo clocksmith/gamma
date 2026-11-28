@@ -444,21 +444,17 @@ class PairedSwitchAdapter:
         cache = clone_kv_cache(past_key_values)
         if not new_token_ids:
             raise ValueError("new_token_ids must be non-empty")
-        logits_steps = []
-        pos = start_pos
-        for tid in new_token_ids:
-            inp = torch.tensor([[tid]], dtype=torch.long, device=self.device)
-            pos_ids = torch.tensor([[pos]], dtype=torch.long, device=self.device)
-            out = self.model(
-                input_ids=inp,
-                position_ids=pos_ids,
-                past_key_values=cache,
-                use_cache=True,
-            )
-            cache = out.past_key_values
-            logits_steps.append(out.logits[:, -1, :].detach().clone())
-            pos += 1
-        return torch.stack(logits_steps, dim=1), cache
+        inp = torch.tensor([new_token_ids], dtype=torch.long, device=self.device)
+        pos_ids = torch.arange(
+            start_pos, start_pos + len(new_token_ids), dtype=torch.long, device=self.device
+        ).unsqueeze(0)
+        out = self.model(
+            input_ids=inp,
+            position_ids=pos_ids,
+            past_key_values=cache,
+            use_cache=True,
+        )
+        return out.logits.detach().clone(), out.past_key_values
 
 
 def build_switch_adaptation_sequences(
