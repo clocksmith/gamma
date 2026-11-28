@@ -195,10 +195,22 @@ def summarize_paired_search_outcomes(
         timeouts = sum(1 for x in items if x.get("status") == "timeout")
         total_work = sum(float(x["total_work_units"]) for x in items)
         helper_calls = sum(int(x.get("helper_calls", 0)) for x in items)
+        syntactic_all = sum(
+            int(x.get("syntactic_helper_calls_all_attempts", x.get("helper_calls", 0)))
+            for x in items
+        )
+        runtime_all = sum(int(x.get("runtime_helper_calls_all_attempts", 0)) for x in items)
+        passing_syn = sum(int(x.get("passing_syntactic_helper_calls", 0)) for x in items)
+        passing_run = sum(int(x.get("passing_runtime_helper_calls", 0)) for x in items)
+        solved_with_helper = sum(
+            1 for x in items if x["solved"] and int(x.get("passing_runtime_helper_calls", 0)) > 0
+        )
         solved_work = [float(x["work_to_first_verified"]) for x in items if x["solved"] and x.get("work_to_first_verified") is not None]
         arm_summaries[arm] = {
             "total_in_denominator": total,
             "solved": solved,
+            "solved_with_executed_helper": solved_with_helper,
+            "solved_without_executed_helper": solved - solved_with_helper,
             "solve_rate": solved / total if total else 0.0,
             "refusals": refusals,
             "timeouts": timeouts,
@@ -207,6 +219,10 @@ def summarize_paired_search_outcomes(
             "total_work_units": round(total_work, 4),
             "mean_work_to_first_verified": round(sum(solved_work) / len(solved_work), 4) if solved_work else None,
             "total_helper_calls": helper_calls,
+            "total_syntactic_helper_calls_all_attempts": syntactic_all,
+            "total_runtime_helper_calls_all_attempts": runtime_all,
+            "passing_syntactic_helper_calls": passing_syn,
+            "passing_runtime_helper_calls": passing_run,
             "mean_elapsed_seconds": round(sum(float(x.get("elapsed_seconds", 0.0)) for x in items) / total, 4) if total else 0.0,
             "peak_memory_bytes": max((int(x.get("peak_memory_bytes", 0)) for x in items), default=0),
         }

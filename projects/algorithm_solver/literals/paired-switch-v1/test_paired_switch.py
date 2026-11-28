@@ -72,8 +72,10 @@ class LiveBudgetTests(unittest.TestCase):
         def verify(*_args, **kwargs):
             nonlocal now
             now += verification_ns
-            passed = next(answers)
-            return {"passed": passed, "status": "pass" if passed else "fail"}
+            verdict = next(answers)
+            if isinstance(verdict, dict):
+                return verdict
+            return {"passed": verdict, "status": "pass" if verdict else "fail"}
 
         snap = {"prefix_token_ids": [1], "rng_state": {},
                 "switch_exposure": {"alias_arms": "skip_equal(xs, i)"}}
@@ -125,12 +127,59 @@ class LiveBudgetTests(unittest.TestCase):
         self.assertEqual(retry["work_to_first_verified"], .05)
 
     def test_late_verifier_pass_is_rejected_and_overrun_recorded(self):
-        record, _, verifier = self.run_arm(setup_ns=40_000_000, verification_ns=50_000_001)
+        record, _, verifier = self.run_arm(
+            setup_ns=40_000_000,
+            verification_ns=50_000_001,
+            verdicts=({"passed": True, "status": "pass", "syntactic_helper_calls": 2, "runtime_helper_calls": 5},),
+        )
         verifier.assert_called_once()
         self.assertFalse(record["solved"])
         self.assertEqual(record["status"], "budget_exhausted")
         self.assertEqual(record["overrun_ns"], 1)
         self.assertIsNone(record["work_to_first_verified"])
+        self.assertEqual(record["syntactic_helper_calls_all_attempts"], 2)
+        self.assertEqual(record["runtime_helper_calls_all_attempts"], 5)
+        self.assertEqual(record["passing_syntactic_helper_calls"], 0)
+        self.assertEqual(record["passing_runtime_helper_calls"], 0)
+        self.assertFalse(record["solved_with_executed_helper"])
+
+    def test_executed_helper_calls_on_passing_candidates_separated_from_mentions(self):
+        # Attempt 1 fails with 3 syntactic mentions and 2 runtime calls; attempt 2 passes with 1 mention and 4 runtime calls.
+        record, _, _ = self.run_arm(
+            setup_ns=10_000_000,
+            verification_ns=15_000_000,
+            verdicts=(
+                {"passed": False, "status": "fail", "syntactic_helper_calls": 3, "runtime_helper_calls": 2},
+                {"passed": True, "status": "pass", "syntactic_helper_calls": 1, "runtime_helper_calls": 4},
+            ),
+        )
+        self.assertTrue(record["solved"])
+        self.assertEqual(record["syntactic_helper_calls_all_attempts"], 4)
+        self.assertEqual(record["runtime_helper_calls_all_attempts"], 6)
+        self.assertEqual(record["passing_syntactic_helper_calls"], 1)
+        self.assertEqual(record["passing_runtime_helper_calls"], 4)
+        self.assertTrue(record["solved_with_executed_helper"])
+
+        # Passing attempt with zero executed helper calls keeps mentions separate from passing execution.
+        no_helper_pass, _, _ = self.run_arm(
+            setup_ns=10_000_000,
+            verification_ns=15_000_000,
+            verdicts=(
+                {"passed": False, "status": "fail", "syntactic_helper_calls": 5, "runtime_helper_calls": 0},
+                {"passed": True, "status": "pass", "syntactic_helper_calls": 0, "runtime_helper_calls": 0},
+            ),
+        )
+        self.assertTrue(no_helper_pass["solved"])
+        self.assertEqual(no_helper_pass["syntactic_helper_calls_all_attempts"], 5)
+        self.assertEqual(no_helper_pass["passing_runtime_helper_calls"], 0)
+        self.assertFalse(no_helper_pass["solved_with_executed_helper"])
+        summary = summarize_paired_search_outcomes([record, no_helper_pass], bootstrap_iters=50)
+        arm = summary["arms"]["score_and_input_alias"]
+        self.assertEqual(arm["solved"], 2)
+        self.assertEqual(arm["solved_with_executed_helper"], 1)
+        self.assertEqual(arm["solved_without_executed_helper"], 1)
+        self.assertEqual(arm["total_syntactic_helper_calls_all_attempts"], 9)
+        self.assertEqual(arm["passing_runtime_helper_calls"], 4)
 
     def test_verifier_process_stops_at_arm_deadline(self):
         result = verify_candidate(
@@ -440,12 +489,21 @@ class Section2And3EngineTests(unittest.TestCase):
             self.assertEqual(rep["adapter_detected_tied_embeddings"], tied)
             self.assertTrue(rep["equal_spend_ok"])
             self.assertTrue(rep["all_invariance_ok"])
+            # Score-only and score-and-input must optimize the exact same loss positions and step-0 loss.
+            so_rep = rep["arms"]["score_only_alias"]
+            si_rep = rep["arms"]["score_and_input_alias"]
+            self.assertTrue(so_rep["loss_positions_matched"])
+            self.assertTrue(si_rep["loss_positions_matched"])
+            self.assertEqual(so_rep["loss_position_counts"], si_rep["loss_position_counts"])
+            self.assertGreater(so_rep["loss_position_counts"]["selection"], 0)
+            self.assertGreater(so_rep["loss_position_counts"]["post_call"], 0)
+            self.assertAlmostEqual(so_rep["initial_loss"], si_rep["initial_loss"], places=6)
             # Score-only must keep input row bit-exact untouched while updating output row.
-            so_inv = rep["arms"]["score_only_alias"]["invariance"]
+            so_inv = so_rep["invariance"]
             self.assertEqual(so_inv["h0_input_row_max_abs_diff"], 0.0)
             self.assertGreater(so_inv["h0_output_row_max_abs_diff"], 0.0)
             # Score-and-input must update both rows independently even when tied=True.
-            si_inv = rep["arms"]["score_and_input_alias"]["invariance"]
+            si_inv = si_rep["invariance"]
             self.assertGreater(si_inv["h0_output_row_max_abs_diff"], 0.0)
             self.assertGreater(si_inv["h0_input_row_max_abs_diff"], 0.0)
             # Cache reuse & forced-call isolation gates.

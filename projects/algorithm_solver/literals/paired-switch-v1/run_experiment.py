@@ -437,7 +437,8 @@ def _run_live_arm(
     solved = False
     status = "attempt_cap"
     blocked_phase = None
-    attempts = checks = calls = generation_tokens = 0
+    attempts = checks = syntactic_calls = runtime_calls = generation_tokens = 0
+    passing_syntactic_calls = passing_runtime_calls = 0
     verifier_statuses: dict[str, int] = {}
     partial_generation = False
 
@@ -508,11 +509,16 @@ def _run_live_arm(
                 binding=binding, arm_uses_alias=alias, timeout_seconds=verifier_timeout,
                 deadline_ns=budget.deadline,
             )
-            calls += int(verdict.get("syntactic_helper_calls", 0))
+            syn_c = int(verdict.get("syntactic_helper_calls", 0))
+            run_c = int(verdict.get("runtime_helper_calls", 0))
+            syntactic_calls += syn_c
+            runtime_calls += run_c
             status = verdict["status"]
             verifier_statuses[status] = verifier_statuses.get(status, 0) + 1
             if verdict["passed"]:
                 solved = True
+                passing_syntactic_calls = syn_c
+                passing_runtime_calls = run_c
                 break
     except OutOfBudget as exc:
         blocked_phase = str(exc)
@@ -522,6 +528,8 @@ def _run_live_arm(
         blocked_phase = blocked_phase or budget.phase
     if blocked_phase is not None:
         solved = False
+        passing_syntactic_calls = 0
+        passing_runtime_calls = 0
         status = "budget_exhausted"
 
     seconds = spent_ns / 1e9
@@ -531,8 +539,17 @@ def _run_live_arm(
         "switch_point_id": f"{problem['problem_id']}@cap{attempt_cap}", "attempt_cap": attempt_cap,
         "arm": arm, "solved": solved, "status": status, "attempts_started": attempts,
         "failed_attempts": attempts - int(solved),
-        "verifier_calls": checks, "verifier_statuses": verifier_statuses, "helper_calls": calls,
+        "verifier_calls": checks, "verifier_statuses": verifier_statuses,
+        "helper_calls": syntactic_calls,
+        "syntactic_helper_calls_all_attempts": syntactic_calls,
+        "runtime_helper_calls_all_attempts": runtime_calls,
+        "passing_syntactic_helper_calls": passing_syntactic_calls,
+        "passing_runtime_helper_calls": passing_runtime_calls,
+        "solved_with_executed_helper": bool(solved and passing_runtime_calls > 0),
         "setup_tokens": state["tokens_processed"] if state is not None else None,
+        "setup_initial_loss": state.get("initial_loss") if state is not None else None,
+        "setup_final_loss": state.get("final_loss") if state is not None else None,
+        "setup_loss_position_counts": state.get("loss_position_counts") if state is not None else None,
         "generation_tokens_completed_attempts": generation_tokens, "interrupted_generation": partial_generation,
         "total_work_units": seconds, "elapsed_seconds": seconds,
         "work_to_first_verified": seconds if solved else None,
@@ -668,7 +685,9 @@ def cmd_run_live(args: argparse.Namespace) -> int:
                 gate_receipts.append(gate)
                 recent = records[-len(contract["arms"]):]
                 arm_bits = " ".join(
-                    f"{r['arm']}={'PASS' if r['solved'] else r['status']}({r['attempts_started']}att,{r['helper_calls']}h,{r['elapsed_seconds']:.1f}s)"
+                    f"{r['arm']}={'PASS' if r['solved'] else r['status']}"
+                    f"({r['attempts_started']}att,syn={r['syntactic_helper_calls_all_attempts']},"
+                    f"pass_run={r['passing_runtime_helper_calls']},{r['elapsed_seconds']:.1f}s)"
                     for r in recent
                 )
                 print(f"[live-progress] {prob['problem_id']} cap={cap}: {arm_bits}", file=sys.stderr, flush=True)

@@ -524,6 +524,8 @@ def adapt_arm_equal_budget(
             "peak_rss_bytes": get_peak_rss_bytes(),
             "initial_loss": None,
             "final_loss": None,
+            "loss_positions_matched": True,
+            "loss_position_counts": {"selection": 0, "post_call": 0},
             "delta_out": adapter.delta_out.detach().clone(),
             "delta_in": adapter.delta_in.detach().clone(),
             "delta_out_l2": 0.0,
@@ -555,10 +557,15 @@ def adapt_arm_equal_budget(
             "ensure the tokenizer maps the helper alias symbol to exactly [helper_token_id]."
         )
 
+    sel_positions_per_step = 0
+    post_positions_per_step = 0
+
     for step in range(setup_budget_steps):
         optimizer.zero_grad(set_to_none=True)
         step_loss = torch.tensor(0.0, device=adapter.device, dtype=torch.float32)
         ex_count = 0
+        step_sel_positions = 0
+        step_post_positions = 0
         for ex in adaptation_examples:
             if checkpoint is not None:
                 checkpoint()
@@ -572,9 +579,11 @@ def adapt_arm_equal_budget(
             forward_passes += 1
             tokens_processed += inp.shape[1]
 
-            # Loss combines:
-            # - selection loss on positions predicting <H0> (supervises delta_out),
-            # - post-call continuation loss on positions strictly after <H0> (supervises delta_in + delta_out).
+            # Controlled objective: BOTH adapted arms (`score_only_alias` and
+            # `score_and_input_alias`) optimize the exact same cross-entropy loss
+            # over the exact same examples and loss positions (`sel_mask` + `post_mask`).
+            # The ONLY experimental difference between the two arms is whether
+            # `delta_in` (the input embedding row for `<H0>`) is trainable.
             per_tok = F.cross_entropy(logits.view(-1, logits.shape[-1]), tgt.view(-1), reduction="none")
             tgt_flat = tgt.view(-1)
             inp_flat = inp.view(-1)
@@ -587,22 +596,22 @@ def adapt_arm_equal_budget(
                 first_h0 = int(h0_positions[0].item())
                 post_mask[first_h0:] = True
 
-            # Both arms see the exact same sequences and spend the exact same step/forward/backward budget.
-            # Score-only spends 100% of its gradient updates on delta_out (selection objective);
-            # score-and-input optimizes both delta_out and delta_in jointly.
-            if arm_name == "score_only_alias":
-                active_mask = sel_mask if bool(sel_mask.any()) else torch.ones_like(sel_mask)
-                ex_loss = per_tok[active_mask].mean()
-            else:
-                loss_terms = []
-                if bool(sel_mask.any()):
-                    loss_terms.append(per_tok[sel_mask].mean())
-                if bool(post_mask.any()):
-                    loss_terms.append(per_tok[post_mask].mean())
-                ex_loss = sum(loss_terms) / max(1, len(loss_terms))
+            step_sel_positions += int(sel_mask.sum().item())
+            step_post_positions += int(post_mask.sum().item())
+
+            loss_terms = []
+            if bool(sel_mask.any()):
+                loss_terms.append(per_tok[sel_mask].mean())
+            if bool(post_mask.any()):
+                loss_terms.append(per_tok[post_mask].mean())
+            ex_loss = sum(loss_terms) / max(1, len(loss_terms))
 
             step_loss = step_loss + ex_loss
             ex_count += 1
+
+        if step == 0:
+            sel_positions_per_step = step_sel_positions
+            post_positions_per_step = step_post_positions
 
         step_loss = step_loss / max(1, ex_count)
         if checkpoint is not None:
@@ -632,6 +641,11 @@ def adapt_arm_equal_budget(
         "peak_rss_bytes": get_peak_rss_bytes(),
         "initial_loss": loss_trace[0] if loss_trace else None,
         "final_loss": loss_trace[-1] if loss_trace else None,
+        "loss_positions_matched": True,
+        "loss_position_counts": {
+            "selection": sel_positions_per_step,
+            "post_call": post_positions_per_step,
+        },
         "delta_out": adapter.delta_out.detach().clone(),
         "delta_in": adapter.delta_in.detach().clone(),
         "delta_out_l2": float(adapter.delta_out.detach().norm().item()),
