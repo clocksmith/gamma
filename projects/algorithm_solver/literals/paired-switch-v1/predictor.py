@@ -520,6 +520,24 @@ def evaluate_rung2_predictor(
     }
 
 
+def is_full_run_gpu_reservation_verified(gpu_check: dict[str, Any] | None) -> bool:
+    """Return True iff the receipt proves whole-run exclusive GPU reservation.
+
+    A point-in-time startup foreign-PID check is not sufficient; the exclusive
+    lock must have been held for the full run with continuous watchdog polling
+    and zero mid-run foreign compute intrusions.
+    """
+    if not isinstance(gpu_check, dict):
+        return False
+    return bool(
+        gpu_check.get("exclusive_verified", False)
+        and gpu_check.get("lease_held_for_full_run", False)
+        and gpu_check.get("exclusive_maintained_throughout_run", False)
+        and int(gpu_check.get("watchdog_polls", 0)) >= 1
+        and len(gpu_check.get("mid_run_intrusions", [])) == 0
+    )
+
+
 def evaluate_rung3_dev_gate(
     stage3_receipt: dict[str, Any],
     *,
@@ -535,7 +553,24 @@ def evaluate_rung3_dev_gate(
     bar = contract["rung3_promotion_bar"]
     min_gain = float(bar["min_worthwhile_solve_rate_gain"])
     stage1_ok = bool(stage1_receipt and stage1_receipt.get("qualified"))
-    stage2_ok = bool(stage2_receipt and stage2_receipt.get("rung2_earned"))
+    stage1_gpu_ok = bool(
+        stage1_receipt and is_full_run_gpu_reservation_verified(stage1_receipt.get("exclusive_gpu_check"))
+    )
+    stage2_earned = bool(stage2_receipt and stage2_receipt.get("rung2_earned"))
+    stage2_paired_ok = bool(
+        stage2_receipt
+        and stage2_receipt.get("same_helper_paired_installation_verified")
+        and stage2_receipt.get("matched_budget_and_adaptation_verified")
+        and stage2_receipt.get("validation_families_disjoint_from_train")
+        and stage2_receipt.get("install_arm") == "score_and_input_alias"
+        and stage2_receipt.get("baseline_arm") == "score_only_alias"
+    )
+    stage2_gpu_ok = bool(
+        stage2_receipt
+        and stage2_receipt.get("outcomes_gpu_reserved_for_full_run")
+        and is_full_run_gpu_reservation_verified(stage2_receipt.get("outcomes_exclusive_gpu_check"))
+    )
+    stage2_ok = bool(stage2_earned and stage2_paired_ok)
 
     summary = stage3_receipt.get("summary") or summarize_paired_search_outcomes(
         stage3_receipt.get("records", [])
@@ -569,9 +604,8 @@ def evaluate_rung3_dev_gate(
     forced_call_all_ok = bool(gates) and all(
         bool(g.get("forced_call", {}).get("fixture_passed")) for g in gates
     )
-    exclusive_gpu_ok = bool(
-        stage3_receipt.get("exclusive_gpu_check", {}).get("exclusive_verified", False)
-    )
+    stage3_gpu_ok = is_full_run_gpu_reservation_verified(stage3_receipt.get("exclusive_gpu_check"))
+    exclusive_gpu_ok = bool(stage1_gpu_ok and stage2_gpu_ok and stage3_gpu_ok)
 
     dev_gate_passed = bool(
         stage1_ok
@@ -594,7 +628,11 @@ def evaluate_rung3_dev_gate(
         "frozen_min_worthwhile_solve_rate_gain": min_gain,
         "prerequisites": {
             "stage1_helper_qualified": stage1_ok,
-            "stage2_rung2_earned": stage2_ok,
+            "stage1_exclusive_gpu_lease_verified": stage1_gpu_ok,
+            "stage2_rung2_earned": stage2_earned,
+            "stage2_paired_installation_verified": stage2_paired_ok,
+            "stage2_exclusive_gpu_lease_verified": stage2_gpu_ok,
+            "stage3_exclusive_gpu_lease_verified": stage3_gpu_ok,
             "exclusive_gpu_verified": exclusive_gpu_ok,
             "forced_call_gate_all_passed": forced_call_all_ok,
         },

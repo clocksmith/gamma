@@ -1,20 +1,32 @@
 {
-  "schema_version": "bits-paired-switch-contract-v3",
+  "schema_version": "bits-paired-switch-contract-v4",
   "study_id": "paired-switch-v1",
-  "status": "staged_development_gates_no_experiment_started",
+  "status": "harness_review_ready_no_experiment_started",
   "separate_from_existing_papers": true,
   "existing_paper_release_order": {
     "lead": "bits-sixbit-capacity-and-certificates",
     "companion": "bits-three-objectives"
   },
+  "gpu_reservation_policy": {
+    "mode": "whole_run_flock_plus_continuous_watchdog",
+    "point_in_time_startup_check_sufficient": false,
+    "require_lease_held_for_full_run": true,
+    "require_exclusive_maintained_throughout_run": true,
+    "min_watchdog_polls": 1,
+    "max_mid_run_intrusions": 0,
+    "default_poll_interval_seconds": 5.0,
+    "optional_external_lease_flag": "--external-lease-id"
+  },
   "stage_order": [
     "stage1_qualify_ordinary_helper",
-    "stage2_earn_rung2_prediction",
-    "stage3_rung3_dev_gate_exclusive_gpu"
+    "stage2_paired_installation_validation_and_rung2_prediction",
+    "stage3_rung3_dev_gate_reserved_exclusive_gpu"
   ],
   "stage1_helper_qualification": {
     "status": "REQUIRED_BEFORE_STAGE2_AND_STAGE3",
     "arms": ["no_helper", "ordinary_named_fn"],
+    "tests_helper_usefulness_not_vocab_installation": true,
+    "require_whole_run_gpu_reservation": true,
     "require_strict_solve_rate_gain_over_no_helper": true,
     "min_families_with_executed_helper_solve": 2,
     "required_utility_regimes": [
@@ -27,6 +39,17 @@
   "stage2_rung2_prediction": {
     "status": "REQUIRED_BEFORE_STAGE3",
     "predictor_scope": "frozen_helper_agnostic_pre_switch_transcript_only",
+    "collection_subcommand": "run-stage2-val",
+    "evaluation_subcommand": "eval-rung2",
+    "paired_installation_arms": {
+      "install_arm": "score_and_input_alias",
+      "baseline_arm": "score_only_alias",
+      "require_same_helper": true,
+      "require_equal_total_budget": true,
+      "require_matched_adaptation_setup": true,
+      "reject_stage1_no_helper_comparison": true
+    },
+    "require_whole_run_gpu_reservation": true,
     "train_dev_families": [
       "duplicate_handling",
       "interval_processing",

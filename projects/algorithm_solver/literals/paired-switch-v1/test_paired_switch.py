@@ -25,16 +25,21 @@ from predictor import (
     evaluate_rung2_predictor,
     evaluate_rung3_dev_gate,
     evaluate_stage1_helper_qualification,
+    is_full_run_gpu_reservation_verified,
     predict_switch_benefit,
     summarize_paired_search_outcomes,
 )
 from run_experiment import (
     CONTRACT_PATH,
+    ExclusiveGpuLease,
     _collect_eos_token_ids,
     _extract_python_code,
     _run_live_arm,
+    build_stage2_paired_installation_items,
     check_exclusive_gpu,
+    cmd_eval_rung2,
     cmd_run_live,
+    cmd_run_stage2_val,
     run_engine_verification,
     verify_helper_token_roundtrip,
 )
@@ -667,6 +672,162 @@ class Section4To6DevSuiteAndContractTests(unittest.TestCase):
         self.assertGreaterEqual(res["policies"]["frozen_transcript_predictor"]["loss_recall"], 0.85)
         self.assertGreaterEqual(res["policies"]["frozen_transcript_predictor"]["win_recall"], 0.85)
 
+    def test_stage2_eval_rung2_requires_paired_installation_outcomes_and_rejects_stage1(self):
+        """Stage 2 must score the frozen predictor on paired installation outcomes (val split), not Stage 1."""
+        contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+        full_gpu_lease = {
+            "exclusive_verified": True,
+            "lease_held_for_full_run": True,
+            "exclusive_maintained_throughout_run": True,
+            "watchdog_polls": 4,
+            "mid_run_intrusions": [],
+        }
+
+        # Build synthetic paired validation outcomes across all 9 DEV_VAL_PROBLEMS (3 disjoint val families).
+        paired_records = []
+        for prob in DEV_VAL_PROBLEMS:
+            for cap in (2, 32):
+                useful = prob["utility_regime"] != "irrelevant_decoy"
+                inst_solved = bool(useful)
+                base_solved = False
+                inst_elapsed = 12.0 if useful else 30.0
+                base_elapsed = 28.0 if useful else 20.0
+                for arm, solved, elapsed, prun in (
+                    ("score_only_alias", base_solved, base_elapsed, 0),
+                    ("score_and_input_alias", inst_solved, inst_elapsed, 2 if inst_solved else 0),
+                ):
+                    paired_records.append(
+                        {
+                            "problem_id": prob["problem_id"],
+                            "family": prob["family"],
+                            "helper_name": prob["helper_name"],
+                            "utility_regime": prob["utility_regime"],
+                            "switch_point_id": f"{prob['problem_id']}@cap{cap}",
+                            "attempt_cap": cap,
+                            "arm": arm,
+                            "solved": solved,
+                            "status": "pass" if solved else "fail",
+                            "elapsed_seconds": elapsed,
+                            "total_work_units": elapsed,
+                            "budget_limit_ns": 30_000_000_000,
+                            "setup_tokens": 512,
+                            "setup_loss_position_counts": {"selection": 16, "post_call": 64},
+                            "passing_runtime_helper_calls": prun,
+                        }
+                    )
+
+        raw_valid = {"exclusive_gpu_check": full_gpu_lease, "records": paired_records}
+
+        # 1. Stage 1 comparison (ordinary_named_fn vs no_helper) MUST fail closed.
+        with self.assertRaises(SystemExit):
+            build_stage2_paired_installation_items(
+                raw_valid,
+                contract=contract,
+                dev_split="val",
+                install_arm="ordinary_named_fn",
+                baseline_arm="no_helper",
+            )
+        # 2. Train split MUST fail closed.
+        with self.assertRaises(SystemExit):
+            build_stage2_paired_installation_items(
+                raw_valid,
+                contract=contract,
+                dev_split="train",
+                install_arm="score_and_input_alias",
+                baseline_arm="score_only_alias",
+            )
+        # 3. Unequal total budget between paired arms MUST fail closed.
+        bad_budget = json.loads(json.dumps(raw_valid))
+        bad_budget["records"][0]["budget_limit_ns"] = 15_000_000_000
+        with self.assertRaises(SystemExit):
+            build_stage2_paired_installation_items(bad_budget, contract=contract)
+        # 4. Unmatched adaptation loss positions MUST fail closed.
+        bad_adapt = json.loads(json.dumps(raw_valid))
+        bad_adapt["records"][0]["setup_loss_position_counts"] = {"selection": 16, "post_call": 0}
+        with self.assertRaises(SystemExit):
+            build_stage2_paired_installation_items(bad_adapt, contract=contract)
+
+        # 5. Valid paired validation outcomes pass cmd_eval_rung2 with verified metadata.
+        with TemporaryDirectory() as directory:
+            outcomes_path = Path(directory) / "stage2_val_outcomes.json"
+            receipt_path = Path(directory) / "stage2_receipt.json"
+            outcomes_path.write_text(json.dumps(raw_valid), encoding="utf-8")
+            with redirect_stdout(io.StringIO()):
+                rc = cmd_eval_rung2(
+                    Namespace(
+                        outcomes_json=str(outcomes_path),
+                        dev_split="val",
+                        install_arm="score_and_input_alias",
+                        baseline_arm="score_only_alias",
+                        output=str(receipt_path),
+                    )
+                )
+            self.assertEqual(rc, 0)
+            s2 = json.loads(receipt_path.read_text(encoding="utf-8"))
+            self.assertTrue(s2["rung2_earned"], s2)
+            self.assertTrue(s2["same_helper_paired_installation_verified"])
+            self.assertTrue(s2["matched_budget_and_adaptation_verified"])
+            self.assertTrue(s2["validation_families_disjoint_from_train"])
+            self.assertTrue(s2["outcomes_gpu_reserved_for_full_run"])
+            self.assertEqual(s2["install_arm"], "score_and_input_alias")
+            self.assertEqual(s2["baseline_arm"], "score_only_alias")
+            self.assertEqual(s2["paired_validation_units"], len(DEV_VAL_PROBLEMS) * 2)
+
+    def test_run_stage2_val_executes_paired_adapted_arms_on_val_split(self):
+        """Smoke test: `run-stage2-val` runs paired adapted arms on DEV_VAL_PROBLEMS with matched setup."""
+        self.addCleanup(torch.set_num_threads, torch.get_num_threads())
+        torch.set_num_threads(1)
+        tok = ByteLevelTestTokenizer(helper_token_id=259)
+        tokenizer = Mock(
+            get_vocab=lambda: {HELPER_TOKEN_SYMBOL: 259},
+            convert_tokens_to_ids=lambda _: 259,
+            eos_token_id=tok.eos_token_id,
+            encode=lambda text, **_: tok.encode(text),
+            decode=lambda ids, **_: tok.decode(ids),
+        )
+        model = build_synthetic_transformer(hidden_size=16, num_hidden_layers=1, num_attention_heads=2)
+        contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+        contract["search_budgets"]["max_new_tokens_per_attempt"] = 1
+        with TemporaryDirectory() as directory:
+            contract_path = Path(directory) / "contract.json"
+            contract_path.write_text(json.dumps(contract), encoding="utf-8")
+            output = Path(directory) / "stage2_val.json"
+            with (
+                patch("run_experiment.CONTRACT_PATH", contract_path),
+                patch("transformers.AutoTokenizer.from_pretrained", return_value=tokenizer),
+                patch("transformers.AutoModelForCausalLM.from_pretrained", return_value=model),
+                patch("run_experiment.DEV_VAL_PROBLEMS", [DEV_VAL_PROBLEMS[0]]),
+                redirect_stdout(io.StringIO()),
+            ):
+                args = Namespace(
+                    model="in-memory-stage2-val",
+                    allow_download=False,
+                    dtype="float32",
+                    device="cpu",
+                    reserved_token_id=None,
+                    attempt_caps="2",
+                    setup_steps=2,
+                    arm_budget_seconds=30.0,
+                    include_ordinary=False,
+                    stage1_receipt=None,
+                    require_exclusive_gpu=False,
+                    output=str(output),
+                )
+                self.assertEqual(cmd_run_stage2_val(args), 0)
+                receipt = json.loads(output.read_text(encoding="utf-8"))
+                self.assertEqual(receipt["dev_split"], "val")
+                self.assertEqual(
+                    receipt["paired_installation_arms"],
+                    ["score_only_alias", "score_and_input_alias"],
+                )
+                self.assertEqual(len(receipt["records"]), 2)
+                r0, r1 = receipt["records"]
+                self.assertEqual(r0["helper_name"], r1["helper_name"])
+                self.assertEqual(r0["budget_limit_ns"], r1["budget_limit_ns"])
+                self.assertEqual(r0["setup_tokens"], r1["setup_tokens"])
+                self.assertEqual(r0["setup_loss_position_counts"], r1["setup_loss_position_counts"])
+                self.assertTrue(receipt["gate_receipts"][0]["forced_call"]["fixture_passed"])
+
     def test_stage3_dev_gate_enforces_prerequisites_controls_and_keeps_holdout_sealed(self):
         contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
         # Build synthetic dev receipt where joint beats BOTH score_only and ordinary across 3 families.
@@ -689,31 +850,173 @@ class Section4To6DevSuiteAndContractTests(unittest.TestCase):
                     "passing_runtime_helper_calls": prun, "total_work_units": 15.0,
                     "work_to_first_verified": 15.0 if solved else None,
                 })
+        full_gpu_lease = {
+            "exclusive_verified": True,
+            "lease_held_for_full_run": True,
+            "exclusive_maintained_throughout_run": True,
+            "watchdog_polls": 6,
+            "mid_run_intrusions": [],
+        }
+        valid_s1 = {"qualified": True, "exclusive_gpu_check": full_gpu_lease}
+        valid_s2 = {
+            "rung2_earned": True,
+            "same_helper_paired_installation_verified": True,
+            "matched_budget_and_adaptation_verified": True,
+            "validation_families_disjoint_from_train": True,
+            "install_arm": "score_and_input_alias",
+            "baseline_arm": "score_only_alias",
+            "outcomes_gpu_reserved_for_full_run": True,
+            "outcomes_exclusive_gpu_check": full_gpu_lease,
+        }
         s3_receipt = {
-            "exclusive_gpu_check": {"exclusive_verified": True},
+            "exclusive_gpu_check": full_gpu_lease,
             "gate_receipts": gates,
             "records": recs,
         }
-        # Missing Stage 1 or Stage 2 -> STOP_ON_DEV.
-        blocked = evaluate_rung3_dev_gate(
+        # 1. Missing Stage 1 -> STOP_ON_DEV.
+        blocked_s1 = evaluate_rung3_dev_gate(
             s3_receipt, contract=contract,
-            stage1_receipt={"qualified": False},
-            stage2_receipt={"rung2_earned": True},
+            stage1_receipt={"qualified": False, "exclusive_gpu_check": full_gpu_lease},
+            stage2_receipt=valid_s2,
         )
-        self.assertFalse(blocked["dev_gate_passed"])
-        self.assertEqual(blocked["verdict"], "STOP_ON_DEV")
+        self.assertFalse(blocked_s1["dev_gate_passed"])
+        self.assertEqual(blocked_s1["verdict"], "STOP_ON_DEV")
 
-        # All prerequisites + both controls beaten -> ELIGIBLE_FOR_SEALED_DECISION_ONLY (not Rung 3 claim!).
+        # 2. Point-in-time GPU check only (no whole-run lease / watchdog) -> STOP_ON_DEV.
+        point_in_time_s3 = dict(s3_receipt, exclusive_gpu_check={"exclusive_verified": True})
+        blocked_pit = evaluate_rung3_dev_gate(
+            point_in_time_s3, contract=contract, stage1_receipt=valid_s1, stage2_receipt=valid_s2
+        )
+        self.assertFalse(blocked_pit["dev_gate_passed"])
+        self.assertFalse(blocked_pit["prerequisites"]["stage3_exclusive_gpu_lease_verified"])
+
+        # 3. Mid-run GPU intrusion recorded -> STOP_ON_DEV.
+        intruded_gpu = dict(
+            full_gpu_lease,
+            exclusive_maintained_throughout_run=False,
+            exclusive_verified=False,
+            mid_run_intrusions=[{"foreign_pids": [777777]}],
+        )
+        blocked_intrusion = evaluate_rung3_dev_gate(
+            dict(s3_receipt, exclusive_gpu_check=intruded_gpu),
+            contract=contract, stage1_receipt=valid_s1, stage2_receipt=valid_s2,
+        )
+        self.assertFalse(blocked_intrusion["dev_gate_passed"])
+
+        # 4. Stage 2 receipt built from Stage 1 (no paired installation) -> STOP_ON_DEV.
+        unpaired_s2 = dict(valid_s2, same_helper_paired_installation_verified=False, baseline_arm="no_helper")
+        blocked_s2 = evaluate_rung3_dev_gate(
+            s3_receipt, contract=contract, stage1_receipt=valid_s1, stage2_receipt=unpaired_s2
+        )
+        self.assertFalse(blocked_s2["dev_gate_passed"])
+        self.assertFalse(blocked_s2["prerequisites"]["stage2_paired_installation_verified"])
+
+        # 5. All prerequisites + whole-run GPU leases + both controls beaten -> ELIGIBLE_FOR_SEALED_DECISION_ONLY.
         passed = evaluate_rung3_dev_gate(
-            s3_receipt, contract=contract,
-            stage1_receipt={"qualified": True},
-            stage2_receipt={"rung2_earned": True},
+            s3_receipt, contract=contract, stage1_receipt=valid_s1, stage2_receipt=valid_s2
         )
         self.assertTrue(passed["dev_gate_passed"], passed)
         self.assertEqual(passed["verdict"], "ELIGIBLE_FOR_SEALED_DECISION_ONLY")
         self.assertFalse(passed["rung3_claimed"])
         self.assertEqual(passed["holdout_status"], "SEALED")
         self.assertEqual(passed["rung4_status"], "LOCKED_PENDING_RUNG3_WIN")
+
+    def test_exclusive_gpu_lease_holds_flock_and_catches_mid_run_intrusion(self):
+        """Whole-run ExclusiveGpuLease locks out concurrent runs and catches transient mid-run PIDs."""
+        clean_rocm = Mock(stdout="PID\tPROCESS\n", returncode=0)
+        dirty_rocm = Mock(stdout="PID\tPROCESS\n888888\tcompeting_train\n", returncode=0)
+        err_rocm = Mock(stdout="", returncode=1)
+
+        with TemporaryDirectory() as directory:
+            lock_path = Path(directory) / "gpu0.lock"
+
+            # 1. Clean full-run lease: holds flock (blocking concurrent lease), polls watchdog, releases cleanly.
+            with (
+                patch("run_experiment.shutil.which", side_effect=lambda cmd: "/usr/bin/rocm-smi" if cmd == "rocm-smi" else None),
+                patch("run_experiment.subprocess.run", return_value=clean_rocm),
+            ):
+                lease1 = ExclusiveGpuLease(
+                    "cuda",
+                    require_exclusive=True,
+                    lock_path=lock_path,
+                    poll_interval_seconds=0.02,
+                    external_lease_id="bus-lease-test-01",
+                    stage="stage3_test",
+                )
+                with lease1:
+                    meta = json.loads(lock_path.read_text(encoding="utf-8"))
+                    self.assertEqual(meta["external_lease_id"], "bus-lease-test-01")
+                    self.assertEqual(meta["stage"], "stage3_test")
+                    # Second concurrent lease on the same lockfile MUST fail closed!
+                    with self.assertRaises(RuntimeError):
+                        with ExclusiveGpuLease(
+                            "cuda",
+                            require_exclusive=True,
+                            lock_path=lock_path,
+                            poll_interval_seconds=0.02,
+                            stage="competing",
+                        ):
+                            pass
+                    time.sleep(0.05)
+
+                self.assertTrue(lease1.report["lease_held_for_full_run"])
+                self.assertTrue(lease1.report["exclusive_maintained_throughout_run"])
+                self.assertGreaterEqual(lease1.report["watchdog_polls"], 1)
+                self.assertEqual(lease1.report["mid_run_intrusions"], [])
+                self.assertEqual(lease1.report["external_lease_id"], "bus-lease-test-01")
+                self.assertTrue(is_full_run_gpu_reservation_verified(lease1.report))
+                lease1.raise_if_intruded()
+
+                # After exit, lock is released so a subsequent lease succeeds.
+                lease2 = ExclusiveGpuLease(
+                    "cuda", require_exclusive=True, lock_path=lock_path, poll_interval_seconds=0.02
+                )
+                with lease2:
+                    pass
+                self.assertTrue(is_full_run_gpu_reservation_verified(lease2.report))
+
+            # 2. Transient mid-run intrusion: clean at start and end, dirty during watchdog poll!
+            # Calls: [0]=initial check (clean), [1]=first watchdog poll (clean), [2]=second poll (dirty), [3+]=clean.
+            poll_seq = [clean_rocm, clean_rocm, dirty_rocm, clean_rocm, clean_rocm, clean_rocm]
+            call_idx = {"n": 0}
+
+            def _seq_run(*_a, **_kw):
+                i = call_idx["n"]
+                call_idx["n"] += 1
+                return poll_seq[min(i, len(poll_seq) - 1)]
+
+            with (
+                patch("run_experiment.shutil.which", side_effect=lambda cmd: "/usr/bin/rocm-smi" if cmd == "rocm-smi" else None),
+                patch("run_experiment.subprocess.run", side_effect=_seq_run),
+            ):
+                lease_bad = ExclusiveGpuLease(
+                    "cuda",
+                    require_exclusive=True,
+                    lock_path=lock_path,
+                    poll_interval_seconds=0.02,
+                    stage="intrusion_test",
+                )
+                with lease_bad:
+                    time.sleep(0.08)
+
+                self.assertTrue(lease_bad.report["lease_held_for_full_run"])
+                self.assertFalse(lease_bad.report["exclusive_maintained_throughout_run"])
+                self.assertFalse(lease_bad.report["exclusive_verified"])
+                self.assertIn(888888, lease_bad.report["foreign_pids"])
+                self.assertGreaterEqual(len(lease_bad.report["mid_run_intrusions"]), 1)
+                self.assertFalse(is_full_run_gpu_reservation_verified(lease_bad.report))
+                with self.assertRaises(RuntimeError):
+                    lease_bad.raise_if_intruded()
+
+            # 3. Non-zero rocm-smi exit code fails closed (does not masquerade as zero foreign PIDs).
+            with (
+                patch("run_experiment.shutil.which", side_effect=lambda cmd: "/usr/bin/rocm-smi" if cmd == "rocm-smi" else None),
+                patch("run_experiment.subprocess.run", return_value=err_rocm),
+            ):
+                res_err = check_exclusive_gpu("cuda", require_exclusive=False)
+                self.assertFalse(res_err["exclusive_verified"])
+                with self.assertRaises(RuntimeError):
+                    check_exclusive_gpu("cuda", require_exclusive=True)
 
     def test_exclusive_gpu_check_rejects_foreign_pid_and_no_helper_arm_omits_binding(self):
         fake_rocm = Mock(stdout="PID\tPROCESS\n999999\tother_worker\n")
