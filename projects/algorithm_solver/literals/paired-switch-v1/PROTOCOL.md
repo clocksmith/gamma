@@ -22,7 +22,7 @@ Do not scale up the alias comparison before passing Stage 1 and Stage 2 on devel
 
 ### Stage 2 — Earn Rung 2 with Paired Installation Outcomes (`run-stage2-val` + `eval-rung2`)
 - Freeze a helper-agnostic switch-time rule (`predictor.py`) using only pre-switch transcript and switch-time contract features (no family-name lookup tables, no oracle labels).
-- Collect **paired vocabulary-installation outcomes** (`run-stage2-val`) on the **separate validation development families** (`DEV_VAL_PROBLEMS`: `string_parsing`, `window_aggregation`, `grid_flood`, strictly disjoint from `DEV_PROBLEMS` `duplicate_handling`, `interval_processing`, `graph_traversal`, while keeping the sealed holdout untouched) under a whole-run `ExclusiveGpuLease`:
+- Collect **paired vocabulary-installation outcomes** (`run-stage2-val`) on the **separate validation development families** (`DEV_VAL_PROBLEMS`: `version_semver`, `calendar_business`, `expr_rpn_vm`, strictly disjoint from `DEV_PROBLEMS` `run_codec`, `interval_algebra`, `protocol_fsm`, while keeping the sealed holdout untouched) under a whole-run `ExclusiveGpuLease`:
   - Run the installed vocabulary entry (`score_and_input_alias`) and the equally adapted single-token alias (`score_only_alias`) with the **exact same helper, transcript, matched adaptation loss positions, and total wall-clock budget**.
 - Score the frozen predictor (`eval-rung2`) strictly against those paired `(score_and_input_alias, score_only_alias)` validation outcomes—predicting **losses** as well as **wins**—against three baselines:
   1. `always_install`

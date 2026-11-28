@@ -205,13 +205,15 @@ def extract_switch_visible_features(snapshot: dict[str, Any]) -> dict[str, Any]:
     code_overlap = sorted(contract_tokens & code_tokens)
     stmt_overlap = sorted(contract_tokens & stmt_tokens)
 
-    # Generic mismatch cues: when BOTH failure diagnostics and failed code point toward
-    # optimization/counting/sorting/dp paradigms not mentioned by the helper contract.
+    # Generic mismatch cues: when failure diagnostics or statement point toward
+    # unrelated optimization/graph/string paradigms not mentioned by the helper contract.
     non_helper_paradigm_tokens = {
         "dp", "greedy", "weight", "weighted", "cost", "room", "rooms", "event", "events",
         "concurrent", "half", "bracket", "brackets", "nest", "nesting", "stack",
         "gap", "unsort", "unsorted", "negative", "sum", "subarray", "longest", "revisit",
-        "relax", "dag", "tiebreak", "span_not_adjacent",
+        "relax", "dag", "tiebreak", "span_not_adjacent", "palindrome", "palindromic",
+        "coin", "coins", "denomination", "denominations", "profit", "subset", "job", "jobs",
+        "cycle", "directed", "graph", "meeting", "meetings", "contiguous",
     }
     helper_paradigms = contract_tokens & non_helper_paradigm_tokens
     transcript_non_helper = (

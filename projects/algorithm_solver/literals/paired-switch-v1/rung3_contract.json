@@ -51,18 +51,18 @@
     },
     "require_whole_run_gpu_reservation": true,
     "train_dev_families": [
-      "duplicate_handling",
-      "interval_processing",
-      "graph_traversal"
+      "run_codec",
+      "interval_algebra",
+      "protocol_fsm"
     ],
     "separate_validation_dev_families": [
-      "string_parsing",
-      "window_aggregation",
-      "grid_flood"
+      "version_semver",
+      "calendar_business",
+      "expr_rpn_vm"
     ],
     "setup_cost_per_step_attempt_equiv": 0.05,
     "min_net_benefit_to_adapt": 0.25,
-    "helper_length_baseline_min_lines": 12,
+    "helper_length_baseline_min_lines": 28,
     "comparators": [
       "always_install",
       "never_install",
@@ -107,8 +107,8 @@
   },
   "adaptation_policy": {
     "optimizer": "AdamW",
-    "learning_rate": 0.05,
-    "weight_decay": 0.0,
+    "learning_rate": 0.005,
+    "weight_decay": 0.01,
     "grad_clip_norm": 1.0,
     "setup_budget_steps": 16,
     "matched_loss_positions_for_adapted_arms": true,

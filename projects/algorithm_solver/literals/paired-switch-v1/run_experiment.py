@@ -94,7 +94,7 @@ CONTRACT_PATH = HERE / "rung3_contract.json"
 
 def cmd_verify_fixture(_args: argparse.Namespace) -> int:
     tok = ByteLevelTestTokenizer(helper_symbol=HELPER_TOKEN_SYMBOL, helper_token_id=259)
-    problem = get_problem("dup_02_unique_triplets_zero")
+    problem = get_problem("rle_02_stream_diff_metrics")
     snapshot = build_switch_point(
         problem=problem,
         tokenizer_encode=tok.encode,
@@ -119,7 +119,7 @@ def run_engine_verification(
 ) -> dict[str, Any]:
     """Run Sections 2-3 mechanical & numerical checks on a real transformers LlamaForCausalLM."""
     tok = ByteLevelTestTokenizer(helper_symbol=HELPER_TOKEN_SYMBOL, helper_token_id=259)
-    problem = get_problem("dup_02_unique_triplets_zero")
+    problem = get_problem("rle_02_stream_diff_metrics")
     snapshot = build_switch_point(
         problem=problem,
         tokenizer_encode=tok.encode,
@@ -801,6 +801,7 @@ def _run_live_arm(
     attempt_cap: int,
     setup_steps: int,
     learning_rate: float,
+    weight_decay: float = 0.0,
     max_new_tokens: int,
     verifier_timeout: float,
 ) -> tuple[dict[str, Any], dict[str, Any] | None]:
@@ -843,7 +844,7 @@ def _run_live_arm(
         budget.checkpoint()
         state = adapt_arm_equal_budget(
             adapter, arm_name=arm, adaptation_examples=examples, setup_budget_steps=setup_steps,
-            lr=learning_rate, checkpoint=budget.checkpoint,
+            lr=learning_rate, weight_decay=weight_decay, checkpoint=budget.checkpoint,
         )
         budget.checkpoint()
         adapter.set_deltas(state["delta_out"], state["delta_in"])
@@ -851,12 +852,20 @@ def _run_live_arm(
         if no_helper:
             suffix = encode(
                 "[SYSTEM_SWITCH]\nContinue solving using standard Python only (no external helper is provided).\n"
+                "Return only the corrected Python function inside the code block.\n"
                 "[ASSISTANT]\n```python\n"
             )
         else:
             exposure_key = "alias_arms" if alias else "ordinary_named_fn_arm"
             exposure = snapshot["switch_exposure"][exposure_key]
-            suffix = encode(f"[SYSTEM_SWITCH]\n{exposure}\n[ASSISTANT]\n```python\n")
+            suffix = encode(
+                "[SYSTEM_SWITCH]\n"
+                "The following tested helper operator is already bound in the runtime environment (do NOT redefine it). "
+                "Use it if it directly fixes the failing failure mode; ignore it if the failure has an unrelated cause.\n"
+                f"{exposure}\n"
+                "Return only the corrected Python function inside the code block.\n"
+                "[ASSISTANT]\n```python\n"
+            )
         eos_ids = _collect_eos_token_ids(
             alias_tokenizer,
             getattr(adapter, "model", None),
@@ -1114,6 +1123,7 @@ def _run_paired_arms_loop(
                             arm, prob, snap, prefill, adapter, alias_tokenizer, budget,
                             attempt_cap=cap, setup_steps=setup_steps,
                             learning_rate=float(contract["adaptation_policy"]["learning_rate"]),
+                            weight_decay=float(contract["adaptation_policy"].get("weight_decay", 0.0)),
                             max_new_tokens=max_new_tokens, verifier_timeout=timeout_s,
                         )
                         records.append(record)
@@ -1129,13 +1139,15 @@ def _run_paired_arms_loop(
                     }
                     if joint_state is not None:
                         started = time.perf_counter()
+                        h_spec = HELPER_SPECS[prob["helper_name"]]
+                        h_lhs, h_rhs = h_spec.call_template.split("{OP}", 1)
                         fc = run_forced_call_check(
                             adapter, prefix_token_ids=snap["prefix_token_ids"],
                             pre_call_tokens=alias_tokenizer.encode(
                                 snap["switch_exposure"]["alias_arms"].replace(HELPER_TOKEN_SYMBOL, "HELPER_OP")
-                                + "\nj = ", add_special_tokens=False,
+                                + f"\n{h_lhs}", add_special_tokens=False,
                             ),
-                            forced_operands_and_body_tokens=alias_tokenizer.encode("(xs, i)\n", add_special_tokens=False),
+                            forced_operands_and_body_tokens=alias_tokenizer.encode(f"{h_rhs}\n", add_special_tokens=False),
                             forced_verifier_response_tokens=alias_tokenizer.encode(
                                 "\n[TOOL]\nVERIFIER: retry\n", add_special_tokens=False,
                             ),

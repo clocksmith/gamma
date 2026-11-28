@@ -465,25 +465,35 @@ def build_switch_adaptation_sequences(
 
     Zero hidden test cases and zero ground-truth solutions enter here: only the
     switch-time helper exposure, operand convention, boundary behavior table,
-    and syntax template visible to all arms.
+    declared entry_point name, and syntax template visible to all arms.
     """
     helper_name = snapshot["helper_name"]
     spec = HELPER_SPECS[helper_name]
     sym = snapshot["reserved_token"]["helper_token_symbol"]
     exposure = snapshot["switch_exposure"]["alias_arms"]
+    entry_point = snapshot.get("entry_point", "solve")
 
-    # Two switch-visible training cues:
-    # (1) Selection cue: exposure + invocation lead-in -> <H0> + exact operand convention.
-    # (2) Boundary consumption cue: exposure + boundary call -> expected return usage.
     call_line = spec.call_template.format(OP=sym)
     lhs, rhs = call_line.split(sym, 1)
+    lhs_vars = [v.strip() for v in lhs.strip().rstrip("=").strip().split(",") if v.strip()]
+    use_line = f"    return [{', '.join(lhs_vars)}]" if len(lhs_vars) > 1 else f"    return {lhs_vars[0]}"
+
+    header = (
+        "[SYSTEM_SWITCH]\n"
+        "The following tested helper operator is already bound in the runtime environment (do NOT redefine it). "
+        "Use it if it directly fixes the failing failure mode; ignore it if the failure has an unrelated cause.\n"
+        f"{exposure}\n"
+        "Return only the corrected Python function inside the code block.\n"
+        "[ASSISTANT]\n```python\n"
+    )
 
     seq_texts = [
-        f"{exposure}\nUSE_HELPER:\n{lhs}{sym}{rhs}\nreturn {lhs.strip().rstrip('=').strip()}\n",
+        f"{header}def {entry_point}(*args):\n    {lhs}{sym}{rhs}\n{use_line}\n```\n",
+        f"{header}def {entry_point}(*args):\n    for _item in args:\n        {lhs}{sym}{rhs}\n{use_line}\n```\n",
     ]
     for case in spec.boundary_cases[:3]:
         seq_texts.append(
-            f"{exposure}\nCHECK_{case['label']}:\nres = {sym}({case['args_repr']})\n# -> {case['expected_repr']}\n"
+            f"{header}# boundary {case['label']}\n{lhs}{sym}({case['args_repr']})\n# expected: {case['expected_repr']}\n```\n"
         )
 
     examples = []

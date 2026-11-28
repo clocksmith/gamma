@@ -419,7 +419,7 @@ class Section1SwitchPointTests(unittest.TestCase):
 
     def test_canonical_switch_point_roundtrip_and_absence_check(self):
         tok = ByteLevelTestTokenizer(helper_symbol=HELPER_TOKEN_SYMBOL, helper_token_id=259)
-        prob = get_problem("dup_02_unique_triplets_zero")
+        prob = get_problem("rle_02_stream_diff_metrics")
         snap = build_switch_point(
             problem=prob,
             tokenizer_encode=tok.encode,
@@ -457,7 +457,7 @@ class Section1SwitchPointTests(unittest.TestCase):
         reg = SingleBindRegistry()
         reg.bind_once("skip_equal", 259)
         with self.assertRaises(RuntimeError):
-            reg.bind_once("merge_span", 259)
+            reg.bind_once("apply_weighted_span", 259)
 
         refusal = verify_candidate("", "f", [{"label": "a", "args": [1], "expected": 1}])
         self.assertEqual(refusal["status"], "refusal")
@@ -551,20 +551,28 @@ class Section4To6DevSuiteAndContractTests(unittest.TestCase):
         helpers_rep = verify_all_helpers()
         self.assertEqual(
             set(helpers_rep.keys()),
-            {"skip_equal", "merge_span", "push_unvisited", "scan_quoted", "prune_window", "expand_grid"},
+            {
+                "skip_equal",
+                "advance_rle_block",
+                "apply_weighted_span",
+                "step_frame_parser",
+                "parse_semver_key",
+                "shift_business_day",
+                "eval_safe_op",
+            },
         )
 
         suite_rep = verify_dev_family_suite(helper_token_id=259, problems=ALL_DEV_PROBLEMS)
-        self.assertEqual(suite_rep["total_problems"], 18)
+        self.assertEqual(suite_rep["total_problems"], 24)
         self.assertEqual(
             set(suite_rep["families"]),
             {
-                "duplicate_handling",
-                "interval_processing",
-                "graph_traversal",
-                "string_parsing",
-                "window_aggregation",
-                "grid_flood",
+                "run_codec",
+                "interval_algebra",
+                "protocol_fsm",
+                "version_semver",
+                "calendar_business",
+                "expr_rpn_vm",
             },
         )
         self.assertEqual(
@@ -663,7 +671,7 @@ class Section4To6DevSuiteAndContractTests(unittest.TestCase):
                     realized_net = 0.55 if cap == 32 else 0.20
                 val_items.append({"snapshot": snap, "realized_net_benefit": realized_net})
 
-        res = evaluate_rung2_predictor(val_items, helper_length_threshold_lines=12)
+        res = evaluate_rung2_predictor(val_items, helper_length_threshold_lines=28)
         self.assertTrue(res["rung2_earned"], res)
         self.assertTrue(res["beats_always_install"])
         self.assertTrue(res["beats_never_install"])
