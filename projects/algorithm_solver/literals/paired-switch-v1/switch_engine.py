@@ -511,7 +511,7 @@ def adapt_arm_equal_budget(
     started = time.perf_counter()
     adapter.set_deltas(None, None)
 
-    if arm_name in ("frozen_alias", "ordinary_named_fn") or setup_budget_steps <= 0:
+    if arm_name in ("frozen_alias", "ordinary_named_fn", "no_helper") or setup_budget_steps <= 0:
         inv = adapter.verify_parameter_invariance(arm_name, checkpoint=checkpoint)
         return {
             "arm": arm_name,

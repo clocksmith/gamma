@@ -15,7 +15,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
+import shutil
+import subprocess
 import sys
 import time
 from collections.abc import Callable
@@ -28,9 +31,22 @@ HERE = Path(__file__).resolve().parent
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
-from dev_families import DEV_PROBLEMS, get_problem, verify_dev_family_suite
+from dev_families import (
+    ALL_DEV_PROBLEMS,
+    DEV_PROBLEMS,
+    DEV_VAL_PROBLEMS,
+    get_dev_split,
+    get_problem,
+    verify_dev_family_suite,
+)
 from helpers import HELPER_SPECS, verify_all_helpers
-from predictor import predict_switch_benefit, summarize_paired_search_outcomes
+from predictor import (
+    evaluate_rung2_predictor,
+    evaluate_rung3_dev_gate,
+    evaluate_stage1_helper_qualification,
+    predict_switch_benefit,
+    summarize_paired_search_outcomes,
+)
 from switch_engine import (
     ByteLevelTestTokenizer,
     HelperAliasTokenizer,
@@ -216,50 +232,126 @@ def cmd_verify_engine(args: argparse.Namespace) -> int:
 
 def cmd_verify_dev_suite(_args: argparse.Namespace) -> int:
     helpers_receipt = verify_all_helpers()
-    suite_receipt = verify_dev_family_suite(helper_token_id=259)
+    suite_receipt = verify_dev_family_suite(helper_token_id=259, problems=ALL_DEV_PROBLEMS)
     tok = ByteLevelTestTokenizer(helper_symbol=HELPER_TOKEN_SYMBOL, helper_token_id=259)
 
-    pred_rows = []
-    for prob in DEV_PROBLEMS:
-        for cap in (2, 32):
-            snap = build_switch_point(
-                problem=prob,
-                tokenizer_encode=tok.encode,
-                helper_token_id=tok.helper_token_id,
-                remaining_attempt_cap=cap,
-                remaining_token_budget=cap * 384,
-                setup_budget_steps=16,
-                seed=20261127,
-            )
-            pred = predict_switch_benefit(snap)
-            pred_rows.append(
-                {
-                    "problem_id": prob["problem_id"],
-                    "family": prob["family"],
-                    "utility_regime": prob["utility_regime"],
-                    "attempt_cap": cap,
-                    "decision": pred.decision,
-                    "symptom_match_score": pred.symptom_match_score,
-                    "predicted_net_benefit": pred.predicted_net_benefit,
-                }
-            )
-
-    useful_rows = [r for r in pred_rows if r["utility_regime"] != "irrelevant_decoy"]
-    decoy_rows = [r for r in pred_rows if r["utility_regime"] == "irrelevant_decoy"]
-    useful_adapt_rate = sum(1 for r in useful_rows if r["decision"] == "ADAPT") / len(useful_rows)
-    decoy_skip_rate = sum(1 for r in decoy_rows if r["decision"] == "SKIP") / len(decoy_rows)
+    split_reports = {}
+    for split_name, probs in (("train", DEV_PROBLEMS), ("val", DEV_VAL_PROBLEMS)):
+        pred_rows = []
+        for prob in probs:
+            for cap in (2, 32):
+                snap = build_switch_point(
+                    problem=prob,
+                    tokenizer_encode=tok.encode,
+                    helper_token_id=tok.helper_token_id,
+                    remaining_attempt_cap=cap,
+                    remaining_token_budget=cap * 384,
+                    setup_budget_steps=16,
+                    seed=20261127,
+                )
+                sanitized = dict(snap)
+                sanitized["utility_regime"] = "REDACTED"
+                pred = predict_switch_benefit(sanitized)
+                pred_rows.append(
+                    {
+                        "problem_id": prob["problem_id"],
+                        "family": prob["family"],
+                        "utility_regime": prob["utility_regime"],
+                        "attempt_cap": cap,
+                        "decision": pred.decision,
+                        "symptom_match_score": pred.symptom_match_score,
+                        "predicted_net_benefit": pred.predicted_net_benefit,
+                    }
+                )
+        useful_rows = [r for r in pred_rows if r["utility_regime"] != "irrelevant_decoy"]
+        decoy_rows = [r for r in pred_rows if r["utility_regime"] == "irrelevant_decoy"]
+        split_reports[split_name] = {
+            "useful_adapt_rate": sum(1 for r in useful_rows if r["decision"] == "ADAPT") / len(useful_rows),
+            "decoy_skip_rate": sum(1 for r in decoy_rows if r["decision"] == "SKIP") / len(decoy_rows),
+            "rows": pred_rows,
+        }
 
     out = {
         "helpers_verified": list(helpers_receipt.keys()),
         "suite": suite_receipt,
-        "switch_predictor_offline_check": {
-            "useful_adapt_rate": useful_adapt_rate,
-            "decoy_skip_rate": decoy_skip_rate,
-            "rows": pred_rows,
-        },
+        "switch_predictor_offline_check": split_reports,
     }
     print(json.dumps(out, indent=2))
     return 0
+
+
+def check_exclusive_gpu(device: str, *, require_exclusive: bool = False) -> dict[str, Any]:
+    """Verify no other compute process holds the target GPU before running Stage 3."""
+    if device != "cuda":
+        res = {
+            "device": device,
+            "exclusive_verified": False,
+            "probe": "non_cuda_device",
+            "foreign_pids": [],
+            "reason": "Exclusive GPU verification requires --device cuda",
+        }
+        if require_exclusive:
+            raise RuntimeError(res["reason"])
+        return res
+
+    my_pid = os.getpid()
+    foreign_pids: list[int] = []
+    probe = "none"
+    if shutil.which("rocm-smi"):
+        probe = "rocm-smi"
+        proc = subprocess.run(
+            ["rocm-smi", "--showpids"],
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=False,
+        )
+        for line in proc.stdout.splitlines():
+            m = re.match(r"^\s*(\d+)\s+\S+", line)
+            if m:
+                pid = int(m.group(1))
+                if pid != my_pid:
+                    foreign_pids.append(pid)
+    elif shutil.which("nvidia-smi"):
+        probe = "nvidia-smi"
+        proc = subprocess.run(
+            ["nvidia-smi", "--query-compute-apps=pid", "--format=csv,noheader"],
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=False,
+        )
+        for line in proc.stdout.splitlines():
+            line = line.strip()
+            if line.isdigit():
+                pid = int(line)
+                if pid != my_pid:
+                    foreign_pids.append(pid)
+    else:
+        res = {
+            "device": device,
+            "exclusive_verified": False,
+            "probe": "unavailable",
+            "foreign_pids": [],
+            "reason": "Neither rocm-smi nor nvidia-smi found to verify exclusive GPU ownership",
+        }
+        if require_exclusive:
+            raise RuntimeError(res["reason"])
+        return res
+
+    exclusive = len(foreign_pids) == 0
+    res = {
+        "device": device,
+        "exclusive_verified": exclusive,
+        "probe": probe,
+        "self_pid": my_pid,
+        "foreign_pids": sorted(set(foreign_pids)),
+    }
+    if require_exclusive and not exclusive:
+        raise RuntimeError(
+            f"Exclusive GPU check FAILED ({probe}): competing GPU PIDs active: {res['foreign_pids']}"
+        )
+    return res
 
 
 _CODE_BLOCK_RE = re.compile(r"```(?:python|py|python3)?\s*\n(.*?)```", re.S)
@@ -431,7 +523,8 @@ def _run_live_arm(
     max_new_tokens: int,
     verifier_timeout: float,
 ) -> tuple[dict[str, Any], dict[str, Any] | None]:
-    alias = arm != "ordinary_named_fn"
+    no_helper = arm == "no_helper"
+    alias = arm not in ("ordinary_named_fn", "no_helper")
     verify_ns = positive_nanoseconds(verifier_timeout)
     state = None
     solved = False
@@ -474,9 +567,15 @@ def _run_live_arm(
         budget.checkpoint()
         adapter.set_deltas(state["delta_out"], state["delta_in"])
         restore_rng_state(snapshot["rng_state"])
-        exposure_key = "alias_arms" if alias else "ordinary_named_fn_arm"
-        exposure = snapshot["switch_exposure"][exposure_key]
-        suffix = encode(f"[SYSTEM_SWITCH]\n{exposure}\n[ASSISTANT]\n```python\n")
+        if no_helper:
+            suffix = encode(
+                "[SYSTEM_SWITCH]\nContinue solving using standard Python only (no external helper is provided).\n"
+                "[ASSISTANT]\n```python\n"
+            )
+        else:
+            exposure_key = "alias_arms" if alias else "ordinary_named_fn_arm"
+            exposure = snapshot["switch_exposure"][exposure_key]
+            suffix = encode(f"[SYSTEM_SWITCH]\n{exposure}\n[ASSISTANT]\n```python\n")
         eos_ids = _collect_eos_token_ids(
             alias_tokenizer,
             getattr(adapter, "model", None),
@@ -505,8 +604,13 @@ def _run_live_arm(
             budget.enter("verification", reserve_ns=verify_ns)
             checks += 1
             verdict = verify_candidate(
-                source, entry_point=problem["entry_point"], cases=cases, helper_name=problem["helper_name"],
-                binding=binding, arm_uses_alias=alias, timeout_seconds=verifier_timeout,
+                source,
+                entry_point=problem["entry_point"],
+                cases=cases,
+                helper_name=None if no_helper else problem["helper_name"],
+                binding=binding,
+                arm_uses_alias=alias,
+                timeout_seconds=verifier_timeout,
                 deadline_ns=budget.deadline,
             )
             syn_c = int(verdict.get("syntactic_helper_calls", 0))
@@ -569,6 +673,22 @@ def cmd_run_live(args: argparse.Namespace) -> int:
     if args.split == "sealed" and not args.sealed_problems_json:
         raise SystemExit("Refusing sealed run without explicit --sealed-problems-json")
 
+    stage1_path = getattr(args, "stage1_receipt", None)
+    stage2_path = getattr(args, "stage2_receipt", None)
+    if stage1_path:
+        s1 = json.loads(Path(stage1_path).read_text(encoding="utf-8"))
+        if not s1.get("qualified"):
+            raise SystemExit(f"Stage 1 gate NOT qualified ({stage1_path}): {s1.get('verdict')}")
+    if stage2_path:
+        s2 = json.loads(Path(stage2_path).read_text(encoding="utf-8"))
+        if not s2.get("rung2_earned"):
+            raise SystemExit(f"Stage 2 Rung 2 gate NOT earned ({stage2_path}): {s2.get('verdict')}")
+
+    exclusive_gpu_check = check_exclusive_gpu(
+        args.device,
+        require_exclusive=bool(getattr(args, "require_exclusive_gpu", False)),
+    )
+
     local_only = not args.allow_download
     dtype = torch.bfloat16 if args.dtype == "bfloat16" else torch.float32
     limit_ns = positive_nanoseconds(args.arm_budget_seconds)
@@ -593,11 +713,11 @@ def cmd_run_live(args: argparse.Namespace) -> int:
         local_files_only=local_only,
     ).to(args.device).eval()
 
-    problems = (
-        DEV_PROBLEMS
-        if args.split == "dev"
-        else json.loads(Path(args.sealed_problems_json).read_text(encoding="utf-8"))
-    )
+    dev_split = getattr(args, "dev_split", "train")
+    if args.split == "dev":
+        problems = DEV_PROBLEMS if dev_split == "train" else get_dev_split(dev_split)
+    else:
+        problems = json.loads(Path(args.sealed_problems_json).read_text(encoding="utf-8"))
     caps = [int(x.strip()) for x in args.attempt_caps.split(",") if x.strip()]
     setup_steps = int(args.setup_steps)
     max_new_tokens = int(contract["search_budgets"]["max_new_tokens_per_attempt"])
@@ -701,11 +821,15 @@ def cmd_run_live(args: argparse.Namespace) -> int:
         "resident_model_preparation_seconds": preparation_seconds,
         "budget_limit_ns_per_arm": limit_ns,
         "verifier_reservation_ns": positive_nanoseconds(timeout_s),
+        "exclusive_gpu_check": exclusive_gpu_check,
+        "stage1_receipt_path": stage1_path,
+        "stage2_receipt_path": stage2_path,
         "helper_token_roundtrip": roundtrip_receipt,
         "model": args.model,
         "device": args.device,
         "dtype": args.dtype,
         "split": args.split,
+        "dev_split": dev_split if args.split == "dev" else None,
         "attempt_caps": caps,
         "setup_steps": setup_steps,
         "gate_receipts": gate_receipts,
@@ -717,6 +841,183 @@ def cmd_run_live(args: argparse.Namespace) -> int:
     out_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps(summary, indent=2))
     return 0
+
+
+def cmd_qualify_helper(args: argparse.Namespace) -> int:
+    """Stage 1: Qualify ordinary_named_fn vs no_helper at equal wall-clock budgets."""
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+
+    contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+    local_only = not args.allow_download
+    dtype = torch.bfloat16 if args.dtype == "bfloat16" else torch.float32
+    limit_ns = positive_nanoseconds(args.arm_budget_seconds)
+    exclusive_gpu_check = check_exclusive_gpu(
+        args.device,
+        require_exclusive=bool(getattr(args, "require_exclusive_gpu", False)),
+    )
+    preparation_start = time.perf_counter()
+    tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=local_only)
+    model = AutoModelForCausalLM.from_pretrained(
+        args.model,
+        torch_dtype=dtype,
+        local_files_only=local_only,
+    ).to(args.device).eval()
+
+    # Reserve any non-EOS/BOS in-bounds ID strictly for switch-point schema construction.
+    vocab_lim = int(model.get_input_embeddings().weight.shape[0])
+    placeholder_hid = (
+        int(args.reserved_token_id)
+        if args.reserved_token_id is not None
+        else vocab_lim - 1
+    )
+    adapter = PairedSwitchAdapter(model, helper_token_id=placeholder_hid)
+    alias_tokenizer = HelperAliasTokenizer(
+        tokenizer,
+        helper_token_id=placeholder_hid,
+        helper_symbol=HELPER_TOKEN_SYMBOL,
+        vocab_size=min(adapter.vocab_size, int(adapter.lm_head.weight.shape[0])),
+    )
+    sync = _device_synchronizer(adapter.device)
+    sync()
+    preparation_seconds = time.perf_counter() - preparation_start
+
+    problems = get_dev_split(args.dev_split)
+    caps = [int(x.strip()) for x in args.attempt_caps.split(",") if x.strip()]
+    max_new_tokens = int(contract["search_budgets"]["max_new_tokens_per_attempt"])
+    timeout_s = float(contract["search_budgets"]["verifier_timeout_seconds"])
+    records: list[dict[str, Any]] = []
+
+    try:
+        for prob in problems:
+            for cap in caps:
+                snap = build_switch_point(
+                    problem=prob,
+                    tokenizer_encode=lambda s: alias_tokenizer.encode(s, add_special_tokens=False),
+                    helper_token_id=placeholder_hid,
+                    remaining_attempt_cap=cap,
+                    remaining_token_budget=cap * max_new_tokens,
+                    setup_budget_steps=0,
+                    seed=20261127,
+                )
+                shared = ArmBudget(limit_ns, synchronize=sync)
+                prefill = None
+                try:
+                    adapter.set_deltas(None, None)
+                    shared.checkpoint()
+                    prefill = adapter.prefill_prefix(snap["prefix_token_ids"])
+                except OutOfBudget:
+                    pass
+                shared_ns = shared.finish()
+
+                for arm in ("no_helper", "ordinary_named_fn"):
+                    budget = ArmBudget(limit_ns, shared_setup_ns=shared_ns, synchronize=sync)
+                    record, _ = _run_live_arm(
+                        arm, prob, snap, prefill, adapter, alias_tokenizer, budget,
+                        attempt_cap=cap, setup_steps=0, learning_rate=0.0,
+                        max_new_tokens=max_new_tokens, verifier_timeout=timeout_s,
+                    )
+                    records.append(record)
+                recent = records[-2:]
+                arm_bits = " ".join(
+                    f"{r['arm']}={'PASS' if r['solved'] else r['status']}"
+                    f"({r['attempts_started']}att,syn={r['syntactic_helper_calls_all_attempts']},"
+                    f"pass_run={r['passing_runtime_helper_calls']},{r['elapsed_seconds']:.1f}s)"
+                    for r in recent
+                )
+                print(f"[stage1-progress] {prob['problem_id']} cap={cap}: {arm_bits}", file=sys.stderr, flush=True)
+    finally:
+        adapter.close()
+
+    min_fams = int(contract["stage1_helper_qualification"]["min_families_with_executed_helper_solve"])
+    qualification = evaluate_stage1_helper_qualification(
+        records, min_families_with_executed_helper_solve=min_fams
+    )
+    payload = {
+        "schema_version": "bits-paired-switch-stage1-qualification-v1",
+        "work_unit": "synchronized_elapsed_seconds",
+        "resident_model_preparation_seconds": preparation_seconds,
+        "budget_limit_ns_per_arm": limit_ns,
+        "exclusive_gpu_check": exclusive_gpu_check,
+        "model": args.model,
+        "device": args.device,
+        "dtype": args.dtype,
+        "dev_split": args.dev_split,
+        "attempt_caps": caps,
+        **qualification,
+        "records": records,
+    }
+    out_path = Path(args.output)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps({k: v for k, v in qualification.items() if k != "arms"}, indent=2))
+    return 0 if qualification["qualified"] else 2
+
+
+def cmd_eval_rung2(args: argparse.Namespace) -> int:
+    """Stage 2: Score frozen helper-agnostic predictor on separate validation dev families."""
+    contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+    s2_cfg = contract["stage2_rung2_prediction"]
+    tok = ByteLevelTestTokenizer(helper_symbol=HELPER_TOKEN_SYMBOL, helper_token_id=259)
+    problems = get_dev_split(args.dev_split)
+    prob_by_id = {p["problem_id"]: p for p in problems}
+
+    raw = json.loads(Path(args.outcomes_json).read_text(encoding="utf-8"))
+    records = raw.get("records", [])
+    by_key: dict[tuple[str, int], dict[str, dict[str, Any]]] = {}
+    for rec in records:
+        if rec["problem_id"] not in prob_by_id:
+            continue
+        by_key.setdefault((rec["problem_id"], int(rec["attempt_cap"])), {})[rec["arm"]] = rec
+
+    eval_items: list[dict[str, Any]] = []
+    for (pid, cap), arm_map in sorted(by_key.items()):
+        if args.install_arm not in arm_map or args.baseline_arm not in arm_map:
+            continue
+        inst = arm_map[args.install_arm]
+        base = arm_map[args.baseline_arm]
+        # Realized net utility: solve gain (+1/-1) minus normalized extra elapsed-time overhead.
+        solve_delta = float(int(bool(inst["solved"])) - int(bool(base["solved"])))
+        limit_s = float(inst.get("budget_limit_ns", 30_000_000_000)) / 1e9
+        time_penalty = (float(inst["elapsed_seconds"]) - float(base["elapsed_seconds"])) / max(1.0, limit_s)
+        realized_net = solve_delta - 0.1 * time_penalty
+        snap = build_switch_point(
+            problem=prob_by_id[pid],
+            tokenizer_encode=tok.encode,
+            helper_token_id=tok.helper_token_id,
+            remaining_attempt_cap=cap,
+            remaining_token_budget=cap * int(contract["search_budgets"]["max_new_tokens_per_attempt"]),
+            setup_budget_steps=int(contract["adaptation_policy"]["setup_budget_steps"]),
+            seed=20261127,
+        )
+        eval_items.append({"snapshot": snap, "realized_net_benefit": realized_net})
+
+    result = evaluate_rung2_predictor(
+        eval_items,
+        helper_length_threshold_lines=int(s2_cfg["helper_length_baseline_min_lines"]),
+        min_win_recall=float(s2_cfg["require_predicts_both_losses_and_wins"]["min_win_recall"]),
+        min_loss_recall=float(s2_cfg["require_predicts_both_losses_and_wins"]["min_loss_recall"]),
+    )
+    if args.output:
+        out_path = Path(args.output)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(result, indent=2))
+    return 0 if result["rung2_earned"] else 2
+
+
+def cmd_gate_rung3_dev(args: argparse.Namespace) -> int:
+    """Stage 3: Evaluate Rung 3 development gate against frozen prerequisites and controls."""
+    contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+    s1 = json.loads(Path(args.stage1_receipt).read_text(encoding="utf-8")) if args.stage1_receipt else None
+    s2 = json.loads(Path(args.stage2_receipt).read_text(encoding="utf-8")) if args.stage2_receipt else None
+    s3 = json.loads(Path(args.stage3_receipt).read_text(encoding="utf-8"))
+    verdict = evaluate_rung3_dev_gate(s3, contract=contract, stage1_receipt=s1, stage2_receipt=s2)
+    if args.output:
+        out_path = Path(args.output)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps(verdict, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(verdict, indent=2))
+    return 0 if verdict["dev_gate_passed"] else 2
 
 
 def main() -> int:
@@ -734,20 +1035,53 @@ def main() -> int:
     p_dev = sub.add_parser("verify-dev-suite", help="Verify Section 4 development families, helpers, and predictor")
     p_dev.set_defaults(func=cmd_verify_dev_suite)
 
-    p_live = sub.add_parser("run-live", help="Run live free-search paired comparison on provisioned HF model")
+    p_live = sub.add_parser("run-live", help="Run Stage 3 live free-search paired comparison on provisioned HF model")
     p_live.add_argument("--model", required=True, help="Local HF model directory or authorized repo id")
     p_live.add_argument("--device", default="cpu", choices=["cpu", "mps", "cuda"])
     p_live.add_argument("--dtype", default="float32", choices=["float32", "bfloat16"])
     p_live.add_argument("--split", default="dev", choices=["dev", "sealed"])
+    p_live.add_argument("--dev-split", default="train", choices=["train", "val", "all"])
     p_live.add_argument("--sealed-problems-json", default=None)
     p_live.add_argument("--reserved-token-id", type=int, default=None)
     p_live.add_argument("--attempt-caps", default="2,32")
     p_live.add_argument("--setup-steps", type=int, default=16)
     p_live.add_argument("--arm-budget-seconds", required=True, type=float,
                         help="Identical total elapsed-time allowance per arm, from switch through verification")
+    p_live.add_argument("--require-exclusive-gpu", action="store_true",
+                        help="Fail closed unless GPU has zero competing compute processes")
+    p_live.add_argument("--stage1-receipt", default=None, help="Optional Stage 1 qualification receipt to enforce")
+    p_live.add_argument("--stage2-receipt", default=None, help="Optional Stage 2 Rung 2 receipt to enforce")
     p_live.add_argument("--allow-download", action="store_true", help="Explicitly authorize HF download")
     p_live.add_argument("--output", required=True)
     p_live.set_defaults(func=cmd_run_live)
+
+    p_s1 = sub.add_parser("qualify-helper", help="Stage 1: qualify ordinary_named_fn vs no_helper at equal budgets")
+    p_s1.add_argument("--model", required=True, help="Local HF model directory or authorized repo id")
+    p_s1.add_argument("--device", default="cpu", choices=["cpu", "mps", "cuda"])
+    p_s1.add_argument("--dtype", default="float32", choices=["float32", "bfloat16"])
+    p_s1.add_argument("--dev-split", default="train", choices=["train", "val", "all"])
+    p_s1.add_argument("--reserved-token-id", type=int, default=None)
+    p_s1.add_argument("--attempt-caps", default="2,32")
+    p_s1.add_argument("--arm-budget-seconds", required=True, type=float)
+    p_s1.add_argument("--require-exclusive-gpu", action="store_true")
+    p_s1.add_argument("--allow-download", action="store_true")
+    p_s1.add_argument("--output", required=True)
+    p_s1.set_defaults(func=cmd_qualify_helper)
+
+    p_s2 = sub.add_parser("eval-rung2", help="Stage 2: test frozen predictor on separate dev families vs 3 baselines")
+    p_s2.add_argument("--outcomes-json", required=True, help="Stage 1 or Stage 3 JSON receipt with per-arm records")
+    p_s2.add_argument("--dev-split", default="val", choices=["train", "val", "all"])
+    p_s2.add_argument("--install-arm", default="ordinary_named_fn")
+    p_s2.add_argument("--baseline-arm", default="no_helper")
+    p_s2.add_argument("--output", default=None)
+    p_s2.set_defaults(func=cmd_eval_rung2)
+
+    p_s3 = sub.add_parser("gate-rung3-dev", help="Stage 3: evaluate development gate against frozen controls")
+    p_s3.add_argument("--stage1-receipt", default=None)
+    p_s3.add_argument("--stage2-receipt", default=None)
+    p_s3.add_argument("--stage3-receipt", required=True)
+    p_s3.add_argument("--output", default=None)
+    p_s3.set_defaults(func=cmd_gate_rung3_dev)
 
     args = parser.parse_args()
     return int(args.func(args))

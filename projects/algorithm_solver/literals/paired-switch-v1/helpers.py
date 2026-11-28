@@ -67,6 +67,76 @@ def push_unvisited(queue: list[Any], visited: set[Any], neighbors: list[Any]) ->
     return added
 
 
+def scan_quoted(text: str, i: int) -> int:
+    """Scan from opening quote at text[i], honoring backslash escapes, returning index past closing quote.
+
+    Boundary behaviors:
+    - empty suffix (i >= len(text)): returns len(text)
+    - escaped quote inside string (e.g. \\"): does not terminate the literal
+    - escaped backslash before closing quote (e.g. \\\\"): terminates at closing quote
+    - unclosed quote reaching end of string: returns len(text)
+    """
+    n = len(text)
+    if not isinstance(i, int) or isinstance(i, bool) or i < 0:
+        raise ValueError("index i must be a non-negative integer")
+    if i >= n:
+        return n
+    quote = text[i]
+    j = i + 1
+    while j < n:
+        ch = text[j]
+        if ch == "\\":
+            j += 2
+            continue
+        if ch == quote:
+            return j + 1
+        j += 1
+    return n
+
+
+def prune_window(dq: list[int], values: list[int], idx: int, min_idx: int) -> list[int]:
+    """Update monotonic-decreasing index deque dq in-place for sliding window [min_idx..idx] and return dq.
+
+    Boundary behaviors:
+    - empty deque: appends idx and returns [idx]
+    - expired front indices (< min_idx): popped from left
+    - back indices with values[k] <= values[idx]: popped from right before appending idx
+    """
+    while dq and dq[0] < min_idx:
+        dq.pop(0)
+    cur = values[idx]
+    while dq and values[dq[-1]] <= cur:
+        dq.pop()
+    dq.append(idx)
+    return dq
+
+
+def expand_grid(
+    grid: list[list[int]],
+    queue: list[list[int]],
+    visited: set[tuple[int, int]],
+    r: int,
+    c: int,
+) -> int:
+    """Enqueue unseen in-bounds passable (== 1) 4-neighbors of (r, c), mark in visited, return count added.
+
+    Boundary behaviors:
+    - corner cell (0, 0): clips out-of-bounds neighbors cleanly
+    - blocked (0) or already-visited neighbors: skipped without re-enqueuing
+    - isolated cell with no passable neighbors: returns 0
+    """
+    rows = len(grid)
+    cols = len(grid[0]) if rows else 0
+    added = 0
+    for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+        nr, nc = r + dr, c + dc
+        if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 1 and (nr, nc) not in visited:
+            visited.add((nr, nc))
+            queue.append([nr, nc])
+            added += 1
+    return added
+
+
 @dataclass(frozen=True)
 class HelperSpec:
     name: str
@@ -251,6 +321,136 @@ HELPER_SPECS: dict[str, HelperSpec] = {
                 "args_repr": "[], {0, 1, 2}, [1, 2]",
                 "expected": 0,
                 "expected_repr": "0",
+            },
+        ),
+    ),
+    "scan_quoted": HelperSpec(
+        name="scan_quoted",
+        family="string_parsing",
+        signature="scan_quoted(text, i) -> int",
+        call_template="end = {OP}(text, i)",
+        description=(
+            "Starting at opening quote index i in text, scan past backslash-escaped characters "
+            "and return the index immediately after the matching closing quote, or len(text) if unclosed."
+        ),
+        operand_convention=(
+            "Assign result via `end = {OP}(text, i)` with string `text` and quote start index `i`."
+        ),
+        syntax_mask_regex=r"[A-Za-z_][A-Za-z0-9_]*\s*=\s*{OP}\([^,()]+,\s*[^,()]+\)",
+        implementation=scan_quoted,
+        boundary_cases=(
+            {
+                "label": "empty_suffix",
+                "args": ("abc", 3),
+                "args_repr": "'abc', 3",
+                "expected": 3,
+                "expected_repr": "3",
+            },
+            {
+                "label": "escaped_quote_inside",
+                "args": ('"a\\"b",c', 0),
+                "args_repr": "'\"a\\\\\"b\",c', 0",
+                "expected": 6,
+                "expected_repr": "6",
+            },
+            {
+                "label": "escaped_backslash_before_close",
+                "args": ('"a\\\\",c', 0),
+                "args_repr": "'\"a\\\\\\\\\",c', 0",
+                "expected": 5,
+                "expected_repr": "5",
+            },
+            {
+                "label": "unclosed_quote",
+                "args": ('"abc', 0),
+                "args_repr": "'\"abc', 0",
+                "expected": 4,
+                "expected_repr": "4",
+            },
+        ),
+    ),
+    "prune_window": HelperSpec(
+        name="prune_window",
+        family="window_aggregation",
+        signature="prune_window(dq, values, idx, min_idx) -> list[int]",
+        call_template="dq = {OP}(dq, values, idx, min_idx)",
+        description=(
+            "Maintain monotonic-decreasing index deque dq for sliding window [min_idx..idx]: "
+            "drop expired indices < min_idx, pop back indices with values[k] <= values[idx], append idx."
+        ),
+        operand_convention=(
+            "Assign result via `dq = {OP}(dq, values, idx, min_idx)` with index list `dq`, "
+            "sequence `values`, current index `idx`, and window start `min_idx`."
+        ),
+        syntax_mask_regex=r"[A-Za-z_][A-Za-z0-9_]*\s*=\s*{OP}\([^,()]+,\s*[^,()]+,\s*[^,()]+,\s*[^,()]+\)",
+        implementation=prune_window,
+        boundary_cases=(
+            {
+                "label": "empty_deque",
+                "args": ([], [5, 3, 4], 0, 0),
+                "args_repr": "[], [5, 3, 4], 0, 0",
+                "expected": [0],
+                "expected_repr": "[0]",
+            },
+            {
+                "label": "expired_front_and_smaller_back",
+                "args": ([0, 1], [9, 2, 4], 2, 1),
+                "args_repr": "[0, 1], [9, 2, 4], 2, 1",
+                "expected": [2],
+                "expected_repr": "[2]",
+            },
+            {
+                "label": "equal_value_tie_pop",
+                "args": ([0], [4, 4], 1, 0),
+                "args_repr": "[0], [4, 4], 1, 0",
+                "expected": [1],
+                "expected_repr": "[1]",
+            },
+            {
+                "label": "strictly_smaller_kept",
+                "args": ([0], [7, 3], 1, 0),
+                "args_repr": "[0], [7, 3], 1, 0",
+                "expected": [0, 1],
+                "expected_repr": "[0, 1]",
+            },
+        ),
+    ),
+    "expand_grid": HelperSpec(
+        name="expand_grid",
+        family="grid_flood",
+        signature="expand_grid(grid, queue, visited, r, c) -> int",
+        call_template="added = {OP}(grid, queue, visited, r, c)",
+        description=(
+            "Append every unseen in-bounds passable (value 1) 4-neighbor of (r, c) in grid "
+            "to queue, add its (nr, nc) tuple to visited, and return count added."
+        ),
+        operand_convention=(
+            "Assign result via `added = {OP}(grid, queue, visited, r, c)` with 2D `grid`, "
+            "list `queue`, set `visited`, and integer coordinates `r`, `c`."
+        ),
+        syntax_mask_regex=r"[A-Za-z_][A-Za-z0-9_]*\s*=\s*{OP}\([^,()]+,\s*[^,()]+,\s*[^,()]+,\s*[^,()]+,\s*[^,()]+\)",
+        implementation=expand_grid,
+        boundary_cases=(
+            {
+                "label": "corner_bounds_and_blocked",
+                "args": ([[1, 1], [0, 1]], [], {(0, 0)}, 0, 0),
+                "args_repr": "[[1, 1], [0, 1]], [], {(0, 0)}, 0, 0",
+                "expected": 1,
+                "expected_repr": "1",
+            },
+            {
+                "label": "all_neighbors_visited_or_zero",
+                "args": ([[1, 0], [0, 1]], [], {(0, 0)}, 0, 0),
+                "args_repr": "[[1, 0], [0, 1]], [], {(0, 0)}, 0, 0",
+                "expected": 0,
+                "expected_repr": "0",
+            },
+            {
+                "label": "interior_four_neighbors",
+                "args": ([[0, 1, 0], [1, 1, 1], [0, 1, 0]], [], {(1, 1)}, 1, 1),
+                "args_repr": "[[0, 1, 0], [1, 1, 1], [0, 1, 0]], [], {(1, 1)}, 1, 1",
+                "expected": 4,
+                "expected_repr": "4",
             },
         ),
     ),

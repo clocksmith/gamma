@@ -19,14 +19,21 @@ HERE = Path(__file__).resolve().parent
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
-from dev_families import DEV_PROBLEMS, get_problem, verify_dev_family_suite
+from dev_families import ALL_DEV_PROBLEMS, DEV_PROBLEMS, DEV_VAL_PROBLEMS, get_problem, verify_dev_family_suite
 from helpers import HELPER_SPECS, skip_equal, verify_all_helpers
-from predictor import predict_switch_benefit, summarize_paired_search_outcomes
+from predictor import (
+    evaluate_rung2_predictor,
+    evaluate_rung3_dev_gate,
+    evaluate_stage1_helper_qualification,
+    predict_switch_benefit,
+    summarize_paired_search_outcomes,
+)
 from run_experiment import (
     CONTRACT_PATH,
     _collect_eos_token_ids,
     _extract_python_code,
     _run_live_arm,
+    check_exclusive_gpu,
     cmd_run_live,
     run_engine_verification,
     verify_helper_token_roundtrip,
@@ -535,24 +542,38 @@ class Section2And3EngineTests(unittest.TestCase):
 
 
 class Section4To6DevSuiteAndContractTests(unittest.TestCase):
-    def test_all_helpers_and_three_dev_families_verify(self):
+    def test_all_six_helpers_and_both_dev_family_splits_verify(self):
         helpers_rep = verify_all_helpers()
-        self.assertEqual(set(helpers_rep.keys()), {"skip_equal", "merge_span", "push_unvisited"})
+        self.assertEqual(
+            set(helpers_rep.keys()),
+            {"skip_equal", "merge_span", "push_unvisited", "scan_quoted", "prune_window", "expand_grid"},
+        )
 
-        suite_rep = verify_dev_family_suite(helper_token_id=259)
-        self.assertEqual(suite_rep["total_problems"], 9)
+        suite_rep = verify_dev_family_suite(helper_token_id=259, problems=ALL_DEV_PROBLEMS)
+        self.assertEqual(suite_rep["total_problems"], 18)
         self.assertEqual(
             set(suite_rep["families"]),
-            {"duplicate_handling", "interval_processing", "graph_traversal"},
+            {
+                "duplicate_handling",
+                "interval_processing",
+                "graph_traversal",
+                "string_parsing",
+                "window_aggregation",
+                "grid_flood",
+            },
         )
         self.assertEqual(
             set(suite_rep["utility_regimes"]),
             {"useful_once", "repeatedly_useful", "irrelevant_decoy"},
         )
+        # Ensure train-dev and validation-dev family sets are strictly disjoint.
+        train_fams = {p["family"] for p in DEV_PROBLEMS}
+        val_fams = {p["family"] for p in DEV_VAL_PROBLEMS}
+        self.assertEqual(train_fams & val_fams, set())
 
-    def test_switch_predictor_separates_useful_helpers_from_decoys_without_oracle_labels(self):
+    def test_frozen_helper_agnostic_predictor_works_on_train_and_separate_val_dev_families(self):
         tok = ByteLevelTestTokenizer(helper_symbol=HELPER_TOKEN_SYMBOL, helper_token_id=259)
-        for prob in DEV_PROBLEMS:
+        for prob in ALL_DEV_PROBLEMS:
             for cap in (2, 32):
                 snap = build_switch_point(
                     problem=prob,
@@ -568,12 +589,163 @@ class Section4To6DevSuiteAndContractTests(unittest.TestCase):
                 pred = predict_switch_benefit(sanitized)
                 if prob["utility_regime"] == "irrelevant_decoy":
                     self.assertEqual(
-                        pred.decision, "SKIP", f"Decoy {prob['problem_id']} cap={cap} wrongly adapted"
+                        pred.decision,
+                        "SKIP",
+                        f"Decoy {prob['problem_id']} cap={cap} wrongly adapted ({pred.visible_features})",
                     )
+                    self.assertLess(pred.predicted_net_benefit, 0.25)
                 else:
                     self.assertEqual(
-                        pred.decision, "ADAPT", f"Useful {prob['problem_id']} cap={cap} wrongly skipped"
+                        pred.decision,
+                        "ADAPT",
+                        f"Useful {prob['problem_id']} cap={cap} wrongly skipped ({pred.visible_features})",
                     )
+
+    def test_stage1_helper_qualification_requires_executed_helper_wins_across_families(self):
+        # Case 1: ordinary beats no_helper with executed helper solves in >= 2 families -> qualified.
+        good_recs = [
+            # duplicate_handling (useful_once): ordinary solves using helper, no_helper fails
+            {"problem_id": "d1", "family": "duplicate_handling", "utility_regime": "useful_once",
+             "switch_point_id": "d1@cap32", "arm": "no_helper", "solved": False, "status": "fail",
+             "passing_runtime_helper_calls": 0, "total_work_units": 30.0},
+            {"problem_id": "d1", "family": "duplicate_handling", "utility_regime": "useful_once",
+             "switch_point_id": "d1@cap32", "arm": "ordinary_named_fn", "solved": True, "status": "pass",
+             "passing_runtime_helper_calls": 3, "total_work_units": 12.0, "work_to_first_verified": 12.0},
+            # interval_processing (repeatedly_useful): ordinary solves using helper, no_helper fails
+            {"problem_id": "i1", "family": "interval_processing", "utility_regime": "repeatedly_useful",
+             "switch_point_id": "i1@cap32", "arm": "no_helper", "solved": False, "status": "fail",
+             "passing_runtime_helper_calls": 0, "total_work_units": 30.0},
+            {"problem_id": "i1", "family": "interval_processing", "utility_regime": "repeatedly_useful",
+             "switch_point_id": "i1@cap32", "arm": "ordinary_named_fn", "solved": True, "status": "pass",
+             "passing_runtime_helper_calls": 5, "total_work_units": 15.0, "work_to_first_verified": 15.0},
+            # graph_traversal (irrelevant_decoy): tie
+            {"problem_id": "g3", "family": "graph_traversal", "utility_regime": "irrelevant_decoy",
+             "switch_point_id": "g3@cap32", "arm": "no_helper", "solved": True, "status": "pass",
+             "passing_runtime_helper_calls": 0, "total_work_units": 10.0, "work_to_first_verified": 10.0},
+            {"problem_id": "g3", "family": "graph_traversal", "utility_regime": "irrelevant_decoy",
+             "switch_point_id": "g3@cap32", "arm": "ordinary_named_fn", "solved": True, "status": "pass",
+             "passing_runtime_helper_calls": 0, "total_work_units": 11.0, "work_to_first_verified": 11.0},
+        ]
+        res_ok = evaluate_stage1_helper_qualification(good_recs, bootstrap_iters=100)
+        self.assertTrue(res_ok["qualified"], res_ok)
+        self.assertEqual(res_ok["verdict"], "HELPER_QUALIFIED_FOR_STAGE2")
+
+        # Case 2: ordinary solves WITHOUT executing the helper (passing_runtime_helper_calls == 0) -> fails closed.
+        no_exec_recs = [dict(r, passing_runtime_helper_calls=0) for r in good_recs]
+        res_bad = evaluate_stage1_helper_qualification(no_exec_recs, bootstrap_iters=100)
+        self.assertFalse(res_bad["qualified"])
+        self.assertIn("fixture cannot test the alias", res_bad["verdict"])
+
+    def test_stage2_rung2_predictor_beats_all_three_baselines_and_predicts_losses_on_separate_val_families(self):
+        tok = ByteLevelTestTokenizer(helper_symbol=HELPER_TOKEN_SYMBOL, helper_token_id=259)
+        val_items = []
+        for prob in DEV_VAL_PROBLEMS:
+            for cap in (2, 32):
+                snap = build_switch_point(
+                    problem=prob,
+                    tokenizer_encode=tok.encode,
+                    helper_token_id=tok.helper_token_id,
+                    remaining_attempt_cap=cap,
+                    remaining_token_budget=cap * 384,
+                    setup_budget_steps=16,
+                )
+                # Realized net outcomes: wins on useful problems, losses on decoys.
+                if prob["utility_regime"] == "irrelevant_decoy":
+                    realized_net = -0.35
+                elif prob["utility_regime"] == "repeatedly_useful":
+                    realized_net = 0.85 if cap == 32 else 0.45
+                else:
+                    realized_net = 0.55 if cap == 32 else 0.20
+                val_items.append({"snapshot": snap, "realized_net_benefit": realized_net})
+
+        res = evaluate_rung2_predictor(val_items, helper_length_threshold_lines=12)
+        self.assertTrue(res["rung2_earned"], res)
+        self.assertTrue(res["beats_always_install"])
+        self.assertTrue(res["beats_never_install"])
+        self.assertTrue(res["beats_simple_helper_length"])
+        self.assertTrue(res["predicts_both_wins_and_losses"])
+        self.assertGreaterEqual(res["policies"]["frozen_transcript_predictor"]["loss_recall"], 0.85)
+        self.assertGreaterEqual(res["policies"]["frozen_transcript_predictor"]["win_recall"], 0.85)
+
+    def test_stage3_dev_gate_enforces_prerequisites_controls_and_keeps_holdout_sealed(self):
+        contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+        # Build synthetic dev receipt where joint beats BOTH score_only and ordinary across 3 families.
+        recs = []
+        gates = []
+        for fam, pid in [
+            ("duplicate_handling", "dup_01"),
+            ("interval_processing", "int_01"),
+            ("graph_traversal", "graph_01"),
+        ]:
+            gates.append({"problem_id": pid, "forced_call": {"fixture_passed": True}})
+            for arm, solved, prun in [
+                ("score_only_alias", False, 0),
+                ("ordinary_named_fn", False, 0),
+                ("score_and_input_alias", True, 2),
+            ]:
+                recs.append({
+                    "problem_id": pid, "family": fam, "switch_point_id": f"{pid}@cap32",
+                    "arm": arm, "solved": solved, "status": "pass" if solved else "fail",
+                    "passing_runtime_helper_calls": prun, "total_work_units": 15.0,
+                    "work_to_first_verified": 15.0 if solved else None,
+                })
+        s3_receipt = {
+            "exclusive_gpu_check": {"exclusive_verified": True},
+            "gate_receipts": gates,
+            "records": recs,
+        }
+        # Missing Stage 1 or Stage 2 -> STOP_ON_DEV.
+        blocked = evaluate_rung3_dev_gate(
+            s3_receipt, contract=contract,
+            stage1_receipt={"qualified": False},
+            stage2_receipt={"rung2_earned": True},
+        )
+        self.assertFalse(blocked["dev_gate_passed"])
+        self.assertEqual(blocked["verdict"], "STOP_ON_DEV")
+
+        # All prerequisites + both controls beaten -> ELIGIBLE_FOR_SEALED_DECISION_ONLY (not Rung 3 claim!).
+        passed = evaluate_rung3_dev_gate(
+            s3_receipt, contract=contract,
+            stage1_receipt={"qualified": True},
+            stage2_receipt={"rung2_earned": True},
+        )
+        self.assertTrue(passed["dev_gate_passed"], passed)
+        self.assertEqual(passed["verdict"], "ELIGIBLE_FOR_SEALED_DECISION_ONLY")
+        self.assertFalse(passed["rung3_claimed"])
+        self.assertEqual(passed["holdout_status"], "SEALED")
+        self.assertEqual(passed["rung4_status"], "LOCKED_PENDING_RUNG3_WIN")
+
+    def test_exclusive_gpu_check_rejects_foreign_pid_and_no_helper_arm_omits_binding(self):
+        fake_rocm = Mock(stdout="PID\tPROCESS\n999999\tother_worker\n")
+        with (
+            patch("run_experiment.shutil.which", side_effect=lambda cmd: "/usr/bin/rocm-smi" if cmd == "rocm-smi" else None),
+            patch("run_experiment.subprocess.run", return_value=fake_rocm),
+        ):
+            res = check_exclusive_gpu("cuda", require_exclusive=False)
+            self.assertFalse(res["exclusive_verified"])
+            self.assertIn(999999, res["foreign_pids"])
+            with self.assertRaises(RuntimeError):
+                check_exclusive_gpu("cuda", require_exclusive=True)
+
+        # Verify no_helper arm runs cleanly in _run_live_arm with helper_name=None and binding=None.
+        now = 0
+        budget = ArmBudget(100_000_000, shared_setup_ns=1_000_000, synchronize=lambda: None, clock=lambda: now)
+        snap = {"prefix_token_ids": [1], "rng_state": {}, "switch_exposure": {"ordinary_named_fn_arm": "unused"}}
+        with (
+            patch("run_experiment.adapt_arm_equal_budget", return_value={"tokens_processed": 0, "delta_in": None, "delta_out": None}),
+            patch("run_experiment.restore_rng_state"),
+            patch("run_experiment._sample_continuation_from_cache", return_value=([7], 1)),
+            patch("run_experiment.verify_candidate", return_value={"passed": True, "status": "pass"}) as mock_ver,
+        ):
+            rec, _ = _run_live_arm(
+                "no_helper", DEV_PROBLEMS[0], snap, Mock(), Mock(helper_token_id=259),
+                Mock(decode=Mock(return_value="pass")), budget, attempt_cap=1, setup_steps=0,
+                learning_rate=0.0, max_new_tokens=4, verifier_timeout=0.05,
+            )
+            self.assertTrue(rec["solved"])
+            self.assertIsNone(mock_ver.call_args.kwargs["helper_name"])
+            self.assertIsNone(mock_ver.call_args.kwargs["binding"])
+            self.assertFalse(mock_ver.call_args.kwargs["arm_uses_alias"])
 
     def test_paired_accounting_keeps_refusals_and_timeouts_in_denominator_and_rung4_locked(self):
         synthetic_records = [

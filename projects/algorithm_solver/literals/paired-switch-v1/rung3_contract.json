@@ -1,11 +1,55 @@
 {
-  "schema_version": "bits-paired-switch-contract-v2",
+  "schema_version": "bits-paired-switch-contract-v3",
   "study_id": "paired-switch-v1",
-  "status": "mechanical_checks_only",
+  "status": "staged_development_gates_no_experiment_started",
   "separate_from_existing_papers": true,
   "existing_paper_release_order": {
     "lead": "bits-sixbit-capacity-and-certificates",
     "companion": "bits-three-objectives"
+  },
+  "stage_order": [
+    "stage1_qualify_ordinary_helper",
+    "stage2_earn_rung2_prediction",
+    "stage3_rung3_dev_gate_exclusive_gpu"
+  ],
+  "stage1_helper_qualification": {
+    "status": "REQUIRED_BEFORE_STAGE2_AND_STAGE3",
+    "arms": ["no_helper", "ordinary_named_fn"],
+    "require_strict_solve_rate_gain_over_no_helper": true,
+    "min_families_with_executed_helper_solve": 2,
+    "required_utility_regimes": [
+      "useful_once",
+      "repeatedly_useful",
+      "irrelevant_decoy"
+    ],
+    "failure_rule": "If the ordinary helper cannot beat no_helper with executed helper solves across multiple families, the fixture cannot test the alias; stop and fix the fixture."
+  },
+  "stage2_rung2_prediction": {
+    "status": "REQUIRED_BEFORE_STAGE3",
+    "predictor_scope": "frozen_helper_agnostic_pre_switch_transcript_only",
+    "train_dev_families": [
+      "duplicate_handling",
+      "interval_processing",
+      "graph_traversal"
+    ],
+    "separate_validation_dev_families": [
+      "string_parsing",
+      "window_aggregation",
+      "grid_flood"
+    ],
+    "setup_cost_per_step_attempt_equiv": 0.05,
+    "min_net_benefit_to_adapt": 0.25,
+    "helper_length_baseline_min_lines": 12,
+    "comparators": [
+      "always_install",
+      "never_install",
+      "simple_helper_length"
+    ],
+    "require_beats_all_comparators_on_separate_dev_families": true,
+    "require_predicts_both_losses_and_wins": {
+      "min_win_recall": 0.6,
+      "min_loss_recall": 0.6
+    }
   },
   "arms": [
     {
@@ -63,7 +107,7 @@
     "verifier_timeout_seconds": 2.0,
     "total_budget": {
       "cli_argument": "--arm-budget-seconds",
-      "unit": "synchronized_elapsed_seconds_on_one_fixed_device",
+      "unit": "synchronized_elapsed_seconds_on_one_fixed_exclusive_gpu",
       "scope": "one_identical_limit_per_problem_cap_and_arm",
       "shared_prefix_prefill": "measure_once_charge_in_full_to_each_arm",
       "verifier_admission": "reserve_full_verifier_timeout_charge_actual_elapsed",
@@ -79,33 +123,25 @@
     ],
     "keep_refusals_and_timeouts_in_denominator": true
   },
-  "rung2_predictor_policy": {
-    "setup_cost_per_step_attempt_equiv": 0.05,
-    "min_net_benefit_to_adapt": 0.25,
-    "comparators": ["always_adapt", "never_adapt"],
-    "development_families": [
-      "duplicate_handling",
-      "interval_processing",
-      "graph_traversal"
-    ],
-    "utility_regimes": [
-      "useful_once",
-      "repeatedly_useful",
-      "irrelevant_decoy"
-    ]
-  },
   "rung3_promotion_bar": {
     "paired_by": ["problem_id", "switch_point_id"],
+    "require_exclusive_gpu": true,
     "min_worthwhile_solve_rate_gain": 0.05,
     "bootstrap_ci_level": 0.95,
     "require_family_bootstrap_ci_lower_gt_zero": true,
-    "stopping_rule": "Score untouched sealed families once under frozen adaptation_policy and search_budgets; no post-hoc retuning or family additions.",
+    "min_families_with_executed_helper_solve": 2,
+    "dev_gate_pass_grants": "ELIGIBLE_FOR_SEALED_DECISION_ONLY_NOT_RUNG3_CLAIM",
+    "holdout_status": "SEALED",
+    "stopping_rule": "Freeze minimum meaningful win before Stage 3 dev gate. If score_and_input_alias fails to beat BOTH score_only_alias and ordinary_named_fn by family, stop. If it passes on development, that earns a decision on whether to authorize one untouched sealed run, not a Rung 3 claim.",
     "attribution_rules": {
       "score_only_beats_frozen": "supports_better_action_selection_only",
       "input_representation_claim_requires_all": [
+        "stage1_ordinary_helper_qualified_over_no_helper",
+        "stage2_frozen_predictor_earned_on_separate_dev_families",
         "score_and_input_beats_equally_funded_score_only_in_free_search",
         "forced_call_pre_diff_zero_and_post_diff_nonzero",
-        "holds_against_ordinary_named_fn_baseline"
+        "holds_against_ordinary_named_fn_baseline",
+        "verified_solves_execute_helper_at_runtime"
       ],
       "if_ordinary_named_fn_matches_installation": "retain_helper_reuse_as_explanation_and_stop"
     }

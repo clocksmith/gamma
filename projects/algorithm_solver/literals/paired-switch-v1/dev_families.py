@@ -691,17 +691,662 @@ DEV_PROBLEMS: list[dict[str, Any]] = [
 ]
 
 
+# Separate development families reserved for Stage 2 out-of-family Rung 2
+# predictor validation (distinct from DEV_PROBLEMS above, and still strictly
+# separate from untouched sealed holdout families).
+DEV_VAL_PROBLEMS: list[dict[str, Any]] = [
+    # ------------------------------------------------------------------
+    # Validation Family 4: string_parsing (helper: scan_quoted)
+    # ------------------------------------------------------------------
+    {
+        "problem_id": "str_01_split_csv_quoted",
+        "family": "string_parsing",
+        "utility_regime": "useful_once",
+        "helper_name": "scan_quoted",
+        "entry_point": "split_csv_line",
+        "statement": (
+            "Write `split_csv_line(line)` splitting a single CSV line on commas outside double or "
+            "single quotes while keeping quotes and backslash escapes intact inside each field."
+        ),
+        "failed_attempts": [
+            (
+                "def split_csv_line(line):\n"
+                "    return line.split(',')\n"
+            ),
+            (
+                "def split_csv_line(line):\n"
+                "    fields = []\n"
+                "    cur = []\n"
+                "    in_q = False\n"
+                "    for ch in line:\n"
+                "        if ch == '\"':\n"
+                "            in_q = not in_q\n"
+                "            cur.append(ch)\n"
+                "        elif ch == ',' and not in_q:\n"
+                "            fields.append(''.join(cur))\n"
+                "            cur = []\n"
+                "        else:\n"
+                "            cur.append(ch)\n"
+                "    fields.append(''.join(cur))\n"
+                "    return fields\n"
+            ),
+        ],
+        "reference_with_helper": (
+            "def split_csv_line(line):\n"
+            "    fields = []\n"
+            "    n = len(line)\n"
+            "    start = 0\n"
+            "    i = 0\n"
+            "    while i < n:\n"
+            "        if line[i] in ('\"', \"'\"):\n"
+            "            end = {OP}(line, i)\n"
+            "            i = end\n"
+            "        elif line[i] == ',':\n"
+            "            fields.append(line[start:i])\n"
+            "            i += 1\n"
+            "            start = i\n"
+            "        else:\n"
+            "            i += 1\n"
+            "    fields.append(line[start:])\n"
+            "    return fields\n"
+        ),
+        "public_cases": [
+            {
+                "label": "escaped_quote_inside_field",
+                "args": ['a,"b\\",c",d'],
+                "expected": ["a", '"b\\",c"', "d"],
+            },
+            {
+                "label": "escaped_backslash_before_closing_quote",
+                "args": ['"a\\\\",b'],
+                "expected": ['"a\\\\"', "b"],
+            },
+        ],
+        "hidden_cases": [
+            {"label": "plain_csv", "args": ["x,y,z"], "expected": ["x", "y", "z"]},
+            {"label": "single_quoted_comma", "args": ["'a,b',c"], "expected": ["'a,b'", "c"]},
+        ],
+    },
+    {
+        "problem_id": "str_02_strip_comments_and_extract_strings",
+        "family": "string_parsing",
+        "utility_regime": "repeatedly_useful",
+        "helper_name": "scan_quoted",
+        "entry_point": "clean_and_extract_literals",
+        "statement": (
+            "Write `clean_and_extract_literals(src)` taking multi-line text `src`, stripping `#` "
+            "comments that occur outside quoted strings on each line, and returning `[cleaned_src, "
+            "quoted_literals]` where `quoted_literals` lists all quoted substrings from the cleaned text."
+        ),
+        "failed_attempts": [
+            (
+                "def clean_and_extract_literals(src):\n"
+                "    out_lines = [ln.split('#', 1)[0] for ln in src.split('\\n')]\n"
+                "    cleaned = '\\n'.join(out_lines)\n"
+                "    return [cleaned, []]\n"
+            ),
+            (
+                "def clean_and_extract_literals(src):\n"
+                "    cleaned = src\n"
+                "    lits = []\n"
+                "    i = 0\n"
+                "    while i < len(cleaned):\n"
+                "        if cleaned[i] == '\"':\n"
+                "            j = cleaned.find('\"', i + 1)\n"
+                "            if j == -1:\n"
+                "                break\n"
+                "            lits.append(cleaned[i:j + 1])\n"
+                "            i = j + 1\n"
+                "        else:\n"
+                "            i += 1\n"
+                "    return [cleaned, lits]\n"
+            ),
+        ],
+        "reference_with_helper": (
+            "def clean_and_extract_literals(src):\n"
+            "    out_lines = []\n"
+            "    for ln in src.split('\\n'):\n"
+            "        i = 0\n"
+            "        cut = len(ln)\n"
+            "        while i < len(ln):\n"
+            "            if ln[i] in ('\"', \"'\"):\n"
+            "                end = {OP}(ln, i)\n"
+            "                i = end\n"
+            "            elif ln[i] == '#':\n"
+            "                cut = i\n"
+            "                break\n"
+            "            else:\n"
+            "                i += 1\n"
+            "        out_lines.append(ln[:cut])\n"
+            "    cleaned = '\\n'.join(out_lines)\n"
+            "    lits = []\n"
+            "    k = 0\n"
+            "    while k < len(cleaned):\n"
+            "        if cleaned[k] in ('\"', \"'\"):\n"
+            "            end = {OP}(cleaned, k)\n"
+            "            lits.append(cleaned[k:end])\n"
+            "            k = end\n"
+            "        else:\n"
+            "            k += 1\n"
+            "    return [cleaned, lits]\n"
+        ),
+        "public_cases": [
+            {
+                "label": "hash_inside_escaped_quote_and_comment",
+                "args": ['x = "a\\"#b" # trailing\ny = "c\\\\" # end'],
+                "expected": ['x = "a\\"#b" \ny = "c\\\\" ', ['"a\\"#b"', '"c\\\\"']],
+            },
+            {
+                "label": "comment_only_line",
+                "args": ["# ignore \"not_a_lit\"\nz = 'ok'"],
+                "expected": ["\nz = 'ok'", ["'ok'"]],
+            },
+        ],
+        "hidden_cases": [
+            {"label": "no_comments", "args": ['a = "hi"'], "expected": ['a = "hi"', ['"hi"']]},
+            {"label": "empty", "args": [""], "expected": ["", []]},
+        ],
+    },
+    {
+        "problem_id": "str_03_balance_brackets_decoy",
+        "family": "string_parsing",
+        "utility_regime": "irrelevant_decoy",
+        "helper_name": "scan_quoted",
+        "entry_point": "is_balanced_brackets",
+        "statement": (
+            "Write `is_balanced_brackets(s)` returning True if string `s` consisting only of "
+            "brackets `()[]{}` is properly nested and balanced, else False."
+        ),
+        "failed_attempts": [
+            (
+                "def is_balanced_brackets(s):\n"
+                "    return s.count('(') == s.count(')') and s.count('[') == s.count(']') and s.count('{') == s.count('}')\n"
+            ),
+            (
+                "def is_balanced_brackets(s):\n"
+                "    depth = 0\n"
+                "    for ch in s:\n"
+                "        if ch in '([{':\n"
+                "            depth += 1\n"
+                "        else:\n"
+                "            depth -= 1\n"
+                "            if depth < 0:\n"
+                "                return False\n"
+                "    return depth == 0\n"
+            ),
+        ],
+        "reference_with_helper": (
+            "def is_balanced_brackets(s):\n"
+            "    pairs = {')': '(', ']': '[', '}': '{'}\n"
+            "    stack = []\n"
+            "    for ch in s:\n"
+            "        if ch in '([{':\n"
+            "            stack.append(ch)\n"
+            "        elif ch in pairs:\n"
+            "            if not stack or stack[-1] != pairs[ch]:\n"
+            "                return False\n"
+            "            stack.pop()\n"
+            "    return not stack\n"
+        ),
+        "public_cases": [
+            {"label": "crossed_bracket_nesting", "args": ["([)]"], "expected": False},
+            {"label": "mismatched_closing_bracket", "args": ["(]"], "expected": False},
+        ],
+        "hidden_cases": [
+            {"label": "valid_nested", "args": ["{[()[]]}"], "expected": True},
+            {"label": "empty_brackets", "args": [""], "expected": True},
+        ],
+    },
+    # ------------------------------------------------------------------
+    # Validation Family 5: window_aggregation (helper: prune_window)
+    # ------------------------------------------------------------------
+    {
+        "problem_id": "win_01_sliding_max",
+        "family": "window_aggregation",
+        "utility_regime": "useful_once",
+        "helper_name": "prune_window",
+        "entry_point": "sliding_window_max",
+        "statement": (
+            "Write `sliding_window_max(nums, k)` returning the list of maximum values for every "
+            "contiguous window of size `k` (`1 <= k <= len(nums)`), or `[]` if `nums` is empty."
+        ),
+        "failed_attempts": [
+            (
+                "def sliding_window_max(nums, k):\n"
+                "    dq = []\n"
+                "    out = []\n"
+                "    for i, x in enumerate(nums):\n"
+                "        while dq and nums[dq[-1]] < x:\n"
+                "            dq.pop()\n"
+                "        dq.append(i)\n"
+                "        if i >= k - 1:\n"
+                "            out.append(nums[dq[0]])\n"
+                "    return out\n"
+            ),
+            (
+                "def sliding_window_max(nums, k):\n"
+                "    dq = []\n"
+                "    out = []\n"
+                "    for i in range(len(nums)):\n"
+                "        if dq and dq[0] <= i - k:\n"
+                "            dq.pop(0)\n"
+                "        if dq and nums[dq[-1]] <= nums[i]:\n"
+                "            dq.pop()\n"
+                "        dq.append(i)\n"
+                "        if i >= k - 1:\n"
+                "            out.append(nums[dq[0]])\n"
+                "    return out\n"
+            ),
+        ],
+        "reference_with_helper": (
+            "def sliding_window_max(nums, k):\n"
+            "    if not nums:\n"
+            "        return []\n"
+            "    dq = []\n"
+            "    out = []\n"
+            "    for idx in range(len(nums)):\n"
+            "        dq = {OP}(dq, nums, idx, idx - k + 1)\n"
+            "        if idx >= k - 1:\n"
+            "            out.append(nums[dq[0]])\n"
+            "    return out\n"
+        ),
+        "public_cases": [
+            {"label": "expired_front_maximum", "args": [[9, 1, 2, 3], 2], "expected": [9, 2, 3]},
+            {"label": "multi_pop_monotonic_deque", "args": [[8, 4, 2, 7, 1], 3], "expected": [8, 7, 7]},
+        ],
+        "hidden_cases": [
+            {"label": "equal_values_window", "args": [[3, 3, 1, 2, 2], 2], "expected": [3, 3, 2, 2]},
+            {"label": "window_of_one", "args": [[4, -1, 5], 1], "expected": [4, -1, 5]},
+        ],
+    },
+    {
+        "problem_id": "win_02_dual_window_max_gap",
+        "family": "window_aggregation",
+        "utility_regime": "repeatedly_useful",
+        "helper_name": "prune_window",
+        "entry_point": "dual_window_max_diff",
+        "statement": (
+            "Write `dual_window_max_diff(nums, k1, k2)` (`1 <= k1 <= k2 <= len(nums)`) returning "
+            "the maximum value of `max(nums[i-k2+1:i+1]) - max(nums[i-k1+1:i+1])` over all "
+            "`i >= k2 - 1`."
+        ),
+        "failed_attempts": [
+            (
+                "def dual_window_max_diff(nums, k1, k2):\n"
+                "    dq1, dq2 = [], []\n"
+                "    best = 0\n"
+                "    for i, x in enumerate(nums):\n"
+                "        while dq1 and nums[dq1[-1]] <= x:\n"
+                "            dq1.pop()\n"
+                "        dq1.append(i)\n"
+                "        while dq2 and nums[dq2[-1]] <= x:\n"
+                "            dq2.pop()\n"
+                "        dq2.append(i)\n"
+                "        if i >= k2 - 1:\n"
+                "            best = max(best, nums[dq2[0]] - nums[dq1[0]])\n"
+                "    return best\n"
+            ),
+            (
+                "def dual_window_max_diff(nums, k1, k2):\n"
+                "    dq1, dq2 = [], []\n"
+                "    best = 0\n"
+                "    for i in range(len(nums)):\n"
+                "        if dq1 and dq1[0] < i - k1 + 1:\n"
+                "            dq1.pop(0)\n"
+                "        if dq1 and nums[dq1[-1]] <= nums[i]:\n"
+                "            dq1.pop()\n"
+                "        dq1.append(i)\n"
+                "        if dq2 and dq2[0] < i - k2 + 1:\n"
+                "            dq2.pop(0)\n"
+                "        if dq2 and nums[dq2[-1]] <= nums[i]:\n"
+                "            dq2.pop()\n"
+                "        dq2.append(i)\n"
+                "        if i >= k2 - 1:\n"
+                "            best = max(best, nums[dq2[0]] - nums[dq1[0]])\n"
+                "    return best\n"
+            ),
+        ],
+        "reference_with_helper": (
+            "def dual_window_max_diff(nums, k1, k2):\n"
+            "    dq1 = []\n"
+            "    dq2 = []\n"
+            "    best = 0\n"
+            "    for idx in range(len(nums)):\n"
+            "        dq1 = {OP}(dq1, nums, idx, idx - k1 + 1)\n"
+            "        dq2 = {OP}(dq2, nums, idx, idx - k2 + 1)\n"
+            "        if idx >= k2 - 1:\n"
+            "            diff = nums[dq2[0]] - nums[dq1[0]]\n"
+            "            if diff > best:\n"
+            "                best = diff\n"
+            "    return best\n"
+        ),
+        "public_cases": [
+            {"label": "expired_front_and_dual_deque", "args": [[10, 4, 2, 6, 1], 2, 4], "expected": 4},
+            {"label": "stale_peak_drops_out", "args": [[20, 1, 1, 1, 5, 2], 2, 3], "expected": 19},
+            {"label": "multi_pop_monotonic_deque_bug", "args": [[10, 9, 2, 1, 8], 3, 4], "expected": 1},
+        ],
+        "hidden_cases": [
+            {"label": "equal_widths", "args": [[5, 2, 9, 1], 2, 2], "expected": 0},
+            {"label": "descending", "args": [[10, 8, 6, 4, 2], 1, 3], "expected": 4},
+        ],
+    },
+    {
+        "problem_id": "win_03_fixed_window_sum_decoy",
+        "family": "window_aggregation",
+        "utility_regime": "irrelevant_decoy",
+        "helper_name": "prune_window",
+        "entry_point": "max_window_sum",
+        "statement": (
+            "Write `max_window_sum(nums, k)` returning the maximum sum of any contiguous "
+            "subarray of length `k` (`1 <= k <= len(nums)`). Values may be negative."
+        ),
+        "failed_attempts": [
+            (
+                "def max_window_sum(nums, k):\n"
+                "    best = 0\n"
+                "    cur = sum(nums[:k])\n"
+                "    best = max(best, cur)\n"
+                "    for i in range(k, len(nums)):\n"
+                "        cur += nums[i] - nums[i - k]\n"
+                "        best = max(best, cur)\n"
+                "    return best\n"
+            ),
+            (
+                "def max_window_sum(nums, k):\n"
+                "    return sum(sorted(nums)[-k:])\n"
+            ),
+        ],
+        "reference_with_helper": (
+            "def max_window_sum(nums, k):\n"
+            "    cur = sum(nums[:k])\n"
+            "    best = cur\n"
+            "    for i in range(k, len(nums)):\n"
+            "        cur += nums[i] - nums[i - k]\n"
+            "        if cur > best:\n"
+            "            best = cur\n"
+            "    return best\n"
+        ),
+        "public_cases": [
+            {"label": "all_negative_sum_init", "args": [[-5, -2, -8, -1], 2], "expected": -7},
+            {"label": "non_contiguous_sort_bug", "args": [[9, -10, 8, -10, 7], 2], "expected": -1},
+        ],
+        "hidden_cases": [
+            {"label": "mixed_positive", "args": [[1, 4, -2, 6, 3], 3], "expected": 8},
+            {"label": "full_length", "args": [[-3, 2, -4], 3], "expected": -5},
+        ],
+    },
+    # ------------------------------------------------------------------
+    # Validation Family 6: grid_flood (helper: expand_grid)
+    # ------------------------------------------------------------------
+    {
+        "problem_id": "grid_01_largest_island",
+        "family": "grid_flood",
+        "utility_regime": "useful_once",
+        "helper_name": "expand_grid",
+        "entry_point": "largest_island_area",
+        "statement": (
+            "Write `largest_island_area(grid)` returning the size of the largest 4-connected "
+            "component of `1` cells in a binary 2D grid (`0` if none)."
+        ),
+        "failed_attempts": [
+            (
+                "def largest_island_area(grid):\n"
+                "    rows, cols = len(grid), len(grid[0]) if grid else 0\n"
+                "    visited = set()\n"
+                "    best = 0\n"
+                "    for r in range(rows):\n"
+                "        for c in range(cols):\n"
+                "            if grid[r][c] == 1 and (r, c) not in visited:\n"
+                "                q = [(r, c)]\n"
+                "                area = 0\n"
+                "                while q:\n"
+                "                    cr, cc = q.pop(0)\n"
+                "                    visited.add((cr, cc))\n"
+                "                    area += 1\n"
+                "                    for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1)):\n"
+                "                        nr, nc = cr + dr, cc + dc\n"
+                "                        if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 1 and (nr, nc) not in visited:\n"
+                "                            q.append((nr, nc))\n"
+                "                best = max(best, area)\n"
+                "    return best\n"
+            ),
+            (
+                "def largest_island_area(grid):\n"
+                "    rows, cols = len(grid), len(grid[0]) if grid else 0\n"
+                "    best = 0\n"
+                "    for r in range(rows):\n"
+                "        for c in range(cols):\n"
+                "            if grid[r][c] == 1:\n"
+                "                cnt = 1\n"
+                "                for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1)):\n"
+                "                    if grid[r + dr][c + dc] == 1:\n"
+                "                        cnt += 1\n"
+                "                best = max(best, cnt)\n"
+                "    return best\n"
+            ),
+        ],
+        "reference_with_helper": (
+            "def largest_island_area(grid):\n"
+            "    rows = len(grid)\n"
+            "    cols = len(grid[0]) if rows else 0\n"
+            "    visited = set()\n"
+            "    best = 0\n"
+            "    for r in range(rows):\n"
+            "        for c in range(cols):\n"
+            "            if grid[r][c] == 1 and (r, c) not in visited:\n"
+            "                visited.add((r, c))\n"
+            "                q = [[r, c]]\n"
+            "                area = 0\n"
+            "                while q:\n"
+            "                    cr, cc = q.pop(0)\n"
+            "                    area += 1\n"
+            "                    added = {OP}(grid, q, visited, cr, cc)\n"
+            "                if area > best:\n"
+            "                    best = area\n"
+            "    return best\n"
+        ),
+        "public_cases": [
+            {
+                "label": "square_2x2_duplicate_enqueue_bug",
+                "args": [[[1, 1, 0], [1, 1, 0], [0, 0, 1]]],
+                "expected": 4,
+            },
+            {
+                "label": "corner_bounds_grid",
+                "args": [[[1, 0], [0, 0]]],
+                "expected": 1,
+            },
+        ],
+        "hidden_cases": [
+            {"label": "all_zeros", "args": [[[0, 0], [0, 0]]], "expected": 0},
+            {"label": "u_shape", "args": [[[1, 0, 1], [1, 0, 1], [1, 1, 1]]], "expected": 7},
+        ],
+    },
+    {
+        "problem_id": "grid_02_islands_and_top_reach",
+        "family": "grid_flood",
+        "utility_regime": "repeatedly_useful",
+        "helper_name": "expand_grid",
+        "entry_point": "islands_and_top_reachable",
+        "statement": (
+            "Write `islands_and_top_reachable(grid)` returning `[island_count, top_reachable_cells]` "
+            "where `island_count` is the number of 4-connected `1`-components and `top_reachable_cells` "
+            "is the number of `1` cells reachable from any `1` cell on row 0."
+        ),
+        "failed_attempts": [
+            (
+                "def islands_and_top_reachable(grid):\n"
+                "    rows, cols = len(grid), len(grid[0]) if grid else 0\n"
+                "    visited = set()\n"
+                "    islands = 0\n"
+                "    for r in range(rows):\n"
+                "        for c in range(cols):\n"
+                "            if grid[r][c] == 1 and (r, c) not in visited:\n"
+                "                islands += 1\n"
+                "                q = [(r, c)]\n"
+                "                visited.add((r, c))\n"
+                "                while q:\n"
+                "                    cr, cc = q.pop()\n"
+                "                    for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1)):\n"
+                "                        nr, nc = cr + dr, cc + dc\n"
+                "                        if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 1 and (nr, nc) not in visited:\n"
+                "                            visited.add((nr, nc))\n"
+                "                            q.append((nr, nc))\n"
+                "    top_cnt = sum(grid[0]) if rows else 0\n"
+                "    return [islands, top_cnt]\n"
+            ),
+            (
+                "def islands_and_top_reachable(grid):\n"
+                "    rows, cols = len(grid), len(grid[0]) if grid else 0\n"
+                "    seen = set()\n"
+                "    for c in range(cols):\n"
+                "        if grid[0][c] == 1:\n"
+                "            seen.add((0, c))\n"
+                "            if rows > 1 and grid[1][c] == 1:\n"
+                "                seen.add((1, c))\n"
+                "    return [1, len(seen)]\n"
+            ),
+        ],
+        "reference_with_helper": (
+            "def islands_and_top_reachable(grid):\n"
+            "    rows = len(grid)\n"
+            "    cols = len(grid[0]) if rows else 0\n"
+            "    visited = set()\n"
+            "    islands = 0\n"
+            "    for r in range(rows):\n"
+            "        for c in range(cols):\n"
+            "            if grid[r][c] == 1 and (r, c) not in visited:\n"
+            "                islands += 1\n"
+            "                visited.add((r, c))\n"
+            "                q = [[r, c]]\n"
+            "                while q:\n"
+            "                    cr, cc = q.pop(0)\n"
+            "                    added = {OP}(grid, q, visited, cr, cc)\n"
+            "    top_seen = set()\n"
+            "    tq = []\n"
+            "    if rows:\n"
+            "        for c in range(cols):\n"
+            "            if grid[0][c] == 1:\n"
+            "                top_seen.add((0, c))\n"
+            "                tq.append([0, c])\n"
+            "    while tq:\n"
+            "        cr, cc = tq.pop(0)\n"
+            "        added = {OP}(grid, tq, top_seen, cr, cc)\n"
+            "    return [islands, len(top_seen)]\n"
+        ),
+        "public_cases": [
+            {
+                "label": "multi_hop_top_island_and_detached",
+                "args": [[[1, 0, 0], [1, 1, 0], [0, 1, 0], [0, 0, 1]]],
+                "expected": [2, 4],
+            },
+            {
+                "label": "two_top_components",
+                "args": [[[1, 0, 1], [1, 0, 1]]],
+                "expected": [2, 4],
+            },
+        ],
+        "hidden_cases": [
+            {"label": "no_top_land", "args": [[[0, 0], [1, 1]]], "expected": [1, 0]},
+            {"label": "all_zero", "args": [[[0, 0], [0, 0]]], "expected": [0, 0]},
+        ],
+    },
+    {
+        "problem_id": "grid_03_min_path_sum_dp_decoy",
+        "family": "grid_flood",
+        "utility_regime": "irrelevant_decoy",
+        "helper_name": "expand_grid",
+        "entry_point": "min_grid_path_sum",
+        "statement": (
+            "Write `min_grid_path_sum(cost)` for a non-empty 2D grid of positive integers, "
+            "returning the minimum total path cost from `(0, 0)` to `(R-1, C-1)` moving only "
+            "right or down."
+        ),
+        "failed_attempts": [
+            (
+                "def min_grid_path_sum(cost):\n"
+                "    r, c = 0, 0\n"
+                "    rows, cols = len(cost), len(cost[0])\n"
+                "    total = cost[0][0]\n"
+                "    while (r, c) != (rows - 1, cols - 1):\n"
+                "        if r == rows - 1:\n"
+                "            c += 1\n"
+                "        elif c == cols - 1:\n"
+                "            r += 1\n"
+                "        elif cost[r][c + 1] < cost[r + 1][c]:\n"
+                "            c += 1\n"
+                "        else:\n"
+                "            r += 1\n"
+                "        total += cost[r][c]\n"
+                "    return total\n"
+            ),
+            (
+                "def min_grid_path_sum(cost):\n"
+                "    return sum(cost[0]) + sum(row[-1] for row in cost[1:])\n"
+            ),
+        ],
+        "reference_with_helper": (
+            "def min_grid_path_sum(cost):\n"
+            "    rows, cols = len(cost), len(cost[0])\n"
+            "    dp = [[0] * cols for _ in range(rows)]\n"
+            "    dp[0][0] = cost[0][0]\n"
+            "    for c in range(1, cols):\n"
+            "        dp[0][c] = dp[0][c - 1] + cost[0][c]\n"
+            "    for r in range(1, rows):\n"
+            "        dp[r][0] = dp[r - 1][0] + cost[r][0]\n"
+            "    for r in range(1, rows):\n"
+            "        for c in range(1, cols):\n"
+            "            dp[r][c] = cost[r][c] + min(dp[r - 1][c], dp[r][c - 1])\n"
+            "    return dp[-1][-1]\n"
+        ),
+        "public_cases": [
+            {
+                "label": "greedy_trap_dp_cost",
+                "args": [[[1, 2, 100], [5, 1, 1], [100, 1, 1]]],
+                "expected": 6,
+            },
+            {
+                "label": "weighted_border_not_optimal",
+                "args": [[[1, 3, 1], [1, 5, 1], [4, 2, 1]]],
+                "expected": 7,
+            },
+        ],
+        "hidden_cases": [
+            {"label": "single_cell", "args": [[[9]]], "expected": 9},
+            {"label": "rect_grid", "args": [[[1, 2, 3], [4, 5, 6]]], "expected": 12},
+        ],
+    },
+]
+
+
+ALL_DEV_PROBLEMS: list[dict[str, Any]] = DEV_PROBLEMS + DEV_VAL_PROBLEMS
+
+
+def get_dev_split(split_name: str = "train") -> list[dict[str, Any]]:
+    if split_name == "train":
+        return list(DEV_PROBLEMS)
+    if split_name == "val":
+        return list(DEV_VAL_PROBLEMS)
+    if split_name == "all":
+        return list(ALL_DEV_PROBLEMS)
+    raise ValueError(f"Unknown dev split: {split_name!r} (expected 'train', 'val', or 'all')")
+
+
 def get_problem(problem_id: str) -> dict[str, Any]:
-    for prob in DEV_PROBLEMS:
+    for prob in ALL_DEV_PROBLEMS:
         if prob["problem_id"] == problem_id:
             return prob
     raise KeyError(f"Unknown problem_id: {problem_id}")
 
 
-def verify_dev_family_suite(helper_token_id: int = 259) -> dict[str, Any]:
+def verify_dev_family_suite(
+    helper_token_id: int = 259,
+    problems: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
     """Verify every dev problem's failed attempts FAIL and references PASS both alias and ordinary arms."""
+    target_problems = list(ALL_DEV_PROBLEMS if problems is None else problems)
     rows = []
-    for prob in DEV_PROBLEMS:
+    for prob in target_problems:
         all_cases = prob["public_cases"] + prob["hidden_cases"]
         # 1. Both saved pre-switch attempts must fail public cases.
         for idx, bad_src in enumerate(prob["failed_attempts"], start=1):
