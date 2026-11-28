@@ -24,6 +24,8 @@ from helpers import HELPER_SPECS, skip_equal, verify_all_helpers
 from predictor import predict_switch_benefit, summarize_paired_search_outcomes
 from run_experiment import (
     CONTRACT_PATH,
+    _collect_eos_token_ids,
+    _extract_python_code,
     _run_live_arm,
     cmd_run_live,
     run_engine_verification,
@@ -329,6 +331,15 @@ class LiveBudgetTests(unittest.TestCase):
                 self.assertTrue(receipt["helper_token_roundtrip"]["probe_executable_passed"])
                 self.assertTrue(receipt["gate_receipts"][0]["forced_call"]["fixture_passed"])
                 self.assertTrue(receipt["gate_receipts"][0]["forced_call"]["input_effect_isolated"])
+
+    def test_extract_python_code_handles_prompt_opened_fence_and_multi_eos(self):
+        # When prompt suffix opened ```python\n, extract first block before closing ```.
+        raw = "def f(xs):\n    return xs\n```\nextra text\n```python\ndef wrong():\n    pass\n```"
+        self.assertEqual(_extract_python_code(raw, prompt_opened_fence=True), "def f(xs):\n    return xs\n")
+        self.assertEqual(_extract_python_code("def g():\n    return 1\n```", prompt_opened_fence=True), "def g():\n    return 1\n")
+        tok = Mock(eos_token_id=151645)
+        model = Mock(generation_config=Mock(eos_token_id=[151645, 151643]))
+        self.assertEqual(_collect_eos_token_ids(tok, model, exclude_id=151665), {151645, 151643})
 
 
 class Section1SwitchPointTests(unittest.TestCase):

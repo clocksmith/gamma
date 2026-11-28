@@ -265,11 +265,37 @@ def cmd_verify_dev_suite(_args: argparse.Namespace) -> int:
 _CODE_BLOCK_RE = re.compile(r"```(?:python|py|python3)?\s*\n(.*?)```", re.S)
 
 
-def _extract_python_code(text: str) -> str:
+def _extract_python_code(text: str, *, prompt_opened_fence: bool = False) -> str:
+    if prompt_opened_fence:
+        stripped = text.lstrip()
+        if not stripped.startswith("```"):
+            if "```" in text:
+                first = text.split("```", 1)[0].strip()
+                if first:
+                    return first + "\n"
+            return text.strip() + "\n"
     blocks = _CODE_BLOCK_RE.findall(text)
     if blocks:
         return blocks[-1].strip() + "\n"
     return text.strip() + "\n"
+
+
+def _collect_eos_token_ids(tokenizer: Any, model: Any = None, *, exclude_id: int | None = None) -> set[int]:
+    ids: set[int] = set()
+    sources = [getattr(tokenizer, "eos_token_id", None)]
+    gen_cfg = getattr(model, "generation_config", None) if model is not None else None
+    if gen_cfg is not None:
+        sources.append(getattr(gen_cfg, "eos_token_id", None))
+    for src in sources:
+        if isinstance(src, int):
+            ids.add(src)
+        elif isinstance(src, (list, tuple, set)):
+            for item in src:
+                if isinstance(item, int):
+                    ids.add(item)
+    if exclude_id is not None:
+        ids.discard(int(exclude_id))
+    return ids
 
 
 def _sample_continuation_from_cache(
@@ -279,9 +305,11 @@ def _sample_continuation_from_cache(
     start_pos: int,
     prompt_suffix_ids: list[int],
     max_new_tokens: int,
-    eos_token_id: int | None,
+    eos_token_id: int | set[int] | list[int] | tuple[int, ...] | None,
     temperature: float,
     budget: ArmBudget,
+    stop_on_fence_close: bool = False,
+    decode_fn: Callable[[list[int]], str] | None = None,
 ) -> tuple[list[int], int]:
     """Generate one candidate attempt forward-only from a cloned KV cache."""
     if prompt_suffix_ids:
@@ -293,6 +321,12 @@ def _sample_continuation_from_cache(
     else:
         raise ValueError("prompt_suffix_ids must be non-empty")
 
+    eos_ids: set[int] = set()
+    if isinstance(eos_token_id, int):
+        eos_ids.add(eos_token_id)
+    elif isinstance(eos_token_id, (set, list, tuple)):
+        eos_ids.update(int(x) for x in eos_token_id if isinstance(x, int))
+
     generated: list[int] = []
     with torch.no_grad():
         for _ in range(max_new_tokens):
@@ -303,8 +337,12 @@ def _sample_continuation_from_cache(
                 probs = torch.softmax(next_logits.to(torch.float32) / temperature, dim=-1)
                 tok_id = int(torch.multinomial(probs, num_samples=1).item())
             generated.append(tok_id)
-            if eos_token_id is not None and tok_id == eos_token_id:
+            if tok_id in eos_ids:
                 break
+            if stop_on_fence_close and decode_fn is not None and len(generated) >= 4:
+                tail = decode_fn(generated[-4:])
+                if "```" in tail:
+                    break
             inp = torch.tensor([[tok_id]], dtype=torch.long, device=adapter.device)
             pos_ids = torch.tensor([[pos]], dtype=torch.long, device=adapter.device)
             budget.checkpoint()
@@ -438,6 +476,11 @@ def _run_live_arm(
         exposure_key = "alias_arms" if alias else "ordinary_named_fn_arm"
         exposure = snapshot["switch_exposure"][exposure_key]
         suffix = encode(f"[SYSTEM_SWITCH]\n{exposure}\n[ASSISTANT]\n```python\n")
+        eos_ids = _collect_eos_token_ids(
+            alias_tokenizer,
+            getattr(adapter, "model", None),
+            exclude_id=adapter.helper_token_id,
+        )
         cases = problem["public_cases"] + problem["hidden_cases"]
         for attempt in range(attempt_cap):
             # An attempt cannot yield a verified solution without one full verifier window.
@@ -447,12 +490,17 @@ def _run_live_arm(
             ids, tokens = _sample_continuation_from_cache(
                 adapter, past_key_values=prefill.past_key_values,
                 start_pos=len(snapshot["prefix_token_ids"]), prompt_suffix_ids=suffix,
-                max_new_tokens=max_new_tokens, eos_token_id=alias_tokenizer.eos_token_id,
+                max_new_tokens=max_new_tokens, eos_token_id=eos_ids or alias_tokenizer.eos_token_id,
                 temperature=0.0 if attempt == 0 else 0.7, budget=budget,
+                stop_on_fence_close=True,
+                decode_fn=lambda chunk: alias_tokenizer.decode(chunk, skip_special_tokens=True),
             )
             generation_tokens += tokens
             partial_generation = False
-            source = _extract_python_code(alias_tokenizer.decode(ids, skip_special_tokens=True))
+            source = _extract_python_code(
+                alias_tokenizer.decode(ids, skip_special_tokens=True),
+                prompt_opened_fence=True,
+            )
             budget.enter("verification", reserve_ns=verify_ns)
             checks += 1
             verdict = verify_candidate(
