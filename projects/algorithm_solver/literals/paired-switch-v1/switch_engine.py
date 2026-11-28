@@ -110,6 +110,95 @@ class ByteLevelTestTokenizer:
         return "".join(out)
 
 
+class HelperAliasTokenizer:
+    """Wrap any tokenizer so `<H0>` encodes to one reserved ID and decodes back to `<H0>`.
+
+    Works both when the underlying tokenizer already contains literal `<H0>` and
+    when it lacks `<H0>` and binds a user-supplied unused reserved token ID
+    (`--reserved-token-id`).
+    """
+
+    def __init__(
+        self,
+        tokenizer: Any,
+        *,
+        helper_token_id: int,
+        helper_symbol: str = "<H0>",
+        vocab_size: int | None = None,
+    ) -> None:
+        self.tokenizer = tokenizer
+        self.helper_token_id = int(helper_token_id)
+        self.helper_symbol = str(helper_symbol)
+        if self.helper_token_id < 0:
+            raise ValueError(f"helper_token_id must be non-negative, got {self.helper_token_id}")
+        if vocab_size is not None and self.helper_token_id >= int(vocab_size):
+            raise ValueError(
+                f"helper_token_id={self.helper_token_id} out of range for vocab_size={int(vocab_size)}"
+            )
+        eos = getattr(tokenizer, "eos_token_id", None)
+        bos = getattr(tokenizer, "bos_token_id", None)
+        if isinstance(eos, int) and self.helper_token_id == eos:
+            raise ValueError(f"helper_token_id={self.helper_token_id} collides with eos_token_id")
+        if isinstance(bos, int) and self.helper_token_id == bos:
+            raise ValueError(f"helper_token_id={self.helper_token_id} collides with bos_token_id")
+
+    @property
+    def eos_token_id(self) -> Any:
+        return getattr(self.tokenizer, "eos_token_id", None)
+
+    @property
+    def bos_token_id(self) -> Any:
+        return getattr(self.tokenizer, "bos_token_id", None)
+
+    def _encode_segment(self, text: str) -> list[int]:
+        if not text:
+            return []
+        try:
+            ids = self.tokenizer.encode(text, add_special_tokens=False)
+        except TypeError:
+            ids = self.tokenizer.encode(text)
+        return [int(t) for t in ids]
+
+    def encode(self, text: str, add_special_tokens: bool = False) -> list[int]:
+        if self.helper_symbol not in text:
+            try:
+                return self.tokenizer.encode(text, add_special_tokens=add_special_tokens)
+            except TypeError:
+                return self.tokenizer.encode(text)
+        ids: list[int] = []
+        parts = text.split(self.helper_symbol)
+        for idx, part in enumerate(parts):
+            if part:
+                ids.extend(self._encode_segment(part))
+            if idx + 1 < len(parts):
+                ids.append(self.helper_token_id)
+        return ids
+
+    def _decode_span(self, span: list[int], *, skip_special_tokens: bool) -> str:
+        try:
+            return self.tokenizer.decode(span, skip_special_tokens=skip_special_tokens)
+        except TypeError:
+            return self.tokenizer.decode(span)
+
+    def decode(self, ids: list[int] | tuple[int, ...], skip_special_tokens: bool = False) -> str:
+        raw_ids = [int(t) for t in ids]
+        if self.helper_token_id not in raw_ids:
+            return self._decode_span(raw_ids, skip_special_tokens=skip_special_tokens)
+        chunks: list[str] = []
+        span: list[int] = []
+        for tid in raw_ids:
+            if tid == self.helper_token_id:
+                if span:
+                    chunks.append(self._decode_span(span, skip_special_tokens=skip_special_tokens))
+                    span = []
+                chunks.append(self.helper_symbol)
+            else:
+                span.append(tid)
+        if span:
+            chunks.append(self._decode_span(span, skip_special_tokens=skip_special_tokens))
+        return "".join(chunks)
+
+
 def build_synthetic_transformer(
     *,
     vocab_size: int = 264,
@@ -459,6 +548,12 @@ def adapt_arm_equal_budget(
     backward_passes = 0
     tokens_processed = 0
     loss_trace: list[float] = []
+
+    if adaptation_examples and not any(h0 in ex["token_ids"] for ex in adaptation_examples):
+        raise ValueError(
+            f"helper_token_id={h0} never appears in adaptation_examples for arm={arm_name}; "
+            "ensure the tokenizer maps the helper alias symbol to exactly [helper_token_id]."
+        )
 
     for step in range(setup_budget_steps):
         optimizer.zero_grad(set_to_none=True)

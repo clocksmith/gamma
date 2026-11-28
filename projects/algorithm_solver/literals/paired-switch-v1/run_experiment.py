@@ -33,6 +33,7 @@ from helpers import HELPER_SPECS, verify_all_helpers
 from predictor import predict_switch_benefit, summarize_paired_search_outcomes
 from switch_engine import (
     ByteLevelTestTokenizer,
+    HelperAliasTokenizer,
     PairedSwitchAdapter,
     PrefillState,
     adapt_arm_equal_budget,
@@ -48,7 +49,13 @@ from switch_point import (
     save_switch_point,
     verify_switch_point_snapshot,
 )
-from verifier import HELPER_TOKEN_SYMBOL, SingleBindRegistry, verify_candidate
+from verifier import (
+    HELPER_TOKEN_SYMBOL,
+    SingleBindRegistry,
+    _ALIAS_IDENTIFIER,
+    translate_alias_source,
+    verify_candidate,
+)
 from work_budget import ArmBudget, OutOfBudget, positive_nanoseconds
 
 
@@ -321,6 +328,56 @@ def _device_synchronizer(device: torch.device) -> Callable[[], None]:
     return lambda: None
 
 
+def verify_helper_token_roundtrip(alias_tokenizer: HelperAliasTokenizer) -> dict[str, Any]:
+    """Verify `<H0>` encodes to one exact ID and decodes to an executable helper call."""
+    sym = alias_tokenizer.helper_symbol
+    hid = alias_tokenizer.helper_token_id
+    encoded_sym = alias_tokenizer.encode(sym)
+    if encoded_sym != [hid]:
+        raise RuntimeError(
+            f"Helper symbol {sym!r} must encode to single token ID [{hid}], got {encoded_sym!r}"
+        )
+    decoded_sym = alias_tokenizer.decode([hid], skip_special_tokens=True)
+    if decoded_sym != sym:
+        raise RuntimeError(
+            f"Reserved token ID {hid} must decode to {sym!r}, got {decoded_sym!r}"
+        )
+    probe_src = f"def _bits_h0_probe(xs, i):\n    j = {sym}(xs, i)\n    return j\n"
+    probe_ids = alias_tokenizer.encode(probe_src)
+    hid_count = sum(1 for tid in probe_ids if tid == hid)
+    if hid_count != 1:
+        raise RuntimeError(
+            f"Expected reserved token ID {hid} once in encoded probe source, found {hid_count}"
+        )
+    roundtrip_src = alias_tokenizer.decode(probe_ids, skip_special_tokens=True)
+    binding = SingleBindRegistry().bind_once("skip_equal", hid, sym)
+    lowered = translate_alias_source(roundtrip_src, binding, arm_uses_alias=True)
+    calls = [0]
+    impl = HELPER_SPECS["skip_equal"].implementation
+
+    def _wrapped(*args: Any, **kwargs: Any) -> Any:
+        calls[0] += 1
+        return impl(*args, **kwargs)
+
+    ns: dict[str, Any] = {_ALIAS_IDENTIFIER: _wrapped}
+    exec(compile(lowered, "<h0-probe>", "exec"), ns)
+    actual = ns["_bits_h0_probe"]([2, 2, 5], 0)
+    if actual != 2 or calls[0] != 1:
+        raise RuntimeError(
+            f"Decoded helper token {sym!r} (id={hid}) did not execute bound helper cleanly: "
+            f"actual={actual!r}, calls={calls[0]}"
+        )
+    return {
+        "helper_symbol": sym,
+        "helper_token_id": hid,
+        "encoded_symbol_ids": encoded_sym,
+        "decoded_symbol": decoded_sym,
+        "probe_token_id_count": hid_count,
+        "probe_executable_passed": True,
+        "probe_runtime_helper_calls": calls[0],
+    }
+
+
 def _run_live_arm(
     arm: str,
     problem: dict[str, Any],
@@ -346,6 +403,16 @@ def _run_live_arm(
     verifier_statuses: dict[str, int] = {}
     partial_generation = False
 
+    alias_tokenizer = (
+        tokenizer
+        if isinstance(tokenizer, HelperAliasTokenizer)
+        else HelperAliasTokenizer(
+            tokenizer,
+            helper_token_id=adapter.helper_token_id,
+            helper_symbol=HELPER_TOKEN_SYMBOL,
+        )
+    )
+
     try:
         budget.enter("setup")
         binding = (
@@ -354,7 +421,7 @@ def _run_live_arm(
         )
 
         def encode(text: str) -> list[int]:
-            return tokenizer.encode(text, add_special_tokens=False)
+            return alias_tokenizer.encode(text, add_special_tokens=False)
 
         examples = (
             build_switch_adaptation_sequences(snapshot, encode)
@@ -380,12 +447,12 @@ def _run_live_arm(
             ids, tokens = _sample_continuation_from_cache(
                 adapter, past_key_values=prefill.past_key_values,
                 start_pos=len(snapshot["prefix_token_ids"]), prompt_suffix_ids=suffix,
-                max_new_tokens=max_new_tokens, eos_token_id=tokenizer.eos_token_id,
+                max_new_tokens=max_new_tokens, eos_token_id=alias_tokenizer.eos_token_id,
                 temperature=0.0 if attempt == 0 else 0.7, budget=budget,
             )
             generation_tokens += tokens
             partial_generation = False
-            source = _extract_python_code(tokenizer.decode(ids, skip_special_tokens=False))
+            source = _extract_python_code(alias_tokenizer.decode(ids, skip_special_tokens=True))
             budget.enter("verification", reserve_ns=verify_ns)
             checks += 1
             verdict = verify_candidate(
@@ -442,12 +509,12 @@ def cmd_run_live(args: argparse.Namespace) -> int:
     limit_ns = positive_nanoseconds(args.arm_budget_seconds)
     preparation_start = time.perf_counter()
     tokenizer = AutoTokenizer.from_pretrained(args.model, local_files_only=local_only)
-    if HELPER_TOKEN_SYMBOL not in tokenizer.get_vocab():
+    if HELPER_TOKEN_SYMBOL not in tokenizer.get_vocab() and args.reserved_token_id is None:
         raise SystemExit(
             f"Model tokenizer does not reserve {HELPER_TOKEN_SYMBOL}; select a provisioned "
             f"unused special token ID via --reserved-token-id or reserve {HELPER_TOKEN_SYMBOL} "
             f"before creating the switch point."
-        ) if args.reserved_token_id is None else None
+        )
 
     helper_token_id = (
         int(args.reserved_token_id)
@@ -472,6 +539,13 @@ def cmd_run_live(args: argparse.Namespace) -> int:
     timeout_s = float(contract["search_budgets"]["verifier_timeout_seconds"])
 
     adapter = PairedSwitchAdapter(model, helper_token_id=helper_token_id)
+    alias_tokenizer = HelperAliasTokenizer(
+        tokenizer,
+        helper_token_id=helper_token_id,
+        helper_symbol=HELPER_TOKEN_SYMBOL,
+        vocab_size=min(adapter.vocab_size, int(adapter.lm_head.weight.shape[0])),
+    )
+    roundtrip_receipt = verify_helper_token_roundtrip(alias_tokenizer)
     sync = _device_synchronizer(adapter.device)
     sync()
     preparation_seconds = time.perf_counter() - preparation_start
@@ -484,7 +558,7 @@ def cmd_run_live(args: argparse.Namespace) -> int:
                 snapshot_start = time.perf_counter()
                 snap = build_switch_point(
                     problem=prob,
-                    tokenizer_encode=lambda s: tokenizer.encode(s, add_special_tokens=False),
+                    tokenizer_encode=lambda s: alias_tokenizer.encode(s, add_special_tokens=False),
                     helper_token_id=helper_token_id,
                     remaining_attempt_cap=cap,
                     remaining_token_budget=cap * max_new_tokens,
@@ -509,7 +583,7 @@ def cmd_run_live(args: argparse.Namespace) -> int:
                     arm = entry["name"]
                     budget = ArmBudget(limit_ns, shared_setup_ns=shared_ns, synchronize=sync)
                     record, state = _run_live_arm(
-                        arm, prob, snap, prefill, adapter, tokenizer, budget,
+                        arm, prob, snap, prefill, adapter, alias_tokenizer, budget,
                         attempt_cap=cap, setup_steps=setup_steps,
                         learning_rate=float(contract["adaptation_policy"]["learning_rate"]),
                         max_new_tokens=max_new_tokens, verifier_timeout=timeout_s,
@@ -529,12 +603,12 @@ def cmd_run_live(args: argparse.Namespace) -> int:
                     started = time.perf_counter()
                     fc = run_forced_call_check(
                         adapter, prefix_token_ids=snap["prefix_token_ids"],
-                        pre_call_tokens=tokenizer.encode(
+                        pre_call_tokens=alias_tokenizer.encode(
                             snap["switch_exposure"]["alias_arms"].replace(HELPER_TOKEN_SYMBOL, "HELPER_OP")
                             + "\nj = ", add_special_tokens=False,
                         ),
-                        forced_operands_and_body_tokens=tokenizer.encode("(xs, i)\n", add_special_tokens=False),
-                        forced_verifier_response_tokens=tokenizer.encode(
+                        forced_operands_and_body_tokens=alias_tokenizer.encode("(xs, i)\n", add_special_tokens=False),
+                        forced_verifier_response_tokens=alias_tokenizer.encode(
                             "\n[TOOL]\nVERIFIER: retry\n", add_special_tokens=False,
                         ),
                         shared_delta_out=joint_state["delta_out"], adapted_delta_in=joint_state["delta_in"],
@@ -554,6 +628,7 @@ def cmd_run_live(args: argparse.Namespace) -> int:
         "resident_model_preparation_seconds": preparation_seconds,
         "budget_limit_ns_per_arm": limit_ns,
         "verifier_reservation_ns": positive_nanoseconds(timeout_s),
+        "helper_token_roundtrip": roundtrip_receipt,
         "model": args.model,
         "device": args.device,
         "dtype": args.dtype,

@@ -22,9 +22,16 @@ if str(HERE) not in sys.path:
 from dev_families import DEV_PROBLEMS, get_problem, verify_dev_family_suite
 from helpers import HELPER_SPECS, skip_equal, verify_all_helpers
 from predictor import predict_switch_benefit, summarize_paired_search_outcomes
-from run_experiment import CONTRACT_PATH, _run_live_arm, cmd_run_live, run_engine_verification
+from run_experiment import (
+    CONTRACT_PATH,
+    _run_live_arm,
+    cmd_run_live,
+    run_engine_verification,
+    verify_helper_token_roundtrip,
+)
 from switch_engine import (
     ByteLevelTestTokenizer,
+    HelperAliasTokenizer,
     PairedSwitchAdapter,
     build_synthetic_transformer,
     run_forced_call_check,
@@ -183,6 +190,145 @@ class LiveBudgetTests(unittest.TestCase):
                         for arm in receipt["summary"]["arms"].values():
                             self.assertEqual(arm["total_in_denominator"], 1)
                             self.assertEqual(arm["budget_exhaustions"], 1)
+
+    def test_live_runner_with_tokenizer_lacking_literal_h0_and_reserved_token_id(self):
+        """Regression test: tokenizer lacking literal `<H0>` with `--reserved-token-id`.
+
+        Verifies:
+        1. `<H0>` encodes to exactly one token ID (`[reserved_id]`), not subwords.
+        2. Emitting `[reserved_id]` decodes to `<H0>` (not native `<unused0>`) and
+           lowers to an executable helper call in `verify_candidate`.
+        3. `cmd_run_live` completes all 4 arms without raising an exception and
+           adapts `score_only_alias` and `score_and_input_alias` cleanly.
+        """
+        self.addCleanup(torch.set_num_threads, torch.get_num_threads())
+        torch.set_num_threads(1)
+        reserved_id = 259
+
+        class NoLiteralH0Tokenizer:
+            """Tokenizer whose vocab has `<unused0>` at ID 259 and NO literal `<H0>`."""
+
+            eos_token_id = 258
+            bos_token_id = 257
+
+            def get_vocab(self):
+                vocab = {f"byte_{i}": i for i in range(256)}
+                vocab["<bos>"] = 257
+                vocab["<eos>"] = 258
+                vocab["<unused0>"] = reserved_id
+                return vocab
+
+            def encode(self, text, add_special_tokens=False):
+                # Deliberately splits literal "<H0>" into 4 raw UTF-8 bytes!
+                return list(text.encode("utf-8"))
+
+            def decode(self, ids, skip_special_tokens=False):
+                out = []
+                buf = bytearray()
+                for tid in ids:
+                    if tid == reserved_id:
+                        if buf:
+                            out.append(buf.decode("utf-8", errors="replace"))
+                            buf.clear()
+                        if not skip_special_tokens:
+                            out.append("<unused0>")
+                    elif tid == self.eos_token_id:
+                        if buf:
+                            out.append(buf.decode("utf-8", errors="replace"))
+                            buf.clear()
+                        if not skip_special_tokens:
+                            out.append("<eos>")
+                    elif 0 <= tid < 256:
+                        buf.append(tid)
+                if buf:
+                    out.append(buf.decode("utf-8", errors="replace"))
+                return "".join(out)
+
+        raw_tok = NoLiteralH0Tokenizer()
+        # Confirm raw tokenizer reproduces the failure condition.
+        self.assertNotIn(HELPER_TOKEN_SYMBOL, raw_tok.get_vocab())
+        self.assertEqual(len(raw_tok.encode(HELPER_TOKEN_SYMBOL)), 4)
+        self.assertEqual(raw_tok.decode([reserved_id], skip_special_tokens=False), "<unused0>")
+
+        alias_tok = HelperAliasTokenizer(
+            raw_tok, helper_token_id=reserved_id, helper_symbol=HELPER_TOKEN_SYMBOL, vocab_size=264
+        )
+        self.assertEqual(alias_tok.encode(HELPER_TOKEN_SYMBOL), [reserved_id])
+        self.assertEqual(alias_tok.decode([reserved_id], skip_special_tokens=True), HELPER_TOKEN_SYMBOL)
+        self.assertEqual(alias_tok.decode([reserved_id], skip_special_tokens=False), HELPER_TOKEN_SYMBOL)
+
+        # Verify generated IDs containing reserved_id + trailing EOS decode to executable call.
+        sample_code = (
+            "def count_unique_sorted(xs):\n"
+            "    i = 0\n"
+            "    out = 0\n"
+            "    while i < len(xs):\n"
+            "        i = <H0>(xs, i)\n"
+            "        out += 1\n"
+            "    return out\n"
+        )
+        encoded = alias_tok.encode(sample_code) + [raw_tok.eos_token_id]
+        self.assertEqual(encoded.count(reserved_id), 1)
+        decoded = alias_tok.decode(encoded, skip_special_tokens=True)
+        self.assertIn("<H0>(xs, i)", decoded)
+        self.assertNotIn("<eos>", decoded)
+        binding = SingleBindRegistry().bind_once("skip_equal", reserved_id)
+        verdict = verify_candidate(
+            decoded,
+            entry_point="count_unique_sorted",
+            cases=[{"label": "dups", "args": [[1, 1, 2, 2, 2, 5]], "expected": 3}],
+            helper_name="skip_equal",
+            binding=binding,
+            arm_uses_alias=True,
+        )
+        self.assertTrue(verdict["passed"], verdict)
+        self.assertEqual(verdict["runtime_helper_calls"], 3)
+
+        rt = verify_helper_token_roundtrip(alias_tok)
+        self.assertTrue(rt["probe_executable_passed"])
+        self.assertEqual(rt["encoded_symbol_ids"], [reserved_id])
+
+        # Collision and bounds checks fail closed.
+        with self.assertRaises(ValueError):
+            HelperAliasTokenizer(raw_tok, helper_token_id=raw_tok.eos_token_id, vocab_size=264)
+        with self.assertRaises(ValueError):
+            HelperAliasTokenizer(raw_tok, helper_token_id=300, vocab_size=264)
+
+        # Full cmd_run_live end-to-end with `--reserved-token-id 259` and no literal `<H0>`.
+        model = build_synthetic_transformer(
+            vocab_size=264, hidden_size=16, num_hidden_layers=1, num_attention_heads=2
+        )
+        contract = json.loads(CONTRACT_PATH.read_text())
+        contract["search_budgets"]["max_new_tokens_per_attempt"] = 2
+        with TemporaryDirectory() as directory:
+            contract_path = Path(directory) / "contract.json"
+            contract_path.write_text(json.dumps(contract))
+            output = Path(directory) / "receipt.json"
+            with (
+                patch("run_experiment.CONTRACT_PATH", contract_path),
+                patch("transformers.AutoTokenizer.from_pretrained", return_value=raw_tok),
+                patch("transformers.AutoModelForCausalLM.from_pretrained", return_value=model),
+                patch("run_experiment.DEV_PROBLEMS", [DEV_PROBLEMS[0]]),
+                redirect_stdout(io.StringIO()),
+            ):
+                args = Namespace(
+                    model="in-memory-no-h0",
+                    allow_download=False,
+                    split="dev",
+                    dtype="float32",
+                    device="cpu",
+                    reserved_token_id=reserved_id,
+                    attempt_caps="2",
+                    setup_steps=2,
+                    arm_budget_seconds=30.0,
+                    output=str(output),
+                )
+                self.assertEqual(cmd_run_live(args), 0)
+                receipt = json.loads(output.read_text())
+                self.assertEqual(len(receipt["records"]), 4)
+                self.assertTrue(receipt["helper_token_roundtrip"]["probe_executable_passed"])
+                self.assertTrue(receipt["gate_receipts"][0]["forced_call"]["fixture_passed"])
+                self.assertTrue(receipt["gate_receipts"][0]["forced_call"]["input_effect_isolated"])
 
 
 class Section1SwitchPointTests(unittest.TestCase):
