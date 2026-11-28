@@ -105,7 +105,12 @@ def translate_alias_source(source: str, binding: SessionBinding | None, arm_uses
 
 
 _RUNNER_SNIPPET = r'''
-import copy, json, sys, traceback
+import copy, io, json, sys, traceback
+
+_REAL_STDOUT = sys.stdout
+def _emit(obj):
+    _REAL_STDOUT.write(json.dumps(obj) + "\n")
+    _REAL_STDOUT.flush()
 
 payload = json.loads(sys.stdin.read())
 helper_source = payload.get("helper_source")
@@ -129,10 +134,12 @@ if helper_source:
 else:
     call_counter = [0]
 
+# Isolate candidate stdout so print() statements inside candidates never corrupt JSON output.
+sys.stdout = io.StringIO()
 try:
     exec(compile(candidate_source, "<candidate>", "exec"), ns)
-except Exception as exc:
-    print(json.dumps({
+except (Exception, SystemExit) as exc:
+    _emit({
         "status": "syntax_or_load_error",
         "passed": False,
         "passed_cases": 0,
@@ -143,12 +150,12 @@ except Exception as exc:
             "error_type": type(exc).__name__,
             "message": str(exc),
         },
-    }))
+    })
     sys.exit(0)
 
 fn = ns.get(entry_point)
 if not callable(fn):
-    print(json.dumps({
+    _emit({
         "status": "missing_entrypoint",
         "passed": False,
         "passed_cases": 0,
@@ -159,7 +166,7 @@ if not callable(fn):
             "error_type": "NameError",
             "message": f"Missing callable entrypoint `{entry_point}`",
         },
-    }))
+    })
     sys.exit(0)
 
 passed_cases = 0
@@ -170,7 +177,7 @@ for idx, case in enumerate(cases):
     expected = case["expected"]
     try:
         actual = fn(*args)
-    except Exception as exc:
+    except (Exception, SystemExit) as exc:
         if first_failure is None:
             first_failure = {
                 "case": label,
@@ -193,14 +200,14 @@ for idx, case in enumerate(cases):
         }
 
 ok = passed_cases == len(cases)
-print(json.dumps({
+_emit({
     "status": "pass" if ok else "fail",
     "passed": ok,
     "passed_cases": passed_cases,
     "total_cases": len(cases),
     "runtime_helper_calls": call_counter[0],
     "first_failure": first_failure,
-}))
+})
 '''
 
 
@@ -330,7 +337,24 @@ def verify_candidate(
             },
         }
 
-    result = json.loads(proc.stdout)
+    try:
+        result = json.loads(proc.stdout)
+    except json.JSONDecodeError as exc:
+        return {
+            "status": "runtime_crash",
+            "passed": False,
+            "passed_cases": 0,
+            "total_cases": len(cases),
+            "syntactic_helper_calls": syntactic_calls,
+            "runtime_helper_calls": 0,
+            "syntax_mask": syntax_mask,
+            "elapsed_seconds": elapsed,
+            "first_failure": {
+                "case": "<subprocess>",
+                "error_type": "InvalidVerifierOutput",
+                "message": f"{exc}: {proc.stdout[:200]!r}",
+            },
+        }
     result["syntactic_helper_calls"] = syntactic_calls
     result["syntax_mask"] = syntax_mask
     result["elapsed_seconds"] = elapsed

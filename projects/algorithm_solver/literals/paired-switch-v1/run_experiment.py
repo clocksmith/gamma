@@ -666,6 +666,12 @@ def cmd_run_live(args: argparse.Namespace) -> int:
                     if not fc["fixture_passed"]:
                         raise RuntimeError(f"Forced-call pre-call gate FAILED on {prob['problem_id']}: {fc}")
                 gate_receipts.append(gate)
+                recent = records[-len(contract["arms"]):]
+                arm_bits = " ".join(
+                    f"{r['arm']}={'PASS' if r['solved'] else r['status']}({r['attempts_started']}att,{r['helper_calls']}h,{r['elapsed_seconds']:.1f}s)"
+                    for r in recent
+                )
+                print(f"[live-progress] {prob['problem_id']} cap={cap}: {arm_bits}", file=sys.stderr, flush=True)
     finally:
         adapter.close()
 

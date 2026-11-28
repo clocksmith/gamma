@@ -411,6 +411,22 @@ class Section1SwitchPointTests(unittest.TestCase):
         self.assertEqual(timeout["status"], "timeout")
         self.assertFalse(timeout["passed"])
 
+        noisy_pass = verify_candidate(
+            "print('top-level example output')\ndef f(x):\n    print('inside', x)\n    return x + 1\n",
+            "f",
+            [{"label": "a", "args": [2], "expected": 3}],
+        )
+        self.assertTrue(noisy_pass["passed"], noisy_pass)
+        self.assertEqual(noisy_pass["status"], "pass")
+
+        exiting = verify_candidate(
+            "import sys\nsys.exit(0)\ndef f(x):\n    return x\n",
+            "f",
+            [{"label": "a", "args": [1], "expected": 1}],
+        )
+        self.assertFalse(exiting["passed"])
+        self.assertEqual(exiting["status"], "syntax_or_load_error")
+
 
 class Section2And3EngineTests(unittest.TestCase):
     def test_tied_and_untied_engines_pass_all_gates(self):
